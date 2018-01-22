@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">BCNews</string>
 
+
     <!--     版本更新             -->
     <string name="download_fail">下载失败</string>
     <string name="check_new_version">发现了新版本</string>
@@ -11,4 +12,38 @@
     <string name="now_update">立即更新</string>
     <string name="version">v%1$s</string>
     <string name="is_already_latest_version">已经是最新版本了</string>
+
+    <string name="restart_app">重启应用</string>
+    <string name="cut">剪切</string>
+    <!--分享-->
+    <string name="wechat_friend">微信好友</string>
+    <string name="wechat_circle">朋友圈</string>
+    <string name="sina_weibo">新浪微博</string>
+    <string name="share_succeed">分享成功</string>
+    <string name="share_cancel">取消分享</string>
+    <string name="you_not_install_weixin">您尚未安装微信</string>
+    <string name="you_not_install_weibo">您尚未安装微博</string>
+    <string name="share_to">分享至</string>
+
+    <!-- Dialog -->
+    <string name="ok">确定</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+
+    <!-- WebView network error -->
+    <string name="network_error_please_reload">网络连接失败 请重新加载</string>
+    <string name="refresh">刷新</string>
+    <string name="android_web_agent">ANDROID_AGENT</string>
+    <string name="save_image">保存图片</string>
+    <string name="save_qrcode_to">图片保存至%1$s</string>
+    <string name="save_qrcode_failure">图片保存失败</string>
+    <string name="take_phone_from_camera">拍照</string>
+    <string name="look_big_picture">查看大图</string>
+    <string name="take_phone_from_phone">从手机相册选择</string>
+    <string name="take_phone_cancel">取消</string>
+    <string name="sd_is_not_useful">sd卡不可使用</string>
+    <string name="please_open_camera_permission">请打开相机权限</string>
+
 </resources>
