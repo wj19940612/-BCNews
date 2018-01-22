@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">BCNews</string>
+
+    <string name="restart_app">重启应用</string>
+    <string name="cut">剪切</string>
     <!--分享-->
     <string name="wechat_friend">微信好友</string>
     <string name="wechat_circle">朋友圈</string>
