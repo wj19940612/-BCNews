@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">BCNews</string>
+
+    <string name="restart_app">重启应用</string>
+    <string name="cut">剪切</string>
 </resources>
