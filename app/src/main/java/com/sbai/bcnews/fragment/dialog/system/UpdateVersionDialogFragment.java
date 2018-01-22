@@ -39,8 +39,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static android.support.v4.app.DialogFragment.STYLE_NO_TITLE;
-
 /**
  * Created by Administrator on 2018\1\22 0022.
  */
