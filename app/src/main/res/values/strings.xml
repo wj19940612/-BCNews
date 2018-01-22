@@ -16,4 +16,19 @@
     <string name="cancel">取消</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+
+    <!-- WebView network error -->
+    <string name="network_error_please_reload">网络连接失败 请重新加载</string>
+    <string name="refresh">刷新</string>
+    <string name="android_web_agent">ANDROID_AGENT</string>
+    <string name="save_image">保存图片</string>
+    <string name="save_qrcode_to">图片保存至%1$s</string>
+    <string name="save_qrcode_failure">图片保存失败</string>
+    <string name="take_phone_from_camera">拍照</string>
+    <string name="look_big_picture">查看大图</string>
+    <string name="take_phone_from_phone">从手机相册选择</string>
+    <string name="take_phone_cancel">取消</string>
+    <string name="sd_is_not_useful">sd卡不可使用</string>
+    <string name="please_open_camera_permission">请打开相机权限</string>
+
 </resources>
