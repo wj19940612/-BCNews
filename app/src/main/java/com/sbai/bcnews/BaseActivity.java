@@ -1,4 +1,5 @@
 package com.sbai.bcnews;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,7 +21,7 @@ import com.sbai.bcnews.utils.SecurityUtil;
 import com.sbai.bcnews.utils.TimerHandler;
 import com.sbai.bcnews.view.RequestProgress;
 import com.sbai.bcnews.view.SmartDialog;
-import com.sbai.httplib.ApiIndeterminate;
+import com.sbai.httplib.ReqIndeterminate;
 import com.umeng.analytics.MobclickAgent;
 
 import java.security.NoSuchAlgorithmException;
@@ -33,7 +34,7 @@ import java.security.NoSuchAlgorithmException;
  * APIs:
  */
 public class BaseActivity extends StatusBarActivity implements
-        ApiIndeterminate, TimerHandler.TimerCallback{
+        ReqIndeterminate, TimerHandler.TimerCallback{
     public static final String ACTION_TOKEN_EXPIRED = "com.sbai.fin.token_expired";
     public static final String ACTION_LOGIN_SUCCESS = "com.sbai.fin.login_success";
     public static final String ACTION_LOGOUT_SUCCESS = "com.sbai.fin.logout_success";
