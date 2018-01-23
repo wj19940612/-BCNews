@@ -1,0 +1,11 @@
+package com.sbai.bcnews.http;
+
+/**
+ * Modified by john on 23/01/2018
+ * <p>
+ * Description: 统一管理 api 请求
+ * <p>
+ */
+public class Apic {
+
+}

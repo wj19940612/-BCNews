@@ -15,6 +15,7 @@ import android.widget.AbsListView;
 import android.widget.ScrollView;
 
 import com.sbai.bcnews.Preference;
+import com.sbai.bcnews.http.ReqApi;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.SecurityUtil;
@@ -30,11 +31,10 @@ import java.security.NoSuchAlgorithmException;
  * Modified by john on 18/01/2018
  * <p>
  * Description:
- * <p>
- * APIs:
  */
 public class BaseActivity extends StatusBarActivity implements
-        ReqIndeterminate, TimerHandler.TimerCallback{
+        ReqIndeterminate, TimerHandler.TimerCallback {
+
     public static final String ACTION_TOKEN_EXPIRED = "com.sbai.fin.token_expired";
     public static final String ACTION_LOGIN_SUCCESS = "com.sbai.fin.login_success";
     public static final String ACTION_LOGOUT_SUCCESS = "com.sbai.fin.logout_success";
@@ -73,7 +73,7 @@ public class BaseActivity extends StatusBarActivity implements
         mRequestProgress = new RequestProgress(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-//                API.cancel(TAG);
+                ReqApi.cancel(TAG);
             }
         });
 //        SysTime.getSysTime().sync();
@@ -108,7 +108,6 @@ public class BaseActivity extends StatusBarActivity implements
         MobclickAgent.onEvent(getActivity(), eventKey);
     }
 
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -142,18 +141,12 @@ public class BaseActivity extends StatusBarActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //TODO 网络框架
-//        API.cancel(TAG);
-//        WsClient.get().cancel(TAG);
+        ReqApi.cancel(TAG);
 
         SmartDialog.dismiss(this);
         mRequestProgress.dismissAll();
 
         stopScheduleJob();
-    }
-
-    protected boolean needStopPlayRadio() {
-        return true;
     }
 
     protected FragmentActivity getActivity() {

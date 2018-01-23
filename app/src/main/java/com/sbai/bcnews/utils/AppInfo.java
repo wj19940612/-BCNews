@@ -1,17 +1,12 @@
 package com.sbai.bcnews.utils;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import android.util.Log;
 
 public class AppInfo {
     /**
@@ -70,55 +65,87 @@ public class AppInfo {
         return result;
     }
 
-    public static String getDeviceInfo(Context context) {
+//    public static String getDeviceInfo(Context context) {
+//        try {
+//            org.json.JSONObject json = new org.json.JSONObject();
+//            android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
+//                    .getSystemService(Context.TELEPHONY_SERVICE);
+//            String device_id = null;
+//            if (checkPermission(context, Manifest.permission.READ_PHONE_STATE)) {
+//                device_id = tm.getDeviceId();
+//            }
+//            String mac = null;
+//            FileReader fstream = null;
+//            try {
+//                fstream = new FileReader("/sys/class/net/wlan0/address");
+//            } catch (FileNotFoundException e) {
+//                fstream = new FileReader("/sys/class/net/eth0/address");
+//            }
+//            BufferedReader in = null;
+//            if (fstream != null) {
+//                try {
+//                    in = new BufferedReader(fstream, 1024);
+//                    mac = in.readLine();
+//                } catch (IOException e) {
+//                } finally {
+//                    if (fstream != null) {
+//                        try {
+//                            fstream.close();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    if (in != null) {
+//                        try {
+//                            in.close();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }
+//            json.put("mac", mac);
+//            if (TextUtils.isEmpty(device_id)) {
+//                device_id = mac;
+//            }
+//            if (TextUtils.isEmpty(device_id)) {
+//                device_id = android.provider.Settings.Secure.getString(context.getContentResolver(),
+//                        android.provider.Settings.Secure.ANDROID_ID);
+//            }
+//            json.put("device_id", device_id);
+//            return json.toString();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
+    public static String getDeviceHardwareId(Context context) {
         try {
-            org.json.JSONObject json = new org.json.JSONObject();
             android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
                     .getSystemService(Context.TELEPHONY_SERVICE);
-            String device_id = null;
-            if (checkPermission(context, Manifest.permission.READ_PHONE_STATE)) {
-                device_id = tm.getDeviceId();
+            String typePrefix = "DEVICE_ID_";
+            String deviceId = tm.getDeviceId();
+
+            if (TextUtils.isEmpty(deviceId)) {
+                deviceId = Build.SERIAL;
+                typePrefix = "SERIAL_";
             }
-            String mac = null;
-            FileReader fstream = null;
-            try {
-                fstream = new FileReader("/sys/class/net/wlan0/address");
-            } catch (FileNotFoundException e) {
-                fstream = new FileReader("/sys/class/net/eth0/address");
+
+            if (TextUtils.isEmpty(deviceId)) {
+                android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+                String mac = wifi.getConnectionInfo().getMacAddress();
+                deviceId = mac;
+                typePrefix = "MAC_";
             }
-            BufferedReader in = null;
-            if (fstream != null) {
-                try {
-                    in = new BufferedReader(fstream, 1024);
-                    mac = in.readLine();
-                } catch (IOException e) {
-                } finally {
-                    if (fstream != null) {
-                        try {
-                            fstream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (in != null) {
-                        try {
-                            in.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+
+            if (TextUtils.isEmpty(deviceId)) {
+                deviceId = android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+                typePrefix = "ANDROID_ID_";
             }
-            json.put("mac", mac);
-            if (TextUtils.isEmpty(device_id)) {
-                device_id = mac;
-            }
-            if (TextUtils.isEmpty(device_id)) {
-                device_id = android.provider.Settings.Secure.getString(context.getContentResolver(),
-                        android.provider.Settings.Secure.ANDROID_ID);
-            }
-            json.put("device_id", device_id);
-            return json.toString();
+
+            Log.d("AppInfo", "getDeviceHardwareId: " + (typePrefix + deviceId));
+            return SecurityUtil.md5Encrypt(typePrefix + deviceId);
         } catch (Exception e) {
             e.printStackTrace();
         }

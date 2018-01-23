@@ -1,4 +1,4 @@
-package com.sbai.bcnews.fragment.dialog.system;
+package com.sbai.bcnews.fragment;
 
 import android.Manifest;
 import android.app.Dialog;
