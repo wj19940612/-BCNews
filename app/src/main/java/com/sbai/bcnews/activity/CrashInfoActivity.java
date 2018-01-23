@@ -12,7 +12,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
-import com.sbai.bcnews.MainActivity;
 import com.sbai.bcnews.R;
 
 import java.io.IOException;

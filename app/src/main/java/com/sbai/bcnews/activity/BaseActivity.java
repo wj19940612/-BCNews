@@ -1,4 +1,4 @@
-package com.sbai.bcnews;
+package com.sbai.bcnews.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
 
-import com.sbai.bcnews.activity.StatusBarActivity;
+import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.SecurityUtil;

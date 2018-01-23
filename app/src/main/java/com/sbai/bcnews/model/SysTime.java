@@ -1,6 +1,5 @@
-package com.sbai.bcnews.model.local;
+package com.sbai.bcnews.model;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.utils.TimeRecorder;
 

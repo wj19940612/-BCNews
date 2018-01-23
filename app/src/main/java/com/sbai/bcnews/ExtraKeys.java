@@ -6,6 +6,8 @@ package com.sbai.bcnews;
 
 public interface ExtraKeys {
 
-    String CRASH_INFO="crash_info";
+    String CRASH_INFO = "crash_info";
 
+    String APP_VERSION = "app_version";
+    String IS_CANCELED_ON_TOUCH_OUTSIDE = "is_canceled_on_touch_outside";
 }

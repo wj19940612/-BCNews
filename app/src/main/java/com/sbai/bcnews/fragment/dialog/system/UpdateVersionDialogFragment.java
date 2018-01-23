@@ -27,10 +27,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.AppVersion;
 import com.sbai.bcnews.service.DownloadService;
-import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.PermissionUtil;
 import com.sbai.bcnews.utils.ToastUtil;
 
@@ -44,6 +44,7 @@ import butterknife.Unbinder;
  */
 
 public class UpdateVersionDialogFragment extends DialogFragment{
+
     @BindView(R.id.updateVersionMsg)
     TextView mUpdateVersionMsg;
     @BindView(R.id.update)
@@ -74,8 +75,8 @@ public class UpdateVersionDialogFragment extends DialogFragment{
     public static UpdateVersionDialogFragment newInstance(AppVersion appVersion, boolean isCanceledOnTouchOutside) {
         Bundle args = new Bundle();
         UpdateVersionDialogFragment fragment = new UpdateVersionDialogFragment();
-        args.putParcelable(Launcher.EX_PAYLOAD, appVersion);
-        args.putBoolean(Launcher.EX_PAYLOAD_1, isCanceledOnTouchOutside);
+        args.putParcelable(ExtraKeys.APP_VERSION, appVersion);
+        args.putBoolean(ExtraKeys.IS_CANCELED_ON_TOUCH_OUTSIDE, isCanceledOnTouchOutside);
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,8 +86,8 @@ public class UpdateVersionDialogFragment extends DialogFragment{
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_TITLE, R.style.BaseDialog);
         if (getArguments() != null) {
-            mAppVersion = getArguments().getParcelable(Launcher.EX_PAYLOAD);
-            mIsCanceledOnTouchOutside = getArguments().getBoolean(Launcher.EX_PAYLOAD_1, true);
+            mAppVersion = getArguments().getParcelable(ExtraKeys.APP_VERSION);
+            mIsCanceledOnTouchOutside = getArguments().getBoolean(ExtraKeys.APP_VERSION, true);
         }
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mDownloadBroadcastReceiver,
                 new IntentFilter(DownloadService.ACTION_DOWNLOAD_COMPLETE));

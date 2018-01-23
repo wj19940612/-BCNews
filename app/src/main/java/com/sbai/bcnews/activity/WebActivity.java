@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.sbai.bcnews.AppJs;
-import com.sbai.bcnews.BaseActivity;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.Network;
 import com.sbai.bcnews.view.ShareDialog;

@@ -5,40 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 
-
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class Launcher {
 
-    public static final String EX_PAYLOAD = "payload";
-    /**
-     * @deprecated
-     */
-    public static final String EX_PAYLOAD_1 = "payload1";
-    /**
-     * @deprecated
-     */
-    public static final String EX_PAYLOAD_2 = "payload2";
-    /**
-     * @deprecated
-     */
-    public static final String EX_PAYLOAD_3 = "payload3";
-
-    public static final String EX_PAY_END = "pay";
-
-
     private static Launcher sInstance;
 
     private Context mContext;
-    private Intent mIntent;
-    private Class<?> mClass;
-    private ActivityOptionsCompat mOptionsCompat;
     private Fragment mFragment;
+
+    private Intent mIntent;
 
     private Launcher() {
         mIntent = new Intent();
@@ -49,7 +28,6 @@ public class Launcher {
         sInstance.mFragment = new WeakReference<>(fragment).get();
         sInstance.mContext = new WeakReference<>(fragment.getActivity()).get();
         sInstance.mIntent.setClass(sInstance.mContext, clazz);
-        sInstance.mClass = clazz;
         return sInstance;
     }
 
@@ -57,7 +35,6 @@ public class Launcher {
         sInstance = new Launcher();
         sInstance.mContext = new WeakReference<>(context).get();
         sInstance.mIntent.setClass(sInstance.mContext, clazz);
-        sInstance.mClass = clazz;
         return sInstance;
     }
 
@@ -93,17 +70,6 @@ public class Launcher {
 
     public Launcher putExtra(String key, boolean value) {
         mIntent.putExtra(key, value);
-        return this;
-    }
-
-    /**
-     * @param key
-     * @param data
-     * @return
-     * @deprecated
-     */
-    public Launcher putExtra(String key, Serializable data) {
-        mIntent.putExtra(key, data);
         return this;
     }
 

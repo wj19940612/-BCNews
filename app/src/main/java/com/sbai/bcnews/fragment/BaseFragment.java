@@ -9,13 +9,13 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
 
-import com.sbai.bcnews.BaseActivity;
+import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.utils.TimerHandler;
-import com.sbai.httplib.ApiIndeterminate;
+import com.sbai.httplib.ReqIndeterminate;
 import com.umeng.analytics.MobclickAgent;
 
 public class BaseFragment extends Fragment implements
-        ApiIndeterminate, TimerHandler.TimerCallback {
+        ReqIndeterminate, TimerHandler.TimerCallback {
 
     private TimerHandler mTimerHandler;
 

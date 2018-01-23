@@ -1,16 +1,15 @@
 package com.sbai.bcnews;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 
-import com.sbai.bcnews.activity.CrashInfoActivity;
-import com.sbai.bcnews.utils.BuildConfigUtils;
-
-import android.content.Context;
-
 import com.igexin.sdk.PushManager;
+import com.sbai.bcnews.activity.CrashInfoActivity;
+import com.sbai.bcnews.activity.MainActivity;
 import com.sbai.bcnews.service.PushIntentService;
 import com.sbai.bcnews.service.PushService;
+import com.sbai.bcnews.utils.BuildConfigUtils;
 import com.umeng.socialize.UMShareAPI;
 
 /**
@@ -25,6 +24,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         sContext = this;
+
+
         UMShareAPI.get(this);
         //init getui sdk
         PushManager.getInstance().initialize(this, PushService.class);

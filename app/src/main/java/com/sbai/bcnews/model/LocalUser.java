@@ -11,8 +11,6 @@ public class LocalUser {
     private UserInfo mUserInfo;
     private String mPhone;
 
-//    private StockUser mStockUser;
-
     public static LocalUser getUser() {
         if (sLocalUser == null) {
             sLocalUser = loadFromPreference();
@@ -62,8 +60,6 @@ public class LocalUser {
         mUserInfo = null;
         saveToPreference();
     }
-
-
 
     @Override
     public String toString() {
