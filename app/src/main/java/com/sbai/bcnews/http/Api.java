@@ -28,7 +28,7 @@ import java.util.Set;
  * Description: 请求 Api 基础类
  * <p>
  */
-public class ReqApi extends RequestManager {
+public class Api extends RequestManager {
 
     private static Set<String> sCurrentUrls = new HashSet<>();
 
@@ -45,33 +45,33 @@ public class ReqApi extends RequestManager {
     private File mFile;
     private String mFileName;
 
-    private ReqApi() {
+    private Api() {
         mMethod = GET;
     }
 
-    public static ReqApi get(String api) {
-        ReqApi reqApi = new ReqApi();
+    public static Api get(String api) {
+        Api reqApi = new Api();
         reqApi.mApi = api;
         return reqApi;
     }
 
-    public static ReqApi get(String api, ReqParams reqParams) {
-        ReqApi reqApi = new ReqApi();
+    public static Api get(String api, ReqParams reqParams) {
+        Api reqApi = new Api();
         reqApi.mApi = api;
         reqApi.mReqParams = reqParams;
         return reqApi;
     }
 
-    public static ReqApi post(String api, ReqParams reqParams) {
-        ReqApi reqApi = new ReqApi();
+    public static Api post(String api, ReqParams reqParams) {
+        Api reqApi = new Api();
         reqApi.mMethod = POST;
         reqApi.mApi = api;
         reqApi.mReqParams = reqParams;
         return reqApi;
     }
 
-    public static ReqApi post(String api, ReqParams reqParams, String jsonBody) {
-        ReqApi reqApi = new ReqApi();
+    public static Api post(String api, ReqParams reqParams, String jsonBody) {
+        Api reqApi = new Api();
         reqApi.mMethod = POST;
         reqApi.mApi = api;
         reqApi.mReqParams = reqParams;
@@ -79,27 +79,27 @@ public class ReqApi extends RequestManager {
         return reqApi;
     }
 
-    public ReqApi id(String id) {
+    public Api id(String id) {
         mId = id;
         return this;
     }
 
-    public ReqApi tag(String tag) {
+    public Api tag(String tag) {
         mTag = tag;
         return this;
     }
 
-    public ReqApi callback(ReqCallback<?> callback) {
+    public Api callback(ReqCallback<?> callback) {
         mCallback = callback;
         return this;
     }
 
-    public ReqApi indeterminate(ReqIndeterminate indeterminate) {
+    public Api indeterminate(ReqIndeterminate indeterminate) {
         mIndeterminate = indeterminate;
         return this;
     }
 
-    public ReqApi timeout(int timeout) {
+    public Api timeout(int timeout) {
         mTimeout = timeout;
         return this;
     }

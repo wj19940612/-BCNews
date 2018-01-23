@@ -3,19 +3,23 @@ package com.sbai.bcnews;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.igexin.sdk.PushManager;
 import com.sbai.bcnews.activity.CrashInfoActivity;
 import com.sbai.bcnews.activity.MainActivity;
+import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.service.PushIntentService;
 import com.sbai.bcnews.service.PushService;
 import com.sbai.bcnews.utils.BuildConfigUtils;
+import com.sbai.httplib.ReqLogger;
 import com.umeng.socialize.UMShareAPI;
 
 /**
- * Created by ${wangJie} on 2018/1/22.
+ * Modified by john on 23/01/2018
+ * <p>
+ * Description:
  */
-
 public class App extends Application {
 
     private static Context sContext;
@@ -24,7 +28,13 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         sContext = this;
-
+        Api.init(sContext.getCacheDir(), sContext.getFilesDir());
+        Api.setLogger(new ReqLogger() {
+            @Override
+            public void onTag(String log) {
+                Log.d("VolleyHttp", log);
+            }
+        });
 
         UMShareAPI.get(this);
         //init getui sdk

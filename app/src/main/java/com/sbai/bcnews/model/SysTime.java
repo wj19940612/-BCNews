@@ -1,6 +1,9 @@
 package com.sbai.bcnews.model;
 
 import com.sbai.bcnews.Preference;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.utils.TimeRecorder;
 
 import java.util.Date;
@@ -24,21 +27,14 @@ public class SysTime {
         if (Math.abs(TimeRecorder.getElapsedTimeInMinute(RECORD_KEY)) < 10) return;
 
         //TODO 获取时间
-//        Client.getSystemTime()
-//                .setRetryPolicy(new DefaultRetryPolicy(5 * 1000, 3, 1))
-//                .setCallback(new Callback2D<Resp<Long>, Long>() {
-//                    @Override
-//                    protected void onRespSuccessData(Long data) {
-//                        mSystemTime = data.longValue();
-//                        Preference.get().setServerTime(mSystemTime);
-//                        TimeRecorder.record(RECORD_KEY);
-//                    }
-//
-//                    @Override
-//                    protected boolean onErrorToast() {
-//                        return false;
-//                    }
-//                }).fire();
+        Apic.syncSystemTime()
+                .timeout(5 * 1000)
+                .callback(new Callback<Resp<Long>, Void>() {
+                    @Override
+                    protected void onRespSuccess(Resp<Long> resp) {
+
+                    }
+                }).fire();
     }
 
     public long getSystemTimestamp() {

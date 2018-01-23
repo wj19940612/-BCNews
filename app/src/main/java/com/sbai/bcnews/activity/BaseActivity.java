@@ -15,8 +15,9 @@ import android.widget.AbsListView;
 import android.widget.ScrollView;
 
 import com.sbai.bcnews.Preference;
-import com.sbai.bcnews.http.ReqApi;
+import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.model.SysTime;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.SecurityUtil;
 import com.sbai.bcnews.utils.TimerHandler;
@@ -73,10 +74,10 @@ public class BaseActivity extends StatusBarActivity implements
         mRequestProgress = new RequestProgress(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-                ReqApi.cancel(TAG);
+                Api.cancel(TAG);
             }
         });
-//        SysTime.getSysTime().sync();
+        SysTime.getSysTime().sync();
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
     }
 
@@ -141,7 +142,7 @@ public class BaseActivity extends StatusBarActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ReqApi.cancel(TAG);
+        Api.cancel(TAG);
 
         SmartDialog.dismiss(this);
         mRequestProgress.dismissAll();

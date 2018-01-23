@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">BCNews</string>
 
-
     <!--     版本更新             -->
     <string name="download_fail">下载失败</string>
     <string name="check_new_version">发现了新版本</string>
@@ -46,4 +45,10 @@
     <string name="sd_is_not_useful">sd卡不可使用</string>
     <string name="please_open_camera_permission">请打开相机权限</string>
 
+    <!-- http 请求信息 -->
+    <string name="http_error_null">空数据异常</string>
+    <string name="http_error_timeout">网络请求超时</string>
+    <string name="http_error_network">网络异常</string>
+    <string name="http_error_parse">数据解析异常</string>
+    <string name="http_error_server">服务器有事出去一会儿稍等一下,马上回来</string>
 </resources>

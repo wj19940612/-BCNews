@@ -8,4 +8,7 @@ package com.sbai.bcnews.http;
  */
 public class Apic {
 
+    public static Api syncSystemTime() {
+        return Api.get("/user/user/getSystemTime.do");
+    }
 }

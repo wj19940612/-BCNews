@@ -19,8 +19,8 @@ import java.security.NoSuchAlgorithmException;
  */
 public class RequestManager {
 
-    public static final int GET = Request.Method.GET;
-    public static final int POST = Request.Method.POST;
+    protected static final int GET = Request.Method.GET;
+    protected static final int POST = Request.Method.POST;
 
     private static class Volley {
 
@@ -56,7 +56,7 @@ public class RequestManager {
         sLogger = logger;
     }
 
-    public static void enqueue(Request<?> request) {
+    protected static void enqueue(Request<?> request) {
         if (sRequestQueue != null) {
             sRequestQueue.add(request);
             if (sLogger != null) {
@@ -73,7 +73,7 @@ public class RequestManager {
         }
     }
 
-    public static ReqLogger getLogger() {
+    protected static ReqLogger getLogger() {
         return sLogger;
     }
 
