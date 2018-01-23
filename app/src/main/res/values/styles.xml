@@ -32,5 +32,5 @@
         <item name="android:windowExitAnimation">@anim/slide_out_to_bottom</item>
         <item name="android:windowBackground">@android:color/white</item>
     </style>
-    
+
 </resources>
