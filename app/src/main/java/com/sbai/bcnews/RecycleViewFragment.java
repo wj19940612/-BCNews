@@ -22,6 +22,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+/**
+ * 作为SwipeToLoadLayout的使用例子 后期删除
+ */
 
 public class RecycleViewFragment extends Fragment {
 
@@ -130,7 +133,7 @@ public class RecycleViewFragment extends Fragment {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.row_simple_recycleview, parent, false);
+            View view = LayoutInflater.from(mContext).inflate(android.R.layout.simple_list_item_1, parent, false);
             return new ViewHolder(view);
         }
 
@@ -161,7 +164,7 @@ public class RecycleViewFragment extends Fragment {
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
-            @BindView(R.id.text)
+            @BindView(android.R.id.text1)
             TextView mText;
 
             ViewHolder(View view) {

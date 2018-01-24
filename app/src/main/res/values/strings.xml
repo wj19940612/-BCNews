@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">BCNews</string>
 
+    <!--     版本更新             -->
+    <string name="download_fail">下载失败</string>
+    <string name="check_new_version">发现了新版本</string>
+    <string name="downloading">正在下载: %1$s</string>
+    <string name="download_start">开始下载</string>
+    <string name="please_not_download_again">请勿重复下载</string>
+    <string name="download_complete">下载完成</string>
+    <string name="now_update">立即更新</string>
+    <string name="version">v%1$s</string>
+    <string name="is_already_latest_version">已经是最新版本了</string>
+
     <string name="restart_app">重启应用</string>
     <string name="cut">剪切</string>
     <!--分享-->
@@ -20,6 +31,26 @@
     <string name="yes">是</string>
     <string name="no">否</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- WebView network error -->
+    <string name="network_error_please_reload">网络连接失败 请重新加载</string>
+    <string name="refresh">刷新</string>
+    <string name="android_web_agent">ANDROID_AGENT</string>
+    <string name="save_image">保存图片</string>
+    <string name="save_qrcode_to">图片保存至%1$s</string>
+    <string name="save_qrcode_failure">图片保存失败</string>
+    <string name="take_phone_from_camera">拍照</string>
+    <string name="look_big_picture">查看大图</string>
+    <string name="take_phone_from_phone">从手机相册选择</string>
+    <string name="take_phone_cancel">取消</string>
+    <string name="sd_is_not_useful">sd卡不可使用</string>
+    <string name="please_open_camera_permission">请打开相机权限</string>
+
+    <!-- http 请求信息 -->
+    <string name="http_error_null">空数据异常</string>
+    <string name="http_error_timeout">网络请求超时</string>
+    <string name="http_error_network">网络异常</string>
+    <string name="http_error_parse">数据解析异常</string>
+    <string name="http_error_server">服务器有事出去一会儿稍等一下,马上回来</string>
+
 </resources>

@@ -1,1 +1,1 @@
-include ':app', ':swipeloadlayout'
+include ':app', ':httplib', ':swipeloadlayout'
