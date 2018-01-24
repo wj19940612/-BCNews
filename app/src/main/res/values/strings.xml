@@ -19,4 +19,7 @@
     <string name="cancel">取消</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

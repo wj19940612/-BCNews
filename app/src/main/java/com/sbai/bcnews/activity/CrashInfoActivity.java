@@ -73,6 +73,7 @@ public class CrashInfoActivity extends AppCompatActivity {
                 intent.setClass(this, MainActivity.class);
                 startActivity(intent);
                 finish();
+
                 break;
         }
     }
