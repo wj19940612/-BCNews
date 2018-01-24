@@ -21,9 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:drawablePadding="5dp"
+        app:iconArray="@array/tabIcons"
         app:layout_constraintBottom_toBottomOf="parent"
         app:textArray="@array/tabTexts"
-        app:iconArray="@array/tabIcons"
         app:textColor="@android:color/black"
         app:textSize="12sp"/>
 </android.support.constraint.ConstraintLayout>

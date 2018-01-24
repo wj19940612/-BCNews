@@ -31,6 +31,7 @@
     <string name="yes">是</string>
     <string name="no">否</string>
 
+
     <!-- WebView network error -->
     <string name="network_error_please_reload">网络连接失败 请重新加载</string>
     <string name="refresh">刷新</string>
@@ -66,5 +67,4 @@
         <item>@drawable/tab_info</item>
         <item>@drawable/tab_discovery</item>
     </integer-array>
-
 </resources>
