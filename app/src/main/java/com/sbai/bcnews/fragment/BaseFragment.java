@@ -10,12 +10,12 @@ import android.widget.AbsListView;
 import android.widget.ScrollView;
 
 import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.utils.TimerHandler;
 import com.sbai.httplib.ReqIndeterminate;
 import com.umeng.analytics.MobclickAgent;
 
-public class BaseFragment extends Fragment implements
-        ReqIndeterminate, TimerHandler.TimerCallback {
+public class BaseFragment extends Fragment implements ReqIndeterminate, TimerHandler.TimerCallback {
 
     private TimerHandler mTimerHandler;
 
@@ -54,8 +54,7 @@ public class BaseFragment extends Fragment implements
     public void onDestroyView() {
         super.onDestroyView();
         stopScheduleJob();
-        //TODO 网络接口
-        //API.cancel(TAG);
+        Api.cancel(TAG);
     }
 
     private void scrollToTop(View view) {

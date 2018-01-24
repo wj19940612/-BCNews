@@ -29,7 +29,7 @@ public class SysTime {
         //TODO 获取时间
         Apic.syncSystemTime()
                 .timeout(5 * 1000)
-                .callback(new Callback<Resp<Long>, Void>() {
+                .callback(new Callback<Resp<Long>>() {
                     @Override
                     protected void onRespSuccess(Resp<Long> resp) {
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--底部 tabs-->
+    <declare-styleable name="BottomTabs">
+        <attr name="textSize" format="dimension"/>
+        <attr name="textColor" format="color"/>
+        <attr name="drawablePadding" format="dimension"/>
+        <attr name="textPaddingTop" format="dimension"/>
+        <attr name="textPaddingBottom" format="dimension"/>
+        <attr name="textArray" format="reference"/>
+        <attr name="iconArray" format="reference"/>
+    </declare-styleable>
+
+    <!-- 带红点的 textview -->
+    <declare-styleable name="BadgeTextView">
+        <attr name="badgeBgColor" format="color"/>
+        <attr name="badgeTextColor" format="color"/>
+        <attr name="badgeTextSize" format="dimension|reference"/>
+        <attr name="badgeText" format="string"/>
+        <attr name="badgeStyle" format="enum">
+            <enum name="round" value="0"/>
+            <enum name="circular" value="1"/>
+        </attr>
+        <attr name="radius" format="dimension|reference"/>
+    </declare-styleable>
+
+</resources>

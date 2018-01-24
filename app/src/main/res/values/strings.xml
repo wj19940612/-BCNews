@@ -51,4 +51,20 @@
     <string name="http_error_network">网络异常</string>
     <string name="http_error_parse">数据解析异常</string>
     <string name="http_error_server">服务器有事出去一会儿稍等一下,马上回来</string>
+
+    <!-- bottom tabs -->
+    <string name="news">资讯</string>
+    <string name="news_flash">快讯</string>
+    <string name="market">行情</string>
+    <string-array name="tabTexts">
+        <item>@string/news</item>
+        <item>@string/news_flash</item>
+        <item>@string/market</item>
+    </string-array>
+    <integer-array name="tabIcons">
+        <item>@drawable/tab_info</item>
+        <item>@drawable/tab_info</item>
+        <item>@drawable/tab_discovery</item>
+    </integer-array>
+
 </resources>
