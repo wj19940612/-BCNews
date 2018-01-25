@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
@@ -38,8 +39,6 @@ public class SubTextActivity extends Activity {
     protected String mPureHtml;
 
     public static final String INFO_HTML_META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\">";
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -156,6 +155,7 @@ public class SubTextActivity extends Activity {
             content = getHtmlData(urlData);
         }
         getWebView().loadDataWithBaseURL(null, content, "text/html", "utf-8", null);
+        getWebView().scrollTo(0, (int) MainActivity.mWebViewDy);
     }
 
     public WebView getWebView() {
@@ -178,5 +178,12 @@ public class SubTextActivity extends Activity {
             return "Meizu".equalsIgnoreCase(Build.BRAND);
 //            return false;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        MainActivity.mWebViewDy = mWebView.getScrollY();
+        Log.e("zzz","dy:"+mWebView.getScrollY());
     }
 }
