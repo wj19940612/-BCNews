@@ -4,8 +4,10 @@
     <string name="load_more">加载更多</string>
     <string name="restart_load_more">重新加载</string>
     <string name="loading_more">正在加载</string>
+    <string name="swipe_load_more">上拉加载</string>
 
     <string name="refresh_complete">刷新完成</string>
     <string name="refreshing">正在刷新</string>
     <string name="release_to_refresh">释放刷新</string>
+    <string name="swipe_fresh">下拉刷新</string>
 </resources>

@@ -2,8 +2,8 @@ package com.sbai.bcnews;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,9 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
-import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.fragment.BaseSwipeLoadFragment;
 
 import java.util.ArrayList;
 
@@ -25,14 +24,12 @@ import butterknife.Unbinder;
  * 作为SwipeToLoadLayout的使用例子 后期删除
  */
 
-public class RecycleViewFragment extends Fragment {
+public class RecycleViewFragment extends BaseSwipeLoadFragment {
 
 
 
     @BindView(R.id.swipe_target)
     RecyclerView mSwipeTarget;
-    //    @BindView(R.id.googleProgress)
-//    GoogleCircleProgressView mGoogleProgress;
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
     private Unbinder mBind;
@@ -67,55 +64,51 @@ public class RecycleViewFragment extends Fragment {
         mRecycleViewAdapter = new RecycleViewAdapter(mStrings, getActivity());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeTarget.setAdapter(mRecycleViewAdapter);
+    }
 
-        mSwipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
+    @NonNull
+    @Override
+    protected View initSwipeTargetView() {
+        return mSwipeTarget;
+    }
+
+    @NonNull
+    @Override
+    protected SwipeToLoadLayout initSwipeToLoadLayout() {
+        return mSwipeToLoadLayout;
+    }
+
+    @Override
+    public void onLoadMore() {
+        mSwipeToLoadLayout.postDelayed(new Runnable() {
             @Override
-            public void onRefresh() {
-                mSwipeToLoadLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        a = 0;
-                        mSwipeToLoadLayout.setRefreshing(false);
-
-                        mRecycleViewAdapter.clear();
-                        for (int i = 0; i < 20; i++) {
-                            a++;
-                            mStrings.add("第 " + a + " 个数据");
-                        }
-                        mRecycleViewAdapter.addAll(mStrings);
-                    }
-                }, 200);
-            }
-        });
-
-        mSwipeToLoadLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                mSwipeToLoadLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 20; i++) {
-                            a++;
-                            mRecycleViewAdapter.add("第 " + a + " 个数据");
-                        }
-
-                        mSwipeToLoadLayout.setLoadingMore(false);
-                    }
-                }, 2000);
-            }
-        });
-
-        mSwipeTarget.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (!recyclerView.canScrollVertically(1)) {
-                        mSwipeToLoadLayout.setLoadingMore(true);
-                    }
+            public void run() {
+                for (int i = 0; i < 20; i++) {
+                    a++;
+                    mRecycleViewAdapter.add("第 " + a + " 个数据");
                 }
+
+                mSwipeToLoadLayout.setLoadingMore(false);
             }
-        });
+        }, 2000);
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeToLoadLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                a = 0;
+                mSwipeToLoadLayout.setRefreshing(false);
+
+                mRecycleViewAdapter.clear();
+                for (int i = 0; i < 20; i++) {
+                    a++;
+                    mStrings.add("第 " + a + " 个数据");
+                }
+                mRecycleViewAdapter.addAll(mStrings);
+            }
+        }, 200);
     }
 
 

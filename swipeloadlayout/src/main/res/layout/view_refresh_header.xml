@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/refresh_header_height_twitter"
-                android:layout_gravity="center">
+<com.zcmrr.swipelayout.header.RefreshHeaderView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/refresh_header_height_twitter"
+        android:layout_gravity="center">
 
         <ImageView
             android:id="@+id/ivArrow"
@@ -12,7 +17,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="48dp"
             android:layout_toLeftOf="@+id/tvRefresh"
-            android:background="@drawable/ic_refresh_pull_arrow" />
+            android:background="@drawable/ic_refresh_pull_arrow"/>
 
         <ImageView
             android:id="@+id/ivSuccess"
@@ -21,7 +26,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="48dp"
             android:layout_toLeftOf="@+id/tvRefresh"
-            android:background="@drawable/ic_refresh_success" />
+            android:background="@drawable/ic_refresh_success"/>
 
         <ProgressBar
             android:id="@+id/progressbar"
@@ -30,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="48dp"
-            android:layout_toLeftOf="@+id/tvRefresh" />
+            android:layout_toLeftOf="@+id/tvRefresh"/>
 
         <TextView
             android:id="@+id/tvRefresh"
@@ -38,5 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:textColor="?attr/colorPrimary" />
-</RelativeLayout>
+            android:textColor="?attr/colorPrimary"/>
+    </RelativeLayout>
+
+</com.zcmrr.swipelayout.header.RefreshHeaderView>

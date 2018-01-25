@@ -7,13 +7,6 @@
     android:layout_height="match_parent"
     tools:context="com.sbai.bcnews.activity.MainActivity">
 
-    <TextView
-        android:gravity="center"
-        android:text="凤凰卡萨付款"
-        android:background="@android:color/holo_blue_dark"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"/>
-
     <com.sbai.bcnews.view.ScrollableViewPager
         android:id="@+id/viewPager"
         android:layout_width="0dp"

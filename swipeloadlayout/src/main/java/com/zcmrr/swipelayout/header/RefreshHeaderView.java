@@ -3,8 +3,6 @@ package com.zcmrr.swipelayout.header;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -50,15 +48,20 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
         rotateDown = AnimationUtils.loadAnimation(context, R.anim.rotate_down);
 
 
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_refresh_header, this, false);
+//        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_refresh_header, this, false);
+//
+//        addView(view);
 
-        addView(view);
-        tvRefresh = view.findViewById(R.id.tvRefresh);
-        ivArrow = view.findViewById(R.id.ivArrow);
-        ivSuccess = view.findViewById(R.id.ivSuccess);
-        progressBar = view.findViewById(R.id.progressbar);
     }
 
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        tvRefresh = findViewById(R.id.tvRefresh);
+        ivArrow = findViewById(R.id.ivArrow);
+        ivSuccess = findViewById(R.id.ivSuccess);
+        progressBar = findViewById(R.id.progressbar);
+    }
 
     @Override
     public void onRefresh() {
@@ -94,7 +97,7 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
                     rotated = false;
                 }
 
-                tvRefresh.setText("SWIPE TO REFRESH");
+                tvRefresh.setText(R.string.swipe_fresh);
             }
         }
     }
