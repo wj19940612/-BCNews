@@ -67,6 +67,7 @@
             android:label="PushService"
             android:process=":pushservice">
         </service>
+        <activity android:name=".activity.SubTextActivity"/>
     </application>
 
 </manifest>
