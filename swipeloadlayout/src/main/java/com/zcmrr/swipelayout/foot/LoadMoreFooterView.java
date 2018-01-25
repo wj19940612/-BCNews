@@ -2,6 +2,8 @@ package com.zcmrr.swipelayout.foot;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,15 +35,13 @@ public class LoadMoreFooterView extends SwipeLoadMoreFooterLayout {
         super(context, attrs, defStyleAttr);
         mFooterHeight = getResources().getDimensionPixelOffset(R.dimen.load_more_footer_height_twitter);
 
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_load_more_footer, this, false);
+        tvLoadMore = view.findViewById(R.id.tvLoadMore);
+        ivSuccess = view.findViewById(R.id.ivSuccess);
+        progressBar =view.findViewById(R.id.progressbar);
+        addView(view);
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        tvLoadMore = findViewById(R.id.tvLoadMore);
-        ivSuccess = findViewById(R.id.ivSuccess);
-        progressBar =findViewById(R.id.progressbar);
-    }
 
     @Override
     public void onPrepare() {

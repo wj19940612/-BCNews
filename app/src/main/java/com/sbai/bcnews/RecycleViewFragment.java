@@ -26,8 +26,6 @@ import butterknife.Unbinder;
 
 public class RecycleViewFragment extends BaseSwipeLoadFragment {
 
-
-
     @BindView(R.id.swipe_target)
     RecyclerView mSwipeTarget;
     @BindView(R.id.swipeToLoadLayout)

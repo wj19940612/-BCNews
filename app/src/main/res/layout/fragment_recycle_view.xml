@@ -15,9 +15,10 @@
     tools:context="com.sbai.bcnews.RecycleViewFragment">
 
 
-    <include
+    <com.zcmrr.swipelayout.header.RefreshHeaderView
         android:id="@+id/swipe_refresh_header"
-        layout="@layout/view_refresh_header"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@id/swipe_target"
@@ -25,8 +26,9 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"/>
 
-    <include
+    <com.zcmrr.swipelayout.foot.LoadMoreFooterView
         android:id="@+id/swipe_load_more_footer"
-        layout="@layout/view_load_more_footer"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>

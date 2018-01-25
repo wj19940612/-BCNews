@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zcmrr.swipelayout.header.RefreshHeaderView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<!--<com.zcmrr.swipelayout.header.RefreshHeaderView-->
+  <!---->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical">-->
 
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="@dimen/refresh_header_height_twitter"
         android:layout_gravity="center">
@@ -46,4 +47,4 @@
             android:textColor="?attr/colorPrimary"/>
     </RelativeLayout>
 
-</com.zcmrr.swipelayout.header.RefreshHeaderView>
+<!--</com.zcmrr.swipelayout.header.RefreshHeaderView>-->
