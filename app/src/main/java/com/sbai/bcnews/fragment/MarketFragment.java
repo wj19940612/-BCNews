@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.sbai.bcnews.R;
 
+
 /**
  * Modified by john on 24/01/2018
  * <p>

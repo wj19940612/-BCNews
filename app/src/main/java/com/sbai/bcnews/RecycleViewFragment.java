@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
-import com.zcmrr.swipelayout.GoogleCircleProgressView;
 
 import java.util.ArrayList;
 
@@ -29,8 +28,7 @@ import butterknife.Unbinder;
 public class RecycleViewFragment extends Fragment {
 
 
-    @BindView(R.id.googleProgress)
-    GoogleCircleProgressView mGoogleProgress;
+
     @BindView(R.id.swipe_target)
     RecyclerView mSwipeTarget;
     //    @BindView(R.id.googleProgress)
