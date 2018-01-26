@@ -72,4 +72,7 @@
         <item>@drawable/tab_info</item>
         <item>@drawable/tab_discovery</item>
     </integer-array>
+
+    <!-- 资讯 -->
+    <string name="news_detail">资讯详情</string>
 </resources>
