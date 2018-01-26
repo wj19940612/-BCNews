@@ -57,11 +57,14 @@ public abstract class BaseDefaultSwipeLoadFragment extends BaseSwipeLoadFragment
         if (context != null) {
             switch (mSwipeTargetType) {
                 case SWIPE_TARGET_RECYCLE_VIEW:
-                    mSwipeTargetView = LayoutInflater.from(context).inflate(R.layout.view_base_recycleview_swipe_load, null);
+                    View rootView = LayoutInflater.from(context).inflate(R.layout.view_base_recycleview_swipe_load, null);
+                    mSwipeToLoadLayout = rootView.findViewById(R.id.swipeToLoadLayout);
+                    mSwipeTargetView = rootView.findViewById(R.id.swipe_target);
                     return mSwipeTargetView;
                 case SWIPE_TARGET_LIST_VIEW:
-                    mSwipeTargetView = LayoutInflater.from(context).inflate(R.layout.view_base_listview_swipe_load, null);
-                    return mSwipeTargetView;
+                    View view = inflater.inflate(R.layout.view_base_listview_swipe_load, null);
+                    mSwipeToLoadLayout = view.findViewById(R.id.swipeToLoadLayout);
+                    mSwipeTargetView = view.findViewById(R.id.swipe_target);
                 default:
                     return null;
             }
