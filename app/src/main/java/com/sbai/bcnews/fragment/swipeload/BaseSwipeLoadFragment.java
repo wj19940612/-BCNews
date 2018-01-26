@@ -1,4 +1,4 @@
-package com.sbai.bcnews.fragment;
+package com.sbai.bcnews.fragment.swipeload;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,27 +11,32 @@ import android.widget.ListView;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.fragment.BaseFragment;
 
 /**
  * Created by ${wangJie} on 2018/1/25.
+ * 基础的刷新和加载fragment  提供了基础的刷新加载方法
+ * <p>
  */
 
 public abstract class BaseSwipeLoadFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
 
-    private SwipeToLoadLayout mSwipeToLoadLayout;
-    private View mSwipeTargetView;
+    protected SwipeToLoadLayout mSwipeToLoadLayout;
+
+    protected View mSwipeTargetView;
 
     protected OnListViewScrollListener mOnListViewScrollListener;
 
     protected OnRecycleViewScrollListener mOnRecycleViewScrollListener;
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mSwipeTargetView = initSwipeTargetView();
+        mSwipeTargetView = getSwipeTargetView();
 
-        mSwipeToLoadLayout = initSwipeToLoadLayout();
+        mSwipeToLoadLayout = getSwipeToLoadLayout();
 
         if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setOnLoadMoreListener(this);
@@ -47,6 +52,7 @@ public abstract class BaseSwipeLoadFragment extends BaseFragment implements OnLo
         }
 
     }
+
 
     private void initRecycleViewOnScrollListener(RecyclerView recyclerView) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -104,12 +110,13 @@ public abstract class BaseSwipeLoadFragment extends BaseFragment implements OnLo
      * @return
      */
     @NonNull
-    protected abstract View initSwipeTargetView();
+    protected abstract View getSwipeTargetView();
 
     @NonNull
-    protected abstract SwipeToLoadLayout initSwipeToLoadLayout();
+    protected abstract SwipeToLoadLayout getSwipeToLoadLayout();
 
-    protected void onStopFreshOrLoad() {
+
+    protected void stopFreshOrLoadAnimation() {
         if (mSwipeToLoadLayout != null) {
             if (mSwipeToLoadLayout.isRefreshing()) {
                 mSwipeToLoadLayout.setRefreshing(false);
@@ -142,5 +149,5 @@ public abstract class BaseSwipeLoadFragment extends BaseFragment implements OnLo
     public void setOnRecycleViewScrollListener(OnRecycleViewScrollListener onRecycleViewScrollListener) {
         this.mOnRecycleViewScrollListener = onRecycleViewScrollListener;
     }
-    
+
 }

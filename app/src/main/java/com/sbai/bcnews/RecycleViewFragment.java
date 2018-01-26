@@ -2,7 +2,6 @@ package com.sbai.bcnews;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,48 +10,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
-import com.sbai.bcnews.fragment.BaseSwipeLoadFragment;
+import com.sbai.bcnews.fragment.swipeload.BaseDefaultSwipeLoadFragment;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * 作为SwipeToLoadLayout的使用例子 后期删除
  */
 
-public class RecycleViewFragment extends BaseSwipeLoadFragment {
+public class RecycleViewFragment extends BaseDefaultSwipeLoadFragment {
 
-    @BindView(R.id.swipe_target)
-    RecyclerView mSwipeTarget;
-    @BindView(R.id.swipeToLoadLayout)
-    SwipeToLoadLayout mSwipeToLoadLayout;
-    private Unbinder mBind;
+
     private ArrayList<String> mStrings;
     private RecycleViewAdapter mRecycleViewAdapter;
 
-    private int a;
+    int a;
 
     public RecycleViewFragment() {
+        super(SWIPE_TARGET_RECYCLE_VIEW);
     }
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recycle_view, container, false);
-        mBind = ButterKnife.bind(this, view);
-        return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mBind.unbind();
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -60,21 +40,10 @@ public class RecycleViewFragment extends BaseSwipeLoadFragment {
 
         mStrings = new ArrayList<>();
         mRecycleViewAdapter = new RecycleViewAdapter(mStrings, getActivity());
-        mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mSwipeTarget.setAdapter(mRecycleViewAdapter);
+        ((RecyclerView) mSwipeTargetView).setLayoutManager(new LinearLayoutManager(getActivity()));
+        ((RecyclerView) mSwipeTargetView).setAdapter(mRecycleViewAdapter);
     }
 
-    @NonNull
-    @Override
-    protected View initSwipeTargetView() {
-        return mSwipeTarget;
-    }
-
-    @NonNull
-    @Override
-    protected SwipeToLoadLayout initSwipeToLoadLayout() {
-        return mSwipeToLoadLayout;
-    }
 
     @Override
     public void onLoadMore() {
@@ -86,7 +55,8 @@ public class RecycleViewFragment extends BaseSwipeLoadFragment {
                     mRecycleViewAdapter.add("第 " + a + " 个数据");
                 }
 
-                mSwipeToLoadLayout.setLoadingMore(false);
+                stopFreshOrLoadAnimation();
+
             }
         }, 2000);
     }
@@ -97,8 +67,8 @@ public class RecycleViewFragment extends BaseSwipeLoadFragment {
             @Override
             public void run() {
                 a = 0;
-                mSwipeToLoadLayout.setRefreshing(false);
 
+                stopFreshOrLoadAnimation();
                 mRecycleViewAdapter.clear();
                 for (int i = 0; i < 20; i++) {
                     a++;
@@ -108,6 +78,7 @@ public class RecycleViewFragment extends BaseSwipeLoadFragment {
             }
         }, 200);
     }
+
 
 
     static class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {

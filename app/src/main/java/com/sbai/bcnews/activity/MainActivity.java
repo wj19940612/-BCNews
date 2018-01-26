@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity {
                     return new NewsFlashFragment();
                 case 2:
                     return new RecycleViewFragment();
+//                    return new MarketFragment();
             }
             return null;
         }
