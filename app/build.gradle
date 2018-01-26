@@ -32,7 +32,7 @@ android {
 
     productFlavors {
         dev {
-
+            buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
         }
 
         alpha {
