@@ -25,6 +25,8 @@ import butterknife.Unbinder;
  * APIs:
  */
 public class NewsFragment extends BaseFragment {
+    public static float mWebViewDy;
+
 
     private Unbinder mBind;
     @BindView(R.id.news)

@@ -20,6 +20,7 @@
         app:titleTextColor="@color/blackPrimary"/>
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/titleBar"
@@ -37,6 +38,7 @@
                 android:paddingTop="14dp">
 
                 <TextView
+                    android:id="@+id/subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="14dp"

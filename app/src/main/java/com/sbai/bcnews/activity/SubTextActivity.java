@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,12 +15,15 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.fragment.NewsFragment;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.view.TitleBar;
 
 import java.lang.reflect.Method;
 
@@ -35,6 +39,14 @@ public class SubTextActivity extends Activity {
 
     @BindView(R.id.webView)
     WebView mWebView;
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
+    @BindView(R.id.subtitle)
+    TextView mSubtitle;
+    @BindView(R.id.titleLayout)
+    RelativeLayout mTitleLayout;
+    @BindView(R.id.scrollView)
+    NestedScrollView mScrollView;
 
     private WebViewClient mWebViewClient;
 
@@ -51,6 +63,7 @@ public class SubTextActivity extends Activity {
         ButterKnife.bind(this);
         initData();
         initWebView();
+        initScrollView();
     }
 
     private void initData() {
@@ -170,7 +183,6 @@ public class SubTextActivity extends Activity {
             content = getHtmlData(urlData);
         }
         getWebView().loadDataWithBaseURL(null, content, "text/html", "utf-8", null);
-        getWebView().scrollTo(0, (int) MainActivity.mWebViewDy);
     }
 
     public WebView getWebView() {
@@ -195,6 +207,10 @@ public class SubTextActivity extends Activity {
         }
     }
 
+    private void initScrollView(){
+        getWebView().scrollTo(0, (int) NewsFragment.mWebViewDy);
+    }
+
     public void openBigImage(String img) {
         Launcher.with(this, LookBigPictureActivity.class).putExtra(ExtraKeys.PORTRAIT, img).execute();
     }
@@ -202,6 +218,7 @@ public class SubTextActivity extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        MainActivity.mWebViewDy = mWebView.getScrollY();
+        NewsFragment.mWebViewDy = mScrollView.getScrollY();
+        Log.e("zzz", "scY:" + mScrollView.getScrollY());
     }
 }
