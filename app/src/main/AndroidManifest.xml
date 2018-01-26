@@ -68,6 +68,7 @@
             android:process=":pushservice">
         </service>
         <activity android:name=".activity.SubTextActivity"/>
+        <activity android:name=".activity.LookBigPictureActivity"/>
     </application>
 
 </manifest>

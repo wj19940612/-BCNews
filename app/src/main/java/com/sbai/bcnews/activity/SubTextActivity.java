@@ -16,7 +16,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 
+import com.sbai.bcnews.AppJs;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.utils.Launcher;
 
 import java.lang.reflect.Method;
 
@@ -37,6 +40,7 @@ public class SubTextActivity extends Activity {
 
     protected String mPageUrl;
     protected String mPureHtml;
+    private AppJs mAppJs;
 
     public static final String INFO_HTML_META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\">";
 
@@ -91,10 +95,21 @@ public class SubTextActivity extends Activity {
             //5.0 以下 默认同时加载http和https
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
-        mWebViewClient = new WebViewClient();
+        mWebViewClient = new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                mWebView.loadUrl("javascript:(function(){"
+                        + "var objs = document.getElementsByTagName(\"img\"); "
+                        + "for(var i=0;i<objs.length;i++) " + "{" + " objs[i].onclick=function() "
+                        + " { " + " window.AppJs.openImage(this.src); " + " } " + "}" + "})()");
+            }
+        };
         mWebView.setWebViewClient(mWebViewClient);
         mWebView.setDrawingCacheEnabled(true);
         mWebView.setBackgroundColor(0);
+        mAppJs = new AppJs(this);
+        mWebView.addJavascriptInterface(mAppJs, "AppJs");
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -180,10 +195,13 @@ public class SubTextActivity extends Activity {
         }
     }
 
+    public void openBigImage(String img) {
+        Launcher.with(this, LookBigPictureActivity.class).putExtra(ExtraKeys.PORTRAIT, img).execute();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         MainActivity.mWebViewDy = mWebView.getScrollY();
-        Log.e("zzz","dy:"+mWebView.getScrollY());
     }
 }
