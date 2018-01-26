@@ -27,6 +27,7 @@
     <string name="you_not_install_weixin">您尚未安装微信</string>
     <string name="you_not_install_weibo">您尚未安装微博</string>
     <string name="share_to">分享至</string>
+    <string name="share_to_">分享至:</string>
 
     <!-- Dialog -->
     <string name="ok">确定</string>
