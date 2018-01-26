@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.Display;
 
@@ -210,7 +211,7 @@ public class TitleBar extends RelativeLayout {
         if (backIcon != null) {
             mLeftView.setCompoundDrawablesWithIntrinsicBounds(backIcon, null, null, null);
         } else { // default icon
-            //  mLeftView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_launcher_background, 0, 0, 0);
+            mLeftView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tb_back_black, 0, 0, 0);
         }
     }
 
@@ -316,6 +317,9 @@ public class TitleBar extends RelativeLayout {
                     return;
                 }
             }
+            Glide.with(getContext())
+                    .load(rightViewContent)
+                    .into(mRightImageView);
         }
     }
 

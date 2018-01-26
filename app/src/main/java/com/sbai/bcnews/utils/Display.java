@@ -9,6 +9,10 @@ import android.view.WindowManager;
 
 import com.sbai.bcnews.App;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
 public class Display {
 
     public static float dp2Px(float value, Resources res) {

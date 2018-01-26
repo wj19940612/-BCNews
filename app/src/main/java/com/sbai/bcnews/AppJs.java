@@ -2,12 +2,16 @@ package com.sbai.bcnews;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 
+import com.sbai.bcnews.activity.SubTextActivity;
 import com.sbai.bcnews.activity.WebActivity;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.view.ShareDialog;
 
 
@@ -153,5 +157,19 @@ public class AppJs {
         }
 
         return availableNetwork;
+    }
+
+    @JavascriptInterface
+    public void openImage(final String img){
+        Log.e("zzz","openImage");
+        if (mContext instanceof SubTextActivity) {
+            final SubTextActivity activity = (SubTextActivity) mContext;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    activity.openBigImage(img);
+                }
+            });
+        }
     }
 }

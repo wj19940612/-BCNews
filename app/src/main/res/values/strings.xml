@@ -14,6 +14,10 @@
 
     <string name="restart_app">重启应用</string>
     <string name="cut">剪切</string>
+    <string name="save_to_the_gallery">是否保存到相册</string>
+    <string name="image_save_to_">图片保存至%1$s</string>
+    <string name="image_save_fail">图片保存失败</string>
+    <string name="is_sure_delete_photo">要删除这张照片吗?</string>
     <!--分享-->
     <string name="wechat_friend">微信好友</string>
     <string name="wechat_circle">朋友圈</string>
@@ -32,6 +36,7 @@
     <string name="cancel">取消</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+
 
 
     <!-- WebView network error -->
@@ -70,4 +75,8 @@
         <item>@drawable/tab_discovery</item>
     </integer-array>
     <string name="share_news_flash">分享快讯</string>
+=======
+
+    <!-- 资讯 -->
+    <string name="news_detail">资讯详情</string>
 </resources>

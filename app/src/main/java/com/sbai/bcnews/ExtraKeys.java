@@ -12,4 +12,7 @@ public interface ExtraKeys {
     String IS_CANCELED_ON_TOUCH_OUTSIDE = "is_canceled_on_touch_outside";
 
     String NEWS_FLASH = "news_flash";
+    String PORTRAIT = "portrait";
+    String PIC_DELETE = "pic_delete";
+    String MISS_AVATAR = "miss_avatar";
 }

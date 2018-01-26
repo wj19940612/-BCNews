@@ -1,10 +1,12 @@
 package com.sbai.bcnews.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.MarketFragment;
@@ -15,9 +17,9 @@ import com.sbai.bcnews.view.ScrollableViewPager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
-
     @BindView(R.id.viewPager)
     ScrollableViewPager mViewPager;
     @BindView(R.id.bottomTabs)
@@ -30,6 +32,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
 
         initViews();
     }
