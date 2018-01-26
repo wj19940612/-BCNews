@@ -21,9 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.Display;
-import com.sbai.glide.GlideApp;
+
 
 public class TitleBar extends RelativeLayout {
 
@@ -316,7 +317,7 @@ public class TitleBar extends RelativeLayout {
                     return;
                 }
             }
-            GlideApp.with(getContext())
+            Glide.with(getContext())
                     .load(rightViewContent)
                     .into(mRightImageView);
         }
