@@ -1,5 +1,7 @@
 package com.sbai.bcnews.fragment;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,11 +13,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.ShareNewsFlashActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.NewsFlash;
+import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.httplib.ReqCallback;
 
 import java.util.ArrayList;
@@ -58,7 +65,7 @@ public class NewsFlashFragment extends BaseFragment {
         Apic.getNewsFlash(mPage).tag(TAG)
                 .callback(new Callback2D<Resp<List<NewsFlash>>, List<NewsFlash>>() {
                     @Override
-                    protected void onRespSuccessData(List<NewsFlash> data) {
+                    protected void onRespSuccessData(final List<NewsFlash> data) {
                         updateNewsFlashData(data);
                     }
                 }).fireFreely();
@@ -76,16 +83,18 @@ public class NewsFlashFragment extends BaseFragment {
     }
 
     private void initRecyclerView() {
-        mNewsAdapter = new NewsAdapter();
+        mNewsAdapter = new NewsAdapter(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNewsAdapter);
     }
 
     static class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         private List<NewsFlash> dataList;
+        private Context mContext;
 
-        public NewsAdapter() {
+        public NewsAdapter(Context context) {
             super();
+            mContext = context;
             dataList = new ArrayList<>();
         }
 
@@ -114,7 +123,7 @@ public class NewsFlashFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.bindDataWithView(dataList.get(position));
+            holder.bindDataWithView(dataList.get(position), mContext);
         }
 
         @Override
@@ -136,9 +145,23 @@ public class NewsFlashFragment extends BaseFragment {
                 ButterKnife.bind(itemView);
             }
 
-            private void bindDataWithView(NewsFlash newsFlash) {
-              //  mTime.setText(newsFlash.getReleaseTime());
-              mContent.setText(newsFlash.getContent());
+            private void bindDataWithView(final NewsFlash newsFlash, Context context) {
+                mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()).concat(" ").concat(context.getString(R.string.news_flash)));
+                if (newsFlash.isImportant()) {
+                    mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
+                            Color.parseColor("#476E92"), Color.parseColor("#476E92")));
+                } else {
+                    mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
+                            Color.parseColor("#494949"), Color.parseColor("#494949")));
+                }
+                mShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Launcher.with(mContext, ShareNewsFlashActivity.class)
+                                .putExtra(ExtraKeys.NEWS_FLASH, newsFlash)
+                                .execute();
+                    }
+                });
             }
         }
     }

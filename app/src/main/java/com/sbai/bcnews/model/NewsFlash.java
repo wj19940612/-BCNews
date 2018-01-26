@@ -9,7 +9,6 @@ import android.os.Parcelable;
 
 public class NewsFlash implements Parcelable {
 
-    public static final int IMPORTANT = 1;
 
     /**
      * content : 链圈微信CoinMeet(MEE)今日下午3点整即将全球首发火币PRO全球交易站、CoinEgg、BJEX、NB.top、龙币网。
@@ -19,7 +18,7 @@ public class NewsFlash implements Parcelable {
      */
 
     private String content;
-    private String id;
+    private long id;
     private long releaseTime;
     private String title;
     private int rank;
@@ -28,7 +27,7 @@ public class NewsFlash implements Parcelable {
         return content;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
@@ -42,6 +41,10 @@ public class NewsFlash implements Parcelable {
 
     public int getRank() {
         return rank;
+    }
+
+    public boolean isImportant() {
+        return rank == 1;
     }
 
     @Override
@@ -65,7 +68,7 @@ public class NewsFlash implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.content);
-        dest.writeString(this.id);
+        dest.writeLong(this.id);
         dest.writeLong(this.releaseTime);
         dest.writeString(this.title);
         dest.writeInt(this.rank);
@@ -73,7 +76,7 @@ public class NewsFlash implements Parcelable {
 
     protected NewsFlash(Parcel in) {
         this.content = in.readString();
-        this.id = in.readString();
+        this.id = in.readInt();
         this.releaseTime = in.readLong();
         this.title = in.readString();
         this.rank = in.readInt();

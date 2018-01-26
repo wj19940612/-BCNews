@@ -3,9 +3,12 @@ package com.sbai.bcnews.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,12 +17,17 @@ import android.widget.TextView;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.NewsFlash;
+import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.TitleBar;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,10 +71,23 @@ public class ShareNewsFlashActivity extends BaseActivity {
         initData(getIntent());
     }
 
+    @Override
+    public void overridePendingTransition(int enterAnim, int exitAnim) {
+        overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_to_bottom);
+    }
+
     private void initData(Intent intent) {
         NewsFlash newsFlash = intent.getParcelableExtra(ExtraKeys.NEWS_FLASH);
         if (newsFlash != null) {
-
+            mWeek.setText(DateUtil.getDayOfWeek(newsFlash.getReleaseTime()));
+            mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()).concat(" ").concat(getString(R.string.news_flash)));
+            if (newsFlash.isImportant()) {
+                mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
+                        Color.parseColor("#476E92"), Color.parseColor("#476E92")));
+            } else {
+                mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
+                        Color.parseColor("#494949"), Color.parseColor("#494949")));
+            }
         }
     }
 
@@ -105,7 +126,7 @@ public class ShareNewsFlashActivity extends BaseActivity {
                 }
                 break;
             case R.id.download:
-                // TODO: 2018-01-26
+                ImageUtils.saveImageToGallery(getActivity(), screenShot(mShareArea));
                 break;
         }
     }

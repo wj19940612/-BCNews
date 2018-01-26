@@ -41,7 +41,8 @@ public class ShareDialog {
     public enum SHARE_PLATFORM {
         WECHAT_FRIEND,
         WECHAT_CIRCLE,
-        SINA_WEIBO
+        SINA_WEIBO,
+        QQ
     }
 
     private Activity mActivity;
@@ -111,6 +112,32 @@ public class ShareDialog {
                                 @Override
                                 public void run() {
                                     ToastUtil.show(R.string.you_not_install_weixin);
+                                }
+                            });
+                        }
+                    }
+                    mSmartDialog.dismiss();
+                    break;
+                case R.id.qq:
+                    if (UMShareAPI.get(mActivity).isInstall(mActivity, SHARE_MEDIA.QQ)) {
+                        if (mShareImageOnly) {
+                            shareImageToPlatform(SHARE_MEDIA.QQ);
+                        } else {
+                            if (mShareUrl.contains("?")) {
+                                mShareUrl += "&userFrom=friend";
+                            } else {
+                                mShareUrl += "?userFrom=friend";
+                            }
+                            shareToPlatform(SHARE_MEDIA.QQ);
+                        }
+
+                        onSharePlatformClicked(SHARE_PLATFORM.QQ);
+                    } else {
+                        if (mActivity != null) {
+                            mActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtil.show(R.string.you_not_install_qq);
                                 }
                             });
                         }
