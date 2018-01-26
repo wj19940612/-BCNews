@@ -18,12 +18,11 @@ import com.sbai.bcnews.fragment.BaseFragment;
  * <p>
  */
 
-public abstract class BaseSwipeLoadFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
 
-    protected SwipeToLoadLayout mSwipeToLoadLayout;
+    private SwipeToLoadLayout mSwipeToLoadLayout;
 
-    protected View mSwipeTargetView;
-
+    private T mSwipeTargetView;
 
     /**
      * 设置需要刷新和加载的的view 如ListView RecycleView
@@ -31,13 +30,13 @@ public abstract class BaseSwipeLoadFragment extends BaseFragment implements OnLo
      * @return
      */
     @NonNull
-    protected abstract View getSwipeTargetView();
+    protected abstract T getSwipeTargetView();
 
     @NonNull
     protected abstract SwipeToLoadLayout getSwipeToLoadLayout();
 
 
-    protected void onScrollToBottom() {
+    protected void triggerLoadMore() {
         if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setLoadingMore(true);
         }

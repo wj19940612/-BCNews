@@ -34,7 +34,7 @@ public class RecycleViewFragment extends RecycleViewSwipeLoadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mStrings = new ArrayList<>();
-        RecyclerView recycleView = getRecycleView();
+        RecyclerView recycleView = getSwipeTargetView();
         mRecycleViewAdapter = new RecycleViewAdapter(mStrings, getActivity());
         recycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycleView.setAdapter(mRecycleViewAdapter);
@@ -43,7 +43,7 @@ public class RecycleViewFragment extends RecycleViewSwipeLoadFragment {
 
     @Override
     public void onLoadMore() {
-        mSwipeToLoadLayout.postDelayed(new Runnable() {
+        getSwipeToLoadLayout().postDelayed(new Runnable() {
             @Override
             public void run() {
                 for (int i = 0; i < 20; i++) {
@@ -59,7 +59,7 @@ public class RecycleViewFragment extends RecycleViewSwipeLoadFragment {
 
     @Override
     public void onRefresh() {
-        mSwipeToLoadLayout.postDelayed(new Runnable() {
+        getSwipeToLoadLayout().postDelayed(new Runnable() {
             @Override
             public void run() {
                 a = 0;

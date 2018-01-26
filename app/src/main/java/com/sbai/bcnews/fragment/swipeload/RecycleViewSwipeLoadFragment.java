@@ -17,7 +17,7 @@ import com.sbai.bcnews.R;
  * 提供了默认的布局  如果要使用自定义布局 可以重写onCreateView  
  */
 
-public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment {
+public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment<RecyclerView> {
 
     @Nullable
     @Override
@@ -29,7 +29,7 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        RecyclerView recycleView = getRecycleView();
+        RecyclerView recycleView = getSwipeTargetView();
         recycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -43,7 +43,6 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
         });
     }
 
-
     @NonNull
     @Override
     protected SwipeToLoadLayout getSwipeToLoadLayout() {
@@ -52,11 +51,8 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
 
     @NonNull
     @Override
-    protected View getSwipeTargetView() {
+    protected RecyclerView getSwipeTargetView() {
         return getView().findViewById(R.id.swipe_target);
-    }
-    protected RecyclerView getRecycleView() {
-        return (RecyclerView) mSwipeTargetView;
     }
 
     protected void onRecycleViewScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -72,7 +68,7 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
             super.onScrollStateChanged(recyclerView, newState);
             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                 if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
-                    onScrollToBottom();
+                    triggerLoadMore();
                 }
             }
             onRecycleViewScrollStateChanged(recyclerView, newState);
@@ -89,7 +85,7 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RecyclerView recycleView = getRecycleView();
+        RecyclerView recycleView = getSwipeTargetView();
         if (recycleView != null) {
             recycleView.removeOnScrollListener(mOnScrollListener);
         }

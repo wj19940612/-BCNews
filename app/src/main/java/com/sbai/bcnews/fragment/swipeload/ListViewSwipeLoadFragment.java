@@ -18,7 +18,7 @@ import com.sbai.bcnews.R;
  * 提供了默认的布局  如果要使用自定义布局 可以重写onCreateView
  */
 
-public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment {
+public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment<ListView> {
 
     @Nullable
     @Override
@@ -34,19 +34,15 @@ public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment {
 
     @NonNull
     @Override
-    protected View getSwipeTargetView() {
+    protected ListView getSwipeTargetView() {
         return getView().findViewById(R.id.swipe_target);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ListView listView = getListView();
+        ListView listView = getSwipeTargetView();
         listView.setOnScrollListener(mOnScrollChangeListener);
-    }
-
-    protected ListView getListView() {
-        return (ListView) mSwipeTargetView;
     }
 
     protected AbsListView.OnScrollListener mOnScrollChangeListener = new AbsListView.OnScrollListener() {
@@ -54,7 +50,7 @@ public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment {
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                 if (view.getLastVisiblePosition() == view.getCount() - 1 && !view.canScrollVertically(1)) {
-                    onScrollToBottom();
+                    triggerLoadMore();
                 }
             }
             onListViewScrollStateChanged(view, scrollState);
