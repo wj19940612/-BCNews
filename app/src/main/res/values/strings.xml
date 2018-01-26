@@ -76,8 +76,11 @@
         <item>@drawable/tab_discovery</item>
     </integer-array>
     <string name="share_news_flash">分享快讯</string>
-=======
 
     <!-- 资讯 -->
     <string name="news_detail">资讯详情</string>
+    <string name="praise_count">赞(%1$d)</string>
+    <string name="news_praise">赞</string>
+    <string name="praise_error">点赞失败</string>
+    <string name="reader_time">约%1$d分钟</string>
 </resources>

@@ -22,4 +22,8 @@ public class Apic {
         return Api.get("/api/news-info/info/information.do", new ReqParams().put("page", page));
     }
 
+    public static Api praiseNews(String newsId) {
+        return Api.put("/api/news-info/info/like/" + newsId);
+    }
+
 }

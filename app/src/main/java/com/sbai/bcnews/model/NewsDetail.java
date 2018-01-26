@@ -23,6 +23,7 @@ public class NewsDetail {
     private int type;           //一级类型
     private List<String> imgs;    //图片集合
     private List<String> tags;    //标签
+    private int readerTime;       //需要阅读时间
 
     private int readHeight; //阅读高度,用于用户记忆浏览
 
@@ -144,6 +145,14 @@ public class NewsDetail {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public int getReaderTime() {
+        return readerTime;
+    }
+
+    public void setReaderTime(int readerTime) {
+        this.readerTime = readerTime;
     }
 
     public int getReadHeight() {
