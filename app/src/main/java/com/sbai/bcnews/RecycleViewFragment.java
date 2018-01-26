@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sbai.bcnews.fragment.swipeload.BaseDefaultSwipeLoadFragment;
+import com.sbai.bcnews.fragment.swipeload.RecycleViewSwipeLoadFragment;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
  * 作为SwipeToLoadLayout的使用例子 后期删除
  */
 
-public class RecycleViewFragment extends BaseDefaultSwipeLoadFragment {
+public class RecycleViewFragment extends RecycleViewSwipeLoadFragment {
 
 
     private ArrayList<String> mStrings;
@@ -29,19 +29,15 @@ public class RecycleViewFragment extends BaseDefaultSwipeLoadFragment {
 
     int a;
 
-    public RecycleViewFragment() {
-        super(SWIPE_TARGET_RECYCLE_VIEW);
-    }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mStrings = new ArrayList<>();
+        RecyclerView recycleView = getRecycleView();
         mRecycleViewAdapter = new RecycleViewAdapter(mStrings, getActivity());
-        ((RecyclerView) mSwipeTargetView).setLayoutManager(new LinearLayoutManager(getActivity()));
-        ((RecyclerView) mSwipeTargetView).setAdapter(mRecycleViewAdapter);
+        recycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recycleView.setAdapter(mRecycleViewAdapter);
     }
 
 
@@ -78,7 +74,6 @@ public class RecycleViewFragment extends BaseDefaultSwipeLoadFragment {
             }
         }, 200);
     }
-
 
 
     static class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
