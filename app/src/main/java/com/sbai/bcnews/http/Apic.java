@@ -10,8 +10,14 @@ import com.sbai.httplib.ReqParams;
  */
 public class Apic {
 
+    public static final int NORMAL_PAGESIZE = 20;
+
     public static Api getNewsDetail(String id) {
         return Api.get("/api/news-info/info/details/" + id);
+    }
+
+    public static Api getNewsList(int page) {
+        return Api.get("/api/news-info/info/list.do", new ReqParams().put("page", page).put("pageSize", NORMAL_PAGESIZE));
     }
 
     public static Api syncSystemTime() {
@@ -29,6 +35,7 @@ public class Apic {
     public static Api requestMarkListData(String exchangeCode) {
         return Api.get("/api/news-quota/quota/list", new ReqParams().put("exchangeCode", exchangeCode));
     }
+
     public static Api getNewsFlash(int page) {
         return Api.get("/api/news-info/info/information.do", new ReqParams().put("page", page));
     }

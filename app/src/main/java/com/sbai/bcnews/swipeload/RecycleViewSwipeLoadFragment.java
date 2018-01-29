@@ -86,10 +86,10 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RecyclerView recycleView = getSwipeTargetView();
-        if (recycleView != null) {
-            recycleView.removeOnScrollListener(mOnScrollListener);
-        }
+//        RecyclerView recycleView = getSwipeTargetView();
+//        if (recycleView != null) {
+//            recycleView.removeOnScrollListener(mOnScrollListener);
+//        }
         mOnScrollListener = null;
     }
 }
