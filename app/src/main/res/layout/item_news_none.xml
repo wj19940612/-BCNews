@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/contentRL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textColor="@color/primaryText"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/original"
+            android:layout_width="44dp"
+            android:layout_height="16dp"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="22dp"
+            android:layout_marginRight="18dp"
+            android:textColor="@color/colorOriginal"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:background="@drawable/bg_original"
+            android:text="@string/original"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="22dp"
+            android:layout_toRightOf="@+id/original"
+            android:textColor="@color/unluckyText"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:text="@string/original"/>
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="22dp"
+            android:layout_toRightOf="@+id/source"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/unluckyText"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:text="@string/original"/>
+    </RelativeLayout>
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/background"
+        android:layout_below="@+id/contentRL"/>
+
+</RelativeLayout>
