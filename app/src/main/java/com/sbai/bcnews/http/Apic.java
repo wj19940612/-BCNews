@@ -14,8 +14,16 @@ public class Apic {
         return Api.get("/user/user/getSystemTime.do");
     }
 
-    public static Api getNewsFlash(long time) {
-        return Api.get("/api/news-info/info/information.do", new ReqParams().put("time", time));
+    /**
+     * 0请求小于时间戳的数据
+     * 1请求大于时间戳的数据
+     *
+     * @param time
+     * @param status
+     * @return
+     */
+    public static Api getNewsFlash(long time, int status) {
+        return Api.get("/api/news-info/info/information.do", new ReqParams().put("time", time).put("status", status));
     }
 
     /**

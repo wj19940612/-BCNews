@@ -1,7 +1,6 @@
-package com.sbai.bcnews.fragment.swipeload;
+package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
@@ -18,22 +17,11 @@ import com.sbai.bcnews.fragment.BaseFragment;
  * <p>
  */
 
-public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment implements OnLoadMoreListener, OnRefreshListener ,SwipeLoadTarget<T>{
 
     private SwipeToLoadLayout mSwipeToLoadLayout;
 
     private T mSwipeTargetView;
-
-    /**
-     * 设置需要刷新和加载的的view 如ListView RecycleView
-     *
-     * @return
-     */
-    @NonNull
-    protected abstract T getSwipeTargetView();
-
-    @NonNull
-    protected abstract SwipeToLoadLayout getSwipeToLoadLayout();
 
 
     protected void triggerLoadMore() {
@@ -51,6 +39,7 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
                 mSwipeToLoadLayout.setLoadingMore(false);
             }
         }
+
     }
 
     @Override

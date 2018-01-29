@@ -16,18 +16,17 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ShareNewsFlashActivity;
-import com.sbai.bcnews.fragment.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.NewsFlash;
+import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
-import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
-import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,14 +40,15 @@ import butterknife.Unbinder;
  * <p>
  */
 public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
-
+    private static final int LESS_THAN_TIME = 0;
+    private static final int GREATER_THAN_TIME = 1;
     @BindView(R.id.swipe_target)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
     Unbinder unbinder;
     private NewsAdapter mNewsAdapter;
-    private long mTime;
+    private long mFirstDataTime, mLastDataTime;
 
     @Nullable
     @Override
@@ -62,14 +62,21 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initRecyclerView();
-        requestNewsFlash();
+        requestNewsFlash(mFirstDataTime, GREATER_THAN_TIME);
+        startScheduleJob(60 * 1000);
     }
 
-    private void requestNewsFlash() {
-        Apic.getNewsFlash(mTime).tag(TAG)
+    @Override
+    public void onTimeUp(int count) {
+        super.onTimeUp(count);
+        requestNewsFlash(mFirstDataTime, GREATER_THAN_TIME);
+    }
+
+    private void requestNewsFlash(long time, int status) {
+        Apic.getNewsFlash(time, status).tag(TAG)
                 .callback(new Callback2D<Resp<List<NewsFlash>>, List<NewsFlash>>() {
                     @Override
-                    protected void onRespSuccessData( List<NewsFlash> data) {
+                    protected void onRespSuccessData(List<NewsFlash> data) {
                         updateNewsFlashData(data);
                     }
 
@@ -78,23 +85,33 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                         super.onFinish();
                         stopFreshOrLoadAnimation();
                     }
-                }).fireFreely();
+                }).fire();
     }
 
     private void updateNewsFlashData(List<NewsFlash> data) {
-        if (data.size() < 30) {
+        int size = data.size();
+        if (size < 20) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);
         }
-        if (mTime == 0) {
+        if (mFirstDataTime == 0) {
+            //重新刷新
             mNewsAdapter.clear();
             mNewsAdapter.addAllData(data);
+        } else if (size > 0 && data.get(size - 1).getReleaseTime() > mFirstDataTime) {
+            //定时更新
+            Collections.reverse(data);
+            for (NewsFlash newsFlash : data) {
+                mNewsAdapter.addFirst(newsFlash);
+            }
         } else {
+            //加载更多
             mNewsAdapter.addAllData(data);
         }
-        if (data.size() > 0) {
-            mTime = data.get(0).getReleaseTime();
+        if (size > 0) {
+            mFirstDataTime = data.get(0).getReleaseTime();
+            mLastDataTime = data.get(size - 1).getReleaseTime();
         }
     }
 
@@ -102,6 +119,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        stopScheduleJob();
     }
 
     private void initRecyclerView() {
@@ -112,13 +130,13 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
     @Override
     public void onLoadMore() {
-        requestNewsFlash();
+        requestNewsFlash(mLastDataTime, LESS_THAN_TIME);
     }
 
     @Override
     public void onRefresh() {
-        mTime = 0;
-        requestNewsFlash();
+        mFirstDataTime = 0;
+        requestNewsFlash(mFirstDataTime, GREATER_THAN_TIME);
     }
 
     static class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
@@ -136,8 +154,8 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
             notifyDataSetChanged();
         }
 
-        public void addData(NewsFlash newsFlash) {
-            dataList.add(newsFlash);
+        public void addFirst(NewsFlash newsFlash) {
+            dataList.add(0, newsFlash);
             notifyDataSetChanged();
         }
 
@@ -150,8 +168,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_news_flash, parent, false);
-            ViewHolder viewHolder = new ViewHolder(v);
-            return viewHolder;
+            return new ViewHolder(v);
         }
 
         @Override
@@ -164,7 +181,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
             return dataList.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        static class ViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.time)
             TextView mTime;
             @BindView(R.id.share)
@@ -175,11 +192,11 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                ButterKnife.bind(itemView);
+                ButterKnife.bind(this, itemView);
             }
 
-            private void bindDataWithView(final NewsFlash newsFlash, Context context) {
-                mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()).concat(" ").concat(context.getString(R.string.news_flash)));
+            private void bindDataWithView(final NewsFlash newsFlash, final Context context) {
+                mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()));
                 if (newsFlash.isImportant()) {
                     mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
                             Color.parseColor("#476E92"), Color.parseColor("#476E92")));
@@ -190,7 +207,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 mShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Launcher.with(mContext, ShareNewsFlashActivity.class)
+                        Launcher.with(context, ShareNewsFlashActivity.class)
                                 .putExtra(ExtraKeys.NEWS_FLASH, newsFlash)
                                 .execute();
                     }

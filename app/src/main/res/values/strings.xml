@@ -74,7 +74,7 @@
         <item>@drawable/tab_discovery</item>
     </integer-array>
     <string name="share_news_flash">分享快讯</string>
-=======
+    <string name="week_">星期%1$s</string>
 
     <!-- 资讯 -->
     <string name="news_detail">资讯详情</string>
@@ -85,4 +85,5 @@
     <string name="product_price_us">$%1$s</string>
     <string name="product_price_cn">¥%1$s</string>
     <string name="ten_thousand_number">%1$s万</string>
+    <string name="up_range">+%1$s</string>
 </resources>
