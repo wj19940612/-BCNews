@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@android:color/white"
     android:maxHeight="326dp"
     android:orientation="vertical">
 
@@ -51,9 +51,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="10dp"
-            android:drawableTop="@drawable/ic_share_circle"
+            android:drawableTop="@drawable/ic_share_wechat_circle"
             android:gravity="center"
             android:text="@string/wechat_circle"
+            android:textColor="@color/primaryText"
+            android:textSize="12sp"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/qq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_share_qq"
+            android:gravity="center"
+            android:text="QQ"
             android:textColor="@color/primaryText"
             android:textSize="12sp"/>
 
@@ -75,17 +91,13 @@
             android:textSize="12sp"/>
     </LinearLayout>
 
-    <View
-        android:id="@+id/secondSplitLine"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/split"/>
-
     <TextView
         android:id="@+id/cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white"
+        android:layout_marginLeft="38dp"
+        android:layout_marginRight="38dp"
+        android:background="@drawable/bg_white_round"
         android:gravity="center"
         android:minHeight="50dp"
         android:text="@string/cancel"

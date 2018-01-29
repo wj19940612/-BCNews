@@ -25,4 +25,8 @@ public class Apic {
     public static Api requestMarkListData(String exchangeCode) {
         return Api.get("/api/news-quota/quota/list", new ReqParams().put("exchangeCode", exchangeCode));
     }
+    public static Api getNewsFlash(int page) {
+        return Api.get("/api/news-info/info/information.do", new ReqParams().put("page", page));
+    }
+
 }
