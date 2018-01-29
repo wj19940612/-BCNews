@@ -15,6 +15,18 @@ public class Apic {
     }
 
     /**
+     * 0请求小于时间戳的数据
+     * 1请求大于时间戳的数据
+     *
+     * @param time
+     * @param status
+     * @return
+     */
+    public static Api getNewsFlash(long time, int status) {
+        return Api.get("/api/news-info/info/information.do", new ReqParams().put("time", time).put("status", status));
+    }
+
+    /**
      * /api/news-quota/quota/list
      * GET
      * 行情列表 (ws)
@@ -24,9 +36,6 @@ public class Apic {
      */
     public static Api requestMarkListData(String exchangeCode) {
         return Api.get("/api/news-quota/quota/list", new ReqParams().put("exchangeCode", exchangeCode));
-    }
-    public static Api getNewsFlash(int page) {
-        return Api.get("/api/news-info/info/information.do", new ReqParams().put("page", page));
     }
 
 }

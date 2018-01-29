@@ -69,17 +69,19 @@ public class ShareNewsFlashActivity extends BaseActivity {
         setContentView(R.layout.activity_news_flash_share);
         ButterKnife.bind(this);
         initData(getIntent());
+        overridePendingTransition(R.anim.slide_in_from_bottom, 0);
     }
 
     @Override
-    public void overridePendingTransition(int enterAnim, int exitAnim) {
-        overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_to_bottom);
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, R.anim.slide_out_to_bottom);
     }
 
     private void initData(Intent intent) {
         NewsFlash newsFlash = intent.getParcelableExtra(ExtraKeys.NEWS_FLASH);
         if (newsFlash != null) {
-            mWeek.setText(DateUtil.getDayOfWeek(newsFlash.getReleaseTime()));
+            mWeek.setText(getString(R.string.week_, DateUtil.getDayOfWeek(newsFlash.getReleaseTime())));
             mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()).concat(" ").concat(getString(R.string.news_flash)));
             if (newsFlash.isImportant()) {
                 mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,

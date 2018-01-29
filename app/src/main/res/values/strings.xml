@@ -74,6 +74,7 @@
         <item>@drawable/tab_discovery</item>
     </integer-array>
     <string name="share_news_flash">分享快讯</string>
+    <string name="week_">星期%1$s</string>
 
     <!-- 资讯 -->
     <string name="news_detail">资讯详情</string>
