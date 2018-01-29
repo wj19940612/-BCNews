@@ -23,6 +23,7 @@ import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.view.ListRecycleViewItemDecoration;
+import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -48,7 +49,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
     private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 5000;
 
     @BindView(R.id.titleBar)
-    TextView mTitleBar;
+    TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
     @BindView(R.id.swipe_target)
