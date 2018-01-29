@@ -7,16 +7,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.volley.Response;
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ShareNewsFlashActivity;
+import com.sbai.bcnews.fragment.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
@@ -24,7 +24,8 @@ import com.sbai.bcnews.model.NewsFlash;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
-import com.sbai.httplib.ReqCallback;
+import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
+import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +40,12 @@ import butterknife.Unbinder;
  * Description: 快讯
  * <p>
  */
-public class NewsFlashFragment extends BaseFragment {
+public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.swipe_target)
     RecyclerView mRecyclerView;
+    @BindView(R.id.swipeToLoadLayout)
+    SwipeToLoadLayout mSwipeToLoadLayout;
     Unbinder unbinder;
     private NewsAdapter mNewsAdapter;
     private long mTime;
@@ -66,15 +69,33 @@ public class NewsFlashFragment extends BaseFragment {
         Apic.getNewsFlash(mTime).tag(TAG)
                 .callback(new Callback2D<Resp<List<NewsFlash>>, List<NewsFlash>>() {
                     @Override
-                    protected void onRespSuccessData(final List<NewsFlash> data) {
+                    protected void onRespSuccessData( List<NewsFlash> data) {
                         updateNewsFlashData(data);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        stopFreshOrLoadAnimation();
                     }
                 }).fireFreely();
     }
 
     private void updateNewsFlashData(List<NewsFlash> data) {
-        mNewsAdapter.clear();
-        mNewsAdapter.addAllData(data);
+        if (data.size() < 30) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+        } else {
+            mSwipeToLoadLayout.setLoadMoreEnabled(true);
+        }
+        if (mTime == 0) {
+            mNewsAdapter.clear();
+            mNewsAdapter.addAllData(data);
+        } else {
+            mNewsAdapter.addAllData(data);
+        }
+        if (data.size() > 0) {
+            mTime = data.get(0).getReleaseTime();
+        }
     }
 
     @Override
@@ -87,6 +108,17 @@ public class NewsFlashFragment extends BaseFragment {
         mNewsAdapter = new NewsAdapter(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNewsAdapter);
+    }
+
+    @Override
+    public void onLoadMore() {
+        requestNewsFlash();
+    }
+
+    @Override
+    public void onRefresh() {
+        mTime = 0;
+        requestNewsFlash();
     }
 
     static class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
