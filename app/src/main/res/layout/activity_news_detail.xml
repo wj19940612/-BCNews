@@ -18,6 +18,9 @@
         app:rightVisible="true"
         app:titleText="@string/news_detail"
         app:textSingle="true"
+        app:titleLeftMargin="30dp"
+        app:titleRightMargin="30dp"
+        app:rightImage="@drawable/ic_right_share"
         app:titleTextColor="@color/blackPrimary"/>
 
     <View

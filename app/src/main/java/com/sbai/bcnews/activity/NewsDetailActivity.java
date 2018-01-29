@@ -22,7 +22,6 @@ import com.android.volley.VolleyError;
 import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.fragment.NewsFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
@@ -34,9 +33,6 @@ import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.NewsScrollView;
 import com.sbai.bcnews.view.TitleBar;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,9 +98,10 @@ public class NewsDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subtext);
+        setContentView(R.layout.activity_news_detail);
         ButterKnife.bind(this);
         initData();
+        initView();
         initWebView();
         initScrollView();
         requestDetailData();
@@ -112,9 +109,16 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void initData() {
         mId = getIntent().getStringExtra(ExtraKeys.NEWS_ID);
-        mId = "5a6841148940b041d86256da";
         mNewsDetail = NewsCache.getCahceNewsForId(mId);
-//        mPureHtml = text;
+    }
+
+    private void initView(){
+        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     protected void initWebView() {
@@ -263,45 +267,44 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void requestDetailData() {
-//        if (mNewsDetail == null) {
-//            Apic.getNewsDetail(mId).tag(TAG).callback(new Callback2D<Resp<NewsDetail>, NewsDetail>() {
-//                @Override
-//                protected void onRespSuccessData(NewsDetail data) {
-//                    mNewsDetail = data;
-//                    updateData(data);
-//                }
-//            }).fireFreely();
-//        }else{
-//            updateData(mNewsDetail);
-//        }
         if (mNewsDetail == null) {
-            mNewsDetail = new NewsDetail();
-            mNewsDetail.setContent("<p>彭博称，北欧最大的银行已经告诉其员工，不要交易比特币和其他<u>加密货币</u>。这可能导致欧洲银行联合会评估其对<u>加密货币</u>的官方立场。</p> \n<p>北欧联合银行发言人Afroditi Kellberg通过电话说，该行将于2月28日实施这一禁令，之前该行董事会同意采取这一立场，因为<u>加密货币</u>市场“无监管的性质”。截至第三季度末，该行约有3.15万名员工。</p> \n<p>北欧联合银行在发给彭博的电子邮件中表示，其政策“包括对现有持币人员的过渡性规定，并允许某些例外”。已经拥有比特币的员工“被允许保留现有持仓”。</p> \n<div>\n  北欧第二大银行丹麦丹斯克银行说，不鼓励员工交易比特币，但尚未决定是否需要全面禁止。丹斯克银行发言人Kenni Leth在一封电子邮件中表示：“我们对 \n <u>加密货币</u>持怀疑态度，并建议我们的员工不要交易，但我们并没有实施实际的禁令。我们正在分析情况，时间会告诉我们是否会有正式的禁令。” \n <p></p> \n <p>丹斯克银行不向客户提供<u>加密货币</u>交易。“由于各种<u>加密货币</u>不成熟、缺乏透明度，我们决定在我们的平台上不提供这种证券交易，”Leth说。</p> \n <p>北欧联合银行在电邮中表示，对客户的政策与对员工不一样，但也要强调不推荐客户投资于此。</p> \n <p>（原文标题：《北欧联合银行全员禁止比特币 因市场“无监管”》）</p> \n</div> \n<div></div> \n<div>\n  来源：新浪财经 \n</div> \n<div>\n  文章地址：http://finance.sina.com.cn/stock/usstock/c/2018-01-23/doc-ifyqwiqi5439089.shtml \n</div>");
-            mNewsDetail.setCreateTime(1516781844505L);
-            mNewsDetail.setDetail("比特币资讯");
-            mNewsDetail.setId("5a6841148940b041d86256da");
-            mNewsDetail.setImgs(new ArrayList<String>());
-            mNewsDetail.setPraiseCount(0);
-            mNewsDetail.setReaderCount(1);
-            mNewsDetail.setReleaseTime(1516636800000L);
-            mNewsDetail.setSecondDetail("行业解读");
-            mNewsDetail.setSecondType(12);
-            mNewsDetail.setSource("BTCif中文网");
-            mNewsDetail.setSummary("彭博称，北欧最大的银行已经告诉其员工，不要交易比特币和其他加密货币。这可能导致欧洲银行联合会评估其对加密货币的官方立场。");
-            List<String> tags = new ArrayList<>();
-            tags.add("银行");
-            tags.add("员工");
-            tags.add("北欧");
-            tags.add("加密");
-            tags.add("货币");
-            mNewsDetail.setTags(tags);
-            mNewsDetail.setTitle("北欧联合银行全员禁止比特币，因加密货币市场“无监管”");
-            mNewsDetail.setType(1);
+            Apic.getNewsDetail(mId).tag(TAG).callback(new Callback2D<Resp<NewsDetail>, NewsDetail>() {
+                @Override
+                protected void onRespSuccessData(NewsDetail data) {
+                    mNewsDetail = data;
+                    updateData(data);
+                }
+            }).fireFreely();
+        }else{
+            updateData(mNewsDetail);
         }
-        updateData(mNewsDetail);
+//        if (mNewsDetail == null) {
+//            mNewsDetail = new NewsDetail();
+//            mNewsDetail.setContent("<p>彭博称，北欧最大的银行已经告诉其员工，不要交易比特币和其他<u>加密货币</u>。这可能导致欧洲银行联合会评估其对<u>加密货币</u>的官方立场。</p> \n<p>北欧联合银行发言人Afroditi Kellberg通过电话说，该行将于2月28日实施这一禁令，之前该行董事会同意采取这一立场，因为<u>加密货币</u>市场“无监管的性质”。截至第三季度末，该行约有3.15万名员工。</p> \n<p>北欧联合银行在发给彭博的电子邮件中表示，其政策“包括对现有持币人员的过渡性规定，并允许某些例外”。已经拥有比特币的员工“被允许保留现有持仓”。</p> \n<div>\n  北欧第二大银行丹麦丹斯克银行说，不鼓励员工交易比特币，但尚未决定是否需要全面禁止。丹斯克银行发言人Kenni Leth在一封电子邮件中表示：“我们对 \n <u>加密货币</u>持怀疑态度，并建议我们的员工不要交易，但我们并没有实施实际的禁令。我们正在分析情况，时间会告诉我们是否会有正式的禁令。” \n <p></p> \n <p>丹斯克银行不向客户提供<u>加密货币</u>交易。“由于各种<u>加密货币</u>不成熟、缺乏透明度，我们决定在我们的平台上不提供这种证券交易，”Leth说。</p> \n <p>北欧联合银行在电邮中表示，对客户的政策与对员工不一样，但也要强调不推荐客户投资于此。</p> \n <p>（原文标题：《北欧联合银行全员禁止比特币 因市场“无监管”》）</p> \n</div> \n<div></div> \n<div>\n  来源：新浪财经 \n</div> \n<div>\n  文章地址：http://finance.sina.com.cn/stock/usstock/c/2018-01-23/doc-ifyqwiqi5439089.shtml \n</div>");
+//            mNewsDetail.setCreateTime(1516781844505L);
+//            mNewsDetail.setDetail("比特币资讯");
+//            mNewsDetail.setId("5a6841148940b041d86256da");
+//            mNewsDetail.setImgs(new ArrayList<String>());
+//            mNewsDetail.setPraiseCount(0);
+//            mNewsDetail.setReaderCount(1);
+//            mNewsDetail.setReleaseTime(1516636800000L);
+//            mNewsDetail.setSecondDetail("行业解读");
+//            mNewsDetail.setSecondType(12);
+//            mNewsDetail.setSource("BTCif中文网");
+//            mNewsDetail.setSummary("彭博称，北欧最大的银行已经告诉其员工，不要交易比特币和其他加密货币。这可能导致欧洲银行联合会评估其对加密货币的官方立场。");
+//            List<String> tags = new ArrayList<>();
+//            tags.add("银行");
+//            tags.add("员工");
+//            tags.add("北欧");
+//            tags.add("加密");
+//            tags.add("货币");
+//            mNewsDetail.setTags(tags);
+//            mNewsDetail.setTitle("北欧联合银行全员禁止比特币，因加密货币市场“无监管”");
+//            mNewsDetail.setType(1);
+//        }
+//        updateData(mNewsDetail);
 
-        mPureHtml = mNewsDetail.getContent();
-        loadPage();
+
     }
 
     private void updateData(NewsDetail newsDetail) {
@@ -310,6 +313,9 @@ public class NewsDetailActivity extends BaseActivity {
         mPubTime.setText(DateUtil.formatDefaultStyleTime(newsDetail.getReleaseTime()));
         mReadTime.setText(String.format(getString(R.string.reader_time),newsDetail.getReaderTime()));
         updatePraiseCount(newsDetail.getPraiseCount());
+
+        mPureHtml = mNewsDetail.getContent();
+        loadPage();
     }
 
     private void updatePraiseCount(int praiseCount) {
@@ -348,7 +354,6 @@ public class NewsDetailActivity extends BaseActivity {
         super.onBackPressed();
         mNewsDetail.setReadHeight(mScrollView.getScrollY());
         NewsCache.insertOrReplaceNews(mNewsDetail);
-        Log.e("zzz", "scY:" + mScrollView.getScrollY());
     }
 
     @OnClick({R.id.icWxShare, R.id.icCircleShare,R.id.praiseLayout})

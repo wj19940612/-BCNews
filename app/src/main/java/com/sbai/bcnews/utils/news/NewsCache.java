@@ -12,7 +12,9 @@ import org.json.JSONException;
 import org.json.JSONTokener;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -75,7 +77,7 @@ public class NewsCache {
             }
         }
         //插入
-        if(!isContains){
+        if (!isContains) {
             if (sNewsCache.size() >= TOTAL_NEWS) {
                 sNewsCache.poll();
             }
@@ -87,7 +89,7 @@ public class NewsCache {
     }
 
     //读取缓存
-    public static NewsDetail getCahceNewsForId(String id){
+    public static NewsDetail getCahceNewsForId(String id) {
         if (sNewsCache == null) {
             readFromPreference();
         }
@@ -97,5 +99,28 @@ public class NewsCache {
             }
         }
         return null;
+    }
+
+    /**
+     * @param location     从第几个cache开始获取
+     * @param requireCount 获取多少个news
+     * @return
+     */
+    public static List<NewsDetail> getCahceNews(int location, int requireCount) {
+        if (sNewsCache == null) {
+            readFromPreference();
+        }
+        int i = 0;
+        List<NewsDetail> newsDetails = new ArrayList<>();
+        for (NewsDetail detail : sNewsCache) {
+            if (i > location && i <= requireCount + location) {
+                newsDetails.add(detail);
+            }
+            if (i > location + requireCount) {
+                break;
+            }
+            i++;
+        }
+        return newsDetails;
     }
 }
