@@ -22,6 +22,7 @@ import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.OnItemClickListener;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.ListRecycleViewItemDecoration;
 import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
@@ -46,7 +47,7 @@ import butterknife.Unbinder;
  */
 public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
-    private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 5000;
+    private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 6000;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -80,12 +81,14 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         startScheduleJob(REFRESH_MARKET_DATE_TIME_INTERVAL);
     }
 
+
     private void requestMarketListData() {
         Apic.requestMarkListData(MarketData.DEFAULT_MARKET_BOURSE_CODE)
                 .tag(TAG)
                 .callback(new Callback2D<Resp<List<MarketData>>, List<MarketData>>() {
                     @Override
                     protected void onRespSuccessData(List<MarketData> data) {
+                        mMarkListAdapter.clear();
                         mMarkListAdapter.addAll(data);
                     }
 
@@ -102,7 +105,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         mMarkListAdapter = new MarkListAdapter(new ArrayList<MarketData>(), getActivity());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        int dividerHeight = (int) Display.dp2Px(1, getResources());
+        int dividerHeight = (int) Display.dp2Px(0.5f, getResources());
         ListRecycleViewItemDecoration listRecycleViewItemDecoration = new ListRecycleViewItemDecoration(getActivity(),
                 ListRecycleViewItemDecoration.VERTICAL_LIST,
                 dividerHeight,
@@ -113,9 +116,12 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         mMarkListAdapter.setOnItemClickListener(new OnItemClickListener<MarketData>() {
             @Override
             public void onItemClick(MarketData marketData, int position) {
-
+                ToastUtil.show("" + marketData.getName());
             }
         });
+
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
+
     }
 
     @Override
@@ -129,7 +135,8 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
 //        mSwipeToLoadLayout.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
-//                mSwipeToLoadLayout.setLoadingMore(false);
+////                mSwipeToLoadLayout.setLoadingMore(false);
+//                stopFreshOrLoadAnimation();
 //            }
 //        }, 500);
 
@@ -210,6 +217,8 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
             TextView mPriceChangeRatio;
             @BindView(R.id.rootView)
             ConstraintLayout mRootView;
+            @BindView(R.id.split)
+            View mSplit;
 
             ViewHolder(View view) {
                 super(view);
@@ -217,6 +226,12 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
             }
 
             public void bindDataWithView(final MarketData marketData, final int position, Context context, final OnItemClickListener<MarketData> onItemClickListener) {
+
+                if (position == 0) {
+                    mSplit.setVisibility(View.VISIBLE);
+                } else {
+                    mSplit.setVisibility(View.GONE);
+                }
 
                 mBourseName.setText(marketData.getExchangeCode());
                 mMarketName.setText(marketData.getName().toUpperCase());

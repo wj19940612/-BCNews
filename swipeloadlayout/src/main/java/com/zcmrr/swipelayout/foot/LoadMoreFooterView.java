@@ -53,11 +53,11 @@ public class LoadMoreFooterView extends SwipeLoadMoreFooterLayout {
         if (!isComplete) {
             ivSuccess.setVisibility(GONE);
             progressBar.setVisibility(GONE);
-            if (-y >= mFooterHeight) {
-                tvLoadMore.setText(R.string.restart_load_more);
-            } else {
+//            if (-y >= mFooterHeight) {
+//                tvLoadMore.setText(R.string.restart_load_more);
+//            } else {
                 tvLoadMore.setText(R.string.swipe_load_more);
-            }
+//            }
         }
     }
 
