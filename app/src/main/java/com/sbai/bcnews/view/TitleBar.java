@@ -56,6 +56,7 @@ public class TitleBar extends RelativeLayout {
     private Drawable mRightTextRightImage;
     private int mLeftViewLeftPadding;
     private ImageView mRightImageView;
+    private boolean mTextSingle;
 
     public TitleBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -110,6 +111,7 @@ public class TitleBar extends RelativeLayout {
         mSplitLineHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, HEIGHT_SPLIT_LINE_DP,
                 getResources().getDisplayMetrics());
         mLeftViewLeftPadding = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_leftViewLeftPadding, -1);
+        mTextSingle = typedArray.getBoolean(R.styleable.TitleBar_textSingle, false);
         typedArray.recycle();
     }
 
@@ -154,6 +156,10 @@ public class TitleBar extends RelativeLayout {
             mLeftViewLeftPadding = paddingHorizontal;
         }
         mLeftView.setPadding(mLeftViewLeftPadding, 0, paddingHorizontal, 0);
+        if (mTextSingle) {
+            mLeftView.setMaxLines(1);
+            mLeftView.setEllipsize(TextUtils.TruncateAt.END);
+        }
         addView(mLeftView, params);
         if (mBackFeature) {
             setBackButtonIcon(mBackIcon);

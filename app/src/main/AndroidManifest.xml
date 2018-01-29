@@ -68,7 +68,7 @@
             android:process=":pushservice">
         </service>
 
-        <activity android:name=".activity.SubTextActivity"/>
+        <activity android:name=".activity.NewsDetailActivity"/>
         <activity android:name=".activity.LookBigPictureActivity"/>
         <activity
             android:name=".activity.ShareNewsFlashActivity"

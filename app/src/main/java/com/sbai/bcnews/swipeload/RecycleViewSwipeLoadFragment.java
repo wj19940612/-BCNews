@@ -14,7 +14,7 @@ import com.sbai.bcnews.R;
 /**
  * Created by ${wangJie} on 2018/1/26.
  * 使用recycleView作为控件 可以上拉加载，下拉刷新
- * 提供了默认的布局  如果要使用自定义布局 可以重写onCreateView  
+ * 提供了默认的布局  如果要使用自定义布局 可以重写onCreateView
  */
 
 public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment<RecyclerView> {
@@ -22,38 +22,36 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.view_base_recycleview_swipe_load, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.view_base_recycleview_swipe_load, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         RecyclerView recycleView = getSwipeTargetView();
-        recycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
+        if (recycleView != null) {
+            recycleView.addOnScrollListener(mOnScrollListener);
+        }
     }
 
 
     @NonNull
     @Override
     public SwipeToLoadLayout getSwipeToLoadLayout() {
-        return getView().findViewById(R.id.swipeToLoadLayout);
+        if (getView() != null) {
+            return getView().findViewById(R.id.swipeToLoadLayout);
+        }
+        return null;
     }
+
 
     @NonNull
     @Override
     public RecyclerView getSwipeTargetView() {
-        return getView().findViewById(R.id.swipe_target);
+        if (getView() != null) {
+            return getView().findViewById(R.id.swipe_target);
+        }
+        return null;
     }
 
     protected void onRecycleViewScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -86,10 +84,6 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RecyclerView recycleView = getSwipeTargetView();
-        if (recycleView != null) {
-            recycleView.removeOnScrollListener(mOnScrollListener);
-        }
         mOnScrollListener = null;
     }
 }

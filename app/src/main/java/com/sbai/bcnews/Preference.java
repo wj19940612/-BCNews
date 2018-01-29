@@ -48,6 +48,7 @@ public class Preference {
         String FIRST_OPEN_APP = "first_open_app";
         String UPDATE_OPEN_APP_TIME = "update_open_app_time";
         String FIRST_LOGIN = "first_login";
+        String NEWS_READ = "news_read";
     }
 
     private static Preference sInstance;
@@ -194,6 +195,16 @@ public class Preference {
 
     public void setFirstLogin(boolean isFirstLogin) {
         apply(Key.FIRST_LOGIN, isFirstLogin);
+    }
+
+    public void setNewsRead(String newsRead) {
+        String key = Key.NEWS_READ;
+        apply(key, newsRead);
+    }
+
+    public String getNewsRead() {
+        String key = Key.NEWS_READ;
+        return mPrefs.getString(key, null);
     }
 
 }
