@@ -17,7 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
-
     @BindView(R.id.viewPager)
     ScrollableViewPager mViewPager;
     @BindView(R.id.bottomTabs)
@@ -30,6 +29,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
 
         initViews();
     }

@@ -67,6 +67,12 @@
             android:label="PushService"
             android:process=":pushservice">
         </service>
+
+        <activity android:name=".activity.SubTextActivity"/>
+        <activity android:name=".activity.LookBigPictureActivity"/>
+        <activity
+            android:name=".activity.ShareNewsFlashActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

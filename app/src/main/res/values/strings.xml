@@ -14,15 +14,21 @@
 
     <string name="restart_app">重启应用</string>
     <string name="cut">剪切</string>
+    <string name="save_to_the_gallery">是否保存到相册</string>
+    <string name="image_save_to_">图片保存至%1$s</string>
+    <string name="image_save_fail">图片保存失败</string>
+    <string name="is_sure_delete_photo">要删除这张照片吗?</string>
     <!--分享-->
     <string name="wechat_friend">微信好友</string>
     <string name="wechat_circle">朋友圈</string>
-    <string name="sina_weibo">新浪微博</string>
+    <string name="sina_weibo">微博</string>
     <string name="share_succeed">分享成功</string>
     <string name="share_cancel">取消分享</string>
     <string name="you_not_install_weixin">您尚未安装微信</string>
     <string name="you_not_install_weibo">您尚未安装微博</string>
+    <string name="you_not_install_qq">您尚未安装QQ</string>
     <string name="share_to">分享至</string>
+    <string name="share">分享</string>
 
     <!-- Dialog -->
     <string name="ok">确定</string>
@@ -67,4 +73,16 @@
         <item>@drawable/tab_info</item>
         <item>@drawable/tab_discovery</item>
     </integer-array>
+    <string name="share_news_flash">分享快讯</string>
+
+    <!-- 资讯 -->
+    <string name="news_detail">资讯详情</string>
+
+
+    <!--行情-->
+    <string name="market_volume">量%1$s</string>
+    <string name="product_price_us">$%1$s</string>
+    <string name="product_price_cn">¥%1$s</string>
+    <string name="ten_thousand_number">%1$s万</string>
+    <string name="up_range">+%1$s</string>
 </resources>
