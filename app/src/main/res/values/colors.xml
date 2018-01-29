@@ -17,4 +17,9 @@
     <color name="white">#FFF</color>
 
 
+    <color name="text">#494949</color>
+    <color name="greenPrimary">#39AE13</color>
+    <color name="price">#FF1E40</color>
+    <color name="losePrimary">#F62048</color>
+
 </resources>

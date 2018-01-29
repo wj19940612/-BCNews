@@ -12,4 +12,7 @@
     <dimen name="load_more_trigger_offset_google">88dp</dimen>
     <dimen name="load_more_final_offset_google">120dp</dimen>
     <dimen name="load_more_drawable_size_google">36dp</dimen>
+
+    <dimen name="refresh_header_height_twitter">80dp</dimen>
+    <dimen name="load_more_footer_height_twitter">60dp</dimen>
 </resources>

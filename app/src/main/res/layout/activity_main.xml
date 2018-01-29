@@ -16,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+
     <com.sbai.bcnews.view.BottomTabs
         android:id="@+id/bottomTabs"
         android:layout_width="match_parent"
