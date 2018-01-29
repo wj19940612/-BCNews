@@ -18,4 +18,16 @@ public class Apic {
         return Api.get("/api/news-info/info/information.do", new ReqParams().put("time", time));
     }
 
+    /**
+     * /api/news-quota/quota/list
+     * GET
+     * 行情列表 (ws)
+     *
+     * @param exchangeCode
+     * @return
+     */
+    public static Api requestMarkListData(String exchangeCode) {
+        return Api.get("/api/news-quota/quota/list", new ReqParams().put("exchangeCode", exchangeCode));
+    }
+
 }

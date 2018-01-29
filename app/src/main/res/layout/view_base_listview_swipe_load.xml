@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,8 +12,7 @@
     app:load_more_trigger_offset="@dimen/load_more_trigger_offset_google"
     app:refresh_final_drag_offset="@dimen/refresh_final_offset_google"
     app:refresh_trigger_offset="@dimen/refresh_trigger_offset_google"
-    app:swipe_style="above"
-    tools:context="com.sbai.bcnews.RecycleViewFragment">
+    app:swipe_style="classic">
 
 
     <com.zcmrr.swipelayout.header.RefreshHeaderView
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <android.support.v7.widget.RecyclerView
+    <ListView
         android:id="@id/swipe_target"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

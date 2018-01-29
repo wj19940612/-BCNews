@@ -85,7 +85,8 @@ public class MainActivity extends BaseActivity {
                 case 1:
                     return new RecycleViewFragment();
                 case 2:
-                    return new MarketFragment();
+                    return new RecycleViewFragment();
+//                    return new MarketFragment();
             }
             return null;
         }

@@ -38,7 +38,6 @@
     <string name="no">否</string>
 
 
-
     <!-- WebView network error -->
     <string name="network_error_please_reload">网络连接失败 请重新加载</string>
     <string name="refresh">刷新</string>
@@ -79,4 +78,11 @@
 
     <!-- 资讯 -->
     <string name="news_detail">资讯详情</string>
+
+
+    <!--行情-->
+    <string name="market_volume">量%1$s</string>
+    <string name="product_price_us">$%1$s</string>
+    <string name="product_price_cn">¥%1$s</string>
+    <string name="ten_thousand_number">%1$s万</string>
 </resources>
