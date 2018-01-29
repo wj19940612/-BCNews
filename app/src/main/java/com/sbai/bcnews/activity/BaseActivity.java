@@ -77,7 +77,8 @@ public class BaseActivity extends StatusBarActivity implements
                 Api.cancel(TAG);
             }
         });
-        SysTime.getSysTime().sync();
+        //TODO 服务器还没这个接口，经常打印toast
+//        SysTime.getSysTime().sync();
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
     }
 

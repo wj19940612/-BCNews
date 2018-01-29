@@ -57,6 +57,9 @@ public class TitleBar extends RelativeLayout {
     private int mLeftViewLeftPadding;
     private ImageView mRightImageView;
     private boolean mTextSingle;
+    private int mTitleLeftMargin;
+    private int mTitleRightMargin;
+
 
     public TitleBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -112,6 +115,8 @@ public class TitleBar extends RelativeLayout {
                 getResources().getDisplayMetrics());
         mLeftViewLeftPadding = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_leftViewLeftPadding, -1);
         mTextSingle = typedArray.getBoolean(R.styleable.TitleBar_textSingle, false);
+        mTitleLeftMargin = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_titleLeftMargin, 0);
+        mTitleRightMargin = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_titleRightMargin, 0);
         typedArray.recycle();
     }
 
@@ -147,6 +152,14 @@ public class TitleBar extends RelativeLayout {
             addView(mTitleView, params);
         }
 
+        if (mTextSingle) {
+            mTitleView.setMaxLines(1);
+            mTitleView.setEllipsize(TextUtils.TruncateAt.END);
+            LayoutParams titleParams = (LayoutParams) mTitleView.getLayoutParams();
+            titleParams.setMargins(mTitleLeftMargin, 0, mTitleRightMargin, 0);
+            mTitleView.setLayoutParams(titleParams);
+        }
+
         // left view
         params = new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
@@ -156,10 +169,6 @@ public class TitleBar extends RelativeLayout {
             mLeftViewLeftPadding = paddingHorizontal;
         }
         mLeftView.setPadding(mLeftViewLeftPadding, 0, paddingHorizontal, 0);
-        if (mTextSingle) {
-            mLeftView.setMaxLines(1);
-            mLeftView.setEllipsize(TextUtils.TruncateAt.END);
-        }
         addView(mLeftView, params);
         if (mBackFeature) {
             setBackButtonIcon(mBackIcon);

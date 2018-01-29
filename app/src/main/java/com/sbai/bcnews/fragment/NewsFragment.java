@@ -22,11 +22,13 @@ import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.swipeload.ListViewSwipeLoadFragment;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.glide.GlideApp;
 
 import java.util.ArrayList;
@@ -53,6 +55,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     private NewsAdapter mNewsAdapter;
     private List<NewsDetail> mNewsDetails;
+    private List<NewsDetail> mCacheDetails;
 
     private int mPage;
 
@@ -106,10 +109,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void loadData(final boolean refresh) {
-        Apic.getNewsList(mPage).tag(TAG).callback(new Callback2D<Resp<List<NewsDetail>>, List<NewsDetail>>() {
+        Apic.getNewsList(mPage).tag(TAG).callback(new Callback2D<Resp<News>, News>() {
             @Override
-            protected void onRespSuccessData(List<NewsDetail> data) {
-                updateData(data, refresh);
+            protected void onRespSuccessData(News data) {
+                updateData(data.getContent(), refresh);
             }
 
             @Override
@@ -123,9 +126,9 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private void updateData(List<NewsDetail> data, boolean refresh) {
         if (refresh) {
             mNewsDetails.clear();
-            if(data.size()<20){
-                
-            }
+//            if(data.size()<20){
+//                mCacheDetails = NewsCache.getCahceNewsForId()
+//            }
         }
         mPage++;
         mNewsDetails.addAll(data);
@@ -214,6 +217,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
 
         static class NoneHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.rootView)
+            View mRootView;
             @BindView(R.id.title)
             TextView mTitle;
             @BindView(R.id.original)
@@ -232,13 +237,19 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, NewsDetail item, int position, int count, OnItemClickListener onItemClickListener) {
+            public void bindingData(Context context, final NewsDetail item, int position, int count, final OnItemClickListener onItemClickListener) {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatDefaultStyleTime(item.getReleaseTime()));
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(item);
-                }
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(item);
+                        }
+                    }
+                });
+
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
                 }
@@ -246,6 +257,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
 
         static class SingleHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.rootView)
+            View mRootView;
             @BindView(R.id.img)
             ImageView mImg;
             @BindView(R.id.title)
@@ -266,7 +279,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, NewsDetail item, int position, int count, OnItemClickListener onItemClickListener) {
+            public void bindingData(Context context, final NewsDetail item, int position, int count, final OnItemClickListener onItemClickListener) {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatDefaultStyleTime(item.getReleaseTime()));
@@ -276,9 +289,14 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                             .centerCrop()
                             .into(mImg);
                 }
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(item);
-                }
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(item);
+                        }
+                    }
+                });
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
                 }
@@ -286,6 +304,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
 
         static class ThreeHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.rootView)
+            View mRootView;
             @BindView(R.id.title)
             TextView mTitle;
             @BindView(R.id.img1)
@@ -310,7 +330,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, NewsDetail item, int position, int count, OnItemClickListener onItemClickListener) {
+            public void bindingData(Context context, final NewsDetail item, int position, int count, final OnItemClickListener onItemClickListener) {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatDefaultStyleTime(item.getReleaseTime()));
@@ -334,9 +354,14 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                             .centerCrop()
                             .into(mImg3);
                 }
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(item);
-                }
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(item);
+                        }
+                    }
+                });
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
                 }
