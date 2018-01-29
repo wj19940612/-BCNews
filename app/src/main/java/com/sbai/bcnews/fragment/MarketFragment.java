@@ -96,6 +96,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                     public void onFinish() {
                         super.onFinish();
                         stopFreshOrLoadAnimation();
+
                     }
                 })
                 .fire();
@@ -132,13 +133,13 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
     @Override
     public void onLoadMore() {
-//        mSwipeToLoadLayout.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-////                mSwipeToLoadLayout.setLoadingMore(false);
-//                stopFreshOrLoadAnimation();
-//            }
-//        }, 500);
+        mSwipeToLoadLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                mSwipeToLoadLayout.setLoadingMore(false);
+                stopFreshOrLoadAnimation();
+            }
+        }, 500);
 
     }
 
