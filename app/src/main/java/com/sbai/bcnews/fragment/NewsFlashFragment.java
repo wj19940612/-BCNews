@@ -92,7 +92,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
     private void updateNewsFlashData(List<NewsFlash> data) {
         int size = data.size();
-        if (size < 20) {
+        if (size < 30) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);

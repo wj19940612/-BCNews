@@ -63,6 +63,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
                 android:textColor="#494949"
                 android:textSize="15sp"
                 tools:text=" 深交所将研究创新监管和服务质量，提高上市公司质量深交所，将研究创新监管和质"/>
@@ -97,9 +98,9 @@
         <ImageView
             android:id="@+id/back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="27dp"
+            android:layout_height="match_parent"
+            android:paddingLeft="18dp"
+            android:paddingRight="27dp"
             android:src="@drawable/ic_tb_back_black"/>
 
         <ImageView

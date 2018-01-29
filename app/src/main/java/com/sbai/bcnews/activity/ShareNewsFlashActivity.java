@@ -18,6 +18,7 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.NewsFlash;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.ShareUtils;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.image.ImageUtils;
@@ -100,31 +101,23 @@ public class ShareNewsFlashActivity extends BaseActivity {
                 getActivity().onBackPressed();
                 break;
             case R.id.wechat:
-                if (UMShareAPI.get(getActivity()).isInstall(getActivity(), SHARE_MEDIA.WEIXIN)) {
+                if (ShareUtils.canShare(getActivity(), SHARE_MEDIA.WEIXIN)) {
                     shareImageToPlatform(SHARE_MEDIA.WEIXIN, screenShot(mShareArea));
-                } else {
-                    ToastUtil.show(R.string.you_not_install_weixin);
                 }
                 break;
             case R.id.circle:
-                if (UMShareAPI.get(getActivity()).isInstall(getActivity(), SHARE_MEDIA.WEIXIN)) {
+                if (ShareUtils.canShare(getActivity(), SHARE_MEDIA.WEIXIN_CIRCLE)) {
                     shareImageToPlatform(SHARE_MEDIA.WEIXIN_CIRCLE, screenShot(mShareArea));
-                } else {
-                    ToastUtil.show(R.string.you_not_install_weixin);
                 }
                 break;
             case R.id.qq:
-                if (UMShareAPI.get(getActivity()).isInstall(getActivity(), SHARE_MEDIA.QQ)) {
+                if (ShareUtils.canShare(getActivity(), SHARE_MEDIA.QQ)) {
                     shareImageToPlatform(SHARE_MEDIA.QQ, screenShot(mShareArea));
-                } else {
-                    ToastUtil.show(R.string.you_not_install_qq);
                 }
                 break;
             case R.id.weibo:
-                if (UMShareAPI.get(getActivity()).isInstall(getActivity(), SHARE_MEDIA.SINA)) {
+                if (ShareUtils.canShare(getActivity(), SHARE_MEDIA.SINA)) {
                     shareImageToPlatform(SHARE_MEDIA.SINA, screenShot(mShareArea));
-                } else {
-                    ToastUtil.show(R.string.you_not_install_weibo);
                 }
                 break;
             case R.id.download:
