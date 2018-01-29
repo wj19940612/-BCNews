@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,7 @@ public class NewsFlashFragment extends BaseFragment {
     RecyclerView mRecyclerView;
     Unbinder unbinder;
     private NewsAdapter mNewsAdapter;
-    private int mPage;
+    private long mTime;
 
     @Nullable
     @Override
@@ -62,7 +63,7 @@ public class NewsFlashFragment extends BaseFragment {
     }
 
     private void requestNewsFlash() {
-        Apic.getNewsFlash(mPage).tag(TAG)
+        Apic.getNewsFlash(mTime).tag(TAG)
                 .callback(new Callback2D<Resp<List<NewsFlash>>, List<NewsFlash>>() {
                     @Override
                     protected void onRespSuccessData(final List<NewsFlash> data) {
@@ -160,6 +161,25 @@ public class NewsFlashFragment extends BaseFragment {
                         Launcher.with(mContext, ShareNewsFlashActivity.class)
                                 .putExtra(ExtraKeys.NEWS_FLASH, newsFlash)
                                 .execute();
+                    }
+                });
+
+                mContent.setMaxLines(6);
+                mContent.setEllipsize(TextUtils.TruncateAt.END);
+                mContent.setOnClickListener(new View.OnClickListener() {
+                    boolean flag = true;
+
+                    @Override
+                    public void onClick(View v) {
+                        if (flag) {
+                            flag = false;
+                            mContent.setMaxLines(Integer.MAX_VALUE);
+                            mContent.setEllipsize(null);
+                        } else {
+                            flag = true;
+                            mContent.setMaxLines(6);
+                            mContent.setEllipsize(TextUtils.TruncateAt.END);
+                        }
                     }
                 });
             }

@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.RecycleViewFragment;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
 import com.sbai.bcnews.fragment.NewsFragment;
@@ -82,7 +83,7 @@ public class MainActivity extends BaseActivity {
                 case 0:
                     return new NewsFragment();
                 case 1:
-                    return new NewsFlashFragment();
+                    return new RecycleViewFragment();
                 case 2:
                     return new MarketFragment();
             }

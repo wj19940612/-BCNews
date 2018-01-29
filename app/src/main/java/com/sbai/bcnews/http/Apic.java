@@ -14,8 +14,8 @@ public class Apic {
         return Api.get("/user/user/getSystemTime.do");
     }
 
-    public static Api getNewsFlash(int page) {
-        return Api.get("/api/news-info/info/information.do", new ReqParams().put("page", page));
+    public static Api getNewsFlash(long time) {
+        return Api.get("/api/news-info/info/information.do", new ReqParams().put("time", time));
     }
 
 }
