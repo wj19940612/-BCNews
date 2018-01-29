@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sbai.bcnews.fragment.swipeload.RecycleViewSwipeLoadFragment;
+import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 
 import java.util.ArrayList;
 

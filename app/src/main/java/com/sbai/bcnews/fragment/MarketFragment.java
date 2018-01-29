@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.model.market.MarketData;
+import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.view.ListRecycleViewItemDecoration;
@@ -35,7 +36,7 @@ import butterknife.Unbinder;
  * APIs:
  * 首页行情列表
  */
-public class MarketFragment extends BaseFragment {
+public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
     @BindView(R.id.titleBar)
     TextView mTitleBar;
@@ -73,12 +74,23 @@ public class MarketFragment extends BaseFragment {
 //            Log.d(TAG, "onActivityCreated: " + result.toString());
             markListAdapter.add(result);
         }
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onLoadMore() {
+
+    }
+
+    @Override
+    public void onRefresh() {
+
     }
 
     static class MarkListAdapter extends RecyclerView.Adapter<MarkListAdapter.ViewHolder> {

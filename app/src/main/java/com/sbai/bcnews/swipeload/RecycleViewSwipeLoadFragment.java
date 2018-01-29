@@ -1,4 +1,4 @@
-package com.sbai.bcnews.fragment.swipeload;
+package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -43,15 +43,16 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
         });
     }
 
+
     @NonNull
     @Override
-    protected SwipeToLoadLayout getSwipeToLoadLayout() {
+    public SwipeToLoadLayout getSwipeToLoadLayout() {
         return getView().findViewById(R.id.swipeToLoadLayout);
     }
 
     @NonNull
     @Override
-    protected RecyclerView getSwipeTargetView() {
+    public RecyclerView getSwipeTargetView() {
         return getView().findViewById(R.id.swipe_target);
     }
 

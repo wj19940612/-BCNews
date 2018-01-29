@@ -1,4 +1,4 @@
-package com.sbai.bcnews.fragment.swipeload;
+package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,13 +28,13 @@ public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment<Li
 
     @NonNull
     @Override
-    protected SwipeToLoadLayout getSwipeToLoadLayout() {
+    public SwipeToLoadLayout getSwipeToLoadLayout() {
         return getView().findViewById(R.id.swipeToLoadLayout);
     }
 
     @NonNull
     @Override
-    protected ListView getSwipeTargetView() {
+    public ListView getSwipeTargetView() {
         return getView().findViewById(R.id.swipe_target);
     }
 
