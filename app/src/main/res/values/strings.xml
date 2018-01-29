@@ -76,5 +76,9 @@
     <string name="news_detail">资讯详情</string>
 
 
-    <string name="market_volume">量%1%s</string>
+    <!--行情-->
+    <string name="market_volume">量%1$s</string>
+    <string name="product_price_us">$%1$s</string>
+    <string name="product_price_cn">¥%1$s</string>
+    <string name="ten_thousand_number">%1$s万</string>
 </resources>

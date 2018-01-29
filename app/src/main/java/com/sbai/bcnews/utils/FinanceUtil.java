@@ -530,4 +530,5 @@ public class FinanceUtil {
     private static String removeTailZero(String number) {
         return number.replace(".00", "");
     }
+
 }
