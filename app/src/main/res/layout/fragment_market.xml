@@ -6,22 +6,46 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <TextView
+    <com.sbai.bcnews.view.TitleBar
         android:id="@+id/titleBar"
+        app:titleTextColor="@color/primaryText"
+        app:titleTextSize="17sp"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@android:color/white"
-        android:gravity="center"
-        android:text="@string/market"
-        android:textColor="@color/primaryText"
-        android:textSize="17sp"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_height="wrap_content"
+        app:titleText="@string/market"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleView"
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/titleBar"/>
+        app:default_to_loading_more_scrolling_duration="500"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar"
+        app:load_more_complete_delay_duration="0"
+        app:load_more_final_drag_offset="@dimen/load_more_final_offset_google"
+        app:load_more_trigger_offset="@dimen/load_more_trigger_offset_google"
+        app:refresh_final_drag_offset="@dimen/refresh_final_offset_google"
+        app:refresh_trigger_offset="@dimen/refresh_trigger_offset_google"
+        app:swipe_style="classic">
+
+
+        <com.zcmrr.swipelayout.header.RefreshHeaderView
+            android:id="@+id/swipe_refresh_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@id/swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"/>
+
+        <com.zcmrr.swipelayout.foot.LoadMoreFooterView
+            android:id="@+id/swipe_load_more_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
 </android.support.constraint.ConstraintLayout>
