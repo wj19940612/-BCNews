@@ -65,16 +65,16 @@ public class ShareNewsFlashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.slide_in_from_bottom, 0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_flash_share);
         ButterKnife.bind(this);
         initData(getIntent());
-        overridePendingTransition(R.anim.slide_in_from_bottom, 0);
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    public void finish() {
+        super.finish();
         overridePendingTransition(0, R.anim.slide_out_to_bottom);
     }
 
@@ -129,6 +129,7 @@ public class ShareNewsFlashActivity extends BaseActivity {
                 break;
             case R.id.download:
                 ImageUtils.saveImageToGallery(getActivity(), screenShot(mShareArea));
+                ToastUtil.show(R.string.save_success);
                 break;
         }
     }

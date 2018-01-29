@@ -1,6 +1,7 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -61,6 +62,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
         initRecyclerView();
         requestNewsFlash(mFirstDataTime, GREATER_THAN_TIME);
         startScheduleJob(60 * 1000);
@@ -107,7 +109,9 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
             }
         } else {
             //加载更多
-            mNewsAdapter.addAllData(data);
+            if (size > 0) {
+                mNewsAdapter.addAllData(data);
+            }
         }
         if (size > 0) {
             mFirstDataTime = data.get(0).getReleaseTime();
@@ -156,7 +160,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
         public void addFirst(NewsFlash newsFlash) {
             dataList.add(0, newsFlash);
-            notifyDataSetChanged();
+            notifyItemInserted(0);
         }
 
         public void clear() {

@@ -32,4 +32,14 @@
         <item name="android:windowBackground">@android:color/white</item>
     </style>
 
+    <style name="DialogTheme.NoTitle.FadeIn" parent="DialogTheme.NoTitle">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
+    </style>
+
+    <style name="ActivityEntryAnimation" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>
