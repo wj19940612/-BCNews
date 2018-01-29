@@ -39,7 +39,7 @@ public class App extends Application {
         UMShareAPI.get(this);
         //init getui sdk
         PushManager.getInstance().initialize(this, PushService.class);
-        //init getui service
+//        //init getui service
         PushManager.getInstance().registerPushIntentService(this, PushIntentService.class);
         processCaughtException();
     }
