@@ -21,6 +21,7 @@ public class RequestManager {
 
     protected static final int GET = Request.Method.GET;
     protected static final int POST = Request.Method.POST;
+    protected static final int PUT = Request.Method.PUT;
 
     private static class Volley {
 

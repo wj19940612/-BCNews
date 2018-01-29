@@ -43,6 +43,7 @@
         <attr name="hasBottomSplitLine"/>
         <attr name="splitLineColor"/>
         <attr name="leftViewLeftPadding" format="dimension|reference"/>
+        <attr name="textSingle" format="boolean"/>
     </declare-styleable>
 
 </resources>

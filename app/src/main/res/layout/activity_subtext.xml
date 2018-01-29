@@ -2,10 +2,10 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/background">
+    android:background="@color/white">
 
     <com.sbai.bcnews.view.TitleBar
         android:id="@+id/titleBar"
@@ -17,24 +17,32 @@
         app:leftViewLeftPadding="14dp"
         app:rightVisible="true"
         app:titleText="@string/news_detail"
+        app:textSingle="true"
         app:titleTextColor="@color/blackPrimary"/>
 
-    <android.support.v4.widget.NestedScrollView
+    <View
+        android:id="@+id/titleBarLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/titleBar"
+        android:background="@color/background"/>
+
+    <com.sbai.bcnews.view.NewsScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/titleBar"
+        android:layout_below="@+id/titleBarLine"
         android:scrollbars="none">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="40dp">
 
             <RelativeLayout
                 android:id="@+id/titleLayout"
                 android:layout_width="match_parent"
                 android:layout_height="114dp"
-                android:paddingBottom="14dp"
                 android:paddingTop="14dp">
 
                 <TextView
@@ -48,18 +56,147 @@
                     android:text="黄金矿业公司转投比特币后 股价上涨了1300%"
                     android:textColor="@color/blackPrimary"
                     android:textSize="22sp"/>
+
+                <TextView
+                    android:id="@+id/source"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/subtitle"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginTop="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="BTC分析师"
+                    android:textColor="@color/unluckyText"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/pubTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/subtitle"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/source"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="1分钟前"
+                    android:textColor="@color/unluckyText"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/readTime"
+                    android:layout_width="64dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/subtitle"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_read_time"
+                    android:drawableLeft="@drawable/ic_read_time"
+                    android:drawablePadding="1dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="1分钟前"
+                    android:textColor="@color/unluckyText"
+                    android:textSize="12sp"/>
+
+                <View
+                    android:id="@+id/titleLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"
+                    android:background="@color/background"/>
             </RelativeLayout>
 
             <WebView
                 android:id="@+id/webView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
                 android:layout_below="@+id/titleLayout"
+                android:layout_marginTop="20dp"
                 android:scrollbars="none"
                 tools:ignore="WebViewLayout"/>
 
+            <RelativeLayout
+                android:id="@+id/praiseLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/webView"
+                android:visibility="gone"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:id="@+id/praiseIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_praise_not"/>
+
+                <TextView
+                    android:id="@+id/praiseCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/praiseIcon"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/unluckyText"
+                    android:textSize="12sp"/>
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/statement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/praiseLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_statement"/>
+
+            <RelativeLayout
+                android:id="@+id/shareLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/statement"
+                android:layout_alignLeft="@+id/statement"
+                android:layout_marginTop="12dp">
+
+                <TextView
+                    android:id="@+id/shareTo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textSize="12sp"
+                    android:textColor="@color/blackPrimary"
+                    android:text="@string/share_to_"/>
+
+                <ImageView
+                    android:id="@+id/icWxShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/shareTo"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/ic_share_wx_small"/>
+
+                <ImageView
+                    android:id="@+id/icCircleShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/icWxShare"
+                    android:layout_marginLeft="12dp"
+                    android:src="@drawable/ic_share_circle_small"/>
+
+            </RelativeLayout>
+
         </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </com.sbai.bcnews.view.NewsScrollView>
 
 
 </RelativeLayout>
