@@ -17,6 +17,7 @@
         app:leftViewLeftPadding="14dp"
         app:rightVisible="true"
         app:titleText="@string/news_detail"
+        app:textSingle="true"
         app:titleTextColor="@color/blackPrimary"/>
 
     <View

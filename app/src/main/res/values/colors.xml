@@ -3,6 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorOriginal">#FFB405</color>
+    <color name="colorOriginalBg">#FFF9E4</color>
 
     <color name="unluckyText">#999</color>
     <color name="luckyText">#666</color>
