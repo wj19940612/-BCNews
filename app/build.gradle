@@ -10,7 +10,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField('String', 'HOST', '\"lemi.ailemi.com\"')
+        buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
 
         manifestPlaceholders = [
                 GETUI_APP_ID    : "yz2rMIFVG88ywlddHHoLU4",
@@ -19,6 +19,18 @@ android {
                 UMENG_APP_KEY   : "59f7e22d734be4113a0000d8",
                 UMENG_CHANNEL   : "android"
         ]
+    }
+
+    java.util.Properties properties = new Properties();
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    signingConfigs {
+        release {
+            storeFile file(properties.get('keystore_storeFile'))
+            storePassword properties.get('keystore_storePassword')
+            keyAlias properties.get('keystore_keyAlias')
+            keyPassword properties.get('keystore_keyPassword')
+        }
     }
 
     flavorDimensions("app")
@@ -43,6 +55,18 @@ android {
 
         }
 
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "bcnews-${variant.name}-${variant.versionName}.apk"
+        }
+    }
+
+    productFlavors.all { flavor ->
+        if (flavor.name != 'dev' && flavor.name != 'alpha') {
+            flavor.manifestPlaceholders = [UMENG_CHANNEL: name]
+        }
     }
 }
 
