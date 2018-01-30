@@ -19,4 +19,7 @@ public class UmengCountEventId {
     public static final String NEWS_FLASH_TAB = "flash01";     //快讯tab
     public static final String NEWS_FLASH_SHARE = "flash01";     //快讯分享
 
+    //行情
+    public static final String MARKET_LIST_TAB = "market01";  //行情页面tab点击
+
 }

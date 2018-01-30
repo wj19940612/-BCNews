@@ -20,6 +20,7 @@ import com.sbai.bcnews.model.market.MarketData;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.OnItemClickListener;
+import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
@@ -105,7 +106,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         mMarkListAdapter.setOnItemClickListener(new OnItemClickListener<MarketData>() {
             @Override
             public void onItemClick(MarketData marketData, int position) {
-                // TODO: 2018/1/29 添加友盟统计
+                umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
             }
         });
 
