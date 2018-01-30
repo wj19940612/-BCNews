@@ -258,7 +258,7 @@ public class NewsDetailActivity extends BaseActivity {
     private void initScrollViewLocation() {
         mTitleHeight = mTitleLayout.getMeasuredHeight();
         int webViewHeight = mWebView.getHeight();
-        Log.e("zzz", "starty:" + mNewsDetail.getReadHeight() + " and webview 高度:" + webViewHeight);
+        //Log.e("zzz", "starty:" + mNewsDetail.getReadHeight() + " and webview 高度:" + webViewHeight);
         //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
         if (mNewsDetail != null && mNewsDetail.getReadHeight() > webViewHeight + mTitleHeight) {
             startScheduleJob(50);
@@ -272,14 +272,14 @@ public class NewsDetailActivity extends BaseActivity {
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
-        Log.e("zzz", "onTimeUp");
+        //Log.e("zzz", "onTimeUp");
         mTitleHeight = mTitleLayout.getMeasuredHeight();
         int webViewHeight = mWebView.getHeight();
         //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
         if (mNewsDetail != null && mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
             stopScheduleJob();
             mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
-            Log.e("zzz", "starty:" + mNewsDetail.getReadHeight() + " and webview 高度:" + webViewHeight);
+            //Log.e("zzz", "starty:" + mNewsDetail.getReadHeight() + " and webview 高度:" + webViewHeight);
         }
     }
 
@@ -357,7 +357,7 @@ public class NewsDetailActivity extends BaseActivity {
         super.onBackPressed();
         if (mNewsDetail != null) {
             mNewsDetail.setReadHeight(mScrollView.getScrollY());
-            Log.e("zzz", "y:" + mScrollView.getScrollY());
+            //Log.e("zzz", "y:" + mScrollView.getScrollY());
             NewsCache.insertOrReplaceNews(mNewsDetail);
         }
     }
