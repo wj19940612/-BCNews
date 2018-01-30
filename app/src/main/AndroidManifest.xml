@@ -72,7 +72,8 @@
         <activity android:name=".activity.LookBigPictureActivity"/>
         <activity
             android:name=".activity.ShareNewsFlashActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityEntryAnimation"/>
     </application>
 
 </manifest>

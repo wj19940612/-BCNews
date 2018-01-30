@@ -1,6 +1,7 @@
 package com.sbai.bcnews.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,11 +30,16 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.ShareUtils;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.DrawWebView;
 import com.sbai.bcnews.view.NewsScrollView;
 import com.sbai.bcnews.view.TitleBar;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,7 +119,7 @@ public class NewsDetailActivity extends BaseActivity {
         mNewsDetail = NewsCache.getCahceNewsForId(mId);
     }
 
-    private void initView(){
+    private void initView() {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -278,7 +284,7 @@ public class NewsDetailActivity extends BaseActivity {
                     updateData(data);
                 }
             }).fireFreely();
-        }else{
+        } else {
             updateData(mNewsDetail);
         }
     }
@@ -287,7 +293,7 @@ public class NewsDetailActivity extends BaseActivity {
         mSubtitle.setText(newsDetail.getTitle());
         mSource.setText(newsDetail.getSource());
         mPubTime.setText(DateUtil.formatDefaultStyleTime(newsDetail.getReleaseTime()));
-        mReadTime.setText(String.format(getString(R.string.reader_time),newsDetail.getReaderTime()));
+        mReadTime.setText(String.format(getString(R.string.reader_time), newsDetail.getReaderTime()));
         updatePraiseCount(newsDetail.getPraiseCount());
 
         mPureHtml = mNewsDetail.getContent();
@@ -333,7 +339,7 @@ public class NewsDetailActivity extends BaseActivity {
         NewsCache.insertOrReplaceNews(mNewsDetail);
     }
 
-    @OnClick({R.id.icWxShare, R.id.icCircleShare,R.id.praiseLayout})
+    @OnClick({R.id.icWxShare, R.id.icCircleShare, R.id.praiseLayout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.icWxShare:
@@ -344,5 +350,26 @@ public class NewsDetailActivity extends BaseActivity {
                 requestPraise();
                 break;
         }
+    }
+
+    private void shareToPlatform(SHARE_MEDIA platform) {
+        if (mNewsDetail == null) return;
+//        if (ShareUtils.canShare(getActivity(), platform)) {
+//            String text = mNewsDetail.getTitle() + mNewsDetail.get;
+//            UMImage image;
+//            if (TextUtils.isEmpty(mShareThumbUrl)) {
+//                image = new UMImage(mActivity, R.mipmap.ic_launcher);
+//            } else {
+//                image = new UMImage(mActivity, mShareThumbUrl);
+//            }
+//            if (mActivity != null && !mActivity.isFinishing()) {
+//                new ShareAction(mActivity)
+//                        .withText(text)
+//                        .withMedia(image)
+//                        .setPlatform(platform)
+//                        .setCallback(mUMShareListener)
+//                        .share();
+//            }
+//        }
     }
 }
