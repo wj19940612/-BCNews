@@ -1,6 +1,7 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,6 +25,8 @@ import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
+import com.sbai.bcnews.utils.UmengCountEventId;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,15 +64,37 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
         initRecyclerView();
         requestNewsFlash(mFirstDataTime, GREATER_THAN_TIME);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         startScheduleJob(60 * 1000);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopScheduleJob();
     }
 
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
         requestNewsFlash(mFirstDataTime, GREATER_THAN_TIME);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            startScheduleJob(60 * 1000);
+        } else {
+            stopScheduleJob();
+        }
     }
 
     private void requestNewsFlash(long time, int status) {
@@ -90,28 +115,34 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
     private void updateNewsFlashData(List<NewsFlash> data) {
         int size = data.size();
-        if (size < 20) {
-            mSwipeToLoadLayout.setLoadMoreEnabled(false);
-        } else {
-            mSwipeToLoadLayout.setLoadMoreEnabled(true);
-        }
-        if (mFirstDataTime == 0) {
-            //重新刷新
-            mNewsAdapter.clear();
-            mNewsAdapter.addAllData(data);
-        } else if (size > 0 && data.get(size - 1).getReleaseTime() > mFirstDataTime) {
-            //定时更新
+        if (size > 0 && mFirstDataTime > 0 && data.get(size - 1).getReleaseTime() > mFirstDataTime) {
+            mFirstDataTime = data.get(0).getReleaseTime();
+            //定时刷新
             Collections.reverse(data);
             for (NewsFlash newsFlash : data) {
                 mNewsAdapter.addFirst(newsFlash);
             }
         } else {
-            //加载更多
-            mNewsAdapter.addAllData(data);
-        }
-        if (size > 0) {
-            mFirstDataTime = data.get(0).getReleaseTime();
-            mLastDataTime = data.get(size - 1).getReleaseTime();
+            if (mFirstDataTime == 0) {
+                //重新刷新
+                if (size > 0) {
+                    mFirstDataTime = data.get(0).getReleaseTime();
+                    mLastDataTime = data.get(size - 1).getReleaseTime();
+                }
+                mNewsAdapter.clear();
+                mNewsAdapter.addAllData(data);
+            } else {
+                //加载更多
+                if (size > 0) {
+                    mLastDataTime = data.get(size - 1).getReleaseTime();
+                    mNewsAdapter.addAllData(data);
+                }
+            }
+            if (size < 30) {
+                mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            } else {
+                mSwipeToLoadLayout.setLoadMoreEnabled(true);
+            }
         }
     }
 
@@ -119,7 +150,6 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        stopScheduleJob();
     }
 
     private void initRecyclerView() {
@@ -156,7 +186,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
         public void addFirst(NewsFlash newsFlash) {
             dataList.add(0, newsFlash);
-            notifyDataSetChanged();
+            notifyItemInserted(0);
         }
 
         public void clear() {
@@ -207,6 +237,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 mShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        MobclickAgent.onEvent(context, UmengCountEventId.NEWS_FLASH_SHARE);
                         Launcher.with(context, ShareNewsFlashActivity.class)
                                 .putExtra(ExtraKeys.NEWS_FLASH, newsFlash)
                                 .execute();

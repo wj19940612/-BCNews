@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,18 +17,22 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsDetail;
-import com.sbai.bcnews.swipeload.ListViewSwipeLoadFragment;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.news.NewsReadCache;
+import com.sbai.bcnews.utils.news.NewsSummaryCache;
 import com.sbai.glide.GlideApp;
+import com.sbai.httplib.ReqError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +41,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import butterknife.internal.ListenerClass;
 
 /**
  * Modified by john on 24/01/2018
@@ -50,6 +54,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private Unbinder mBind;
     @BindView(R.id.swipe_target)
     RecyclerView mRecyclerView;
+    @BindView(R.id.swipeToLoadLayout)
+    SwipeToLoadLayout mSwipeToLoadLayout;
 
     private NewsAdapter mNewsAdapter;
     private List<NewsDetail> mNewsDetails;
@@ -76,7 +82,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         mNewsAdapter = new NewsAdapter(getActivity(), mNewsDetails, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
-                Launcher.with(getActivity(),NewsDetailActivity.class).putExtra(ExtraKeys.NEWS_ID,newsDetail.getId()).execute();
+                NewsReadCache.markNewsRead(newsDetail);
+                Launcher.with(getActivity(), NewsDetailActivity.class).putExtra(ExtraKeys.NEWS_ID, newsDetail.getId()).execute();
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -106,10 +113,16 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void loadData(final boolean refresh) {
-        Apic.getNewsList(mPage).tag(TAG).callback(new Callback2D<Resp<List<NewsDetail>>, List<NewsDetail>>() {
+        Apic.getNewsList(mPage).tag(TAG).callback(new Callback2D<Resp<News>, News>() {
             @Override
-            protected void onRespSuccessData(List<NewsDetail> data) {
-                updateData(data, refresh);
+            protected void onRespSuccessData(News data) {
+                updateData(data.getContent(), refresh);
+            }
+
+            @Override
+            public void onFailure(ReqError reqError) {
+                super.onFailure(reqError);
+                loadCacheData();
             }
 
             @Override
@@ -120,12 +133,30 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }).fireFreely();
     }
 
+    private void loadCacheData() {
+        List<NewsDetail> newsDetails = NewsSummaryCache.getNewsSummaryCache();
+        if (mNewsDetails.size() == 0) {
+            newsDetails =  NewsReadCache.filterReadCache(newsDetails);
+            mNewsDetails.addAll(newsDetails);
+            mNewsAdapter.notifyDataSetChanged();
+        }
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
+    }
+
     private void updateData(List<NewsDetail> data, boolean refresh) {
+        if (data == null || data.size() == 0) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            return;
+        }
+        NewsSummaryCache.markNewsSummarys(data);
+        data = NewsReadCache.filterReadCache(data);
         if (refresh) {
             mNewsDetails.clear();
-            if(data.size()<20){
-                
-            }
+        }
+        if (data.size() < Apic.NORMAL_PAGESIZE) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+        } else {
+            mSwipeToLoadLayout.setLoadMoreEnabled(true);
         }
         mPage++;
         mNewsDetails.addAll(data);
@@ -147,7 +178,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         private OnItemClickListener mOnItemClickListener;
 
 
-        public NewsAdapter(Context context, List<NewsDetail> newsDetails,OnItemClickListener onItemClickListener) {
+        public NewsAdapter(Context context, List<NewsDetail> newsDetails, OnItemClickListener onItemClickListener) {
             mContext = context;
             items = newsDetails;
             mOnItemClickListener = onItemClickListener;
@@ -214,6 +245,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
 
         static class NoneHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.rootView)
+            View mRootView;
             @BindView(R.id.title)
             TextView mTitle;
             @BindView(R.id.original)
@@ -232,13 +265,22 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, NewsDetail item, int position, int count, OnItemClickListener onItemClickListener) {
+            public void bindingData(final Context context, final NewsDetail item, int position, int count, final OnItemClickListener onItemClickListener) {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
-                mTime.setText(DateUtil.formatDefaultStyleTime(item.getReleaseTime()));
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(item);
-                }
+                mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
+                mTitle.setTextColor(item.isRead()?ContextCompat.getColor(context,R.color.unluckyText):ContextCompat.getColor(context,R.color.primaryText));
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            mTitle.setTextColor(ContextCompat.getColor(context,R.color.unluckyText));
+                            item.setRead(true);
+                            onItemClickListener.onItemClick(item);
+                        }
+                    }
+                });
+
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
                 }
@@ -246,6 +288,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
 
         static class SingleHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.rootView)
+            View mRootView;
             @BindView(R.id.img)
             ImageView mImg;
             @BindView(R.id.title)
@@ -266,19 +310,27 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, NewsDetail item, int position, int count, OnItemClickListener onItemClickListener) {
+            public void bindingData(final Context context, final NewsDetail item, int position, int count, final OnItemClickListener onItemClickListener) {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
-                mTime.setText(DateUtil.formatDefaultStyleTime(item.getReleaseTime()));
+                mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
+                mTitle.setTextColor(item.isRead()?ContextCompat.getColor(context,R.color.unluckyText):ContextCompat.getColor(context,R.color.primaryText));
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     GlideApp.with(context).load(item.getImgs().get(0))
-                            .placeholder(R.drawable.ic_default_image)
+                            .placeholder(R.drawable.ic_default_news)
                             .centerCrop()
                             .into(mImg);
                 }
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(item);
-                }
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            mTitle.setTextColor(ContextCompat.getColor(context,R.color.unluckyText));
+                            item.setRead(true);
+                            onItemClickListener.onItemClick(item);
+                        }
+                    }
+                });
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
                 }
@@ -286,6 +338,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
 
         static class ThreeHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.rootView)
+            View mRootView;
             @BindView(R.id.title)
             TextView mTitle;
             @BindView(R.id.img1)
@@ -310,33 +364,41 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, NewsDetail item, int position, int count, OnItemClickListener onItemClickListener) {
+            public void bindingData(final Context context, final NewsDetail item, int position, int count, final OnItemClickListener onItemClickListener) {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
-                mTime.setText(DateUtil.formatDefaultStyleTime(item.getReleaseTime()));
+                mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
+                mTitle.setTextColor(item.isRead()?ContextCompat.getColor(context,R.color.unluckyText):ContextCompat.getColor(context,R.color.primaryText));
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     GlideApp.with(context).load(item.getImgs().get(0))
-                            .placeholder(R.drawable.ic_default_image)
+                            .placeholder(R.drawable.ic_default_news)
                             .centerCrop()
                             .into(mImg1);
                 }
 
                 if (item.getImgs() != null && item.getImgs().size() > 1) {
                     GlideApp.with(context).load(item.getImgs().get(1))
-                            .placeholder(R.drawable.ic_default_image)
+                            .placeholder(R.drawable.ic_default_news)
                             .centerCrop()
                             .into(mImg2);
                 }
 
                 if (item.getImgs() != null && item.getImgs().size() > 2) {
                     GlideApp.with(context).load(item.getImgs().get(2))
-                            .placeholder(R.drawable.ic_default_image)
+                            .placeholder(R.drawable.ic_default_news)
                             .centerCrop()
                             .into(mImg3);
                 }
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(item);
-                }
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            mTitle.setTextColor(ContextCompat.getColor(context,R.color.unluckyText));
+                            item.setRead(true);
+                            onItemClickListener.onItemClick(item);
+                        }
+                    }
+                });
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
                 }

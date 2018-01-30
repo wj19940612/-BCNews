@@ -427,6 +427,29 @@ public class DateUtil {
     }
 
     /**
+     * 如果是当天，显示今天
+     * 如果是昨天，显示昨天
+     * 如果是本年内的其他时期  12/07;
+     * 跨年  2015/12/07
+     * 涉及页面  资讯列表，资讯详情
+     *
+     * @param createTime
+     * @return
+     */
+    public static String formatNewsStyleTime(long createTime) {
+        long systemTime = SysTime.getSysTime().getSystemTimestamp();
+        if (DateUtil.isInThisDay(createTime, systemTime))
+            return "今天";
+        else if(DateUtil.isYesterday(createTime,systemTime)){
+            return "昨天";
+        }else if (DateUtil.isInThisYear(createTime)) {
+            return DateUtil.format(createTime, "MM/dd ");
+        } else {
+            return DateUtil.format(createTime, "yyyy/MM/dd ");
+        }
+    }
+
+    /**
      * 当前是否白天
      *
      * @return

@@ -12,7 +12,10 @@ import org.json.JSONException;
 import org.json.JSONTokener;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -21,7 +24,6 @@ import java.util.Queue;
 
 public class NewsCache {
     private static final int TOTAL_NEWS = 200;
-
     private static Queue<NewsDetail> sNewsCache;
     private static Gson sGson = new Gson();
 
@@ -33,11 +35,11 @@ public class NewsCache {
         }
         sNewsCache.add(newsDetail);
         String news = sGson.toJson(sNewsCache);
-        Preference.get().setNewsRead(news);
+        Preference.get().setNewsDetail(news);
     }
 
     private static void readFromPreference() {
-        String news = Preference.get().getNewsRead();
+        String news = Preference.get().getNewsDetail();
         if (!TextUtils.isEmpty(news) && isJsonArray(news)) {
             Type type = new TypeToken<LinkedList<NewsDetail>>() {
             }.getType();
@@ -61,7 +63,7 @@ public class NewsCache {
         }
     }
 
-    //插入或替换缓存(替换指的是阅读记忆的阅读高度)
+    //插入或替换缓存(替换指的是更新阅读记忆的阅读高度)
     public static void insertOrReplaceNews(NewsDetail newsDetail) {
         if (sNewsCache == null) {
             readFromPreference();
@@ -75,7 +77,7 @@ public class NewsCache {
             }
         }
         //插入
-        if(!isContains){
+        if (!isContains) {
             if (sNewsCache.size() >= TOTAL_NEWS) {
                 sNewsCache.poll();
             }
@@ -83,11 +85,11 @@ public class NewsCache {
         }
 
         String news = sGson.toJson(sNewsCache);
-        Preference.get().setNewsRead(news);
+        Preference.get().setNewsDetail(news);
     }
 
     //读取缓存
-    public static NewsDetail getCahceNewsForId(String id){
+    public static NewsDetail getCacheForId(String id) {
         if (sNewsCache == null) {
             readFromPreference();
         }
