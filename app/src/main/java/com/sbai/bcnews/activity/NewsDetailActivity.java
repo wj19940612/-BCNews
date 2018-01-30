@@ -116,7 +116,7 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void initData() {
         mId = getIntent().getStringExtra(ExtraKeys.NEWS_ID);
-        mNewsDetail = NewsCache.getCahceNewsForId(mId);
+        mNewsDetail = NewsCache.getCacheForId(mId);
     }
 
     private void initView() {
@@ -255,10 +255,29 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void initScrollViewLocation() {
         mTitleHeight = mTitleLayout.getMeasuredHeight();
-        //webView加载完高度才完全展示出来，这时候scrollView才能滑动到记忆的位置
-        if (mNewsDetail != null){
-            mScrollView.scrollTo(0, mNewsDetail.getReadHeight());
-            Log.e("zzz","starty:"+mNewsDetail.getReadHeight()+" and webview 高度:"+mWebView.getHeight());
+        int webViewHeight = mWebView.getHeight();
+        Log.e("zzz", "starty:" + mNewsDetail.getReadHeight() + " and webview 高度:" + webViewHeight);
+        //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
+        if (mNewsDetail != null && mNewsDetail.getReadHeight() > webViewHeight + mTitleHeight) {
+            startScheduleJob(50);
+            return;
+        }
+        if (mNewsDetail != null) {
+            mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+        }
+    }
+
+    @Override
+    public void onTimeUp(int count) {
+        super.onTimeUp(count);
+        Log.e("zzz", "onTimeUp");
+        mTitleHeight = mTitleLayout.getMeasuredHeight();
+        int webViewHeight = mWebView.getHeight();
+        //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
+        if (mNewsDetail != null && mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
+            stopScheduleJob();
+            mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+            Log.e("zzz", "starty:" + mNewsDetail.getReadHeight() + " and webview 高度:" + webViewHeight);
         }
     }
 
@@ -292,7 +311,7 @@ public class NewsDetailActivity extends BaseActivity {
     private void updateData(NewsDetail newsDetail) {
         mSubtitle.setText(newsDetail.getTitle());
         mSource.setText(newsDetail.getSource());
-        mPubTime.setText(DateUtil.formatDefaultStyleTime(newsDetail.getReleaseTime()));
+        mPubTime.setText(DateUtil.formatNewsStyleTime(newsDetail.getReleaseTime()));
         mReadTime.setText(String.format(getString(R.string.reader_time), newsDetail.getReaderTime()));
         updatePraiseCount(newsDetail.getPraiseCount());
 
@@ -334,9 +353,11 @@ public class NewsDetailActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mNewsDetail.setReadHeight(mScrollView.getScrollY());
-        Log.e("zzz","y:"+mScrollView.getScrollY());
-        NewsCache.insertOrReplaceNews(mNewsDetail);
+        if (mNewsDetail != null) {
+            mNewsDetail.setReadHeight(mScrollView.getScrollY());
+            Log.e("zzz", "y:" + mScrollView.getScrollY());
+            NewsCache.insertOrReplaceNews(mNewsDetail);
+        }
     }
 
     @OnClick({R.id.icWxShare, R.id.icCircleShare, R.id.praiseLayout})

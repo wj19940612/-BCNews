@@ -48,6 +48,8 @@ public class Preference {
         String FIRST_OPEN_APP = "first_open_app";
         String UPDATE_OPEN_APP_TIME = "update_open_app_time";
         String FIRST_LOGIN = "first_login";
+        String NEWS_DETAIL = "news_detail";
+        String NEWS_SUMMARY = "news_summary";
         String NEWS_READ = "news_read";
     }
 
@@ -196,6 +198,27 @@ public class Preference {
     public void setFirstLogin(boolean isFirstLogin) {
         apply(Key.FIRST_LOGIN, isFirstLogin);
     }
+
+    public void setNewsDetail(String newsRead) {
+        String key = Key.NEWS_DETAIL;
+        apply(key, newsRead);
+    }
+
+    public String getNewsDetail() {
+        String key = Key.NEWS_DETAIL;
+        return mPrefs.getString(key, null);
+    }
+
+    public void setNewsSummary(String newsSummary) {
+        String key = Key.NEWS_SUMMARY;
+        apply(key, newsSummary);
+    }
+
+    public String getNewsSummary() {
+        String key = Key.NEWS_SUMMARY;
+        return mPrefs.getString(key, null);
+    }
+
 
     public void setNewsRead(String newsRead) {
         String key = Key.NEWS_READ;

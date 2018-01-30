@@ -10,6 +10,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
 import com.sbai.bcnews.fragment.NewsFragment;
+import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.BottomTabs;
 import com.sbai.bcnews.view.ScrollableViewPager;
 
@@ -17,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
+    public static final int PAGE_POSITION_NEWS = 1;
     @BindView(R.id.viewPager)
     ScrollableViewPager mViewPager;
     @BindView(R.id.bottomTabs)
@@ -60,6 +62,9 @@ public class MainActivity extends BaseActivity {
             public void onTabClick(int position) {
                 mBottomTabs.selectTab(position);
                 mViewPager.setCurrentItem(position, false);
+                if (position == PAGE_POSITION_NEWS) {
+                    umengEventCount(UmengCountEventId.NEWS01);
+                }
             }
         });
     }
