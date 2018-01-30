@@ -22,7 +22,6 @@ import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.OnItemClickListener;
-import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.ListRecycleViewItemDecoration;
 import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
@@ -117,12 +116,11 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         mMarkListAdapter.setOnItemClickListener(new OnItemClickListener<MarketData>() {
             @Override
             public void onItemClick(MarketData marketData, int position) {
-                ToastUtil.show("" + marketData.getName());
+                // TODO: 2018/1/29 添加友盟统计
             }
         });
 
         mSwipeToLoadLayout.setLoadMoreEnabled(false);
-
     }
 
     @Override
@@ -237,7 +235,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                 mBourseName.setText(marketData.getExchangeCode());
                 mMarketName.setText(marketData.getName().toUpperCase());
                 mNumberCurrency.setText(marketData.getCurrencyMoney());
-                mDealNumber.setText(formatExchangeVolume(context, marketData.getVolume()));
+                mDealNumber.setText(formatExchangeVolume(context, marketData.getLastVolume()));
 
                 boolean isRise = marketData.getUpDropSpeed() >= 0;
                 mUsPrice.setSelected(isRise);
@@ -288,7 +286,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                     float v = FinanceUtil.divide(volume, 10000, 1, RoundingMode.DOWN).floatValue();
                     exchangeVolume = context.getString(R.string.ten_thousand_number, " " + String.valueOf(v));
                 } else {
-                    exchangeVolume = String.valueOf(volume);
+                    exchangeVolume = FinanceUtil.formatWithScale(volume, 1, RoundingMode.DOWN);
                 }
                 return context.getString(R.string.market_volume, " " + exchangeVolume);
             }
