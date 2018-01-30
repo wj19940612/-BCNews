@@ -18,7 +18,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
-    public static final int PAGE_POSITION_NEWS = 1;
+    public static final int PAGE_POSITION_NEWS = 0;
+    public static final int PAGE_POSITION_NEWS_FLASH = 1;
+
     @BindView(R.id.viewPager)
     ScrollableViewPager mViewPager;
     @BindView(R.id.bottomTabs)
@@ -64,6 +66,8 @@ public class MainActivity extends BaseActivity {
                 mViewPager.setCurrentItem(position, false);
                 if (position == PAGE_POSITION_NEWS) {
                     umengEventCount(UmengCountEventId.NEWS01);
+                } else if (position == PAGE_POSITION_NEWS_FLASH) {
+                    umengEventCount(UmengCountEventId.NEWS_FLASH_TAB);
                 }
             }
         });

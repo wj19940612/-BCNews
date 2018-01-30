@@ -25,6 +25,8 @@ import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
+import com.sbai.bcnews.utils.UmengCountEventId;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -235,6 +237,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 mShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        MobclickAgent.onEvent(context, UmengCountEventId.NEWS_FLASH_SHARE);
                         Launcher.with(context, ShareNewsFlashActivity.class)
                                 .putExtra(ExtraKeys.NEWS_FLASH, newsFlash)
                                 .execute();
