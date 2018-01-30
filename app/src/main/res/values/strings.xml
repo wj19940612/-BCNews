@@ -70,9 +70,9 @@
         <item>@string/market</item>
     </string-array>
     <integer-array name="tabIcons">
-        <item>@drawable/tab_info</item>
-        <item>@drawable/tab_info</item>
-        <item>@drawable/tab_discovery</item>
+        <item>@drawable/tab_news</item>
+        <item>@drawable/tab_flash_news</item>
+        <item>@drawable/tab_market</item>
     </integer-array>
     <string name="share_news_flash">分享快讯</string>
     <string name="week_">星期%1$s</string>
