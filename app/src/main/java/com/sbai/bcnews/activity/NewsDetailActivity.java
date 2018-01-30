@@ -35,9 +35,11 @@ import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.DrawWebView;
 import com.sbai.bcnews.view.NewsScrollView;
+import com.sbai.bcnews.view.ShareDialog;
 import com.sbai.bcnews.view.TitleBar;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 
@@ -123,7 +125,7 @@ public class NewsDetailActivity extends BaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                showShareDialog();
             }
         });
     }
@@ -364,8 +366,10 @@ public class NewsDetailActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.icWxShare:
+                shareToPlatform(SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.icCircleShare:
+                shareToPlatform(SHARE_MEDIA.WEIXIN_CIRCLE);
                 break;
             case R.id.praiseLayout:
                 requestPraise();
@@ -373,24 +377,60 @@ public class NewsDetailActivity extends BaseActivity {
         }
     }
 
+    private void showShareDialog() {
+        if (mNewsDetail == null) return;
+        String shareThumbUrl = null;
+        if (mNewsDetail.getImgs() != null && !mNewsDetail.getImgs().isEmpty()) {
+            shareThumbUrl = mNewsDetail.getImgs().get(0);
+        }
+        ShareDialog.with(getActivity())
+                .setTitleVisible(false)
+                .setShareTitle(mNewsDetail.getTitle())
+//                .setShareDescription(mNewsDetail.getc)
+                .setShareUrl(String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId()))
+                .setShareThumbUrl(shareThumbUrl)
+                .show();
+
+    }
+
     private void shareToPlatform(SHARE_MEDIA platform) {
         if (mNewsDetail == null) return;
-//        if (ShareUtils.canShare(getActivity(), platform)) {
-//            String text = mNewsDetail.getTitle() + mNewsDetail.get;
-//            UMImage image;
-//            if (TextUtils.isEmpty(mShareThumbUrl)) {
-//                image = new UMImage(mActivity, R.mipmap.ic_launcher);
-//            } else {
-//                image = new UMImage(mActivity, mShareThumbUrl);
-//            }
-//            if (mActivity != null && !mActivity.isFinishing()) {
-//                new ShareAction(mActivity)
-//                        .withText(text)
-//                        .withMedia(image)
-//                        .setPlatform(platform)
-//                        .setCallback(mUMShareListener)
-//                        .share();
-//            }
-//        }
+        if (ShareUtils.canShare(getActivity(), platform)) {
+            String text = mNewsDetail.getTitle() + String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId());
+            UMImage image;
+            if (mNewsDetail.getImgs() == null || mNewsDetail.getImgs().isEmpty()) {
+                image = new UMImage(getActivity(), R.mipmap.ic_launcher);
+            } else {
+                image = new UMImage(getActivity(), mNewsDetail.getImgs().get(0));
+            }
+            new ShareAction(getActivity())
+                    .withText(text)
+                    .withMedia(image)
+                    .setPlatform(platform)
+                    .setCallback(mUMShareListener)
+                    .share();
+        }
     }
+
+    private UMShareListener mUMShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+            ToastUtil.show(R.string.share_succeed);
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            //   ToastUtil.show(R.string.share_failed);
+            ToastUtil.show(throwable.getMessage());
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            ToastUtil.show(R.string.share_cancel);
+        }
+    };
 }

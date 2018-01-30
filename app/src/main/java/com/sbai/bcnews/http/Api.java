@@ -197,7 +197,7 @@ public class Api extends RequestManager {
         return url;
     }
 
-    private static String getHost() {
+    public static String getHost() {
         if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")) {
             return "http://" + BuildConfig.HOST;
         }

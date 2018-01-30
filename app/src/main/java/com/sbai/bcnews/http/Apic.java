@@ -12,6 +12,8 @@ public class Apic {
 
     public static final int NORMAL_PAGESIZE = 20;
 
+    public static final String SHARE_NEWS_URL = Api.getHost() + "%s";
+
     public static Api getNewsDetail(String id) {
         return Api.get("/api/news-info/info/details/" + id);
     }

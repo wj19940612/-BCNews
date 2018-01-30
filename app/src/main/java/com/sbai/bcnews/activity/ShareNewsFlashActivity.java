@@ -25,6 +25,7 @@ import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.TitleBar;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 
@@ -139,7 +140,30 @@ public class ShareNewsFlashActivity extends BaseActivity {
         UMImage image = new UMImage(getActivity(), bitmap);
         new ShareAction(getActivity())
                 .withMedia(image)
+                .setCallback(mUMShareListener)
                 .setPlatform(platform)
                 .share();
     }
+
+    private UMShareListener mUMShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+            ToastUtil.show(R.string.share_succeed);
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            //   ToastUtil.show(R.string.share_failed);
+            ToastUtil.show(throwable.getMessage());
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            ToastUtil.show(R.string.share_cancel);
+        }
+    };
 }
