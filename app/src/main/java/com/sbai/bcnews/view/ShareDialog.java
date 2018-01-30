@@ -328,14 +328,14 @@ public class ShareDialog {
         if (!mHasWeiBo) {
             mView.findViewById(R.id.sinaWeibo).setVisibility(View.INVISIBLE);
         }
+        TextView title = (TextView) mView.findViewById(R.id.title);
         if (!TextUtils.isEmpty(mTitle)) {
-            TextView title = (TextView) mView.findViewById(R.id.title);
             title.setText(mTitle);
-            if (mHasTitle) {
-                title.setVisibility(View.VISIBLE);
-            } else {
-                title.setVisibility(View.GONE);
-            }
+        }
+        if (mHasTitle) {
+            title.setVisibility(View.VISIBLE);
+        } else {
+            title.setVisibility(View.GONE);
         }
 
         mSmartDialog.setWidthScale(1)
