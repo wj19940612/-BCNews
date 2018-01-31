@@ -10,6 +10,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
 import com.sbai.bcnews.fragment.NewsFragment;
+import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.BottomTabs;
 import com.sbai.bcnews.view.ScrollableViewPager;
@@ -63,42 +64,21 @@ public class MainActivity extends BaseActivity {
         mBottomTabs.setOnTabClickListener(new BottomTabs.OnTabClickListener() {
             @Override
             public void onTabClick(int position) {
+                if (position == mViewPager.getCurrentItem() && position != PAGE_POSITION_MARKET) {
+                    refreshPageData(position);
+                }
                 mBottomTabs.selectTab(position);
                 mViewPager.setCurrentItem(position, false);
-
                 umengClickStatistics(position);
-                refreshPageData(position);
             }
         });
     }
 
     private void refreshPageData(int position) {
-        switch (position) {
-            case PAGE_POSITION_NEWS:
-                NewsFragment newsFragment = getNewsFragment();
-                newsFragment.onRefresh();
-                break;
-            case PAGE_POSITION_NEWS_FLASH:
-                NewsFlashFragment newsFlashFragment = getNewsFlashFragment();
-                newsFlashFragment.onRefresh();
-                break;
-            case PAGE_POSITION_MARKET:
-                MarketFragment marketFragment = getMarketFragment();
-                marketFragment.onRefresh();
-                break;
+        Fragment fragment = mMainFragmentsAdapter.getFragment(position);
+        if (fragment instanceof BaseSwipeLoadFragment) {
+            ((BaseSwipeLoadFragment) fragment).triggerRefresh();
         }
-    }
-
-    public NewsFragment getNewsFragment() {
-        return (NewsFragment) mMainFragmentsAdapter.getFragment(PAGE_POSITION_NEWS);
-    }
-
-    public NewsFlashFragment getNewsFlashFragment() {
-        return (NewsFlashFragment) mMainFragmentsAdapter.getFragment(PAGE_POSITION_NEWS_FLASH);
-    }
-
-    public MarketFragment getMarketFragment() {
-        return (MarketFragment) mMainFragmentsAdapter.getFragment(PAGE_POSITION_MARKET);
     }
 
     private void umengClickStatistics(int position) {

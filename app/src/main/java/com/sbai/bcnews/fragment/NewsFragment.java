@@ -108,6 +108,12 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         loadData(true);
     }
 
+    @Override
+    public void triggerRefresh() {
+        super.triggerRefresh();
+        onRefresh();
+    }
+
     private void loadData(final boolean refresh) {
         Apic.getNewsList(mPage).tag(TAG).callback(new Callback2D<Resp<News>, News>() {
             @Override
@@ -132,7 +138,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private void loadCacheData() {
         List<NewsDetail> newsDetails = NewsSummaryCache.getNewsSummaryCache();
         if (mNewsDetails.size() == 0) {
-            newsDetails =  NewsReadCache.filterReadCache(newsDetails);
+            newsDetails = NewsReadCache.filterReadCache(newsDetails);
             mNewsDetails.addAll(newsDetails);
             mNewsAdapter.notifyDataSetChanged();
         }
@@ -265,12 +271,12 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-                mTitle.setTextColor(item.isRead()?ContextCompat.getColor(context,R.color.unluckyText):ContextCompat.getColor(context,R.color.primaryText));
+                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (onItemClickListener != null) {
-                            mTitle.setTextColor(ContextCompat.getColor(context,R.color.unluckyText));
+                            mTitle.setTextColor(ContextCompat.getColor(context, R.color.unluckyText));
                             item.setRead(true);
                             onItemClickListener.onItemClick(item);
                         }
@@ -310,7 +316,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-                mTitle.setTextColor(item.isRead()?ContextCompat.getColor(context,R.color.unluckyText):ContextCompat.getColor(context,R.color.primaryText));
+                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     GlideApp.with(context).load(item.getImgs().get(0))
                             .placeholder(R.drawable.ic_default_news)
@@ -321,7 +327,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                     @Override
                     public void onClick(View v) {
                         if (onItemClickListener != null) {
-                            mTitle.setTextColor(ContextCompat.getColor(context,R.color.unluckyText));
+                            mTitle.setTextColor(ContextCompat.getColor(context, R.color.unluckyText));
                             item.setRead(true);
                             onItemClickListener.onItemClick(item);
                         }
@@ -364,7 +370,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-                mTitle.setTextColor(item.isRead()?ContextCompat.getColor(context,R.color.unluckyText):ContextCompat.getColor(context,R.color.primaryText));
+                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     GlideApp.with(context).load(item.getImgs().get(0))
                             .placeholder(R.drawable.ic_default_news)
@@ -389,7 +395,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                     @Override
                     public void onClick(View v) {
                         if (onItemClickListener != null) {
-                            mTitle.setTextColor(ContextCompat.getColor(context,R.color.unluckyText));
+                            mTitle.setTextColor(ContextCompat.getColor(context, R.color.unluckyText));
                             item.setRead(true);
                             onItemClickListener.onItemClick(item);
                         }
