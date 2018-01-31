@@ -169,6 +169,12 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
         requestNewsFlash(mFirstDataTime, GREATER_THAN_TIME);
     }
 
+    @Override
+    public void triggerRefresh() {
+        super.triggerRefresh();
+        onRefresh();
+    }
+
     static class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         private List<NewsFlash> dataList;
         private Context mContext;

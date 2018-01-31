@@ -17,6 +17,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -101,6 +102,8 @@ public class NewsDetailActivity extends BaseActivity {
     private NewsDetail mNewsDetail;
 
     private int mTitleHeight;
+    private boolean mTitleVisible;
+    private boolean mScrolling;
 
     public static final String INFO_HTML_META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\">";
 
@@ -288,10 +291,21 @@ public class NewsDetailActivity extends BaseActivity {
             @Override
             public void onScroll(int scrollY) {
                 if (scrollY > mTitleHeight && mNewsDetail != null) {
-                    mTitleBar.setTitle(mNewsDetail.getTitle());
+                    if (!mTitleVisible) {
+                        mTitleBar.setTitle(mNewsDetail.getTitle());
+                        mTitleVisible = true;
+                    }
                 } else {
-                    mTitleBar.setTitle(R.string.news);
+                    if (mTitleVisible) {
+                        mTitleBar.setTitle(R.string.news);
+                        mTitleVisible = false;
+                    }
                 }
+            }
+
+            @Override
+            public void onScrollState(boolean scrolling) {
+                mScrolling = scrolling;
             }
         });
     }
@@ -362,7 +376,7 @@ public class NewsDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.icWxShare, R.id.icCircleShare, R.id.praiseLayout})
+    @OnClick({R.id.icWxShare, R.id.icCircleShare, R.id.praiseLayout, R.id.titleBar})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.icWxShare:
@@ -373,6 +387,10 @@ public class NewsDetailActivity extends BaseActivity {
                 break;
             case R.id.praiseLayout:
                 requestPraise();
+                break;
+            case R.id.titleBar:
+                if (!mScrolling)
+                    mScrollView.scrollTo(0, 0);
                 break;
         }
     }
