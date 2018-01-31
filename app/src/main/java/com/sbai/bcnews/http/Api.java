@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.sbai.bcnews.BuildConfig;
+import com.sbai.bcnews.utils.BuildConfigUtils;
 import com.sbai.httplib.CookieManger;
 import com.sbai.httplib.GsonRequest;
 import com.sbai.httplib.MultipartRequest;
@@ -198,7 +199,8 @@ public class Api extends RequestManager {
     }
 
     public static String getHost() {
-        if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")) {
+        if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")
+                ||BuildConfig.FLAVOR.equalsIgnoreCase(BuildConfigUtils.FLAVOR_NAME_ALPHA)) {
             return "http://" + BuildConfig.HOST;
         }
         return "https://" + BuildConfig.HOST;

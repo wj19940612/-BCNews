@@ -10,7 +10,7 @@ public class BuildConfigUtils {
 
     private static final String FLAVOR_NAME_DEV = "dev";
 
-    private static final String FLAVOR_NAME_ALPHA = "alpha";
+    public static final String FLAVOR_NAME_ALPHA = "alpha";
 
     public static boolean isProductFlavor() {
         return !(BuildConfig.FLAVOR.equalsIgnoreCase(FLAVOR_NAME_DEV) ||
