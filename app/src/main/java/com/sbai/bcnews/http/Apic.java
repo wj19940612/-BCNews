@@ -19,7 +19,7 @@ public class Apic {
     }
 
     public static Api getNewsList(int page) {
-        return Api.get("/api/news-info/info/list.do", new ReqParams().put("page", page).put("pageSize", NORMAL_PAGESIZE));
+        return Api.get("/api/news-info/info/list.do", new ReqParams().put("page", page).put("size", NORMAL_PAGESIZE));
     }
 
     public static Api syncSystemTime() {
