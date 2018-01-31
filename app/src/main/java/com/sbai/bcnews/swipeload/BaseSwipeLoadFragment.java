@@ -25,7 +25,7 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
 
 
     protected void triggerLoadMore() {
-        if (mSwipeToLoadLayout != null ) {
+        if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setLoadingMore(true);
         }
     }
@@ -39,7 +39,12 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
                 mSwipeToLoadLayout.setLoadingMore(false);
             }
         }
+    }
 
+    public void triggerRefresh() {
+        if (mSwipeToLoadLayout != null) {
+            mSwipeToLoadLayout.setRefreshing(true);
+        }
     }
 
     @Override
