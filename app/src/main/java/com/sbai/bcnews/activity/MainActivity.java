@@ -10,6 +10,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
 import com.sbai.bcnews.fragment.NewsFragment;
+import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.BottomTabs;
 import com.sbai.bcnews.view.ScrollableViewPager;
 
@@ -17,6 +18,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
+    public static final int PAGE_POSITION_NEWS = 0;
+    public static final int PAGE_POSITION_NEWS_FLASH = 1;
+    private static final int PAGE_POSITION_MARKET = 2;
+
     @BindView(R.id.viewPager)
     ScrollableViewPager mViewPager;
     @BindView(R.id.bottomTabs)
@@ -60,8 +65,50 @@ public class MainActivity extends BaseActivity {
             public void onTabClick(int position) {
                 mBottomTabs.selectTab(position);
                 mViewPager.setCurrentItem(position, false);
+
+                umengClickStatistics(position);
+                refreshPageData(position);
             }
         });
+    }
+
+    private void refreshPageData(int position) {
+        switch (position) {
+            case PAGE_POSITION_NEWS:
+                NewsFragment newsFragment = getNewsFragment();
+                newsFragment.onRefresh();
+                break;
+            case PAGE_POSITION_NEWS_FLASH:
+                NewsFlashFragment newsFlashFragment = getNewsFlashFragment();
+                newsFlashFragment.onRefresh();
+                break;
+            case PAGE_POSITION_MARKET:
+                MarketFragment marketFragment = getMarketFragment();
+                marketFragment.onRefresh();
+                break;
+        }
+    }
+
+    public NewsFragment getNewsFragment() {
+        return (NewsFragment) mMainFragmentsAdapter.getFragment(PAGE_POSITION_NEWS);
+    }
+
+    public NewsFlashFragment getNewsFlashFragment() {
+        return (NewsFlashFragment) mMainFragmentsAdapter.getFragment(PAGE_POSITION_NEWS_FLASH);
+    }
+
+    public MarketFragment getMarketFragment() {
+        return (MarketFragment) mMainFragmentsAdapter.getFragment(PAGE_POSITION_MARKET);
+    }
+
+    private void umengClickStatistics(int position) {
+        if (position == PAGE_POSITION_NEWS) {
+            umengEventCount(UmengCountEventId.NEWS01);
+        } else if (position == PAGE_POSITION_NEWS_FLASH) {
+            umengEventCount(UmengCountEventId.NEWS_FLASH_TAB);
+        } else if (position == PAGE_POSITION_MARKET) {
+            umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
+        }
     }
 
     private static class MainFragmentsAdapter extends FragmentPagerAdapter {

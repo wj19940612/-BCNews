@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,10 +18,9 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.market.MarketData;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
-import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.OnItemClickListener;
-import com.sbai.bcnews.view.ListRecycleViewItemDecoration;
+import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
@@ -46,7 +44,7 @@ import butterknife.Unbinder;
  */
 public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
-    private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 5000;
+    private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 6000;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -80,12 +78,14 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         startScheduleJob(REFRESH_MARKET_DATE_TIME_INTERVAL);
     }
 
+
     private void requestMarketListData() {
         Apic.requestMarkListData(MarketData.DEFAULT_MARKET_BOURSE_CODE)
                 .tag(TAG)
                 .callback(new Callback2D<Resp<List<MarketData>>, List<MarketData>>() {
                     @Override
                     protected void onRespSuccessData(List<MarketData> data) {
+                        mMarkListAdapter.clear();
                         mMarkListAdapter.addAll(data);
                     }
 
@@ -93,6 +93,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                     public void onFinish() {
                         super.onFinish();
                         stopFreshOrLoadAnimation();
+
                     }
                 })
                 .fire();
@@ -101,21 +102,15 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
     private void initRecycleView() {
         mMarkListAdapter = new MarkListAdapter(new ArrayList<MarketData>(), getActivity());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        int dividerHeight = (int) Display.dp2Px(1, getResources());
-        ListRecycleViewItemDecoration listRecycleViewItemDecoration = new ListRecycleViewItemDecoration(getActivity(),
-                ListRecycleViewItemDecoration.VERTICAL_LIST,
-                dividerHeight,
-                ContextCompat.getColor(getActivity(), R.color.split));
-        mSwipeTarget.addItemDecoration(listRecycleViewItemDecoration);
         mSwipeTarget.setAdapter(mMarkListAdapter);
-
         mMarkListAdapter.setOnItemClickListener(new OnItemClickListener<MarketData>() {
             @Override
             public void onItemClick(MarketData marketData, int position) {
-
+                umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
             }
         });
+
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
     }
 
     @Override
@@ -126,12 +121,13 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
     @Override
     public void onLoadMore() {
-//        mSwipeToLoadLayout.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
+        mSwipeToLoadLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
 //                mSwipeToLoadLayout.setLoadingMore(false);
-//            }
-//        }, 500);
+                stopFreshOrLoadAnimation();
+            }
+        }, 500);
 
     }
 
@@ -146,7 +142,9 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         requestMarketListData();
     }
 
-    static class MarkListAdapter extends RecyclerView.Adapter<MarkListAdapter.ViewHolder> {
+    static class MarkListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private static final int ITEM_VIEW_TYPE_FOOTER = 1;
 
         private ArrayList<MarketData> mMarketDataList;
         private Context mContext;
@@ -177,19 +175,36 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.row_market_list, parent, false);
-            return new ViewHolder(view);
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            switch (viewType) {
+                case ITEM_VIEW_TYPE_FOOTER:
+                    View footerView = LayoutInflater.from(mContext).inflate(R.layout.view_footer_view, parent, false);
+                    return new FooterViewHolder(footerView);
+                default:
+                    View view = LayoutInflater.from(mContext).inflate(R.layout.row_market_list, parent, false);
+                    return new ViewHolder(view);
+            }
+
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.bindDataWithView(mMarketDataList.get(position), position, mContext, mOnItemClickListener);
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof MarkListAdapter.ViewHolder) {
+                ((MarkListAdapter.ViewHolder) holder).bindDataWithView(mMarketDataList.get(position), position, mContext, mOnItemClickListener);
+            }
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (!mMarketDataList.isEmpty() && position == mMarketDataList.size()) {
+                return ITEM_VIEW_TYPE_FOOTER;
+            }
+            return super.getItemViewType(position);
         }
 
         @Override
         public int getItemCount() {
-            return mMarketDataList.size();
+            return mMarketDataList.isEmpty() ? 0 : mMarketDataList.size() + 1;
         }
 
 
@@ -210,6 +225,8 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
             TextView mPriceChangeRatio;
             @BindView(R.id.rootView)
             ConstraintLayout mRootView;
+            @BindView(R.id.split)
+            View mSplit;
 
             ViewHolder(View view) {
                 super(view);
@@ -218,10 +235,16 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
             public void bindDataWithView(final MarketData marketData, final int position, Context context, final OnItemClickListener<MarketData> onItemClickListener) {
 
+                if (position == 0) {
+                    mSplit.setVisibility(View.VISIBLE);
+                } else {
+                    mSplit.setVisibility(View.GONE);
+                }
+
                 mBourseName.setText(marketData.getExchangeCode());
                 mMarketName.setText(marketData.getName().toUpperCase());
                 mNumberCurrency.setText(marketData.getCurrencyMoney());
-                mDealNumber.setText(formatExchangeVolume(context, marketData.getVolume()));
+                mDealNumber.setText(formatExchangeVolume(context, marketData.getLastVolume()));
 
                 boolean isRise = marketData.getUpDropSpeed() >= 0;
                 mUsPrice.setSelected(isRise);
@@ -272,9 +295,16 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                     float v = FinanceUtil.divide(volume, 10000, 1, RoundingMode.DOWN).floatValue();
                     exchangeVolume = context.getString(R.string.ten_thousand_number, " " + String.valueOf(v));
                 } else {
-                    exchangeVolume = String.valueOf(volume);
+                    exchangeVolume = FinanceUtil.formatWithScale(volume, 1, RoundingMode.DOWN);
                 }
                 return context.getString(R.string.market_volume, " " + exchangeVolume);
+            }
+        }
+
+        static class FooterViewHolder extends RecyclerView.ViewHolder {
+
+            public FooterViewHolder(View itemView) {
+                super(itemView);
             }
         }
     }

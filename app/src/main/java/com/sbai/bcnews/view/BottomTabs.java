@@ -52,7 +52,7 @@ public class BottomTabs extends LinearLayout {
         mTexts = typedArray.getTextArray(R.styleable.BottomTabs_textArray);
 
         if (isInEditMode()) {
-            mIcons = new int[]{R.drawable.tab_info, R.drawable.tab_info, R.drawable.tab_info};
+            mIcons = new int[]{R.drawable.tab_news, R.drawable.tab_flash_news, R.drawable.tab_market};
         } else {
             int iconsArrayRes = typedArray.getResourceId(R.styleable.BottomTabs_iconArray, 0);
             if (iconsArrayRes != 0) {

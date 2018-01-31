@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="vertical"
     android:paddingLeft="20dp"
@@ -37,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_news_flash_share"
+            android:gravity="center_vertical"
             android:text="@string/share"
             android:textColor="@color/unluckyText"
             android:textSize="12sp"/>
@@ -49,7 +50,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="14dp"
         android:ellipsize="end"
-        android:maxLines="3"
+        android:lineSpacingExtra="4dp"
+        android:maxLines="6"
         android:textColor="#494949"
         android:textSize="15sp"
         tools:text="高上市公司质量深交所，将研究创新监管和质量"/>

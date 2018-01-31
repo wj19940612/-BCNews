@@ -62,6 +62,13 @@ public class Api extends RequestManager {
         return reqApi;
     }
 
+    public static Api put(String api) {
+        Api reqApi = new Api();
+        reqApi.mMethod = PUT;
+        reqApi.mApi = api;
+        return reqApi;
+    }
+
     public static Api post(String api, ReqParams reqParams) {
         Api reqApi = new Api();
         reqApi.mMethod = POST;
@@ -190,7 +197,7 @@ public class Api extends RequestManager {
         return url;
     }
 
-    private static String getHost() {
+    public static String getHost() {
         if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")) {
             return "http://" + BuildConfig.HOST;
         }

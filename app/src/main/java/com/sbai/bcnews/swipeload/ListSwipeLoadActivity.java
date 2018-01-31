@@ -24,7 +24,8 @@ public abstract class ListSwipeLoadActivity extends BaseSwipeLoadActivity<ListVi
         getSwipeTargetView().setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if (view.getLastVisiblePosition() == view.getCount() - 1 && !view.canScrollVertically(1)) {
+                if (view.getLastVisiblePosition() == view.getCount() - 1
+                        && !view.canScrollVertically(1)) {
                     triggerLoadMore();
                 }
                 onListViewScrollStateChanged(view, scrollState);

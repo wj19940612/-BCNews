@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.ReplacementSpan;
+import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 
 
@@ -128,7 +129,7 @@ public class StrUtil {
             int end = s1.length();
             res = new SpannableString(s1);
             res.setSpan(new ForegroundColorSpan(s1Color), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            res.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            res.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             res.setSpan(new RelativeSizeSpan(ratio), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             if (s2Color != Color.TRANSPARENT) {
                 res.setSpan(new ForegroundColorSpan(s2Color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

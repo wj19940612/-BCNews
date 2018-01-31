@@ -45,16 +45,17 @@ public class App extends Application {
     }
 
     private void processCaughtException() {
-      Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-          @Override
-          public void uncaughtException(Thread t, Throwable e) {
-              if (BuildConfigUtils.isProductFlavor()) {
-                  submitErrorInfoToServers(e);
-              } else {
-                  openCrashInfoPage(e);
-              }
-          }
-      });
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                if (BuildConfigUtils.isProductFlavor()) {
+                    submitErrorInfoToServers(e);
+                } else {
+                    openCrashInfoPage(e);
+                }
+                System.exit(1);
+            }
+        });
     }
 
     private void openCrashInfoPage(Throwable e) {

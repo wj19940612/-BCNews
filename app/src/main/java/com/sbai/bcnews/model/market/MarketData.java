@@ -1,12 +1,6 @@
 package com.sbai.bcnews.model.market;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.sbai.bcnews.http.Apic;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ${wangJie} on 2018/1/26.
@@ -54,15 +48,6 @@ public class MarketData {
     private long upTime;
     private String upTimeFormat;
     private double volume;
-
-    // TODO: 2018/1/26 先写死数据
-    public static List<MarketData> arrayMarketListDataFromData(String str) {
-
-        Type listType = new TypeToken<ArrayList<MarketData>>() {
-        }.getType();
-
-        return new Gson().fromJson(str, listType);
-    }
 
     public double getAskPrice() {
         return askPrice;

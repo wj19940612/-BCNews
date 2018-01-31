@@ -56,6 +56,10 @@ public class TitleBar extends RelativeLayout {
     private Drawable mRightTextRightImage;
     private int mLeftViewLeftPadding;
     private ImageView mRightImageView;
+    private boolean mTextSingle;
+    private int mTitleLeftMargin;
+    private int mTitleRightMargin;
+
 
     public TitleBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -110,6 +114,9 @@ public class TitleBar extends RelativeLayout {
         mSplitLineHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, HEIGHT_SPLIT_LINE_DP,
                 getResources().getDisplayMetrics());
         mLeftViewLeftPadding = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_leftViewLeftPadding, -1);
+        mTextSingle = typedArray.getBoolean(R.styleable.TitleBar_textSingle, false);
+        mTitleLeftMargin = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_titleLeftMargin, 0);
+        mTitleRightMargin = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_titleRightMargin, 0);
         typedArray.recycle();
     }
 
@@ -143,6 +150,14 @@ public class TitleBar extends RelativeLayout {
             mTitleView = new TextView(getContext());
             mTitleView.setGravity(Gravity.CENTER);
             addView(mTitleView, params);
+        }
+
+        if (mTextSingle) {
+            mTitleView.setMaxLines(1);
+            mTitleView.setEllipsize(TextUtils.TruncateAt.END);
+            LayoutParams titleParams = (LayoutParams) mTitleView.getLayoutParams();
+            titleParams.setMargins(mTitleLeftMargin, 0, mTitleRightMargin, 0);
+            mTitleView.setLayoutParams(titleParams);
         }
 
         // left view

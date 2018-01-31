@@ -29,5 +29,5 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="@string/load_more"
-        android:textColor="?attr/colorPrimary"/>
+        android:textColor="@color/google_yellow"/>
 </RelativeLayout>

@@ -49,7 +49,8 @@ public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment<Li
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                if (view.getLastVisiblePosition() == view.getCount() - 1 && !view.canScrollVertically(1)) {
+                if (view.getLastVisiblePosition() == view.getCount() - 1
+                        && !view.canScrollVertically(1)) {
                     triggerLoadMore();
                 }
             }

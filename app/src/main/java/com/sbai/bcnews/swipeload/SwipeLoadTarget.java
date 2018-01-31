@@ -9,7 +9,7 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
  * 下拉刷新  上拉加载的接口
  * <p>
  * 有两个实现类  {@link BaseSwipeLoadActivity
- *              {@link BaseSwipeLoadFragment 这两个实现子类
+ * {@link BaseSwipeLoadFragment 这两个实现子类
  */
 
 public interface SwipeLoadTarget<T> {
@@ -26,4 +26,5 @@ public interface SwipeLoadTarget<T> {
 
     @NonNull
     SwipeToLoadLayout getSwipeToLoadLayout();
+
 }

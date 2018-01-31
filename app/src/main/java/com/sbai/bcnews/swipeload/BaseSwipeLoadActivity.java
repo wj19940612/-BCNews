@@ -20,12 +20,12 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
     private SwipeToLoadLayout mSwipeToLoadLayout;
 
     /**
-     *  该view 的id 必须为 swipe_target
+     * 该view 的id 必须为 swipe_target
      */
     private T mSwipeTargetView;
 
     protected void triggerLoadMore() {
-        if (mSwipeToLoadLayout != null) {
+        if (mSwipeToLoadLayout != null ) {
             mSwipeToLoadLayout.setLoadingMore(true);
         }
     }
@@ -52,4 +52,5 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
             mSwipeToLoadLayout.setOnRefreshListener(this);
         }
     }
+
 }
