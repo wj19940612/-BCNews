@@ -2,7 +2,9 @@ package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ListView;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
@@ -44,6 +46,12 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
     public void triggerRefresh() {
         if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setRefreshing(true);
+            if (mSwipeTargetView instanceof RecyclerView) {
+                ((RecyclerView) mSwipeTargetView).scrollToPosition(0);
+            }
+            if (mSwipeTargetView instanceof ListView) {
+                ((ListView) mSwipeTargetView).smoothScrollToPosition(0);
+            }
         }
     }
 
