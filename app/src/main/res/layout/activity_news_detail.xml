@@ -45,7 +45,7 @@
             <RelativeLayout
                 android:id="@+id/titleLayout"
                 android:layout_width="match_parent"
-                android:layout_height="114dp"
+                android:layout_height="wrap_content"
                 android:paddingTop="14dp">
 
                 <TextView
@@ -56,7 +56,6 @@
                     android:layout_marginRight="14dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="黄金矿业公司转投比特币后 股价上涨了1300%"
                     android:textColor="@color/blackPrimary"
                     android:textSize="22sp"/>
 
@@ -69,7 +68,6 @@
                     android:layout_marginTop="10dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="BTC分析师"
                     android:textColor="@color/unluckyText"
                     android:textSize="12sp"/>
 
@@ -83,7 +81,6 @@
                     android:layout_toRightOf="@+id/source"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="1分钟前"
                     android:textColor="@color/unluckyText"
                     android:textSize="12sp"/>
 
@@ -101,7 +98,6 @@
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:text="1分钟前"
                     android:textColor="@color/unluckyText"
                     android:textSize="12sp"/>
 
@@ -109,7 +105,8 @@
                     android:id="@+id/titleLine"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/readTime"
+                    android:layout_marginTop="12dp"
                     android:layout_marginLeft="14dp"
                     android:layout_marginRight="14dp"
                     android:background="@color/background"/>
@@ -200,6 +197,13 @@
 
         </RelativeLayout>
     </com.sbai.bcnews.view.NewsScrollView>
+
+    <com.sbai.bcnews.view.EmptyView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titleBar"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>
