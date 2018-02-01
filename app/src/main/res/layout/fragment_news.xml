@@ -47,5 +47,12 @@
             android:layout_height="wrap_content"/>
     </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
+    <com.sbai.bcnews.view.EmptyView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titleBar"
+        android:visibility="gone"/>
+
 
 </RelativeLayout>

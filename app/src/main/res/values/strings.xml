@@ -40,6 +40,7 @@
 
 
     <!-- WebView network error -->
+    <string name="check_your_net">请检查您的网络设置，并刷新！</string>
     <string name="network_error_please_reload">网络连接失败 请重新加载</string>
     <string name="refresh">刷新</string>
     <string name="android_web_agent">ANDROID_AGENT</string>
@@ -93,4 +94,7 @@
     <string name="product_price_cn">¥%1$s</string>
     <string name="ten_thousand_number">%1$s万</string>
     <string name="up_range">+%1$s</string>
+
+    <!-- common -->
+    <string name="now_refresh">立即刷新</string>
 </resources>

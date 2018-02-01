@@ -35,9 +35,11 @@ import com.sbai.bcnews.utils.ShareUtils;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.DrawWebView;
+import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.NewsScrollView;
 import com.sbai.bcnews.view.ShareDialog;
 import com.sbai.bcnews.view.TitleBar;
+import com.sbai.httplib.ReqError;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -91,6 +93,8 @@ public class NewsDetailActivity extends BaseActivity {
     TextView mShareTo;
     @BindView(R.id.shareLayout)
     RelativeLayout mShareLayout;
+    @BindView(R.id.emptyView)
+    EmptyView mEmptyView;
 
     private WebViewClient mWebViewClient;
 
@@ -129,6 +133,12 @@ public class NewsDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 showShareDialog();
+            }
+        });
+        mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
+            @Override
+            public void onRefreshClick() {
+                requestDetailData();
             }
         });
     }
@@ -317,6 +327,13 @@ public class NewsDetailActivity extends BaseActivity {
                 protected void onRespSuccessData(NewsDetail data) {
                     mNewsDetail = data;
                     updateData(data);
+                    mEmptyView.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onFailure(ReqError reqError) {
+                    super.onFailure(reqError);
+                    mEmptyView.setVisibility(View.VISIBLE);
                 }
             }).fireFreely();
         } else {

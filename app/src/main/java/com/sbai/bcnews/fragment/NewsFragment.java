@@ -27,6 +27,7 @@ import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
+import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
@@ -61,6 +62,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     RecyclerView mRecyclerView;
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
+    @BindView(R.id.emptyView)
+    EmptyView mEmptyView;
 
     private NewsAdapter mNewsAdapter;
     private List<NewsDetail> mNewsDetails;
@@ -93,6 +96,12 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNewsAdapter);
+        mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
+            @Override
+            public void onRefreshClick() {
+                loadData(true);
+            }
+        });
     }
 
     @OnClick({})
@@ -151,8 +160,14 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         List<NewsDetail> newsDetails = NewsSummaryCache.getNewsSummaryCache();
         if (mNewsDetails.size() == 0) {
             newsDetails = NewsReadCache.filterReadCache(newsDetails);
-            mNewsDetails.addAll(newsDetails);
-            mNewsAdapter.notifyDataSetChanged();
+            if(newsDetails == null || newsDetails.size() == 0){
+                mEmptyView.setVisibility(View.VISIBLE);
+            }else{
+                mEmptyView.setVisibility(View.GONE);
+                mNewsDetails.addAll(newsDetails);
+                mNewsAdapter.notifyDataSetChanged();
+            }
+
         }
         mSwipeToLoadLayout.setLoadMoreEnabled(false);
     }
@@ -160,8 +175,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private void updateData(List<NewsDetail> data, boolean refresh) {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            mEmptyView.setVisibility(View.VISIBLE);
             return;
         }
+        mEmptyView.setVisibility(View.GONE);
         NewsSummaryCache.markNewsSummarys(data);
         data = NewsReadCache.filterReadCache(data);
         if (refresh) {
