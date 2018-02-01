@@ -5,12 +5,13 @@ import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ScrollView;
 
 /**
  * Created by Administrator on 2018\1\26 0026.
  */
 
-public class NewsScrollView extends NestedScrollView {
+public class NewsScrollView extends ScrollView {
     private OnScrollListener listener;
     private int scrollY;
 
