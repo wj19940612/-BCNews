@@ -228,6 +228,10 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
             return super.getItemViewType(position);
         }
 
+
+
+
+        
         @Override
         public int getItemCount() {
             return mMarketDataList.isEmpty() ? 0 : mMarketDataList.size() + 1;
