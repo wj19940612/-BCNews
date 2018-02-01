@@ -1,7 +1,6 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,6 +25,7 @@ import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
+import com.sbai.httplib.ReqError;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -103,13 +103,15 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                     @Override
                     protected void onRespSuccessData(List<NewsFlash> data) {
                         updateNewsFlashData(data);
+                        refreshSuccess();
                     }
 
                     @Override
-                    public void onFinish() {
-                        super.onFinish();
-                        stopFreshOrLoadAnimation();
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
+                        refreshFail();
                     }
+
                 }).fire();
     }
 
@@ -172,6 +174,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void triggerRefresh() {
         super.triggerRefresh();
+        smoothScrollToTop();
         onRefresh();
     }
 

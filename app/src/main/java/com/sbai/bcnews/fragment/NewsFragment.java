@@ -27,8 +27,11 @@ import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
+import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
+import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
+import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,12 @@ import butterknife.Unbinder;
  */
 public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
+    @BindView(R.id.swipe_refresh_header)
+    RefreshHeaderView mSwipeRefreshHeader;
+    @BindView(R.id.swipe_load_more_footer)
+    LoadMoreFooterView mSwipeLoadMoreFooter;
     private Unbinder mBind;
     @BindView(R.id.swipe_target)
     RecyclerView mRecyclerView;
@@ -111,6 +120,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void triggerRefresh() {
         super.triggerRefresh();
+        smoothScrollToTop();
         onRefresh();
     }
 
@@ -119,12 +129,14 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             @Override
             protected void onRespSuccessData(News data) {
                 updateData(data.getContent(), refresh);
+                mSwipeRefreshHeader.refreshSuccess();
             }
 
             @Override
             public void onFailure(ReqError reqError) {
                 super.onFailure(reqError);
                 loadCacheData();
+                mSwipeRefreshHeader.refreshFail();
             }
 
             @Override
