@@ -307,7 +307,7 @@ public class NewsDetailActivity extends BaseActivity {
                     }
                 } else {
                     if (mTitleVisible) {
-                        mTitleBar.setTitle(R.string.news);
+                        mTitleBar.setTitle(R.string.news_detail);
                         mTitleVisible = false;
                     }
                 }
@@ -407,7 +407,7 @@ public class NewsDetailActivity extends BaseActivity {
                 break;
             case R.id.titleBar:
                 if (!mScrolling)
-                    mScrollView.scrollTo(0, 0);
+                    mScrollView.smoothScrollTo(0, 0);
                 break;
         }
     }
