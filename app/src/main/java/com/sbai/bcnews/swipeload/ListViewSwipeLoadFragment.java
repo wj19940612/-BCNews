@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
+import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 /**
  * Created by ${wangJie} on 2018/1/26.
@@ -69,5 +70,37 @@ public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment<Li
 
     protected void onListViewScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
+    }
+
+
+    public void smoothScrollToTop(){
+        ListView swipeTargetView = getSwipeTargetView();
+        if(swipeTargetView!=null){
+            swipeTargetView.setSelection(0);
+        }
+    }
+
+    @NonNull
+    public RefreshHeaderView getRefreshHeaderView() {
+        if (getView() != null) {
+            return getView().findViewById(R.id.swipe_refresh_header);
+        }
+        return null;
+    }
+
+    protected void refreshSuccess() {
+        RefreshHeaderView refreshHeaderView = getRefreshHeaderView();
+        if (refreshHeaderView != null) {
+            refreshHeaderView.refreshSuccess();
+        }
+        stopFreshOrLoadAnimation();
+    }
+
+    protected void refreshFail() {
+        RefreshHeaderView refreshHeaderView = getRefreshHeaderView();
+        if (refreshHeaderView != null) {
+            refreshHeaderView.refreshFail();
+        }
+        stopFreshOrLoadAnimation();
     }
 }

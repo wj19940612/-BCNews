@@ -1,14 +1,13 @@
 package com.zcmrr.swipelayout.header;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
+import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeRefreshHeaderLayout;
@@ -19,21 +18,19 @@ import com.zcmrr.swipelayout.R;
  */
 
 public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
-    private ImageView ivArrow;
 
-    private ImageView ivSuccess;
+    private static final String TAG = "RefreshHeaderView";
+    private ImageView ivArrow;
 
     private TextView tvRefresh;
 
-    private ProgressBar progressBar;
 
     private int mHeaderHeight;
 
-    private Animation rotateUp;
-
-    private Animation rotateDown;
-
     private boolean rotated = false;
+
+    private CharSequence mRefreshCompleteText;
+
 
     public RefreshHeaderView(Context context) {
         this(context, null);
@@ -46,81 +43,104 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
     public RefreshHeaderView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mHeaderHeight = getResources().getDimensionPixelOffset(R.dimen.refresh_header_height_twitter);
-        rotateUp = AnimationUtils.loadAnimation(context, R.anim.rotate_up);
-        rotateDown = AnimationUtils.loadAnimation(context, R.anim.rotate_down);
 
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.view_refresh_header, this, false);
 
         tvRefresh = view.findViewById(R.id.tvRefresh);
         ivArrow = view.findViewById(R.id.ivArrow);
-        ivSuccess = view.findViewById(R.id.ivSuccess);
-        progressBar = view.findViewById(R.id.progressbar);
         addView(view);
-
+        mRefreshCompleteText = getContext().getString(R.string.refresh_complete);
     }
 
 
     @Override
     public void onRefresh() {
-        ivSuccess.setVisibility(GONE);
+        Log.d(TAG, "onRefresh: ");
         ivArrow.clearAnimation();
-        ivArrow.setVisibility(GONE);
-        progressBar.setVisibility(VISIBLE);
+
+        ivArrow.setImageResource(R.drawable.refreshing);
+        AnimationDrawable animationDrawable = (AnimationDrawable) ivArrow.getDrawable();
+        animationDrawable.start();
+
+        tvRefresh.setVisibility(VISIBLE);
         tvRefresh.setText(R.string.refreshing);
     }
 
     @Override
     public void onPrepare() {
-        Log.d("TwitterRefreshHeader", "onPrepare()");
+        Log.d(TAG, "onPrepare()");
+        reset();
+        ivArrow.setImageResource(R.drawable.refresh_start);
+        AnimationDrawable refreshStartDrawable = (AnimationDrawable) ivArrow.getDrawable();
+        refreshStartDrawable.start();
     }
 
     @Override
     public void onMove(int y, boolean isComplete, boolean automatic) {
         if (!isComplete) {
-            ivArrow.setVisibility(VISIBLE);
-            progressBar.setVisibility(GONE);
-            ivSuccess.setVisibility(GONE);
+//            if (tvRefresh.getVisibility() != INVISIBLE) {
+//                tvRefresh.setVisibility(INVISIBLE);
+//            }
             if (y > mHeaderHeight) {
-                tvRefresh.setText(R.string.release_to_refresh);
                 if (!rotated) {
-                    ivArrow.clearAnimation();
-                    ivArrow.startAnimation(rotateUp);
                     rotated = true;
                 }
             } else if (y < mHeaderHeight) {
                 if (rotated) {
-                    ivArrow.clearAnimation();
-                    ivArrow.startAnimation(rotateDown);
                     rotated = false;
                 }
 
-                tvRefresh.setText(R.string.swipe_fresh);
             }
         }
     }
 
     @Override
     public void onRelease() {
-        Log.d("TwitterRefreshHeader", "onRelease()");
+        Log.d(TAG, "onRelease: ");
     }
 
     @Override
     public void onComplete() {
+        Log.d(TAG, "onComplete: ");
         rotated = false;
-        ivSuccess.setVisibility(VISIBLE);
         ivArrow.clearAnimation();
-        ivArrow.setVisibility(GONE);
-        progressBar.setVisibility(GONE);
-        tvRefresh.setText(R.string.refresh_complete);
+        ivArrow.setVisibility(INVISIBLE);
+        tvRefresh.setText(mRefreshCompleteText);
     }
 
     @Override
     public void onReset() {
+        Log.d(TAG, "onReset: ");
         rotated = false;
-        ivSuccess.setVisibility(GONE);
+        reset();
+    }
+
+    private void reset() {
+        ivArrow.setVisibility(VISIBLE);
+        tvRefresh.setText("");
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         ivArrow.clearAnimation();
-        ivArrow.setVisibility(GONE);
-        progressBar.setVisibility(GONE);
+    }
+
+    public void setRefreshCompleteText(@StringRes int resid) {
+        setRefreshCompleteText(getContext().getString(resid));
+    }
+
+    public void setRefreshCompleteText(CharSequence text) {
+        mRefreshCompleteText = text;
+        tvRefresh.setText(mRefreshCompleteText);
+    }
+
+    public void refreshFail() {
+        setRefreshCompleteText(R.string.refresh_fail);
+    }
+
+    public void refreshSuccess() {
+        setRefreshCompleteText(R.string.refresh_complete);
     }
 }

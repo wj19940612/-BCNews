@@ -22,6 +22,7 @@ import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.TitleBar;
+import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -72,12 +73,31 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         initRecycleView();
         requestMarketListData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         startScheduleJob(REFRESH_MARKET_DATE_TIME_INTERVAL);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopScheduleJob();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            startScheduleJob(REFRESH_MARKET_DATE_TIME_INTERVAL);
+        } else {
+            stopScheduleJob();
+        }
+    }
 
     private void requestMarketListData() {
         Apic.requestMarkListData(MarketData.DEFAULT_MARKET_BOURSE_CODE)
@@ -85,6 +105,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                 .callback(new Callback2D<Resp<List<MarketData>>, List<MarketData>>() {
                     @Override
                     protected void onRespSuccessData(List<MarketData> data) {
+                        mSwipeRefreshHeader.refreshSuccess();
                         mMarkListAdapter.clear();
                         mMarkListAdapter.addAll(data);
                     }
@@ -93,7 +114,12 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                     public void onFinish() {
                         super.onFinish();
                         stopFreshOrLoadAnimation();
+                    }
 
+                    @Override
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
+                        mSwipeRefreshHeader.refreshFail();
                     }
                 })
                 .fire();

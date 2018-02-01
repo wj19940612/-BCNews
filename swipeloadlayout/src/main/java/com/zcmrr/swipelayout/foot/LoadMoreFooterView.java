@@ -56,7 +56,7 @@ public class LoadMoreFooterView extends SwipeLoadMoreFooterLayout {
 //            if (-y >= mFooterHeight) {
 //                tvLoadMore.setText(R.string.restart_load_more);
 //            } else {
-                tvLoadMore.setText(R.string.swipe_load_more);
+            tvLoadMore.setText(R.string.swipe_load_more);
 //            }
         }
     }
@@ -82,4 +82,5 @@ public class LoadMoreFooterView extends SwipeLoadMoreFooterLayout {
     public void onReset() {
         ivSuccess.setVisibility(GONE);
     }
+
 }
