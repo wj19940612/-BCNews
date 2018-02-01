@@ -27,6 +27,7 @@ import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
+import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
@@ -61,6 +62,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     RecyclerView mRecyclerView;
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
+    @BindView(R.id.emptyView)
+    EmptyView mEmptyView;
 
     private NewsAdapter mNewsAdapter;
     private List<NewsDetail> mNewsDetails;
@@ -93,11 +96,21 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNewsAdapter);
+        mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
+            @Override
+            public void onRefreshClick() {
+                loadData(true);
+            }
+        });
     }
 
-    @OnClick({})
+    @OnClick({R.id.titleBar})
     public void onViewClicked(View view) {
-
+        switch (view.getId()) {
+            case R.id.titleBar:
+                scrollToFirstView();
+                break;
+        }
     }
 
     @Override
@@ -151,17 +164,24 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         List<NewsDetail> newsDetails = NewsSummaryCache.getNewsSummaryCache();
         if (mNewsDetails.size() == 0) {
             newsDetails = NewsReadCache.filterReadCache(newsDetails);
-            mNewsDetails.addAll(newsDetails);
-            mNewsAdapter.notifyDataSetChanged();
+            if (newsDetails == null || newsDetails.size() == 0) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+                mNewsDetails.addAll(newsDetails);
+                mNewsAdapter.refresh();
+            }
+
         }
-        mSwipeToLoadLayout.setLoadMoreEnabled(false);
     }
 
     private void updateData(List<NewsDetail> data, boolean refresh) {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            mEmptyView.setVisibility(View.VISIBLE);
             return;
         }
+        mEmptyView.setVisibility(View.GONE);
         NewsSummaryCache.markNewsSummarys(data);
         data = NewsReadCache.filterReadCache(data);
         if (refresh) {
@@ -174,7 +194,17 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
         mPage++;
         mNewsDetails.addAll(data);
-        mNewsAdapter.notifyDataSetChanged();
+        mNewsAdapter.refresh();
+    }
+
+    private void scrollToFirstView() {
+        int firstVisiblePosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        if (firstVisiblePosition > 20) {
+            mRecyclerView.scrollToPosition(0);
+        } else {
+            mRecyclerView.smoothScrollToPosition(0);
+        }
+        mNewsAdapter.refresh();
     }
 
     public static class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -186,7 +216,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             public void onItemClick(NewsDetail newsDetail);
         }
 
-        private int continuesPic;
         private Context mContext;
         private List<NewsDetail> items;
         private OnItemClickListener mOnItemClickListener;
@@ -196,6 +225,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             mContext = context;
             items = newsDetails;
             mOnItemClickListener = onItemClickListener;
+        }
+
+        public void refresh() {
+            notifyDataSetChanged();
         }
 
         @Override
@@ -213,24 +246,34 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         public int getItemViewType(int position) {
             NewsDetail news = items.get(position);
             int thePicNum = news.getImgs().size();
-            if (continuesPic <= 4) {
-                continuesPic++;
-                if (thePicNum == 0)
-                    return TYPE_NONE;
-                else
-                    return TYPE_SINGLE;
+            if (thePicNum == 0) {
+                return TYPE_NONE;
+            } else if (thePicNum == 1) {
+                return TYPE_SINGLE;
             } else {
-                if (thePicNum == 3) {
-                    continuesPic = 0;
-                    return TYPE_THREE;
-                } else if (thePicNum == 1) {
-                    continuesPic++;
+                if (position <= 4) {
                     return TYPE_SINGLE;
-                } else {
-                    continuesPic++;
-                    return TYPE_NONE;
+                }
+                //前面五张全是单张模式，这里才显示3张图片
+                if(judgeFiveSingleMode(position)){
+                    return TYPE_THREE;
+                }else{
+                    return TYPE_SINGLE;
                 }
             }
+        }
+
+        //前面五item是否全为单张模式
+        private boolean judgeFiveSingleMode(int position){
+            if (position <= 4) {
+                return true;
+            }
+            for (int i = position - 1; i > position - 5; i--) {
+                if (items.get(i).getImgs().size() > 1 && !judgeFiveSingleMode(i)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         @Override

@@ -25,6 +25,7 @@ import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
+import com.sbai.bcnews.view.EmptyView;
 import com.sbai.httplib.ReqError;
 import com.umeng.analytics.MobclickAgent;
 
@@ -50,6 +51,8 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
     Unbinder unbinder;
+    @BindView(R.id.emptyView)
+    EmptyView mEmptyView;
     private NewsAdapter mNewsAdapter;
     private long mFirstDataTime, mLastDataTime;
 
@@ -117,7 +120,13 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
     private void updateNewsFlashData(List<NewsFlash> data) {
         int size = data.size();
-        if (size > 0 && mFirstDataTime > 0 && data.get(size - 1).getReleaseTime() > mFirstDataTime) {
+        if (size == 0 && mNewsAdapter.isEmpty()) {
+            mEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyView.setVisibility(View.GONE);
+        }
+        if (size == 0) return;
+        if (mFirstDataTime > 0 && data.get(size - 1).getReleaseTime() > mFirstDataTime) {
             mFirstDataTime = data.get(0).getReleaseTime();
             //定时刷新
             Collections.reverse(data);
@@ -127,18 +136,14 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
         } else {
             if (mFirstDataTime == 0) {
                 //重新刷新
-                if (size > 0) {
-                    mFirstDataTime = data.get(0).getReleaseTime();
-                    mLastDataTime = data.get(size - 1).getReleaseTime();
-                }
+                mFirstDataTime = data.get(0).getReleaseTime();
+                mLastDataTime = data.get(size - 1).getReleaseTime();
                 mNewsAdapter.clear();
                 mNewsAdapter.addAllData(data);
             } else {
                 //加载更多
-                if (size > 0) {
-                    mLastDataTime = data.get(size - 1).getReleaseTime();
-                    mNewsAdapter.addAllData(data);
-                }
+                mLastDataTime = data.get(size - 1).getReleaseTime();
+                mNewsAdapter.addAllData(data);
             }
             if (size < 30) {
                 mSwipeToLoadLayout.setLoadMoreEnabled(false);
@@ -158,6 +163,13 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
         mNewsAdapter = new NewsAdapter(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNewsAdapter);
+        mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
+            @Override
+            public void onRefreshClick() {
+                mFirstDataTime = 0;
+                requestNewsFlash(mFirstDataTime, GREATER_THAN_TIME);
+            }
+        });
     }
 
     @Override
@@ -201,6 +213,10 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
         public void clear() {
             dataList.clear();
             notifyDataSetChanged();
+        }
+
+        public boolean isEmpty() {
+            return dataList.isEmpty();
         }
 
         @Override

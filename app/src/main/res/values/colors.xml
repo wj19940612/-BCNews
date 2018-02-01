@@ -21,5 +21,6 @@
     <color name="greenPrimary">#39AE13</color>
     <color name="price">#FF1E40</color>
     <color name="losePrimary">#F62048</color>
+    <color name="shadowBlack">#1f000000</color>
 
 </resources>
