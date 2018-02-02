@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
@@ -106,8 +107,8 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 .callback(new Callback2D<Resp<List<NewsFlash>>, List<NewsFlash>>() {
                     @Override
                     protected void onRespSuccessData(List<NewsFlash> data) {
-                        updateNewsFlashData(data);
                         refreshSuccess();
+                        updateNewsFlashData(data);
                     }
 
                     @Override
@@ -148,8 +149,10 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
             }
             if (size < 30) {
                 mSwipeToLoadLayout.setLoadMoreEnabled(false);
+                mNewsAdapter.showFooterView(true);
             } else {
                 mSwipeToLoadLayout.setLoadMoreEnabled(true);
+                mNewsAdapter.showFooterView(false);
             }
         }
     }
@@ -192,6 +195,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
     }
 
     static class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
+        private boolean showFooterView;
         private List<NewsFlash> dataList;
         private Context mContext;
 
@@ -216,6 +220,11 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
             notifyDataSetChanged();
         }
 
+        public void showFooterView(boolean isShow) {
+            showFooterView = isShow;
+            notifyDataSetChanged();
+        }
+
         public boolean isEmpty() {
             return dataList.isEmpty();
         }
@@ -229,7 +238,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.bindDataWithView(dataList.get(position), mContext);
+            holder.bindDataWithView(showFooterView && position == dataList.size() - 1, dataList.get(position), mContext);
         }
 
         @Override
@@ -244,6 +253,10 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
             TextView mShare;
             @BindView(R.id.content)
             TextView mContent;
+            @BindView(R.id.split)
+            View mSplit;
+            @BindView(R.id.footer)
+            TextView mFooter;
 
 
             public ViewHolder(View itemView) {
@@ -251,7 +264,14 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, itemView);
             }
 
-            private void bindDataWithView(final NewsFlash newsFlash, final Context context) {
+            private void bindDataWithView(boolean showFooterView, final NewsFlash newsFlash, final Context context) {
+                if (showFooterView) {
+                    mSplit.setVisibility(View.GONE);
+                    mFooter.setVisibility(View.VISIBLE);
+                } else {
+                    mSplit.setVisibility(View.VISIBLE);
+                    mFooter.setVisibility(View.GONE);
+                }
                 mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()));
                 if (newsFlash.isImportant()) {
                     mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
