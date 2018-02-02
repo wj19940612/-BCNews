@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -255,16 +256,16 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                     return TYPE_SINGLE;
                 }
                 //前面五张全是单张模式，这里才显示3张图片
-                if(judgeFiveSingleMode(position)){
+                if (judgeFiveSingleMode(position)) {
                     return TYPE_THREE;
-                }else{
+                } else {
                     return TYPE_SINGLE;
                 }
             }
         }
 
         //前面五item是否全为单张模式
-        private boolean judgeFiveSingleMode(int position){
+        private boolean judgeFiveSingleMode(int position) {
             if (position <= 4) {
                 return true;
             }
@@ -373,10 +374,13 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
+                    mImg.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(0))
                             .placeholder(R.drawable.ic_default_news)
                             .centerCrop()
                             .into(mImg);
+                } else {
+                    mImg.setVisibility(View.GONE);
                 }
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -427,24 +431,33 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
+                    mImg1.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(0))
                             .placeholder(R.drawable.ic_default_news)
                             .centerCrop()
                             .into(mImg1);
+                } else {
+                    mImg1.setVisibility(View.GONE);
                 }
 
                 if (item.getImgs() != null && item.getImgs().size() > 1) {
+                    mImg2.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(1))
                             .placeholder(R.drawable.ic_default_news)
                             .centerCrop()
                             .into(mImg2);
+                } else {
+                    mImg2.setVisibility(View.GONE);
                 }
 
                 if (item.getImgs() != null && item.getImgs().size() > 2) {
+                    mImg3.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(2))
                             .placeholder(R.drawable.ic_default_news)
                             .centerCrop()
                             .into(mImg3);
+                } else {
+                    mImg3.setVisibility(View.GONE);
                 }
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
