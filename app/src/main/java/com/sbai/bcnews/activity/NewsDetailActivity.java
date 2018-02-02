@@ -449,6 +449,12 @@ public class NewsDetailActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
     private UMShareListener mUMShareListener = new UMShareListener() {
         @Override
         public void onStart(SHARE_MEDIA share_media) {

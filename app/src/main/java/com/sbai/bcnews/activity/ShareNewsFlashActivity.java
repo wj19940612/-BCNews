@@ -80,6 +80,12 @@ public class ShareNewsFlashActivity extends BaseActivity {
         overridePendingTransition(0, R.anim.slide_out_to_bottom);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
     private void initData(Intent intent) {
         NewsFlash newsFlash = intent.getParcelableExtra(ExtraKeys.NEWS_FLASH);
         if (newsFlash != null) {

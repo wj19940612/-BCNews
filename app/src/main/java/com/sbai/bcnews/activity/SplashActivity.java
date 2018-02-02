@@ -1,6 +1,7 @@
 package com.sbai.bcnews.activity;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.sbai.bcnews.R;
@@ -20,6 +21,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
 
