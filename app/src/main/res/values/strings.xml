@@ -88,6 +88,7 @@
     <string name="reader_time">约%1$d分钟</string>
     <string name="original">原创</string>
     <string name="no_more_data">没有更多内容了</string>
+    <string name="no_more_new_news">已是最新资讯</string>
 
 
     <!--行情-->

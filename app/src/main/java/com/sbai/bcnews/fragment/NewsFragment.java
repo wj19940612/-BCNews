@@ -142,15 +142,21 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         Apic.getNewsList(mPage).tag(TAG).callback(new Callback2D<Resp<News>, News>() {
             @Override
             protected void onRespSuccessData(News data) {
+                if (data != null && data.getContent() != null && data.getContent().size() != 0) {
+                    if (mNewsDetails.size() > 0 && data.getContent().get(0).getId().equals(mNewsDetails.get(0).getId())) {
+                        mSwipeRefreshHeader.refreshSuccess(R.string.no_more_new_news);
+                    }
+                } else {
+                    mSwipeRefreshHeader.refreshSuccess();
+                }
                 updateData(data.getContent(), refresh);
-                mSwipeRefreshHeader.refreshSuccess();
             }
 
             @Override
             public void onFailure(ReqError reqError) {
                 super.onFailure(reqError);
-                loadCacheData();
                 mSwipeRefreshHeader.refreshFail();
+                loadCacheData();
             }
 
             @Override
@@ -341,7 +347,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
-                }else{
+                } else {
                     mLine.setVisibility(View.VISIBLE);
                 }
             }
@@ -396,7 +402,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 });
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
-                }else{
+                } else {
                     mLine.setVisibility(View.VISIBLE);
                 }
             }
@@ -475,7 +481,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 });
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
-                }else{
+                } else {
                     mLine.setVisibility(View.VISIBLE);
                 }
             }

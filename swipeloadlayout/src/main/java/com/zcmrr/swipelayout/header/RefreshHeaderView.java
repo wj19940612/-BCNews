@@ -141,4 +141,13 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
     public void refreshSuccess() {
         setRefreshCompleteText(R.string.refresh_complete);
     }
+
+    public void refreshSuccess(String toast){
+        setRefreshCompleteText(toast);
+    }
+
+    public void refreshSuccess(int toast){
+        setRefreshCompleteText(toast);
+
+    }
 }
