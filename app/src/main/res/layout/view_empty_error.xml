@@ -35,7 +35,7 @@
         android:layout_marginTop="40dp"
         android:background="@drawable/bg_news_refresh_btn"
         android:text="@string/now_refresh"
-        android:textColor="@color/text"
+        android:textColor="@color/marketText"
         android:textSize="16sp"/>
 
 </merge>
