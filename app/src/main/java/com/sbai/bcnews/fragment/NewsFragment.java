@@ -144,10 +144,12 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             protected void onRespSuccessData(News data) {
                 if (data != null && data.getContent() != null && data.getContent().size() != 0) {
                     if (mNewsDetails.size() > 0 && data.getContent().get(0).getId().equals(mNewsDetails.get(0).getId())) {
-                        mSwipeRefreshHeader.refreshSuccess(R.string.no_more_new_news);
+                        refreshSuccess(R.string.no_more_new_news);
+                    } else {
+                        refreshSuccess();
                     }
                 } else {
-                    mSwipeRefreshHeader.refreshSuccess();
+                    refreshSuccess();
                 }
                 updateData(data.getContent(), refresh);
             }

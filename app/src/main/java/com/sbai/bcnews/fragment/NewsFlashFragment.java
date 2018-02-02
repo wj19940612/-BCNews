@@ -107,7 +107,15 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 .callback(new Callback2D<Resp<List<NewsFlash>>, List<NewsFlash>>() {
                     @Override
                     protected void onRespSuccessData(List<NewsFlash> data) {
-                        refreshSuccess();
+                        if (data.size() > 0 && !mNewsAdapter.isEmpty()) {
+                            if (data.get(0).getId() == mNewsAdapter.getFirst().getId()) {
+                                refreshSuccess(R.string.no_more_new_news);
+                            } else {
+                                refreshSuccess();
+                            }
+                        } else {
+                            refreshSuccess();
+                        }
                         updateNewsFlashData(data);
                     }
 
@@ -227,6 +235,10 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
         public boolean isEmpty() {
             return dataList.isEmpty();
+        }
+
+        public NewsFlash getFirst() {
+            return dataList.isEmpty() ? null : dataList.get(0);
         }
 
         @Override

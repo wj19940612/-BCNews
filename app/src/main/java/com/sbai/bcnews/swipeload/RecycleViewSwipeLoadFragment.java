@@ -71,6 +71,15 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
         stopFreshOrLoadAnimation();
     }
 
+    protected void refreshSuccess(int resid) {
+        RefreshHeaderView refreshHeaderView = getRefreshHeaderView();
+        if (refreshHeaderView != null) {
+            refreshHeaderView.refreshSuccess(resid);
+        }
+        stopFreshOrLoadAnimation();
+    }
+
+
     protected void refreshFail() {
         RefreshHeaderView refreshHeaderView = getRefreshHeaderView();
         if (refreshHeaderView != null) {
@@ -78,9 +87,10 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
         }
         stopFreshOrLoadAnimation();
     }
-    public void smoothScrollToTop(){
+
+    public void smoothScrollToTop() {
         RecyclerView swipeTargetView = getSwipeTargetView();
-        if(swipeTargetView!=null){
+        if (swipeTargetView != null) {
             swipeTargetView.smoothScrollToPosition(0);
         }
     }

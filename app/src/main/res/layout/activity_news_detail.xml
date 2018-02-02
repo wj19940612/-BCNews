@@ -15,14 +15,14 @@
         app:backFeature="true"
         app:backIcon="@drawable/ic_tb_back_black"
         app:leftViewLeftPadding="14dp"
+        app:rightImage="@drawable/ic_right_share"
         app:rightVisible="true"
-        app:titleText="@string/news_detail"
-        app:titleTextSize="14sp"
         app:textSingle="true"
         app:titleLeftMargin="60dp"
         app:titleRightMargin="60dp"
-        app:rightImage="@drawable/ic_right_share"
-        app:titleTextColor="@color/blackPrimary"/>
+        app:titleText="@string/news_detail"
+        app:titleTextColor="@color/blackPrimary"
+        app:titleTextSize="14sp"/>
 
     <View
         android:id="@+id/titleBarLine"
@@ -107,9 +107,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@+id/readTime"
-                    android:layout_marginTop="12dp"
                     android:layout_marginLeft="14dp"
                     android:layout_marginRight="14dp"
+                    android:layout_marginTop="12dp"
                     android:background="@color/background"/>
             </RelativeLayout>
 
@@ -117,9 +117,9 @@
                 android:id="@+id/webView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/titleLayout"
                 android:layout_marginLeft="14dp"
                 android:layout_marginRight="14dp"
-                android:layout_below="@+id/titleLayout"
                 android:layout_marginTop="20dp"
                 android:scrollbars="none"
                 tools:ignore="WebViewLayout"/>
@@ -129,8 +129,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/webView"
-                android:visibility="gone"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/praiseIcon"
@@ -163,8 +163,8 @@
                 android:id="@+id/shareLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/statement"
                 android:layout_alignLeft="@+id/statement"
+                android:layout_below="@+id/statement"
                 android:layout_marginTop="12dp">
 
                 <TextView
@@ -172,26 +172,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:textSize="12sp"
+                    android:text="@string/share_to_"
                     android:textColor="@color/blackPrimary"
-                    android:text="@string/share_to_"/>
+                    android:textSize="12sp"/>
 
-                <ImageView
+                <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
                     android:id="@+id/icWxShare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/shareTo"
                     android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@+id/shareTo"
                     android:src="@drawable/ic_share_wx_small"/>
 
-                <ImageView
+                <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
                     android:id="@+id/icCircleShare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/icWxShare"
                     android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@+id/icWxShare"
                     android:src="@drawable/ic_share_circle_small"/>
 
             </RelativeLayout>

@@ -83,6 +83,6 @@ public class App extends Application {
     static {
         // 注意：测试用 appId & secret
         PlatformConfig.setWeixin("wx7576ec9bb65aea1a", "d640a05c70ec272f56557bd7e9c15dc4");
-        PlatformConfig.setQQZone("1106465763", "KEYqYrMZDFn2dn5KQhP");
+        PlatformConfig.setQQZone("1106465763", "qYrMZDFn2dn5KQhP");
     }
 }
