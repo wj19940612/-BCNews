@@ -152,12 +152,14 @@
             android:id="@+id/weibo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_share_weibo"/>
+            android:src="@drawable/ic_share_weibo"
+            android:visibility="gone"/>
 
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/download"
