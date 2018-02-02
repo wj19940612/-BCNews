@@ -79,9 +79,6 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
     @Override
     public void onMove(int y, boolean isComplete, boolean automatic) {
         if (!isComplete) {
-//            if (tvRefresh.getVisibility() != INVISIBLE) {
-//                tvRefresh.setVisibility(INVISIBLE);
-//            }
             if (y > mHeaderHeight) {
                 if (!rotated) {
                     rotated = true;
@@ -118,7 +115,8 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
 
     private void reset() {
         ivArrow.setVisibility(VISIBLE);
-        tvRefresh.setText("");
+        mRefreshCompleteText = "";
+        tvRefresh.setVisibility(INVISIBLE);
     }
 
     @Override

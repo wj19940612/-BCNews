@@ -17,9 +17,10 @@
         app:leftViewLeftPadding="14dp"
         app:rightVisible="true"
         app:titleText="@string/news_detail"
+        app:titleTextSize="14sp"
         app:textSingle="true"
-        app:titleLeftMargin="30dp"
-        app:titleRightMargin="30dp"
+        app:titleLeftMargin="60dp"
+        app:titleRightMargin="60dp"
         app:rightImage="@drawable/ic_right_share"
         app:titleTextColor="@color/blackPrimary"/>
 
