@@ -24,7 +24,7 @@ android {
     java.util.Properties properties = new Properties();
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
-    signingConfigs{
+    signingConfigs {
         release {
             storeFile file(properties.get('keystore_storeFile'))
             storePassword properties.get('keystore_storePassword')
@@ -63,6 +63,8 @@ android {
         }
 
         alpha {
+            versionCode 2
+            versionName "1.0.1"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
         }
 

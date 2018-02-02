@@ -45,6 +45,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -421,7 +422,7 @@ public class NewsDetailActivity extends BaseActivity {
         ShareDialog.with(getActivity())
                 .setTitleVisible(false)
                 .setShareTitle(mNewsDetail.getTitle())
-//                .setShareDescription(mNewsDetail.getc)
+                .setShareDescription(mNewsDetail.getSummary())
                 .setShareUrl(String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId()))
                 .setShareThumbUrl(shareThumbUrl)
                 .show();
@@ -430,21 +431,22 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void shareToPlatform(SHARE_MEDIA platform) {
         if (mNewsDetail == null) return;
-        if (ShareUtils.canShare(getActivity(), platform)) {
-            String text = mNewsDetail.getTitle() + String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId());
-            UMImage image;
-            if (mNewsDetail.getImgs() == null || mNewsDetail.getImgs().isEmpty()) {
-                image = new UMImage(getActivity(), R.mipmap.ic_launcher);
-            } else {
-                image = new UMImage(getActivity(), mNewsDetail.getImgs().get(0));
-            }
-            new ShareAction(getActivity())
-                    .withText(text)
-                    .withMedia(image)
-                    .setPlatform(platform)
-                    .setCallback(mUMShareListener)
-                    .share();
+        UMWeb mWeb = new UMWeb(String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId()));
+        mWeb.setTitle(mNewsDetail.getTitle());
+        mWeb.setDescription(mNewsDetail.getSummary());
+        UMImage thumb;
+        if (mNewsDetail.getImgs() == null || mNewsDetail.getImgs().isEmpty()) {
+            thumb = new UMImage(getActivity(), R.mipmap.ic_launcher);
+        } else {
+            thumb = new UMImage(getActivity(), mNewsDetail.getImgs().get(0));
         }
+        mWeb.setThumb(thumb);
+        new ShareAction(getActivity())
+                .withMedia(mWeb)
+                .setPlatform(platform)
+                .setCallback(mUMShareListener)
+                .share();
+
     }
 
     private UMShareListener mUMShareListener = new UMShareListener() {

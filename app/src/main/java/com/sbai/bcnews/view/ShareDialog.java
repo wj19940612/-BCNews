@@ -260,6 +260,7 @@ public class ShareDialog {
     private void init() {
         mView.findViewById(R.id.weChatFriend).setOnClickListener(new ShareButtonClickListener());
         mView.findViewById(R.id.weChatFriendCircle).setOnClickListener(new ShareButtonClickListener());
+        mView.findViewById(R.id.qq).setOnClickListener(new ShareButtonClickListener());
         mView.findViewById(R.id.sinaWeibo).setOnClickListener(new ShareButtonClickListener());
         mView.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override

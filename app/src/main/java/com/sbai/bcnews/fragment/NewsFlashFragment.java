@@ -1,6 +1,7 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -264,6 +265,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                     public void onClick(View view) {
                         MobclickAgent.onEvent(context, UmengCountEventId.NEWS_FLASH_SHARE);
                         Launcher.with(context, ShareNewsFlashActivity.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 .putExtra(ExtraKeys.NEWS_FLASH, newsFlash)
                                 .execute();
                     }
