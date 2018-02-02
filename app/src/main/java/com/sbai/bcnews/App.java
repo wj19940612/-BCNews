@@ -13,6 +13,7 @@ import com.sbai.bcnews.service.PushIntentService;
 import com.sbai.bcnews.service.PushService;
 import com.sbai.bcnews.utils.BuildConfigUtils;
 import com.sbai.httplib.ReqLogger;
+import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
 /**
@@ -77,5 +78,12 @@ public class App extends Application {
 
     public static Context getAppContext() {
         return sContext;
+    }
+
+    static {
+        // 注意：测试用 appId & secret
+        PlatformConfig.setWeixin("wx967daebe835fbeac", "5bb696d9ccd75a38c8a0bfe0675559b3");
+        PlatformConfig.setQQZone("1106465763", "KEYqYrMZDFn2dn5KQhP");
+        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
     }
 }
