@@ -341,6 +341,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
+                }else{
+                    mLine.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -394,6 +396,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 });
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
+                }else{
+                    mLine.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -437,7 +441,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                             .centerCrop()
                             .into(mImg1);
                 } else {
-                    mImg1.setVisibility(View.GONE);
+                    mImg1.setVisibility(View.INVISIBLE);
                 }
 
                 if (item.getImgs() != null && item.getImgs().size() > 1) {
@@ -447,7 +451,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                             .centerCrop()
                             .into(mImg2);
                 } else {
-                    mImg2.setVisibility(View.GONE);
+                    mImg2.setVisibility(View.INVISIBLE);
                 }
 
                 if (item.getImgs() != null && item.getImgs().size() > 2) {
@@ -457,7 +461,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                             .centerCrop()
                             .into(mImg3);
                 } else {
-                    mImg3.setVisibility(View.GONE);
+                    mImg3.setVisibility(View.INVISIBLE);
                 }
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -471,6 +475,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 });
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
+                }else{
+                    mLine.setVisibility(View.VISIBLE);
                 }
             }
         }
