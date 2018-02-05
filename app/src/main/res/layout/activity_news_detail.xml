@@ -182,7 +182,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_toRightOf="@+id/shareTo"
-                    android:background="@drawable/btn_share_wechat"/>
+                    android:background="@drawable/btn_share_wx_small"/>
 
                 <TextView
                     android:id="@+id/circleShare"
@@ -191,7 +191,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_toRightOf="@+id/wxShare"
-                    android:background="@drawable/btn_share_circle"/>
+                    android:background="@drawable/btn_share_circle_small"/>
 
             </RelativeLayout>
 
