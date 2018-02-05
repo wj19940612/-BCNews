@@ -52,8 +52,6 @@ import butterknife.Unbinder;
  */
 public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
-    @BindView(R.id.titleBar)
-    TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
     @BindView(R.id.swipe_load_more_footer)
@@ -70,6 +68,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private List<NewsDetail> mNewsDetails;
 
     private int mPage;
+    private int overallXScroll;
 
     @Nullable
     @Override
@@ -97,6 +96,14 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNewsAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                overallXScroll = overallXScroll + dy;
+                Log.e("zzz", "dy:" + overallXScroll);
+            }
+        });
         mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
             @Override
             public void onRefreshClick() {
@@ -105,12 +112,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         });
     }
 
-    @OnClick({R.id.titleBar})
+    @OnClick({})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.titleBar:
-                scrollToFirstView();
-                break;
+
         }
     }
 

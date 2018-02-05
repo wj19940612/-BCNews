@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.fragment.HomeNewsFragment;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
-import com.sbai.bcnews.fragment.NewsFragment;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.BottomTabs;
@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new NewsFragment();
+                    return new HomeNewsFragment();
                 case 1:
                     return new NewsFlashFragment();
                 case 2:

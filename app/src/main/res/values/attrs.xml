@@ -48,4 +48,26 @@
         <attr name="titleRightMargin" format="dimension|reference"/>
     </declare-styleable>
 
+    <declare-styleable name="SlidingTabTitle">
+        <attr name="showBack" format="boolean"/>
+        <attr name="isWhiteBack" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="HomeBanner">
+        <attr name="isRectIndicator" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="PageIndicator">
+        <attr name="indicators" format="integer"/>
+        <attr name="indicatorsInterval" format="dimension"/>
+        <attr name="point" format="color"/>
+        <attr name="selectedPoint" format="color"/>
+        <attr name="pointRadius" format="dimension"/>
+        <attr name="pointWidth" format="dimension"/>
+        <attr name="pointHeight" format="dimension"/>
+        <attr name="infinite" format="boolean"/>
+        <attr name="isRect" format="boolean"/>
+    </declare-styleable>
+
+
 </resources>
