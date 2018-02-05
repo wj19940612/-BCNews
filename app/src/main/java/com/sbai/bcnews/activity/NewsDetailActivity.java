@@ -277,6 +277,7 @@ public class NewsDetailActivity extends BaseActivity {
                 "                  margin-right: 20px !important;\n" +
                 "                }\n" +
                 "                * {\n" +
+                "                  text-align:justify;\n" +
                 "                  font-size: 17px !important;\n" +
                 "                  font-family: 'PingFangSC-Regular' !important;\n" +
                 "                  color: #494949 !important;\n" +
