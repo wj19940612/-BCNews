@@ -17,7 +17,8 @@ import com.sbai.bcnews.fragment.BaseFragment;
  * <p>
  */
 
-public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment implements OnLoadMoreListener, OnRefreshListener, SwipeLoadTarget<T> {
+public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment implements
+        OnLoadMoreListener, OnRefreshListener, SwipeLoader<T> {
 
     private SwipeToLoadLayout mSwipeToLoadLayout;
 

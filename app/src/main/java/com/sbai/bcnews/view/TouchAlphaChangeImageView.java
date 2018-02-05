@@ -11,16 +11,16 @@ import android.view.View;
  * 按下的时候 alpha会变暗的view
  */
 
-public class OnTouchAlphaChangeImageView extends AppCompatImageView implements View.OnTouchListener {
-    public OnTouchAlphaChangeImageView(Context context) {
+public class TouchAlphaChangeImageView extends AppCompatImageView implements View.OnTouchListener {
+    public TouchAlphaChangeImageView(Context context) {
         this(context, null);
     }
 
-    public OnTouchAlphaChangeImageView(Context context, AttributeSet attrs) {
+    public TouchAlphaChangeImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public OnTouchAlphaChangeImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TouchAlphaChangeImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOnTouchListener(this);
     }

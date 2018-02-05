@@ -159,7 +159,7 @@ public class AppJs {
 
     @JavascriptInterface
     public void openImage(final String img){
-        Log.e("zzz","openImage");
+//        Log.e("zzz","openImage");
         if (mContext instanceof NewsDetailActivity) {
             final NewsDetailActivity activity = (NewsDetailActivity) mContext;
             activity.runOnUiThread(new Runnable() {

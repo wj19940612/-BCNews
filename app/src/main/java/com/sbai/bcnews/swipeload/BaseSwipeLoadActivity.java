@@ -15,7 +15,8 @@ import com.sbai.bcnews.activity.BaseActivity;
  * 提供的基础刷新 加载基类
  */
 
-public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity implements SwipeLoadTarget<T>, OnLoadMoreListener, OnRefreshListener {
+public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity implements
+        SwipeLoader<T>, OnLoadMoreListener, OnRefreshListener {
 
     private SwipeToLoadLayout mSwipeToLoadLayout;
 

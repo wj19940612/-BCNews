@@ -73,10 +73,10 @@ public class NewsDetailActivity extends BaseActivity {
     ImageView mPraiseIcon;
     @BindView(R.id.praiseCount)
     TextView mPraiseCount;
-    @BindView(R.id.icCircleShare)
-    ImageView mIcCircleShare;
-    @BindView(R.id.icWxShare)
-    ImageView mIcWxShare;
+    @BindView(R.id.circleShare)
+    TextView mCircleShare;
+    @BindView(R.id.wxShare)
+    TextView mWxShare;
     @BindView(R.id.titleBarLine)
     View mTitleBarLine;
     @BindView(R.id.titleLine)
@@ -272,6 +272,7 @@ public class NewsDetailActivity extends BaseActivity {
                 "                  margin-right: 20px !important;\n" +
                 "                }\n" +
                 "                * {\n" +
+                "                  text-align:justify;\n" +
                 "                  font-size: 17px !important;\n" +
                 "                  font-family: 'PingFangSC-Regular' !important;\n" +
                 "                  color: #494949 !important;\n" +
@@ -411,13 +412,13 @@ public class NewsDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.icWxShare, R.id.icCircleShare, R.id.praiseLayout, R.id.titleBar})
+    @OnClick({R.id.wxShare, R.id.circleShare, R.id.praiseLayout, R.id.titleBar})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.icWxShare:
+            case R.id.wxShare:
                 shareToPlatform(SHARE_MEDIA.WEIXIN);
                 break;
-            case R.id.icCircleShare:
+            case R.id.circleShare:
                 shareToPlatform(SHARE_MEDIA.WEIXIN_CIRCLE);
                 break;
             case R.id.praiseLayout:

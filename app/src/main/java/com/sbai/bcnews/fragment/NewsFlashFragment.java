@@ -28,6 +28,7 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.EmptyView;
+import com.sbai.bcnews.view.TitleBar;
 import com.sbai.httplib.ReqError;
 import com.umeng.analytics.MobclickAgent;
 
@@ -37,6 +38,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -55,6 +57,8 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
     Unbinder unbinder;
     @BindView(R.id.emptyView)
     EmptyView mEmptyView;
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
     private NewsAdapter mNewsAdapter;
     private long mFirstDataTime, mLastDataTime;
 
@@ -100,6 +104,17 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
         } else {
             stopScheduleJob();
         }
+    }
+
+
+    private void scrollToFirstView() {
+        int firstVisiblePosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        if (firstVisiblePosition > 20) {
+            mRecyclerView.scrollToPosition(0);
+        } else {
+            mRecyclerView.smoothScrollToPosition(0);
+        }
+        mNewsAdapter.refresh();
     }
 
     private void requestNewsFlash(long time, int status) {
@@ -202,6 +217,11 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
         onRefresh();
     }
 
+    @OnClick(R.id.titleBar)
+    public void onViewClicked() {
+        scrollToFirstView();
+    }
+
     static class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         private boolean showFooterView;
         private List<NewsFlash> dataList;
@@ -230,6 +250,10 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 
         public void showFooterView(boolean isShow) {
             showFooterView = isShow;
+            notifyDataSetChanged();
+        }
+
+        public void refresh() {
             notifyDataSetChanged();
         }
 
@@ -262,7 +286,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
             @BindView(R.id.time)
             TextView mTime;
             @BindView(R.id.share)
-            TextView mShare;
+            LinearLayout mShare;
             @BindView(R.id.content)
             TextView mContent;
             @BindView(R.id.split)
