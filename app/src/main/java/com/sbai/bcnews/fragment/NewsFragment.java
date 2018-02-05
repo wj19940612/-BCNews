@@ -21,6 +21,7 @@ import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.Banner;
 import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
@@ -29,6 +30,7 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
 import com.sbai.bcnews.view.EmptyView;
+import com.sbai.bcnews.view.HomeBanner;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
@@ -66,6 +68,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     private NewsAdapter mNewsAdapter;
     private List<NewsDetail> mNewsDetails;
+    private List<Banner> mBanners;
 
     private int mPage;
     private int overallXScroll;
@@ -87,7 +90,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     private void initView() {
         mNewsDetails = new ArrayList<>();
-        mNewsAdapter = new NewsAdapter(getActivity(), mNewsDetails, new NewsAdapter.OnItemClickListener() {
+        mBanners = new ArrayList<>();
+        mNewsAdapter = new NewsAdapter(getActivity(), mNewsDetails, mBanners, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
                 NewsReadCache.markNewsRead(newsDetail);
@@ -208,6 +212,22 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
         mPage++;
         mNewsDetails.addAll(data);
+        Banner banner = new Banner();
+        banner.setClicks(455);
+        banner.setContent("https://lemi.ailemi.com/lm/activityk.html");
+        banner.setCover("https://esongb.oss-cn-shanghai.aliyuncs.com/ueditor/1514517627375015440.png");
+        banner.setId("5a45b48a87761dd50d4e52ec");
+
+        Banner banner1 = new Banner();
+        banner1.setClicks(455);
+        banner1.setContent("https://lemi.ailemi.com/lm/banner/acer.html");
+        banner1.setCover("https://esongb.oss-cn-shanghai.aliyuncs.com/ueditor/1513563771235023353.png");
+        banner1.setId("5a3726af87761961bba3372c");
+        List<Banner> homeBanners = new ArrayList<>();
+        homeBanners.add(banner);
+        homeBanners.add(banner1);
+        mBanners.clear();
+        mBanners.addAll(homeBanners);
         mNewsAdapter.refresh();
     }
 
@@ -225,6 +245,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         public static final int TYPE_NONE = 1;
         public static final int TYPE_SINGLE = 2;
         public static final int TYPE_THREE = 3;
+        public static final int TYPE_BANNER = 4;
 
         interface OnItemClickListener {
             public void onItemClick(NewsDetail newsDetail);
@@ -233,12 +254,14 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         private Context mContext;
         private List<NewsDetail> items;
         private OnItemClickListener mOnItemClickListener;
+        private List<Banner> mBanners;
 
 
-        public NewsAdapter(Context context, List<NewsDetail> newsDetails, OnItemClickListener onItemClickListener) {
+        public NewsAdapter(Context context, List<NewsDetail> newsDetails, List<Banner> homeBanners, OnItemClickListener onItemClickListener) {
             mContext = context;
             items = newsDetails;
             mOnItemClickListener = onItemClickListener;
+            mBanners = homeBanners;
         }
 
         public void refresh() {
@@ -252,20 +275,23 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public int getItemCount() {
-            return items == null ? 0 : items.size();
+            return items == null ? 0 : items.size() + 1;
         }
 
 
         @Override
         public int getItemViewType(int position) {
-            NewsDetail news = items.get(position);
+            if (position == 0) {
+                return TYPE_BANNER;
+            }
+            NewsDetail news = items.get(position - 1);
             int thePicNum = news.getImgs().size();
             if (thePicNum == 0) {
                 return TYPE_NONE;
             } else if (thePicNum == 1) {
                 return TYPE_SINGLE;
             } else {
-                if (position <= 4) {
+                if (position <= 5) {
                     return TYPE_SINGLE;
                 }
                 //前面五张全是单张模式，这里才显示3张图片
@@ -279,7 +305,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
         //前面五item是否全为单张模式
         private boolean judgeFiveSingleMode(int position) {
-            if (position <= 4) {
+            if (position <= 5) {
                 return true;
             }
             for (int i = position - 1; i > position - 5; i--) {
@@ -292,7 +318,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == TYPE_NONE) {
+            if (viewType == TYPE_BANNER) {
+                View view = LayoutInflater.from(mContext).inflate(R.layout.item_banner, parent, false);
+                return new BannerHolder(view);
+            } else if (viewType == TYPE_NONE) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.item_news_none, parent, false);
                 return new NoneHolder(view);
             } else if (viewType == TYPE_SINGLE) {
@@ -306,12 +335,14 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof NoneHolder) {
-                ((NoneHolder) holder).bindingData(mContext, items.get(position), position, getItemCount(), mOnItemClickListener);
+            if (holder instanceof BannerHolder) {
+                ((BannerHolder) holder).bindingData(mContext, mBanners, position, getItemCount(), mOnItemClickListener);
+            } else if (holder instanceof NoneHolder) {
+                ((NoneHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
             } else if (holder instanceof SingleHolder) {
-                ((SingleHolder) holder).bindingData(mContext, items.get(position), position, getItemCount(), mOnItemClickListener);
+                ((SingleHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
             } else {
-                ((ThreeHolder) holder).bindingData(mContext, items.get(position), position, getItemCount(), mOnItemClickListener);
+                ((ThreeHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
             }
         }
 
@@ -491,6 +522,21 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     mLine.setVisibility(View.VISIBLE);
                 }
+            }
+        }
+
+        static class BannerHolder extends RecyclerView.ViewHolder {
+
+            @BindView(R.id.banner)
+            HomeBanner banner;
+
+            public BannerHolder(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
+            }
+
+            public void bindingData(Context context, List<Banner> banners, int position, int itemCount, OnItemClickListener onItemClickListener) {
+                banner.setHomeAdvertisement(banners);
             }
         }
     }
