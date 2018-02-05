@@ -176,7 +176,7 @@
                     android:textColor="@color/blackPrimary"
                     android:textSize="12sp"/>
 
-                <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
+                <com.sbai.bcnews.view.TouchAlphaChangeImageView
                     android:id="@+id/icWxShare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -185,7 +185,7 @@
                     android:layout_toRightOf="@+id/shareTo"
                     android:src="@drawable/ic_share_wx_small"/>
 
-                <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
+                <com.sbai.bcnews.view.TouchAlphaChangeImageView
                     android:id="@+id/icCircleShare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -115,7 +115,7 @@
             android:paddingRight="27dp"
             android:src="@drawable/ic_tb_back_black"/>
 
-        <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
+        <com.sbai.bcnews.view.TouchAlphaChangeImageView
             android:id="@+id/wechat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-        <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
+        <com.sbai.bcnews.view.TouchAlphaChangeImageView
             android:id="@+id/circle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-        <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
+        <com.sbai.bcnews.view.TouchAlphaChangeImageView
             android:id="@+id/qq"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-        <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
+        <com.sbai.bcnews.view.TouchAlphaChangeImageView
             android:id="@+id/weibo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
             android:layout_weight="1"
             android:visibility="gone"/>
 
-        <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
+        <com.sbai.bcnews.view.TouchAlphaChangeImageView
             android:id="@+id/download"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
