@@ -176,6 +176,7 @@
                     android:textColor="@color/blackPrimary"
                     android:textSize="12sp"/>
 
+
                 <TextView
                     android:id="@+id/wxShare"
                     android:layout_width="wrap_content"

@@ -262,11 +262,33 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private String getHtmlData(String bodyHTML) {
-        String head = "<head>" +
-                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
-                "<style>img{max-width:100% !important; width:auto; height:auto;}</style>" +
-                "</head>";
+        String head = getTextHead();
         return "<html>" + head + "<body style:'height:auto;max-width: 100%; width:auto;'>" + bodyHTML + "</body></html>";
+    }
+
+    private String getTextHead() {
+        String textHead = "<head>" +
+                "            <meta charset='utf-8'>\n" +
+                "            <meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1.0001, minimum-scale=1.0001, maximum-scale=1.0001, shrink-to-fit=no'>\n" +
+                "            <style type='text/css'>\n" +
+                "                body {\n" +
+                "                  margin-top: 20px !important;\n" +
+                "                  margin-left: 20px !important;\n" +
+                "                  margin-right: 20px !important;\n" +
+                "                }\n" +
+                "                * {\n" +
+                "                  font-size: 17px !important;\n" +
+                "                  font-family: 'PingFangSC-Regular' !important;\n" +
+                "                  color: #494949 !important;\n" +
+                "                  background-color: white !important;\n" +
+                "                  letter-spacing: 1px !important;\n" +
+                "                  line-height: 26px !important;\n" +
+                "                  white-space: break-all !important;\n" +
+                "                  word-wrap: break-word;\n" +
+                "                }\n" +
+                "                img{max-width:100% !important; width:auto; height:auto;}\n" +
+                "            </style>\n" + "</head>";
+        return textHead;
     }
 
     private void initScrollViewLocation() {

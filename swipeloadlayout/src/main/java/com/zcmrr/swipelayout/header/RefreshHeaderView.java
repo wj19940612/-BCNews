@@ -102,7 +102,7 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
         Log.d(TAG, "onComplete: ");
         rotated = false;
         ivArrow.clearAnimation();
-        ivArrow.setVisibility(INVISIBLE);
+        ivArrow.setVisibility(GONE);
         tvRefresh.setText(mRefreshCompleteText);
     }
 
