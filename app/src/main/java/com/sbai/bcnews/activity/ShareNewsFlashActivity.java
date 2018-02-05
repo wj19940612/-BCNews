@@ -51,15 +51,15 @@ public class ShareNewsFlashActivity extends BaseActivity {
     @BindView(R.id.back)
     ImageView mBack;
     @BindView(R.id.wechat)
-    ImageView mWechat;
+    LinearLayout mWechat;
     @BindView(R.id.circle)
-    ImageView mCircle;
+    LinearLayout mCircle;
     @BindView(R.id.qq)
-    ImageView mQq;
+    LinearLayout mQq;
     @BindView(R.id.weibo)
-    ImageView mWeibo;
+    LinearLayout mWeibo;
     @BindView(R.id.download)
-    ImageView mDownload;
+    LinearLayout mDownload;
     @BindView(R.id.share)
     LinearLayout mShare;
     @BindView(R.id.shareArea)
