@@ -97,6 +97,12 @@
         </LinearLayout>
     </ScrollView>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/share"
+        android:background="@color/background"/>
+
     <LinearLayout
         android:id="@+id/share"
         android:layout_width="match_parent"
@@ -110,50 +116,82 @@
         <ImageView
             android:id="@+id/back"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="18dp"
             android:paddingRight="27dp"
             android:src="@drawable/ic_tb_back_black"/>
 
-        <com.sbai.bcnews.view.TouchAlphaChangeImageView
+        <LinearLayout
             android:id="@+id/wechat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_share_wechat"/>
+            android:background="@drawable/bg_white_small_round"
+            android:padding="6dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_share_wechat"/>
+        </LinearLayout>
+
 
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-        <com.sbai.bcnews.view.TouchAlphaChangeImageView
+        <LinearLayout
             android:id="@+id/circle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_share_wechat_circle"/>
+            android:background="@drawable/bg_white_small_round"
+            android:padding="6dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_share_wechat_circle"/>
+        </LinearLayout>
+
 
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-        <com.sbai.bcnews.view.TouchAlphaChangeImageView
+
+        <LinearLayout
             android:id="@+id/qq"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_share_qq"/>
+            android:background="@drawable/bg_white_small_round"
+            android:padding="6dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_share_qq"/>
+        </LinearLayout>
 
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-        <com.sbai.bcnews.view.TouchAlphaChangeImageView
+
+        <LinearLayout
             android:id="@+id/weibo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_share_weibo"
-            android:visibility="gone"/>
+            android:background="@drawable/bg_white_small_round"
+            android:padding="6dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_share_weibo"/>
+        </LinearLayout>
 
         <View
             android:layout_width="0dp"
@@ -161,11 +199,19 @@
             android:layout_weight="1"
             android:visibility="gone"/>
 
-        <com.sbai.bcnews.view.TouchAlphaChangeImageView
+
+        <LinearLayout
             android:id="@+id/download"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_share_pic_download"/>
+            android:background="@drawable/bg_white_small_round"
+            android:padding="6dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_share_pic_download"/>
+        </LinearLayout>
 
 
     </LinearLayout>
