@@ -7,7 +7,7 @@
 
     <com.sbai.bcnews.view.HomeBanner
         android:id="@+id/banner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="95dp"
         android:background="@color/white"
         app:isRectIndicator="true"/>

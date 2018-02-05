@@ -115,7 +115,7 @@ public class HomeNewsFragment extends BaseFragment{
 
         @Override
         public int getCount() {
-            return 9;
+            return 1;
         }
 
         public Fragment getFragment(int position) {

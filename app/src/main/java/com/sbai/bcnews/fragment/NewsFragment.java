@@ -65,10 +65,13 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.emptyView)
     EmptyView mEmptyView;
+    @BindView(R.id.banner)
+    HomeBanner mHomeBanner;
 
     private NewsAdapter mNewsAdapter;
     private List<NewsDetail> mNewsDetails;
     private List<Banner> mBanners;
+//    private HomeBanner mHomeBanner;
 
     private int mPage;
     private int overallXScroll;
@@ -114,13 +117,13 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 loadData(true);
             }
         });
+//        initBannerView();
     }
 
-    @OnClick({})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-
-        }
+    private void initBannerView() {
+        View bannerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_banner, null);
+        mHomeBanner = bannerView.findViewById(R.id.banner);
+        mNewsAdapter.setHeaderView(bannerView);
     }
 
     @Override
@@ -226,7 +229,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         List<Banner> homeBanners = new ArrayList<>();
         homeBanners.add(banner);
         homeBanners.add(banner1);
-        mNewsAdapter.modifyBanners(homeBanners);
+        mHomeBanner.setHomeAdvertisement(homeBanners);
         mNewsAdapter.refresh();
     }
 
@@ -254,6 +257,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         private List<NewsDetail> items;
         private OnItemClickListener mOnItemClickListener;
         private List<Banner> mBanners;
+        private View mHeadView;
 
 
         public NewsAdapter(Context context, List<NewsDetail> newsDetails, List<Banner> homeBanners, OnItemClickListener onItemClickListener) {
@@ -261,6 +265,11 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             items = newsDetails;
             mOnItemClickListener = onItemClickListener;
             mBanners = homeBanners;
+        }
+
+        public void setHeaderView(View homeBanner) {
+            mHeadView = homeBanner;
+            notifyItemInserted(0);//插入下标0位置
         }
 
         public void modifyBanners(List<Banner> banners) {
@@ -279,16 +288,16 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public int getItemCount() {
-            return items == null ? 0 : items.size() + 1;
+            return items == null ? 0 : items.size();
         }
 
 
         @Override
         public int getItemViewType(int position) {
-            if (position == 0) {
-                return TYPE_BANNER;
-            }
-            NewsDetail news = items.get(position - 1);
+//            if (mHeadView != null && position == 0) {
+//                return TYPE_BANNER;
+//            }
+            NewsDetail news = items.get(position);
             int thePicNum = news.getImgs().size();
             if (thePicNum == 0) {
                 return TYPE_NONE;
@@ -323,8 +332,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == TYPE_BANNER) {
-                View view = LayoutInflater.from(mContext).inflate(R.layout.item_banner, parent, false);
-                return new BannerHolder(view);
+                return new BannerHolder(mHeadView);
             } else if (viewType == TYPE_NONE) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.item_news_none, parent, false);
                 return new NoneHolder(view);
@@ -340,13 +348,13 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof BannerHolder) {
-                ((BannerHolder) holder).bindingData(mContext, mBanners, position, getItemCount(), mOnItemClickListener);
+
             } else if (holder instanceof NoneHolder) {
-                ((NoneHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
+                ((NoneHolder) holder).bindingData(mContext, items.get(position ), position, getItemCount(), mOnItemClickListener);
             } else if (holder instanceof SingleHolder) {
-                ((SingleHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
+                ((SingleHolder) holder).bindingData(mContext, items.get(position ), position, getItemCount(), mOnItemClickListener);
             } else {
-                ((ThreeHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
+                ((ThreeHolder) holder).bindingData(mContext, items.get(position), position, getItemCount(), mOnItemClickListener);
             }
         }
 
@@ -530,17 +538,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
 
         static class BannerHolder extends RecyclerView.ViewHolder {
-
-            @BindView(R.id.banner)
-            HomeBanner banner;
-
             public BannerHolder(View itemView) {
                 super(itemView);
-                ButterKnife.bind(this, itemView);
-            }
-
-            public void bindingData(Context context, List<Banner> banners, int position, int itemCount, OnItemClickListener onItemClickListener) {
-                banner.setHomeAdvertisement(banners);
             }
         }
     }
