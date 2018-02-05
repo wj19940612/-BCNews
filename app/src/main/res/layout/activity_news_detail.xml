@@ -176,23 +176,24 @@
                     android:textColor="@color/blackPrimary"
                     android:textSize="12sp"/>
 
-                <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
-                    android:id="@+id/icWxShare"
+
+                <TextView
+                    android:id="@+id/wxShare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_toRightOf="@+id/shareTo"
-                    android:src="@drawable/ic_share_wx_small"/>
+                    android:background="@drawable/btn_share_wechat"/>
 
-                <com.sbai.bcnews.view.OnTouchAlphaChangeImageView
-                    android:id="@+id/icCircleShare"
+                <TextView
+                    android:id="@+id/circleShare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
-                    android:layout_toRightOf="@+id/icWxShare"
-                    android:src="@drawable/ic_share_circle_small"/>
+                    android:layout_toRightOf="@+id/wxShare"
+                    android:background="@drawable/btn_share_circle"/>
 
             </RelativeLayout>
 
