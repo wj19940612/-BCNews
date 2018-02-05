@@ -105,7 +105,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 overallXScroll = overallXScroll + dy;
-                Log.e("zzz", "dy:" + overallXScroll);
+//                Log.e("zzz", "dy:" + overallXScroll);
             }
         });
         mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
@@ -226,8 +226,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         List<Banner> homeBanners = new ArrayList<>();
         homeBanners.add(banner);
         homeBanners.add(banner1);
-        mBanners.clear();
-        mBanners.addAll(homeBanners);
+        mNewsAdapter.modifyBanners(homeBanners);
         mNewsAdapter.refresh();
     }
 
@@ -262,6 +261,11 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             items = newsDetails;
             mOnItemClickListener = onItemClickListener;
             mBanners = homeBanners;
+        }
+
+        public void modifyBanners(List<Banner> banners) {
+            mBanners.clear();
+            mBanners.addAll(banners);
         }
 
         public void refresh() {

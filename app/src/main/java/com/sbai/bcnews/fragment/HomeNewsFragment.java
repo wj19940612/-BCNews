@@ -96,31 +96,26 @@ public class HomeNewsFragment extends BaseFragment{
                     return "比特现金";
                 case 4:
                     return "ICO";
+                case 5:
+                    return "比特现金";
+                case 6:
+                    return "比特现金";
+                case 7:
+                    return "比特现金";
+                case 8:
+                    return "比特现金";
             }
             return super.getPageTitle(position);
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new NewsFragment();
-                case 1:
-                    return new NewsFragment();
-                case 2:
-                    return new NewsFragment();
-                case 3:
-                    return new NewsFragment();
-                case 4:
-                    return new NewsFragment();
-
-            }
-            return null;
+            return new NewsFragment();
         }
 
         @Override
         public int getCount() {
-            return 5;
+            return 9;
         }
 
         public Fragment getFragment(int position) {

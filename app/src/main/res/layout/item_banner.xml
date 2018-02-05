@@ -2,14 +2,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="95dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.sbai.bcnews.view.HomeBanner
         android:id="@+id/banner"
         android:layout_width="wrap_content"
         android:layout_height="95dp"
-        android:layout_marginTop="20dp"
         android:background="@color/white"
         app:isRectIndicator="true"/>
 
