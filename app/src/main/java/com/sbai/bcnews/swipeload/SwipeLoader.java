@@ -12,7 +12,7 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
  * {@link BaseSwipeLoadFragment 这两个实现子类
  */
 
-public interface SwipeLoadTarget<T> {
+public interface SwipeLoader<T> {
 
     /**
      * 设置需要刷新和加载的的view 如ListView RecycleView
