@@ -58,4 +58,36 @@ public class Apic {
         return Api.put("/api/news-info/info/like/" + newsId);
     }
 
+    /**
+     * 接口名称 获取验证码
+     *
+     * @param phone
+     * @return
+     */
+    public static Api getAuthCode(String phone) {
+        return getAuthCode(phone, null);
+    }
+
+    /**
+     * 接口名称 获取验证码
+     *
+     * @param phone
+     * @param imgCode
+     * @return
+     */
+    public static Api getAuthCode(String phone, String imgCode) {
+        return Api.post("/user/registerLogin/sendMsgCode.do", new ReqParams()
+                .put("phone", phone)
+                .put("imgCode", imgCode));
+    }
+    /**
+     * 图片验证码地址
+     *
+     * @param phone
+     * @return
+     */
+    public static String getImageAuthCode(String phone) {
+        return Api.getHost() + "/user/registerLogin/getRegImage.do?userPhone=" + phone;
+    }
+
 }

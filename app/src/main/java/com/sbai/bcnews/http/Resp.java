@@ -2,6 +2,8 @@ package com.sbai.bcnews.http;
 
 
 public class Resp<T> {
+    // 验证码请求过多 需要图片验证码
+    public static final int CODE_IMAGE_AUTH_CODE_REQUIRED = 215;
 
     private int code;
     private String msg;
