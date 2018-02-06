@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.ExtraKeys;
+import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
@@ -404,7 +405,14 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     public void openBigImage(String img) {
-        Launcher.with(this, LookBigPictureActivity.class).putExtra(ExtraKeys.PORTRAIT, img).execute();
+        //可能是base64位，过长无法通过Intent传递
+        if (img.contains("base64")) {
+            Preference.get().setBigImage(img);
+            Launcher.with(this, LookBigPictureActivity.class).execute();
+        }else {
+            //普通的http图片地址直接通过参数传递，否则效率太差
+            Launcher.with(this, LookBigPictureActivity.class).putExtra(ExtraKeys.PORTRAIT,img).execute();
+        }
     }
 
     @Override
