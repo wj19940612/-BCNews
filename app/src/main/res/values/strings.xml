@@ -116,6 +116,7 @@
     <string name="_seconds">%1$ds</string>
     <string name="obtain_auth_code_continue">重新获取</string>
     <string name="login_ing">登录中</string>
+    <string name="bind_phone">关联手机号</string>
 
     <!-- 图形验证码输入框 -->
     <string name="please_input_image_auth_code">请输入图形验证码</string>

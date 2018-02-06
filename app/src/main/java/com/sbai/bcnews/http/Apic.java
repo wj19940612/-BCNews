@@ -1,5 +1,8 @@
 package com.sbai.bcnews.http;
 
+import com.sbai.bcnews.App;
+import com.sbai.bcnews.Preference;
+import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.httplib.ReqParams;
 
 /**
@@ -80,6 +83,7 @@ public class Apic {
                 .put("phone", phone)
                 .put("imgCode", imgCode));
     }
+
     /**
      * 图片验证码地址
      *
@@ -88,6 +92,75 @@ public class Apic {
      */
     public static String getImageAuthCode(String phone) {
         return Api.getHost() + "/user/registerLogin/getRegImage.do?userPhone=" + phone;
+    }
+
+    /**
+     * 接口名称 快捷登入
+     *
+     * @param authCode 短信验证码
+     * @param phone    手机
+     *                 deviceId 设备id
+     *                 platform 平台 0-安卓 1-ios
+     * @return
+     */
+    public static Api authCodeLogin(String phone, String authCode) {
+        return Api.post("/user/registerLogin/quickLogin.do", new ReqParams()
+                .put("phone", phone)
+                .put("msgCode", authCode)
+                .put("deviceId", Preference.get().getPushClientId())
+                .put("platform", 0)
+                .put("channel", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
+    }
+
+    /**
+     * 接口名称 快捷登入(for 微信)
+     *
+     * @param authCode 短信验证码
+     * @param phone    手机
+     *                 deviceId 设备id
+     *                 platform 平台 0-安卓 1-ios
+     * @return
+     */
+    public static Api authCodeLogin(String phone, String authCode, String openId, String name, String iconUrl, int sex) {
+        return Api.post("/user/registerLogin/quickLogin.do", new ReqParams()
+                .put("phone", phone)
+                .put("msgCode", authCode)
+                .put("deviceId", Preference.get().getPushClientId())
+                .put("platform", 0)
+                .put("channel", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL"))
+                .put("openId", openId)
+                .put("name", name)
+                .put("iconUrl", iconUrl)
+                .put("sex", sex));
+    }
+
+    /**
+     * 常规登录
+     *
+     * @param phone
+     * @param password
+     * @return
+     */
+    public static Api login(String phone, String password) {
+        return Api.post("/user/registerLogin/login.do", new ReqParams()
+                .put("phone", phone)
+                .put("password", password)
+                .put("deviceId", Preference.get().getPushClientId())
+                .put("platform", 0));
+    }
+
+    /**
+     * 微信登录
+     *
+     * @param openId
+     * @return
+     */
+    public static Api requestWeChatLogin(String openId) {
+        return Api.post("/user/registerLogin/wechatLogin.do", new ReqParams()
+                .put("openId", openId)
+                .put("deviceId", Preference.get().getPushClientId())
+                .put("platform", 0)
+                .put("source", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
     }
 
 }

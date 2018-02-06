@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
+import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.KeyBoardHelper;
 import com.sbai.bcnews.utils.KeyBoardUtils;
 import com.sbai.bcnews.utils.Launcher;
@@ -51,6 +53,8 @@ public class LoginActivity extends WeChatActivity {
     EditText mAuthCode;
     @BindView(R.id.getAuthCode)
     TextView mGetAuthCode;
+    @BindView(R.id.pageTitle)
+    TextView mPageTitle;
 
     @BindView(R.id.login)
     TextView mLogin;
@@ -62,6 +66,18 @@ public class LoginActivity extends WeChatActivity {
 
     @BindView(R.id.weChatLogin)
     TextView mWeChatLogin;
+    @BindView(R.id.closePage)
+    ImageView mClosePage;
+    @BindView(R.id.weChatAvatar)
+    ImageView mWeChatAvatar;
+    @BindView(R.id.weChatName)
+    TextView mWeChatName;
+    @BindView(R.id.weChatArea)
+    LinearLayout mWeChatArea;
+    @BindView(R.id.contentArea)
+    LinearLayout mContentArea;
+    @BindView(R.id.agree)
+    TextView mAgree;
     private KeyBoardHelper mKeyBoardHelper;
 
     private int mCounter;
@@ -207,10 +223,10 @@ public class LoginActivity extends WeChatActivity {
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
-            boolean enable = checkSignInButtonEnable();
-            if (enable != mLogin.isEnabled()) {
-                mLogin.setEnabled(enable);
-            }
+            // boolean enable = checkSignInButtonEnable();
+//            if (enable != mLogin.isEnabled()) {
+//                mLogin.setEnabled(enable);
+//            }
         }
     };
 
@@ -269,27 +285,40 @@ public class LoginActivity extends WeChatActivity {
 
     @Override
     protected void bindSuccess() {
-//        Apic.requestWeChatLogin(getWeChatOpenid()).setTag(TAG)
-//                .setCallback(new Callback<Resp<UserInfo>>() {
-//                    @Override
-//                    protected void onRespSuccess(Resp<UserInfo> resp) {
-//                        LocalUser.getUser().setUserInfo(resp.getData());
-//                        ToastUtil.show(R.string.login_success);
-//                        postLogin();
-//                    }
-//
-//                    @Override
-//                    protected void onRespFailure(Resp failedResp) {
-//                        if (failedResp.getCode() == Resp.CODE_NO_BIND_WE_CHAT) {
-//                            updateBindPhoneViews();
-//                        }
-//                    }
-//                }).fireFree();
+        Apic.requestWeChatLogin(getWeChatOpenid()).tag(TAG)
+                .callback(new Callback<Resp<UserInfo>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<UserInfo> resp) {
+                        LocalUser.getUser().setUserInfo(resp.getData());
+                        ToastUtil.show(R.string.login_success);
+                        postLogin();
+                    }
+
+                    @Override
+                    protected void onRespFailure(Resp failedResp) {
+                        if (failedResp.getCode() == Resp.CODE_NO_BIND_WE_CHAT) {
+                            updateBindPhoneViews();
+                        }
+                    }
+                }).fireFreely();
     }
 
     @Override
     protected void bindFailure() {
         ToastUtil.show(R.string.cancel_login);
+    }
+
+    private void updateBindPhoneViews() {
+        mLogin.setText(getString(R.string.ok));
+        mPageTitle.setText(getString(R.string.bind_phone));
+        mWeChatLogin.setVisibility(View.GONE);
+        mAgree.setVisibility(View.GONE);
+        mWeChatArea.setVisibility(View.VISIBLE);
+        mClosePage.setImageResource(R.drawable.ic_tb_back_black);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.setMargins((int) Display.dp2Px(50, getResources()), (int) Display.dp2Px(32, getResources()),
+                (int) Display.dp2Px(50, getResources()), 0);
+        mContentArea.setLayoutParams(params);
     }
 
     private void login() {
@@ -302,8 +331,8 @@ public class LoginActivity extends WeChatActivity {
         mLoading.setVisibility(View.VISIBLE);
         mLoading.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading));
         if (isWeChatLogin()) {
-            Apic.authCodeLogin(phoneNumber, authCode, getWeChatOpenid(), getWeChatName(), getWeChatIconUrl(), getWeChatGender()).setTag(TAG)
-                    .setCallback(new Callback<Resp<UserInfo>>() {
+            Apic.authCodeLogin(phoneNumber, authCode, getWeChatOpenid(), getWeChatName(), getWeChatIconUrl(), getWeChatGender()).tag(TAG)
+                    .callback(new Callback<Resp<UserInfo>>() {
                         @Override
                         public void onFinish() {
                             super.onFinish();
@@ -318,8 +347,8 @@ public class LoginActivity extends WeChatActivity {
                         }
                     }).fire();
         } else {
-            Apic.authCodeLogin(phoneNumber, authCode).setTag(TAG)
-                    .setCallback(new Callback<Resp<UserInfo>>() {
+            Apic.authCodeLogin(phoneNumber, authCode).tag(TAG)
+                    .callback(new Callback<Resp<UserInfo>>() {
                         @Override
                         public void onFinish() {
                             super.onFinish();
