@@ -233,16 +233,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         mNewsAdapter.refresh();
     }
 
-    private void scrollToFirstView() {
-        int firstVisiblePosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-        if (firstVisiblePosition > 20) {
-            mRecyclerView.scrollToPosition(0);
-        } else {
-            mRecyclerView.smoothScrollToPosition(0);
-        }
-        mNewsAdapter.refresh();
-    }
-
     public static class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public static final int TYPE_NONE = 1;
         public static final int TYPE_SINGLE = 2;

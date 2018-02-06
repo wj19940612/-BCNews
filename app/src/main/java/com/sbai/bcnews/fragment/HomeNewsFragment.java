@@ -13,26 +13,38 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.Display;
+import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingTab.SlidingTabLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
  * Created by Administrator on 2018\2\5 0005.
  */
 
-public class HomeNewsFragment extends BaseFragment{
+public class HomeNewsFragment extends BaseFragment {
 
     Unbinder unbinder;
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mTabLayout;
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
+    @BindView(R.id.text)
+    TextView mText;
+    @BindView(R.id.reLa)
+    RelativeLayout mReLa;
+    @BindView(R.id.layout)
+    RelativeLayout mLayout;
     private PagerAdapter mPagerAdapter;
 
     @Nullable
@@ -70,6 +82,14 @@ public class HomeNewsFragment extends BaseFragment{
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick({R.id.text})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.text:
+                break;
+        }
     }
 
     public static class PagerAdapter extends FragmentPagerAdapter {
