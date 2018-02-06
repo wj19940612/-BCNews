@@ -40,7 +40,6 @@
             android:name=".activity.MainActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
@@ -52,7 +51,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.WebActivity"
             android:screenOrientation="portrait"/>
@@ -83,19 +81,16 @@
             android:name=".activity.ShareNewsFlashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityEntryAnimation"/>
-
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
         <activity
             android:name="com.umeng.qq.tencent.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -105,11 +100,13 @@
                 <data android:scheme="tencent1106465763"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.umeng.qq.tencent.AssistActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".activity.market.DigitalCashMarketActivity"
+                  android:configChanges="screenSize|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

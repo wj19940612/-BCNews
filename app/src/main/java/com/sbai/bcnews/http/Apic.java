@@ -58,4 +58,30 @@ public class Apic {
         return Api.put("/api/news-info/info/like/" + newsId);
     }
 
+    /**
+     * /api/news-quota/quota/{code}
+     * GET
+     * 单个行情(ws)
+     *
+     * @return
+     */
+    public static Api requestDigitalCashDetail(String code, String exchangeCode) {
+        return Api.get("/api/news-quota/quota/",
+                new ReqParams()
+                        .put("code", code)
+                        .put("exchangeCode", exchangeCode));
+    }
+
+
+    /**
+     * /api/news-quota/quota/{code}/trend
+     * POST
+     * 分时图列表
+     *
+     * @param code
+     */
+    // TODO: 2018/2/6 没有完善
+    public static Api requestTimeSharingPlanData(String code) {
+        return Api.post("", null);
+    }
 }

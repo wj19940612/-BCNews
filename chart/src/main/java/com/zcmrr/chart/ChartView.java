@@ -24,10 +24,10 @@ public abstract class ChartView extends View {
         BASE("#dddddd"),
         TEXT("#999999"),
         WHITE("#ffffff"),
-        GREEN("#2fcc9f"),
+        GREEN("#39AE13"),
         BLACK("#222222"),
         DASH("#979797"),
-        RED("#f25b57");
+        RED("#F62048");
 
         private String value;
 

@@ -12,13 +12,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.market.DigitalCashMarketActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.market.MarketData;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.FinanceUtil;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.TitleBar;
@@ -133,6 +136,9 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
             @Override
             public void onItemClick(MarketData marketData, int position) {
                 umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
+                Launcher.with(getActivity(), DigitalCashMarketActivity.class)
+                        .putExtra(ExtraKeys.DigitalCash, marketData)
+                        .execute();
             }
         });
 
@@ -229,9 +235,6 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         }
 
 
-
-
-        
         @Override
         public int getItemCount() {
             return mMarketDataList.isEmpty() ? 0 : mMarketDataList.size() + 1;

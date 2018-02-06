@@ -17,4 +17,6 @@ public interface ExtraKeys {
     String MISS_AVATAR = "miss_avatar";
 
     String NEWS_ID = "news_id";
+
+    String DigitalCash = "digital_cash";
 }

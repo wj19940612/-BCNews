@@ -109,4 +109,5 @@ dependencies {
     implementation project(path: ':httplib')
     implementation project(path: ':glide')
     implementation files('libs/SocialSDK_QQ_Simplify.jar')
+    implementation project(':chart')
 }

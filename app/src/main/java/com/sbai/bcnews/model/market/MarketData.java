@@ -1,5 +1,8 @@
 package com.sbai.bcnews.model.market;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.sbai.bcnews.http.Apic;
 
 /**
@@ -7,7 +10,7 @@ import com.sbai.bcnews.http.Apic;
  * {@link Apic#  /api/news-quota/quota/list}
  */
 
-public class MarketData {
+public class MarketData implements Parcelable{
 
     public static final String DEFAULT_MARKET_BOURSE_CODE  = "gate.io";
 
@@ -207,4 +210,65 @@ public class MarketData {
                 ", volume=" + volume +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(this.askPrice);
+        dest.writeDouble(this.bidPrice);
+        dest.writeString(this.code);
+        dest.writeString(this.currencyMoney);
+        dest.writeString(this.exchangeCode);
+        dest.writeDouble(this.highestPrice);
+        dest.writeDouble(this.lastPrice);
+        dest.writeDouble(this.lastVolume);
+        dest.writeDouble(this.lowestPrice);
+        dest.writeString(this.name);
+        dest.writeDouble(this.rate);
+        dest.writeInt(this.status);
+        dest.writeString(this.tradeDay);
+        dest.writeDouble(this.upDropSpeed);
+        dest.writeLong(this.upTime);
+        dest.writeString(this.upTimeFormat);
+        dest.writeDouble(this.volume);
+    }
+
+    public MarketData() {
+    }
+
+    protected MarketData(Parcel in) {
+        this.askPrice = in.readDouble();
+        this.bidPrice = in.readDouble();
+        this.code = in.readString();
+        this.currencyMoney = in.readString();
+        this.exchangeCode = in.readString();
+        this.highestPrice = in.readDouble();
+        this.lastPrice = in.readDouble();
+        this.lastVolume = in.readDouble();
+        this.lowestPrice = in.readDouble();
+        this.name = in.readString();
+        this.rate = in.readDouble();
+        this.status = in.readInt();
+        this.tradeDay = in.readString();
+        this.upDropSpeed = in.readDouble();
+        this.upTime = in.readLong();
+        this.upTimeFormat = in.readString();
+        this.volume = in.readDouble();
+    }
+
+    public static final Creator<MarketData> CREATOR = new Creator<MarketData>() {
+        @Override
+        public MarketData createFromParcel(Parcel source) {
+            return new MarketData(source);
+        }
+
+        @Override
+        public MarketData[] newArray(int size) {
+            return new MarketData[size];
+        }
+    };
 }
