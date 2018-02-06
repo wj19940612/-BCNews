@@ -408,9 +408,9 @@ public class NewsDetailActivity extends BaseActivity {
         if (img.contains("base64")) {
             Preference.get().setBigImage(img);
             Launcher.with(this, LookBigPictureActivity.class).execute();
-        }else {
+        } else {
             //普通的http图片地址直接通过参数传递，否则效率太差
-            Launcher.with(this, LookBigPictureActivity.class).putExtra(ExtraKeys.PORTRAIT,img).execute();
+            Launcher.with(this, LookBigPictureActivity.class).putExtra(ExtraKeys.PORTRAIT, img).execute();
         }
     }
 
@@ -449,6 +449,7 @@ public class NewsDetailActivity extends BaseActivity {
         if (mNewsDetail.getImgs() != null && !mNewsDetail.getImgs().isEmpty()) {
             shareThumbUrl = mNewsDetail.getImgs().get(0);
         }
+        updateSummaryData();
         ShareDialog.with(getActivity())
                 .setTitleVisible(false)
                 .setShareTitle(mNewsDetail.getTitle())
@@ -463,6 +464,7 @@ public class NewsDetailActivity extends BaseActivity {
         if (mNewsDetail == null) return;
         UMWeb mWeb = new UMWeb(String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId()));
         mWeb.setTitle(mNewsDetail.getTitle());
+        updateSummaryData();
         mWeb.setDescription(mNewsDetail.getSummary());
         UMImage thumb;
         if (mNewsDetail.getImgs() == null || mNewsDetail.getImgs().isEmpty()) {
@@ -478,6 +480,17 @@ public class NewsDetailActivity extends BaseActivity {
                 .share();
 
     }
+
+    private void updateSummaryData() {
+        if (TextUtils.isEmpty(mNewsDetail.getSummary())) {
+            if (mNewsDetail.getContent().length() > 150) {
+                mNewsDetail.setSummary(mNewsDetail.getContent().substring(0, 150));
+            } else {
+                mNewsDetail.setSummary(mNewsDetail.getContent());
+            }
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
