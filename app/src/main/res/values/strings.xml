@@ -97,7 +97,14 @@
     <string name="product_price_cn">¥%1$s</string>
     <string name="ten_thousand_number">%1$s万</string>
     <string name="up_range">+%1$s</string>
-
+    <string name="volume">交易量</string>
+    <string name="market_value">市值</string>
+    <string name="highest">最高</string>
+    <string name="lowest">最低</string>
+    <string name="ask_price_1">买一</string>
+    <string name="bid_price_1">卖一</string>
+    
     <!-- common -->
     <string name="now_refresh">立即刷新</string>
+    <string name="check_related_news">查看相关资讯</string>
 </resources>

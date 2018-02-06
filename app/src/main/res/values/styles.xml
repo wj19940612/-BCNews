@@ -47,4 +47,14 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <!-- 行情数据样式 -->
+    <style name="MarketData" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/background</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="MarketData.Title">
+        <item name="android:textColor">@color/unluckyText</item>
+    </style>
+
 </resources>
