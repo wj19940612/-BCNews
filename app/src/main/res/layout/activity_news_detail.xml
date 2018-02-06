@@ -87,7 +87,8 @@
 
                 <TextView
                     android:id="@+id/readTime"
-                    android:layout_width="64dp"
+                    android:layout_width="wrap_content"
+                    android:minWidth="64dp"
                     android:layout_height="18dp"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/subtitle"
