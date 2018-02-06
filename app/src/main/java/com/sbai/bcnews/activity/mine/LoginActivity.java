@@ -31,6 +31,7 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrFormatter;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.ValidationWatcher;
+import com.sbai.glide.GlideApp;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -223,12 +224,27 @@ public class LoginActivity extends WeChatActivity {
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
-            // boolean enable = checkSignInButtonEnable();
-//            if (enable != mLogin.isEnabled()) {
-//                mLogin.setEnabled(enable);
-//            }
+            boolean enable = checkSignInButtonEnable();
+            if (enable != mLogin.isEnabled()) {
+                mLogin.setEnabled(enable);
+            }
         }
     };
+
+    private boolean checkSignInButtonEnable() {
+        String phone = getPhoneNumber();
+        String authCode = mAuthCode.getText().toString().trim();
+
+        if (TextUtils.isEmpty(phone) || phone.length() < 11) {
+            return false;
+        }
+
+        if ((TextUtils.isEmpty(authCode) || authCode.length() < 4)) {
+            return false;
+        }
+        return true;
+
+    }
 
     private boolean checkClearBtnVisible() {
         String phone = mPhoneNumber.getText().toString();
@@ -273,7 +289,8 @@ public class LoginActivity extends WeChatActivity {
                 login();
                 break;
             case R.id.weChatLogin:
-                weChatLogin();
+                updateBindPhoneViews();
+//                weChatLogin();
             default:
                 break;
         }
@@ -309,13 +326,23 @@ public class LoginActivity extends WeChatActivity {
     }
 
     private void updateBindPhoneViews() {
+        mWeChatLogin.setVisibility(View.GONE);
+        mWeChatName.setText(getWeChatName());
+        mWeChatArea.setVisibility(View.VISIBLE);
+        GlideApp.with(getActivity()).load(getWeChatIconUrl())
+                .placeholder(R.drawable.ic_default_news)
+                .centerCrop()
+                .into(mWeChatAvatar);
+
+        mPhoneNumber.setText("");
+        mAuthCode.setText("");
+        mGetAuthCode.setText(R.string.get_auth_code);
+        mGetAuthCode.setEnabled(true);
         mLogin.setText(getString(R.string.ok));
         mPageTitle.setText(getString(R.string.bind_phone));
-        mWeChatLogin.setVisibility(View.GONE);
         mAgree.setVisibility(View.GONE);
-        mWeChatArea.setVisibility(View.VISIBLE);
         mClosePage.setImageResource(R.drawable.ic_tb_back_black);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.setMargins((int) Display.dp2Px(50, getResources()), (int) Display.dp2Px(32, getResources()),
                 (int) Display.dp2Px(50, getResources()), 0);
         mContentArea.setLayoutParams(params);

@@ -45,7 +45,8 @@
                 android:id="@+id/weChatAvatar"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_share_wechat"/>
+                android:scaleType="fitXY"
+                tools:src="@drawable/ic_share_wechat"/>
 
             <TextView
                 android:id="@+id/weChatName"
