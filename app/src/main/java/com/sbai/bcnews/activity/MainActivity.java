@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new NewsFragment();
+                    return new HomeNewsFragment();
                 case 1:
                     return new NewsFlashFragment();
                 case 2:

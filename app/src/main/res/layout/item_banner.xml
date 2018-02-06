@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<com.sbai.bcnews.view.HomeBanner
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/banner"
     android:layout_width="match_parent"
     android:layout_height="95dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <com.sbai.bcnews.view.HomeBanner
-        android:id="@+id/banner"
-        android:layout_width="match_parent"
-        android:layout_height="95dp"
-        android:background="@color/white"
-        app:isRectIndicator="true"/>
-
-</RelativeLayout>
+    android:background="@color/white"
+    app:isRectIndicator="true"/>

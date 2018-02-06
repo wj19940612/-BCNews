@@ -79,13 +79,13 @@ public class HomeBanner extends FrameLayout {
         mInnerCounter = 1;
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (mViewPager != null) {
-            mViewPager.clearOnPageChangeListeners();
-        }
-    }
+//    @Override
+//    protected void onDetachedFromWindow() {
+//        super.onDetachedFromWindow();
+//        if (mViewPager != null) {
+//            mViewPager.clearOnPageChangeListeners();
+//        }
+//    }
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -148,10 +148,7 @@ public class HomeBanner extends FrameLayout {
                 mViewPager.addOnPageChangeListener(mOnPageChangeListener);
                 mViewPager.setAdapter(mAdapter);
             } else {
-                mAdapter = new AdvertisementAdapter(getContext(), informationList, mOnViewClickListener);
-                mViewPager.addOnPageChangeListener(mOnPageChangeListener);
-                mViewPager.setAdapter(mAdapter);
-//                mAdapter.setNewAdvertisements(informationList);
+                mAdapter.setNewAdvertisements(informationList);
             }
         }
     }
@@ -216,8 +213,6 @@ public class HomeBanner extends FrameLayout {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        Log.e("zzz","2 dianji");
-
                         mListener.onBannerClick(information);
                     }
                 }

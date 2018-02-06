@@ -38,6 +38,7 @@ import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -65,13 +66,12 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.emptyView)
     EmptyView mEmptyView;
-    @BindView(R.id.banner)
-    HomeBanner mHomeBanner;
 
     private NewsAdapter mNewsAdapter;
     private List<NewsDetail> mNewsDetails;
     private List<Banner> mBanners;
-//    private HomeBanner mHomeBanner;
+
+    private HomeBanner mHomeBanner;
 
     private int mPage;
     private int overallXScroll;
@@ -93,8 +93,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     private void initView() {
         mNewsDetails = new ArrayList<>();
-        mBanners = new ArrayList<>();
-        mNewsAdapter = new NewsAdapter(getActivity(), mNewsDetails, mBanners, new NewsAdapter.OnItemClickListener() {
+        mNewsAdapter = new NewsAdapter(getActivity(), mNewsDetails, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
                 NewsReadCache.markNewsRead(newsDetail);
@@ -117,13 +116,14 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 loadData(true);
             }
         });
-//        initBannerView();
+        initBannerView();
     }
 
     private void initBannerView() {
-        View bannerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_banner, null);
-        mHomeBanner = bannerView.findViewById(R.id.banner);
-        mNewsAdapter.setHeaderView(bannerView);
+        mHomeBanner = (HomeBanner) LayoutInflater.from(getActivity()).inflate(R.layout.item_banner,null);
+        mHomeBanner.setLayoutParams(new RecyclerView.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, getActivity().getWindowManager().getDefaultDisplay().getHeight() / 3));
+        mNewsAdapter.setHeaderView(mHomeBanner);
     }
 
     @Override
@@ -256,25 +256,18 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         private Context mContext;
         private List<NewsDetail> items;
         private OnItemClickListener mOnItemClickListener;
-        private List<Banner> mBanners;
         private View mHeadView;
 
 
-        public NewsAdapter(Context context, List<NewsDetail> newsDetails, List<Banner> homeBanners, OnItemClickListener onItemClickListener) {
+        public NewsAdapter(Context context, List<NewsDetail> newsDetails, OnItemClickListener onItemClickListener) {
             mContext = context;
             items = newsDetails;
             mOnItemClickListener = onItemClickListener;
-            mBanners = homeBanners;
         }
 
         public void setHeaderView(View homeBanner) {
             mHeadView = homeBanner;
             notifyItemInserted(0);//插入下标0位置
-        }
-
-        public void modifyBanners(List<Banner> banners) {
-            mBanners.clear();
-            mBanners.addAll(banners);
         }
 
         public void refresh() {
@@ -288,16 +281,16 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public int getItemCount() {
-            return items == null ? 0 : items.size();
+            return items == null ? 0 : items.size() + 1;
         }
 
 
         @Override
         public int getItemViewType(int position) {
-//            if (mHeadView != null && position == 0) {
-//                return TYPE_BANNER;
-//            }
-            NewsDetail news = items.get(position);
+            if (mHeadView != null && position == 0) {
+                return TYPE_BANNER;
+            }
+            NewsDetail news = items.get(position - 1);
             int thePicNum = news.getImgs().size();
             if (thePicNum == 0) {
                 return TYPE_NONE;
@@ -308,7 +301,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                     return TYPE_SINGLE;
                 }
                 //前面五张全是单张模式，这里才显示3张图片
-                if (judgeFiveSingleMode(position)) {
+                if (judgeFiveSingleMode(position - 1)) {
                     return TYPE_THREE;
                 } else {
                     return TYPE_SINGLE;
@@ -318,7 +311,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
         //前面五item是否全为单张模式
         private boolean judgeFiveSingleMode(int position) {
-            if (position <= 5) {
+            if (position <= 4) {
                 return true;
             }
             for (int i = position - 1; i > position - 5; i--) {
@@ -350,11 +343,11 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             if (holder instanceof BannerHolder) {
 
             } else if (holder instanceof NoneHolder) {
-                ((NoneHolder) holder).bindingData(mContext, items.get(position ), position, getItemCount(), mOnItemClickListener);
+                ((NoneHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
             } else if (holder instanceof SingleHolder) {
-                ((SingleHolder) holder).bindingData(mContext, items.get(position ), position, getItemCount(), mOnItemClickListener);
+                ((SingleHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
             } else {
-                ((ThreeHolder) holder).bindingData(mContext, items.get(position), position, getItemCount(), mOnItemClickListener);
+                ((ThreeHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
             }
         }
 
