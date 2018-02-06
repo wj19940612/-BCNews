@@ -1,1 +1,1 @@
-include ':app', ':httplib', ':glide',':swipeloadlayout'
+include ':app', ':httplib', ':glide',':swipeloadlayout', ':chart'
