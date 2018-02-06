@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +48,10 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
+
+import java.sql.Struct;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -483,10 +488,16 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void updateSummaryData() {
         if (TextUtils.isEmpty(mNewsDetail.getSummary())) {
-            if (mNewsDetail.getContent().length() > 150) {
-                mNewsDetail.setSummary(mNewsDetail.getContent().substring(0, 150));
+            String content = new String(mNewsDetail.getContent());
+            String imgTag = "<img\\s[^>]+>";
+            Pattern pattern = Pattern.compile(imgTag);
+            Matcher matcher = pattern.matcher(content);
+            content = matcher.replaceAll("");
+            content = Html.fromHtml(content).toString();
+            if (content.length() > 150) {
+                mNewsDetail.setSummary(content.substring(0, 150));
             } else {
-                mNewsDetail.setSummary(mNewsDetail.getContent());
+                mNewsDetail.setSummary(content);
             }
         }
     }
