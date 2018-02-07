@@ -89,6 +89,8 @@
     <string name="original">原创</string>
     <string name="no_more_data">没有更多内容了</string>
     <string name="no_more_new_news">已是最新资讯</string>
+    <string name="channel_custom">频道定制</string>
+    <string name="channel_select">已选频道</string>
 
 
     <!--行情-->

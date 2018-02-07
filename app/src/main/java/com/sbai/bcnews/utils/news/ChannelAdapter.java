@@ -119,7 +119,6 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((OtherViewHolder) holder).textView.setText(mOtherChannelItems.get(position - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER).getName());
         } else if (holder instanceof MyChannelHeaderViewHolder) {
             MyChannelHeaderViewHolder headerHolder = (MyChannelHeaderViewHolder) holder;
-            headerHolder.tvBtnEdit.setText("编辑");
         }
     }
 
@@ -130,12 +129,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void setFinishTouch(final MyChannelHeaderViewHolder holder){
-        holder.tvBtnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
     }
 
     //“我的栏目”相关触摸
@@ -500,11 +494,9 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * 我的频道  标题部分
      */
     class MyChannelHeaderViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvBtnEdit;
 
         public MyChannelHeaderViewHolder(View itemView) {
             super(itemView);
-            tvBtnEdit = (TextView) itemView.findViewById(R.id.tv_btn_edit);
         }
     }
 }

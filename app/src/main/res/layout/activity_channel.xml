@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background">
 
     <com.sbai.bcnews.view.TitleBar
         android:id="@+id/titleBar"
@@ -11,8 +12,7 @@
         android:layout_height="wrap_content"
         app:backFeature="false"
         app:customView="@layout/view_title_news"
-        app:hasBottomSplitLine="true"
-        app:splitLineColor="@color/split"/>
+        app:hasBottomSplitLine="false"/>
 
     <!--Recycler Item触摸涉及镜像动画需要父布局是Frame-->
     <FrameLayout
@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipChildren="false"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            android:background="@color/white"/>
 
     </FrameLayout>
 
