@@ -196,6 +196,11 @@ public class NewsDetailActivity extends BaseActivity {
                         + "for(var i=0;i<objs.length;i++) " + "{" + " objs[i].onclick=function() "
                         + " { " + " window.AppJs.openImage(this.src); " + " } " + "}" + "})()");
             }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return true;
+            }
         };
         mWebView.setWebViewClient(mWebViewClient);
         mWebView.setDrawingCacheEnabled(true);
