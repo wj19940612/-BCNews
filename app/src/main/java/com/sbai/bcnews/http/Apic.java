@@ -79,7 +79,7 @@ public class Apic {
      * @return
      */
     public static Api getAuthCode(String phone, String imgCode) {
-        return Api.post("/user/registerLogin/sendMsgCode.do", new ReqParams()
+        return Api.post("/api/news-user/login/msg/{phone}" + phone, new ReqParams()
                 .put("phone", phone)
                 .put("imgCode", imgCode));
     }
@@ -95,7 +95,7 @@ public class Apic {
     }
 
     /**
-     * 接口名称 快捷登入
+     * 接口名称 验证码快捷登入
      *
      * @param authCode 短信验证码
      * @param phone    手机
@@ -103,50 +103,26 @@ public class Apic {
      *                 platform 平台 0-安卓 1-ios
      * @return
      */
-    public static Api authCodeLogin(String phone, String authCode) {
-        return Api.post("/user/registerLogin/quickLogin.do", new ReqParams()
+    public static Api requestAuthCodeLogin(String phone, String authCode) {
+        return Api.post("/api/news-user/login/quick/{phone}/{msgCode}", new ReqParams()
                 .put("phone", phone)
                 .put("msgCode", authCode)
                 .put("deviceId", Preference.get().getPushClientId())
                 .put("platform", 0)
-                .put("channel", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
+                .put("source", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
     }
 
     /**
-     * 接口名称 快捷登入(for 微信)
+     * 接口名称 绑定微信
      *
-     * @param authCode 短信验证码
-     * @param phone    手机
-     *                 deviceId 设备id
-     *                 platform 平台 0-安卓 1-ios
      * @return
      */
-    public static Api authCodeLogin(String phone, String authCode, String openId, String name, String iconUrl, int sex) {
-        return Api.post("/user/registerLogin/quickLogin.do", new ReqParams()
-                .put("phone", phone)
-                .put("msgCode", authCode)
-                .put("deviceId", Preference.get().getPushClientId())
-                .put("platform", 0)
-                .put("channel", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL"))
+    public static Api requestBindWeChat(String openId, String name, String iconUrl, int sex) {
+        return Api.post("/api/news-user/user/bound/{openId}", new ReqParams()
                 .put("openId", openId)
                 .put("name", name)
                 .put("iconUrl", iconUrl)
                 .put("sex", sex));
-    }
-
-    /**
-     * 常规登录
-     *
-     * @param phone
-     * @param password
-     * @return
-     */
-    public static Api login(String phone, String password) {
-        return Api.post("/user/registerLogin/login.do", new ReqParams()
-                .put("phone", phone)
-                .put("password", password)
-                .put("deviceId", Preference.get().getPushClientId())
-                .put("platform", 0));
     }
 
     /**
@@ -156,7 +132,7 @@ public class Apic {
      * @return
      */
     public static Api requestWeChatLogin(String openId) {
-        return Api.post("/user/registerLogin/wechatLogin.do", new ReqParams()
+        return Api.post("/api/news-user/login/wechat/{openId}", new ReqParams()
                 .put("openId", openId)
                 .put("deviceId", Preference.get().getPushClientId())
                 .put("platform", 0)

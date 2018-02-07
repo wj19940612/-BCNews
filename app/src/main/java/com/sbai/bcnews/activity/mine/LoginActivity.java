@@ -358,7 +358,7 @@ public class LoginActivity extends WeChatActivity {
         mLoading.setVisibility(View.VISIBLE);
         mLoading.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading));
         if (isWeChatLogin()) {
-            Apic.authCodeLogin(phoneNumber, authCode, getWeChatOpenid(), getWeChatName(), getWeChatIconUrl(), getWeChatGender()).tag(TAG)
+            Apic.requestWeChatLogin(getWeChatOpenid()).tag(TAG)
                     .callback(new Callback<Resp<UserInfo>>() {
                         @Override
                         public void onFinish() {
@@ -374,7 +374,7 @@ public class LoginActivity extends WeChatActivity {
                         }
                     }).fire();
         } else {
-            Apic.authCodeLogin(phoneNumber, authCode).tag(TAG)
+            Apic.requestAuthCodeLogin(phoneNumber, authCode).tag(TAG)
                     .callback(new Callback<Resp<UserInfo>>() {
                         @Override
                         public void onFinish() {

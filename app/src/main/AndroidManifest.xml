@@ -86,6 +86,9 @@
         <activity
             android:name=".activity.mine.LoginActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.ImageAuthCodeActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".wxapi.WXEntryActivity"
