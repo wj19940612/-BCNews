@@ -2,14 +2,31 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:padding="8dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
+    <com.sbai.bcnews.view.TitleBar
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        app:backFeature="false"
+        app:customView="@layout/view_title_news"
+        app:hasBottomSplitLine="true"
+        app:splitLineColor="@color/split"/>
+
+    <!--Recycler Item触摸涉及镜像动画需要父布局是Frame-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titleBar">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"/>
+
+    </FrameLayout>
 
 </RelativeLayout>

@@ -17,7 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.ChannelActivity;
 import com.sbai.bcnews.utils.Display;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingTab.SlidingTabLayout;
 
@@ -58,7 +60,7 @@ public class HomeNewsFragment extends BaseFragment {
     }
 
     private void initViewPager() {
-        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setOffscreenPageLimit(8);
         mViewPager.setCurrentItem(0, false);
         mPagerAdapter = new PagerAdapter(getChildFragmentManager(), getActivity());
         mViewPager.setAdapter(mPagerAdapter);
@@ -88,6 +90,7 @@ public class HomeNewsFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.text:
+                Launcher.with(getActivity(), ChannelActivity.class).execute();
                 break;
         }
     }

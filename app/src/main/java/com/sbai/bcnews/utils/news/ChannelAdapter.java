@@ -52,9 +52,6 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private LayoutInflater mInflater;
     private ItemTouchHelper mItemTouchHelper;
 
-//    // 是否为 编辑 模式
-//    private boolean isEditMode;
-
     private List<ChannelEntity> mMyChannelItems, mOtherChannelItems;
 
     // 我的频道点击事件
@@ -90,162 +87,23 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case TYPE_MY_CHANNEL_HEADER:
                 view = mInflater.inflate(R.layout.item_my_channel_header, parent, false);
                 final MyChannelHeaderViewHolder holder = new MyChannelHeaderViewHolder(view);
-                holder.tvBtnEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
+                setFinishTouch(holder);
                 return holder;
 
             case TYPE_MY:
                 view = mInflater.inflate(R.layout.item_my_channel, parent, false);
                 final MyViewHolder myHolder = new MyViewHolder(view);
-
-                myHolder.textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(final View v) {
-                        int position = myHolder.getAdapterPosition();
-                        RecyclerView recyclerView = ((RecyclerView) parent);
-                        View targetView = recyclerView.getLayoutManager().findViewByPosition(mMyChannelItems.size() + COUNT_PRE_OTHER_HEADER);
-                        View currentView = recyclerView.getLayoutManager().findViewByPosition(position);
-                        // 如果targetView不在屏幕内,则indexOfChild为-1  此时不需要添加动画,因为此时notifyItemMoved自带一个向目标移动的动画
-                        // 如果在屏幕内,则添加一个位移动画
-                        if (recyclerView.indexOfChild(targetView) >= 0) {
-                            int targetX, targetY;
-
-                            RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
-                            int spanCount = ((GridLayoutManager) manager).getSpanCount();
-
-                            // 移动后 高度将变化 (我的频道Grid 最后一个item在新的一行第一个)
-                            if ((mMyChannelItems.size() - COUNT_PRE_MY_HEADER) % spanCount == 0) {
-                                View preTargetView = recyclerView.getLayoutManager().findViewByPosition(mMyChannelItems.size() + COUNT_PRE_OTHER_HEADER - 1);
-                                targetX = preTargetView.getLeft();
-                                targetY = preTargetView.getTop();
-                            } else {
-                                targetX = targetView.getLeft();
-                                targetY = targetView.getTop();
-                            }
-
-                            moveMyToOther(myHolder);
-                            startAnimation(recyclerView, currentView, targetX, targetY);
-
-                        } else {
-                            moveMyToOther(myHolder);
-                        }
-                    }
-                });
-
-                myHolder.textView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(final View v) {
-
-                        mItemTouchHelper.startDrag(myHolder);
-                        return true;
-                    }
-                });
-
-                myHolder.textView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (MotionEventCompat.getActionMasked(event)) {
-                            case MotionEvent.ACTION_DOWN:
-                                startTime = System.currentTimeMillis();
-                                break;
-                            case MotionEvent.ACTION_MOVE:
-                                if (System.currentTimeMillis() - startTime > SPACE_TIME) {
-                                    mItemTouchHelper.startDrag(myHolder);
-                                }
-                                break;
-                            case MotionEvent.ACTION_CANCEL:
-                            case MotionEvent.ACTION_UP:
-                                startTime = 0;
-                                break;
-                        }
-
-                        return false;
-                    }
-                });
+                setMyTextTouch(myHolder, parent);
                 return myHolder;
 
             case TYPE_OTHER_CHANNEL_HEADER:
                 view = mInflater.inflate(R.layout.item_other_channel_header, parent, false);
-                return new RecyclerView.ViewHolder(view) {
-                };
+                return new RecyclerView.ViewHolder(view) {};
 
             case TYPE_OTHER:
                 view = mInflater.inflate(R.layout.item_other_channel, parent, false);
                 final OtherViewHolder otherHolder = new OtherViewHolder(view);
-                otherHolder.textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        RecyclerView recyclerView = ((RecyclerView) parent);
-                        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
-                        int currentPiosition = otherHolder.getAdapterPosition();
-                        // 如果RecyclerView滑动到底部,移动的目标位置的y轴 - height
-                        View currentView = manager.findViewByPosition(currentPiosition);
-                        // 目标位置的前一个item  即当前MyChannel的最后一个
-                        View preTargetView = manager.findViewByPosition(mMyChannelItems.size() - 1 + COUNT_PRE_MY_HEADER);
-
-                        // 如果targetView不在屏幕内,则为-1  此时不需要添加动画,因为此时notifyItemMoved自带一个向目标移动的动画
-                        // 如果在屏幕内,则添加一个位移动画
-                        if (recyclerView.indexOfChild(preTargetView) >= 0) {
-                            int targetX = preTargetView.getLeft();
-                            int targetY = preTargetView.getTop();
-
-                            int targetPosition = mMyChannelItems.size() - 1 + COUNT_PRE_OTHER_HEADER;
-
-                            GridLayoutManager gridLayoutManager = ((GridLayoutManager) manager);
-                            int spanCount = gridLayoutManager.getSpanCount();
-                            // target 在最后一行第一个
-                            if ((targetPosition - COUNT_PRE_MY_HEADER) % spanCount == 0) {
-                                View targetView = manager.findViewByPosition(targetPosition);
-                                targetX = targetView.getLeft();
-                                targetY = targetView.getTop();
-                            } else {
-                                targetX += preTargetView.getWidth();
-
-                                // 最后一个item可见
-                                if (gridLayoutManager.findLastVisibleItemPosition() == getItemCount() - 1) {
-                                    // 最后的item在最后一行第一个位置
-                                    if ((getItemCount() - 1 - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER) % spanCount == 0) {
-                                        // RecyclerView实际高度 > 屏幕高度 && RecyclerView实际高度 < 屏幕高度 + item.height
-                                        int firstVisiblePostion = gridLayoutManager.findFirstVisibleItemPosition();
-                                        if (firstVisiblePostion == 0) {
-                                            // FirstCompletelyVisibleItemPosition == 0 即 内容不满一屏幕 , targetY值不需要变化
-                                            // // FirstCompletelyVisibleItemPosition != 0 即 内容满一屏幕 并且 可滑动 , targetY值 + firstItem.getTop
-                                            if (gridLayoutManager.findFirstCompletelyVisibleItemPosition() != 0) {
-                                                int offset = (-recyclerView.getChildAt(0).getTop()) - recyclerView.getPaddingTop();
-                                                targetY += offset;
-                                            }
-                                        } else { // 在这种情况下 并且 RecyclerView高度变化时(即可见第一个item的 position != 0),
-                                            // 移动后, targetY值  + 一个item的高度
-                                            targetY += preTargetView.getHeight();
-                                        }
-                                    }
-                                }
-                            }
-
-                            // 如果当前位置是otherChannel可见的最后一个
-                            // 并且 当前位置不在grid的第一个位置
-                            // 并且 目标位置不在grid的第一个位置
-
-                            // 则 需要延迟250秒 notifyItemMove , 这是因为这种情况 , 并不触发ItemAnimator , 会直接刷新界面
-                            // 导致我们的位移动画刚开始,就已经notify完毕,引起不同步问题
-                            if (currentPiosition == gridLayoutManager.findLastVisibleItemPosition()
-                                    && (currentPiosition - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER) % spanCount != 0
-                                    && (targetPosition - COUNT_PRE_MY_HEADER) % spanCount != 0) {
-                                moveOtherToMyWithDelay(otherHolder);
-                            } else {
-                                moveOtherToMy(otherHolder);
-                            }
-                            startAnimation(recyclerView, currentView, targetX, targetY);
-
-                        } else {
-                            moveOtherToMy(otherHolder);
-                        }
-                    }
-                });
+                setOtherTouch(otherHolder,parent);
                 return otherHolder;
         }
         return null;
@@ -254,11 +112,9 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyViewHolder) {
-
             MyViewHolder myHolder = (MyViewHolder) holder;
             myHolder.textView.setText(mMyChannelItems.get(position - COUNT_PRE_MY_HEADER).getName());
             myHolder.imgEdit.setVisibility(View.INVISIBLE);
-
         } else if (holder instanceof OtherViewHolder) {
             ((OtherViewHolder) holder).textView.setText(mOtherChannelItems.get(position - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER).getName());
         } else if (holder instanceof MyChannelHeaderViewHolder) {
@@ -271,6 +127,156 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         // 我的频道  标题 + 我的频道.size + 其他频道 标题 + 其他频道.size
         return mMyChannelItems.size() + mOtherChannelItems.size() + COUNT_PRE_OTHER_HEADER;
+    }
+
+    private void setFinishTouch(final MyChannelHeaderViewHolder holder){
+        holder.tvBtnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    //“我的栏目”相关触摸
+    private void setMyTextTouch(final MyViewHolder myHolder, final ViewGroup parent) {
+        myHolder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                int position = myHolder.getAdapterPosition();
+                RecyclerView recyclerView = ((RecyclerView) parent);
+                View targetView = recyclerView.getLayoutManager().findViewByPosition(mMyChannelItems.size() + COUNT_PRE_OTHER_HEADER);
+                View currentView = recyclerView.getLayoutManager().findViewByPosition(position);
+                // 如果targetView不在屏幕内,则indexOfChild为-1  此时不需要添加动画,因为此时notifyItemMoved自带一个向目标移动的动画
+                // 如果在屏幕内,则添加一个位移动画
+                if (recyclerView.indexOfChild(targetView) >= 0) {
+                    int targetX, targetY;
+
+                    RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+                    int spanCount = ((GridLayoutManager) manager).getSpanCount();
+
+                    // 移动后 高度将变化 (我的频道Grid 最后一个item在新的一行第一个)
+                    if ((mMyChannelItems.size() - COUNT_PRE_MY_HEADER) % spanCount == 0) {
+                        View preTargetView = recyclerView.getLayoutManager().findViewByPosition(mMyChannelItems.size() + COUNT_PRE_OTHER_HEADER - 1);
+                        targetX = preTargetView.getLeft();
+                        targetY = preTargetView.getTop();
+                    } else {
+                        targetX = targetView.getLeft();
+                        targetY = targetView.getTop();
+                    }
+
+                    moveMyToOther(myHolder);
+                    startAnimation(recyclerView, currentView, targetX, targetY);
+
+                } else {
+                    moveMyToOther(myHolder);
+                }
+            }
+        });
+
+        myHolder.textView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View v) {
+                mItemTouchHelper.startDrag(myHolder);
+                return true;
+            }
+        });
+
+        //        myHolder.textView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (MotionEventCompat.getActionMasked(event)) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        startTime = System.currentTimeMillis();
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        if (System.currentTimeMillis() - startTime > SPACE_TIME) {
+//                            mItemTouchHelper.startDrag(myHolder);
+//                        }
+//                        break;
+//                    case MotionEvent.ACTION_CANCEL:
+//                    case MotionEvent.ACTION_UP:
+//                        startTime = 0;
+//                        break;
+//                }
+//
+//                return false;
+//            }
+//        });
+    }
+
+    //“其他栏目”相关触摸事件
+    private void setOtherTouch(final OtherViewHolder otherHolder, final ViewGroup parent){
+        otherHolder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecyclerView recyclerView = ((RecyclerView) parent);
+                RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+                int currentPiosition = otherHolder.getAdapterPosition();
+                // 如果RecyclerView滑动到底部,移动的目标位置的y轴 - height
+                View currentView = manager.findViewByPosition(currentPiosition);
+                // 目标位置的前一个item  即当前MyChannel的最后一个
+                View preTargetView = manager.findViewByPosition(mMyChannelItems.size() - 1 + COUNT_PRE_MY_HEADER);
+
+                // 如果targetView不在屏幕内,则为-1  此时不需要添加动画,因为此时notifyItemMoved自带一个向目标移动的动画
+                // 如果在屏幕内,则添加一个位移动画
+                if (recyclerView.indexOfChild(preTargetView) >= 0) {
+                    int targetX = preTargetView.getLeft();
+                    int targetY = preTargetView.getTop();
+
+                    int targetPosition = mMyChannelItems.size() - 1 + COUNT_PRE_OTHER_HEADER;
+
+                    GridLayoutManager gridLayoutManager = ((GridLayoutManager) manager);
+                    int spanCount = gridLayoutManager.getSpanCount();
+                    // target 在最后一行第一个
+                    if ((targetPosition - COUNT_PRE_MY_HEADER) % spanCount == 0) {
+                        View targetView = manager.findViewByPosition(targetPosition);
+                        targetX = targetView.getLeft();
+                        targetY = targetView.getTop();
+                    } else {
+                        targetX += preTargetView.getWidth();
+
+                        // 最后一个item可见
+                        if (gridLayoutManager.findLastVisibleItemPosition() == getItemCount() - 1) {
+                            // 最后的item在最后一行第一个位置
+                            if ((getItemCount() - 1 - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER) % spanCount == 0) {
+                                // RecyclerView实际高度 > 屏幕高度 && RecyclerView实际高度 < 屏幕高度 + item.height
+                                int firstVisiblePostion = gridLayoutManager.findFirstVisibleItemPosition();
+                                if (firstVisiblePostion == 0) {
+                                    // FirstCompletelyVisibleItemPosition == 0 即 内容不满一屏幕 , targetY值不需要变化
+                                    // // FirstCompletelyVisibleItemPosition != 0 即 内容满一屏幕 并且 可滑动 , targetY值 + firstItem.getTop
+                                    if (gridLayoutManager.findFirstCompletelyVisibleItemPosition() != 0) {
+                                        int offset = (-recyclerView.getChildAt(0).getTop()) - recyclerView.getPaddingTop();
+                                        targetY += offset;
+                                    }
+                                } else { // 在这种情况下 并且 RecyclerView高度变化时(即可见第一个item的 position != 0),
+                                    // 移动后, targetY值  + 一个item的高度
+                                    targetY += preTargetView.getHeight();
+                                }
+                            }
+                        }
+                    }
+
+                    // 如果当前位置是otherChannel可见的最后一个
+                    // 并且 当前位置不在grid的第一个位置
+                    // 并且 目标位置不在grid的第一个位置
+
+                    // 则 需要延迟250秒 notifyItemMove , 这是因为这种情况 , 并不触发ItemAnimator , 会直接刷新界面
+                    // 导致我们的位移动画刚开始,就已经notify完毕,引起不同步问题
+                    if (currentPiosition == gridLayoutManager.findLastVisibleItemPosition()
+                            && (currentPiosition - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER) % spanCount != 0
+                            && (targetPosition - COUNT_PRE_MY_HEADER) % spanCount != 0) {
+                        moveOtherToMyWithDelay(otherHolder);
+                    } else {
+                        moveOtherToMy(otherHolder);
+                    }
+                    startAnimation(recyclerView, currentView, targetX, targetY);
+
+                } else {
+                    moveOtherToMy(otherHolder);
+                }
+            }
+        });
     }
 
     /**
