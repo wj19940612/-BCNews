@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.DownloadListener;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.ExtraKeys;
+import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
@@ -41,6 +43,10 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
+
+import java.sql.Struct;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -398,7 +404,14 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     public void openBigImage(String img) {
-        Launcher.with(this, LookBigPictureActivity.class).putExtra(ExtraKeys.PORTRAIT, img).execute();
+        //可能是base64位，过长无法通过Intent传递
+        if (img.contains("base64")) {
+            Preference.get().setBigImage(img);
+            Launcher.with(this, LookBigPictureActivity.class).execute();
+        } else {
+            //普通的http图片地址直接通过参数传递，否则效率太差
+            Launcher.with(this, LookBigPictureActivity.class).putExtra(ExtraKeys.PORTRAIT, img).execute();
+        }
     }
 
     @Override
@@ -439,7 +452,7 @@ public class NewsDetailActivity extends BaseActivity {
         ShareDialog.with(getActivity())
                 .setTitleVisible(false)
                 .setShareTitle(mNewsDetail.getTitle())
-                .setShareDescription(mNewsDetail.getSummary())
+                .setShareDescription(getSummaryData())
                 .setShareUrl(String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId()))
                 .setShareThumbUrl(shareThumbUrl)
                 .show();
@@ -450,7 +463,7 @@ public class NewsDetailActivity extends BaseActivity {
         if (mNewsDetail == null) return;
         UMWeb mWeb = new UMWeb(String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId()));
         mWeb.setTitle(mNewsDetail.getTitle());
-        mWeb.setDescription(mNewsDetail.getSummary());
+        mWeb.setDescription(getSummaryData());
         UMImage thumb;
         if (mNewsDetail.getImgs() == null || mNewsDetail.getImgs().isEmpty()) {
             thumb = new UMImage(getActivity(), R.mipmap.ic_launcher);
@@ -465,6 +478,24 @@ public class NewsDetailActivity extends BaseActivity {
                 .share();
 
     }
+
+    private String getSummaryData() {
+        if (TextUtils.isEmpty(mNewsDetail.getSummary())) {
+            String content = new String(mNewsDetail.getContent());
+            String imgTag = "<img\\s[^>]+>";
+            Pattern pattern = Pattern.compile(imgTag);
+            Matcher matcher = pattern.matcher(content);
+            content = matcher.replaceAll("");
+            content = Html.fromHtml(content).toString();
+            if (content.length() > 150) {
+                return content.substring(0, 150);
+            } else {
+                return content;
+            }
+        }
+        return mNewsDetail.getSummary();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
