@@ -17,6 +17,8 @@ public class Apic {
 
     public static final String SHARE_NEWS_URL = Api.getHost() + "/news/share/index.html?id=%s";
 
+    public static final String DOWNLOAD_URL = Api.getHost() + "/qc.png";
+
     /**
      * 资讯详情 - 齐慕伟
      *
@@ -89,7 +91,7 @@ public class Apic {
      * @return
      */
     public static Api getAuthCode(String phone, String imgCode) {
-        return Api.post("/api/news-user/login/msg/{phone}" + phone, new ReqParams()
+        return Api.post("/api/news-user/login/msg/{phone}", new ReqParams()
                 .put("phone", phone)
                 .put("imgCode", imgCode));
     }
@@ -120,6 +122,28 @@ public class Apic {
                 .put("deviceId", Preference.get().getPushClientId())
                 .put("platform", 0)
                 .put("source", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
+    }
+
+    /**
+     * 接口名称 快捷登入(for 微信)
+     *
+     * @param authCode 短信验证码
+     * @param phone    手机
+     *                 deviceId 设备id
+     *                 platform 平台 0-安卓 1-ios
+     * @return
+     */
+    public static Api requestAuthCodeLogin(String phone, String authCode, String openId, String name, String iconUrl, int sex) {
+        return Api.post("/api/news-user/login/quick/{phone}/{msgCode}", new ReqParams()
+                .put("phone", phone)
+                .put("msgCode", authCode)
+                .put("deviceId", Preference.get().getPushClientId())
+                .put("platform", 0)
+                .put("channel", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL"))
+                .put("openId", openId)
+                .put("name", name)
+                .put("iconUrl", iconUrl)
+                .put("sex", sex));
     }
 
     /**

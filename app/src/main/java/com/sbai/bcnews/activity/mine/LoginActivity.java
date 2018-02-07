@@ -92,10 +92,7 @@ public class LoginActivity extends WeChatActivity {
 
         translucentStatusBar();
         // 第一次登录不需要弹出软键盘
-        if (!Preference.get().isFirstLogin()) {
-            mPhoneNumber.requestFocus();
-        }
-        Preference.get().setFirstLogin(false);
+        mPhoneNumber.clearFocus();
 
         if (!TextUtils.isEmpty(LocalUser.getUser().getPhone())) {
             mPhoneNumber.setText(LocalUser.getUser().getPhone());
@@ -270,7 +267,7 @@ public class LoginActivity extends WeChatActivity {
         return mPhoneNumber.getText().toString().trim().replaceAll(" ", "");
     }
 
-    @OnClick({R.id.closePage, R.id.phoneNumberClear, R.id.getAuthCode, R.id.login, R.id.rootView, R.id.weChatLogin})
+    @OnClick({R.id.closePage, R.id.phoneNumberClear, R.id.getAuthCode, R.id.login, R.id.rootView, R.id.weChatLogin, R.id.agree})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.closePage:
@@ -289,8 +286,10 @@ public class LoginActivity extends WeChatActivity {
                 login();
                 break;
             case R.id.weChatLogin:
-                updateBindPhoneViews();
-//                weChatLogin();
+                weChatLogin();
+                break;
+            case R.id.agree:
+                // TODO: 2018-02-07  
             default:
                 break;
         }
@@ -337,7 +336,7 @@ public class LoginActivity extends WeChatActivity {
         mPhoneNumber.setText("");
         mAuthCode.setText("");
         mGetAuthCode.setText(R.string.get_auth_code);
-        mGetAuthCode.setEnabled(true);
+        mGetAuthCode.setEnabled(false);
         mLogin.setText(getString(R.string.ok));
         mPageTitle.setText(getString(R.string.bind_phone));
         mAgree.setVisibility(View.GONE);
@@ -358,7 +357,7 @@ public class LoginActivity extends WeChatActivity {
         mLoading.setVisibility(View.VISIBLE);
         mLoading.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading));
         if (isWeChatLogin()) {
-            Apic.requestWeChatLogin(getWeChatOpenid()).tag(TAG)
+            Apic.requestAuthCodeLogin(phoneNumber, authCode, getWeChatOpenid(), getWeChatName(), getWeChatIconUrl(), getWeChatGender()).tag(TAG)
                     .callback(new Callback<Resp<UserInfo>>() {
                         @Override
                         public void onFinish() {
@@ -407,7 +406,7 @@ public class LoginActivity extends WeChatActivity {
     private void requestAuthCode() {
         final String phoneNumber = getPhoneNumber();
         Apic.getAuthCode(phoneNumber)
-                .tag(TAG).indeterminate(this)
+                .tag(TAG)
                 .callback(new Callback<Resp<JsonObject>>() {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {

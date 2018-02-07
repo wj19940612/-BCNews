@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ImageFormat;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +13,7 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.model.NewsFlash;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.ShareUtils;
@@ -23,13 +21,12 @@ import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.TitleBar;
+import com.sbai.glide.GlideApp;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
-
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +61,8 @@ public class ShareNewsFlashActivity extends BaseActivity {
     LinearLayout mShare;
     @BindView(R.id.shareArea)
     LinearLayout mShareArea;
+    @BindView(R.id.downloadImg)
+    ImageView mDownloadImg;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +98,10 @@ public class ShareNewsFlashActivity extends BaseActivity {
                         Color.parseColor("#494949"), Color.parseColor("#494949")));
             }
         }
+        GlideApp.with(getActivity())
+                .load(Apic.DOWNLOAD_URL)
+                .into(mDownloadImg);
+
     }
 
     @OnClick({R.id.back, R.id.wechat, R.id.circle, R.id.qq, R.id.weibo, R.id.download})

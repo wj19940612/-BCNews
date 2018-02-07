@@ -205,14 +205,11 @@ public class Api extends RequestManager {
     }
 
     public static String getHost() {
-        if (BuildConfig.HOST.contains("http")) {
-            return BuildConfig.HOST;
-        }
         if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")
                 || BuildConfig.FLAVOR.equalsIgnoreCase(BuildConfigUtils.FLAVOR_NAME_ALPHA)) {
             return "http://" + BuildConfig.HOST;
         }
-        return "https://" + BuildConfig.HOST;
+        return "http://" + BuildConfig.HOST;
     }
 
     public static void cancel(String tag) {
