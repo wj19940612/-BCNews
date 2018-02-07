@@ -75,8 +75,10 @@
             android:process=":pushservice">
         </service>
 
-        <activity android:name=".activity.NewsDetailActivity"/>
-        <activity android:name=".activity.LookBigPictureActivity"/>
+        <activity android:name=".activity.NewsDetailActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.LookBigPictureActivity"
+                  android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ShareNewsFlashActivity"
             android:screenOrientation="portrait"

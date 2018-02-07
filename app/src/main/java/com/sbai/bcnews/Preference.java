@@ -51,6 +51,7 @@ public class Preference {
         String NEWS_DETAIL = "news_detail";
         String NEWS_SUMMARY = "news_summary";
         String NEWS_READ = "news_read";
+        String NEWS_BIG_IMAGE = "news_big_image";
     }
 
     private static Preference sInstance;
@@ -227,6 +228,16 @@ public class Preference {
 
     public String getNewsRead() {
         String key = Key.NEWS_READ;
+        return mPrefs.getString(key, null);
+    }
+
+    public void setBigImage(String img) {
+        String key = Key.NEWS_BIG_IMAGE;
+        apply(key, img);
+    }
+
+    public String getBigImage() {
+        String key = Key.NEWS_BIG_IMAGE;
         return mPrefs.getString(key, null);
     }
 

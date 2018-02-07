@@ -63,10 +63,11 @@ public class Api extends RequestManager {
         return reqApi;
     }
 
-    public static Api put(String api) {
+    public static Api put(String api, ReqParams reqParams) {
         Api reqApi = new Api();
         reqApi.mMethod = PUT;
         reqApi.mApi = api;
+        reqApi.mReqParams = reqParams;
         return reqApi;
     }
 
@@ -190,17 +191,22 @@ public class Api extends RequestManager {
     }
 
     private String getUrl() {
+        if (mReqParams != null) {
+            mApi = mReqParams.replaceHolders(mApi);
+        }
+
         String url = new StringBuilder(getHost()).append(mApi).toString();
         if (mMethod == GET && mReqParams != null) {
             url += mReqParams.toString();
             mReqParams = null;
         }
+
         return url;
     }
 
     public static String getHost() {
         if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")
-                ||BuildConfig.FLAVOR.equalsIgnoreCase(BuildConfigUtils.FLAVOR_NAME_ALPHA)) {
+                || BuildConfig.FLAVOR.equalsIgnoreCase(BuildConfigUtils.FLAVOR_NAME_ALPHA)) {
             return "http://" + BuildConfig.HOST;
         }
         return "https://" + BuildConfig.HOST;
