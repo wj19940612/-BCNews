@@ -3,6 +3,8 @@ package com.sbai.httplib;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Modified by john on 18/01/2018
@@ -63,5 +65,23 @@ public class ReqParams {
             }
         }
         return builder.toString();
+    }
+
+    public String replaceHolders(String api) {
+        if (mParams != null) {
+            Iterator<Map.Entry<String, String>> it = mParams.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, String> next = it.next();
+                String holder = "{" + next.getKey() + "}";
+                int indexOf = api.indexOf(holder);
+                if (indexOf > -1) {
+                    api = api.substring(0, indexOf)
+                            .concat(next.getValue())
+                            .concat(api.substring(indexOf + holder.length()));
+                    it.remove();
+                }
+            }
+        }
+        return api;
     }
 }
