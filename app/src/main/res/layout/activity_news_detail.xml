@@ -87,7 +87,8 @@
 
                 <TextView
                     android:id="@+id/readTime"
-                    android:layout_width="64dp"
+                    android:layout_width="wrap_content"
+                    android:minWidth="64dp"
                     android:layout_height="18dp"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/subtitle"
@@ -118,8 +119,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/titleLayout"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="14dp"
                 android:layout_marginTop="20dp"
                 android:scrollbars="none"
                 tools:ignore="WebViewLayout"/>
@@ -184,7 +183,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_toRightOf="@+id/shareTo"
-                    android:background="@drawable/btn_share_wechat"/>
+                    android:background="@drawable/btn_share_wx_small"/>
 
                 <TextView
                     android:id="@+id/circleShare"
@@ -193,7 +192,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_toRightOf="@+id/wxShare"
-                    android:background="@drawable/btn_share_circle"/>
+                    android:background="@drawable/btn_share_circle_small"/>
 
             </RelativeLayout>
 

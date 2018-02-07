@@ -14,6 +14,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
 import com.sbai.bcnews.ExtraKeys;
+import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
@@ -133,6 +134,9 @@ public class LookBigPictureActivity extends BaseActivity implements View.OnClick
 
     private void initData(Intent intent) {
         mPortrait = intent.getStringExtra(ExtraKeys.PORTRAIT);
+        if (mPortrait == null) {
+            mPortrait = Preference.get().getBigImage();
+        }
         mDelete = intent.getIntExtra(ExtraKeys.PIC_DELETE, -1);
         mMissAvatar = intent.getIntExtra(ExtraKeys.MISS_AVATAR, 0);
     }
