@@ -17,8 +17,14 @@ public class Apic {
 
     public static final String SHARE_NEWS_URL = Api.getHost() + "/news/share/index.html?id=%s";
 
+    /**
+     * 资讯详情 - 齐慕伟
+     *
+     * @param id
+     * @return
+     */
     public static Api getNewsDetail(String id) {
-        return Api.get("/api/news-info/info/details/" + id);
+        return Api.get("/api/news-info/info/details/{id}", new ReqParams().put("id", id));
     }
 
     public static Api getNewsList(int page) {
@@ -42,8 +48,6 @@ public class Apic {
     }
 
     /**
-     * /api/news-quota/quota/list
-     * GET
      * 行情列表 (ws)
      *
      * @param exchangeCode
@@ -57,8 +61,14 @@ public class Apic {
         return Api.get("/api/news-info/info/information.do", new ReqParams().put("page", page));
     }
 
+    /**
+     * 资讯点赞 - 齐慕伟
+     *
+     * @param newsId
+     * @return
+     */
     public static Api praiseNews(String newsId) {
-        return Api.put("/api/news-info/info/like/" + newsId);
+        return Api.put("/api/news-info/info/like/{id}", new ReqParams().put("id", newsId));
     }
 
     /**

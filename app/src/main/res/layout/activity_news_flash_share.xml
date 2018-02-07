@@ -165,7 +165,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_white_small_round"
-            android:padding="6dp">
+            android:padding="6dp"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -176,7 +177,8 @@
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:visibility="gone"/>
 
 
         <LinearLayout
