@@ -18,10 +18,18 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ChannelActivity;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.ChannelCacheModel;
+import com.sbai.bcnews.model.ChannelEntity;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingTab.SlidingTabLayout;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +55,9 @@ public class HomeNewsFragment extends BaseFragment {
     RelativeLayout mReLa;
     @BindView(R.id.layout)
     RelativeLayout mLayout;
+
     private PagerAdapter mPagerAdapter;
+    private ChannelCacheModel mChannelCacheModel;
 
     @Nullable
     @Override
@@ -57,6 +67,24 @@ public class HomeNewsFragment extends BaseFragment {
         initViewPager();
         initTabView();
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getChannels();
+    }
+
+    private void getChannels() {
+        ChannelCacheModel channelCacheModel = ChannelCache.getChannel();
+        mChannelCacheModel = channelCacheModel;
+        Apic.getChannels().tag(TAG).callback(new Callback2D<List<Resp<String>>, List<String>>() {
+
+            @Override
+            protected void onRespSuccessData(List<String> data) {
+                mChannelCacheModel = ChannelCache.contrastChannel(mChannelCacheModel, data);
+            }
+        }).fireFreely();
     }
 
     private void initViewPager() {

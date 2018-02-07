@@ -91,6 +91,8 @@
     <string name="no_more_new_news">已是最新资讯</string>
     <string name="channel_custom">频道定制</string>
     <string name="channel_select">已选频道</string>
+    <string name="drag_to_select_channel">长按拖动调整排序</string>
+    <string name="un_select_channel">未选频道</string>
 
 
     <!--行情-->

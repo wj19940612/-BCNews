@@ -24,6 +24,11 @@ public class Apic {
         return Api.get("/api/news-info/info/details/{id}", new ReqParams().put("id", id));
     }
 
+    /**
+     * 获取资讯列表
+     * @param page 页数
+     * @return
+     */
     public static Api getNewsList(int page) {
         return Api.get("/api/news-info/info/list.do", new ReqParams().put("page", page).put("size", NORMAL_PAGESIZE));
     }
@@ -61,11 +66,18 @@ public class Apic {
     /**
      * 资讯点赞 - 齐慕伟
      *
-     * @param newsId
+     * @param newsId 资讯id
      * @return
      */
     public static Api praiseNews(String newsId) {
         return Api.put("/api/news-info/info/like/{id}", new ReqParams().put("id", newsId));
+    }
+
+    /**
+     * 频道列表
+     */
+    public static Api getChannels(){
+        return Api.get("/api/news-info/news/channels");
     }
 
 }

@@ -20,10 +20,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-/**
- * 频道 增删改查 排序
- * Created by YoKeyword on 15/12/29.
- */
 public class ChannelActivity extends AppCompatActivity {
 
     @BindView(R.id.recyclerView)

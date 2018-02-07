@@ -14,11 +14,38 @@
         app:customView="@layout/view_title_news"
         app:hasBottomSplitLine="false"/>
 
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_below="@id/titleBar"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/channel_custom"
+            android:textColor="@color/primaryText"
+            android:textSize="13sp"/>
+
+        <ImageView
+            android:id="@+id/finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/btn_channel_finish"/>
+
+    </RelativeLayout>
+
     <!--Recycler Item触摸涉及镜像动画需要父布局是Frame-->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/titleBar">
+        android:layout_below="@+id/title">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"

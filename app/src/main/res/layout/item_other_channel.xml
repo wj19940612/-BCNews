@@ -12,13 +12,15 @@
         android:background="@drawable/bg_channel"
         android:foreground="?attr/selectableItemBackground"
         android:layout_centerInParent="true"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textColor="@color/marketText"
+        android:textSize="13sp"/>
 
     <ImageView
-        android:id="@+id/img_edit"
+        android:id="@+id/add"
         android:layout_alignParentRight="true"
         android:layout_width="16dp"
-        android:visibility="invisible"
-        android:layout_height="16dp"/>
+        android:layout_height="16dp"
+        android:src="@drawable/btn_add_channel"/>
 
 </RelativeLayout>

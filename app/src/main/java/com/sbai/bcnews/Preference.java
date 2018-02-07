@@ -52,6 +52,7 @@ public class Preference {
         String NEWS_SUMMARY = "news_summary";
         String NEWS_READ = "news_read";
         String NEWS_BIG_IMAGE = "news_big_image";
+        String NEWS_CHANNEL = "news_big_image";
     }
 
     private static Preference sInstance;
@@ -238,6 +239,16 @@ public class Preference {
 
     public String getBigImage() {
         String key = Key.NEWS_BIG_IMAGE;
+        return mPrefs.getString(key, null);
+    }
+
+    public void setChannelCache(String channelCache) {
+        String key = Key.NEWS_CHANNEL;
+        apply(key, channelCache);
+    }
+
+    public String getChannelCache() {
+        String key = Key.NEWS_CHANNEL;
         return mPrefs.getString(key, null);
     }
 

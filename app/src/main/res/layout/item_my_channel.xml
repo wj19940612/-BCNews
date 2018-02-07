@@ -5,20 +5,23 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tv"
+        android:id="@+id/channel"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_margin="8dp"
         android:background="@drawable/bg_channel"
         android:foreground="?attr/selectableItemBackground"
         android:layout_centerInParent="true"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textColor="@color/marketText"
+        android:textSize="13sp"/>
 
     <ImageView
-        android:id="@+id/img_edit"
+        android:id="@+id/delete"
         android:layout_alignParentRight="true"
-        android:layout_width="16dp"
+        android:layout_width="36dp"
         android:layout_height="16dp"
-        android:src="@drawable/ic_channel_edit"/>
+        android:paddingLeft="20dp"
+        android:src="@drawable/btn_delete_channel"/>
 
 </RelativeLayout>

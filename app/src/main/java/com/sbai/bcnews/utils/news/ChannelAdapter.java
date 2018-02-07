@@ -22,10 +22,12 @@ import com.sbai.bcnews.model.ChannelEntity;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 /**
  * 拖拽排序 + 增删
- * Created by YoKeyword on 15/12/28.
  */
 public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnItemMoveListener {
     // 我的频道 标题部分
@@ -87,7 +89,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case TYPE_MY_CHANNEL_HEADER:
                 view = mInflater.inflate(R.layout.item_my_channel_header, parent, false);
                 final MyChannelHeaderViewHolder holder = new MyChannelHeaderViewHolder(view);
-                setFinishTouch(holder);
+                setMyHeaderTouch(holder);
                 return holder;
 
             case TYPE_MY:
@@ -98,12 +100,13 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             case TYPE_OTHER_CHANNEL_HEADER:
                 view = mInflater.inflate(R.layout.item_other_channel_header, parent, false);
-                return new RecyclerView.ViewHolder(view) {};
+                return new RecyclerView.ViewHolder(view) {
+                };
 
             case TYPE_OTHER:
                 view = mInflater.inflate(R.layout.item_other_channel, parent, false);
                 final OtherViewHolder otherHolder = new OtherViewHolder(view);
-                setOtherTouch(otherHolder,parent);
+                setOtherTouch(otherHolder, parent);
                 return otherHolder;
         }
         return null;
@@ -113,8 +116,12 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyViewHolder) {
             MyViewHolder myHolder = (MyViewHolder) holder;
-            myHolder.textView.setText(mMyChannelItems.get(position - COUNT_PRE_MY_HEADER).getName());
-            myHolder.imgEdit.setVisibility(View.INVISIBLE);
+            myHolder.mChannel.setText(mMyChannelItems.get(position - COUNT_PRE_MY_HEADER).getName());
+            if (position == COUNT_PRE_MY_HEADER) {
+                myHolder.mDelete.setVisibility(View.INVISIBLE);
+            } else {
+                myHolder.mDelete.setVisibility(View.VISIBLE);
+            }
         } else if (holder instanceof OtherViewHolder) {
             ((OtherViewHolder) holder).textView.setText(mOtherChannelItems.get(position - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER).getName());
         } else if (holder instanceof MyChannelHeaderViewHolder) {
@@ -128,13 +135,13 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mMyChannelItems.size() + mOtherChannelItems.size() + COUNT_PRE_OTHER_HEADER;
     }
 
-    private void setFinishTouch(final MyChannelHeaderViewHolder holder){
+    private void setMyHeaderTouch(final MyChannelHeaderViewHolder holder) {
 
     }
 
     //“我的栏目”相关触摸
     private void setMyTextTouch(final MyViewHolder myHolder, final ViewGroup parent) {
-        myHolder.textView.setOnClickListener(new View.OnClickListener() {
+        myHolder.mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 int position = myHolder.getAdapterPosition();
@@ -168,10 +175,13 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
 
-        myHolder.textView.setOnLongClickListener(new View.OnLongClickListener() {
+        myHolder.mChannel.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View v) {
-                mItemTouchHelper.startDrag(myHolder);
+                int position = myHolder.getAdapterPosition();
+                if (position != COUNT_PRE_MY_HEADER) {
+                    mItemTouchHelper.startDrag(myHolder);
+                }
                 return true;
             }
         });
@@ -200,7 +210,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     //“其他栏目”相关触摸事件
-    private void setOtherTouch(final OtherViewHolder otherHolder, final ViewGroup parent){
+    private void setOtherTouch(final OtherViewHolder otherHolder, final ViewGroup parent) {
         otherHolder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -415,6 +425,9 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (mAnimationing) {
             return false;
         }
+        if(toPosition==COUNT_PRE_MY_HEADER){
+            return false;
+        }
         if (fromPosition - COUNT_PRE_MY_HEADER < 0 || fromPosition - COUNT_PRE_MY_HEADER > mMyChannelItems.size() - 1) {
             return false;
         }
@@ -452,13 +465,14 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * 我的频道
      */
     class MyViewHolder extends RecyclerView.ViewHolder implements OnDragVHListener {
-        private TextView textView;
-        private ImageView imgEdit;
+        @BindView(R.id.delete)
+        ImageView mDelete;
+        @BindView(R.id.channel)
+        TextView mChannel;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.tv);
-            imgEdit = (ImageView) itemView.findViewById(R.id.img_edit);
+            ButterKnife.bind(this, itemView);
         }
 
         /**
@@ -466,7 +480,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
          */
         @Override
         public void onItemSelected() {
-            textView.setBackgroundResource(R.drawable.bg_channel_pressed);
+            mChannel.setBackgroundResource(R.drawable.bg_channel_pressed);
         }
 
         /**
@@ -474,7 +488,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
          */
         @Override
         public void onItemFinish() {
-            textView.setBackgroundResource(R.drawable.bg_channel);
+            mChannel.setBackgroundResource(R.drawable.bg_channel);
         }
     }
 
