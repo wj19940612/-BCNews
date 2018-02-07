@@ -7,10 +7,10 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
+        buildConfigField('String', 'HOST', '\"http://news.ailemi.com\"')
 
         manifestPlaceholders = [
                 GETUI_APP_ID    : "yz2rMIFVG88ywlddHHoLU4",
