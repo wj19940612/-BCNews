@@ -17,6 +17,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.DialogBaseActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.glide.GlideApp;
@@ -60,10 +61,16 @@ public class ImageAuthCodeActivity extends DialogBaseActivity {
     }
 
     private void requestImageAuthCode() {
-        GlideApp.with(getActivity()).load(Apic.getAuthCode(mPhone))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(mImageAuthCode);
+        Apic.getImageAuthCode(mPhone)
+                .callback(new Callback2D<Resp<String>, String>() {
+                    @Override
+                    protected void onRespSuccessData(String data) {
+                        GlideApp.with(getActivity()).load(data)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .into(mImageAuthCode);
+                    }
+                }).fireFreely();
     }
 
     private void initData(Intent intent) {

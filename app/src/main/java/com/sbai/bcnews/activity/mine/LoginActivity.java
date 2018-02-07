@@ -334,7 +334,9 @@ public class LoginActivity extends WeChatActivity {
                 .into(mWeChatAvatar);
 
         mPhoneNumber.setText("");
+        mPhoneNumber.clearFocus();
         mAuthCode.setText("");
+        mAuthCode.clearFocus();
         mGetAuthCode.setText(R.string.get_auth_code);
         mGetAuthCode.setEnabled(false);
         mLogin.setText(getString(R.string.ok));
@@ -398,9 +400,17 @@ public class LoginActivity extends WeChatActivity {
     }
 
     private void resetLoginButton() {
-        mLogin.setText(R.string.fast_login);
+        if (isBindPhone()) {
+            mLogin.setText(getString(R.string.ok));
+        } else {
+            mLogin.setText(R.string.fast_login);
+        }
         mLoading.setVisibility(View.GONE);
         mLoading.clearAnimation();
+    }
+
+    private boolean isBindPhone() {
+        return mPageTitle.getText().toString().equals(getString(R.string.bind_phone));
     }
 
     private void requestAuthCode() {

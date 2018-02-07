@@ -102,8 +102,9 @@ public class Apic {
      * @param phone
      * @return
      */
-    public static String getImageAuthCode(String phone) {
-        return Api.getHost() + "/user/registerLogin/getRegImage.do?userPhone=" + phone;
+    public static Api getImageAuthCode(String phone) {
+        return Api.post("/api/news-user/login/get/image/{phone}", new ReqParams()
+                .put("phone", phone));
     }
 
     /**
