@@ -10,7 +10,7 @@ android {
         versionName "0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField('String', 'HOST', '\"http://news.ailemi.com\"')
+        buildConfigField('String', 'HOST', '\"news.ailemi.com\"')
 
         manifestPlaceholders = [
                 GETUI_APP_ID    : "yz2rMIFVG88ywlddHHoLU4",
