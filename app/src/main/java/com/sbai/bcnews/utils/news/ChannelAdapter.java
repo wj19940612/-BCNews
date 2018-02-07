@@ -54,7 +54,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private LayoutInflater mInflater;
     private ItemTouchHelper mItemTouchHelper;
 
-    private List<ChannelEntity> mMyChannelItems, mOtherChannelItems;
+    private List<String> mMyChannelItems, mOtherChannelItems;
 
     // 我的频道点击事件
     private OnMyChannelItemClickListener mChannelItemClickListener;
@@ -62,7 +62,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     //是否正在执行动画
     private boolean mAnimationing;
 
-    public ChannelAdapter(Context context, ItemTouchHelper helper, List<ChannelEntity> mMyChannelItems, List<ChannelEntity> mOtherChannelItems) {
+    public ChannelAdapter(Context context, ItemTouchHelper helper, List<String> mMyChannelItems, List<String> mOtherChannelItems) {
         this.mInflater = LayoutInflater.from(context);
         this.mItemTouchHelper = helper;
         this.mMyChannelItems = mMyChannelItems;
@@ -116,14 +116,14 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyViewHolder) {
             MyViewHolder myHolder = (MyViewHolder) holder;
-            myHolder.mChannel.setText(mMyChannelItems.get(position - COUNT_PRE_MY_HEADER).getName());
+            myHolder.mChannel.setText(mMyChannelItems.get(position - COUNT_PRE_MY_HEADER));
             if (position == COUNT_PRE_MY_HEADER) {
                 myHolder.mDelete.setVisibility(View.INVISIBLE);
             } else {
                 myHolder.mDelete.setVisibility(View.VISIBLE);
             }
         } else if (holder instanceof OtherViewHolder) {
-            ((OtherViewHolder) holder).textView.setText(mOtherChannelItems.get(position - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER).getName());
+            ((OtherViewHolder) holder).textView.setText(mOtherChannelItems.get(position - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER));
         } else if (holder instanceof MyChannelHeaderViewHolder) {
             MyChannelHeaderViewHolder headerHolder = (MyChannelHeaderViewHolder) holder;
         }
@@ -329,7 +329,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (startPosition > mMyChannelItems.size() - 1) {
             return;
         }
-        ChannelEntity item = mMyChannelItems.get(startPosition);
+        String item = mMyChannelItems.get(startPosition);
         mMyChannelItems.remove(startPosition);
         mOtherChannelItems.add(0, item);
 
@@ -376,7 +376,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (startPosition > mOtherChannelItems.size() - 1 || startPosition < 0) {
             return -1;
         }
-        ChannelEntity item = mOtherChannelItems.get(startPosition);
+        String item = mOtherChannelItems.get(startPosition);
         mOtherChannelItems.remove(startPosition);
         mMyChannelItems.add(item);
         return position;
@@ -415,7 +415,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (!judgeCanMove(fromPosition, toPosition)) {
             return;
         }
-        ChannelEntity item = mMyChannelItems.get(fromPosition - COUNT_PRE_MY_HEADER);
+        String item = mMyChannelItems.get(fromPosition - COUNT_PRE_MY_HEADER);
         mMyChannelItems.remove(fromPosition - COUNT_PRE_MY_HEADER);
         mMyChannelItems.add(toPosition - COUNT_PRE_MY_HEADER, item);
         notifyItemMoved(fromPosition, toPosition);

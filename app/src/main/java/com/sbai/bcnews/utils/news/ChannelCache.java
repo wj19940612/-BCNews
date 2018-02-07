@@ -45,13 +45,16 @@ public class ChannelCache {
     }
 
     public static ChannelCacheModel contrastChannel(ChannelCacheModel channelCacheModel, List<String> netChannels) {
+        boolean modified = false;
         if (netChannels == null) {
+            channelCacheModel.setModified(false);
             return channelCacheModel;
         }
         if (channelCacheModel == null) {
             //没缓存用netChannels
             ChannelCacheModel netChannelCacheModel = new ChannelCacheModel();
             netChannelCacheModel.setMyChannelEntities(netChannels);
+            netChannelCacheModel.setModified(true);
             return netChannelCacheModel;
         }
         //删除在远端没有的频道
@@ -61,6 +64,7 @@ public class ChannelCache {
                 //这个频道在远端已经没了，剔除
                 if (!netChannels.contains(channel)) {
                     myChannels.remove(channel);
+                    modified = true;
                 }
             }
         }
@@ -91,6 +95,7 @@ public class ChannelCache {
         ChannelCacheModel newChannelCacheModel = new ChannelCacheModel();
         newChannelCacheModel.setMyChannelEntities(myChannels);
         newChannelCacheModel.setOtherChannelEntities(otherChannels);
+        newChannelCacheModel.setModified(modified);
         return newChannelCacheModel;
     }
 }

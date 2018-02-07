@@ -1,6 +1,7 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ChannelActivity;
 import com.sbai.bcnews.http.Apic;
@@ -29,6 +31,7 @@ import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingTab.SlidingTabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -36,11 +39,17 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.app.Activity.RESULT_OK;
+import static com.sbai.bcnews.fragment.NewsFragment.HAS_BANNER;
+import static com.sbai.bcnews.fragment.NewsFragment.NO_BANNER;
+
 /**
  * Created by Administrator on 2018\2\5 0005.
  */
 
 public class HomeNewsFragment extends BaseFragment {
+
+    public static final int REQUEST_CODE_CHANNEL = 886;
 
     Unbinder unbinder;
     @BindView(R.id.slidingTabLayout)
@@ -58,39 +67,30 @@ public class HomeNewsFragment extends BaseFragment {
 
     private PagerAdapter mPagerAdapter;
     private ChannelCacheModel mChannelCacheModel;
+    private List<String> mMyChannels;
+    private int mCurrentItem;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_news, container, false);
         unbinder = ButterKnife.bind(this, view);
-        initViewPager();
-        initTabView();
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mMyChannels = new ArrayList<>();
+        initTabView();
+        initViewPager();
         getChannels();
-    }
-
-    private void getChannels() {
-        ChannelCacheModel channelCacheModel = ChannelCache.getChannel();
-        mChannelCacheModel = channelCacheModel;
-        Apic.getChannels().tag(TAG).callback(new Callback2D<List<Resp<String>>, List<String>>() {
-
-            @Override
-            protected void onRespSuccessData(List<String> data) {
-                mChannelCacheModel = ChannelCache.contrastChannel(mChannelCacheModel, data);
-            }
-        }).fireFreely();
+        mTabLayout.setViewPager(mViewPager);
     }
 
     private void initViewPager() {
-        mViewPager.setOffscreenPageLimit(8);
+        mPagerAdapter = new PagerAdapter(getChildFragmentManager(), getActivity(), mMyChannels);
         mViewPager.setCurrentItem(0, false);
-        mPagerAdapter = new PagerAdapter(getChildFragmentManager(), getActivity());
         mViewPager.setAdapter(mPagerAdapter);
     }
 
@@ -105,6 +105,36 @@ public class HomeNewsFragment extends BaseFragment {
         mTabLayout.setTabViewTextSize(15);
         mTabLayout.setSelectedIndicatorHeight(2);
         mTabLayout.setHasBottomBorder(false);
+    }
+
+    private void getChannels() {
+        final ChannelCacheModel channelCacheModel = ChannelCache.getChannel();
+        Apic.getChannels().tag(TAG).callback(new Callback2D<Resp<List<String>>, List<String>>() {
+
+            @Override
+            protected void onRespSuccessData(List<String> data) {
+                ChannelCacheModel contrastedChannelCacheModel = ChannelCache.contrastChannel(channelCacheModel, data);
+                updateChannel(contrastedChannelCacheModel);
+            }
+        }).fireFreely();
+    }
+
+    private void updateChannel(ChannelCacheModel channelCacheModel) {
+        if (channelCacheModel == null) {
+            return;
+        }
+        mChannelCacheModel = channelCacheModel;
+        if (mChannelCacheModel.isModified())
+            updateViewPager(channelCacheModel.getMyChannelEntities());
+
+    }
+
+    private void updateViewPager(List<String> myChannelEntities) {
+        mViewPager.setOffscreenPageLimit(myChannelEntities.size() - 1);
+        mMyChannels.clear();
+        mMyChannels.addAll(myChannelEntities);
+        mPagerAdapter.notifyDataSetChanged();
+        mViewPager.setCurrentItem(mCurrentItem, false);
         mTabLayout.setViewPager(mViewPager);
     }
 
@@ -118,8 +148,17 @@ public class HomeNewsFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.text:
-                Launcher.with(getActivity(), ChannelActivity.class).execute();
+                mCurrentItem = mViewPager.getCurrentItem();
+                Launcher.with(this, ChannelActivity.class).putExtra(ExtraKeys.CHANNEL, mChannelCacheModel).excuteForResultFragment(REQUEST_CODE_CHANNEL);
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_CHANNEL && resultCode == RESULT_OK) {
+            mChannelCacheModel = data.getParcelableExtra(ExtraKeys.CHANNEL);
+            updateChannel(mChannelCacheModel);
         }
     }
 
@@ -127,46 +166,37 @@ public class HomeNewsFragment extends BaseFragment {
 
         private Context mContext;
         private FragmentManager mFragmentManager;
+        private List<String> mMyChannelEntities;
 
-        public PagerAdapter(FragmentManager fm, Context context) {
+        public PagerAdapter(FragmentManager fm, Context context, List<String> myChannelEntities) {
             super(fm);
             mContext = context;
             mFragmentManager = fm;
+            mMyChannelEntities = myChannelEntities;
+        }
+
+        public void setMyChannelEntities(List<String> myChannelEntities) {
+            mMyChannelEntities = myChannelEntities;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "推荐";
-                case 1:
-                    return "比特币";
-                case 2:
-                    return "以太坊";
-                case 3:
-                    return "比特现金";
-                case 4:
-                    return "ICO";
-                case 5:
-                    return "比特现金";
-                case 6:
-                    return "比特现金";
-                case 7:
-                    return "比特现金";
-                case 8:
-                    return "比特现金";
-            }
+            if (mMyChannelEntities != null && mMyChannelEntities.get(position) != null)
+                return mMyChannelEntities.get(position);
             return super.getPageTitle(position);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return new NewsFragment();
+            if (position == 0) {
+                return NewsFragment.newsInstance(HAS_BANNER);
+            }
+            return NewsFragment.newsInstance(NO_BANNER);
         }
 
         @Override
         public int getCount() {
-            return 9;
+            return mMyChannelEntities.size();
         }
 
         public Fragment getFragment(int position) {

@@ -46,6 +46,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.sbai.bcnews.ExtraKeys.HEADER_COUNT;
+
 /**
  * Modified by john on 24/01/2018
  * <p>
@@ -54,6 +56,9 @@ import butterknife.Unbinder;
  * APIs:
  */
 public class NewsFragment extends RecycleViewSwipeLoadFragment {
+
+    public static final int HAS_BANNER = 1;
+    public static final int NO_BANNER = 0;
 
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
@@ -75,6 +80,23 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     private int mPage;
     private int overallXScroll;
+    private int mHeaderCount;
+
+    public static NewsFragment newsInstance(int headerCount) {
+        NewsFragment newsFragment = new NewsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(HEADER_COUNT, headerCount);
+        newsFragment.setArguments(bundle);
+        return newsFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mHeaderCount = getArguments().getInt(HEADER_COUNT);
+        }
+    }
 
     @Nullable
     @Override
@@ -93,7 +115,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     private void initView() {
         mNewsDetails = new ArrayList<>();
-        mNewsAdapter = new NewsAdapter(getActivity(), mNewsDetails, new NewsAdapter.OnItemClickListener() {
+        mNewsAdapter = new NewsAdapter(getActivity(), mNewsDetails, mHeaderCount, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
                 NewsReadCache.markNewsRead(newsDetail);
@@ -120,10 +142,12 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void initBannerView() {
-        mHomeBanner = (HomeBanner) LayoutInflater.from(getActivity()).inflate(R.layout.item_banner,null);
-        mHomeBanner.setLayoutParams(new RecyclerView.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, getActivity().getWindowManager().getDefaultDisplay().getHeight() / 3));
-        mNewsAdapter.setHeaderView(mHomeBanner);
+        if (mHeaderCount > 0) {
+            mHomeBanner = (HomeBanner) LayoutInflater.from(getActivity()).inflate(R.layout.item_banner, null);
+            mHomeBanner.setLayoutParams(new RecyclerView.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, getActivity().getWindowManager().getDefaultDisplay().getHeight() / 3));
+            mNewsAdapter.setHeaderView(mHomeBanner);
+        }
     }
 
     @Override
@@ -229,7 +253,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         List<Banner> homeBanners = new ArrayList<>();
         homeBanners.add(banner);
         homeBanners.add(banner1);
-        mHomeBanner.setHomeAdvertisement(homeBanners);
+        if (mHomeBanner != null)
+            mHomeBanner.setHomeAdvertisement(homeBanners);
         mNewsAdapter.refresh();
     }
 
@@ -247,17 +272,20 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         private List<NewsDetail> items;
         private OnItemClickListener mOnItemClickListener;
         private View mHeadView;
+        private int mHeaderCount;
 
-
-        public NewsAdapter(Context context, List<NewsDetail> newsDetails, OnItemClickListener onItemClickListener) {
+        public NewsAdapter(Context context, List<NewsDetail> newsDetails, int headerCount, OnItemClickListener onItemClickListener) {
             mContext = context;
             items = newsDetails;
             mOnItemClickListener = onItemClickListener;
+            mHeaderCount = headerCount;
         }
 
         public void setHeaderView(View homeBanner) {
-            mHeadView = homeBanner;
-            notifyItemInserted(0);//插入下标0位置
+            if (mHeaderCount > 0) {
+                mHeadView = homeBanner;
+                notifyItemInserted(0);//插入下标0位置
+            }
         }
 
         public void refresh() {
@@ -271,7 +299,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public int getItemCount() {
-            return items == null ? 0 : items.size() + 1;
+            if (mHeaderCount > 0)
+                return items == null ? 0 : items.size() + 1;
+            else
+                return items == null ? 0 : items.size();
         }
 
 
@@ -280,14 +311,14 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             if (mHeadView != null && position == 0) {
                 return TYPE_BANNER;
             }
-            NewsDetail news = items.get(position - 1);
+            NewsDetail news = items.get(position - mHeaderCount);
             int thePicNum = news.getImgs().size();
             if (thePicNum == 0) {
                 return TYPE_NONE;
-            } else if (thePicNum == 1) {
+            } else if (thePicNum < 3) {
                 return TYPE_SINGLE;
             } else {
-                if (position <= 5) {
+                if (position <= 5 - (1 - mHeaderCount)) {
                     return TYPE_SINGLE;
                 }
                 //前面五张全是单张模式，这里才显示3张图片
@@ -305,7 +336,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 return true;
             }
             for (int i = position - 1; i > position - 5; i--) {
-                if (items.get(i).getImgs().size() > 1 && !judgeFiveSingleMode(i)) {
+                if (items.get(i).getImgs().size() > 2 && !judgeFiveSingleMode(i)) {
                     return false;
                 }
             }
@@ -333,11 +364,11 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             if (holder instanceof BannerHolder) {
 
             } else if (holder instanceof NoneHolder) {
-                ((NoneHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
+                ((NoneHolder) holder).bindingData(mContext, items.get(position - mHeaderCount), position, getItemCount(), mOnItemClickListener);
             } else if (holder instanceof SingleHolder) {
-                ((SingleHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
+                ((SingleHolder) holder).bindingData(mContext, items.get(position - mHeaderCount), position, getItemCount(), mOnItemClickListener);
             } else {
-                ((ThreeHolder) holder).bindingData(mContext, items.get(position - 1), position, getItemCount(), mOnItemClickListener);
+                ((ThreeHolder) holder).bindingData(mContext, items.get(position - mHeaderCount), position, getItemCount(), mOnItemClickListener);
             }
         }
 

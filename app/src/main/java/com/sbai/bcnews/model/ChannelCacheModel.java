@@ -9,23 +9,26 @@ import java.util.List;
  * Created by Administrator on 2018\2\7 0007.
  */
 
-public class ChannelCacheModel implements Parcelable{
+public class ChannelCacheModel implements Parcelable {
     private List<String> mMyChannelEntities;
     private List<String> mOtherChannelEntities;
+    private boolean mModified;
 
-    public ChannelCacheModel(){
+    public ChannelCacheModel() {
 
     }
 
     protected ChannelCacheModel(Parcel in) {
         this.mMyChannelEntities = in.createStringArrayList();
         this.mOtherChannelEntities = in.createStringArrayList();
+        this.mModified = in.readInt() > 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringList(this.mMyChannelEntities);
         dest.writeStringList(this.mOtherChannelEntities);
+        dest.writeInt(this.mModified ? 1 : 0);
     }
 
     @Override
@@ -59,5 +62,13 @@ public class ChannelCacheModel implements Parcelable{
 
     public void setOtherChannelEntities(List<String> otherChannelEntities) {
         mOtherChannelEntities = otherChannelEntities;
+    }
+
+    public boolean isModified() {
+        return mModified;
+    }
+
+    public void setModified(boolean modified) {
+        mModified = modified;
     }
 }

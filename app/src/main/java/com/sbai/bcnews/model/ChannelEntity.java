@@ -12,6 +12,10 @@ public class ChannelEntity implements Parcelable{
     private long id;
     private String name;
 
+    public ChannelEntity(){
+
+    }
+
     protected ChannelEntity(Parcel in) {
         id = in.readLong();
         name = in.readString();

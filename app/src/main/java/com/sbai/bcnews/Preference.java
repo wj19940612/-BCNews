@@ -52,7 +52,7 @@ public class Preference {
         String NEWS_SUMMARY = "news_summary";
         String NEWS_READ = "news_read";
         String NEWS_BIG_IMAGE = "news_big_image";
-        String NEWS_CHANNEL = "news_big_image";
+        String NEWS_CHANNEL = "news_channel";
     }
 
     private static Preference sInstance;

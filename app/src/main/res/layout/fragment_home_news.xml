@@ -19,8 +19,7 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/titleBar"
-        android:orientation="horizontal">
+        android:layout_below="@+id/titleBar">
 
         <com.sbai.bcnews.view.slidingTab.SlidingTabLayout
             android:id="@+id/slidingTabLayout"
