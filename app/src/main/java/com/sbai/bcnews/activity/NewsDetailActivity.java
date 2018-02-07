@@ -454,11 +454,10 @@ public class NewsDetailActivity extends BaseActivity {
         if (mNewsDetail.getImgs() != null && !mNewsDetail.getImgs().isEmpty()) {
             shareThumbUrl = mNewsDetail.getImgs().get(0);
         }
-        updateSummaryData();
         ShareDialog.with(getActivity())
                 .setTitleVisible(false)
                 .setShareTitle(mNewsDetail.getTitle())
-                .setShareDescription(mNewsDetail.getSummary())
+                .setShareDescription(getSummaryData())
                 .setShareUrl(String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId()))
                 .setShareThumbUrl(shareThumbUrl)
                 .show();
@@ -469,8 +468,7 @@ public class NewsDetailActivity extends BaseActivity {
         if (mNewsDetail == null) return;
         UMWeb mWeb = new UMWeb(String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId()));
         mWeb.setTitle(mNewsDetail.getTitle());
-        updateSummaryData();
-        mWeb.setDescription(mNewsDetail.getSummary());
+        mWeb.setDescription(getSummaryData());
         UMImage thumb;
         if (mNewsDetail.getImgs() == null || mNewsDetail.getImgs().isEmpty()) {
             thumb = new UMImage(getActivity(), R.mipmap.ic_launcher);
@@ -486,7 +484,7 @@ public class NewsDetailActivity extends BaseActivity {
 
     }
 
-    private void updateSummaryData() {
+    private String getSummaryData() {
         if (TextUtils.isEmpty(mNewsDetail.getSummary())) {
             String content = new String(mNewsDetail.getContent());
             String imgTag = "<img\\s[^>]+>";
@@ -495,11 +493,12 @@ public class NewsDetailActivity extends BaseActivity {
             content = matcher.replaceAll("");
             content = Html.fromHtml(content).toString();
             if (content.length() > 150) {
-                mNewsDetail.setSummary(content.substring(0, 150));
+                return content.substring(0, 150);
             } else {
-                mNewsDetail.setSummary(content);
+                return content;
             }
         }
+        return mNewsDetail.getSummary();
     }
 
 
