@@ -25,7 +25,7 @@ public abstract class ChartView extends View {
         TEXT("#999999"),
         WHITE("#ffffff"),
         GREEN("#39AE13"),
-        BLACK("#222222"),
+        BLACK("#494949"),
         DASH("#979797"),
         RED("#F62048");
 

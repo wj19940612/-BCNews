@@ -3,15 +3,18 @@ package com.sbai.bcnews.view.market;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 
+import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.market.DigitalCashTrendData;
 import com.zcmrr.chart.ChartSettings;
 import com.zcmrr.chart.ChartView;
@@ -26,6 +29,9 @@ import java.util.List;
  */
 
 public class DigitalCashTrendChart extends ChartView {
+
+    private static final String TAG = "DigitalCashTrendChart";
+
     private static final float VOLUME_WIDTH_DP = 1.0f; //dp
 
     private List<DigitalCashTrendData> mDataList;
@@ -59,15 +65,15 @@ public class DigitalCashTrendChart extends ChartView {
 
     private void setRealTimeFillPaint(Paint paint) {
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.parseColor("#ECF6FF"));
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.digitalCashRealTimeFullColor));
         paint.setPathEffect(null);
     }
 
     protected void setRealTimeLinePaint(Paint paint) {
-        paint.setColor(Color.parseColor(ChartView.ChartColor.BLACK.get()));
-        paint.setStrokeWidth(1);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setPathEffect(null);
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.digitalCashRealTimeLineColor));
+        paint.setStrokeWidth(dp2Px(4));
+        paint.setPathEffect(new CornerPathEffect(20));
     }
 
     private void setCandleBodyPaint(Paint paint, String color) {
@@ -77,7 +83,8 @@ public class DigitalCashTrendChart extends ChartView {
     }
 
     protected void setDashLinePaint(Paint paint) {
-        paint.setColor(Color.parseColor("629CD3"));
+
+        paint.setColor(Color.parseColor(ChartColor.RED.get()));
         paint.setStyle(Paint.Style.STROKE);
         paint.setPathEffect(new DashPathEffect(new float[]{8, 3}, 1));
     }
@@ -448,7 +455,8 @@ public class DigitalCashTrendChart extends ChartView {
     @Override
     protected int calculateTouchIndex(MotionEvent e) {
         float touchX = e.getX();
-        return getIndexOfXAxis(touchX);
+        int touchIndex = getIndexOfXAxis(touchX);
+        return touchIndex;
     }
 
     private void updateFirstLastVisibleIndex(int indexOfXAxis) {
@@ -458,19 +466,33 @@ public class DigitalCashTrendChart extends ChartView {
 
     @Override
     protected void drawTimeLine(int left, int top, int width, Canvas canvas) {
+        
         setDefaultTextPaint(sPaint);
+
+        int horizontalOffset = (int) dp2Px(32);
+        width = width - horizontalOffset;
+
         float textWidth = sPaint.measureText(mTimeLine[0]);
         float textY = top + mTextMargin * 2.5f + mFontHeight / 2 + mOffset4CenterText;
-        float textX = left - textWidth / 2;
+        float textX = width / 5 - textWidth;
         canvas.drawText(mTimeLine[0], textX, textY, sPaint);
 
+
+        textWidth = sPaint.measureText(mTimeLine[1]);
+        textX = width / 5 * 2-textWidth ;
+        canvas.drawText(mTimeLine[1], textX, textY, sPaint);
+
         textWidth = sPaint.measureText(mTimeLine[2]);
-        textX = (left + width) / 2 - textWidth / 2;
+        textX = width / 5 * 3 - textWidth;
         canvas.drawText(mTimeLine[2], textX, textY, sPaint);
 
         textWidth = sPaint.measureText(mTimeLine[3]);
-        textX = left + width - textWidth / 2;
+        textX = width / 5 * 4 - textWidth;
         canvas.drawText(mTimeLine[3], textX, textY, sPaint);
+
+        textWidth = sPaint.measureText(mTimeLine[4]);
+        textX = width - textWidth;
+        canvas.drawText(mTimeLine[4], textX, textY, sPaint);
     }
 
     @Override
@@ -524,7 +546,8 @@ public class DigitalCashTrendChart extends ChartView {
             setTouchLineTextPaint(sPaint);
             float priceWidth = sPaint.measureText(price);
             float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
-            float priceX = left + width - priceMargin - priceWidth;
+//            float priceX = left + width - priceMargin - priceWidth;
+            float priceX = left;
             redRect = getBigFontBgRectF(priceX, touchY + mOffset4CenterBigText, priceWidth);
             rectHeight = redRect.height();
             redRect.top -= rectHeight / 2;

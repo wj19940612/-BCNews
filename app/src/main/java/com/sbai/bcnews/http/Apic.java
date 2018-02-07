@@ -76,7 +76,7 @@ public class Apic {
      * @return
      */
     public static Api requestDigitalCashDetail(String code, String exchangeCode) {
-        return Api.get("/api/news-quota/quota/",
+        return Api.get("/api/news-quota/quota/{code}",
                 new ReqParams()
                         .put("code", code)
                         .put("exchangeCode", exchangeCode));
@@ -88,10 +88,14 @@ public class Apic {
      * POST
      * 分时图列表
      *
+     * @param exchangeCode
      * @param code
      */
     // TODO: 2018/2/6 没有完善
-    public static Api requestTimeSharingPlanData(String code) {
-        return Api.post("", null);
+    public static Api requestTimeSharingPlanData( String code,String exchangeCode) {
+        return Api.get("/api/news-quota/quota/{code}/trend",
+                new ReqParams()
+                        .put("code", code)
+                        .put("exchangeCode", exchangeCode));
     }
 }

@@ -23,4 +23,7 @@
     <color name="losePrimary">#F62048</color>
     <color name="shadowBlack">#1f000000</color>
 
+    <color name="digitalCashRealTimeFullColor">#ECF6FF</color>
+    <color name="digitalCashRealTimeLineColor">#629CD3</color>
+
 </resources>

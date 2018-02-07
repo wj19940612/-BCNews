@@ -48,12 +48,20 @@ public class DigitalCashMarketActivity extends BaseActivity {
     }
 
     private void requestTimeSharingPlanData(MarketData data) {
-        Apic.requestTimeSharingPlanData(data.getCode())
+        Apic.requestTimeSharingPlanData(data.getCode(), data.getExchangeCode())
                 .tag(TAG)
                 .callback(new Callback2D<Resp<List<DigitalCashTrendData>>, List<DigitalCashTrendData>>() {
                     @Override
                     protected void onRespSuccessData(List<DigitalCashTrendData> data) {
-
+                        mTrendView.setDataList(data);
+//                        mTrendView.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                DigitalCashTrendView.Settings settings = mTrendView.getSettings();
+//                                settings.setPreClosePrice(7732.27f);
+//                                mTrendView.setSettings(settings);
+//                            }
+//                        }, 5000);
                     }
                 })
                 .fireFreely();
@@ -64,9 +72,10 @@ public class DigitalCashMarketActivity extends BaseActivity {
         settings.setBaseLines(5);
         settings.setNumberScale(2);
         settings.setIndexesEnable(true);
-        settings.setIndexesBaseLines(2);
+        settings.setIndexesBaseLines(5);
         settings.setOpenMarketTimes(DigitalCashTrendView.TIME_LINE_DIGITAL_CASH);
         settings.setCalculateXAxisFromOpenMarketTime(true);
         mTrendView.setSettings(settings);
+
     }
 }
