@@ -1,5 +1,7 @@
 package com.sbai.bcnews.activity;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -8,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
@@ -15,6 +18,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,6 +58,9 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_GONE;
+import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_NORMAL;
 
 /**
  * Created by Administrator on 2018\1\25 0025.
@@ -139,6 +146,8 @@ public class NewsDetailActivity extends BaseActivity {
     RelativeLayout mThirdArticle;
     @BindView(R.id.split)
     View mSplit;
+    @BindView(R.id.collectAndShareLayout)
+    LinearLayout mCollectAndShareLayout;
 
     private WebViewClient mWebViewClient;
 
@@ -148,11 +157,15 @@ public class NewsDetailActivity extends BaseActivity {
 
     private String mId;
     private NewsDetail mNewsDetail;
+    private NewsDetail mNetNewsDetail;//保证是网络更新的详情
     private String mChannel;
 
     private int mTitleHeight;
     private boolean mTitleVisible;
     private boolean mScrolling;
+    private int mScrollY;
+    private boolean mAnimating;
+    private int mTitleScrollState;  //0-默认 1-已经滚下去了
 
     public static final String INFO_HTML_META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\">";
 
@@ -181,6 +194,12 @@ public class NewsDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 showShareDialog();
+            }
+        });
+        mTitleBar.setBackClickListener(new TitleBar.OnBackClickListener() {
+            @Override
+            public void onClick() {
+                saveDetailCache();
             }
         });
         mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
@@ -376,6 +395,12 @@ public class NewsDetailActivity extends BaseActivity {
         mScrollView.setOnScrollListener(new NewsScrollView.OnScrollListener() {
             @Override
             public void onScroll(int scrollY) {
+                //底部按钮的交互
+                if (mScrollY != 0 && mScrollY != scrollY) {
+                    scrollTitleBar(scrollY - mScrollY > 0);
+                }else if(scrollY == mScrollView.getHeight()){
+                    scrollTitleBar(false);
+                }
                 if (scrollY > mTitleHeight && mNewsDetail != null) {
                     if (!mTitleVisible) {
                         mTitleBar.setTitle(mNewsDetail.getTitle());
@@ -387,6 +412,7 @@ public class NewsDetailActivity extends BaseActivity {
                         mTitleVisible = false;
                     }
                 }
+                mScrollY = scrollY;
             }
 
             @Override
@@ -396,25 +422,77 @@ public class NewsDetailActivity extends BaseActivity {
         });
     }
 
+    private void scrollTitleBar(final boolean down) {
+        if (mAnimating || (mTitleScrollState == SCROLL_STATE_GONE && down) || (mTitleScrollState == SCROLL_STATE_NORMAL && !down)) {
+            return;
+        }
+        int titleHeight = mCollectAndShareLayout.getHeight();
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(down ? 0 : -titleHeight, down ? -titleHeight : 0);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int y = (int) animation.getAnimatedValue();
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mCollectAndShareLayout.getLayoutParams();
+                lp.setMargins(0, 0, 0, y);
+                mCollectAndShareLayout.setLayoutParams(lp);
+            }
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mAnimating = false;
+                mTitleScrollState = down ? SCROLL_STATE_GONE : SCROLL_STATE_NORMAL;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        valueAnimator.setDuration(500);
+        mAnimating = true;
+        valueAnimator.start();
+    }
+
     private void requestDetailData() {
         if (mNewsDetail == null) {
-            Apic.getNewsDetail(mId).tag(TAG).callback(new Callback2D<Resp<NewsDetail>, NewsDetail>() {
-                @Override
-                protected void onRespSuccessData(NewsDetail data) {
+            requestData(true);
+        } else {
+            updateData(mNewsDetail);
+            requestData(false);
+        }
+    }
+
+    private void requestData(final boolean refresh) {
+        Apic.getNewsDetail(mId).tag(TAG).callback(new Callback2D<Resp<NewsDetail>, NewsDetail>() {
+            @Override
+            protected void onRespSuccessData(NewsDetail data) {
+                if (refresh) {
                     mNewsDetail = data;
                     updateData(data);
                     mEmptyView.setVisibility(View.GONE);
+                } else {
+                    mNetNewsDetail = data;
                 }
+            }
 
-                @Override
-                public void onFailure(ReqError reqError) {
-                    super.onFailure(reqError);
+            @Override
+            public void onFailure(ReqError reqError) {
+                super.onFailure(reqError);
+                if (refresh)
                     mEmptyView.setVisibility(View.VISIBLE);
-                }
-            }).fireFreely();
-        } else {
-            updateData(mNewsDetail);
-        }
+            }
+        }).fireFreely();
     }
 
     private void updateData(NewsDetail newsDetail) {
@@ -552,9 +630,16 @@ public class NewsDetailActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (mNewsDetail != null) {
+        saveDetailCache();
+    }
+
+    private void saveDetailCache() {
+        if (mNewsDetail != null && mNetNewsDetail != null) {
+            if (mNewsDetail.getCreateTime() != mNetNewsDetail.getCreateTime()) {
+                NewsCache.insertOrReplaceNews(mNetNewsDetail);
+            }
+        } else if (mNewsDetail != null) {
             mNewsDetail.setReadHeight(mScrollView.getScrollY());
-            //Log.e("zzz", "y:" + mScrollView.getScrollY());
             NewsCache.insertOrReplaceNews(mNewsDetail);
         }
     }

@@ -53,6 +53,7 @@ public class Preference {
         String NEWS_READ = "news_read";
         String NEWS_BIG_IMAGE = "news_big_image";
         String NEWS_CHANNEL = "news_channel";
+        String NEWS_PRAISE = "news_praise";
     }
 
     private static Preference sInstance;
@@ -249,6 +250,16 @@ public class Preference {
 
     public String getChannelCache() {
         String key = Key.NEWS_CHANNEL;
+        return mPrefs.getString(key, null);
+    }
+
+    public void setPraiseCache(String praiseCache) {
+        String key = Key.NEWS_PRAISE;
+        apply(key, praiseCache);
+    }
+
+    public String getPraiseCahce() {
+        String key = Key.NEWS_PRAISE;
         return mPrefs.getString(key, null);
     }
 
