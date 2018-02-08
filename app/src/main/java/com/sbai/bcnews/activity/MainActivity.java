@@ -5,11 +5,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
 import com.sbai.bcnews.fragment.NewsFragment;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.market.MarketPageSwitch;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.BottomTabs;
@@ -21,7 +26,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity {
     public static final int PAGE_POSITION_NEWS = 0;
     public static final int PAGE_POSITION_NEWS_FLASH = 1;
-    private static final int PAGE_POSITION_MARKET = 2;
+    public static final int PAGE_POSITION_MARKET = 2;
 
     @BindView(R.id.viewPager)
     ScrollableViewPager mViewPager;
@@ -38,6 +43,23 @@ public class MainActivity extends BaseActivity {
 
 
         initViews();
+        requestShowMarketPageSwitch();
+    }
+
+    private void requestShowMarketPageSwitch() {
+        Apic.requestShowMarketPageSwitch()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<MarketPageSwitch>, MarketPageSwitch>() {
+                    @Override
+                    protected void onRespSuccessData(MarketPageSwitch data) {
+                        if (data.getQuota() == MarketPageSwitch.SHOW_MARKET_PAGE) {
+                            mBottomTabs.setThirdTabVisibility(View.VISIBLE);
+                            mMainFragmentsAdapter.setShowMarketPage(true);
+                            mMainFragmentsAdapter.notifyDataSetChanged();
+                        }
+                    }
+                })
+                .fire();
     }
 
     private void initViews() {
@@ -94,10 +116,15 @@ public class MainActivity extends BaseActivity {
     private static class MainFragmentsAdapter extends FragmentPagerAdapter {
 
         FragmentManager mFragmentManager;
+        private boolean mShowMarketPage;
 
         public MainFragmentsAdapter(FragmentManager fm) {
             super(fm);
             mFragmentManager = fm;
+        }
+
+        public void setShowMarketPage(boolean showMarketPage) {
+            mShowMarketPage = showMarketPage;
         }
 
         @Override
@@ -115,7 +142,10 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            if (mShowMarketPage) {
+                return 3;
+            }
+            return 2;
         }
 
         public Fragment getFragment(int position) {

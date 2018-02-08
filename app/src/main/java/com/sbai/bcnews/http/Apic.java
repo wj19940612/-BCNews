@@ -70,4 +70,11 @@ public class Apic {
         return Api.put("/api/news-info/info/like/{id}", new ReqParams().put("id", newsId));
     }
 
+    /**
+     * 查询行情界面是否显示接口
+     * http://news.ailemi.com/dic.html
+     */
+    public static Api requestShowMarketPageSwitch() {
+        return Api.get("/dic.html");
+    }
 }
