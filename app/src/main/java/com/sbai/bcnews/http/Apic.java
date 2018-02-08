@@ -31,6 +31,7 @@ public class Apic {
 
     /**
      * 获取资讯列表
+     *
      * @param page 页数
      * @return
      */
@@ -75,23 +76,24 @@ public class Apic {
      * @return
      */
     public static Api praiseNews(String newsId) {
-        return Api.put("/api/news-info/info/like/{id}", new ReqParams().put("id", newsId));
+        return Api.post("/api/news-info/info/like/{id}", new ReqParams().put("id", newsId));
     }
 
     /**
      * 频道列表
      */
-    public static Api getChannels(){
+    public static Api getChannels() {
         return Api.get("/api/news-info/news/channels");
     }
 
     /**
      * 获取资讯详情相关文章
      */
-    public static Api getOtherArticles(String channel,String id) {
+    public static Api getOtherArticles(String channel, String id) {
         return Api.get("/api/news-info/news/channel/{channel}/{id}", new ReqParams().put("channel", channel).put("id", id));
     }
-     /**
+
+    /**
      * 接口名称 获取验证码
      *
      * @param phone
@@ -190,6 +192,15 @@ public class Apic {
                 .put("deviceId", Preference.get().getPushClientId())
                 .put("platform", 0)
                 .put("source", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
+    }
+
+    /**
+     * 获取点赞状态
+     * @param id 资讯id
+     * @return
+     */
+    public static Api requestPraiseStatus(String id) {
+        return Api.get("/api/news-info/news/check/praise/{id}", new ReqParams().put("id", id));
     }
 
 }

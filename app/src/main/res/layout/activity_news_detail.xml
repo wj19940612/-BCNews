@@ -125,11 +125,12 @@
 
             <RelativeLayout
                 android:id="@+id/praiseLayout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/webView"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/praiseIcon"
@@ -202,7 +203,8 @@
                 android:layout_height="4dp"
                 android:layout_below="@+id/shareLayout"
                 android:layout_marginTop="20dp"
-                android:background="@color/background"/>
+                android:background="@color/background"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/otherArticleTip"
@@ -246,7 +248,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="12dp"
-                        android:layout_toLeftOf="@+id/img"
+                        android:layout_toLeftOf="@+id/firstImg"
                         android:ellipsize="end"
                         android:maxLines="3"
                         android:textColor="@color/primaryText"
@@ -256,7 +258,7 @@
                         android:id="@+id/firstOriginal"
                         android:layout_width="44dp"
                         android:layout_height="16dp"
-                        android:layout_below="@+id/title"
+                        android:layout_below="@+id/firstTitle"
                         android:layout_marginRight="18dp"
                         android:layout_marginTop="22dp"
                         android:background="@drawable/bg_original"
@@ -270,9 +272,10 @@
                         android:id="@+id/firstSource"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/title"
+                        android:layout_below="@+id/firstTitle"
                         android:layout_marginTop="22dp"
-                        android:layout_toRightOf="@+id/original"
+                        android:layout_marginRight="8dp"
+                        android:layout_toRightOf="@+id/firstOriginal"
                         android:gravity="center"
                         android:text="@string/original"
                         android:textColor="@color/unluckyText"
@@ -282,8 +285,7 @@
                         android:id="@+id/firstTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/title"
-                        android:layout_marginLeft="8dp"
+                        android:layout_below="@+id/firstTitle"
                         android:layout_marginTop="22dp"
                         android:layout_toRightOf="@+id/firstSource"
                         android:gravity="center"
@@ -296,7 +298,7 @@
                     android:id="@+id/line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@+id/contentRL"
+                    android:layout_below="@+id/firstContentRL"
                     android:background="@color/background"/>
 
             </RelativeLayout>
@@ -356,6 +358,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/secondTitle"
                         android:layout_marginTop="22dp"
+                        android:layout_marginRight="8dp"
                         android:layout_toRightOf="@+id/secondOriginal"
                         android:gravity="center"
                         android:text="@string/original"
@@ -367,7 +370,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/secondTitle"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginTop="22dp"
                         android:layout_toRightOf="@+id/secondSource"
                         android:gravity="center"
@@ -440,6 +442,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/thirdTitle"
                         android:layout_marginTop="22dp"
+                        android:layout_marginRight="8dp"
                         android:layout_toRightOf="@+id/thirdOriginal"
                         android:gravity="center"
                         android:text="@string/original"
@@ -451,7 +454,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/thirdTitle"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginTop="22dp"
                         android:layout_toRightOf="@+id/thirdSource"
                         android:gravity="center"

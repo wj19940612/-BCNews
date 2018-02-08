@@ -6,8 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -418,6 +420,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
+                mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -466,6 +469,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
+                mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     mImg.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(0))
@@ -526,6 +530,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
+                mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     mImg1.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(0))

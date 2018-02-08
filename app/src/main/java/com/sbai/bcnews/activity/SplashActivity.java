@@ -36,7 +36,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void goMain() {
-        Launcher.with(getActivity(), LoginActivity.class).execute();
+        Launcher.with(getActivity(), MainActivity.class).execute();
         supportFinishAfterTransition();
     }
 }

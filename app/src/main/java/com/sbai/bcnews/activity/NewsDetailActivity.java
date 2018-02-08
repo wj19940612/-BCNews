@@ -27,6 +27,7 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.OtherArticle;
 import com.sbai.bcnews.utils.DateUtil;
@@ -136,6 +137,8 @@ public class NewsDetailActivity extends BaseActivity {
     TextView mThirdTime;
     @BindView(R.id.ThirdArticle)
     RelativeLayout mThirdArticle;
+    @BindView(R.id.split)
+    View mSplit;
 
     private WebViewClient mWebViewClient;
 
@@ -164,7 +167,7 @@ public class NewsDetailActivity extends BaseActivity {
         initScrollView();
         requestDetailData();
         requestOtherArticle();
-//        requestPraiseStatus();
+        requestPraiseStatus();
     }
 
     private void initData() {
@@ -426,7 +429,8 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void requestOtherArticle() {
-        Apic.getOtherArticles(mChannel, mId).tag(TAG).callback(new Callback2D<Resp<List<OtherArticle>>, List<OtherArticle>>() {
+        String encodeChannel = Uri.encode(mChannel);
+        Apic.getOtherArticles(encodeChannel, mId).tag(TAG).callback(new Callback2D<Resp<List<OtherArticle>>, List<OtherArticle>>() {
             @Override
             protected void onRespSuccessData(List<OtherArticle> data) {
                 updateOtherData(data);
@@ -438,11 +442,13 @@ public class NewsDetailActivity extends BaseActivity {
         if (data == null || data.size() == 0) {
             return;
         }
+        mSplit.setVisibility(View.VISIBLE);
         mOtherArticleTip.setVisibility(View.VISIBLE);
         mFirstArticle.setVisibility(View.VISIBLE);
         mFirstTitle.setText(data.get(0).getTitle());
         mFirstOriginal.setVisibility(data.get(0).getOriginal() > 0 ? View.VISIBLE : View.GONE);
         mFirstSource.setText(data.get(0).getSource());
+        mFirstSource.setVisibility(TextUtils.isEmpty(data.get(0).getSource()) ? View.GONE : View.VISIBLE);
         mFirstTime.setText(DateUtil.formatNewsStyleTime(data.get(0).getReleaseTime()));
         if (data.get(0).getImgs() != null && data.get(0).getImgs().size() > 0) {
             mFirstImg.setVisibility(View.VISIBLE);
@@ -454,12 +460,13 @@ public class NewsDetailActivity extends BaseActivity {
             mFirstImg.setVisibility(View.GONE);
         }
 
-        if(data.size()>1){
+        if (data.size() > 1) {
             mSecondArticle.setVisibility(View.VISIBLE);
             mSecondTitle.setText(data.get(1).getTitle());
             mSecondOriginal.setVisibility(data.get(1).getOriginal() > 0 ? View.VISIBLE : View.GONE);
             mSecondSource.setText(data.get(1).getSource());
             mSecondTime.setText(DateUtil.formatNewsStyleTime(data.get(1).getReleaseTime()));
+            mSecondSource.setVisibility(TextUtils.isEmpty(data.get(1).getSource()) ? View.GONE : View.VISIBLE);
             if (data.get(1).getImgs() != null && data.get(1).getImgs().size() > 0) {
                 mSecondImg.setVisibility(View.VISIBLE);
                 GlideApp.with(getActivity()).load(data.get(1).getImgs().get(0))
@@ -471,12 +478,13 @@ public class NewsDetailActivity extends BaseActivity {
             }
         }
 
-        if(data.size()>2){
+        if (data.size() > 2) {
             mThirdArticle.setVisibility(View.VISIBLE);
             mThirdTitle.setText(data.get(2).getTitle());
             mThirdOriginal.setVisibility(data.get(2).getOriginal() > 0 ? View.VISIBLE : View.GONE);
             mThirdSource.setText(data.get(2).getSource());
             mThirdTime.setText(DateUtil.formatNewsStyleTime(data.get(2).getReleaseTime()));
+            mThirdSource.setVisibility(TextUtils.isEmpty(data.get(2).getSource()) ? View.GONE : View.VISIBLE);
             if (data.get(2).getImgs() != null && data.get(2).getImgs().size() > 0) {
                 mThirdImg.setVisibility(View.VISIBLE);
                 GlideApp.with(getActivity()).load(data.get(2).getImgs().get(0))
@@ -486,6 +494,20 @@ public class NewsDetailActivity extends BaseActivity {
             } else {
                 mThirdImg.setVisibility(View.GONE);
             }
+        }
+    }
+
+    private void requestPraiseStatus() {
+        if (LocalUser.getUser().isLogin()) {
+            Apic.requestPraiseStatus(mId).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
+
+                @Override
+                protected void onRespSuccessData(Integer data) {
+                    updatePraiseCount(data);
+                }
+            }).fireFreely();
+        } else {
+            updatePraiseCount(0);
         }
     }
 
