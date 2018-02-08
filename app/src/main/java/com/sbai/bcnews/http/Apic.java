@@ -1,5 +1,8 @@
 package com.sbai.bcnews.http;
 
+import com.sbai.bcnews.App;
+import com.sbai.bcnews.Preference;
+import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.httplib.ReqParams;
 
 /**
@@ -85,8 +88,108 @@ public class Apic {
     /**
      * 获取资讯详情相关文章
      */
-    public static Api getOtherArticles(String channel,String id){
-        return Api.get("/api/news-info/news/channel/{channel}/{id}",new ReqParams().put("channel",channel).put("id",id));
+    public static Api getOtherArticles(String channel,String id) {
+        return Api.get("/api/news-info/news/channel/{channel}/{id}", new ReqParams().put("channel", channel).put("id", id));
+    }
+     /**
+     * 接口名称 获取验证码
+     *
+     * @param phone
+     * @return
+     */
+    public static Api getAuthCode(String phone) {
+        return getAuthCode(phone, null);
+    }
+
+    /**
+     * 接口名称 获取验证码
+     *
+     * @param phone
+     * @param imgCode
+     * @return
+     */
+    public static Api getAuthCode(String phone, String imgCode) {
+        return Api.post("/api/news-user/login/msg/{phone}", new ReqParams()
+                .put("phone", phone)
+                .put("imgCode", imgCode));
+    }
+
+    /**
+     * 图片验证码地址
+     *
+     * @param phone
+     * @return
+     */
+    public static Api getImageAuthCode(String phone) {
+        return Api.post("/api/news-user/login/get/image/{phone}", new ReqParams()
+                .put("phone", phone));
+    }
+
+    /**
+     * 接口名称 验证码快捷登入
+     *
+     * @param authCode 短信验证码
+     * @param phone    手机
+     *                 deviceId 设备id
+     *                 platform 平台 0-安卓 1-ios
+     * @return
+     */
+    public static Api requestAuthCodeLogin(String phone, String authCode) {
+        return Api.post("/api/news-user/login/quick/{phone}/{msgCode}", new ReqParams()
+                .put("phone", phone)
+                .put("msgCode", authCode)
+                .put("deviceId", Preference.get().getPushClientId())
+                .put("platform", 0)
+                .put("source", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
+    }
+
+    /**
+     * 接口名称 快捷登入(for 微信)
+     *
+     * @param authCode 短信验证码
+     * @param phone    手机
+     *                 deviceId 设备id
+     *                 platform 平台 0-安卓 1-ios
+     * @return
+     */
+    public static Api requestAuthCodeLogin(String phone, String authCode, String openId, String name, String iconUrl, int sex) {
+        return Api.post("/api/news-user/login/quick/{phone}/{msgCode}", new ReqParams()
+                .put("phone", phone)
+                .put("msgCode", authCode)
+                .put("deviceId", Preference.get().getPushClientId())
+                .put("platform", 0)
+                .put("channel", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL"))
+                .put("openId", openId)
+                .put("name", name)
+                .put("iconUrl", iconUrl)
+                .put("sex", sex));
+    }
+
+    /**
+     * 接口名称 绑定微信
+     *
+     * @return
+     */
+    public static Api requestBindWeChat(String openId, String name, String iconUrl, int sex) {
+        return Api.post("/api/news-user/user/bound/{openId}", new ReqParams()
+                .put("openId", openId)
+                .put("name", name)
+                .put("iconUrl", iconUrl)
+                .put("sex", sex));
+    }
+
+    /**
+     * 微信登录
+     *
+     * @param openId
+     * @return
+     */
+    public static Api requestWeChatLogin(String openId) {
+        return Api.post("/api/news-user/login/wechat/{openId}", new ReqParams()
+                .put("openId", openId)
+                .put("deviceId", Preference.get().getPushClientId())
+                .put("platform", 0)
+                .put("source", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
     }
 
 }

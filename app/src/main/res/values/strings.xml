@@ -106,4 +106,28 @@
 
     <!-- common -->
     <string name="now_refresh">立即刷新</string>
+
+    <!--login-->
+    <string name="auth_code_login">验证码登录</string>
+    <string name="wechat_login">微信登录</string>
+    <string name="bcnews_agreement">登录即同意《区块财经用户协议》</string>
+    <string name="phone_number">手机号</string>
+    <string name="auth_code">验证码</string>
+    <string name="get_auth_code">获取验证码</string>
+    <string name="fast_login">快速登录</string>
+    <string name="login_success">登录成功</string>
+    <string name="cancel_login">取消登录</string>
+    <string name="auth_code_had_sent_">验证码已发送至%1$s</string>
+    <string name="reset_password_success">重设密码成功，请重新登录</string>
+    <string name="_seconds">%1$ds</string>
+    <string name="obtain_auth_code_continue">重新获取</string>
+    <string name="login_ing">登录中</string>
+    <string name="bind_phone">关联手机号</string>
+
+    <!-- 图形验证码输入框 -->
+    <string name="please_input_image_auth_code">请输入图形验证码</string>
+    <string name="auth_code_error">图形验证码有误</string>
+    <string name="image_auth_code">图形验证码</string>
+    <string name="change_image_auth_code">看不清？</string>
+    <string name="change_image">换一张</string>
 </resources>
