@@ -209,7 +209,7 @@ public class Api extends RequestManager {
                 || BuildConfig.FLAVOR.equalsIgnoreCase(BuildConfigUtils.FLAVOR_NAME_ALPHA)) {
             return "http://" + BuildConfig.HOST;
         }
-        return "https://" + BuildConfig.HOST;
+        return "http://" + BuildConfig.HOST;
     }
 
     public static void cancel(String tag) {

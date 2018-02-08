@@ -14,6 +14,8 @@ public class Apic {
 
     public static final String SHARE_NEWS_URL = Api.getHost() + "/news/share/index.html?id=%s";
 
+    public static final String DOWNLOAD_URL = Api.getHost() + "/qc.png";
+
     /**
      * 资讯详情 - 齐慕伟
      *
@@ -68,4 +70,11 @@ public class Apic {
         return Api.put("/api/news-info/info/like/{id}", new ReqParams().put("id", newsId));
     }
 
+    /**
+     * 查询行情界面是否显示接口
+     * http://news.ailemi.com/dic.html
+     */
+    public static Api requestShowMarketPageSwitch() {
+        return Api.get("/dic.html");
+    }
 }
