@@ -6,10 +6,11 @@ import android.os.Parcelable;
 import com.sbai.bcnews.http.Apic;
 
 /**
- * Created by ${wangJie} on 2018/1/26.
- * {@link Apic#  /api/news-quota/quota/list}
+ * Modified by john on 06/02/2018
+ * <p>
+ * Description:
+ *
  */
-
 public class MarketData implements Parcelable{
 
     public static final String DEFAULT_MARKET_BOURSE_CODE  = "gate.io";
