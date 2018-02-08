@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.MarketFragment;
+import com.sbai.bcnews.fragment.MineFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
 import com.sbai.bcnews.fragment.NewsFragment;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
@@ -22,6 +23,7 @@ public class MainActivity extends BaseActivity {
     public static final int PAGE_POSITION_NEWS = 0;
     public static final int PAGE_POSITION_NEWS_FLASH = 1;
     private static final int PAGE_POSITION_MARKET = 2;
+    private static final int PAGE_POSITION_MINE = 3;
 
     @BindView(R.id.viewPager)
     ScrollableViewPager mViewPager;
@@ -43,7 +45,7 @@ public class MainActivity extends BaseActivity {
     private void initViews() {
         mMainFragmentsAdapter = new MainFragmentsAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mMainFragmentsAdapter);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setScrollable(false);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -109,6 +111,8 @@ public class MainActivity extends BaseActivity {
                     return new NewsFlashFragment();
                 case 2:
                     return new MarketFragment();
+                case 3:
+                    return new MineFragment();
             }
             return null;
         }

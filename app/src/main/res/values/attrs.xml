@@ -56,4 +56,41 @@
         <attr name="maxCharNum" format="integer"/>
     </declare-styleable>
 
+    <!--带图标和文字的行控件-->
+    <declare-styleable name="IconTextRow">
+        <attr name="leftIcon" format="reference"/>
+        <attr name="rightIcon" format="reference"/>
+        <attr name="rightIconVisibility">
+            <enum name="visible" value="0"/>
+            <enum name="invisible" value="4"/>
+            <enum name="gone" value="8"/>
+        </attr>
+        <attr name="subText" format="reference|string"/>
+        <attr name="subTextSize" format="reference|dimension"/>
+        <attr name="subTextColor" format="color"/>
+        <attr name="subTextBackground" format="reference"/>
+        <attr name="subTextLeftDrawable" format="reference"/>
+        <attr name="subTextRightDrawable" format="reference"/>
+        <attr name="subTextRightMargin" format="reference|dimension"/>
+        <attr name="subTextSingleLine" format="boolean"/>
+        <attr name="subTextLeftMargin" format="reference|dimension"/>
+        <attr name="subTextVisible">
+            <enum name="visible" value="0"/>
+            <enum name="invisible" value="4"/>
+            <enum name="gone" value="8"/>
+        </attr>
+        <attr name="rowText" format="reference|string"/>
+        <attr name="rowTextSize" format="dimension"/>
+        <attr name="rowTextColor" format="color"/>
+        <attr name="rowSubText" format="reference|string"/>
+        <attr name="rowSubTextSize" format="dimension"/>
+        <attr name="rowSubTextColor" format="color"/>
+        <attr name="rowTextSpaceExtra" format="dimension"/>
+        <attr name="rowVerticalPadding" format="dimension"/>
+        <attr name="rowHorizontalPadding" format="dimension"/>
+        <attr name="hasBottomSplitLine"/>
+        <attr name="splitLineColor"/>
+        <attr name="splitLineLeftPadding" format="dimension"/>
+    </declare-styleable>
+
 </resources>

@@ -8,7 +8,17 @@ import android.os.Parcelable;
  */
 public class UserInfo implements Parcelable {
 
-    public String getUserPhone(){
+    private String userPortrait;
+
+    public String getUserPortrait() {
+        return userPortrait;
+    }
+
+    public void setUserPortrait(String userPortrait) {
+        this.userPortrait = userPortrait;
+    }
+
+    public String getUserPhone() {
         //TODO 需要字段
         return null;
     }

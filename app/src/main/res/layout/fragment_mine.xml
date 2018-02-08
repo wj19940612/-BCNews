@@ -1,0 +1,122 @@
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context="com.sbai.bcnews.fragment.MineFragment">
+
+    <RelativeLayout
+        android:id="@+id/headLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/headPortrait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="47dp"
+            tools:src="@drawable/ic_default_head_portrait"/>
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/headPortrait"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="17dp"
+            android:textColor="@color/primaryText"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headPortrait"
+            tools:text="溺水的鱼"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="40dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/collect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/assistText"
+                tools:text="收藏  0"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="14dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
+                android:background="@color/unluckyText"/>
+
+            <TextView
+                android:id="@+id/history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/assistText"
+                tools:text="历史  0"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <com.sbai.bcnews.view.IconTextRow
+        android:id="@+id/contribute"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_white"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/headLayout"
+        app:leftIcon="@drawable/ic_share_wechat"
+        app:rightIcon="@drawable/ic_common_right_arrow"
+        app:rowText="@string/me_want_contribute"
+        app:rowTextColor="@color/primaryText"
+        app:rowTextSize="16sp"
+        app:rowVerticalPadding="0dp"/>
+
+    <com.sbai.bcnews.view.IconTextRow
+        android:id="@+id/feedBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_white"
+        android:visibility="visible"
+        app:hasBottomSplitLine="true"
+        app:splitLineColor="@color/background"
+        app:layout_constraintTop_toBottomOf="@+id/contribute"
+        app:leftIcon="@drawable/ic_share_wechat"
+        app:rightIcon="@drawable/ic_common_right_arrow"
+        app:rowText="@string/feed_back"
+        app:rowTextColor="@color/primaryText"
+        app:rowTextSize="16sp"
+        app:rowVerticalPadding="0dp"/>
+
+    <com.sbai.bcnews.view.IconTextRow
+        android:id="@+id/setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/feedBack"
+        app:leftIcon="@drawable/ic_share_wechat"
+        app:rightIcon="@drawable/ic_common_right_arrow"
+        app:rowText="@string/setting"
+        app:rowTextColor="@color/primaryText"
+        app:rowTextSize="16sp"
+        app:rowVerticalPadding="0dp"/>
+
+</android.support.constraint.ConstraintLayout>
