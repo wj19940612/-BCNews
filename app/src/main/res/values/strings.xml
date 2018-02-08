@@ -133,7 +133,7 @@
     <string name="feed_back">意见反馈</string>
     <string name="setting">设置</string>
     <string name="click_login">点击登录</string>
-    <string name="collect_s">收藏%1$s</string>
-    <string name="history_">历史%1$s</string>
+    <string name="collect">收藏</string>
+    <string name="history">历史</string>
 
 </resources>
