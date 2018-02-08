@@ -178,7 +178,19 @@
         android:layout_height="match_parent"
         android:layout_below="@id/marketDataArea"
         android:layout_marginTop="14dp"
+        android:orientation="vertical"
         android:background="@drawable/bg_market">
+
+        <com.sbai.bcnews.view.slidingtab.SlidingTabLayout
+            android:id="@+id/slidingTab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"/>
+
+        <com.sbai.bcnews.view.ScrollableViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="220dp" />
     </LinearLayout>
 
     <TextView
