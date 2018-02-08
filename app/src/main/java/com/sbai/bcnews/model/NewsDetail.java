@@ -25,6 +25,7 @@ public class NewsDetail {
     private List<String> tags;    //标签
     private int readerTime;       //需要阅读时间
     private boolean isRead;       //阅读状态已读未读
+    private int original;         //是否原创
 
     private int readHeight; //阅读高度,用于用户记忆浏览
 
@@ -170,5 +171,13 @@ public class NewsDetail {
 
     public void setRead(boolean read) {
         isRead = read;
+    }
+
+    public int getOriginal() {
+        return original;
+    }
+
+    public void setOriginal(int original) {
+        this.original = original;
     }
 }

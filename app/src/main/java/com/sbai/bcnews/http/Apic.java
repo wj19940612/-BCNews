@@ -82,4 +82,11 @@ public class Apic {
         return Api.get("/api/news-info/news/channels");
     }
 
+    /**
+     * 获取资讯详情相关文章
+     */
+    public static Api getOtherArticles(String channel,String id){
+        return Api.get("/api/news-info/news/channel/{channel}/{id}",new ReqParams().put("channel",channel).put("id",id));
+    }
+
 }

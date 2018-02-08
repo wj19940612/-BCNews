@@ -88,7 +88,6 @@
                 <TextView
                     android:id="@+id/readTime"
                     android:layout_width="wrap_content"
-                    android:minWidth="64dp"
                     android:layout_height="18dp"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/subtitle"
@@ -100,6 +99,7 @@
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLines="1"
+                    android:minWidth="64dp"
                     android:textColor="@color/unluckyText"
                     android:textSize="12sp"/>
 
@@ -136,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_praise_not"/>
+                    android:src="@drawable/btn_praise_normal"/>
 
                 <TextView
                     android:id="@+id/praiseCount"
@@ -196,8 +196,346 @@
 
             </RelativeLayout>
 
+            <View
+                android:id="@+id/split"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_below="@+id/shareLayout"
+                android:layout_marginTop="20dp"
+                android:background="@color/background"/>
+
+            <TextView
+                android:id="@+id/otherArticleTip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/split"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/other_article"
+                android:textColor="@color/marketText"
+                android:textSize="16sp"
+                android:visibility="gone"/>
+
+            <RelativeLayout
+                android:id="@+id/firstArticle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/otherArticleTip"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/bg_news_item"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/firstContentRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/firstImg"
+                        android:layout_width="114dp"
+                        android:layout_height="80dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="12dp"/>
+
+                    <TextView
+                        android:id="@+id/firstTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="12dp"
+                        android:layout_toLeftOf="@+id/img"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:textColor="@color/primaryText"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/firstOriginal"
+                        android:layout_width="44dp"
+                        android:layout_height="16dp"
+                        android:layout_below="@+id/title"
+                        android:layout_marginRight="18dp"
+                        android:layout_marginTop="22dp"
+                        android:background="@drawable/bg_original"
+                        android:gravity="center"
+                        android:text="@string/original"
+                        android:textColor="@color/colorOriginal"
+                        android:textSize="12sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/firstSource"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/title"
+                        android:layout_marginTop="22dp"
+                        android:layout_toRightOf="@+id/original"
+                        android:gravity="center"
+                        android:text="@string/original"
+                        android:textColor="@color/unluckyText"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/firstTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/title"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_toRightOf="@+id/firstSource"
+                        android:gravity="center"
+                        android:text="@string/original"
+                        android:textColor="@color/unluckyText"
+                        android:textSize="12sp"/>
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/contentRL"
+                    android:background="@color/background"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/secondArticle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/firstArticle"
+                android:background="@drawable/bg_news_item"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/secondContentRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/secondImg"
+                        android:layout_width="114dp"
+                        android:layout_height="80dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="12dp"/>
+
+                    <TextView
+                        android:id="@+id/secondTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="12dp"
+                        android:layout_toLeftOf="@+id/secondImg"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:textColor="@color/primaryText"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/secondOriginal"
+                        android:layout_width="44dp"
+                        android:layout_height="16dp"
+                        android:layout_below="@+id/secondTitle"
+                        android:layout_marginRight="18dp"
+                        android:layout_marginTop="22dp"
+                        android:background="@drawable/bg_original"
+                        android:gravity="center"
+                        android:text="@string/original"
+                        android:textColor="@color/colorOriginal"
+                        android:textSize="12sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/secondSource"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/secondTitle"
+                        android:layout_marginTop="22dp"
+                        android:layout_toRightOf="@+id/secondOriginal"
+                        android:gravity="center"
+                        android:text="@string/original"
+                        android:textColor="@color/unluckyText"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/secondTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/secondTitle"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_toRightOf="@+id/secondSource"
+                        android:gravity="center"
+                        android:text="@string/original"
+                        android:textColor="@color/unluckyText"
+                        android:textSize="12sp"/>
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/secondLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/secondContentRL"
+                    android:background="@color/background"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/ThirdArticle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/secondArticle"
+                android:background="@drawable/bg_news_item"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/thirdContentRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/thirdImg"
+                        android:layout_width="114dp"
+                        android:layout_height="80dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="12dp"/>
+
+                    <TextView
+                        android:id="@+id/thirdTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="12dp"
+                        android:layout_toLeftOf="@+id/thirdImg"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:textColor="@color/primaryText"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/thirdOriginal"
+                        android:layout_width="44dp"
+                        android:layout_height="16dp"
+                        android:layout_below="@+id/thirdTitle"
+                        android:layout_marginRight="18dp"
+                        android:layout_marginTop="22dp"
+                        android:background="@drawable/bg_original"
+                        android:gravity="center"
+                        android:text="@string/original"
+                        android:textColor="@color/colorOriginal"
+                        android:textSize="12sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/thirdSource"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/thirdTitle"
+                        android:layout_marginTop="22dp"
+                        android:layout_toRightOf="@+id/thirdOriginal"
+                        android:gravity="center"
+                        android:text="@string/original"
+                        android:textColor="@color/unluckyText"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/thirdTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/thirdTitle"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_toRightOf="@+id/thirdSource"
+                        android:gravity="center"
+                        android:text="@string/original"
+                        android:textColor="@color/unluckyText"
+                        android:textSize="12sp"/>
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/thirdLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/thirdContentRL"
+                    android:background="@color/background"/>
+
+            </RelativeLayout>
+
         </RelativeLayout>
     </com.sbai.bcnews.view.NewsScrollView>
+
+    <LinearLayout
+        android:id="@+id/collectAndShareLayout"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_collect">
+
+        <LinearLayout
+            android:id="@+id/collectLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/collectIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_collect"/>
+
+            <TextView
+                android:id="@+id/collect"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:gravity="center"
+                android:text="@string/collect"
+                android:textColor="@color/collect"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/background"/>
+
+        <LinearLayout
+            android:id="@+id/bottomShareLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/bottomShareIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_right_share"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:gravity="center"
+                android:text="@string/share"
+                android:textColor="@color/collect"
+                android:textSize="14sp"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <com.sbai.bcnews.view.EmptyView
         android:id="@+id/emptyView"

@@ -28,6 +28,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.NewsDetail;
+import com.sbai.bcnews.model.OtherArticle;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
@@ -36,6 +37,7 @@ import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.NewsScrollView;
 import com.sbai.bcnews.view.ShareDialog;
 import com.sbai.bcnews.view.TitleBar;
+import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
@@ -44,7 +46,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
-import java.sql.Struct;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,6 +98,44 @@ public class NewsDetailActivity extends BaseActivity {
     RelativeLayout mShareLayout;
     @BindView(R.id.emptyView)
     EmptyView mEmptyView;
+    @BindView(R.id.otherArticleTip)
+    TextView mOtherArticleTip;
+    @BindView(R.id.firstArticle)
+    RelativeLayout mFirstArticle;
+    @BindView(R.id.firstImg)
+    ImageView mFirstImg;
+    @BindView(R.id.firstTitle)
+    TextView mFirstTitle;
+    @BindView(R.id.firstOriginal)
+    TextView mFirstOriginal;
+    @BindView(R.id.firstSource)
+    TextView mFirstSource;
+    @BindView(R.id.firstTime)
+    TextView mFirstTime;
+    @BindView(R.id.secondImg)
+    ImageView mSecondImg;
+    @BindView(R.id.secondTitle)
+    TextView mSecondTitle;
+    @BindView(R.id.secondOriginal)
+    TextView mSecondOriginal;
+    @BindView(R.id.secondSource)
+    TextView mSecondSource;
+    @BindView(R.id.secondTime)
+    TextView mSecondTime;
+    @BindView(R.id.secondArticle)
+    RelativeLayout mSecondArticle;
+    @BindView(R.id.thirdImg)
+    ImageView mThirdImg;
+    @BindView(R.id.thirdTitle)
+    TextView mThirdTitle;
+    @BindView(R.id.thirdOriginal)
+    TextView mThirdOriginal;
+    @BindView(R.id.thirdSource)
+    TextView mThirdSource;
+    @BindView(R.id.thirdTime)
+    TextView mThirdTime;
+    @BindView(R.id.ThirdArticle)
+    RelativeLayout mThirdArticle;
 
     private WebViewClient mWebViewClient;
 
@@ -105,6 +145,7 @@ public class NewsDetailActivity extends BaseActivity {
 
     private String mId;
     private NewsDetail mNewsDetail;
+    private String mChannel;
 
     private int mTitleHeight;
     private boolean mTitleVisible;
@@ -122,10 +163,13 @@ public class NewsDetailActivity extends BaseActivity {
         initWebView();
         initScrollView();
         requestDetailData();
+        requestOtherArticle();
+//        requestPraiseStatus();
     }
 
     private void initData() {
         mId = getIntent().getStringExtra(ExtraKeys.NEWS_ID);
+        mChannel = getIntent().getStringExtra(ExtraKeys.CHANNEL);
         mNewsDetail = NewsCache.getCacheForId(mId);
     }
 
@@ -381,13 +425,77 @@ public class NewsDetailActivity extends BaseActivity {
         loadPage();
     }
 
+    private void requestOtherArticle() {
+        Apic.getOtherArticles(mChannel, mId).tag(TAG).callback(new Callback2D<Resp<List<OtherArticle>>, List<OtherArticle>>() {
+            @Override
+            protected void onRespSuccessData(List<OtherArticle> data) {
+                updateOtherData(data);
+            }
+        }).fireFreely();
+    }
+
+    private void updateOtherData(List<OtherArticle> data) {
+        if (data == null || data.size() == 0) {
+            return;
+        }
+        mOtherArticleTip.setVisibility(View.VISIBLE);
+        mFirstArticle.setVisibility(View.VISIBLE);
+        mFirstTitle.setText(data.get(0).getTitle());
+        mFirstOriginal.setVisibility(data.get(0).getOriginal() > 0 ? View.VISIBLE : View.GONE);
+        mFirstSource.setText(data.get(0).getSource());
+        mFirstTime.setText(DateUtil.formatNewsStyleTime(data.get(0).getReleaseTime()));
+        if (data.get(0).getImgs() != null && data.get(0).getImgs().size() > 0) {
+            mFirstImg.setVisibility(View.VISIBLE);
+            GlideApp.with(getActivity()).load(data.get(0).getImgs().get(0))
+                    .placeholder(R.drawable.ic_default_news)
+                    .centerCrop()
+                    .into(mFirstImg);
+        } else {
+            mFirstImg.setVisibility(View.GONE);
+        }
+
+        if(data.size()>1){
+            mSecondArticle.setVisibility(View.VISIBLE);
+            mSecondTitle.setText(data.get(1).getTitle());
+            mSecondOriginal.setVisibility(data.get(1).getOriginal() > 0 ? View.VISIBLE : View.GONE);
+            mSecondSource.setText(data.get(1).getSource());
+            mSecondTime.setText(DateUtil.formatNewsStyleTime(data.get(1).getReleaseTime()));
+            if (data.get(1).getImgs() != null && data.get(1).getImgs().size() > 0) {
+                mSecondImg.setVisibility(View.VISIBLE);
+                GlideApp.with(getActivity()).load(data.get(1).getImgs().get(0))
+                        .placeholder(R.drawable.ic_default_news)
+                        .centerCrop()
+                        .into(mSecondImg);
+            } else {
+                mSecondImg.setVisibility(View.GONE);
+            }
+        }
+
+        if(data.size()>2){
+            mThirdArticle.setVisibility(View.VISIBLE);
+            mThirdTitle.setText(data.get(2).getTitle());
+            mThirdOriginal.setVisibility(data.get(2).getOriginal() > 0 ? View.VISIBLE : View.GONE);
+            mThirdSource.setText(data.get(2).getSource());
+            mThirdTime.setText(DateUtil.formatNewsStyleTime(data.get(2).getReleaseTime()));
+            if (data.get(2).getImgs() != null && data.get(2).getImgs().size() > 0) {
+                mThirdImg.setVisibility(View.VISIBLE);
+                GlideApp.with(getActivity()).load(data.get(2).getImgs().get(0))
+                        .placeholder(R.drawable.ic_default_news)
+                        .centerCrop()
+                        .into(mThirdImg);
+            } else {
+                mThirdImg.setVisibility(View.GONE);
+            }
+        }
+    }
+
     private void updatePraiseCount(int praiseCount) {
         if (praiseCount == 0) {
             mPraiseCount.setText(R.string.news_praise);
-            mPraiseIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_praise_not));
+            mPraiseIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.btn_praise_normal));
         } else {
             mPraiseCount.setText(String.format(getString(R.string.praise_count), praiseCount));
-            mPraiseIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_praise));
+            mPraiseIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.btn_praise_selected));
         }
     }
 

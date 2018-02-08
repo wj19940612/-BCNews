@@ -47,6 +47,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.sbai.bcnews.ExtraKeys.CHANNEL;
 import static com.sbai.bcnews.ExtraKeys.HEADER_COUNT;
 
 /**
@@ -84,11 +85,22 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private int mPage;
     private int overallXScroll;
     private int mHeaderCount;
+    private OnScrollListener mOnScrollListener;
+    private String mChannel;
 
-    public static NewsFragment newsInstance(int headerCount) {
+    public interface OnScrollListener {
+        public void onScroll(int dy);
+    }
+
+    public void setOnScrollListener(OnScrollListener onScrollListener) {
+        mOnScrollListener = onScrollListener;
+    }
+
+    public static NewsFragment newsInstance(int headerCount, String channel) {
         NewsFragment newsFragment = new NewsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(HEADER_COUNT, headerCount);
+        bundle.putString(CHANNEL, channel);
         newsFragment.setArguments(bundle);
         return newsFragment;
     }
@@ -98,6 +110,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mHeaderCount = getArguments().getInt(HEADER_COUNT);
+            mChannel = getArguments().getString(CHANNEL);
         }
     }
 
@@ -122,7 +135,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
                 NewsReadCache.markNewsRead(newsDetail);
-                Launcher.with(getActivity(), NewsDetailActivity.class).putExtra(ExtraKeys.NEWS_ID, newsDetail.getId()).execute();
+                Launcher.with(getActivity(), NewsDetailActivity.class).putExtra(ExtraKeys.NEWS_ID, newsDetail.getId()).putExtra(CHANNEL, mChannel).execute();
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -133,6 +146,9 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 super.onScrolled(recyclerView, dx, dy);
                 overallXScroll = overallXScroll + dy;
 //                Log.e("zzz", "dy:" + overallXScroll);
+                if (mOnScrollListener != null) {
+                    mOnScrollListener.onScroll(dy);
+                }
             }
         });
         mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
@@ -401,6 +417,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
+                mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -448,6 +465,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
+                mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     mImg.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(0))
@@ -507,6 +525,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
+                mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     mImg1.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(0))
