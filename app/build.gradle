@@ -7,16 +7,16 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
+        buildConfigField('String', 'HOST', '\"news.ailemi.com\"')
 
         manifestPlaceholders = [
                 GETUI_APP_ID    : "yz2rMIFVG88ywlddHHoLU4",
                 GETUI_APP_SECRET: "Qr9bNhb5Cn8llNuhj1OZk1",
                 GETUI_APP_KEY   : "ZfYQR3S4rSAFq58WDy3ZX2",
-                UMENG_APP_KEY   : "59f7e22d734be4113a0000d8",
+                UMENG_APP_KEY   : "5a7bb8b8f43e481619000049",
                 UMENG_CHANNEL   : "android"
         ]
     }
@@ -68,7 +68,7 @@ android {
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
         }
 
-        pro {
+        others {
 
         }
 

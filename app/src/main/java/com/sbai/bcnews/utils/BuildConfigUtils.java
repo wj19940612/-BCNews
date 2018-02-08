@@ -12,6 +12,7 @@ public class BuildConfigUtils {
 
     public static final String FLAVOR_NAME_ALPHA = "alpha";
 
+
     public static boolean isProductFlavor() {
         return !(BuildConfig.FLAVOR.equalsIgnoreCase(FLAVOR_NAME_DEV) ||
                 BuildConfig.FLAVOR.equalsIgnoreCase(FLAVOR_NAME_ALPHA));

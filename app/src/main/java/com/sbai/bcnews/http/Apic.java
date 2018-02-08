@@ -14,6 +14,8 @@ public class Apic {
 
     public static final String SHARE_NEWS_URL = Api.getHost() + "/news/share/index.html?id=%s";
 
+    public static final String DOWNLOAD_URL = Api.getHost() + "/qc.png";
+
     /**
      * 资讯详情 - 齐慕伟
      *
@@ -92,10 +94,18 @@ public class Apic {
      * @param code
      */
     // TODO: 2018/2/6 没有完善
-    public static Api requestTimeSharingPlanData( String code,String exchangeCode) {
+    public static Api requestTimeSharingPlanData(String code, String exchangeCode) {
         return Api.get("/api/news-quota/quota/{code}/trend",
                 new ReqParams()
                         .put("code", code)
                         .put("exchangeCode", exchangeCode));
+
+    }
+
+    /**
+     * 查询行情界面是否显示接口
+     */
+    public static Api requestShowMarketPageSwitch() {
+        return Api.get("/dic.html");
     }
 }
