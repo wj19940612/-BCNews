@@ -119,6 +119,18 @@ public class DigitalCashTrendChart extends ChartView {
         paint.setPathEffect(null);
     }
 
+    private void setTouchCirclePointPaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartColor.BLACK.get()));
+        paint.setPathEffect(null);
+        paint.setStyle(Paint.Style.FILL);
+    }
+
+    private void setTouchAnnulusPointPaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartColor.WHITE.get()));
+        paint.setPathEffect(null);
+        paint.setStyle(Paint.Style.FILL);
+    }
+
     public List<DigitalCashTrendData> getDataList() {
         return mDataList;
     }
@@ -466,7 +478,7 @@ public class DigitalCashTrendChart extends ChartView {
 
     @Override
     protected void drawTimeLine(int left, int top, int width, Canvas canvas) {
-        
+
         setDefaultTextPaint(sPaint);
 
         int horizontalOffset = (int) dp2Px(32);
@@ -479,7 +491,7 @@ public class DigitalCashTrendChart extends ChartView {
 
 
         textWidth = sPaint.measureText(mTimeLine[1]);
-        textX = width / 5 * 2-textWidth ;
+        textX = width / 5 * 2 - textWidth;
         canvas.drawText(mTimeLine[1], textX, textY, sPaint);
 
         textWidth = sPaint.measureText(mTimeLine[2]);
@@ -548,7 +560,7 @@ public class DigitalCashTrendChart extends ChartView {
             float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
 //            float priceX = left + width - priceMargin - priceWidth;
             float priceX = left;
-            redRect = getBigFontBgRectF(priceX, touchY + mOffset4CenterBigText, priceWidth);
+            redRect = getBigFontBgRectF(priceX, touchY + mOffset4CenterBigText + mBigFontHeight / 2, priceWidth);
             rectHeight = redRect.height();
             redRect.top -= rectHeight / 2;
             if (redRect.top < top) {
@@ -560,6 +572,12 @@ public class DigitalCashTrendChart extends ChartView {
             float priceY = redRect.top + rectHeight / 2 + mOffset4CenterBigText;
             setTouchLineTextPaint(sPaint);
             canvas.drawText(price, priceX, priceY, sPaint);
+
+
+            setTouchAnnulusPointPaint(sPaint);
+            canvas.drawCircle(touchX, touchY, 7, sPaint);
+            setTouchCirclePointPaint(sPaint);
+            canvas.drawCircle(touchX, touchY, 5, sPaint);
 
             if (indexesEnable) {
                 // draw cross line: vertical line and horizontal line
@@ -597,6 +615,7 @@ public class DigitalCashTrendChart extends ChartView {
             }
         }
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {

@@ -2,7 +2,6 @@ package com.sbai.bcnews.view.market;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -61,14 +60,12 @@ public class DigitalCashTouchView extends DigitalCashTrendChart {
             touchIndex = Math.max(touchIndex, mDigitalCashTrendChart.getFirstVisibleIndex());
             touchIndex = Math.min(touchIndex, mDigitalCashTrendChart.getLastVisibleIndex());
         }
-        Log.d(TAG, "calculateTouchIndex: " + touchIndex);
         return touchIndex;
     }
 
     @Override
     protected boolean hasThisTouchIndex(int touchIndex) {
         if (touchIndex != -1 && getVisibleList() != null && getVisibleList().get(touchIndex) != null) {
-            Log.d(TAG, "hasThisTouchIndex: " + true);
             return true;
         }
         return super.hasThisTouchIndex(touchIndex);
