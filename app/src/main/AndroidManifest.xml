@@ -84,12 +84,6 @@
         <activity android:name=".activity.LookBigPictureActivity"
                   android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.NewsDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.LookBigPictureActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.ShareNewsFlashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityEntryAnimation"/>
