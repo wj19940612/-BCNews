@@ -93,7 +93,8 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.mine.ImageAuthCodeActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/BaseDialog"/>
 
         <activity
             android:name=".wxapi.WXEntryActivity"

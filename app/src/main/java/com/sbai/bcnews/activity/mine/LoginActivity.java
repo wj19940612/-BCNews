@@ -325,6 +325,9 @@ public class LoginActivity extends WeChatActivity {
     }
 
     private void updateBindPhoneViews() {
+        stopScheduleJob();
+        mFreezeObtainAuthCode = false;
+
         mWeChatLogin.setVisibility(View.GONE);
         mWeChatName.setText(getWeChatName());
         mWeChatArea.setVisibility(View.VISIBLE);
