@@ -26,6 +26,7 @@ import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
@@ -59,6 +60,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     public static final int HAS_BANNER = 1;
     public static final int NO_BANNER = 0;
+
+    public static final int BANNER_HEIGHT = 170;
 
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
@@ -145,7 +148,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         if (mHeaderCount > 0) {
             mHomeBanner = (HomeBanner) LayoutInflater.from(getActivity()).inflate(R.layout.item_banner, null);
             mHomeBanner.setLayoutParams(new RecyclerView.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, getActivity().getWindowManager().getDefaultDisplay().getHeight() / 3));
+                    ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(BANNER_HEIGHT, getResources())));
             mNewsAdapter.setHeaderView(mHomeBanner);
         }
     }

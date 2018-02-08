@@ -11,9 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="false"
-        app:customView="@layout/view_title_news"
-        app:hasBottomSplitLine="true"
-        app:splitLineColor="@color/split"/>
+        app:customView="@layout/view_title_news"/>
 
     <RelativeLayout
         android:id="@+id/layout"
@@ -23,7 +21,7 @@
 
         <com.sbai.bcnews.view.slidingTab.SlidingTabLayout
             android:id="@+id/slidingTabLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"/>
 
@@ -33,14 +31,19 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/slidingTabLayout"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/slidingTabLayout">
+            android:layout_alignTop="@+id/slidingTabLayout"
+            android:background="@color/white">
 
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/toChannel"
+                android:layout_width="40dp"
+                android:layout_height="36dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
                 android:layout_centerVertical="true"
-                android:text="++"/>
+                android:src="@drawable/btn_to_channel"/>
         </RelativeLayout>
 
     </RelativeLayout>

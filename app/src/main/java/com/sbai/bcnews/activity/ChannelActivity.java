@@ -13,6 +13,7 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.ChannelCacheModel;
 import com.sbai.bcnews.utils.news.ChannelAdapter;
+import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.utils.news.ItemDragHelperCallback;
 
 import java.util.ArrayList;
@@ -44,6 +45,13 @@ public class ChannelActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mChannelCacheModel != null && mChannelCacheModel.getMyChannelEntities() != null && mChannelCacheModel.getMyChannelEntities().size() != 0)
+            ChannelCache.modifyChannel(mChannelCacheModel.getMyChannelEntities(), mChannelCacheModel.getOtherChannelEntities());
+    }
+
     private void initData() {
         mChannelCacheModel = getIntent().getParcelableExtra(ExtraKeys.CHANNEL);
         if (mChannelCacheModel.getOtherChannelEntities() == null) {
@@ -60,7 +68,7 @@ public class ChannelActivity extends AppCompatActivity {
         final ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(mRecyclerView);
 
-        mChannelAdapter = new ChannelAdapter(this, helper, mChannelCacheModel.getMyChannelEntities(), mChannelCacheModel.getOtherChannelEntities());
+        mChannelAdapter = new ChannelAdapter(this, helper, mChannelCacheModel);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -85,7 +93,7 @@ public class ChannelActivity extends AppCompatActivity {
         returnActivityModel();
     }
 
-    private void returnActivityModel(){
+    private void returnActivityModel() {
         Intent intent = new Intent();
         if (mChannelCacheModel != null) {
             intent.putExtra(ExtraKeys.CHANNEL, mChannelCacheModel);

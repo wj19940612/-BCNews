@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -58,8 +59,8 @@ public class HomeNewsFragment extends BaseFragment {
     ViewPager mViewPager;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.text)
-    TextView mText;
+    @BindView(R.id.toChannel)
+    ImageView mToChannel;
     @BindView(R.id.reLa)
     RelativeLayout mReLa;
     @BindView(R.id.layout)
@@ -95,14 +96,11 @@ public class HomeNewsFragment extends BaseFragment {
     }
 
     private void initTabView() {
-        mTabLayout.setDistributeEvenly(true);
+        mTabLayout.setDistributeEvenly(false);
         mTabLayout.setDividerColors(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-        mTabLayout.setPadding((int) Display.dp2Px(10, getResources()), 0, (int) Display.dp2Px(10, getResources()), 0);
-        mTabLayout.setWeightEqual(false);
-        mTabLayout.setPadding(Display.dp2Px(5, getResources()));
+        mTabLayout.setCustomTabView(R.layout.view_home_tab, R.id.tab);
+        mTabLayout.setSelectedIndicatorPadding(Display.dp2Px(15, getResources()));
         mTabLayout.setSelectedIndicatorColors(Color.BLACK);
-        mTabLayout.setTabViewTextColor(ContextCompat.getColorStateList(getActivity(), R.color.sliding_tab_text));
-        mTabLayout.setTabViewTextSize(15);
         mTabLayout.setSelectedIndicatorHeight(2);
         mTabLayout.setHasBottomBorder(false);
     }
@@ -114,17 +112,17 @@ public class HomeNewsFragment extends BaseFragment {
             @Override
             protected void onRespSuccessData(List<String> data) {
                 ChannelCacheModel contrastedChannelCacheModel = ChannelCache.contrastChannel(channelCacheModel, data);
-                updateChannel(contrastedChannelCacheModel);
+                updateChannel(contrastedChannelCacheModel, true);
             }
         }).fireFreely();
     }
 
-    private void updateChannel(ChannelCacheModel channelCacheModel) {
+    private void updateChannel(ChannelCacheModel channelCacheModel, boolean mustRefresh) {
         if (channelCacheModel == null) {
             return;
         }
         mChannelCacheModel = channelCacheModel;
-        if (mChannelCacheModel.isModified())
+        if (mChannelCacheModel.isModified() || mustRefresh)
             updateViewPager(channelCacheModel.getMyChannelEntities());
 
     }
@@ -134,7 +132,10 @@ public class HomeNewsFragment extends BaseFragment {
         mMyChannels.clear();
         mMyChannels.addAll(myChannelEntities);
         mPagerAdapter.notifyDataSetChanged();
-        mViewPager.setCurrentItem(mCurrentItem, false);
+        if (mCurrentItem < mChannelCacheModel.getMyChannelEntities().size() - 1)
+            mViewPager.setCurrentItem(mCurrentItem, false);
+        else
+            mViewPager.setCurrentItem(mChannelCacheModel.getMyChannelEntities().size() - 1, false);
         mTabLayout.setViewPager(mViewPager);
     }
 
@@ -144,10 +145,10 @@ public class HomeNewsFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.text})
+    @OnClick({R.id.toChannel})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.text:
+            case R.id.toChannel:
                 mCurrentItem = mViewPager.getCurrentItem();
                 Launcher.with(this, ChannelActivity.class).putExtra(ExtraKeys.CHANNEL, mChannelCacheModel).excuteForResultFragment(REQUEST_CODE_CHANNEL);
                 break;
@@ -158,7 +159,7 @@ public class HomeNewsFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CHANNEL && resultCode == RESULT_OK) {
             mChannelCacheModel = data.getParcelableExtra(ExtraKeys.CHANNEL);
-            updateChannel(mChannelCacheModel);
+            updateChannel(mChannelCacheModel,false);
         }
     }
 

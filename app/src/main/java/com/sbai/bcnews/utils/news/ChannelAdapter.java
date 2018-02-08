@@ -7,6 +7,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.model.ChannelCacheModel;
 import com.sbai.bcnews.model.ChannelEntity;
 
 import java.util.List;
@@ -55,18 +57,21 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private ItemTouchHelper mItemTouchHelper;
 
     private List<String> mMyChannelItems, mOtherChannelItems;
+    private ChannelCacheModel mChannelCacheModel;
 
     // 我的频道点击事件
     private OnMyChannelItemClickListener mChannelItemClickListener;
 
-    //是否正在执行动画
-    private boolean mAnimationing;
+//    //是否正在执行动画
+//    private boolean mAnimationing;
 
-    public ChannelAdapter(Context context, ItemTouchHelper helper, List<String> mMyChannelItems, List<String> mOtherChannelItems) {
+    public ChannelAdapter(Context context, ItemTouchHelper helper, ChannelCacheModel channelCacheModel) {
         this.mInflater = LayoutInflater.from(context);
         this.mItemTouchHelper = helper;
-        this.mMyChannelItems = mMyChannelItems;
-        this.mOtherChannelItems = mOtherChannelItems;
+        this.mMyChannelItems = channelCacheModel.getMyChannelEntities();
+        this.mOtherChannelItems = channelCacheModel.getOtherChannelEntities();
+        mChannelCacheModel = channelCacheModel;
+        mChannelCacheModel.setModified(false);
     }
 
     @Override
@@ -160,14 +165,14 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     if ((mMyChannelItems.size() - COUNT_PRE_MY_HEADER) % spanCount == 0) {
                         View preTargetView = recyclerView.getLayoutManager().findViewByPosition(mMyChannelItems.size() + COUNT_PRE_OTHER_HEADER - 1);
                         targetX = preTargetView.getLeft();
-                        targetY = preTargetView.getTop();
+                        targetY = preTargetView.getTop() + preTargetView.getHeight() - currentView.getHeight();
                     } else {
                         targetX = targetView.getLeft();
                         targetY = targetView.getTop();
                     }
 
                     moveMyToOther(myHolder);
-                    startAnimation(recyclerView, currentView, targetX, targetY);
+//                    startAnimation(recyclerView, currentView, targetX, targetY);
 
                 } else {
                     moveMyToOther(myHolder);
@@ -270,11 +275,12 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     if (currentPiosition == gridLayoutManager.findLastVisibleItemPosition()
                             && (currentPiosition - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER) % spanCount != 0
                             && (targetPosition - COUNT_PRE_MY_HEADER) % spanCount != 0) {
-                        moveOtherToMyWithDelay(otherHolder);
+//                        moveOtherToMyWithDelay(otherHolder);
+                        moveOtherToMy(otherHolder);
                     } else {
                         moveOtherToMy(otherHolder);
                     }
-                    startAnimation(recyclerView, currentView, targetX, targetY);
+//                    startAnimation(recyclerView, currentView, targetX, targetY);
 
                 } else {
                     moveOtherToMy(otherHolder);
@@ -283,39 +289,39 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         });
     }
 
-    /**
-     * 开始增删动画
-     */
-    private void startAnimation(RecyclerView recyclerView, final View currentView, float targetX, float targetY) {
-        final ViewGroup viewGroup = (ViewGroup) recyclerView.getParent();
-        final ImageView mirrorView = addMirrorView(viewGroup, recyclerView, currentView);
-
-        Animation animation = getTranslateAnimator(
-                targetX - currentView.getLeft(), targetY - currentView.getTop());
-        currentView.setVisibility(View.INVISIBLE);
-        mAnimationing = true;
-        mirrorView.startAnimation(animation);
-
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                viewGroup.removeView(mirrorView);
-                if (currentView.getVisibility() == View.INVISIBLE) {
-                    currentView.setVisibility(View.VISIBLE);
-                }
-                mAnimationing = false;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-    }
+//    /**
+//     * 开始增删动画
+//     */
+//    private void startAnimation(RecyclerView recyclerView, final View currentView, float targetX, float targetY) {
+//        final ViewGroup viewGroup = (ViewGroup) recyclerView.getParent();
+//        final ImageView mirrorView = addMirrorView(viewGroup, recyclerView, currentView);
+//
+//        Animation animation = getTranslateAnimator(
+//                targetX - currentView.getLeft(), targetY - currentView.getTop());
+//        currentView.setVisibility(View.INVISIBLE);
+////        mAnimationing = true;
+//        mirrorView.startAnimation(animation);
+//
+//        animation.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                viewGroup.removeView(mirrorView);
+//                if (currentView.getVisibility() == View.INVISIBLE) {
+//                    currentView.setVisibility(View.VISIBLE);
+//                }
+////                mAnimationing = false;
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//
+//            }
+//        });
+//    }
 
     /**
      * 我的频道 移动到 其他频道
@@ -333,6 +339,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mMyChannelItems.remove(startPosition);
         mOtherChannelItems.add(0, item);
 
+        mChannelCacheModel.setModified(true);
         notifyItemMoved(position, mMyChannelItems.size() + COUNT_PRE_OTHER_HEADER);
     }
 
@@ -342,10 +349,12 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * @param otherHolder
      */
     private void moveOtherToMy(OtherViewHolder otherHolder) {
+
         int position = processItemRemoveAdd(otherHolder);
         if (position == -1) {
             return;
         }
+        mChannelCacheModel.setModified(true);
         notifyItemMoved(position, mMyChannelItems.size() - 1 + COUNT_PRE_MY_HEADER);
     }
 
@@ -354,20 +363,20 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      *
      * @param otherHolder
      */
-    private void moveOtherToMyWithDelay(OtherViewHolder otherHolder) {
-        final int position = processItemRemoveAdd(otherHolder);
-        if (position == -1) {
-            return;
-        }
-        delayHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                notifyItemMoved(position, mMyChannelItems.size() - 1 + COUNT_PRE_MY_HEADER);
-            }
-        }, ANIM_TIME);
-    }
+//    private void moveOtherToMyWithDelay(OtherViewHolder otherHolder) {
+//        final int position = processItemRemoveAdd(otherHolder);
+//        if (position == -1) {
+//            return;
+//        }
+//        delayHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                notifyItemMoved(position, mMyChannelItems.size() - 1 + COUNT_PRE_MY_HEADER);
+//            }
+//        }, ANIM_TIME);
+//    }
 
-    private Handler delayHandler = new Handler();
+//    private Handler delayHandler = new Handler();
 
     private int processItemRemoveAdd(OtherViewHolder otherHolder) {
         int position = otherHolder.getAdapterPosition();
@@ -418,13 +427,14 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         String item = mMyChannelItems.get(fromPosition - COUNT_PRE_MY_HEADER);
         mMyChannelItems.remove(fromPosition - COUNT_PRE_MY_HEADER);
         mMyChannelItems.add(toPosition - COUNT_PRE_MY_HEADER, item);
+        mChannelCacheModel.setModified(true);
         notifyItemMoved(fromPosition, toPosition);
     }
 
     private boolean judgeCanMove(int fromPosition, int toPosition) {
-        if (mAnimationing) {
-            return false;
-        }
+//        if (mAnimationing) {
+//            return false;
+//        }
         if(toPosition==COUNT_PRE_MY_HEADER){
             return false;
         }
