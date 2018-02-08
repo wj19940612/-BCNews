@@ -101,7 +101,6 @@ public class ShareNewsFlashActivity extends BaseActivity {
         GlideApp.with(getActivity())
                 .load(Apic.DOWNLOAD_URL)
                 .into(mDownloadImg);
-
     }
 
     @OnClick({R.id.back, R.id.wechat, R.id.circle, R.id.qq, R.id.weibo, R.id.download})
