@@ -102,7 +102,7 @@ public class MineFragment extends BaseFragment {
         SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.collect),
                 " " + collectNumber,
                 ContextCompat.getColor(getActivity(), R.color.cyan));
-        mHistory.setText(spannableString);
+        mCollect.setText(spannableString);
     }
 
     private void updateUserHeadPortrait() {

@@ -37,9 +37,8 @@ public class AccountManagerActivity extends BaseActivity {
         setContentView(R.layout.activity_account_manager);
         ButterKnife.bind(this);
 
-        // TODO: 2018/2/9 绑定的微信
+        // TODO: 2018/2/9 绑定的微信 缺少微信绑定状态
 
-        mWeChat.setText(" 微信号");
         if (true) {
             mCloseWeChat.setVisibility(View.GONE);
         } else {
