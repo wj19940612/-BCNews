@@ -1,7 +1,7 @@
 package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -30,11 +30,11 @@ import butterknife.ButterKnife;
 public class ListSwipeLoadActivity extends BaseSwipeLoadActivity<ListView> {
 
     @BindView(R.id.titleBar)
-    TitleBar mTitleBar;
+    protected TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
-    RefreshHeaderView mSwipeRefreshHeader;
+     RefreshHeaderView mSwipeRefreshHeader;
     @BindView(R.id.swipe_target)
-    ListView mSwipeTarget;
+     ListView mSwipeTarget;
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView mSwipeLoadMoreFooter;
     @BindView(R.id.swipeToLoadLayout)
@@ -45,7 +45,7 @@ public class ListSwipeLoadActivity extends BaseSwipeLoadActivity<ListView> {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_base_listview_swipe_load);
+        setContentView(getContentViewId());
         ButterKnife.bind(this);
 
         ListView swipeTargetView = getSwipeTargetView();
@@ -82,6 +82,16 @@ public class ListSwipeLoadActivity extends BaseSwipeLoadActivity<ListView> {
      */
     public View getContentView() {
         return mRootView;
+    }
+
+    /**
+     * setContentView 中的布局文件id
+     *
+     * @return
+     */
+    @LayoutRes
+    public int getContentViewId() {
+        return R.layout.view_base_listview_swipe_load;
     }
 
     @NonNull

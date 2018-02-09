@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
+import com.sbai.bcnews.activity.mine.ReadHistoryActivity;
 import com.sbai.bcnews.activity.mine.SettingActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
@@ -148,6 +149,7 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.history:
                 umengEventCount(UmengCountEventId.MINE_HISTORY);
+                Launcher.with(getActivity(), ReadHistoryActivity.class).execute();
                 break;
             case R.id.contribute:
                 requestOperationWetchatAccount();
