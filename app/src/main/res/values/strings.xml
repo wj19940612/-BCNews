@@ -66,14 +66,17 @@
     <string name="news">资讯</string>
     <string name="news_flash">快讯</string>
     <string name="market">行情</string>
+    <string name="mine">我的</string>
     <string-array name="tabTexts">
         <item>@string/news</item>
         <item>@string/news_flash</item>
         <item>@string/market</item>
+        <item>@string/mine</item>
     </string-array>
     <integer-array name="tabIcons">
         <item>@drawable/tab_news</item>
         <item>@drawable/tab_flash_news</item>
+        <item>@drawable/tab_market</item>
         <item>@drawable/tab_market</item>
     </integer-array>
     <string name="share_news_flash">分享快讯</string>
@@ -126,7 +129,6 @@
     <string name="change_image">换一张</string>
 
     <!--我的-->
-    <string name="about_bcnews">关于区块财经</string>
     <string name="company_info">浙江松柏信息技术有限公司\nCopyright@2017</string>
     <string name="bcnews_user_agreement">《区块财经用户协议》</string>
     <string name="cooperation_click_copy">商务合作(点击复制)</string>
@@ -139,4 +141,22 @@
     <string name="gallery">相册</string>
     <string name="preview">预览</string>
     <string name="all_image">所有图片</string>
+
+    <string name="me_want_contribute">我要投稿</string>
+    <string name="feed_back">意见反馈</string>
+    <string name="setting">设置</string>
+    <string name="click_login">点击登录</string>
+    <string name="collect">收藏</string>
+    <string name="history">历史</string>
+    <string name="please_add_us_wechat_account">请添加我们的微信号%1$s\n我们坐下来慢慢详谈</string>
+    <string name="copy_us_wechat_account">复制微信号</string>
+
+    <string name="receive_new_notification">接收新消息通知</string>
+    <string name="personal_data">个人资料</string>
+    <string name="account_manager">账号管理</string>
+    <string name="about_bcnews">关于区块财经</string>
+    <string name="logout">退出</string>
+    <string name="weChat_account">微信号</string>
+    <string name="affirm_logout">确定要退出登录吗</string>
+
 </resources>

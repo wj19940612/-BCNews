@@ -71,6 +71,11 @@ public class Api extends RequestManager {
         return reqApi;
     }
 
+
+    public static Api post(String api) {
+        return post(api, null);
+    }
+
     public static Api post(String api, ReqParams reqParams) {
         Api reqApi = new Api();
         reqApi.mMethod = POST;

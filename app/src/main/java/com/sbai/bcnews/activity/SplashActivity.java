@@ -5,8 +5,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.activity.mine.AboutActivity;
-import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.utils.Launcher;
 
 import butterknife.BindView;
@@ -37,7 +35,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void goMain() {
-        Launcher.with(getActivity(), AboutActivity.class).execute();
+        Launcher.with(getActivity(), MainActivity.class).execute();
         supportFinishAfterTransition();
     }
 }

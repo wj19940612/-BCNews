@@ -89,7 +89,7 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
                 .callback(new Callback2D<Resp<List<Feedback>>, List<Feedback>>() {
                     @Override
                     protected void onRespSuccessData(List<Feedback> data) {
-                        updateFeedbackData(data);
+                      //  updateFeedbackData(data);
                     }
 
                     @Override
