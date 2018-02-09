@@ -3,6 +3,8 @@ package com.sbai.bcnews.swipeload;
 import android.support.annotation.NonNull;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
+import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 /**
  * Created by ${wangJie} on 2018/1/29.
@@ -26,5 +28,16 @@ public interface SwipeLoader<T> {
 
     @NonNull
     SwipeToLoadLayout getSwipeToLoadLayout();
+
+    @NonNull
+    RefreshHeaderView getRefreshHeaderView();
+
+    @NonNull
+    LoadMoreFooterView getLoadMoreFooterView();
+
+    @NonNull
+    void refreshSuccess(String successMsg);
+
+    void refreshFail(String failMsg);
 
 }

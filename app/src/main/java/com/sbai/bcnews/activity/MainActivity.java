@@ -5,12 +5,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.HomeNewsFragment;
 import com.sbai.bcnews.fragment.MarketFragment;
+import com.sbai.bcnews.fragment.MineFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
 import com.sbai.bcnews.fragment.NewsFragment;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.market.MarketPageSwitch;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.BottomTabs;
@@ -23,6 +29,7 @@ public class MainActivity extends BaseActivity {
     public static final int PAGE_POSITION_NEWS = 0;
     public static final int PAGE_POSITION_NEWS_FLASH = 1;
     private static final int PAGE_POSITION_MARKET = 2;
+    private static final int PAGE_POSITION_MINE = 3;
 
     @BindView(R.id.viewPager)
     ScrollableViewPager mViewPager;
@@ -37,14 +44,31 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
+        mBottomTabs.setIndexTabVisibility(2, View.GONE);
         initViews();
+        requestShowMarketPageSwitch();
+    }
+
+    private void requestShowMarketPageSwitch() {
+        Apic.requestShowMarketPageSwitch()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<MarketPageSwitch>, MarketPageSwitch>() {
+                    @Override
+                    protected void onRespSuccessData(MarketPageSwitch data) {
+                        if (data.getQuota() == MarketPageSwitch.SHOW_MARKET_PAGE) {
+                            mBottomTabs.setIndexTabVisibility(2, View.VISIBLE);
+                            mMainFragmentsAdapter.setShowMarketPage(true);
+                            mMainFragmentsAdapter.notifyDataSetChanged();
+                        }
+                    }
+                })
+                .fire();
     }
 
     private void initViews() {
         mMainFragmentsAdapter = new MainFragmentsAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mMainFragmentsAdapter);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setScrollable(false);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -79,26 +103,40 @@ public class MainActivity extends BaseActivity {
         Fragment fragment = mMainFragmentsAdapter.getFragment(position);
         if (fragment instanceof BaseSwipeLoadFragment) {
             ((BaseSwipeLoadFragment) fragment).triggerRefresh();
+        } else if (fragment instanceof MineFragment) {
+            ((MineFragment) fragment).refreshUserData();
         }
     }
 
     private void umengClickStatistics(int position) {
-        if (position == PAGE_POSITION_NEWS) {
-            umengEventCount(UmengCountEventId.NEWS01);
-        } else if (position == PAGE_POSITION_NEWS_FLASH) {
-            umengEventCount(UmengCountEventId.NEWS_FLASH_TAB);
-        } else if (position == PAGE_POSITION_MARKET) {
-            umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
+        switch (position) {
+            case PAGE_POSITION_NEWS:
+                umengEventCount(UmengCountEventId.NEWS01);
+                break;
+            case PAGE_POSITION_NEWS_FLASH:
+                umengEventCount(UmengCountEventId.NEWS_FLASH_TAB);
+                break;
+            case PAGE_POSITION_MARKET:
+                umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
+                break;
+            case PAGE_POSITION_MINE:
+                umengEventCount(UmengCountEventId.TAB_MINE);
+                break;
         }
     }
 
     private static class MainFragmentsAdapter extends FragmentPagerAdapter {
 
         FragmentManager mFragmentManager;
+        private boolean mShowMarketPage;
 
         public MainFragmentsAdapter(FragmentManager fm) {
             super(fm);
             mFragmentManager = fm;
+        }
+
+        public void setShowMarketPage(boolean showMarketPage) {
+            mShowMarketPage = showMarketPage;
         }
 
         @Override
@@ -110,13 +148,15 @@ public class MainActivity extends BaseActivity {
                     return new NewsFlashFragment();
                 case 2:
                     return new MarketFragment();
+                case 3:
+                    return new MineFragment();
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         public Fragment getFragment(int position) {

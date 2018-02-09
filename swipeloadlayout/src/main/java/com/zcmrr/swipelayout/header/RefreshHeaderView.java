@@ -150,6 +150,10 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
         setRefreshCompleteText(R.string.refresh_fail);
     }
 
+    public void refreshFail(String freshFailMsg) {
+        setRefreshCompleteText(freshFailMsg);
+    }
+
     public void refreshSuccess() {
         setRefreshCompleteText(R.string.refresh_complete);
     }

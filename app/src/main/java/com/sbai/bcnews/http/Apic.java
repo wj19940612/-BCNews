@@ -105,6 +105,7 @@ public class Apic {
     }
 
     /**
+     * <<<<<<< HEAD
      * 接口名称 获取验证码
      *
      * @param phone
@@ -220,4 +221,24 @@ public class Apic {
         return Api.get("/api/news-user/banner/findBannerList.do", new ReqParams().put("showType", 0));
     }
 
+    // TODO: 2018/2/8 请求运营微信账户
+    public static Api requestOperationWetchatAccount() {
+        return Api.get("");
+    }
+
+    public static Api logout() {
+        return Api.post("/api/news-user/login/logout");
+    }
+
+    // TODO: 2018/2/9 解绑微信号
+    public static Api unbindWeChatAccount() {
+        return Api.post("");
+    }
+
+    /**
+     *查询行情界面是否显示接口
+     */
+    public static Api requestShowMarketPageSwitch() {
+        return Api.get("/dic.html");
+    }
 }
