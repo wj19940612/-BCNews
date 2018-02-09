@@ -23,7 +23,7 @@
             android:id="@+id/slidingTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="36dp"
+            android:layout_marginRight="36dp"
             android:background="@color/white"/>
 
         <RelativeLayout
