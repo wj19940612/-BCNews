@@ -498,14 +498,9 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-<<<<<<< HEAD
-                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
-=======
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.blackPrimary));
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
                 mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
-
->>>>>>> bae49f4eb2f08025519d399563129ba27d34714a
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     mImg.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(0))
@@ -564,14 +559,9 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-<<<<<<< HEAD
-                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
-=======
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.blackPrimary));
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
                 mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
-
->>>>>>> bae49f4eb2f08025519d399563129ba27d34714a
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     mImg1.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(0))
