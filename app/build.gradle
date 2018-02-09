@@ -13,9 +13,9 @@ android {
         buildConfigField('String', 'HOST', '\"news.ailemi.com\"')
 
         manifestPlaceholders = [
-                GETUI_APP_ID    : "yz2rMIFVG88ywlddHHoLU4",
-                GETUI_APP_SECRET: "Qr9bNhb5Cn8llNuhj1OZk1",
-                GETUI_APP_KEY   : "ZfYQR3S4rSAFq58WDy3ZX2",
+                GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
+                GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
+                GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
                 UMENG_APP_KEY   : "5a7bb8b8f43e481619000049",
                 UMENG_CHANNEL   : "android"
         ]
