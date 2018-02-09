@@ -11,7 +11,13 @@ import android.widget.ListView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.view.TitleBar;
+import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by ${wangJie} on 2018/1/26.
@@ -21,10 +27,17 @@ import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment<ListView> {
 
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
+
+    private Unbinder mBind;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.view_base_listview_swipe_load, container, false);
+        View view = inflater.inflate(R.layout.view_base_listview_swipe_load, container, false);
+        mBind = ButterKnife.bind(this, view);
+        return view;
     }
 
     @NonNull
@@ -37,6 +50,24 @@ public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment<Li
     @Override
     public ListView getSwipeTargetView() {
         return getView().findViewById(R.id.swipe_target);
+    }
+
+
+    @NonNull
+    @Override
+    public LoadMoreFooterView getLoadMoreFooterView() {
+        if (getView() != null) {
+            return getView().findViewById(R.id.swipe_load_more_footer);
+        }
+        return null;
+    }
+
+    @NonNull
+    public RefreshHeaderView getRefreshHeaderView() {
+        if (getView() != null) {
+            return getView().findViewById(R.id.swipe_refresh_header);
+        }
+        return null;
     }
 
     @Override
@@ -73,34 +104,18 @@ public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment<Li
     }
 
 
-    public void smoothScrollToTop(){
+    public void smoothScrollToTop() {
         ListView swipeTargetView = getSwipeTargetView();
-        if(swipeTargetView!=null){
+        if (swipeTargetView != null) {
             swipeTargetView.setSelection(0);
         }
     }
 
-    @NonNull
-    public RefreshHeaderView getRefreshHeaderView() {
-        if (getView() != null) {
-            return getView().findViewById(R.id.swipe_refresh_header);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mBind != null) {
+            mBind.unbind();
         }
-        return null;
-    }
-
-    protected void refreshSuccess() {
-        RefreshHeaderView refreshHeaderView = getRefreshHeaderView();
-        if (refreshHeaderView != null) {
-            refreshHeaderView.refreshSuccess();
-        }
-        stopFreshOrLoadAnimation();
-    }
-
-    protected void refreshFail() {
-        RefreshHeaderView refreshHeaderView = getRefreshHeaderView();
-        if (refreshHeaderView != null) {
-            refreshHeaderView.refreshFail();
-        }
-        stopFreshOrLoadAnimation();
     }
 }

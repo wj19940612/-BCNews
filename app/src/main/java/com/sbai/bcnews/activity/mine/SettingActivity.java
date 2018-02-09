@@ -1,0 +1,158 @@
+package com.sbai.bcnews.activity.mine;
+
+import android.annotation.SuppressLint;
+import android.app.AppOpsManager;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.UmengCountEventId;
+import com.sbai.bcnews.view.IconTextRow;
+import com.sbai.bcnews.view.SmartDialog;
+import com.sbai.bcnews.view.TitleBar;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class SettingActivity extends BaseActivity {
+
+    private static final String CHECK_OP_NO_THROW = "checkOpNoThrow";
+    private static final String OP_POST_NOTIFICATION = "OP_POST_NOTIFICATION";
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
+    @BindView(R.id.notificationSwitch)
+    ImageView mNotificationSwitch;
+    @BindView(R.id.receiveNotification)
+    LinearLayout mReceiveNotification;
+    @BindView(R.id.personalData)
+    IconTextRow mPersonalData;
+    @BindView(R.id.accountManager)
+    IconTextRow mAccountManager;
+    @BindView(R.id.aboutBcnews)
+    IconTextRow mAboutBcnews;
+    @BindView(R.id.logout)
+    TextView mLogout;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_setting);
+        ButterKnife.bind(this);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mNotificationSwitch.setSelected(isNotificationEnabled());
+        if (LocalUser.getUser().isLogin()) {
+            mLogout.setVisibility(View.VISIBLE);
+        } else {
+            mLogout.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 获取通知栏权限是否开启
+     */
+    @SuppressLint("NewApi")
+    public boolean isNotificationEnabled() {
+
+        AppOpsManager mAppOps = (AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE);
+        ApplicationInfo appInfo = this.getApplicationInfo();
+        String pkg = this.getApplicationContext().getPackageName();
+        int uid = appInfo.uid;
+
+        Class appOpsClass = null;
+      /* Context.APP_OPS_MANAGER */
+        try {
+            appOpsClass = Class.forName(AppOpsManager.class.getName());
+            Method checkOpNoThrowMethod = appOpsClass.getMethod(CHECK_OP_NO_THROW, Integer.TYPE, Integer.TYPE,
+                    String.class);
+            Field opPostNotificationValue = appOpsClass.getDeclaredField(OP_POST_NOTIFICATION);
+
+            int value = (Integer) opPostNotificationValue.get(Integer.class);
+            return ((Integer) checkOpNoThrowMethod.invoke(mAppOps, value, uid, pkg) == AppOpsManager.MODE_ALLOWED);
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @OnClick({R.id.notificationSwitch, R.id.personalData, R.id.accountManager, R.id.aboutBcnews, R.id.logout})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.notificationSwitch:
+                break;
+            case R.id.personalData:
+                umengEventCount(UmengCountEventId.SETTING_PERSONAL_DATE);
+                if (LocalUser.getUser().isLogin()) {
+                    // TODO: 2018/2/8 个人资料页
+                } else {
+                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                }
+                break;
+            case R.id.accountManager:
+                umengEventCount(UmengCountEventId.SETTING_ACCOUNT_MANAGER);
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), AccountManagerActivity.class).execute();
+                } else {
+                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                }
+                break;
+            case R.id.aboutBcnews:
+                umengEventCount(UmengCountEventId.SETTING_ABOUT_APP);
+                break;
+            case R.id.logout:
+                logout();
+                break;
+        }
+    }
+
+    private void logout() {
+        SmartDialog.with(getActivity(),R.string.affirm_logout)
+               .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                   @Override
+                   public void onClick(Dialog dialog) {
+                       Apic.logout()
+                               .tag(TAG)
+                               .callback(new Callback<Resp<Object>>() {
+
+                                   @Override
+                                   protected void onRespSuccess(Resp<Object> resp) {
+                                       finish();
+                                   }
+                               })
+                               .fire();
+                   }
+               })
+                .show();
+
+    }
+}

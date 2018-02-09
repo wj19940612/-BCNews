@@ -10,7 +10,13 @@ import android.view.ViewGroup;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.view.TitleBar;
+import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by ${wangJie} on 2018/1/26.
@@ -20,10 +26,16 @@ import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment<RecyclerView> {
 
+    @BindView(R.id.titleBar)
+    protected TitleBar mTitleBar;
+    private Unbinder mBind;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.view_base_recycleview_swipe_load, container, false);
+        View view = inflater.inflate(R.layout.view_base_recycleview_swipe_load, container, false);
+        mBind = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
@@ -63,30 +75,15 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
         return null;
     }
 
-    protected void refreshSuccess() {
-        RefreshHeaderView refreshHeaderView = getRefreshHeaderView();
-        if (refreshHeaderView != null) {
-            refreshHeaderView.refreshSuccess();
+    @NonNull
+    @Override
+    public LoadMoreFooterView getLoadMoreFooterView() {
+        if (getView() != null) {
+            return getView().findViewById(R.id.swipe_load_more_footer);
         }
-        stopFreshOrLoadAnimation();
+        return null;
     }
 
-    protected void refreshSuccess(int resid) {
-        RefreshHeaderView refreshHeaderView = getRefreshHeaderView();
-        if (refreshHeaderView != null) {
-            refreshHeaderView.refreshSuccess(resid);
-        }
-        stopFreshOrLoadAnimation();
-    }
-
-
-    protected void refreshFail() {
-        RefreshHeaderView refreshHeaderView = getRefreshHeaderView();
-        if (refreshHeaderView != null) {
-            refreshHeaderView.refreshFail();
-        }
-        stopFreshOrLoadAnimation();
-    }
 
     public void smoothScrollToTop() {
         RecyclerView swipeTargetView = getSwipeTargetView();
@@ -126,5 +123,13 @@ public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment
     public void onDestroy() {
         super.onDestroy();
         mOnScrollListener = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mBind != null) {
+            mBind.unbind();
+        }
     }
 }

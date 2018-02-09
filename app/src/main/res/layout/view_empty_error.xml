@@ -35,7 +35,7 @@
         android:minHeight="0dp"
         android:minWidth="0dp"
         android:text="@string/now_refresh"
-        android:textColor="@color/marketText"
+        android:textColor="@color/assistText"
         android:textSize="16sp"/>
 
 </merge>

@@ -36,7 +36,6 @@ public class PushIntentService extends GTIntentService {
     @Override
     public void onReceiveClientId(Context context, String s) {
         Log.d(TAG, "onReceiveClientId: " + s);
-
     }
 
     @Override

@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.activity.MainActivity;
 
 public class BottomTabs extends LinearLayout {
 
@@ -83,7 +82,6 @@ public class BottomTabs extends LinearLayout {
             addView(createTab(i), params);
         }
         selectTab(0);
-        setThirdTabVisibility(GONE);
     }
 
     private View createTab(int i) {
@@ -113,8 +111,8 @@ public class BottomTabs extends LinearLayout {
         tabTextView.setNum(num);
     }
 
-    public void setThirdTabVisibility(int visible) {
-        View childAt = getChildAt(MainActivity.PAGE_POSITION_MARKET);
+    public void setIndexTabVisibility(int index, int visible) {
+        View childAt = getChildAt(index);
         childAt.setVisibility(visible);
     }
 

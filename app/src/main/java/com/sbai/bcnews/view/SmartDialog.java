@@ -3,7 +3,7 @@ package com.sbai.bcnews.view;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
-
 
 import com.sbai.bcnews.R;
 
@@ -167,13 +166,13 @@ public class SmartDialog {
         mIconResId = -1;
 
         mTitleText = null;
-        mTitleTextColor = Color.parseColor("#222222");
+        mTitleTextColor = ContextCompat.getColor(mActivity, R.color.blackPrimary);
         mTitleMaxLines = 2;
 
         mMessageText = null;
         mMessageGravity = Gravity.CENTER_VERTICAL;
         mMessageTextSize = 14;
-        mMessageTextColor = Color.parseColor("#666666");
+        mMessageTextColor =  ContextCompat.getColor(mActivity, R.color.luckyText);
         mMessageTextMaxLines = 3;
         mWidthScale = 0;
         mHeightScale = 0;
@@ -184,7 +183,7 @@ public class SmartDialog {
         mNegativeListener = null;
         mOnCancelListener = null;
         mDismissListener = null;
-        mPositiveTextColor = Color.parseColor("#55ADFF");
+        mPositiveTextColor = ContextCompat.getColor(mActivity, R.color.colorOriginal);
         mNegativeVisible = View.VISIBLE;
 
         mCancelableOnTouchOutside = true;

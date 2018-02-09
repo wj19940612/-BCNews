@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:splitLineColor="@color/background"
         app:titleText="@string/market"
-        app:titleTextColor="@color/primaryText"
+        app:titleTextColor="@color/blackPrimary"
         app:titleTextSize="17sp"/>
 
     <com.aspsine.swipetoloadlayout.SwipeToLoadLayout

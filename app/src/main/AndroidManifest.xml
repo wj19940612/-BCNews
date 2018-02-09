@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.sbai.bcnews">
+<manifest package="com.sbai.bcnews"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -40,7 +40,6 @@
             android:name=".activity.MainActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
@@ -52,12 +51,77 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.WebActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.CrashInfoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.MarketDetailActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activity.NewsDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.LookBigPictureActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.ShareNewsFlashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityEntryAnimation"/>
+        <activity
+            android:name=".activity.mine.LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.ImageAuthCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/BaseDialog"/>
+
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name="com.umeng.qq.tencent.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="tencent1106465763"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.umeng.qq.tencent.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name=".activity.mine.SettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.AccountManagerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".swipeload.ListSwipeLoadActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".swipeload.RecycleViewSwipeLoadActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.ReadHistoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
 
@@ -70,48 +134,13 @@
             android:value="${UMENG_CHANNEL}"/>
 
         <service android:name=".service.PushIntentService"/>
+
         <service
             android:name=".service.PushService"
             android:exported="true"
             android:label="PushService"
             android:process=":pushservice">
         </service>
-
-        <activity android:name=".activity.NewsDetailActivity"
-                  android:screenOrientation="portrait"/>
-        <activity android:name=".activity.LookBigPictureActivity"
-                  android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.ShareNewsFlashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ActivityEntryAnimation"/>
-
-        <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
-        <activity
-            android:name="com.umeng.qq.tencent.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data android:scheme="tencent1106465763"/>
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.umeng.qq.tencent.AssistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
     </application>
 
 </manifest>
