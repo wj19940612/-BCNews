@@ -1,4 +1,4 @@
-package com.zcmrr.chart;
+package com.sbai.chart;
 
 import java.util.HashMap;
 

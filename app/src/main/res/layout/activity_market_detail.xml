@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/marketBgBlack"
-    tools:context="com.sbai.bcnews.activity.MarketDetailActivity">
+    tools:context="com.sbai.bcnews.activity.market.MarketDetailActivity">
 
     <com.sbai.bcnews.view.TitleBar
         android:id="@+id/titleBar"
@@ -178,19 +178,23 @@
         android:layout_height="match_parent"
         android:layout_below="@id/marketDataArea"
         android:layout_marginTop="14dp"
-        android:orientation="vertical"
-        android:background="@drawable/bg_market">
+        android:background="@drawable/bg_market"
+        android:orientation="vertical">
 
-        <com.sbai.bcnews.view.slidingtab.SlidingTabLayout
-            android:id="@+id/slidingTab"
+        <com.sbai.bcnews.view.HackTabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"/>
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/marketText"
+            app:tabIndicatorHeight="2dp"
+            app:tabMinWidth="0dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/marketText"
+            app:tabTextAppearance="@style/TabLayoutText"/>
 
-        <com.sbai.bcnews.view.ScrollableViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="220dp" />
+
     </LinearLayout>
 
     <TextView

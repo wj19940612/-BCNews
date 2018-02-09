@@ -5,7 +5,6 @@ import android.support.design.widget.TabLayout;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.sbai.bcnews.utils.Display;
 
@@ -16,7 +15,7 @@ import java.lang.reflect.Field;
  */
 public class HackTabLayout extends TabLayout {
 
-    private static final float MARGIN_DP = 10;
+    private static final float MARGIN_DP = 12;
 
     public HackTabLayout(Context context) {
         super(context);
@@ -33,7 +32,7 @@ public class HackTabLayout extends TabLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        //hack();
+        hack();
     }
 
     public void hack() {
@@ -55,25 +54,27 @@ public class HackTabLayout extends TabLayout {
             for (int i = 0; i < tabStrip.getChildCount(); i++) {
                 View child = tabStrip.getChildAt(i);
 
-                Field declaredField = child.getClass().getDeclaredField("mTextView");
-                declaredField.setAccessible(true);
-
-                TextView textView = (TextView) declaredField.get(child);
-                int width = textView.getWidth();
-                if (width == 0) {
-                    textView.measure(0, 0);
-                    width = textView.getMeasuredWidth();
-                }
+//                Field declaredField = child.getClass().getDeclaredField("mTextView");
+//                declaredField.setAccessible(true);
+//
+//                TextView textView = (TextView) declaredField.get(child);
+//                int width = textView.getWidth();
+//                if (width == 0) {
+//                    textView.measure(0, 0);
+//                    width = textView.getMeasuredWidth();
+//                }
 
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) child.getLayoutParams();
-                params.width = width;
+                //params.width = width;
 
                 child.setPadding(0, 0, 0, 0);
                 int margin = (int) Display.dp2Px(MARGIN_DP, getResources());
+                int rightMargin = (int) Display.dp2Px(20, getResources());
+                int leftMargin = rightMargin;
                 if (i == 0) {
-                    params.setMargins(0, 0, margin, 0);
+                    params.setMargins(leftMargin, 0, margin, 0);
                 } else if (i == tabStrip.getChildCount() - 1) {
-                    params.setMargins(margin, 0, 0, 0);
+                    params.setMargins(margin, 0, rightMargin, 0);
                 } else {
                     params.setMargins(margin, 0, margin, 0);
                 }
@@ -81,8 +82,6 @@ public class HackTabLayout extends TabLayout {
             }
 
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
     }

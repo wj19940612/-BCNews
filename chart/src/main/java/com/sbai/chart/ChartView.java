@@ -1,4 +1,4 @@
-package com.zcmrr.chart;
+package com.sbai.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -24,10 +24,10 @@ public abstract class ChartView extends View {
         BASE("#dddddd"),
         TEXT("#999999"),
         WHITE("#ffffff"),
-        GREEN("#39AE13"),
-        BLACK("#494949"),
+        GREEN("#2fcc9f"),
+        BLACK("#222222"),
         DASH("#979797"),
-        RED("#F62048");
+        RED("#f25b57");
 
         private String value;
 

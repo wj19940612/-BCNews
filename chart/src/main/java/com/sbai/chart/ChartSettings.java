@@ -1,4 +1,4 @@
-package com.zcmrr.chart;
+package com.sbai.chart;
 
 public class ChartSettings {
 

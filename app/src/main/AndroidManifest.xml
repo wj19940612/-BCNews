@@ -59,7 +59,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.MarketDetailActivity"
+            android:name=".activity.market.MarketDetailActivity"
             android:screenOrientation="portrait"/>
 
         <activity

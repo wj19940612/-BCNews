@@ -67,7 +67,7 @@ public class StrUtil {
      * 按比例缩放 s2 的大小并设置 s2 颜色，同时拼接 s1 和 s2
      *
      * @param s1
-     * @param ratio
+     * @param ratio 比例值，单位字体大小 = 原字体大小 * ratio
      * @param s2Color
      * @param s2
      * @return 处理后的字符串

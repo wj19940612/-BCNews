@@ -47,15 +47,14 @@ public class MainActivity extends BaseActivity {
     }
 
     private void requestShowMarketPageSwitch() {
+        mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.VISIBLE);
         Apic.requestShowMarketPageSwitch()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<MarketPageSwitch>, MarketPageSwitch>() {
                     @Override
                     protected void onRespSuccessData(MarketPageSwitch data) {
                         if (data.getQuota() == MarketPageSwitch.SHOW_MARKET_PAGE) {
-                            mBottomTabs.setThirdTabVisibility(View.VISIBLE);
-                            mMainFragmentsAdapter.setShowMarketPage(true);
-                            mMainFragmentsAdapter.notifyDataSetChanged();
+                            mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.VISIBLE);
                         }
                     }
                 })
@@ -123,10 +122,6 @@ public class MainActivity extends BaseActivity {
             mFragmentManager = fm;
         }
 
-        public void setShowMarketPage(boolean showMarketPage) {
-            mShowMarketPage = showMarketPage;
-        }
-
         @Override
         public Fragment getItem(int position) {
             switch (position) {
@@ -142,10 +137,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            if (mShowMarketPage) {
-                return 3;
-            }
-            return 2;
+            return 3;
         }
 
         public Fragment getFragment(int position) {

@@ -18,5 +18,5 @@ public interface ExtraKeys {
 
     String NEWS_ID = "news_id";
 
-    String DigitalCash = "digital_cash";
+    String DIGITAL_CURRENCY = "digital_currency";
 }

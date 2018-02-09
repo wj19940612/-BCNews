@@ -1,4 +1,4 @@
-package com.zcmrr.chart;
+package com.sbai.chart;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -12,7 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.zcmrr.chart.domain.KlineViewData;
+import com.sbai.chart.domain.KlineViewData;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,7 +50,7 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         mKlineChart = new KlineChart(getContext());
         mKlineChart.setOnTouchLinesAppearListener(this);
         int padding = (int) mKlineChart.dp2Px(14);
-        LayoutParams params = new LayoutParams(
+        RelativeLayout.LayoutParams params = new LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         mKlineChart.setPadding(padding, 0, padding, 0);

@@ -1,4 +1,4 @@
-package com.zcmrr.chart;
+package com.sbai.chart;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.zcmrr.chart.domain.TrendViewData;
+import com.sbai.chart.domain.TrendViewData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

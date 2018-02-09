@@ -1,4 +1,4 @@
-package com.zcmrr.chart.domain;
+package com.sbai.chart.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -131,7 +131,7 @@ public class KlineViewData implements Parcelable {
         this.movingAverages = in.readSparseArray(Float.class.getClassLoader());
     }
 
-    public static final Creator<KlineViewData> CREATOR = new Creator<KlineViewData>() {
+    public static final Parcelable.Creator<KlineViewData> CREATOR = new Parcelable.Creator<KlineViewData>() {
         @Override
         public KlineViewData createFromParcel(Parcel source) {
             return new KlineViewData(source);

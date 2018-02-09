@@ -1,4 +1,4 @@
-package com.zcmrr.chart.domain;
+package com.sbai.chart.domain;
 
 public class TrendViewData {
 

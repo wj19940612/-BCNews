@@ -14,8 +14,7 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.activity.MarketDetailActivity;
-import com.sbai.bcnews.activity.market.DigitalCashMarketActivity;
+import com.sbai.bcnews.activity.market.MarketDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
@@ -136,11 +135,11 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         mMarkListAdapter.setOnItemClickListener(new OnItemClickListener<MarketData>() {
             @Override
             public void onItemClick(MarketData marketData, int position) {
-                Launcher.with(getActivity(), MarketDetailActivity.class).execute();
-                umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
-                Launcher.with(getActivity(), DigitalCashMarketActivity.class)
-                        .putExtra(ExtraKeys.DigitalCash, marketData)
+                Launcher.with(getActivity(), MarketDetailActivity.class)
+                        .putExtra(ExtraKeys.DIGITAL_CURRENCY, marketData)
                         .execute();
+
+                umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
             }
         });
 

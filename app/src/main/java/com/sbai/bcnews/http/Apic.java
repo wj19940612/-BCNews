@@ -71,21 +71,6 @@ public class Apic {
     }
 
     /**
-     * /api/news-quota/quota/{code}
-     * GET
-     * 单个行情(ws)
-     *
-     * @return
-     */
-    public static Api requestDigitalCashDetail(String code, String exchangeCode) {
-        return Api.get("/api/news-quota/quota/{code}",
-                new ReqParams()
-                        .put("code", code)
-                        .put("exchangeCode", exchangeCode));
-    }
-
-
-    /**
      * /api/news-quota/quota/{code}/trend
      * POST
      * 分时图列表
@@ -107,5 +92,19 @@ public class Apic {
      */
     public static Api requestShowMarketPageSwitch() {
         return Api.get("/dic.html");
+    }
+
+    /**
+     * 请求当个数字货币的行情
+     *
+     * @param code
+     * @param exchangeCode
+     * @return
+     */
+    public static Api reqSingleMarket(String code, String exchangeCode) {
+        return Api.get("/api/news-quota/quota/{code}",
+                new ReqParams()
+                        .put("code", code)
+                        .put("exchangeCode", exchangeCode));
     }
 }

@@ -1,17 +1,17 @@
-package com.zcmrr.chart;
+package com.sbai.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
-public class KTouchView extends KlineChart {
+public class TouchView extends TrendChart {
 
-    private KlineChart mChart;
+    private TrendChart mTrendChart;
 
-    public KTouchView(Context context, KlineChart chart) {
+    public TouchView(Context context, TrendChart chart) {
         super(context);
-        mChart = chart;
-        setVisibleList(mChart.getVisibleList());
+        mTrendChart = chart;
+        setVisibleList(mTrendChart.getVisibleList());
     }
 
     @Override
@@ -23,23 +23,24 @@ public class KTouchView extends KlineChart {
     }
 
     @Override
-    protected boolean enableDragChart() {
-        return false;
-    }
-
-    @Override
     protected void drawBaseLines(boolean indexesEnable,
                                  float[] baselines, int left, int top, int width, int height,
                                  long[] indexesBaseLines, int left2, int top2, int width2, int height2,
                                  Canvas canvas) {
-        setPriceAreaWidth(mChart.getPriceAreaWidth());
+        setPriceAreaWidth(mTrendChart.getPriceAreaWidth());
     }
-
 
     @Override
     protected void drawRealTimeData(boolean indexesEnable,
                                     int left, int top, int width, int height,
                                     int left2, int top2, int width2, int height2,
+                                    Canvas canvas) {
+    }
+
+    @Override
+    protected void drawUnstableData(boolean indexesEnable,
+                                    int left, int top, int width, int topPartHeight,
+                                    int left2, int top2, int width1, int bottomPartHeight,
                                     Canvas canvas) {
     }
 
@@ -51,8 +52,8 @@ public class KTouchView extends KlineChart {
     protected int calculateTouchIndex(MotionEvent e) {
         int touchIndex = super.calculateTouchIndex(e);
         if (getVisibleList() != null && getVisibleList().size() > 0) {
-            touchIndex = Math.max(touchIndex, mChart.getFirstVisibleIndex());
-            touchIndex = Math.min(touchIndex, mChart.getLastVisibleIndex());
+            touchIndex = Math.max(touchIndex, mTrendChart.getFirstVisibleIndex());
+            touchIndex = Math.min(touchIndex, mTrendChart.getLastVisibleIndex());
         }
         return touchIndex;
     }
@@ -67,11 +68,6 @@ public class KTouchView extends KlineChart {
 
     @Override
     protected boolean enableDrawTouchLines() {
-        return true;
-    }
-
-    @Override
-    protected boolean enableDrawMovingAverages() {
         return true;
     }
 }

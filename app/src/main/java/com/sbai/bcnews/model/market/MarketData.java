@@ -3,8 +3,6 @@ package com.sbai.bcnews.model.market;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.sbai.bcnews.http.Apic;
-
 /**
  * Modified by john on 06/02/2018
  * <p>
@@ -35,8 +33,8 @@ public class MarketData implements Parcelable{
      * volume : 91431.3021
      */
 
-    private double askPrice;     //卖价
-    private double bidPrice;     //买价
+    private double askPrice;     //卖出价（买价）
+    private double bidPrice;     //买入价（卖价）
     private String code;         //代码
     private String currencyMoney;//计价货币
     private String exchangeCode; //交易所code
