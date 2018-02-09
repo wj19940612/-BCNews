@@ -8,10 +8,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.fragment.HomeNewsFragment;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.MineFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
-import com.sbai.bcnews.fragment.NewsFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
@@ -142,7 +142,7 @@ public class MainActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new NewsFragment();
+                    return new HomeNewsFragment();
                 case 1:
                     return new NewsFlashFragment();
                 case 2:

@@ -61,12 +61,12 @@
         <activity
             android:name=".activity.MarketDetailActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.NewsDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.LookBigPictureActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.NewsDetailActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ChannelActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.LookBigPictureActivity"
+                  android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ShareNewsFlashActivity"
             android:screenOrientation="portrait"
@@ -108,10 +108,6 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.mine.AccountManagerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".swipeload.ListSwipeLoadActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity

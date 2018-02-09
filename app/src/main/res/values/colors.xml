@@ -12,8 +12,10 @@
     <color name="background">#F5F5F5</color>
     <color name="redPrimary">#f25b57</color>
     <color name="blackPrimary">#222</color>
+    <color name="primaryText">#222</color>
     <color name="split">#ddd</color>
     <color name="white">#FFF</color>
+    <color name="collect">#444</color>
 
 
     <color name="assistText">#494949</color>

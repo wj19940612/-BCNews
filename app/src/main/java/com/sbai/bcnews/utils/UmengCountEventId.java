@@ -11,6 +11,7 @@ public class UmengCountEventId {
      */
     public static final String NEWS01 = "news01";     //资讯tab
     public static final String NEWS05 = "news05";     //资讯详情分享
+    public static final String NEWS04 = "news04";     //资讯详情收藏
 
     /**
      * 快讯

@@ -92,6 +92,13 @@
     <string name="original">原创</string>
     <string name="no_more_data">没有更多内容了</string>
     <string name="no_more_new_news">已是最新资讯</string>
+    <string name="channel_custom">频道定制</string>
+    <string name="channel_select">已选频道</string>
+    <string name="drag_to_select_channel">长按拖动调整排序</string>
+    <string name="un_select_channel">未选频道</string>
+    <string name="other_article">相关文章</string>
+    <string name="collect_fail">收藏失败</string>
+    <string name="no_news">暂无资讯，换个频道试试吧</string>
 
 
     <!--行情-->
