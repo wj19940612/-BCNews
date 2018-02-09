@@ -12,7 +12,6 @@ import com.sbai.bcnews.fragment.HomeNewsFragment;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.MineFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
-import com.sbai.bcnews.fragment.NewsFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
