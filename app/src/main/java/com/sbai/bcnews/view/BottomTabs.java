@@ -29,6 +29,7 @@ public class BottomTabs extends LinearLayout {
 
     private OnTabClickListener mOnTabClickListener;
 
+
     public interface OnTabClickListener {
         void onTabClick(int position);
     }
@@ -108,6 +109,11 @@ public class BottomTabs extends LinearLayout {
     public void setPointNum(int index, int num) {
         BadgeTextView tabTextView = (BadgeTextView) getChildAt(index);
         tabTextView.setNum(num);
+    }
+
+    public void setIndexTabVisibility(int index, int visible) {
+        View childAt = getChildAt(index);
+        childAt.setVisibility(visible);
     }
 
     private View createPointTab(int i) {

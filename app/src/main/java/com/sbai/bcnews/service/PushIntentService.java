@@ -12,6 +12,8 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.igexin.sdk.GTIntentService;
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
@@ -81,19 +83,19 @@ public class PushIntentService extends GTIntentService {
 
     private void handleMessage(Context context, String data) {
         Log.d(TAG, "===data  " + data);
-//        try {
-//            PushMessage pushMessage = new Gson().fromJson(data, PushMessage.class);
-//            createNotification(context, pushMessage);
-//        } catch (JsonSyntaxException e) {
-//            Log.d(TAG, "handleMessage: " + e.toString());
-//        }
+        try {
+            PushMessage pushMessage = new Gson().fromJson(data, PushMessage.class);
+            createNotification(context, pushMessage);
+        } catch (JsonSyntaxException e) {
+            Log.d(TAG, "handleMessage: " + e.toString());
+        }
 
     }
 
     private void createNotification(Context context, PushMessage pushMessage) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentTitle(pushMessage.getPushTopic());
-        builder.setContentText(pushMessage.getPushContent());
+        builder.setContentTitle(pushMessage.getTitle());
+        builder.setContentText(pushMessage.getMsg());
         builder.setAutoCancel(true);
         builder.setWhen(System.currentTimeMillis());
         String brand = Build.BRAND;

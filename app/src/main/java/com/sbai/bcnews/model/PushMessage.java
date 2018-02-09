@@ -5,43 +5,70 @@ package com.sbai.bcnews.model;
  */
 
 public class PushMessage {
-
-    /**
-     * createTime : 2017-11-03 10:20:42
-     * pushTopic : dasda
-     * pushContent : dasdasda
-     * url : ccsdasdasd
-     * pushType : 2
-     */
-
-    private String createTime;
-    private String pushTopic;
-    private String pushContent;
+    private int classify;      // 以前用的classify 和type 双重判断  后面用type 作为唯一表示
+    private long createTime;
+    private String dataId;
+    private String iconUrl;
+    private String msg;
+    private String title;
+    private int type;
     private String url;
-    private int pushType;
 
-    public String getCreateTime() {
+    public int getClassify() {
+        return classify;
+    }
+
+    public void setClassify(int classify) {
+        this.classify = classify;
+    }
+
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 
-    public String getPushTopic() {
-        return pushTopic;
+
+    public String getDataId() {
+        return dataId;
     }
 
-    public void setPushTopic(String pushTopic) {
-        this.pushTopic = pushTopic;
+    public void setDataId(String dataId) {
+        this.dataId = dataId;
     }
 
-    public String getPushContent() {
-        return pushContent;
+    public String getIconUrl() {
+        return iconUrl;
     }
 
-    public void setPushContent(String pushContent) {
-        this.pushContent = pushContent;
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getUrl() {
@@ -52,22 +79,17 @@ public class PushMessage {
         this.url = url;
     }
 
-    public int getPushType() {
-        return pushType;
-    }
-
-    public void setPushType(int pushType) {
-        this.pushType = pushType;
-    }
-
     @Override
     public String toString() {
-        return "PushMessage{" +
-                "createTime='" + createTime + '\'' +
-                ", pushTopic='" + pushTopic + '\'' +
-                ", pushContent='" + pushContent + '\'' +
+        return "PushMessageModel{" +
+                "classify=" + classify +
+                ", createTime=" + createTime +
+                ", dataId='" + dataId + '\'' +
+                ", iconUrl='" + iconUrl + '\'' +
+                ", msg='" + msg + '\'' +
+                ", title='" + title + '\'' +
+                ", type=" + type +
                 ", url='" + url + '\'' +
-                ", pushType=" + pushType +
                 '}';
     }
 }

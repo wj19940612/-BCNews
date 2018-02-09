@@ -32,7 +32,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="17dp"
-            android:textColor="@color/primaryText"
+            android:textColor="@color/blackPrimary"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +84,7 @@
         app:leftIcon="@drawable/ic_share_wechat"
         app:rightIcon="@drawable/ic_common_right_arrow"
         app:rowText="@string/me_want_contribute"
-        app:rowTextColor="@color/primaryText"
+        app:rowTextColor="@color/blackPrimary"
         app:rowTextSize="16sp"
         app:rowVerticalPadding="0dp"/>
 
@@ -101,7 +101,7 @@
         app:leftIcon="@drawable/ic_share_wechat"
         app:rightIcon="@drawable/ic_common_right_arrow"
         app:rowText="@string/feed_back"
-        app:rowTextColor="@color/primaryText"
+        app:rowTextColor="@color/blackPrimary"
         app:rowTextSize="16sp"
         app:rowVerticalPadding="0dp"/>
 
@@ -115,7 +115,7 @@
         app:leftIcon="@drawable/ic_share_wechat"
         app:rightIcon="@drawable/ic_common_right_arrow"
         app:rowText="@string/setting"
-        app:rowTextColor="@color/primaryText"
+        app:rowTextColor="@color/blackPrimary"
         app:rowTextSize="16sp"
         app:rowVerticalPadding="0dp"/>
 

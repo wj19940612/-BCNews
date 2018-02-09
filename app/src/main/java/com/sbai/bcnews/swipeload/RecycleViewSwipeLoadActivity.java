@@ -1,12 +1,11 @@
 package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
@@ -28,7 +27,7 @@ import butterknife.ButterKnife;
 public class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<RecyclerView> {
 
     @BindView(R.id.titleBar)
-    TitleBar mTitleBar;
+    protected TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
     @BindView(R.id.swipe_target)
@@ -38,7 +37,7 @@ public class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<Recycler
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
-    LinearLayout mRootView;
+    View mRootView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,6 +92,16 @@ public class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<Recycler
      */
     public View getContentView() {
         return mRootView;
+    }
+
+    /**
+     * setContentView 中的布局文件id
+     *
+     * @return
+     */
+    @LayoutRes
+    protected int getContentViewId() {
+        return R.layout.view_base_recycleview_swipe_load;
     }
 
     @NonNull
