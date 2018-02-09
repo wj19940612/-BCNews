@@ -166,13 +166,13 @@ public class SmartDialog {
         mIconResId = -1;
 
         mTitleText = null;
-        mTitleTextColor = ContextCompat.getColor(mActivity, R.color.blackPrimary);
+        mTitleTextColor = ContextCompat.getColor(mActivity, R.color.primaryText);
         mTitleMaxLines = 2;
 
         mMessageText = null;
         mMessageGravity = Gravity.CENTER_VERTICAL;
         mMessageTextSize = 14;
-        mMessageTextColor =  ContextCompat.getColor(mActivity, R.color.luckyText);
+        mMessageTextColor = ContextCompat.getColor(mActivity, R.color.luckyText);
         mMessageTextMaxLines = 3;
         mWidthScale = 0;
         mHeightScale = 0;

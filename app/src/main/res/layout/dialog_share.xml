@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:minHeight="29dp"
-        android:textColor="@color/blackPrimary"
+        android:textColor="@color/primaryText"
         android:textSize="11sp"/>
 
     <View
@@ -54,7 +54,7 @@
                 android:drawableTop="@drawable/ic_share_wechat"
                 android:gravity="center"
                 android:text="@string/wechat_friend"
-                android:textColor="@color/blackPrimary"
+                android:textColor="@color/primaryText"
                 android:textSize="12sp"/>
         </LinearLayout>
 
@@ -83,7 +83,7 @@
                 android:drawableTop="@drawable/ic_share_wechat_circle"
                 android:gravity="center"
                 android:text="@string/wechat_circle"
-                android:textColor="@color/blackPrimary"
+                android:textColor="@color/primaryText"
                 android:textSize="12sp"/>
 
         </LinearLayout>
@@ -114,7 +114,7 @@
                 android:drawableTop="@drawable/ic_share_qq"
                 android:gravity="center"
                 android:text="QQ"
-                android:textColor="@color/blackPrimary"
+                android:textColor="@color/primaryText"
                 android:textSize="12sp"/>
 
         </LinearLayout>
@@ -135,7 +135,7 @@
             android:drawableTop="@drawable/ic_share_weibo"
             android:gravity="center"
             android:text="@string/sina_weibo"
-            android:textColor="@color/blackPrimary"
+            android:textColor="@color/primaryText"
             android:textSize="12sp"
             android:visibility="gone"/>
     </LinearLayout>
@@ -151,6 +151,6 @@
         android:gravity="center"
         android:minHeight="50dp"
         android:text="@string/cancel"
-        android:textColor="@color/blackPrimary"
+        android:textColor="@color/primaryText"
         android:textSize="15sp"/>
 </LinearLayout>

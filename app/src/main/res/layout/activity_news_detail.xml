@@ -21,7 +21,7 @@
         app:titleLeftMargin="60dp"
         app:titleRightMargin="60dp"
         app:titleText="@string/news_detail"
-        app:titleTextColor="@color/blackPrimary"
+        app:titleTextColor="@color/primaryText"
         app:titleTextSize="14sp"/>
 
     <View
@@ -57,7 +57,7 @@
                     android:layout_marginRight="14dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:textColor="@color/blackPrimary"
+                    android:textColor="@color/primaryText"
                     android:textSize="22sp"/>
 
                 <TextView
@@ -172,7 +172,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="@string/share_to_"
-                    android:textColor="@color/blackPrimary"
+                    android:textColor="@color/primaryText"
                     android:textSize="12sp"/>
 
 
