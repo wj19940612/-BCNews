@@ -63,4 +63,9 @@
         <item name="android:textCursorDrawable">@drawable/cursor_primary</item>
     </style>
 
+    <style name="BaseDialog.Bottom">
+        <item name="android:windowAnimationStyle">@style/BottomDialogAnimation</item>
+    </style>
+
+
 </resources>

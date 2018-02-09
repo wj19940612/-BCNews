@@ -174,4 +174,23 @@ public class Apic {
                 .put("source", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
     }
 
+    /**
+     * 查询用户反馈数据
+     */
+    public static Api requestFeedbackList(int page) {
+        return Api.get("/api/news-user/feedback/page", new ReqParams()
+                .put("page", page)
+                .put("size", Apic.NORMAL_PAGESIZE));
+    }
+
+    /**
+     * 提交用户反馈数据
+     */
+    public static Api requestSendFeedback(String content, int contentType) {
+        return Api.post("/api/news-user/feedback/add", new ReqParams()
+                .put("content", content)
+                .put("contentType", contentType));
+    }
+
+
 }

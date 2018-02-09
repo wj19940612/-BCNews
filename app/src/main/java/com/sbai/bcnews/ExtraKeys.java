@@ -6,6 +6,8 @@ package com.sbai.bcnews;
 
 public interface ExtraKeys {
 
+    String IMAGE = "image";
+
     String CRASH_INFO = "crash_info";
 
     String APP_VERSION = "app_version";

@@ -5,6 +5,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.mine.AboutActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.utils.Launcher;
 
@@ -36,7 +37,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void goMain() {
-        Launcher.with(getActivity(), LoginActivity.class).execute();
+        Launcher.with(getActivity(), AboutActivity.class).execute();
         supportFinishAfterTransition();
     }
 }

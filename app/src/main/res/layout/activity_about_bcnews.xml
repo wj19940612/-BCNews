@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.sbai.bcnews.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:backFeature="true"
+        app:hasBottomSplitLine="true"
+        app:titleText="@string/about_bcnews"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="260dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:src="@drawable/ic_news_flash_share_pic"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="14dp"
+            android:text="@string/cooperation_click_copy"
+            android:textColor="@color/unluckyText"
+            android:textSize="12sp"/>
+
+    </RelativeLayout>
+
+    <com.sbai.bcnews.view.autofit.AutofitTextView
+        android:id="@+id/weChat"
+        android:layout_width="170dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_white_round"
+        android:drawableLeft="@drawable/ic_share_wechat"
+        android:gravity="center"
+        android:textColor="@color/marketText"
+        android:textSize="14sp"
+        app:autoSizeMaxTextSize="14sp"
+        tools:text="微信:qkcj2018"/>
+
+
+    <com.sbai.bcnews.view.autofit.AutofitTextView
+        android:id="@+id/qq"
+        android:layout_width="170dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bg_white_round"
+        android:drawableLeft="@drawable/ic_share_qq"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/marketText"
+        android:textSize="14sp"
+        app:autoSizeMaxTextSize="14sp"
+        tools:text="QQ:1957869980"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/agree"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:textColor="@color/marketText"
+            android:textSize="12sp"
+            tools:text="v1.0.1"/>
+
+
+        <TextView
+            android:id="@+id/agree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/companyInfo"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:text="@string/bcnews_user_agreement"
+            android:textColor="@color/blackPrimary"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/companyInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:paddingBottom="12dp"
+            android:text="@string/company_info"
+            android:textColor="@color/unluckyText"
+            android:textSize="12sp"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
