@@ -52,6 +52,27 @@
         <attr name="titleRightMargin" format="dimension|reference"/>
     </declare-styleable>
 
+    <declare-styleable name="SlidingTabTitle">
+        <attr name="showBack" format="boolean"/>
+        <attr name="isWhiteBack" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="HomeBanner">
+        <attr name="isRectIndicator" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="PageIndicator">
+        <attr name="indicators" format="integer"/>
+        <attr name="indicatorsInterval" format="dimension"/>
+        <attr name="point" format="color"/>
+        <attr name="selectedPoint" format="color"/>
+        <attr name="pointRadius" format="dimension"/>
+        <attr name="pointWidth" format="dimension"/>
+        <attr name="pointHeight" format="dimension"/>
+        <attr name="infinite" format="boolean"/>
+        <attr name="isRect" format="boolean"/>
+    </declare-styleable>
+
     <!--密码输入控件-->
     <declare-styleable name="PasswordEditText">
         <attr name="textHint" format="reference|string"/>
@@ -59,6 +80,11 @@
         <attr name="splitLineColor"/>
         <attr name="maxCharNum" format="integer"/>
     </declare-styleable>
+
+    <style name="Widget.Design.AppBarLayout" parent="android:Widget">
+        <item name="elevation">0dp</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
 
     <!--带图标和文字的行控件-->
     <declare-styleable name="IconTextRow">

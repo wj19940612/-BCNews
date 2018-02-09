@@ -9,17 +9,13 @@
     <com.sbai.bcnews.view.TitleBar
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:backFeature="false"
-        app:customView="@layout/view_title_news"
-        app:hasBottomSplitLine="true"
-        app:splitLineColor="@color/split"/>
+        android:layout_height="95dp"/>
 
     <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
         android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/titleBar"
+        android:layout_below="@+id/banner"
         app:default_to_loading_more_scrolling_duration="500"
         app:layout_constraintTop_toBottomOf="@+id/titleBar"
         app:load_more_complete_delay_duration="0"
@@ -38,7 +34,6 @@
             android:id="@+id/swipe_target"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="12dp"
             android:clipToPadding="false"/>
 
         <com.zcmrr.swipelayout.foot.LoadMoreFooterView

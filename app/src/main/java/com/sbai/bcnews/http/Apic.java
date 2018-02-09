@@ -29,6 +29,22 @@ public class Apic {
         return Api.get("/api/news-info/info/details/{id}", new ReqParams().put("id", id));
     }
 
+    /**
+     * 获取资讯列表
+     *
+     * @param channel 频道名称
+     * @return
+     */
+    public static Api requestNewsListWithChannel(String channel,int page) {
+        return Api.get("/api/news-info/news/{channel}/list", new ReqParams().put("channel",channel).put("page", page).put("size", NORMAL_PAGESIZE));
+    }
+
+    /**
+     * 获取资讯列表-频道
+     *
+     * @param page 页数
+     * @return
+     */
     public static Api getNewsList(int page) {
         return Api.get("/api/news-info/info/list.do", new ReqParams().put("page", page).put("size", NORMAL_PAGESIZE));
     }
@@ -66,11 +82,26 @@ public class Apic {
     /**
      * 资讯点赞 - 齐慕伟
      *
-     * @param newsId
+     * @param newsId 资讯id
+     * @param type 0-取消点赞 1-点赞
      * @return
      */
-    public static Api praiseNews(String newsId) {
-        return Api.put("/api/news-info/info/like/{id}", new ReqParams().put("id", newsId));
+    public static Api praiseNews(String newsId,int type) {
+        return Api.post("/api/news-info/news/praise/{id}", new ReqParams().put("id", newsId).put("type",type));
+    }
+
+    /**
+     * 频道列表
+     */
+    public static Api getChannels() {
+        return Api.get("/api/news-info/news/channels");
+    }
+
+    /**
+     * 获取资讯详情相关文章
+     */
+    public static Api getOtherArticles(String channel, String id) {
+        return Api.get("/api/news-info/news/channel/{channel}/{id}", new ReqParams().put("channel", channel).put("id", id));
     }
 
     /**
@@ -173,6 +204,21 @@ public class Apic {
                 .put("deviceId", Preference.get().getPushClientId())
                 .put("platform", 0)
                 .put("source", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
+    }
+
+    /**
+     * 用户--资讯收藏--薛松
+     *
+     * @param id         资讯id
+     * @param collectNum 0-收藏 1-取消收藏
+     * @return
+     */
+    public static Api requestCollect(String id, int collectNum) {
+        return Api.post("/api/news-user/operate/collect/{id}", new ReqParams().put("id", id).put("type", 0).put("cancel", collectNum));
+    }
+
+    public static Api requestBanners() {
+        return Api.get("/api/news-user/banner/findBannerList.do", new ReqParams().put("showType", 0));
     }
 
     // TODO: 2018/2/8 请求运营微信账户
