@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
@@ -370,7 +371,6 @@ public class NewsDetailActivity extends BaseActivity {
     private void initScrollViewLocation() {
         mTitleHeight = mTitleLayout.getMeasuredHeight();
         int webViewHeight = mWebView.getHeight();
-        //Log.e("zzz", "starty:" + mNewsDetail.getReadHeight() + " and webview 高度:" + webViewHeight);
         //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
         if (mNewsDetail != null && mNewsDetail.getReadHeight() > webViewHeight + mTitleHeight) {
             startScheduleJob(50);
@@ -384,14 +384,12 @@ public class NewsDetailActivity extends BaseActivity {
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
-        //Log.e("zzz", "onTimeUp");
         mTitleHeight = mTitleLayout.getMeasuredHeight();
         int webViewHeight = mWebView.getHeight();
         //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
         if (mNewsDetail != null && mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
             stopScheduleJob();
             mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
-            //Log.e("zzz", "starty:" + mNewsDetail.getReadHeight() + " and webview 高度:" + webViewHeight);
         }
     }
 
@@ -400,11 +398,7 @@ public class NewsDetailActivity extends BaseActivity {
             @Override
             public void onScroll(int scrollY) {
                 //底部按钮的交互
-                if (mScrollY != 0 && mScrollY != scrollY) {
-                    scrollTitleBar(scrollY - mScrollY > 0);
-                } else if (scrollY == mScrollView.getHeight()) {
-                    scrollTitleBar(false);
-                }
+                upOrDownBottomBar(scrollY);
                 if (scrollY > mTitleHeight && mNewsDetail != null) {
                     if (!mTitleVisible) {
                         mTitleBar.setTitle(mNewsDetail.getTitle());
@@ -416,7 +410,6 @@ public class NewsDetailActivity extends BaseActivity {
                         mTitleVisible = false;
                     }
                 }
-                mScrollY = scrollY;
             }
 
             @Override
@@ -426,7 +419,19 @@ public class NewsDetailActivity extends BaseActivity {
         });
     }
 
-    private void scrollTitleBar(final boolean down) {
+    private void upOrDownBottomBar(int scrollY) {
+        //最底部那部分只滑出不滑入
+        int scrollAddScreenHeight = scrollY + mScrollView.getHeight();
+        int scrollViewExpandHeight = mScrollView.getChildAt(0).getMeasuredHeight();
+        if (scrollAddScreenHeight > scrollViewExpandHeight || Math.abs(scrollAddScreenHeight - scrollViewExpandHeight) < 60) {
+            scrollBottomBar(false);
+        } else if (mScrollY != 0 && mScrollY != scrollY) {
+            scrollBottomBar(scrollY - mScrollY > 0);
+        }
+        mScrollY = scrollY;
+    }
+
+    private void scrollBottomBar(final boolean down) {
         if (mAnimating || (mTitleScrollState == SCROLL_STATE_GONE && down) || (mTitleScrollState == SCROLL_STATE_NORMAL && !down)) {
             return;
         }
@@ -602,14 +607,17 @@ public class NewsDetailActivity extends BaseActivity {
     private void requestPraise() {
         if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
             int praiseWant = mNetNewsDetail.getPraise() == 0 ? 1 : 0;
-            Apic.praiseNews(mNetNewsDetail.getId(), praiseWant).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
+            Apic.praiseNews(mNetNewsDetail.getId(), praiseWant).tag(TAG).callback(new Callback<Resp>() {
                 @Override
-                protected void onRespSuccessData(Integer data) {
-                    if (data != null) {
-                        mNetNewsDetail.setPraise(data);
+                protected void onRespSuccess(Resp resp) {
+                    if (mNetNewsDetail.getPraise() == 0) {
+                        mNetNewsDetail.setPraise(1);
                         mNetNewsDetail.setPraiseCount(mNetNewsDetail.getPraiseCount() + 1);
-                        updatePraiseCollect(mNetNewsDetail);
+                        umengEventCount(UmengCountEventId.NEWS04);
+                    } else {
+                        mNetNewsDetail.setPraise(0);
                     }
+                    updatePraiseCollect(mNetNewsDetail);
                 }
 
                 @Override
@@ -625,9 +633,9 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void collect() {
         if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
-            Apic.requestCollect(mNetNewsDetail.getId(), mNetNewsDetail.getCollect()).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
+            Apic.requestCollect(mNetNewsDetail.getId(), mNetNewsDetail.getCollect()).tag(TAG).callback(new Callback<Resp>() {
                 @Override
-                protected void onRespSuccessData(Integer data) {
+                protected void onRespSuccess(Resp resp) {
                     if (mNetNewsDetail.getCollect() == 0) {
                         mNetNewsDetail.setCollect(1);
                         umengEventCount(UmengCountEventId.NEWS04);
@@ -674,7 +682,7 @@ public class NewsDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.wxShare, R.id.circleShare, R.id.praiseLayout, R.id.titleBar, R.id.collectLayout})
+    @OnClick({R.id.wxShare, R.id.circleShare, R.id.praiseLayout, R.id.titleBar, R.id.collectLayout, R.id.bottomShareLayout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.wxShare:
