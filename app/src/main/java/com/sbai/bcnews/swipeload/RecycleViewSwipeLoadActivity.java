@@ -41,8 +41,8 @@ public  class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<Recycle
     LinearLayout mRootView;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.view_base_recycleview_swipe_load);
         ButterKnife.bind(this);
         if (getSwipeTargetView() != null) {

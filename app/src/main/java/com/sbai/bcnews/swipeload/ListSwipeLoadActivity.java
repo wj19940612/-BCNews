@@ -43,8 +43,8 @@ public class ListSwipeLoadActivity extends BaseSwipeLoadActivity<ListView> {
     LinearLayout mRootView;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.view_base_listview_swipe_load);
         ButterKnife.bind(this);
 
