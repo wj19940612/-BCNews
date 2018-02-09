@@ -1,14 +1,11 @@
 package com.sbai.bcnews.fragment;
 
 import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,10 +16,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
@@ -31,12 +26,11 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ChannelCacheModel;
-import com.sbai.bcnews.model.ChannelEntity;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
-import com.sbai.bcnews.view.slidingTab.SlidingTabLayout;
+import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +41,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
-import static android.view.animation.Animation.ABSOLUTE;
-import static android.view.animation.Animation.RELATIVE_TO_PARENT;
 import static com.sbai.bcnews.fragment.NewsFragment.HAS_BANNER;
 import static com.sbai.bcnews.fragment.NewsFragment.NO_BANNER;
 

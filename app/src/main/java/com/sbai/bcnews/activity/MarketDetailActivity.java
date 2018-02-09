@@ -16,7 +16,7 @@ import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.view.ScrollableViewPager;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.autofit.AutofitTextView;
-import com.sbai.bcnews.view.slidingTab.SlidingTabLayout;
+import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

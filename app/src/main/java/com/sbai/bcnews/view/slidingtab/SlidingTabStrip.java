@@ -1,4 +1,4 @@
-package com.sbai.bcnews.view.slidingTab;
+package com.sbai.bcnews.view.slidingtab;
 /*
  * Copyright (C) 2013 The Android Open Source Project
  *
