@@ -156,7 +156,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             @Override
             public void onFailure(ReqError reqError) {
                 super.onFailure(reqError);
-                refreshFail();
+                refreshFailure();
                 loadCacheData();
             }
 

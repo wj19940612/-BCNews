@@ -61,7 +61,6 @@
         <activity
             android:name=".activity.MarketDetailActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.NewsDetailActivity"
             android:screenOrientation="portrait"/>
@@ -80,7 +79,6 @@
             android:name=".activity.mine.ImageAuthCodeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseDialog"/>
-
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -134,13 +132,15 @@
             android:value="${UMENG_CHANNEL}"/>
 
         <service android:name=".service.PushIntentService"/>
-
         <service
             android:name=".service.PushService"
             android:exported="true"
             android:label="PushService"
             android:process=":pushservice">
         </service>
+
+        <activity android:name=".activity.Main2Activity">
+        </activity>
     </application>
 
 </manifest>

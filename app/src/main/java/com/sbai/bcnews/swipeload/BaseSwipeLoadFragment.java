@@ -44,28 +44,31 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
         }
     }
 
+    @Override
     public void triggerRefresh() {
         if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setRefreshing(true);
         }
     }
 
-    protected void triggerLoadMore() {
+    @Override
+    public void triggerLoadMore() {
         if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setLoadingMore(true);
         }
     }
 
-    public void refreshFail() {
-        refreshFail(getString(R.string.refresh_fail));
-    }
-
-    public void refreshFail(@StringRes int resId) {
-        refreshFail(getString(resId));
+    public void refreshFailure() {
+        refreshFailure(getString(R.string.refresh_fail));
     }
 
     @Override
-    public void refreshFail(String failMsg) {
+    public void refreshFailure(@StringRes int resId) {
+        refreshFailure(getString(resId));
+    }
+
+    @Override
+    public void refreshFailure(String msg) {
         if (mRefreshHeaderView != null) {
             mRefreshHeaderView.refreshFail();
         }
@@ -76,14 +79,15 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
         refreshSuccess(getString(R.string.refresh_complete));
     }
 
+    @Override
     public void refreshSuccess(@StringRes int resId) {
         refreshSuccess(getString(resId));
     }
 
     @Override
-    public void refreshSuccess(String successMsg) {
+    public void refreshSuccess(String msg) {
         if (mRefreshHeaderView != null) {
-            mRefreshHeaderView.refreshSuccess(successMsg);
+            mRefreshHeaderView.refreshSuccess(msg);
         }
         stopFreshOrLoadAnimation();
     }
@@ -92,7 +96,6 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mSwipeTargetView = getSwipeTargetView();
         mSwipeToLoadLayout = getSwipeToLoadLayout();
         mRefreshHeaderView = getRefreshHeaderView();

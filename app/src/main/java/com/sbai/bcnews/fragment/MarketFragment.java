@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.activity.MarketDetailActivity;
+import com.sbai.bcnews.activity.Main2Activity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
@@ -92,7 +92,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                     @Override
                     public void onFailure(ReqError reqError) {
                         super.onFailure(reqError);
-                        refreshFail();
+                        refreshFailure();
                     }
                 })
                 .fire();
@@ -105,7 +105,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         mMarkListAdapter.setOnItemClickListener(new OnItemClickListener<MarketData>() {
             @Override
             public void onItemClick(MarketData marketData, int position) {
-                Launcher.with(getActivity(), MarketDetailActivity.class).execute();
+                Launcher.with(getActivity(), Main2Activity.class).execute();
                 umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
             }
         });
