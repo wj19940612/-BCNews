@@ -2,7 +2,6 @@ package com.sbai.bcnews.activity.mine;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,19 +12,24 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.fragment.UploadImageDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.Feedback;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ThumbTransform;
+import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
@@ -35,6 +39,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.sbai.bcnews.utils.DateUtil.FORMAT_HOUR_MINUTE;
 
@@ -61,10 +66,13 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feedback);
-        ButterKnife.bind(this);
         initViews();
         requestFeedbackData(true);
+    }
+
+    @Override
+    protected int getContentViewId() {
+        return R.layout.activity_feedback;
     }
 
     private void initViews() {
@@ -80,7 +88,7 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
 
     @Override
     public void onRefresh() {
-
+        requestFeedbackData(false);
     }
 
     private void requestFeedbackData(final boolean needScrollToLast) {
@@ -89,7 +97,7 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
                 .callback(new Callback2D<Resp<List<Feedback>>, List<Feedback>>() {
                     @Override
                     protected void onRespSuccessData(List<Feedback> data) {
-                      //  updateFeedbackData(data);
+                        //  updateFeedbackData(data);
                     }
 
                     @Override
@@ -106,6 +114,84 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
                 .fire();
     }
 
+    private void requestSendFeedback(final String content, final int contentType) {
+        Apic.requestSendFeedback(content, contentType).tag(TAG)
+                .callback(new Callback2D<Resp<Object>, Object>() {
+                    @Override
+                    protected void onRespSuccessData(Object data) {
+                        refreshChatList(content, contentType);
+                    }
+                }).fireFreely();
+    }
+
+    //请求最新的服务器数据  并取第一条
+    private void refreshChatList(final String content, final int contentType) {
+        Apic.requestFeedbackList(0)
+                .tag(TAG)
+                .callback(new Callback2D<Resp<List<Feedback>>, List<Feedback>>() {
+                    @Override
+                    protected void onRespSuccessData(List<Feedback> data) {
+                        updateTheLastMessage(data, content, contentType);
+                    }
+                })
+                .fire();
+    }
+
+    private void updateTheLastMessage(List<Feedback> data, String content, int contentType) {
+        if (data.isEmpty()) return;
+        Feedback feedback = data.get(0);
+        mFeedbackAdapter.addData(feedback);
+
+        mRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.scrollToPosition(mFeedbackAdapter.getItemCount() - 1);
+            }
+        }, 240);
+        if (contentType == Feedback.CONTENT_TYPE_TEXT) {
+            feedback.setContent(content);
+            mCommentContent.setText("");
+        }
+    }
+
+    @OnClick({R.id.addPic, R.id.send})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.addPic:
+                if (LocalUser.getUser().isLogin()) {
+                    sendPicToCustomer();
+                } else {
+                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                }
+                break;
+            case R.id.send:
+                if (LocalUser.getUser().isLogin()) {
+                    String content = mCommentContent.getText().toString().trim();
+                    if (!TextUtils.isEmpty(content)) {
+                        requestSendFeedback(content, Feedback.CONTENT_TYPE_TEXT);
+                    }
+                } else {
+                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                }
+                break;
+        }
+    }
+
+    private void sendPicToCustomer() {
+        UploadImageDialogFragment.newInstance(UploadImageDialogFragment.IMAGE_TYPE_OPEN_CUSTOM_GALLERY)
+                .setOnImagePathListener(new UploadImageDialogFragment.OnImagePathListener() {
+                    @Override
+                    public void onImagePath(int index, String imagePath) {
+                        sendFeedbackImage(imagePath);
+                    }
+                }).show(getSupportFragmentManager());
+    }
+
+    private void sendFeedbackImage(final String path) {
+        String content = ImageUtils.compressImageToBase64(path, getActivity());
+        int contentType = Feedback.CONTENT_TYPE_PICTURE;
+        requestSendFeedback(content, contentType);
+    }
 
     static class FeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private List<Feedback> dataList;
@@ -117,8 +203,13 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
             dataList = new ArrayList<>();
         }
 
-        public void addAllData(List<Feedback> newsList) {
-            dataList.addAll(newsList);
+        public void addAllData(List<Feedback> feedbacks) {
+            dataList.addAll(feedbacks);
+            notifyDataSetChanged();
+        }
+
+        public void addData(Feedback feedback) {
+            dataList.add(feedback);
             notifyDataSetChanged();
         }
 

@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
  * 该类不可直接使用
  */
 
-public  class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<RecyclerView> {
+public class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<RecyclerView> {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -43,7 +43,7 @@ public  class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<Recycle
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_base_recycleview_swipe_load);
+        setContentView(getContentViewId());
         ButterKnife.bind(this);
         if (getSwipeTargetView() != null) {
             getSwipeTargetView().addOnScrollListener(mOnScrollListener);
@@ -55,6 +55,10 @@ public  class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<Recycle
 
     protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
 
+    }
+
+    protected int getContentViewId() {
+        return R.layout.view_base_recycleview_swipe_load;
     }
 
     protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
