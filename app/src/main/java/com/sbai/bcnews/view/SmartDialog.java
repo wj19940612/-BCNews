@@ -166,7 +166,7 @@ public class SmartDialog {
         mIconResId = -1;
 
         mTitleText = null;
-        mTitleTextColor = ContextCompat.getColor(mActivity, R.color.primaryText);
+        mTitleTextColor = ContextCompat.getColor(mActivity, R.color.blackPrimary);
         mTitleMaxLines = 2;
 
         mMessageText = null;
