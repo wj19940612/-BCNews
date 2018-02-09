@@ -1,6 +1,7 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -30,6 +31,7 @@ import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
 import com.sbai.bcnews.view.EmptyView;
@@ -51,6 +53,7 @@ import butterknife.Unbinder;
 
 import static com.sbai.bcnews.ExtraKeys.CHANNEL;
 import static com.sbai.bcnews.ExtraKeys.HEADER_COUNT;
+import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_GLIDING;
 
 /**
  * Modified by john on 24/01/2018
@@ -85,7 +88,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private HomeBanner mHomeBanner;
 
     private int mPage;
-    private int overallXScroll;
     private int mHeaderCount;
     private OnScrollListener mOnScrollListener;
     private String mChannel;
@@ -129,11 +131,12 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         super.onActivityCreated(savedInstanceState);
         initView();
         loadData(true);
+        requestBanners();
     }
 
     private void initView() {
         mNewsDetails = new ArrayList<>();
-        mNewsAdapter = new NewsAdapter(getActivity(), mNewsDetails, mHeaderCount, new NewsAdapter.OnItemClickListener() {
+        mNewsAdapter = new NewsAdapter(getActivity(), mNewsDetails, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
                 NewsReadCache.markNewsRead(newsDetail);
@@ -146,16 +149,23 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                overallXScroll = overallXScroll + dy;
-//                Log.e("zzz", "dy:" + overallXScroll);
                 if (mOnScrollListener != null) {
                     mOnScrollListener.onScroll(dy);
+                }
+            }
+        });
+        mSwipeRefreshHeader.setStartRefreshListener(new RefreshHeaderView.OnStartRefreshListener() {
+            @Override
+            public void onStartRefresh() {
+                if (mOnScrollListener != null) {
+                    mOnScrollListener.onScroll(-SCROLL_GLIDING);
                 }
             }
         });
         mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
             @Override
             public void onRefreshClick() {
+                mEmptyView.setSelected(true);
                 loadData(true);
             }
         });
@@ -167,7 +177,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             mHomeBanner = (HomeBanner) LayoutInflater.from(getActivity()).inflate(R.layout.item_banner, null);
             mHomeBanner.setLayoutParams(new RecyclerView.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(BANNER_HEIGHT, getResources())));
-            mNewsAdapter.setHeaderView(mHomeBanner);
         }
     }
 
@@ -196,7 +205,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void loadData(final boolean refresh) {
-        Apic.getNewsList(mPage).tag(TAG).callback(new Callback2D<Resp<News>, News>() {
+        String channelParam = Uri.encode(mChannel);
+        Apic.requestNewsListWithChannel(channelParam, mPage).tag(TAG).callback(new Callback2D<Resp<News>, News>() {
             @Override
             protected void onRespSuccessData(News data) {
                 if (data != null && data.getContent() != null && data.getContent().size() != 0) {
@@ -208,6 +218,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     refreshSuccess();
                 }
+                if (mNewsDetails.size() == 0 && (data.getContent() == null || data.getContent().size() == 0) && mEmptyView.isSelected()) {
+                    ToastUtil.show(R.string.no_news);
+                }
+                mEmptyView.setSelected(false);
                 updateData(data.getContent(), refresh);
             }
 
@@ -260,6 +274,28 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
         mPage++;
         mNewsDetails.addAll(data);
+        mNewsAdapter.refresh();
+    }
+
+    private void requestBanners() {
+        if (mHeaderCount != 0) {
+            Apic.requestBanners().tag(TAG).callback(new Callback2D<Resp<List<Banner>>, List<Banner>>() {
+                @Override
+                protected void onRespSuccessData(List<Banner> data) {
+//                    data = getTestBanner();
+                    if (data == null || data.size() == 0) {
+                        mNewsAdapter.setHeaderView(null);
+                    } else if (mHomeBanner != null) {
+                        mNewsAdapter.setHeaderView(mHomeBanner);
+                        mHomeBanner.setHomeAdvertisement(data);
+                        mNewsAdapter.refresh();
+                    }
+                }
+            }).fireFreely();
+        }
+    }
+
+    private List<Banner> getTestBanner() {
         Banner banner = new Banner();
         banner.setClicks(455);
         banner.setContent("https://lemi.ailemi.com/lm/activityk.html");
@@ -274,9 +310,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         List<Banner> homeBanners = new ArrayList<>();
         homeBanners.add(banner);
         homeBanners.add(banner1);
-        if (mHomeBanner != null)
-            mHomeBanner.setHomeAdvertisement(homeBanners);
-        mNewsAdapter.refresh();
+        return homeBanners;
     }
 
     public static class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -295,18 +329,21 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         private View mHeadView;
         private int mHeaderCount;
 
-        public NewsAdapter(Context context, List<NewsDetail> newsDetails, int headerCount, OnItemClickListener onItemClickListener) {
+        public NewsAdapter(Context context, List<NewsDetail> newsDetails, OnItemClickListener onItemClickListener) {
             mContext = context;
             items = newsDetails;
             mOnItemClickListener = onItemClickListener;
-            mHeaderCount = headerCount;
         }
 
         public void setHeaderView(View homeBanner) {
-            if (mHeaderCount > 0) {
-                mHeadView = homeBanner;
-                notifyItemInserted(0);//插入下标0位置
+            //没banner，不要再插入头
+            if (homeBanner == null) {
+                mHeaderCount = NO_BANNER;
+                return;
             }
+            mHeadView = homeBanner;
+            mHeaderCount = HAS_BANNER;
+            notifyItemInserted(0);//插入下标0位置
         }
 
         public void refresh() {

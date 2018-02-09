@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
@@ -128,7 +129,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 myHolder.mDelete.setVisibility(View.VISIBLE);
             }
         } else if (holder instanceof OtherViewHolder) {
-            ((OtherViewHolder) holder).textView.setText(mOtherChannelItems.get(position - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER));
+            ((OtherViewHolder) holder).mTextView.setText(mOtherChannelItems.get(position - mMyChannelItems.size() - COUNT_PRE_OTHER_HEADER));
         } else if (holder instanceof MyChannelHeaderViewHolder) {
             MyChannelHeaderViewHolder headerHolder = (MyChannelHeaderViewHolder) holder;
         }
@@ -216,7 +217,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     //“其他栏目”相关触摸事件
     private void setOtherTouch(final OtherViewHolder otherHolder, final ViewGroup parent) {
-        otherHolder.textView.setOnClickListener(new View.OnClickListener() {
+        otherHolder.mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RecyclerView recyclerView = ((RecyclerView) parent);
@@ -506,11 +507,14 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * 其他频道
      */
     class OtherViewHolder extends RecyclerView.ViewHolder {
-        private TextView textView;
+        @BindView(R.id.tv)
+        TextView mTextView;
+        @BindView(R.id.rootView)
+        RelativeLayout mRootView;
 
         public OtherViewHolder(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.tv);
+            ButterKnife.bind(this,itemView);
         }
     }
 

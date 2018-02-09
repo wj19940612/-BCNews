@@ -88,19 +88,17 @@ public class NewsPraiseCache {
         return praise == null ? false : praise;
     }
 
-    private static boolean isJsonArray(String news) {
-        boolean result = false;
-        try {
-            Object json = new JSONTokener(news).nextValue();
-            if (json instanceof JSONArray) {
-                result = true;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } finally {
-            return result;
+    //清除某个user的点赞缓存
+    public static void clearPraiseAll(String userId) {
+        if (sPraiseCache == null) {
+            readFromPreference();
+        }
+        MaxLinkedHashMap<String, Boolean> praiseMap = sPraiseCache.get(userId);
+        if (praiseMap != null) {
+            praiseMap.clear();
         }
     }
+
 
     public static class MaxLinkedHashMap<T, E> extends LinkedHashMap<T, E> {
         private static final long serialVersionUID = 1L;

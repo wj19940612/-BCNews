@@ -130,7 +130,7 @@
                 android:layout_below="@+id/webView"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:visibility="visible">
+                android:visibility="invisible">
 
                 <ImageView
                     android:id="@+id/praiseIcon"
@@ -157,7 +157,8 @@
                 android:layout_below="@+id/praiseLayout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_statement"/>
+                android:src="@drawable/ic_statement"
+                android:visibility="invisible"/>
 
             <RelativeLayout
                 android:id="@+id/shareLayout"
@@ -165,7 +166,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/statement"
                 android:layout_below="@+id/statement"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="12dp"
+                android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/shareTo"
@@ -273,8 +275,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/firstTitle"
-                        android:layout_marginTop="22dp"
                         android:layout_marginRight="8dp"
+                        android:layout_marginTop="22dp"
                         android:layout_toRightOf="@+id/firstOriginal"
                         android:gravity="center"
                         android:text="@string/original"
@@ -357,8 +359,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/secondTitle"
-                        android:layout_marginTop="22dp"
                         android:layout_marginRight="8dp"
+                        android:layout_marginTop="22dp"
                         android:layout_toRightOf="@+id/secondOriginal"
                         android:gravity="center"
                         android:text="@string/original"
@@ -441,8 +443,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/thirdTitle"
-                        android:layout_marginTop="22dp"
                         android:layout_marginRight="8dp"
+                        android:layout_marginTop="22dp"
                         android:layout_toRightOf="@+id/thirdOriginal"
                         android:gravity="center"
                         android:text="@string/original"
@@ -479,8 +481,8 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:background="@drawable/bg_collect">
+        android:background="@drawable/bg_collect"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/collectLayout"
@@ -539,12 +541,22 @@
         </LinearLayout>
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/defaultImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="230dp"
+        android:src="@drawable/ic_news_error"
+        android:visibility="visible"/>
+
     <com.sbai.bcnews.view.EmptyView
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/titleBar"
         android:visibility="gone"/>
+
 
 
 </RelativeLayout>

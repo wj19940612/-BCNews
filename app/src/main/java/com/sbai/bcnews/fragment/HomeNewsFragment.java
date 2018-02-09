@@ -1,6 +1,7 @@
 package com.sbai.bcnews.fragment;
 
 import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
+import static android.view.animation.Animation.ABSOLUTE;
 import static android.view.animation.Animation.RELATIVE_TO_PARENT;
 import static com.sbai.bcnews.fragment.NewsFragment.HAS_BANNER;
 import static com.sbai.bcnews.fragment.NewsFragment.NO_BANNER;
@@ -221,7 +223,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
 
             }
         });
-        valueAnimator.setDuration(500);
+        valueAnimator.setDuration(300);
         mAnimating = true;
         valueAnimator.start();
     }

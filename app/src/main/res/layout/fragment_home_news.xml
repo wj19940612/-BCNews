@@ -23,6 +23,7 @@
             android:id="@+id/slidingTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingRight="36dp"
             android:background="@color/white"/>
 
         <RelativeLayout
@@ -38,11 +39,11 @@
                 android:id="@+id/toChannel"
                 android:layout_width="40dp"
                 android:layout_height="36dp"
-                android:paddingTop="10dp"
+                android:layout_centerVertical="true"
                 android:paddingBottom="10dp"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
-                android:layout_centerVertical="true"
+                android:paddingTop="10dp"
                 android:src="@drawable/btn_to_channel"/>
         </RelativeLayout>
 

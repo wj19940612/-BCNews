@@ -95,6 +95,8 @@
     <string name="un_select_channel">未选频道</string>
     <string name="other_article">相关文章</string>
     <string name="collect">收藏</string>
+    <string name="collect_fail">收藏失败</string>
+    <string name="no_news">暂无资讯，换个频道试试吧</string>
 
 
     <!--行情-->

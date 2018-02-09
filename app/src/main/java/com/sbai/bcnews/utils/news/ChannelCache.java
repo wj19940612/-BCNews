@@ -70,7 +70,7 @@ public class ChannelCache {
         }
 
         List<String> otherChannels = channelCacheModel.getOtherChannelEntities();
-        if (myChannels != null && otherChannels.size() != 0) {
+        if (otherChannels != null && otherChannels.size() != 0) {
             for (String channel : otherChannels) {
                 //这个频道在远端已经没了，剔除
                 if (!netChannels.contains(channel)) {

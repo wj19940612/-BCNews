@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
@@ -27,6 +26,7 @@ import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
@@ -148,6 +148,10 @@ public class NewsDetailActivity extends BaseActivity {
     View mSplit;
     @BindView(R.id.collectAndShareLayout)
     LinearLayout mCollectAndShareLayout;
+    @BindView(R.id.defaultImg)
+    ImageView mDefaultImg;
+    @BindView(R.id.collectIcon)
+    ImageView mCollectIcon;
 
     private WebViewClient mWebViewClient;
 
@@ -180,7 +184,6 @@ public class NewsDetailActivity extends BaseActivity {
         initScrollView();
         requestDetailData();
         requestOtherArticle();
-        requestPraiseStatus();
     }
 
     private void initData() {
@@ -272,7 +275,13 @@ public class NewsDetailActivity extends BaseActivity {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
-                if (newProgress == 100) {
+                if (newProgress > 20) {
+                    if (mDefaultImg.getVisibility() != View.GONE) {
+                        mPraiseLayout.setVisibility(View.VISIBLE);
+                        mShareLayout.setVisibility(View.VISIBLE);
+                        mStatement.setVisibility(View.VISIBLE);
+                        mDefaultImg.setVisibility(View.GONE);
+                    }
 //                    mProgress.setVisibility(View.GONE);
                 } else {
 //                    if (mProgress.getVisibility() == View.GONE) {
@@ -398,7 +407,7 @@ public class NewsDetailActivity extends BaseActivity {
                 //底部按钮的交互
                 if (mScrollY != 0 && mScrollY != scrollY) {
                     scrollTitleBar(scrollY - mScrollY > 0);
-                }else if(scrollY == mScrollView.getHeight()){
+                } else if (scrollY == mScrollView.getHeight()) {
                     scrollTitleBar(false);
                 }
                 if (scrollY > mTitleHeight && mNewsDetail != null) {
@@ -479,10 +488,12 @@ public class NewsDetailActivity extends BaseActivity {
             protected void onRespSuccessData(NewsDetail data) {
                 if (refresh) {
                     mNewsDetail = data;
+                    mNetNewsDetail = data;
                     updateData(data);
                     mEmptyView.setVisibility(View.GONE);
                 } else {
                     mNetNewsDetail = data;
+                    updatePraiseCollect(data);
                 }
             }
 
@@ -500,7 +511,6 @@ public class NewsDetailActivity extends BaseActivity {
         mSource.setText(newsDetail.getSource());
         mPubTime.setText(DateUtil.formatNewsStyleTime(newsDetail.getReleaseTime()));
         mReadTime.setText(String.format(getString(R.string.reader_time), newsDetail.getReaderTime()));
-        updatePraiseCount(newsDetail.getPraiseCount());
 
         mPureHtml = mNewsDetail.getContent();
         loadPage();
@@ -575,36 +585,36 @@ public class NewsDetailActivity extends BaseActivity {
         }
     }
 
-    private void requestPraiseStatus() {
-        if (LocalUser.getUser().isLogin()) {
-            Apic.requestPraiseStatus(mId).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
-
-                @Override
-                protected void onRespSuccessData(Integer data) {
-                    updatePraiseCount(data);
-                }
-            }).fireFreely();
-        } else {
-            updatePraiseCount(0);
-        }
-    }
-
-    private void updatePraiseCount(int praiseCount) {
+    private void updatePraiseCollect(NewsDetail newsDetail) {
+        int praiseCount = newsDetail.getPraiseCount();
         if (praiseCount == 0) {
             mPraiseCount.setText(R.string.news_praise);
-            mPraiseIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.btn_praise_normal));
         } else {
             mPraiseCount.setText(String.format(getString(R.string.praise_count), praiseCount));
+        }
+        if (newsDetail.getPraise() > 0) {
             mPraiseIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.btn_praise_selected));
+        } else {
+            mPraiseIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.btn_praise_normal));
+        }
+        if (newsDetail.getCollect() > 0) {
+            mCollectIcon.setSelected(true);
+        } else {
+            mCollectIcon.setSelected(false);
         }
     }
 
     private void requestPraise() {
-        if (mNewsDetail != null) {
-            Apic.praiseNews(mNewsDetail.getId()).tag(TAG).callback(new Callback<Resp>() {
+        if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
+            int praiseWant = mNetNewsDetail.getPraise() == 0 ? 1 : 0;
+            Apic.praiseNews(mNetNewsDetail.getId(), praiseWant).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
                 @Override
-                protected void onRespSuccess(Resp resp) {
-                    updatePraiseCount(mNewsDetail.getPraiseCount() + 1);
+                protected void onRespSuccessData(Integer data) {
+                    if (data != null) {
+                        mNetNewsDetail.setPraise(data);
+                        mNetNewsDetail.setPraiseCount(mNetNewsDetail.getPraiseCount() + 1);
+                        updatePraiseCollect(mNetNewsDetail);
+                    }
                 }
 
                 @Override
@@ -613,6 +623,32 @@ public class NewsDetailActivity extends BaseActivity {
                     ToastUtil.show(R.string.praise_error);
                 }
             }).fireFreely();
+        } else if (mNetNewsDetail != null) {
+            Launcher.with(this, LoginActivity.class).execute();
+        }
+    }
+
+    private void collect() {
+        if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
+            Apic.requestCollect(mNetNewsDetail.getId(), mNetNewsDetail.getCollect()).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
+                @Override
+                protected void onRespSuccessData(Integer data) {
+                    if (mNetNewsDetail.getCollect() == 0) {
+                        mNetNewsDetail.setCollect(1);
+                    } else {
+                        mNetNewsDetail.setCollect(0);
+                    }
+                    updatePraiseCollect(mNetNewsDetail);
+                }
+
+                @Override
+                public void onFailure(ReqError reqError) {
+                    super.onFailure(reqError);
+                    ToastUtil.show(R.string.collect_fail);
+                }
+            }).fireFreely();
+        } else if (!LocalUser.getUser().isLogin()) {
+            Launcher.with(this, LoginActivity.class).execute();
         }
     }
 
@@ -634,17 +670,15 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void saveDetailCache() {
-        if (mNewsDetail != null && mNetNewsDetail != null) {
-            if (mNewsDetail.getCreateTime() != mNetNewsDetail.getCreateTime()) {
-                NewsCache.insertOrReplaceNews(mNetNewsDetail);
-            }
+        if (mNewsDetail != null && mNetNewsDetail != null && mNewsDetail.getCreateTime() != mNetNewsDetail.getCreateTime()) {
+            NewsCache.insertOrReplaceNews(mNetNewsDetail);
         } else if (mNewsDetail != null) {
             mNewsDetail.setReadHeight(mScrollView.getScrollY());
             NewsCache.insertOrReplaceNews(mNewsDetail);
         }
     }
 
-    @OnClick({R.id.wxShare, R.id.circleShare, R.id.praiseLayout, R.id.titleBar})
+    @OnClick({R.id.wxShare, R.id.circleShare, R.id.praiseLayout, R.id.titleBar, R.id.collectLayout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.wxShare:
@@ -659,6 +693,9 @@ public class NewsDetailActivity extends BaseActivity {
             case R.id.titleBar:
                 if (!mScrolling)
                     mScrollView.smoothScrollTo(0, 0);
+                break;
+            case R.id.collectLayout:
+                collect();
                 break;
         }
     }
