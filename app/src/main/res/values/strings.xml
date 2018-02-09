@@ -135,5 +135,15 @@
     <string name="click_login">点击登录</string>
     <string name="collect">收藏</string>
     <string name="history">历史</string>
+    <string name="please_add_us_wechat_account">请添加我们的微信号%1$s\n我们坐下来慢慢详谈</string>
+    <string name="copy_us_wechat_account">复制微信号</string>
+
+    <string name="receive_new_notification">接收新消息通知</string>
+    <string name="personal_data">个人资料</string>
+    <string name="account_manager">账号管理</string>
+    <string name="about_bcnews">关于区块财经</string>
+    <string name="logout">退出</string>
+    <string name="weChat_account">微信号</string>
+    <string name="affirm_logout">确定要退出登录吗</string>
 
 </resources>

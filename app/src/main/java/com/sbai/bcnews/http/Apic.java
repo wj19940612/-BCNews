@@ -174,4 +174,17 @@ public class Apic {
                 .put("source", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
     }
 
+    // TODO: 2018/2/8 请求运营微信账户
+    public static Api requestOperationWetchatAccount() {
+        return Api.get("");
+    }
+
+    public static Api logout() {
+        return Api.post("/api/news-user/login/logout");
+    }
+
+    // TODO: 2018/2/9 解绑微信号
+    public static Api unbindWeChatAccount() {
+        return Api.post("");
+    }
 }

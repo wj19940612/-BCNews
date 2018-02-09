@@ -1,6 +1,10 @@
 package com.sbai.bcnews.fragment;
 
 
+import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -13,11 +17,17 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
+import com.sbai.bcnews.activity.mine.SettingActivity;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
+import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.IconTextRow;
+import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.glide.GlideApp;
 
 import butterknife.BindView;
@@ -60,6 +70,12 @@ public class MineFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         updateUserLoginStatus();
+    }
+
+
+    public void refreshUserData() {
+        // TODO: 2018/2/8  我的tab：点击可刷新头像、昵称、收藏、历史等数据，当然是登录状态下；
+
     }
 
     private void updateUserLoginStatus() {
@@ -115,6 +131,7 @@ public class MineFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.headPortrait:
             case R.id.userName:
+                umengEventCount(UmengCountEventId.MINE_PORTRAIT_AND_NAME);
                 if (LocalUser.getUser().isLogin()) {
                     // TODO: 2018/2/8 用户资料页
                 } else {
@@ -122,6 +139,7 @@ public class MineFragment extends BaseFragment {
                 }
                 break;
             case R.id.collect:
+                umengEventCount(UmengCountEventId.MINE_COLLECT);
                 if (LocalUser.getUser().isLogin()) {
                     // TODO: 2018/2/8  收藏页面
                 } else {
@@ -129,13 +147,48 @@ public class MineFragment extends BaseFragment {
                 }
                 break;
             case R.id.history:
+                umengEventCount(UmengCountEventId.MINE_HISTORY);
                 break;
             case R.id.contribute:
+                requestOperationWetchatAccount();
+                umengEventCount(UmengCountEventId.MINE_CONTRIBUTE);
                 break;
             case R.id.feedBack:
                 break;
             case R.id.setting:
+                umengEventCount(UmengCountEventId.MINE_SETTING);
+                Launcher.with(getActivity(), SettingActivity.class).execute();
                 break;
         }
+    }
+
+    private void requestOperationWetchatAccount() {
+        Apic.requestOperationWetchatAccount()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<String>, String>() {
+                    @Override
+                    protected void onRespSuccessData(String data) {
+                        showAddWetchatAccountDialog(data);
+                    }
+                })
+                .fire();
+    }
+
+    private void showAddWetchatAccountDialog(final String data) {
+        SmartDialog.with(getActivity(), getString(R.string.please_add_us_wechat_account, data))
+                .setPositive(R.string.copy_us_wechat_account, new SmartDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        dialog.dismiss();
+                        copyWeChatAccount(data);
+                    }
+                })
+                .show();
+    }
+
+    private void copyWeChatAccount(String data) {
+        ClipboardManager clipboardManager = (android.content.ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText(null, data);
+        clipboardManager.setPrimaryClip(clipData);
     }
 }

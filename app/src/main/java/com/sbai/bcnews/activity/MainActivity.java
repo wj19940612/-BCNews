@@ -80,16 +80,25 @@ public class MainActivity extends BaseActivity {
         Fragment fragment = mMainFragmentsAdapter.getFragment(position);
         if (fragment instanceof BaseSwipeLoadFragment) {
             ((BaseSwipeLoadFragment) fragment).triggerRefresh();
+        } else if (fragment instanceof MineFragment) {
+            ((MineFragment) fragment).refreshUserData();
         }
     }
 
     private void umengClickStatistics(int position) {
-        if (position == PAGE_POSITION_NEWS) {
-            umengEventCount(UmengCountEventId.NEWS01);
-        } else if (position == PAGE_POSITION_NEWS_FLASH) {
-            umengEventCount(UmengCountEventId.NEWS_FLASH_TAB);
-        } else if (position == PAGE_POSITION_MARKET) {
-            umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
+        switch (position) {
+            case PAGE_POSITION_NEWS:
+                umengEventCount(UmengCountEventId.NEWS01);
+                break;
+            case PAGE_POSITION_NEWS_FLASH:
+                umengEventCount(UmengCountEventId.NEWS_FLASH_TAB);
+                break;
+            case PAGE_POSITION_MARKET:
+                umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
+                break;
+            case PAGE_POSITION_MINE:
+                umengEventCount(UmengCountEventId.TAB_MINE);
+                break;
         }
     }
 
@@ -119,7 +128,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         public Fragment getFragment(int position) {

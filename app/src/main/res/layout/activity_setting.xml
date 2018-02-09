@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context="com.sbai.bcnews.activity.mine.SettingActivity">
+
+    <com.sbai.bcnews.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="@string/setting"/>
+
+    <LinearLayout
+        android:id="@+id/receiveNotification"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_height"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_white"
+        android:gravity="center"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/phone_number"
+            android:textColor="@color/primaryText"
+            android:textSize="15sp"/>
+
+        <ImageView
+            android:id="@+id/notificationSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_switch"/>
+    </LinearLayout>
+
+    <com.sbai.bcnews.view.IconTextRow
+        android:id="@+id/personalData"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_height"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_white"
+        app:hasBottomSplitLine="true"
+        app:layout_constraintTop_toBottomOf="@+id/receiveNotification"
+        app:rightIcon="@drawable/ic_common_right_arrow"
+        app:rowText="@string/personal_data"
+        app:splitLineColor="@color/background"/>
+
+    <com.sbai.bcnews.view.IconTextRow
+        android:id="@+id/accountManager"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_height"
+        android:background="@drawable/bg_white"
+        app:hasBottomSplitLine="true"
+        app:layout_constraintTop_toBottomOf="@+id/personalData"
+        app:rightIcon="@drawable/ic_common_right_arrow"
+        app:rowText="@string/account_manager"
+        app:splitLineColor="@color/background"/>
+
+    <com.sbai.bcnews.view.IconTextRow
+        android:id="@+id/aboutBcnews"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_height"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_white"
+        app:layout_constraintTop_toBottomOf="@+id/accountManager"
+        app:rightIcon="@drawable/ic_common_right_arrow"
+        app:rowText="@string/about_bcnews"/>
+
+
+    <TextView
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_height"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_white"
+        android:gravity="center"
+        android:text="@string/logout"
+        android:textColor="@color/primaryText"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/aboutBcnews"/>
+</android.support.constraint.ConstraintLayout>
