@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.sbai.bcnews"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.sbai.bcnews">
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -61,12 +61,15 @@
         <activity
             android:name=".activity.MarketDetailActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.NewsDetailActivity"
-                  android:screenOrientation="portrait"/>
-        <activity android:name=".activity.ChannelActivity"
-                  android:screenOrientation="portrait"/>
-        <activity android:name=".activity.LookBigPictureActivity"
-                  android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.NewsDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.ChannelActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.LookBigPictureActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ShareNewsFlashActivity"
             android:screenOrientation="portrait"
@@ -111,10 +114,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".swipeload.RecycleViewSwipeLoadActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.mine.ReadHistoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
@@ -135,6 +134,18 @@
             android:process=":pushservice">
         </service>
 
+        <activity
+            android:name=".activity.mine.MyCollectActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.PersonalDataActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.PersonalIntroduceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -26,4 +26,6 @@
     <color name="marketBgBlack">#1C1F23</color>
 
     <color name="cyan">#476E92</color>
+    <color name="unEnable">#83868A</color>
+    <color name="enable">#FFC90C</color>
 </resources>

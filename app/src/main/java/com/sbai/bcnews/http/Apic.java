@@ -35,8 +35,8 @@ public class Apic {
      * @param channel 频道名称
      * @return
      */
-    public static Api requestNewsListWithChannel(String channel,int page) {
-        return Api.get("/api/news-info/news/{channel}/list", new ReqParams().put("channel",channel).put("page", page).put("size", NORMAL_PAGESIZE));
+    public static Api requestNewsListWithChannel(String channel, int page) {
+        return Api.get("/api/news-info/news/{channel}/list", new ReqParams().put("channel", channel).put("page", page).put("size", NORMAL_PAGESIZE));
     }
 
     /**
@@ -83,11 +83,11 @@ public class Apic {
      * 资讯点赞 - 齐慕伟
      *
      * @param newsId 资讯id
-     * @param type 0-取消点赞 1-点赞
+     * @param type   0-取消点赞 1-点赞
      * @return
      */
-    public static Api praiseNews(String newsId,int type) {
-        return Api.post("/api/news-info/news/praise/{id}", new ReqParams().put("id", newsId).put("type",type));
+    public static Api praiseNews(String newsId, int type) {
+        return Api.post("/api/news-info/news/praise/{id}", new ReqParams().put("id", newsId).put("type", type));
     }
 
     /**
@@ -236,9 +236,39 @@ public class Apic {
     }
 
     /**
-     *查询行情界面是否显示接口
+     * 查询行情界面是否显示接口
      */
     public static Api requestShowMarketPageSwitch() {
         return Api.get("/dic.html");
+    }
+
+    /**
+     * 请求阅读历史数据
+     *
+     * @param page
+     */
+    // TODO: 2018/2/11
+    public static Api requestReadHistoryData(int page) {
+        return Api.get("");
+    }
+
+    /**
+     * GET
+     * 用户--用户详情--薛松
+     */
+    public static Api requestUserInfo() {
+        return Api.get("/api/news-user/user/info");
+    }
+
+    /**
+     * PUT
+     * 用户--修改用户信息--薛松
+     *
+     * @return
+     */
+    public static Api submitUserIntroduce(String introduction) {
+        return Api.put("/api/news-user/user/update",
+                new ReqParams()
+                        .put("introduction", introduction));
     }
 }

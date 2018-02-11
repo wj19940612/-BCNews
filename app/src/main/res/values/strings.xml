@@ -167,6 +167,20 @@
     <string name="weChat_account">微信号</string>
     <string name="affirm_logout">确定要退出登录吗</string>
     <string name="read_history">阅读历史</string>
+    <string name="copy_success">复制成功</string>
 
     <string name="check_related_news">查看相关资讯</string>
+
+    <string name="head_portrait">头像</string>
+    <string name="nick_name">昵称</string>
+    <string name="sex">性别</string>
+    <string name="birthday">生日</string>
+    <string name="location">地区</string>
+    <string name="personal_introduce">个人简介</string>
+    <string name="please_select">请选择</string>
+    <string name="please_set_introduce">请设置个人简介</string>
+    <string name="thirty">30</string>
+    <string name="please_input_introduce">让别人瞻仰下不凡的你吧</string>
+    <string name="save">保存</string>
+    <string name="introduce_is_too_more">简介太丰富了</string>
 </resources>

@@ -4,9 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="0.5dp"
-    android:background="@color/background">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/adsorb_text"
@@ -37,7 +35,6 @@
             android:id="@+id/newsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
             android:layout_toLeftOf="@+id/cover"
             android:ellipsize="end"
             android:lineSpacingExtra="3dp"
@@ -46,19 +43,23 @@
             android:textSize="16sp"
             tools:text="空间大姐夫开大会萨科技当升科技凤凰健康的散户山东矿机防护等级考试"/>
 
-        <ImageView
-            android:id="@+id/cover"
-            android:layout_width="114dp"
-            android:layout_height="80dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="12dp"
+        <com.sbai.bcnews.view.ThreeImageLayout
+            android:id="@+id/threeImageLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/newsTitle"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="14dp"
+            android:minHeight="80dp"
             tools:background="@color/colorPrimary"/>
 
         <TextView
+            android:visibility="gone"
+            android:gravity="center"
             android:id="@+id/original"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/newsTitle"
+            android:layout_below="@+id/threeImageLayout"
             android:layout_marginRight="18dp"
             android:background="@drawable/bg_original"
             android:minWidth="24dp"
@@ -66,15 +67,15 @@
             android:textColor="@color/colorOriginal"/>
 
         <TextView
+            android:gravity="center"
             android:id="@+id/source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/newsTitle"
+            android:layout_below="@+id/threeImageLayout"
             android:layout_toRightOf="@+id/original"
             android:textColor="@color/unluckyText"
             android:textSize="12sp"
             tools:text="溺水的鱼"/>
     </RelativeLayout>
-
 
 </android.support.constraint.ConstraintLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context="com.sbai.bcnews.activity.mine.PersonalIntroduceActivity">
+
+    <com.sbai.bcnews.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/please_set_introduce"/>
+
+
+    <EditText
+        android:id="@+id/personalIntroduce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@android:color/white"
+        android:gravity="start"
+        android:hint="@string/please_input_introduce"
+        android:maxLength="30"
+        android:minHeight="100dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp"
+        android:textColorHint="@color/unluckyText"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar"/>
+
+    <TextView
+        android:id="@+id/wordsNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:gravity="right"
+        android:paddingBottom="11dp"
+        android:paddingRight="12dp"
+        android:text="@string/thirty"
+        android:textColor="@color/unluckyText"
+        android:textSize="10sp"
+        app:layout_constraintTop_toBottomOf="@+id/personalIntroduce"/>
+
+    <TextView
+        android:id="@+id/submitIntroduce"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_submit_introduce"
+        android:enabled="false"
+        android:gravity="center"
+        android:text="@string/save"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/wordsNumber"/>
+
+</android.support.constraint.ConstraintLayout>

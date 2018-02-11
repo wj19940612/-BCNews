@@ -19,4 +19,6 @@ public interface ExtraKeys {
     String NEWS_ID = "news_id";
     String HEADER_COUNT = "header_count";
     String CHANNEL = "channel";
+
+    String PERSONAL_INTRODUCE = "personal_introduce ";
 }
