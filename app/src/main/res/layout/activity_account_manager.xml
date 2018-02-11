@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/weChat_account"
-            android:textColor="@color/primaryText"
+            android:textColor="@color/text"
             android:textSize="15sp"/>
 
         <ImageView

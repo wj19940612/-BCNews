@@ -445,7 +445,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
+                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.text));
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
                 mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
 
@@ -495,7 +495,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
+                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.text));
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
                 mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
@@ -557,7 +557,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
 
-                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
+                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.text));
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
                 mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
