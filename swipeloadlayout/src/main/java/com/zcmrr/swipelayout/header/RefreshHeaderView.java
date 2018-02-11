@@ -31,6 +31,11 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
 
     private CharSequence mRefreshCompleteText;
 
+    private OnStartRefreshListener mOnStartRefreshListener;
+
+    public interface OnStartRefreshListener{
+        public void onStartRefresh();
+    }
 
     public RefreshHeaderView(Context context) {
         this(context, null);
@@ -51,6 +56,10 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
         ivArrow = view.findViewById(R.id.ivArrow);
         addView(view);
         mRefreshCompleteText = getContext().getString(R.string.refresh_complete);
+    }
+
+    public void setStartRefreshListener(OnStartRefreshListener onStartRefreshListener){
+        mOnStartRefreshListener = onStartRefreshListener;
     }
 
 
@@ -74,6 +83,9 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
         ivArrow.setImageResource(R.drawable.refresh_start);
         AnimationDrawable refreshStartDrawable = (AnimationDrawable) ivArrow.getDrawable();
         refreshStartDrawable.start();
+        if(mOnStartRefreshListener!=null){
+            mOnStartRefreshListener.onStartRefresh();
+        }
     }
 
     @Override
@@ -138,11 +150,15 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
         setRefreshCompleteText(R.string.refresh_fail);
     }
 
+    public void refreshFail(CharSequence freshFailMsg) {
+        setRefreshCompleteText(freshFailMsg);
+    }
+
     public void refreshSuccess() {
         setRefreshCompleteText(R.string.refresh_complete);
     }
 
-    public void refreshSuccess(String toast){
+    public void refreshSuccess(CharSequence toast){
         setRefreshCompleteText(toast);
     }
 

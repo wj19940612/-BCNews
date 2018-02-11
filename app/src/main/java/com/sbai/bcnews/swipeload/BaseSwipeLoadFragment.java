@@ -2,12 +2,16 @@ package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.view.View;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.BaseFragment;
+import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
+import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 /**
  * Created by ${wangJie} on 2018/1/25.
@@ -20,15 +24,14 @@ import com.sbai.bcnews.fragment.BaseFragment;
 public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment implements
         OnLoadMoreListener, OnRefreshListener, SwipeLoader<T> {
 
-    private SwipeToLoadLayout mSwipeToLoadLayout;
+    protected SwipeToLoadLayout mSwipeToLoadLayout;
 
-    private T mSwipeTargetView;
+    protected T mSwipeTargetView;
 
-    protected void triggerLoadMore() {
-        if (mSwipeToLoadLayout != null) {
-            mSwipeToLoadLayout.setLoadingMore(true);
-        }
-    }
+    protected RefreshHeaderView mRefreshHeaderView;
+
+    protected LoadMoreFooterView mLoadMoreFooterView;
+
 
     protected void stopFreshOrLoadAnimation() {
         if (mSwipeToLoadLayout != null) {
@@ -41,6 +44,7 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
         }
     }
 
+    @Override
     public void triggerRefresh() {
         if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setRefreshing(true);
@@ -48,11 +52,54 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
     }
 
     @Override
+    public void triggerLoadMore() {
+        if (mSwipeToLoadLayout != null) {
+            mSwipeToLoadLayout.setLoadingMore(true);
+        }
+    }
+    @Override
+    public void loadMoreComplete(@StringRes int msgRes) {
+        loadMoreComplete(getString(msgRes));
+    }
+
+    @Override
+    public void loadMoreComplete(CharSequence msg) {
+        if (mLoadMoreFooterView != null) {
+            mLoadMoreFooterView.setLoadMoreSuccess(msg);
+        }
+        stopFreshOrLoadAnimation();
+    }
+
+    public void refreshFailure() {
+        refreshComplete(getString(R.string.refresh_fail));
+    }
+
+    public void refreshSuccess() {
+        refreshComplete(getString(R.string.refresh_complete));
+    }
+
+    @Override
+    public void refreshComplete(@StringRes int resId) {
+        refreshComplete(getString(resId));
+    }
+
+
+    @Override
+    public void refreshComplete(CharSequence msg) {
+        if (mRefreshHeaderView != null) {
+            mRefreshHeaderView.refreshSuccess(msg);
+        }
+        stopFreshOrLoadAnimation();
+    }
+
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mSwipeTargetView = getSwipeTargetView();
         mSwipeToLoadLayout = getSwipeToLoadLayout();
+        mRefreshHeaderView = getRefreshHeaderView();
+        mLoadMoreFooterView = getLoadMoreFooterView();
 
         if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setOnLoadMoreListener(this);

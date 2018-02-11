@@ -1,3 +1,4 @@
+package com.sbai.bcnews.view.slidingtab;
 /*
  * Copyright (C) 2013 The Android Open Source Project
  *
@@ -14,7 +15,6 @@
  * limitations under the License.
  */
 
-package com.sbai.bcnews.view.slidingtab;
 
 import android.content.Context;
 import android.content.res.ColorStateList;

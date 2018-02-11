@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.market.MarketDetailActivity;
@@ -25,17 +24,13 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.MarketDataUtils;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.UmengCountEventId;
-import com.sbai.bcnews.view.TitleBar;
 import com.sbai.httplib.ReqError;
-import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
-import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 
 /**
@@ -50,41 +45,17 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
     private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 6000;
 
-    @BindView(R.id.titleBar)
-    TitleBar mTitleBar;
-    @BindView(R.id.swipe_refresh_header)
-    RefreshHeaderView mSwipeRefreshHeader;
-    @BindView(R.id.swipe_target)
-    RecyclerView mSwipeTarget;
-    @BindView(R.id.swipe_load_more_footer)
-    LoadMoreFooterView mSwipeLoadMoreFooter;
-    @BindView(R.id.swipeToLoadLayout)
-    SwipeToLoadLayout mSwipeToLoadLayout;
-
-    Unbinder unbinder;
 
     private MarkListAdapter mMarkListAdapter;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_market, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mTitleBar.setTitle(R.string.market);
         initRecycleView();
         requestMarketListData();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        startScheduleJob(REFRESH_MARKET_DATE_TIME_INTERVAL);
-    }
 
     @Override
     public void onPause() {
@@ -108,7 +79,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                 .callback(new Callback2D<Resp<List<MarketData>>, List<MarketData>>() {
                     @Override
                     protected void onRespSuccessData(List<MarketData> data) {
-                        mSwipeRefreshHeader.refreshSuccess();
+                        refreshSuccess();
                         mMarkListAdapter.clear();
                         mMarkListAdapter.addAll(data);
                     }
@@ -122,7 +93,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                     @Override
                     public void onFailure(ReqError reqError) {
                         super.onFailure(reqError);
-                        mSwipeRefreshHeader.refreshFail();
+                        refreshFailure();
                     }
                 })
                 .fire();
@@ -130,8 +101,8 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
     private void initRecycleView() {
         mMarkListAdapter = new MarkListAdapter(new ArrayList<MarketData>(), getActivity());
-        mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mSwipeTarget.setAdapter(mMarkListAdapter);
+        mSwipeTargetView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mSwipeTargetView.setAdapter(mMarkListAdapter);
         mMarkListAdapter.setOnItemClickListener(new OnItemClickListener<MarketData>() {
             @Override
             public void onItemClick(MarketData marketData, int position) {
@@ -146,11 +117,6 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         mSwipeToLoadLayout.setLoadMoreEnabled(false);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
     @Override
     public void onLoadMore() {

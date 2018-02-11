@@ -1,9 +1,15 @@
 package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.R;
+import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
+import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 /**
  * Created by ${wangJie} on 2018/1/29.
@@ -11,16 +17,15 @@ import android.support.v7.widget.RecyclerView;
  * 该类封装了 recycleview的上拉加载和滑动事件
  * <p>
  * 该类不可直接使用
+ * <p>
  */
 
 public abstract class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<RecyclerView> {
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        if (getSwipeTargetView() != null) {
-            getSwipeTargetView().addOnScrollListener(mOnScrollListener);
-        }
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSwipeTargetView().addOnScrollListener(mOnScrollListener);
     }
 
     protected void onRecycleViewScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -56,4 +61,35 @@ public abstract class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity
             getSwipeTargetView().removeOnScrollListener(mOnScrollListener);
         }
     }
+
+    /**
+     * @return 根布局view
+     */
+    public abstract View getContentView();
+
+    @NonNull
+    @Override
+    public SwipeToLoadLayout getSwipeToLoadLayout() {
+        return getContentView().findViewById(R.id.swipeToLoadLayout);
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView getSwipeTargetView() {
+        return getContentView().findViewById(R.id.swipe_target);
+    }
+
+
+    @NonNull
+    @Override
+    public RefreshHeaderView getRefreshHeaderView() {
+        return getContentView().findViewById(R.id.swipe_refresh_header);
+    }
+
+    @NonNull
+    @Override
+    public LoadMoreFooterView getLoadMoreFooterView() {
+        return getContentView().findViewById(R.id.swipe_load_more_footer);
+    }
+
 }

@@ -75,7 +75,7 @@
             android:minWidth="75dp"
             android:padding="12dp"
             android:text="@string/cancel"
-            android:textColor="@color/redPrimary"
+            android:textColor="@color/assistText"
             android:textSize="14sp"/>
 
         <TextView
@@ -87,7 +87,7 @@
             android:minWidth="75dp"
             android:padding="12dp"
             android:text="@string/ok"
-            android:textColor="@color/redPrimary"
+            android:textColor="@color/colorOriginal"
             android:textSize="14sp"/>
     </LinearLayout>
 </LinearLayout>

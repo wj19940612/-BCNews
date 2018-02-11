@@ -61,9 +61,11 @@
         <activity
             android:name=".activity.market.MarketDetailActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.NewsDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.ChannelActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.LookBigPictureActivity"
@@ -72,6 +74,14 @@
             android:name=".activity.ShareNewsFlashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityEntryAnimation"/>
+        <activity
+            android:name=".activity.mine.LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.ImageAuthCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/BaseDialog"/>
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -96,8 +106,16 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
-            android:name=".activity.market.DigitalCashMarketActivity"
-            android:configChanges="screenSize|keyboardHidden|orientation"
+            android:name=".activity.mine.SettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.AccountManagerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.ReadHistoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
 
         <!-- meta-data -->
@@ -109,13 +127,13 @@
             android:value="${UMENG_CHANNEL}"/>
 
         <service android:name=".service.PushIntentService"/>
-
         <service
             android:name=".service.PushService"
             android:exported="true"
             android:label="PushService"
             android:process=":pushservice">
         </service>
+
     </application>
 
 </manifest>

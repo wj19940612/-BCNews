@@ -1,6 +1,7 @@
 package com.zcmrr.swipelayout.foot;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,9 @@ public class LoadMoreFooterView extends SwipeLoadMoreFooterLayout {
 
     private int mFooterHeight;
 
+    private CharSequence mLoadMoreCompleteText;
+
+
     public LoadMoreFooterView(Context context) {
         this(context, null);
     }
@@ -38,7 +42,8 @@ public class LoadMoreFooterView extends SwipeLoadMoreFooterLayout {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.view_load_more_footer, this, false);
         tvLoadMore = view.findViewById(R.id.tvLoadMore);
         ivSuccess = view.findViewById(R.id.ivSuccess);
-        progressBar =view.findViewById(R.id.progressbar);
+        progressBar = view.findViewById(R.id.progressbar);
+        mLoadMoreCompleteText = getContext().getString(R.string.swipe_load_more);
         addView(view);
     }
 
@@ -81,6 +86,32 @@ public class LoadMoreFooterView extends SwipeLoadMoreFooterLayout {
     @Override
     public void onReset() {
         ivSuccess.setVisibility(GONE);
+        mLoadMoreCompleteText = "";
+    }
+
+    public void setLoadMoreCompleteText(@StringRes int resid) {
+        setLoadMoreCompleteText(getContext().getString(resid));
+    }
+
+    public void setLoadMoreCompleteText(CharSequence text) {
+        mLoadMoreCompleteText = text;
+        tvLoadMore.setText(mLoadMoreCompleteText);
+    }
+
+    public void setLoadMoreSuccess(CharSequence loadMoreCompleteText) {
+        setLoadMoreCompleteText(loadMoreCompleteText);
+    }
+
+    public void setLoadMoreSuccess(@StringRes int resid) {
+        setLoadMoreCompleteText(getContext().getString(resid));
+    }
+
+    public void setLoadMoreFailure(CharSequence loadMoreCompleteText) {
+        setLoadMoreCompleteText(loadMoreCompleteText);
+    }
+
+    public void setLoadMoreFailure(@StringRes int resId) {
+        setLoadMoreCompleteText(getContext().getString(resId));
     }
 
 }

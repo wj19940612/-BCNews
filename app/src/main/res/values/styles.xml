@@ -47,11 +47,28 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="SignEditText.PhoneNum">
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">13</item>
+    </style>
+
+    <style name="SignEditText" parent="@android:style/TextAppearance">
+        <item name="android:background">@null</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColorHint">@color/unluckyText</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_primary</item>
+    </style>
+    >
     <!-- 行情数据样式 -->
     <style name="MarketData" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/background</item>
         <item name="android:textSize">12sp</item>
     </style>
+
     <style name="MarketData.Title">
         <item name="android:textColor">@color/unluckyText</item>
     </style>

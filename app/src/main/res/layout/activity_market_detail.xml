@@ -188,11 +188,11 @@
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
             app:tabGravity="fill"
-            app:tabIndicatorColor="@color/marketText"
+            app:tabIndicatorColor="@color/assistText"
             app:tabIndicatorHeight="2dp"
             app:tabMinWidth="0dp"
             app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/marketText"
+            app:tabSelectedTextColor="@color/assistText"
             app:tabTextAppearance="@style/TabLayoutText"/>
 
         <FrameLayout

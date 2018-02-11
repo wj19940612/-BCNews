@@ -66,14 +66,17 @@
     <string name="news">资讯</string>
     <string name="news_flash">快讯</string>
     <string name="market">行情</string>
+    <string name="mine">我的</string>
     <string-array name="tabTexts">
         <item>@string/news</item>
         <item>@string/news_flash</item>
         <item>@string/market</item>
+        <item>@string/mine</item>
     </string-array>
     <integer-array name="tabIcons">
         <item>@drawable/tab_news</item>
         <item>@drawable/tab_flash_news</item>
+        <item>@drawable/tab_market</item>
         <item>@drawable/tab_market</item>
     </integer-array>
     <string name="share_news_flash">分享快讯</string>
@@ -89,6 +92,13 @@
     <string name="original">原创</string>
     <string name="no_more_data">没有更多内容了</string>
     <string name="no_more_new_news">已是最新资讯</string>
+    <string name="channel_custom">频道定制</string>
+    <string name="channel_select">已选频道</string>
+    <string name="drag_to_select_channel">长按拖动调整排序</string>
+    <string name="un_select_channel">未选频道</string>
+    <string name="other_article">相关文章</string>
+    <string name="collect_fail">收藏失败</string>
+    <string name="no_news">暂无资讯，换个频道试试吧</string>
 
 
     <!--行情-->
@@ -110,5 +120,49 @@
 
     <!-- common -->
     <string name="now_refresh">立即刷新</string>
+
+    <!--login-->
+    <string name="auth_code_login">验证码登录</string>
+    <string name="wechat_login">微信登录</string>
+    <string name="bcnews_agreement">登录即同意《区块财经用户协议》</string>
+    <string name="phone_number">手机号</string>
+    <string name="auth_code">验证码</string>
+    <string name="get_auth_code">获取验证码</string>
+    <string name="fast_login">快速登录</string>
+    <string name="login_success">登录成功</string>
+    <string name="cancel_login">取消登录</string>
+    <string name="auth_code_had_sent_">验证码已发送至%1$s</string>
+    <string name="reset_password_success">重设密码成功，请重新登录</string>
+    <string name="_seconds">%1$ds</string>
+    <string name="obtain_auth_code_continue">重新获取</string>
+    <string name="login_ing">登录中</string>
+    <string name="bind_phone">关联手机号</string>
+
+    <!-- 图形验证码输入框 -->
+    <string name="please_input_image_auth_code">请输入图形验证码</string>
+    <string name="auth_code_error">图形验证码有误</string>
+    <string name="image_auth_code">图形验证码</string>
+    <string name="change_image_auth_code">看不清？</string>
+    <string name="change_image">换一张</string>
+
+
+    <string name="me_want_contribute">我要投稿</string>
+    <string name="feed_back">意见反馈</string>
+    <string name="setting">设置</string>
+    <string name="click_login">点击登录</string>
+    <string name="collect">收藏</string>
+    <string name="history">历史</string>
+    <string name="please_add_us_wechat_account">请添加我们的微信号%1$s\n我们坐下来慢慢详谈</string>
+    <string name="copy_us_wechat_account">复制微信号</string>
+
+    <string name="receive_new_notification">接收新消息通知</string>
+    <string name="personal_data">个人资料</string>
+    <string name="account_manager">账号管理</string>
+    <string name="about_bcnews">关于区块财经</string>
+    <string name="logout">退出</string>
+    <string name="weChat_account">微信号</string>
+    <string name="affirm_logout">确定要退出登录吗</string>
+    <string name="read_history">阅读历史</string>
+
     <string name="check_related_news">查看相关资讯</string>
 </resources>
