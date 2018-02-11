@@ -55,6 +55,7 @@ public class PersonalIntroduceActivity extends BaseActivity {
                         UserInfo userInfo = LocalUser.getUser().getUserInfo();
                         userInfo.setIntroduction(s);
                         setResult(RESULT_OK);
+                        finish();
                     }
                 })
                 .fire();

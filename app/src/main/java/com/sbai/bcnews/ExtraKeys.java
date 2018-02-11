@@ -21,4 +21,6 @@ public interface ExtraKeys {
     String CHANNEL = "channel";
 
     String PERSONAL_INTRODUCE = "personal_introduce ";
+    String NICK_NAME = "nick_name";
+    String IMAGE_PATH = "image_path";
 }

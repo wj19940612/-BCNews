@@ -183,4 +183,7 @@
     <string name="please_input_introduce">让别人瞻仰下不凡的你吧</string>
     <string name="save">保存</string>
     <string name="introduce_is_too_more">简介太丰富了</string>
+
+    <string name="set_nick_name">设置昵称</string>
+    <string name="please_input_nick_name">请输入昵称</string>
 </resources>

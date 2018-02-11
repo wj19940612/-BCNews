@@ -271,4 +271,8 @@ public class Apic {
                 new ReqParams()
                         .put("introduction", introduction));
     }
+
+    public static Api submitNickName(String nickName) {
+        return Api.put("/api/news-user/user/update", new ReqParams().put("userName", nickName));
+    }
 }

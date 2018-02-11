@@ -52,6 +52,7 @@ public class PersonalDataActivity extends BaseActivity {
     private static final String SEX_GIRL = "女";
 
     public static final int REQ_CODE_PERSONAL_INTRODUCE = 872;
+    public static final int REQ_CODE_NICK_NAME = 873;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -133,6 +134,9 @@ public class PersonalDataActivity extends BaseActivity {
             case R.id.userHeadImage:
                 break;
             case R.id.nickName:
+                Launcher.with(getActivity(), ModifyNickNameActivity.class)
+                        .putExtra(ExtraKeys.NICK_NAME, LocalUser.getUser().getUserInfo().getUserName())
+                        .executeForResult(REQ_CODE_NICK_NAME);
                 break;
             case R.id.sex:
                 showSexWheel();
@@ -303,6 +307,9 @@ public class PersonalDataActivity extends BaseActivity {
             switch (requestCode) {
                 case REQ_CODE_PERSONAL_INTRODUCE:
                     mIntroduce.setText(LocalUser.getUser().getUserInfo().getIntroduction());
+                    break;
+                case REQ_CODE_NICK_NAME:
+                    mNickName.setSubText(LocalUser.getUser().getUserInfo().getUserName());
                     break;
             }
         }
