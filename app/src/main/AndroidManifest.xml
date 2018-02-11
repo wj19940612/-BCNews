@@ -135,8 +135,6 @@
             android:process=":pushservice">
         </service>
 
-        <activity android:name=".activity.Main2Activity">
-        </activity>
     </application>
 
 </manifest>

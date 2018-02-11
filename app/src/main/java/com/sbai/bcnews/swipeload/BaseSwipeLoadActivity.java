@@ -61,34 +61,36 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
         }
     }
 
-    public void refreshFailure() {
-        refreshFailure(getString(R.string.refresh_fail));
+
+    @Override
+    public void loadMoreComplete(@StringRes int msgRes) {
+        loadMoreComplete(getString(msgRes));
     }
 
     @Override
-    public void refreshFailure(@StringRes int resId) {
-        refreshFailure(getString(resId));
-    }
-
-    @Override
-    public void refreshFailure(String msg) {
-        if (mRefreshHeaderView != null) {
-            mRefreshHeaderView.refreshFail();
+    public void loadMoreComplete(CharSequence msg) {
+        if (mLoadMoreFooterView != null) {
+            mLoadMoreFooterView.setLoadMoreSuccess(msg);
         }
         stopFreshOrLoadAnimation();
     }
 
+    public void refreshFailure() {
+        refreshComplete(getString(R.string.refresh_fail));
+    }
+
     public void refreshSuccess() {
-        refreshSuccess(getString(R.string.refresh_complete));
+        refreshComplete(getString(R.string.refresh_complete));
     }
 
     @Override
-    public void refreshSuccess(@StringRes int resId) {
-        refreshSuccess(getString(resId));
+    public void refreshComplete(@StringRes int resId) {
+        refreshComplete(getString(resId));
     }
 
+
     @Override
-    public void refreshSuccess(String msg) {
+    public void refreshComplete(CharSequence msg) {
         if (mRefreshHeaderView != null) {
             mRefreshHeaderView.refreshSuccess(msg);
         }
@@ -96,7 +98,7 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
     }
 
     private void setup(T swipeTargetView, SwipeToLoadLayout swipeToLoadLayout,
-                         RefreshHeaderView refreshHeaderView, LoadMoreFooterView loadMoreFooterView) {
+                       RefreshHeaderView refreshHeaderView, LoadMoreFooterView loadMoreFooterView) {
         mSwipeTargetView = swipeTargetView;
         mSwipeToLoadLayout = swipeToLoadLayout;
         mRefreshHeaderView = refreshHeaderView;

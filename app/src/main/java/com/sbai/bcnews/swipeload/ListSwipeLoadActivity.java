@@ -23,7 +23,12 @@ import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 public abstract class ListSwipeLoadActivity extends BaseSwipeLoadActivity<ListView> {
 
-    public abstract View getView();
+    /**
+     * 根布局的view
+     * @return
+     */
+    @NonNull
+    public abstract View getContentView();
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -56,24 +61,24 @@ public abstract class ListSwipeLoadActivity extends BaseSwipeLoadActivity<ListVi
     @NonNull
     @Override
     public ListView getSwipeTargetView() {
-        return getView().findViewById(R.id.swipe_target);
+        return getContentView().findViewById(R.id.swipe_target);
     }
 
     @NonNull
     @Override
     public SwipeToLoadLayout getSwipeToLoadLayout() {
-        return getView().findViewById(R.id.swipeToLoadLayout);
+        return getContentView().findViewById(R.id.swipeToLoadLayout);
     }
 
     @NonNull
     @Override
     public RefreshHeaderView getRefreshHeaderView() {
-        return getView().findViewById(R.id.swipe_refresh_header);
+        return getContentView().findViewById(R.id.swipe_refresh_header);
     }
 
     @NonNull
     @Override
     public LoadMoreFooterView getLoadMoreFooterView() {
-        return getView().findViewById(R.id.swipe_load_more_footer);
+        return getContentView().findViewById(R.id.swipe_load_more_footer);
     }
 }

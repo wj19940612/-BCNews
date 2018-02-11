@@ -1,7 +1,6 @@
 package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -9,12 +8,8 @@ import android.view.View;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by ${wangJie} on 2018/1/29.
@@ -22,31 +17,15 @@ import butterknife.ButterKnife;
  * 该类封装了 recycleview的上拉加载和滑动事件
  * <p>
  * 该类不可直接使用
+ * <p>
  */
 
-public class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<RecyclerView> {
-
-    @BindView(R.id.titleBar)
-    protected TitleBar mTitleBar;
-    @BindView(R.id.swipe_refresh_header)
-    RefreshHeaderView mSwipeRefreshHeader;
-    @BindView(R.id.swipe_target)
-    RecyclerView mSwipeTarget;
-    @BindView(R.id.swipe_load_more_footer)
-    LoadMoreFooterView mSwipeLoadMoreFooter;
-    @BindView(R.id.swipeToLoadLayout)
-    SwipeToLoadLayout mSwipeToLoadLayout;
-    @BindView(R.id.rootView)
-    View mRootView;
+public abstract class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<RecyclerView> {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
-        ButterKnife.bind(this);
-        if (getSwipeTargetView() != null) {
-            getSwipeTargetView().addOnScrollListener(mOnScrollListener);
-        }
+        getSwipeTargetView().addOnScrollListener(mOnScrollListener);
     }
 
     protected void onRecycleViewScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -86,68 +65,31 @@ public class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<Recycler
     /**
      * @return 根布局view
      */
-    public View getContentView() {
-        return mRootView;
-    }
-
-    /**
-     * setContentView 中的布局文件id
-     *
-     * @return
-     */
-    @LayoutRes
-    protected int getContentViewId() {
-        return R.layout.view_base_recycleview_swipe_load;
-    }
+    public abstract View getContentView();
 
     @NonNull
     @Override
     public SwipeToLoadLayout getSwipeToLoadLayout() {
-        View contentView = getContentView();
-        if (contentView != null) {
-            return contentView.findViewById(R.id.swipeToLoadLayout);
-        }
-        return null;
+        return getContentView().findViewById(R.id.swipeToLoadLayout);
     }
 
     @NonNull
     @Override
     public RecyclerView getSwipeTargetView() {
-        View contentView = getContentView();
-        if (contentView != null) {
-            return contentView.findViewById(R.id.swipe_target);
-        }
-        return null;
+        return getContentView().findViewById(R.id.swipe_target);
     }
 
 
     @NonNull
     @Override
     public RefreshHeaderView getRefreshHeaderView() {
-        View contentView = getContentView();
-        if (contentView != null) {
-            return contentView.findViewById(R.id.swipe_refresh_header);
-        }
-        return null;
+        return getContentView().findViewById(R.id.swipe_refresh_header);
     }
 
     @NonNull
     @Override
     public LoadMoreFooterView getLoadMoreFooterView() {
-        View contentView = getContentView();
-        if (contentView != null) {
-            return contentView.findViewById(R.id.swipe_load_more_footer);
-        }
-        return null;
+        return getContentView().findViewById(R.id.swipe_load_more_footer);
     }
 
-    @Override
-    public void onLoadMore() {
-
-    }
-
-    @Override
-    public void onRefresh() {
-
-    }
 }

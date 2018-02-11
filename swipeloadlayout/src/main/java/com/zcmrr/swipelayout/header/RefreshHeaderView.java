@@ -150,7 +150,7 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
         setRefreshCompleteText(R.string.refresh_fail);
     }
 
-    public void refreshFail(String freshFailMsg) {
+    public void refreshFail(CharSequence freshFailMsg) {
         setRefreshCompleteText(freshFailMsg);
     }
 
@@ -158,7 +158,7 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
         setRefreshCompleteText(R.string.refresh_complete);
     }
 
-    public void refreshSuccess(String toast){
+    public void refreshSuccess(CharSequence toast){
         setRefreshCompleteText(toast);
     }
 

@@ -36,16 +36,17 @@ public interface SwipeLoader<T> {
     @NonNull
     LoadMoreFooterView getLoadMoreFooterView();
 
-    @NonNull
-    void refreshSuccess(String msg);
-
-    void refreshSuccess(@StringRes int msgRes);
-
-    void refreshFailure(String msg);
-
-    void refreshFailure(@StringRes int msgRes);
-
     void triggerRefresh();
 
     void triggerLoadMore();
+
+    @NonNull
+    void refreshComplete(CharSequence msg);
+
+    void refreshComplete(@StringRes int msgRes);
+
+    void loadMoreComplete(CharSequence msg);
+
+    void loadMoreComplete(@StringRes int msgRes);
+
 }

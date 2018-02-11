@@ -206,7 +206,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             protected void onRespSuccessData(News data) {
                 if (data != null && data.getContent() != null && data.getContent().size() != 0) {
                     if (mNewsDetails.size() > 0 && data.getContent().get(0).getId().equals(mNewsDetails.get(0).getId())) {
-                        refreshSuccess(R.string.no_more_new_news);
+                        refreshComplete(R.string.no_more_new_news);
                     } else {
                         refreshSuccess();
                     }
