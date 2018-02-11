@@ -40,7 +40,7 @@ public class MarketData implements Parcelable{
     private String exchangeCode; //交易所code
     private double highestPrice; //最高价
     private double lastPrice;    // 最新 成交价
-    private double lastVolume;   // 最新量
+    private double lastVolume;   // 最新量（最新成交总量）
     private double lowestPrice;
     private String name;
     private double rate;         //兑换rmb 汇率

@@ -171,7 +171,7 @@ public class Api extends RequestManager {
         enqueue(request);
     }
 
-    protected void setupHeaders(ReqHeaders headers) {
+    private void setupHeaders(ReqHeaders headers) {
         String cookies = CookieManger.getInstance().getCookies();
         if (!TextUtils.isEmpty(cookies)) {
             headers.put("Cookie", cookies);

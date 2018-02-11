@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.text.SpannableString;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,10 +16,13 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.market.MarketData;
-import com.sbai.bcnews.utils.StrUtil;
+import com.sbai.bcnews.utils.MarketDataUtils;
 import com.sbai.bcnews.view.HackTabLayout;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.autofit.AutofitTextView;
+import com.sbai.chart.domain.KlineViewData;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +52,14 @@ public class MarketDetailActivity extends BaseActivity {
     TextView mCheckRelatedNews;
     @BindView(R.id.tabLayout)
     HackTabLayout mTabLayout;
+    @BindView(R.id.lowestPrice)
+    TextView mLowestPrice;
+    @BindView(R.id.bidPrice)
+    TextView mBidPrice;
+
     private MarketData mMarketData;
+    private String mCode;
+    private String mExchangeCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +71,36 @@ public class MarketDetailActivity extends BaseActivity {
 
         initTitleBar();
         initTabLayout();
-        initMarketView();
+
+        updateMarketView();
 
         requestSingleMarket();
     }
 
-    private void initMarketView() {
-        
+    /*设置最新价，人民币换算，涨跌幅以及颜色，以及一些基本的数据*/
+    private void updateMarketView() {
+        double lastPrice = mMarketData.getLastPrice();
+        mLastPrice.setText(MarketDataUtils.formatDollar(lastPrice));
+        // mPriceChange show last price in RMB, and price change
+        mPriceChange.setText(MarketDataUtils.formatRmbWithSign(lastPrice * mMarketData.getRate()) + '\n'
+                + MarketDataUtils.formatDollarWithPrefix(lastPrice * mMarketData.getUpDropSpeed())
+                + "  " + MarketDataUtils.percentWithPrefix(mMarketData.getUpDropSpeed()));
+
+        int color = mMarketData.getUpDropSpeed() < 0 ? R.color.losePrimary : R.color.greenPrimary;
+        mLastPrice.setTextColor(ContextCompat.getColor(getActivity(), color));
+        mPriceChange.setTextColor(ContextCompat.getColor(getActivity(), color));
+
+        mVolume.setText(MarketDataUtils.formatVolume(mMarketData.getVolume()));
+        mHighest.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getHighestPrice())
+                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getHighestPrice()));
+        mAskPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getAskPrice())
+                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getAskPrice()));
+
+        mMarketValue.setText("--"); // TODO: 11/02/2018 市值数据未提供
+        mLowestPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getLowestPrice())
+                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getLowestPrice()));
+        mBidPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getBidPrice())
+                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getBidPrice()));
     }
 
     private void requestSingleMarket() {
@@ -75,22 +108,29 @@ public class MarketDetailActivity extends BaseActivity {
                 .callback(new Callback2D<Resp<MarketData>, MarketData>() {
                     @Override
                     protected void onRespSuccessData(MarketData data) {
-
+                        mMarketData = data;
+                        updateMarketView();
                     }
                 }).fireFreely();
     }
 
     private void initData(Intent intent) {
         mMarketData = intent.getParcelableExtra(ExtraKeys.DIGITAL_CURRENCY);
+        mCode = mMarketData.getCode();
+        mExchangeCode = mMarketData.getExchangeCode();
     }
 
     private void initTitleBar() {
         String baseCurrency = mMarketData.getName();
         String counterCurrency = mMarketData.getCurrencyMoney();
-        String exchange = mMarketData.getExchangeCode();
-        SpannableString title = StrUtil.mergeTextWithRatioColor(baseCurrency + "/" + counterCurrency, exchange,
-                0.5f, ContextCompat.getColor(getActivity(), R.color.luckyText));
-        mTitleBar.setTitle(title);
+        String exchangeCode = mMarketData.getExchangeCode();
+
+        View view = mTitleBar.getCustomView();
+        TextView currencyPair = view.findViewById(R.id.currencyPair);
+        TextView exchange = view.findViewById(R.id.exchange);
+        currencyPair.setText(baseCurrency.toUpperCase() + "/" + counterCurrency.toUpperCase());
+        exchange.setText(exchangeCode);
+
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,17 +149,29 @@ public class MarketDetailActivity extends BaseActivity {
         mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
     }
 
+    @Override
+    public void onTimeUp(int count) {
+        // TODO: 11/02/2018 定时刷新
+    }
+
     private TabLayout.OnTabSelectedListener mOnTabSelectedListener = new TabLayout.OnTabSelectedListener() {
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
             switch (tab.getPosition()) {
-                case 0:break;
-                case 1:
+                case 0:
                     break;
-                case 2:break;
-                case 3:break;
-                case 4:break;
-                case 5:break;
+                case 1:
+                    Log.d("Temp", "onTabSelected: " + tab.getPosition());
+                    requestKlineMarket("5");
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
 
             }
         }
@@ -134,6 +186,16 @@ public class MarketDetailActivity extends BaseActivity {
 
         }
     };
+
+    private void requestKlineMarket(String klineType) {
+        Apic.reqKlineMarket(mCode, mExchangeCode, klineType, null).tag(TAG)
+                .callback(new Callback2D<Resp<List<KlineViewData>>, List<KlineViewData>>() {
+                    @Override
+                    protected void onRespSuccessData(List<KlineViewData> data) {
+                        
+                    }
+                }).fire();
+    }
 
     @OnClick(R.id.checkRelatedNews)
     public void onViewClicked() {

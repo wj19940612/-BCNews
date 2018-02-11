@@ -107,4 +107,22 @@ public class Apic {
                         .put("code", code)
                         .put("exchangeCode", exchangeCode));
     }
+
+    /**
+     * 获取 k 线数据
+     *
+     * @param code
+     * @param exchangeCode
+     * @param klineType
+     * @return
+     */
+    public static Api reqKlineMarket(String code, String exchangeCode, String klineType, String startTime) {
+        return Api.get("/api/news-quota/quota/{code}/k",
+                new ReqParams()
+                        .put("code", code)
+                        .put("exchangeCode", exchangeCode)
+                        .put("type", klineType)
+                        .put("startTime", startTime)
+                        .put("limit", 100));
+    }
 }

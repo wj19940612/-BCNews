@@ -15,10 +15,9 @@
         android:background="@android:color/transparent"
         app:backFeature="true"
         app:backIcon="@drawable/ic_tb_back_white"
+        app:customView="@layout/tb_market_detail"
         app:rightTextRightImage="@drawable/ic_share_white"
-        app:rightVisible="true"
-        app:titleText="BTC/USDT"
-        app:titleTextColor="@android:color/white"/>
+        app:rightVisible="true"/>
 
     <LinearLayout
         android:id="@+id/priceArea"
@@ -158,6 +157,7 @@
                 tools:text="1,482,081,753,357"/>
 
             <TextView
+                android:id="@+id/lowestPrice"
                 style="@style/MarketData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -165,6 +165,7 @@
                 tools:text="$8799.54  ¥55217.11"/>
 
             <TextView
+                android:id="@+id/bidPrice"
                 style="@style/MarketData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -194,7 +195,11 @@
             app:tabSelectedTextColor="@color/marketText"
             app:tabTextAppearance="@style/TabLayoutText"/>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
 
+        </FrameLayout>
     </LinearLayout>
 
     <TextView
