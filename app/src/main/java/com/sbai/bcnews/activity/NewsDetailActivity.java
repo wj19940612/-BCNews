@@ -37,6 +37,7 @@ import com.sbai.bcnews.model.OtherArticle;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.NewsScrollView;
@@ -193,12 +194,6 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void initView() {
-        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showShareDialog();
-            }
-        });
         mTitleBar.setBackClickListener(new TitleBar.OnBackClickListener() {
             @Override
             public void onClick() {
@@ -635,6 +630,7 @@ public class NewsDetailActivity extends BaseActivity {
                 protected void onRespSuccessData(Integer data) {
                     if (mNetNewsDetail.getCollect() == 0) {
                         mNetNewsDetail.setCollect(1);
+                        umengEventCount(UmengCountEventId.NEWS04);
                     } else {
                         mNetNewsDetail.setCollect(0);
                     }
@@ -696,6 +692,9 @@ public class NewsDetailActivity extends BaseActivity {
                 break;
             case R.id.collectLayout:
                 collect();
+                break;
+            case R.id.bottomShareLayout:
+                showShareDialog();
                 break;
         }
     }

@@ -138,6 +138,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mViewPager.setOffscreenPageLimit(myChannelEntities.size() - 1);
         mMyChannels.clear();
         mMyChannels.addAll(myChannelEntities);
+//        mMyChannels.addAll(myChannelEntities);
         mPagerAdapter.notifyDataSetChanged();
         if (mCurrentItem < mChannelCacheModel.getMyChannelEntities().size() - 1)
             mViewPager.setCurrentItem(mCurrentItem, false);
