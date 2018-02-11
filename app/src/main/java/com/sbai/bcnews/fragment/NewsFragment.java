@@ -34,19 +34,16 @@ import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
 import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.HomeBanner;
-import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.sbai.bcnews.ExtraKeys.CHANNEL;
@@ -498,14 +495,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-<<<<<<< HEAD
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
-=======
-                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.blackPrimary));
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
                 mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
 
->>>>>>> bae49f4eb2f08025519d399563129ba27d34714a
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     mImg.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(0))
@@ -564,14 +557,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 mTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-<<<<<<< HEAD
                 mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.primaryText));
-=======
-                mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.blackPrimary));
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
                 mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
 
->>>>>>> bae49f4eb2f08025519d399563129ba27d34714a
                 if (item.getImgs() != null && item.getImgs().size() > 0) {
                     mImg1.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(item.getImgs().get(0))
