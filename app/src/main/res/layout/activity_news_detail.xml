@@ -19,7 +19,7 @@
         app:titleLeftMargin="50dp"
         app:titleRightMargin="50dp"
         app:titleText="@string/news_detail"
-        app:titleTextColor="@color/primaryText"
+        app:titleTextColor="@color/text"
         app:titleTextSize="14sp"/>
 
     <View
@@ -55,7 +55,7 @@
                     android:layout_marginRight="14dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:textColor="@color/primaryText"
+                    android:textColor="@color/text"
                     android:textSize="22sp"/>
 
                 <TextView
@@ -173,7 +173,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="@string/share_to_"
-                    android:textColor="@color/primaryText"
+                    android:textColor="@color/text"
                     android:textSize="12sp"/>
 
 
@@ -251,7 +251,7 @@
                         android:layout_toLeftOf="@+id/firstImg"
                         android:ellipsize="end"
                         android:maxLines="3"
-                        android:textColor="@color/blackPrimary"
+                        android:textColor="@color/text"
                         android:textSize="16sp"/>
 
                     <TextView
@@ -264,7 +264,7 @@
                         android:background="@drawable/bg_original"
                         android:gravity="center"
                         android:text="@string/original"
-                        android:textColor="@color/colorOriginal"
+                        android:textColor="@color/textColorPrimary"
                         android:textSize="12sp"
                         android:visibility="gone"/>
 
@@ -335,7 +335,7 @@
                         android:layout_toLeftOf="@+id/secondImg"
                         android:ellipsize="end"
                         android:maxLines="3"
-                        android:textColor="@color/blackPrimary"
+                        android:textColor="@color/text"
                         android:textSize="16sp"/>
 
                     <TextView
@@ -348,7 +348,7 @@
                         android:background="@drawable/bg_original"
                         android:gravity="center"
                         android:text="@string/original"
-                        android:textColor="@color/colorOriginal"
+                        android:textColor="@color/textColorPrimary"
                         android:textSize="12sp"
                         android:visibility="gone"/>
 
@@ -419,7 +419,7 @@
                         android:layout_toLeftOf="@+id/thirdImg"
                         android:ellipsize="end"
                         android:maxLines="3"
-                        android:textColor="@color/blackPrimary"
+                        android:textColor="@color/text"
                         android:textSize="16sp"/>
 
                     <TextView
@@ -432,7 +432,7 @@
                         android:background="@drawable/bg_original"
                         android:gravity="center"
                         android:text="@string/original"
-                        android:textColor="@color/colorOriginal"
+                        android:textColor="@color/textColorPrimary"
                         android:textSize="12sp"
                         android:visibility="gone"/>
 

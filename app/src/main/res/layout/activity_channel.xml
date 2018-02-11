@@ -38,7 +38,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/channel_custom"
-            android:textColor="@color/blackPrimary"
+            android:textColor="@color/text"
             android:textSize="13sp"/>
 
         <ImageView

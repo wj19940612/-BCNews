@@ -30,7 +30,7 @@
             android:layout_marginRight="12dp"
             android:maxLines="3"
             android:ellipsize="end"
-            android:textColor="@color/blackPrimary"
+            android:textColor="@color/text"
             android:textSize="16sp"/>
 
 
@@ -42,7 +42,7 @@
             android:layout_below="@+id/title"
             android:layout_marginTop="22dp"
             android:layout_marginRight="18dp"
-            android:textColor="@color/colorOriginal"
+            android:textColor="@color/textColorPrimary"
             android:textSize="12sp"
             android:gravity="center"
             android:background="@drawable/bg_original"

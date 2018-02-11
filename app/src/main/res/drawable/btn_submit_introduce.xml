@@ -4,7 +4,7 @@
     <item android:state_enabled="true" android:state_pressed="false">
         <shape>
             <corners android:radius="@dimen/common_little_radius"/>
-            <solid android:color="@color/enable"/>
+            <solid android:color="@color/colorPrimary"/>
         </shape>
     </item>
 
@@ -19,7 +19,7 @@
     <item>
         <shape>
             <corners android:radius="@dimen/common_little_radius"/>
-            <solid android:color="@color/unEnable"/>
+            <solid android:color="@color/disable"/>
         </shape>
     </item>
 </selector>
