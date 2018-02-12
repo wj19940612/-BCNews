@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  */
 public class HackTabLayout extends TabLayout {
 
-    private static final float MARGIN_DP = 12;
+    private static final float MARGIN_DP = 10;
 
     public HackTabLayout(Context context) {
         super(context);
@@ -69,12 +69,10 @@ public class HackTabLayout extends TabLayout {
 
                 child.setPadding(0, 0, 0, 0);
                 int margin = (int) Display.dp2Px(MARGIN_DP, getResources());
-                int rightMargin = (int) Display.dp2Px(20, getResources());
-                int leftMargin = rightMargin;
                 if (i == 0) {
-                    params.setMargins(leftMargin, 0, margin, 0);
+                    params.setMargins(0, 0, margin, 0);
                 } else if (i == tabStrip.getChildCount() - 1) {
-                    params.setMargins(margin, 0, rightMargin, 0);
+                    params.setMargins(margin, 0, 0, 0);
                 } else {
                     params.setMargins(margin, 0, margin, 0);
                 }

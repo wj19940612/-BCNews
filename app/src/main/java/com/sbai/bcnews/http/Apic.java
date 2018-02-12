@@ -15,9 +15,9 @@ public class Apic {
 
     public static final int NORMAL_PAGESIZE = 20;
 
-    public static final String SHARE_NEWS_URL = Api.getHost() + "/news/share/index.html?id=%s";
+    public static final String SHARE_NEWS_URL = Api.getFixedHost() + "/news/share/index.html?id=%s";
 
-    public static final String DOWNLOAD_URL = Api.getHost() + "/qc.png";
+    public static final String DOWNLOAD_URL = Api.getFixedHost() + "/qc.png";
 
     /**
      * 资讯详情 - 齐慕伟

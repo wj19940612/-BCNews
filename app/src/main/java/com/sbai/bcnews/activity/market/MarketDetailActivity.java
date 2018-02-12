@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,8 +19,11 @@ import com.sbai.bcnews.utils.MarketDataUtils;
 import com.sbai.bcnews.view.HackTabLayout;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.autofit.AutofitTextView;
+import com.sbai.bcnews.view.market.KlineDataPlane;
+import com.sbai.chart.KlineChart;
 import com.sbai.chart.domain.KlineViewData;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,6 +58,12 @@ public class MarketDetailActivity extends BaseActivity {
     TextView mLowestPrice;
     @BindView(R.id.bidPrice)
     TextView mBidPrice;
+    @BindView(R.id.klinePlane)
+    KlineDataPlane mKlinePlane;
+    @BindView(R.id.klineChart)
+    KlineChart mKlineChart;
+    @BindView(R.id.trendChart)
+    TextView mTrendChart;
 
     private MarketData mMarketData;
     private String mCode;
@@ -71,10 +79,39 @@ public class MarketDetailActivity extends BaseActivity {
 
         initTitleBar();
         initTabLayout();
+        initCharts();
 
         updateMarketView();
 
         requestSingleMarket();
+    }
+
+    private void initCharts() {
+        KlineChart.Settings klineSettings = new KlineChart.Settings();
+        klineSettings.setBaseLines(5);
+        klineSettings.setNumberScale(mMarketData.getHighestPrice() >= 10 ? 2 : 4);
+        klineSettings.setXAxis(45);
+        klineSettings.setIndexesType(KlineChart.Settings.INDEXES_VOL);
+        klineSettings.setIndexesEnable(true);
+        klineSettings.setIndexesBaseLines(2);
+        mKlineChart.setSettings(klineSettings);
+        mKlineChart.setOnTouchLinesAppearListener(new KlineChart.OnTouchLinesAppearListener() {
+            @Override
+            public void onAppear(KlineViewData data, KlineViewData previousData, boolean isLeftArea) {
+                mTabLayout.setVisibility(View.INVISIBLE);
+                mKlinePlane.setVisibility(View.VISIBLE);
+                mKlinePlane.setPrices(data.getOpenPrice(), data.getMaxPrice(), data.getMinPrice(), data.getClosePrice());
+                mKlinePlane.setDate(data.getTimeStamp());
+            }
+
+            @Override
+            public void onDisappear() {
+                mTabLayout.setVisibility(View.VISIBLE);
+                mKlinePlane.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        showTrendView();
     }
 
     /*设置最新价，人民币换算，涨跌幅以及颜色，以及一些基本的数据*/
@@ -86,7 +123,7 @@ public class MarketDetailActivity extends BaseActivity {
                 + MarketDataUtils.formatDollarWithPrefix(lastPrice * mMarketData.getUpDropSpeed())
                 + "  " + MarketDataUtils.percentWithPrefix(mMarketData.getUpDropSpeed()));
 
-        int color = mMarketData.getUpDropSpeed() < 0 ? R.color.losePrimary : R.color.greenPrimary;
+        int color = mMarketData.getUpDropSpeed() < 0 ? R.color.redPrimary : R.color.greenPrimary;
         mLastPrice.setTextColor(ContextCompat.getColor(getActivity(), color));
         mPriceChange.setTextColor(ContextCompat.getColor(getActivity(), color));
 
@@ -159,18 +196,27 @@ public class MarketDetailActivity extends BaseActivity {
         public void onTabSelected(TabLayout.Tab tab) {
             switch (tab.getPosition()) {
                 case 0:
+                    showTrendView();
                     break;
                 case 1:
-                    Log.d("Temp", "onTabSelected: " + tab.getPosition());
+                    showKlineView();
                     requestKlineMarket("5");
                     break;
                 case 2:
+                    showKlineView();
+                    requestKlineMarket("15");
                     break;
                 case 3:
+                    showKlineView();
+                    requestKlineMarket("30");
                     break;
                 case 4:
+                    showKlineView();
+                    requestKlineMarket("60");
                     break;
                 case 5:
+                    showKlineView();
+                    requestKlineMarket("day");
                     break;
 
             }
@@ -187,12 +233,27 @@ public class MarketDetailActivity extends BaseActivity {
         }
     };
 
+    private void showKlineView() {
+        mKlineChart.setVisibility(View.VISIBLE);
+        mTrendChart.setVisibility(View.GONE);
+    }
+
+    private void showTrendView() {
+        mKlineChart.setVisibility(View.GONE);
+        mTrendChart.setVisibility(View.VISIBLE);
+    }
+
     private void requestKlineMarket(String klineType) {
+        mKlineChart.clearData();
         Apic.reqKlineMarket(mCode, mExchangeCode, klineType, null).tag(TAG)
                 .callback(new Callback2D<Resp<List<KlineViewData>>, List<KlineViewData>>() {
                     @Override
                     protected void onRespSuccessData(List<KlineViewData> data) {
-                        
+                        if (data.size() > 1 && data.get(0).getTimeStamp() > data.get(1).getTimeStamp()) {
+                            // 第一个数据是最新数据，reverse
+                            Collections.reverse(data);
+                        }
+                        mKlineChart.setDataList(data);
                     }
                 }).fire();
     }

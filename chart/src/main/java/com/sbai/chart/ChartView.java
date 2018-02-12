@@ -21,13 +21,13 @@ public abstract class ChartView extends View {
 
     protected enum ChartColor {
 
-        BASE("#dddddd"),
+        BASE("#f5f5f5"),
         TEXT("#999999"),
         WHITE("#ffffff"),
-        GREEN("#2fcc9f"),
+        GREEN("#39ae13"),
         BLACK("#222222"),
         DASH("#979797"),
-        RED("#f25b57");
+        RED("#f62048");
 
         private String value;
 

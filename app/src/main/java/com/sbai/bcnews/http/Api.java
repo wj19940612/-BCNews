@@ -42,6 +42,7 @@ public class Api extends RequestManager {
     private ReqParams mReqParams;
     private ReqIndeterminate mIndeterminate;
     private int mTimeout;
+    private String mHost;
 
     private File mFile;
     private String mFileName;
@@ -105,6 +106,11 @@ public class Api extends RequestManager {
 
     public Api callback(ReqCallback<?> callback) {
         mCallback = callback;
+        return this;
+    }
+
+    public Api host(String host) {
+        mHost = host;
         return this;
     }
 
@@ -200,7 +206,8 @@ public class Api extends RequestManager {
             mApi = mReqParams.replaceHolders(mApi);
         }
 
-        String url = new StringBuilder(getHost()).append(mApi).toString();
+        String host = TextUtils.isEmpty(mHost) ? getFixedHost() : mHost;
+        String url = new StringBuilder(host).append(mApi).toString();
         if (mMethod == GET && mReqParams != null) {
             url += mReqParams.toString();
             mReqParams = null;
@@ -209,7 +216,7 @@ public class Api extends RequestManager {
         return url;
     }
 
-    public static String getHost() {
+    public static String getFixedHost() {
         if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")
                 || BuildConfig.FLAVOR.equalsIgnoreCase(BuildConfigUtils.FLAVOR_NAME_ALPHA)) {
             return "http://" + BuildConfig.HOST;

@@ -5,11 +5,11 @@ public class ChartSettings {
     private float[] mBaseLines;
     private long[] mIndexesBaseLines;
     private boolean mIndexesEnable;
+    private boolean mIndexesTouchLineEnable;
     private int mNumberScale;
     private int mXAxis;
     private float mPreClosePrice;
     private ColorCfg mColorCfg;
-    private int mTimeLineHeight;
 
     public ChartSettings() {
         mBaseLines = new float[0];

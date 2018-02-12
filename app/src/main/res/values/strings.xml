@@ -116,7 +116,11 @@
     <string name="thirty_min_k">30分</string>
     <string name="sixty_min_k">60分</string>
     <string name="there_is_no_more_data">没有更多数据了</string>
-
+    <string name="check_related_news">查看相关资讯</string>
+    <string name="open_">开:%1$s</string>
+    <string name="highest_">高:%1$s</string>
+    <string name="lowest_">低:%1$s</string>
+    <string name="close_">收:%1$s</string>
 
     <!-- common -->
     <string name="now_refresh">立即刷新</string>
@@ -164,5 +168,4 @@
     <string name="affirm_logout">确定要退出登录吗</string>
     <string name="read_history">阅读历史</string>
 
-    <string name="check_related_news">查看相关资讯</string>
 </resources>

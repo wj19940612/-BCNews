@@ -22,10 +22,6 @@ public class KlineChart extends ChartView {
 
     private static final int CANDLES_WIDTH_DP = 6; //dp
 
-    private static final String MA_BLUE = "#6a96ef";
-    private static final String MA_PURPLE = "#dc6aef";
-    private static final String MA_YELLOW = "#efc86a";
-
     public static final String DATE_FORMAT_DAY_MIN = "HH:mm";
 
     private List<KlineViewData> mDataList;
@@ -38,6 +34,7 @@ public class KlineChart extends ChartView {
     private boolean mIsDayLine;
     private Date mDate;
     private int[] mMovingAverages;
+    private SparseArray<String> mMAColors;
     private OnTouchLinesAppearListener mOnTouchLinesAppearListener;
     private KlineView.OnReachBorderListener mOnReachBorderListener;
     private KlineView.OnReachBorderListener mReachBorderListener;
@@ -93,7 +90,11 @@ public class KlineChart extends ChartView {
         mDateFormat = new SimpleDateFormat(DATE_FORMAT_DAY_MIN);
         mDate = new Date();
         mCandleWidth = dp2Px(CANDLES_WIDTH_DP);
-        mMovingAverages = new int[]{5, 10, 20};
+
+        mMovingAverages = new int[]{5, 10};
+        mMAColors = new SparseArray<>(mMovingAverages.length);
+        mMAColors.put(5, "#ffb405"/*yellow*/);
+        mMAColors.put(10, "#890cff"/*purple*/);
 
         mFirstVisibleIndex = Integer.MAX_VALUE;
         mLastVisibleIndex = Integer.MIN_VALUE;
@@ -174,13 +175,7 @@ public class KlineChart extends ChartView {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(1);
         paint.setPathEffect(null);
-        if (movingAverage == mMovingAverages[0]) {
-            paint.setColor(Color.parseColor(MA_BLUE));
-        } else if (movingAverage == mMovingAverages[1]) {
-            paint.setColor(Color.parseColor(MA_PURPLE));
-        } else if (movingAverage == mMovingAverages[2]) {
-            paint.setColor(Color.parseColor(MA_YELLOW));
-        }
+        paint.setColor(Color.parseColor(mMAColors.get(movingAverage)));
     }
 
     private void setMovingAveragesTextPaint(Paint paint, int movingAverage) {
@@ -188,13 +183,7 @@ public class KlineChart extends ChartView {
         paint.setStrokeWidth(1);
         paint.setPathEffect(null);
         paint.setTextSize(mMaTitleSize);
-        if (movingAverage == mMovingAverages[0]) {
-            paint.setColor(Color.parseColor(MA_BLUE));
-        } else if (movingAverage == mMovingAverages[1]) {
-            paint.setColor(Color.parseColor(MA_PURPLE));
-        } else if (movingAverage == mMovingAverages[2]) {
-            paint.setColor(Color.parseColor(MA_YELLOW));
-        }
+        paint.setColor(Color.parseColor(mMAColors.get(movingAverage)));
     }
 
     protected void setTouchLinePaint(Paint paint) {
@@ -316,14 +305,16 @@ public class KlineChart extends ChartView {
     protected void drawTitleAboveBaselines(float[] baselines, int left, int top, int width, int height,
                                            long[] indexesBaseLines, int left2, int top2, int width2, int height2,
                                            int touchIndex, Canvas canvas) {
-        float textX = left + mTextMargin;
+        float textX = left + width - mTextMargin;
         float verticalInterval = mTextMargin * 2;
         if (mVisibleList != null && mVisibleList.size() > 0) {
             KlineViewData data = mVisibleList.get(mVisibleList.size() - 1);
             if (hasThisTouchIndex(touchIndex)) {
                 data = mVisibleList.get(touchIndex);
             }
-            for (int movingAverage : mMovingAverages) {
+
+            for (int i = mMovingAverages.length - 1; i >= 0; i--) {
+                int movingAverage = mMovingAverages[i];
                 setMovingAveragesTextPaint(sPaint, movingAverage);
                 Float movingAverageValue = data.getMovingAverage(movingAverage);
                 String maText = "MA" + movingAverage + ":--";
@@ -331,16 +322,17 @@ public class KlineChart extends ChartView {
                     maText = "MA" + movingAverage + ":" + formatNumber(movingAverageValue);
                 }
                 float textWidth = sPaint.measureText(maText);
-                canvas.drawText(maText, textX, top + verticalInterval + mOffset4CenterMaTitle, sPaint);
-                textX += textWidth + mTextMargin * 5;
+                canvas.drawText(maText, textX - textWidth, top + verticalInterval + mOffset4CenterMaTitle, sPaint);
+                textX -= textWidth + mTextMargin * 5;
             }
         } else {
-            for (int movingAverage : mMovingAverages) {
+            for (int i = mMovingAverages.length - 1; i >= 0; i--) {
+                int movingAverage = mMovingAverages[i];
                 setMovingAveragesTextPaint(sPaint, movingAverage);
                 String maText = "MA" + movingAverage + ":--";
                 float textWidth = sPaint.measureText(maText);
-                canvas.drawText(maText, textX, top + verticalInterval + mOffset4CenterMaTitle, sPaint);
-                textX += textWidth + mTextMargin * 5;
+                canvas.drawText(maText, textX - textWidth, top + verticalInterval + mOffset4CenterMaTitle, sPaint);
+                textX -= textWidth + mTextMargin * 5;
             }
         }
     }
@@ -357,6 +349,8 @@ public class KlineChart extends ChartView {
     protected void drawBaseLines(boolean indexesEnable, float[] baselines, int left, int top, int width, int height,
                                  long[] indexesBaseLines, int left2, int top2, int width2, int height2, Canvas canvas) {
         if (baselines == null || baselines.length < 2) return;
+
+        if (mDataList == null || mDataList.isEmpty()) return;
 
         float verticalInterval = height * 1.0f / (baselines.length - 1);
         mPriceAreaWidth = calculatePriceWidth(baselines[0]);
@@ -515,18 +509,13 @@ public class KlineChart extends ChartView {
     @Override
     protected void drawTimeLine(int left, int top, int width, Canvas canvas) {
         float textY = top + mTextMargin * 2.5f + mFontHeight / 2 + mOffset4CenterText;
-        for (int i = mStart; i < mEnd; i += 8) {
+        setDefaultTextPaint(sPaint);
+        for (int i = mStart + 4; i < mEnd; i += 10) {
             KlineViewData data = mDataList.get(i);
-            setDefaultTextPaint(sPaint);
-            if (i == mStart) {
-                String timeStr = data.getDay();
-                canvas.drawText(timeStr, left - mTextMargin * 2, textY, sPaint);
-            } else {
-                String displayTime = formatTimestamp(data);
-                float textWidth = sPaint.measureText(displayTime);
-                float textX = getChartXOfScreen(i) - textWidth / 2;
-                canvas.drawText(displayTime, textX, textY, sPaint);
-            }
+            String displayTime = formatTimestamp(data);
+            float textWidth = sPaint.measureText(displayTime);
+            float textX = getChartXOfScreen(i) - textWidth / 2;
+            canvas.drawText(displayTime, textX, textY, sPaint);
         }
     }
 
@@ -644,7 +633,7 @@ public class KlineChart extends ChartView {
             canvas.drawLine(touchX, top, touchX, top + height, sPaint);
             canvas.drawLine(left, touchY, left + width, touchY, sPaint);
 
-            if (indexesEnable) {
+            /**if (indexesEnable) {
                 float touchY2 = getIndexesChartY(data.getNowVolume());
 
                 // draw volume connect to horizontal line
@@ -672,7 +661,7 @@ public class KlineChart extends ChartView {
                 setTouchLinePaint(sPaint);
                 canvas.drawLine(touchX, top2, touchX, top2 + height2, sPaint);
                 canvas.drawLine(left2, touchY2, left2 + width, touchY2, sPaint);
-            }
+            }**/
         }
     }
 

@@ -74,14 +74,14 @@
                 style="@style/MarketData.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/highest"/>
 
             <TextView
                 style="@style/MarketData.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/ask_price_1"/>
         </LinearLayout>
 
@@ -104,7 +104,7 @@
                 style="@style/MarketData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 tools:text="$1215.77  ¥63986.11"/>
 
             <TextView
@@ -112,7 +112,7 @@
                 style="@style/MarketData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 tools:text="$8799.54  ¥55217.11"/>
         </LinearLayout>
 
@@ -131,14 +131,14 @@
                 style="@style/MarketData.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/lowest"/>
 
             <TextView
                 style="@style/MarketData.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/bid_price_1"/>
         </LinearLayout>
 
@@ -161,7 +161,7 @@
                 style="@style/MarketData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 tools:text="$8799.54  ¥55217.11"/>
 
             <TextView
@@ -169,18 +169,20 @@
                 style="@style/MarketData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 tools:text="$8799.54  ¥55217.11"/>
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/marketDataArea"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/bg_market"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <com.sbai.bcnews.view.HackTabLayout
             android:id="@+id/tabLayout"
@@ -195,12 +197,30 @@
             app:tabSelectedTextColor="@color/assistText"
             app:tabTextAppearance="@style/TabLayoutText"/>
 
+        <com.sbai.bcnews.view.market.KlineDataPlane
+            android:id="@+id/klinePlane"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"/>
+
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="230dp"
+            android:layout_below="@id/tabLayout">
 
+            <com.sbai.chart.KlineChart
+                android:id="@+id/klineChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:id="@+id/trendChart"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="trend chart"
+                android:layout_height="match_parent"/>
         </FrameLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/checkRelatedNews"
