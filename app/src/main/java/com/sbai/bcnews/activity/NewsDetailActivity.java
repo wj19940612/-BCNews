@@ -675,9 +675,11 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void saveDetailCache() {
         if (mNewsDetail != null && mNetNewsDetail != null && mNewsDetail.getCreateTime() != mNetNewsDetail.getCreateTime()) {
+            mNetNewsDetail.setReadTime(System.currentTimeMillis());
             NewsCache.insertOrReplaceNews(mNetNewsDetail);
         } else if (mNewsDetail != null) {
             mNewsDetail.setReadHeight(mScrollView.getScrollY());
+            mNewsDetail.setReadTime(System.currentTimeMillis());
             NewsCache.insertOrReplaceNews(mNewsDetail);
         }
     }
