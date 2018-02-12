@@ -35,7 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/losePrimary"
+            android:textColor="@color/redPrimary"
             android:textSize="34sp"
             tools:text="10210.09"/>
 
@@ -44,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/losePrimary"
+            android:textColor="@color/redPrimary"
             android:textSize="15sp"
             tools:text="¥55537.70\n-1328.69   -13.24%"/>
     </LinearLayout>

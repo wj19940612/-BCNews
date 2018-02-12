@@ -166,7 +166,7 @@ public class SmartDialog {
         mIconResId = -1;
 
         mTitleText = null;
-        mTitleTextColor = ContextCompat.getColor(mActivity, R.color.primaryText);
+        mTitleTextColor = ContextCompat.getColor(mActivity, R.color.text);
         mTitleMaxLines = 2;
 
         mMessageText = null;
@@ -183,7 +183,7 @@ public class SmartDialog {
         mNegativeListener = null;
         mOnCancelListener = null;
         mDismissListener = null;
-        mPositiveTextColor = ContextCompat.getColor(mActivity, R.color.colorOriginal);
+        mPositiveTextColor = ContextCompat.getColor(mActivity, R.color.textColorPrimary);
         mNegativeVisible = View.VISIBLE;
 
         mCancelableOnTouchOutside = true;
