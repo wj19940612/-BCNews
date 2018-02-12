@@ -5,6 +5,8 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.httplib.ReqParams;
 
+import java.io.File;
+
 /**
  * Modified by john on 23/01/2018
  * <p>
@@ -13,7 +15,7 @@ import com.sbai.httplib.ReqParams;
  */
 public class Apic {
 
-    public static final int NORMAL_PAGESIZE = 20;
+    public static final int NORMAL_PAGE_SIZE = 20;
 
     public static final String SHARE_NEWS_URL = Api.getHost() + "/news/share/index.html?id=%s";
 
@@ -36,7 +38,7 @@ public class Apic {
      * @return
      */
     public static Api requestNewsListWithChannel(String channel, int page) {
-        return Api.get("/api/news-info/news/{channel}/list", new ReqParams().put("channel", channel).put("page", page).put("size", NORMAL_PAGESIZE));
+        return Api.get("/api/news-info/news/{channel}/list", new ReqParams().put("channel", channel).put("page", page).put("size", NORMAL_PAGE_SIZE));
     }
 
     /**
@@ -46,7 +48,7 @@ public class Apic {
      * @return
      */
     public static Api getNewsList(int page) {
-        return Api.get("/api/news-info/info/list.do", new ReqParams().put("page", page).put("size", NORMAL_PAGESIZE));
+        return Api.get("/api/news-info/info/list.do", new ReqParams().put("page", page).put("size", NORMAL_PAGE_SIZE));
     }
 
     public static Api syncSystemTime() {
@@ -242,13 +244,18 @@ public class Apic {
     }
 
     /**
-     * 请求阅读历史数据
+     * 请求阅读历史数据 或者 收藏
      *
+     * @param type
      * @param page
      */
     // TODO: 2018/2/11
-    public static Api requestReadHistoryData(int page) {
-        return Api.get("");
+    public static Api requestReadHistoryOrMyCollectData(int type, int page) {
+        return Api.get("/api/news-user/operate/list/{type}",
+                new ReqParams()
+                        .put("type", type)
+                        .put("page", page)
+                        .put("size", NORMAL_PAGE_SIZE));
     }
 
     /**
@@ -266,12 +273,37 @@ public class Apic {
      * @return
      */
     public static Api submitUserIntroduce(String introduction) {
-        return Api.put("/api/news-user/user/update",
+        return Api.post("/api/news-user/user/update",
                 new ReqParams()
                         .put("introduction", introduction));
     }
 
     public static Api submitNickName(String nickName) {
-        return Api.put("/api/news-user/user/update", new ReqParams().put("userName", nickName));
+        return Api.post("/api/news-user/user/update", new ReqParams().put("userName", nickName));
+    }
+
+    public static Api updateUserInfo(String province, String city, String birthday, Integer userSex) {
+        return Api.post("/api/news-user/user/update",
+                new ReqParams()
+                        .put("userProvince", province)
+                        .put("userCity", city)
+                        .put("birthday", birthday)
+                        .put("userSex", userSex));
+    }
+
+    /**
+     * @param file
+     */
+    public static Api submitFile(File file, String fileName) {
+        return Api.post("/api/zuul/news-user/upload/file.do",
+                new ReqParams()
+                        .put("file", file),
+                fileName,
+                file);
+    }
+
+    public static Api submitPortraitPath(String data) {
+        return Api.post("/api/news-user/user/update",
+                new ReqParams().put("userPortrait", data));
     }
 }

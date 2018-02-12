@@ -14,6 +14,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.bcnews.view.TitleBar;
 
@@ -52,6 +53,7 @@ public class PersonalIntroduceActivity extends BaseActivity {
 
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
+                        ToastUtil.show(R.string.update_success);
                         UserInfo userInfo = LocalUser.getUser().getUserInfo();
                         userInfo.setIntroduction(s);
                         setResult(RESULT_OK);

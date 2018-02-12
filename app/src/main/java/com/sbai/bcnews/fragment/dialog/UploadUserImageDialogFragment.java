@@ -148,7 +148,8 @@ public class UploadUserImageDialogFragment extends BottomDialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (!TextUtils.isEmpty(HDPictureUrl) || mImageDealType == IMAGE_TYPE_CLIPPING_IMAGE_SCALE_OR_MOVE) {
+//        || mImageDealType == IMAGE_TYPE_CLIPPING_IMAGE_SCALE_OR_MOVE
+        if (!TextUtils.isEmpty(HDPictureUrl) ) {
             mLookHDPicture.setVisibility(View.VISIBLE);
         } else {
             mLookHDPicture.setVisibility(View.GONE);
@@ -308,7 +309,7 @@ public class UploadUserImageDialogFragment extends BottomDialogFragment {
     private void dealImagePath(String imaUri) {
         if (mImageDealType == IMAGE_TYPE_CLIPPING_IMAGE_SCALE_OR_MOVE) {
             Intent intent = new Intent(getActivity(), ClipHeadImageActivity.class);
-            intent.putExtra(ClipHeadImageActivity.KEY_CLIP_USER_IMAGE, imaUri);
+            intent.putExtra(ExtraKeys.IMAGE_PATH, imaUri);
             getActivity().startActivityForResult(intent, REQ_CLIP_HEAD_IMAGE_PAGE);
         } else {
             if (mOnImagePathListener != null) {

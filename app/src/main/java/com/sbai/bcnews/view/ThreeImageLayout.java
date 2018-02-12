@@ -46,7 +46,7 @@ public class ThreeImageLayout extends LinearLayout {
                 layoutParams.setMargins(0, 0, 0, 0);
             }
             addView(imageView, layoutParams);
-            imageView.setVisibility(GONE);
+            imageView.setVisibility(INVISIBLE);
             mImageViewList.add(imageView);
         }
     }

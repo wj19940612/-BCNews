@@ -13,6 +13,9 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 
+import com.sbai.bcnews.utils.FileUtils;
+
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -381,5 +384,18 @@ public class ImageUtils {
         } else {
             return Environment.getRootDirectory().getPath();
         }
+    }
+
+    public static File bitmapToFile(Bitmap clipBitmap, String fileName) {
+        File file = FileUtils.createFile(fileName);
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+            clipBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 }

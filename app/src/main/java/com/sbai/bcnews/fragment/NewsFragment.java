@@ -257,7 +257,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         if (refresh) {
             mNewsDetails.clear();
         }
-        if (data.size() < Apic.NORMAL_PAGESIZE) {
+        if (data.size() < Apic.NORMAL_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);

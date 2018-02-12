@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="0.5dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="0.5dp"
     android:background="@color/background">
 
     <TextView
@@ -19,7 +19,7 @@
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
         tools:text="2月"/>
 
     <RelativeLayout
@@ -42,7 +42,7 @@
             android:ellipsize="end"
             android:lineSpacingExtra="3dp"
             android:maxLines="3"
-            android:textColor="@color/primaryText"
+            android:textColor="@color/text"
             android:textSize="16sp"
             tools:text="空间大姐夫开大会萨科技当升科技凤凰健康的散户山东矿机防护等级考试"/>
 
@@ -63,7 +63,7 @@
             android:background="@drawable/bg_original"
             android:minWidth="24dp"
             android:text="@string/original"
-            android:textColor="@color/colorOriginal"/>
+            android:textColor="@color/textColorPrimary"/>
 
         <TextView
             android:id="@+id/source"
@@ -75,6 +75,4 @@
             android:textSize="12sp"
             tools:text="溺水的鱼"/>
     </RelativeLayout>
-
-
 </android.support.constraint.ConstraintLayout>

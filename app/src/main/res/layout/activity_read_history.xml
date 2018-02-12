@@ -45,16 +45,16 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"/>
 
-        <TextView
-            android:id="@+id/adsorb_text"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:background="@color/background"
-            android:gravity="center_vertical"
-            android:paddingLeft="13dp"
-            android:textColor="@color/unluckyText"
-            android:textSize="13sp"
-            tools:text="2月"/>
+        <!--<TextView-->
+            <!--android:id="@+id/adsorb_text"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:background="@color/background"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:paddingLeft="13dp"-->
+            <!--android:textColor="@color/unluckyText"-->
+            <!--android:textSize="13sp"-->
+            <!--tools:text="2月"/>-->
 
         <com.zcmrr.swipelayout.foot.LoadMoreFooterView
             android:id="@+id/swipe_load_more_footer"

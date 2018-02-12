@@ -23,8 +23,8 @@ import com.zcmrr.swipelayout.header.RefreshHeaderView;
 public abstract class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<RecyclerView> {
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         getSwipeTargetView().addOnScrollListener(mOnScrollListener);
     }
 

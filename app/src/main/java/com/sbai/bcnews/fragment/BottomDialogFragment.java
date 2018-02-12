@@ -12,7 +12,8 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.sbai.finance.R;
+import com.sbai.bcnews.R;
+
 
 /**
  * 底部弹窗基础类

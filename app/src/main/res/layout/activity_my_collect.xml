@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.sbai.bcnews.activity.mine.MyCollectActivity">
@@ -12,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/read_history"/>
+        app:titleText="@string/my_collect"/>
 
     <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,7 +21,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:default_to_loading_more_scrolling_duration="500"
         app:layout_constraintTop_toBottomOf="@+id/titleBar"
         app:load_more_complete_delay_duration="0"

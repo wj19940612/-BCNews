@@ -168,6 +168,7 @@
     <string name="affirm_logout">确定要退出登录吗</string>
     <string name="read_history">阅读历史</string>
     <string name="copy_success">复制成功</string>
+    <string name="my_collect">我的收藏</string>
 
     <string name="check_related_news">查看相关资讯</string>
 
@@ -186,4 +187,5 @@
 
     <string name="set_nick_name">设置昵称</string>
     <string name="please_input_nick_name">请输入昵称</string>
+    <string name="update_success">修改成功</string>
 </resources>

@@ -113,7 +113,7 @@ public class SettingActivity extends BaseActivity {
             case R.id.personalData:
                 umengEventCount(UmengCountEventId.SETTING_PERSONAL_DATE);
                 if (LocalUser.getUser().isLogin()) {
-                    // TODO: 2018/2/8 个人资料页
+                    Launcher.with(getActivity(),PersonalDataActivity.class).execute();
                 } else {
                     Launcher.with(getActivity(), LoginActivity.class).execute();
                 }
@@ -146,6 +146,7 @@ public class SettingActivity extends BaseActivity {
 
                                    @Override
                                    protected void onRespSuccess(Resp<Object> resp) {
+                                       LocalUser.getUser().logout();
                                        finish();
                                    }
                                })

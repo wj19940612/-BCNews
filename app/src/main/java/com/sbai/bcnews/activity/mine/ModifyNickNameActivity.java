@@ -19,6 +19,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.bcnews.view.TitleBar;
 
@@ -47,11 +48,12 @@ public class ModifyNickNameActivity extends BaseActivity {
         setContentView(R.layout.activity_modiify_nick_name);
         ButterKnife.bind(this);
 
+        mUserNameInput.addTextChangedListener(mValidationWatcher);
+        mUserNameInput.setFilters(new InputFilter[]{filter});
+
         String nickName = getIntent().getStringExtra(ExtraKeys.NICK_NAME);
         mUserNameInput.setText(nickName);
 
-        mUserNameInput.addTextChangedListener(mValidationWatcher);
-        mUserNameInput.setFilters(new InputFilter[]{filter});
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -59,6 +61,7 @@ public class ModifyNickNameActivity extends BaseActivity {
         public void afterTextChanged(Editable s) {
             boolean submitBenEnable = checkSubmitBenEnable();
             if (mSubmitNickName.isEnabled() != submitBenEnable) {
+                mUserNameInput.setSelection(s.length());
                 mSubmitNickName.setEnabled(submitBenEnable);
                 if (submitBenEnable) {
                     mClear.setVisibility(View.VISIBLE);
@@ -137,6 +140,7 @@ public class ModifyNickNameActivity extends BaseActivity {
 
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
+                        ToastUtil.show(R.string.update_success);
                         UserInfo userInfo = LocalUser.getUser().getUserInfo();
                         userInfo.setUserName(nickName);
                         setResult(RESULT_OK);

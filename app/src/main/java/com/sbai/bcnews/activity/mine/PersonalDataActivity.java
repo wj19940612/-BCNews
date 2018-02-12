@@ -19,19 +19,21 @@ import com.google.gson.reflect.TypeToken;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.fragment.dialog.UploadUserImageDialogFragment;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.utils.Launcher;
-import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.IconTextRow;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,7 +81,6 @@ public class PersonalDataActivity extends BaseActivity {
     private OptionPicker mSexPicker;
 
 
-    private int mSelectAgeListIndex;
     private DatePicker mBirthdayDatePicker;
 
     @Override
@@ -88,7 +89,34 @@ public class PersonalDataActivity extends BaseActivity {
         setContentView(R.layout.activity_personal_data);
         ButterKnife.bind(this);
 
+        mUserInfo = LocalUser.getUser().getUserInfo();
         requestUserInfo();
+    }
+
+    @Override
+    public void onBackPressed() {
+        submitUserInfo();
+        super.onBackPressed();
+    }
+
+    private void submitUserInfo() {
+
+        String birthdy = null;
+        Integer sex = null;
+        birthdy = mUserInfo.getBirthday();
+        if (mSex.getSubText().equalsIgnoreCase(SEX_BOY) || mSex.getSubText().equalsIgnoreCase(SEX_GIRL)) {
+            sex = mSex.getSubText().equalsIgnoreCase(SEX_BOY) ? UserInfo.USER_SEX_BOY : UserInfo.USER_SEX_GIRL;
+        }
+
+        Apic.updateUserInfo(mUserInfo.getUserProvince(), mUserInfo.getUserCity(), birthdy, sex)
+                .callback(new Callback<Resp<Object>>() {
+
+                    @Override
+                    protected void onRespSuccess(Resp<Object> resp) {
+                        Log.d(TAG, "onRespSuccess: " + resp.toString());
+                    }
+                })
+                .fireFreely();
     }
 
     private void requestUserInfo() {
@@ -97,6 +125,7 @@ public class PersonalDataActivity extends BaseActivity {
                 .callback(new Callback2D<Resp<UserInfo>, UserInfo>() {
                     @Override
                     protected void onRespSuccessData(UserInfo data) {
+                        mUserInfo = data;
                         LocalUser.getUser().setUserInfo(data);
                         updateUserInfo(data);
                     }
@@ -112,12 +141,13 @@ public class PersonalDataActivity extends BaseActivity {
         if (userSex != 0) {
             boolean isBoy = userSex == UserInfo.USER_SEX_BOY;
             if (mUserInfo != null && mUserInfo.getUserSex() != 0) {
-                mSexPicker.setSelectedItem(isBoy ? SEX_BOY : SEX_GIRL);
                 mSex.setSubText(isBoy ? SEX_BOY : SEX_GIRL);
             }
         }
 
         mIntroduce.setText(data.getIntroduction());
+        mBirthday.setSubText(data.getBirthday());
+        mLocation.setSubText(data.getUserProvince()+" "+data.getUserCity());
     }
 
     private void updateUserPortrait(String portrait) {
@@ -132,6 +162,9 @@ public class PersonalDataActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.userHeadImage:
+                UploadUserImageDialogFragment uploadUserImageDialogFragment = UploadUserImageDialogFragment.newInstance(
+                        UploadUserImageDialogFragment.IMAGE_TYPE_CLIPPING_IMAGE_SCALE_OR_MOVE);
+                uploadUserImageDialogFragment.show(getSupportFragmentManager());
                 break;
             case R.id.nickName:
                 Launcher.with(getActivity(), ModifyNickNameActivity.class)
@@ -160,24 +193,49 @@ public class PersonalDataActivity extends BaseActivity {
     }
 
     private void showLocationWheel() {
-
+        String province = "浙江";
+        String city = "杭州";
+        if (mUserInfo != null) {
+            province = !TextUtils.isEmpty(mUserInfo.getUserProvince()) ? mUserInfo.getUserProvince() : "浙江";
+            city = !TextUtils.isEmpty(mUserInfo.getUserCity()) ? mUserInfo.getUserCity() : "杭州";
+        }
         AddressAsyncTask addressAsyncTask = new AddressAsyncTask(getActivity(), true);
-        addressAsyncTask.execute("浙江", "杭州");
+        addressAsyncTask.execute(province, city);
     }
 
     private void showTimeSelectWheel() {
         mBirthdayDatePicker = new DatePicker(getActivity(), DateTimePicker.YEAR_MONTH_DAY);
         mBirthdayDatePicker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.assistText));
-        mBirthdayDatePicker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.colorOriginal));
+        mBirthdayDatePicker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.textColorPrimary));
         mBirthdayDatePicker.setAnimationStyle(R.style.BottomDialogAnimation);
         mBirthdayDatePicker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
-        mBirthdayDatePicker.setTextColor(ContextCompat.getColor(getActivity(), R.color.primaryText),
+        mBirthdayDatePicker.setRangeStart(Calendar.getInstance().get(Calendar.YEAR) - 100, 1, 1);
+        mBirthdayDatePicker.setRangeEnd(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH) + 1, Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        mBirthdayDatePicker.setTextColor(ContextCompat.getColor(getActivity(), R.color.text),
                 ContextCompat.getColor(getActivity(), R.color.unluckyText));
+
+        if (mUserInfo != null) {
+            String birthday = mUserInfo.getBirthday();
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+            int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+            Log.d(TAG, "showTimeSelectWheel: " + year + " " + month + " " + day);
+            if (!TextUtils.isEmpty(birthday)) {
+                String[] split = birthday.split("-");
+                if (split.length == 3) {
+                    year = Integer.valueOf(split[0]);
+                    month = Integer.valueOf(split[1]);
+                    day = Integer.valueOf(split[2]);
+                }
+            }
+            mBirthdayDatePicker.setSelectedItem(year, month, day);
+        }
+
         mBirthdayDatePicker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
             @Override
             public void onDatePicked(String year, String month, String day) {
-                Log.d(TAG, "onDatePicked: " + year + " " + month + " " + day);
-                ToastUtil.show(year + " " + month + " " + day);
+                mUserInfo.setBirthday(year + "-" + month + "-" + day);
+                mBirthday.setSubText(mUserInfo.getBirthday());
             }
         });
 
@@ -187,7 +245,7 @@ public class PersonalDataActivity extends BaseActivity {
     private void showSexWheel() {
         mSexPicker = new OptionPicker(this, new String[]{SEX_BOY, SEX_GIRL,});
         mSexPicker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.assistText));
-        mSexPicker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.colorOriginal));
+        mSexPicker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.textColorPrimary));
         mSexPicker.setAnimationStyle(R.style.BottomDialogAnimation);
         mSexPicker.setOffset(1);
         if (mUserInfo != null && mUserInfo.getUserSex() != 0) {
@@ -195,7 +253,7 @@ public class PersonalDataActivity extends BaseActivity {
         }
 //        picker.setTopPadding(toDp(10));
 //                picker.setTextSize(11);
-//                picker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
+        mSexPicker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
         mSexPicker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
             @Override
             public void onOptionPicked(int index, String item) {
@@ -277,19 +335,22 @@ public class PersonalDataActivity extends BaseActivity {
                     picker.setColumnWeight(2 / 8.0, 3 / 8.0, 3 / 8.0);//省级、地级和县级的比例为2:3:3
                 }
                 picker.setCancelTextColor(ContextCompat.getColor(mActivity, R.color.unluckyText));
-                picker.setSubmitTextColor(ContextCompat.getColor(mActivity, R.color.colorOriginal));
+                picker.setSubmitTextColor(ContextCompat.getColor(mActivity, R.color.textColorPrimary));
                 picker.setTopBackgroundColor(ContextCompat.getColor(mActivity, R.color.background));
                 picker.setPressedTextColor(ContextCompat.getColor(mActivity, R.color.unluckyText));
                 picker.setAnimationStyle(R.style.BottomDialogAnimation);
                 picker.setSelectedItem(mSelectedProvince, mSelectedCity, mSelectedCounty);
-                picker.setTextColor(ContextCompat.getColor(mActivity, R.color.primaryText), ContextCompat.getColor(mActivity, R.color.unluckyText));
+                picker.setTextColor(ContextCompat.getColor(mActivity, R.color.text), ContextCompat.getColor(mActivity, R.color.unluckyText));
                 WheelView.LineConfig lineConfig = new WheelView.LineConfig(0);//使用最长的分割线
                 lineConfig.setColor(ContextCompat.getColor(mActivity, R.color.background));
                 picker.setLineConfig(lineConfig);
                 picker.setOnAddressPickListener(new AddressPicker.OnAddressPickListener() {
                     @Override
                     public void onAddressPicked(Province province, City city, County county) {
-                        ToastUtil.show(" " + province + " " + city + " " + county);
+                        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+                        userInfo.setUserProvince(province.getAreaName());
+                        userInfo.setUserCity(city.getAreaName());
+                        mLocation.setSubText(province.getAreaName() + " " + city.getAreaName());
                     }
                 });
                 picker.show();
@@ -310,6 +371,10 @@ public class PersonalDataActivity extends BaseActivity {
                     break;
                 case REQ_CODE_NICK_NAME:
                     mNickName.setSubText(LocalUser.getUser().getUserInfo().getUserName());
+                    break;
+                case UploadUserImageDialogFragment.REQ_CLIP_HEAD_IMAGE_PAGE:
+                    updateUserPortrait(LocalUser.getUser().getUserInfo().getUserPortrait());
+                    setResult(RESULT_OK);
                     break;
             }
         }

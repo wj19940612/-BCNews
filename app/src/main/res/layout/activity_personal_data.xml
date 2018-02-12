@@ -30,7 +30,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="12dp"
             android:text="@string/head_portrait"
-            android:textColor="@color/primaryText"
+            android:textColor="@color/text"
             android:textSize="16sp"/>
 
         <android.support.v7.widget.AppCompatImageView
@@ -106,16 +106,6 @@
         app:subText="@string/please_select"
         app:subTextColor="@color/unluckyText"/>
 
-    <!--<com.sbai.bcnews.view.IconTextRow-->
-    <!--android:id="@+id/personalIntroduce"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-
-    <!---->
-    <!--app:rightIcon="@drawable/ic_common_right_arrow"-->
-    <!--app:rowText="@string/personal_introduce"-->
-    <!--app:subTextColor="@color/unluckyText"/>-->
-
     <LinearLayout
         android:id="@+id/personalIntroduce"
         android:layout_width="match_parent"
@@ -130,7 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/personal_introduce"
-            android:textColor="@color/primaryText"/>
+            android:textColor="@color/text"/>
 
         <TextView
             android:id="@+id/introduce"
@@ -139,8 +129,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="14dp"
             android:layout_weight="1"
+            android:gravity="end"
+            android:maxLines="1"
             android:ellipsize="end"
-            android:maxLength="1"
             android:textColor="@color/unluckyText"
             tools:text="接口升到复健科水电费回家打开是否可见得风湿空间划分空间"/>
 
