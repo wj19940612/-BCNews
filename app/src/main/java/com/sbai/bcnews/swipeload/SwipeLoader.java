@@ -1,6 +1,7 @@
 package com.sbai.bcnews.swipeload;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
@@ -35,9 +36,17 @@ public interface SwipeLoader<T> {
     @NonNull
     LoadMoreFooterView getLoadMoreFooterView();
 
-    @NonNull
-    void refreshSuccess(String successMsg);
+    void triggerRefresh();
 
-    void refreshFail(String failMsg);
+    void triggerLoadMore();
+
+    @NonNull
+    void refreshComplete(CharSequence msg);
+
+    void refreshComplete(@StringRes int msgRes);
+
+    void loadMoreComplete(CharSequence msg);
+
+    void loadMoreComplete(@StringRes int msgRes);
 
 }

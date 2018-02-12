@@ -2,6 +2,7 @@ package com.sbai.bcnews.activity.mine;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -18,20 +19,30 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView( R.layout.activity_read_history);
 
         initView();
     }
 
-    private void initView() {
-        mTitleBar.setTitle(R.string.read_history);
+    @Override
+    public View getContentView() {
+        return null;
+    }
 
+    private void initView() {
+//        mTitleBar.setTitle(R.string.read_history);
 
     }
 
 
     @Override
-    protected int getContentViewId() {
-        return R.layout.activity_read_history;
+    public void onLoadMore() {
+
+    }
+
+    @Override
+    public void onRefresh() {
+
     }
 
     public static  class ReadHistoryAdapter extends RecyclerView.Adapter{

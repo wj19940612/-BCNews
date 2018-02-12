@@ -105,7 +105,6 @@ public class Apic {
     }
 
     /**
-     * <<<<<<< HEAD
      * 接口名称 获取验证码
      *
      * @param phone

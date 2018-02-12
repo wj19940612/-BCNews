@@ -28,7 +28,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginTop="10dp"
             android:text="@string/channel_select"
-            android:textColor="@color/colorOriginal"
+            android:textColor="@color/textColorPrimary"
             android:textSize="13sp"/>
 
         <TextView
