@@ -25,6 +25,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.Banner;
 import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsDetail;
+import com.sbai.bcnews.model.NewsModel;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
@@ -77,7 +78,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     EmptyView mEmptyView;
 
     private NewsAdapter mNewsAdapter;
-    private List<NewsDetail> mNewsDetails;
+    private List<NewsModel> mNewsModels;
     private List<Banner> mBanners;
 
     private HomeBanner mHomeBanner;
@@ -130,8 +131,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void initView() {
-        mNewsDetails = new ArrayList<>();
-        mNewsAdapter = new NewsAdapter(getActivity(), mNewsDetails, new NewsAdapter.OnItemClickListener() {
+        mNewsModels = new ArrayList<>();
+        mNewsAdapter = new NewsAdapter(getActivity(), mNewsModels, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
                 NewsReadCache.markNewsRead(newsDetail);
@@ -205,7 +206,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             @Override
             protected void onRespSuccessData(News data) {
                 if (data != null && data.getContent() != null && data.getContent().size() != 0) {
-                    if (mNewsDetails.size() > 0 && data.getContent().get(0).getId().equals(mNewsDetails.get(0).getId())) {
+                    if (mNewsModels.size() > 0 && data.getContent().get(0).getId().equals(mNewsModels.get(0).getNewsDetail().getId())) {
                         refreshComplete(R.string.no_more_new_news);
                     } else {
                         refreshSuccess();
@@ -213,7 +214,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     refreshSuccess();
                 }
-                if (mNewsDetails.size() == 0 && (data.getContent() == null || data.getContent().size() == 0) && mEmptyView.isSelected()) {
+                if (mNewsModels.size() == 0 && (data.getContent() == null || data.getContent().size() == 0) && mEmptyView.isSelected()) {
                     ToastUtil.show(R.string.no_news);
                 }
                 mEmptyView.setSelected(false);
@@ -232,13 +233,13 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     private void loadCacheData() {
         List<NewsDetail> newsDetails = NewsSummaryCache.getNewsSummaryCache();
-        if (mNewsDetails.size() == 0) {
+        if (mNewsModels.size() == 0) {
             newsDetails = NewsReadCache.filterReadCache(newsDetails);
             if (newsDetails == null || newsDetails.size() == 0) {
                 mEmptyView.setVisibility(View.VISIBLE);
             } else {
                 mEmptyView.setVisibility(View.GONE);
-                mNewsDetails.addAll(newsDetails);
+                mNewsModels.addAll(NewsModel.updateImgType(newsDetails));
                 mNewsAdapter.refresh();
             }
 
@@ -255,7 +256,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         NewsSummaryCache.markNewsSummarys(data);
         data = NewsReadCache.filterReadCache(data);
         if (refresh) {
-            mNewsDetails.clear();
+            mNewsModels.clear();
         }
         if (data.size() < Apic.NORMAL_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
@@ -263,7 +264,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);
         }
         mPage++;
-        mNewsDetails.addAll(data);
+        mNewsModels.addAll(NewsModel.updateImgType(data));
         mNewsAdapter.refresh();
     }
 
@@ -314,14 +315,14 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
 
         private Context mContext;
-        private List<NewsDetail> items;
+        private List<NewsModel> items;
         private OnItemClickListener mOnItemClickListener;
         private View mHeadView;
         private int mHeaderCount;
 
-        public NewsAdapter(Context context, List<NewsDetail> newsDetails, OnItemClickListener onItemClickListener) {
+        public NewsAdapter(Context context, List<NewsModel> newsModels, OnItemClickListener onItemClickListener) {
             mContext = context;
-            items = newsDetails;
+            items = newsModels;
             mOnItemClickListener = onItemClickListener;
         }
 
@@ -359,36 +360,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             if (mHeadView != null && position == 0) {
                 return TYPE_BANNER;
             }
-            NewsDetail news = items.get(position - mHeaderCount);
-            int thePicNum = news.getImgs().size();
-            if (thePicNum == 0) {
-                return TYPE_NONE;
-            } else if (thePicNum < 3) {
-                return TYPE_SINGLE;
-            } else {
-                if (position <= 5 - (1 - mHeaderCount)) {
-                    return TYPE_SINGLE;
-                }
-                //前面五张全是单张模式，这里才显示3张图片
-                if (judgeFiveSingleMode(position - 1)) {
-                    return TYPE_THREE;
-                } else {
-                    return TYPE_SINGLE;
-                }
-            }
-        }
-
-        //前面五item是否全为单张模式
-        private boolean judgeFiveSingleMode(int position) {
-            if (position <= 4) {
-                return true;
-            }
-            for (int i = position - 1; i > position - 5; i--) {
-                if (items.get(i).getImgs().size() > 2 && !judgeFiveSingleMode(i)) {
-                    return false;
-                }
-            }
-            return true;
+            return items.get(position - mHeaderCount).getImgType();
         }
 
         @Override
@@ -412,11 +384,11 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             if (holder instanceof BannerHolder) {
 
             } else if (holder instanceof NoneHolder) {
-                ((NoneHolder) holder).bindingData(mContext, items.get(position - mHeaderCount), position, getItemCount(), mOnItemClickListener);
+                ((NoneHolder) holder).bindingData(mContext, items.get(position - mHeaderCount).getNewsDetail(), position, getItemCount(), mOnItemClickListener);
             } else if (holder instanceof SingleHolder) {
-                ((SingleHolder) holder).bindingData(mContext, items.get(position - mHeaderCount), position, getItemCount(), mOnItemClickListener);
+                ((SingleHolder) holder).bindingData(mContext, items.get(position - mHeaderCount).getNewsDetail(), position, getItemCount(), mOnItemClickListener);
             } else {
-                ((ThreeHolder) holder).bindingData(mContext, items.get(position - mHeaderCount), position, getItemCount(), mOnItemClickListener);
+                ((ThreeHolder) holder).bindingData(mContext, items.get(position - mHeaderCount).getNewsDetail(), position, getItemCount(), mOnItemClickListener);
             }
         }
 
