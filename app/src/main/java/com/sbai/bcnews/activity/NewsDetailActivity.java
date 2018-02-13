@@ -53,6 +53,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -677,9 +678,22 @@ public class NewsDetailActivity extends BaseActivity {
         if (mNewsDetail != null && mNetNewsDetail != null && mNewsDetail.getCreateTime() != mNetNewsDetail.getCreateTime()) {
             mNetNewsDetail.setReadTime(System.currentTimeMillis());
             NewsCache.insertOrReplaceNews(mNetNewsDetail);
+            new CacheThread(mNetNewsDetail).start();
         } else if (mNewsDetail != null) {
             mNewsDetail.setReadHeight(mScrollView.getScrollY());
             mNewsDetail.setReadTime(System.currentTimeMillis());
+            new CacheThread(mNewsDetail).start();
+        }
+    }
+
+    static class CacheThread extends Thread {
+        NewsDetail mNewsDetail;
+
+        public CacheThread(NewsDetail newsDetail) {
+            mNewsDetail = newsDetail;
+        }
+
+        public void run() {
             NewsCache.insertOrReplaceNews(mNewsDetail);
         }
     }
