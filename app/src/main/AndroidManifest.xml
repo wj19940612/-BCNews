@@ -62,6 +62,9 @@
             android:name=".activity.market.MarketDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".activity.RelatedNewsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".activity.NewsDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -133,7 +136,6 @@
             android:label="PushService"
             android:process=":pushservice">
         </service>
-
     </application>
 
 </manifest>

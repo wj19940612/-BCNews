@@ -260,5 +260,6 @@ public class MarketDetailActivity extends BaseActivity {
 
     @OnClick(R.id.checkRelatedNews)
     public void onViewClicked() {
+
     }
 }

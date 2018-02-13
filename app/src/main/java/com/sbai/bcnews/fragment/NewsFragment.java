@@ -135,7 +135,9 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
                 NewsReadCache.markNewsRead(newsDetail);
-                Launcher.with(getActivity(), NewsDetailActivity.class).putExtra(ExtraKeys.NEWS_ID, newsDetail.getId()).putExtra(CHANNEL, mChannel).execute();
+                Launcher.with(getActivity(), NewsDetailActivity.class)
+                        .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId())
+                        .putExtra(CHANNEL, mChannel).execute();
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -257,7 +259,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         if (refresh) {
             mNewsDetails.clear();
         }
-        if (data.size() < Apic.NORMAL_PAGESIZE) {
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);

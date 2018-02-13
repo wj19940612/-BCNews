@@ -167,5 +167,6 @@
     <string name="weChat_account">微信号</string>
     <string name="affirm_logout">确定要退出登录吗</string>
     <string name="read_history">阅读历史</string>
+    <string name="related_news">相关资讯</string>
 
 </resources>

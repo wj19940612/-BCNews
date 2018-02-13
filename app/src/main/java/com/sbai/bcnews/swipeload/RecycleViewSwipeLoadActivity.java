@@ -23,7 +23,7 @@ import com.zcmrr.swipelayout.header.RefreshHeaderView;
 public abstract class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<RecyclerView> {
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSwipeTargetView().addOnScrollListener(mOnScrollListener);
     }
@@ -32,7 +32,6 @@ public abstract class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity
     }
 
     protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
-
     }
 
     protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
