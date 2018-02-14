@@ -21,4 +21,5 @@ public interface ExtraKeys {
     String DIGITAL_CURRENCY = "digital_currency";
     String HEADER_COUNT = "header_count";
     String CHANNEL = "channel";
+    String BITMAP_PATH = "bitmap_path";
 }

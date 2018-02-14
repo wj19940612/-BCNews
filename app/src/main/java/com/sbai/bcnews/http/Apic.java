@@ -15,9 +15,10 @@ public class Apic {
 
     public static final int DEFAULT_PAGE_SIZE = 20;
 
-    public static final String SHARE_NEWS_URL = Api.getFixedHost() + "/news/share/index.html?id=%s";
-
-    public static final String DOWNLOAD_URL = Api.getFixedHost() + "/qc.png";
+    public interface url {
+        String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
+        String QR_CODE = Api.getFixedHost() + "/qc.png";
+    }
 
     /**
      * /api/news-info/news/detail/{id}

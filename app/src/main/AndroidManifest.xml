@@ -62,6 +62,9 @@
             android:name=".activity.market.MarketDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".activity.market.ShareMarketActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".activity.RelatedNewsActivity"
             android:screenOrientation="portrait"/>
         <activity

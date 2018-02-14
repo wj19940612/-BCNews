@@ -28,7 +28,6 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
-import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
@@ -709,7 +708,7 @@ public class NewsDetailActivity extends BaseActivity {
                 .setTitleVisible(false)
                 .setShareTitle(mNewsDetail.getTitle())
                 .setShareDescription(getSummaryData())
-                .setShareUrl(String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId()))
+                .setShareUrl(String.format(Apic.url.SHARE_NEWS, mNewsDetail.getId()))
                 .setShareThumbUrl(shareThumbUrl)
                 .show();
 
@@ -717,7 +716,7 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void shareToPlatform(SHARE_MEDIA platform) {
         if (mNewsDetail == null) return;
-        UMWeb mWeb = new UMWeb(String.format(Apic.SHARE_NEWS_URL, mNewsDetail.getId()));
+        UMWeb mWeb = new UMWeb(String.format(Apic.url.SHARE_NEWS, mNewsDetail.getId()));
         mWeb.setTitle(mNewsDetail.getTitle());
         mWeb.setDescription(getSummaryData());
         UMImage thumb;

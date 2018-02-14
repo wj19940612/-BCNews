@@ -1,11 +1,15 @@
 package com.sbai.bcnews.activity.market;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
@@ -15,7 +19,9 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.market.MarketData;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.MarketDataUtils;
+import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.HackTabLayout;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.autofit.AutofitTextView;
@@ -23,6 +29,7 @@ import com.sbai.bcnews.view.market.KlineDataPlane;
 import com.sbai.chart.KlineChart;
 import com.sbai.chart.domain.KlineViewData;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,6 +71,8 @@ public class MarketDetailActivity extends BaseActivity {
     KlineChart mKlineChart;
     @BindView(R.id.trendChart)
     TextView mTrendChart;
+    @BindView(R.id.screenShotArea)
+    RelativeLayout mScreenShotArea;
 
     private MarketData mMarketData;
     private String mCode;
@@ -171,9 +180,26 @@ public class MarketDetailActivity extends BaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 09/02/2018 分享
+                Bitmap bitmap = getScreenShot(mScreenShotArea);
+                File file = ImageUtils.getUtil().saveBitmap(bitmap, createFilename());
+                Launcher.with(getActivity(), ShareMarketActivity.class)
+                        .putExtra(ExtraKeys.BITMAP_PATH, file.getAbsolutePath())
+                        .putExtra(ExtraKeys.DIGITAL_CURRENCY, mMarketData)
+                        .execute();
             }
         });
+    }
+
+    private String createFilename() {
+        return "market_" + SystemClock.elapsedRealtime() + ".png";
+    }
+
+    private Bitmap getScreenShot(View v) {
+        Bitmap bitmap = Bitmap.createBitmap(v.getWidth(), v.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        v.draw(canvas);
+        return bitmap;
     }
 
     private void initTabLayout() {

@@ -121,6 +121,9 @@
     <string name="highest_">高:%1$s</string>
     <string name="lowest_">低:%1$s</string>
     <string name="close_">收:%1$s</string>
+    <string name="share_market">分享行情</string>
+    <string name="real_time_market">实时行情</string>
+    <string name="connect_world_with_news">用资讯链接世界！</string>
 
     <!-- common -->
     <string name="now_refresh">立即刷新</string>

@@ -7,16 +7,16 @@
     android:layout_height="match_parent">
 
     <com.sbai.bcnews.view.TitleBar
-        android:id="@+id/title"
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="@string/share_news_flash"/>
+        app:titleText="@string/share_market"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/share"
-        android:layout_below="@+id/title"
+        android:layout_below="@+id/titleBar"
         android:background="@color/background"
         android:paddingLeft="13dp"
         android:paddingRight="13dp"
@@ -30,69 +30,117 @@
             android:background="@android:color/white"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/marketBgBlack"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        tools:text="2017/12/31 23:52"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="13dp"
+                        android:background="@drawable/bg_real_time_market"
+                        android:text="@string/real_time_market"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/currencyPair"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:textColor="@color/luckyText"
+                        android:textSize="17sp"
+                        tools:text="BTC/USDT"/>
+
+                    <TextView
+                        android:id="@+id/exchange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/luckyText"
+                        android:textSize="12sp"
+                        tools:text="gate.io"/>
+                </LinearLayout>
+            </LinearLayout>
+
             <ImageView
+                android:id="@+id/marketScreenShot"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:src="@drawable/ic_news_flash_share_pic"/>
-
-            <TextView
-                android:id="@+id/week"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="16dp"
-                android:textColor="@color/unluckyText"
-                android:textSize="20sp"
-                tools:text="星期四"/>
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:textColor="@color/unluckyText"
-                android:textSize="12sp"
-                tools:text="2017/12/31 23:52 快报"/>
-
-            <TextView
-                android:id="@+id/content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
-                android:lineSpacingExtra="4dp"
-                android:textColor="#494949"
-                android:textSize="15sp"
-                tools:text=" 深交所将研究创新监管和服务质量，提高上市公司质量深交所，将研究创新监管和质"/>
+                android:layout_height="wrap_content"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginTop="20dp"
                 android:background="@color/background"/>
 
-            <ImageView
-                android:id="@+id/downloadImg"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center_horizontal"
-                android:scaleType="fitXY"
-                tools:src="@drawable/ic_news_flash_share_pic"/>
-
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="12dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/download_app"
-                android:textColor="@color/unluckyText"
-                android:textSize="12sp"/>
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/logo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/logo_block_finance"/>
+
+                    <TextView
+                        android:id="@+id/slogan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:letterSpacing="0.4"
+                        android:maxLines="1"
+                        android:text="@string/connect_world_with_news"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/qrCode"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"/>
+            </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 
@@ -133,7 +181,6 @@
                 android:src="@drawable/ic_share_wechat"/>
         </LinearLayout>
 
-
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -152,12 +199,10 @@
                 android:src="@drawable/ic_share_wechat_circle"/>
         </LinearLayout>
 
-
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
-
 
         <LinearLayout
             android:id="@+id/qq"
@@ -179,7 +224,6 @@
             android:layout_weight="1"
             android:visibility="gone"/>
 
-
         <LinearLayout
             android:id="@+id/weibo"
             android:layout_width="wrap_content"
@@ -200,7 +244,6 @@
             android:layout_weight="1"
             android:visibility="gone"/>
 
-
         <LinearLayout
             android:id="@+id/download"
             android:layout_width="wrap_content"
@@ -213,8 +256,5 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_share_pic_download"/>
         </LinearLayout>
-
-
     </LinearLayout>
-
 </RelativeLayout>
