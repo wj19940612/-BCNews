@@ -120,22 +120,19 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
                         }
 
                         if (operation == REFRESH) {
-                            if (!mNewsWrapList.isEmpty() && !newsDetailList.isEmpty()) { // 与当前第一条 id 相同，显示已经是最新
-                                NewsDetail firstNews = mNewsWrapList.get(0).getNewsDetail();
-                                if (firstNews.getId().equals(newsDetailList.get(0).getId())) {
-                                    refreshComplete(R.string.no_more_new_news);
-                                    return;
-                                }
-                            }
-
+                            boolean isLatest = false;
                             if (!newsDetailList.isEmpty()) { // replace
+                                if (!mNewsWrapList.isEmpty()) {
+                                    isLatest = mNewsWrapList.get(0).getNewsDetail().getId()
+                                            .equals(newsDetailList.get(0).getId());
+                                }
                                 mNewsWrapList.clear();
                                 mNewsWrapList.addAll(NewsWrap.updateImgType(newsDetailList));
                                 NewsSummaryCache.markNewsSummarys(mTag, newsDetailList);
                             }
 
                             if (newsDetailList.size() < Apic.DEFAULT_PAGE_SIZE) {
-                                mSwipeToLoadLayout.setLoadingMore(false);
+                                mSwipeToLoadLayout.setLoadMoreEnabled(false);
                             }
 
                             if (mNewsWrapList.isEmpty()) {
@@ -148,14 +145,18 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
 
                             mPage++;
                             mNewsAdapter.notifyDataSetChanged();
-                            refreshSuccess();
-
+                            if (isLatest) {
+                                refreshComplete(R.string.no_more_new_news);
+                            } else {
+                                refreshSuccess();
+                            }
                         } else if (operation == LOAD_MORE) {
                             if (newsDetailList.size() < Apic.DEFAULT_PAGE_SIZE) {
-                                mSwipeToLoadLayout.setLoadingMore(false);
+                                mSwipeToLoadLayout.setLoadMoreEnabled(false);
                             }
-                            mNewsWrapList.addAll(NewsWrap.updateImgType(newsDetailList));
+
                             mPage++;
+                            mNewsWrapList.addAll(NewsWrap.updateImgType(newsDetailList));
                             mNewsAdapter.notifyDataSetChanged();
                         }
                     }
