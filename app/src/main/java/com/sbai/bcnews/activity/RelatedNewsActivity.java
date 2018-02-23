@@ -26,13 +26,15 @@ import com.sbai.bcnews.model.market.MarketData;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsReadCache;
+import com.sbai.bcnews.utils.news.NewsSummaryCache;
 import com.sbai.bcnews.view.EmptyView;
 import com.sbai.glide.GlideApp;
+import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,9 +68,9 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
         setContentView(mView);
         ButterKnife.bind(this);
 
-        mNewsWrapList = new ArrayList<>(); // TODO: 23/02/2018 使用缓存初始化
-        mPage = 0;
         initData(getIntent());
+        mPage = 0;
+        mNewsWrapList = NewsWrap.updateImgType(NewsSummaryCache.getNewsSummaryCache(mTag));
 
         initViews();
 
@@ -85,9 +87,9 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
                 NewsReadCache.markNewsRead(newsDetail);
-//                Launcher.with(getActivity(), NewsDetailActivity.class)
-//                        .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId())
-//                        .putExtra(CHANNEL, mChannel).execute();
+                Launcher.with(getActivity(), NewsDetailActivity.class)
+                        .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId())
+                        .putExtra(ExtraKeys.TAG, mTag).execute();
             }
         });
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -108,7 +110,6 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
                         List<NewsDetail> newsDetailList = data.getContent();
 
                         if (newsDetailList == null || newsDetailList.isEmpty()) {
-                            stopFreshOrLoadAnimation();
                             return;
                         }
 
@@ -122,22 +123,26 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
 
                         if (mPage == 0) { // refresh
                             mNewsWrapList.clear();
-                            mNewsWrapList.addAll(NewsWrap.updateImgType(newsDetailList)) ;
-                            // TODO: 23/02/2018 缓存新数据
-                            mPage++;
+                            NewsSummaryCache.markNewsSummarys(mTag, newsDetailList);
                             refreshSuccess();
-                            mNewsAdapter.notifyDataSetChanged();
-                        } else { // load
-
                         }
+
+                        mNewsWrapList.addAll(NewsWrap.updateImgType(newsDetailList)) ;
+                        mPage++;
+                        mNewsAdapter.notifyDataSetChanged();
                     }
 
                     @Override
-                    protected void onRespFailure(Resp failedResp) {
-                        super.onRespFailure(failedResp);
-                        stopFreshOrLoadAnimation();
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
+                        refreshFailure();
                     }
 
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        stopFreshOrLoadAnimation();
+                    }
                 }).fireFreely();
     }
 

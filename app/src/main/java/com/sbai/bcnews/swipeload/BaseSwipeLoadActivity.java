@@ -103,7 +103,6 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
         refreshComplete(getString(resId));
     }
 
-
     @Override
     public void refreshComplete(CharSequence msg) {
         if (mRefreshHeaderView != null) {
