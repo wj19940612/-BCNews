@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context="com.sbai.bcnews.activity.mine.ModifyNickNameActivity">
+
+    <com.sbai.bcnews.view.TitleBar
+        app:backFeature="true"
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleText="@string/set_nick_name"/>
+
+    <LinearLayout
+        android:id="@+id/input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:minHeight="44dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar">
+
+        <EditText
+            android:id="@+id/userNameInput"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="@string/please_input_nick_name"
+            android:inputType="text"
+            android:maxLength="8"
+            android:maxLines="1"
+            android:textColorHint="@color/unluckyText"
+            android:textSize="16sp"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ic_data_clear"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/submitNickName"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_submit_introduce"
+        android:enabled="false"
+        android:gravity="center"
+        android:text="@string/save"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/input"/>
+
+</android.support.constraint.ConstraintLayout>

@@ -5,6 +5,8 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.httplib.ReqParams;
 
+import java.io.File;
+
 /**
  * Modified by john on 23/01/2018
  * <p>
@@ -294,6 +296,70 @@ public class Apic {
      */
     public static Api requestShowMarketPageSwitch() {
         return Api.get("/dic.html");
+    }
+
+    /**
+     * 请求阅读历史数据 或者 收藏
+     *
+     * @param type
+     * @param page
+     */
+    // TODO: 2018/2/11
+    public static Api requestReadHistoryOrMyCollectData(int type, int page) {
+        return Api.get("/api/news-user/operate/list/{type}",
+                new ReqParams()
+                        .put("type", type)
+                        .put("page", page)
+                        .put("size", DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * GET
+     * 用户--用户详情--薛松
+     */
+    public static Api requestUserInfo() {
+        return Api.get("/api/news-user/user/info");
+    }
+
+    /**
+     * PUT
+     * 用户--修改用户信息--薛松
+     *
+     * @return
+     */
+    public static Api submitUserIntroduce(String introduction) {
+        return Api.post("/api/news-user/user/update",
+                new ReqParams()
+                        .put("introduction", introduction));
+    }
+
+    public static Api submitNickName(String nickName) {
+        return Api.post("/api/news-user/user/update", new ReqParams().put("userName", nickName));
+    }
+
+    public static Api updateUserInfo(String province, String city, String birthday, Integer userSex) {
+        return Api.post("/api/news-user/user/update",
+                new ReqParams()
+                        .put("userProvince", province)
+                        .put("userCity", city)
+                        .put("birthday", birthday)
+                        .put("userSex", userSex));
+    }
+
+    /**
+     * @param file
+     */
+    public static Api submitFile(File file, String fileName) {
+        return Api.post("/api/zuul/news-user/upload/file.do",
+                new ReqParams()
+                        .put("file", file),
+                fileName,
+                file);
+    }
+
+    public static Api submitPortraitPath(String data) {
+        return Api.post("/api/news-user/user/update",
+                new ReqParams().put("userPortrait", data));
     }
 
     /**

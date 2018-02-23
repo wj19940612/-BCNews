@@ -340,7 +340,6 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mMyChannelItems.remove(startPosition);
         mOtherChannelItems.add(0, item);
 
-        mChannelCacheModel.setModified(true);
         notifyItemMoved(position, mMyChannelItems.size() + COUNT_PRE_OTHER_HEADER);
     }
 
@@ -355,7 +354,6 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (position == -1) {
             return;
         }
-        mChannelCacheModel.setModified(true);
         notifyItemMoved(position, mMyChannelItems.size() - 1 + COUNT_PRE_MY_HEADER);
     }
 
@@ -428,7 +426,6 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         String item = mMyChannelItems.get(fromPosition - COUNT_PRE_MY_HEADER);
         mMyChannelItems.remove(fromPosition - COUNT_PRE_MY_HEADER);
         mMyChannelItems.add(toPosition - COUNT_PRE_MY_HEADER, item);
-        mChannelCacheModel.setModified(true);
         notifyItemMoved(fromPosition, toPosition);
     }
 

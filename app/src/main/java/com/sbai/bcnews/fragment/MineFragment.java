@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
+import com.sbai.bcnews.activity.mine.MyCollectActivity;
+import com.sbai.bcnews.activity.mine.PersonalDataActivity;
 import com.sbai.bcnews.activity.mine.ReadHistoryActivity;
 import com.sbai.bcnews.activity.mine.SettingActivity;
 import com.sbai.bcnews.http.Apic;
@@ -26,6 +28,7 @@ import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.IconTextRow;
 import com.sbai.bcnews.view.SmartDialog;
@@ -134,7 +137,7 @@ public class MineFragment extends BaseFragment {
             case R.id.userName:
                 umengEventCount(UmengCountEventId.MINE_PORTRAIT_AND_NAME);
                 if (LocalUser.getUser().isLogin()) {
-                    // TODO: 2018/2/8 用户资料页
+                    Launcher.with(getActivity(), PersonalDataActivity.class).execute();
                 } else {
                     Launcher.with(getActivity(), LoginActivity.class).execute();
                 }
@@ -142,7 +145,7 @@ public class MineFragment extends BaseFragment {
             case R.id.collect:
                 umengEventCount(UmengCountEventId.MINE_COLLECT);
                 if (LocalUser.getUser().isLogin()) {
-                    // TODO: 2018/2/8  收藏页面
+                    Launcher.with(getActivity(), MyCollectActivity.class).execute();
                 } else {
                     Launcher.with(getActivity(), LoginActivity.class).execute();
                 }
@@ -183,6 +186,7 @@ public class MineFragment extends BaseFragment {
                     public void onClick(Dialog dialog) {
                         dialog.dismiss();
                         copyWeChatAccount(data);
+                        ToastUtil.show(R.string.copy_success);
                     }
                 })
                 .show();
