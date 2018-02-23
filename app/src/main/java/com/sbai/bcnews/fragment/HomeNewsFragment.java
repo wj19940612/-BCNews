@@ -252,7 +252,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
                 newsFragment.setOnScrollListener(mOnScrollListener);
                 return newsFragment;
             }
-            NewsFragment newsFragment = NewsFragment.newsInstance(false, title);
+            NewsFragment newsFragment = NewsFragment.newsInstance(true, title);
             newsFragment.setOnScrollListener(mOnScrollListener);
             return newsFragment;
         }

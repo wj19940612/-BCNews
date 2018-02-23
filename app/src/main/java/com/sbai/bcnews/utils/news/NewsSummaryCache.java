@@ -3,6 +3,7 @@ package com.sbai.bcnews.utils.news;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.model.NewsDetail;
@@ -13,6 +14,7 @@ import org.json.JSONTokener;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +27,12 @@ import java.util.Queue;
 public class NewsSummaryCache {
     private static final int TOTAL_NEWSUMMARY = 100;
     private static final int NEED_NUM = 20;
-    private static LinkedList<NewsDetail> sNewsSummaryCache;
+
+    private static HashMap<String, ArrayList<NewsDetail>> sNewsSummaryCache;
 
     private static Gson sGson = new Gson();
 
-    public static void markNewsSummarys(List<NewsDetail> newsDetails) {
+    public static void markNewsSummarys(String channel, List<NewsDetail> newsDetails) {
         if (sNewsSummaryCache == null) {
             readFromPreference();
         }
@@ -37,46 +40,47 @@ public class NewsSummaryCache {
         if (sNewsSummaryCache.size() >= TOTAL_NEWSUMMARY) {
             sNewsSummaryCache.clear();
         }
-        sNewsSummaryCache.addAll(newsDetails);
+        ArrayList<NewsDetail> newsDetailList = sNewsSummaryCache.get(channel);
+        if (newsDetailList != null) {
+            if (newsDetailList.size() >= TOTAL_NEWSUMMARY) {
+                newsDetailList.clear();
+            }
+            newsDetailList.addAll(newsDetails);
+        } else {
+            new ArrayList<NewsDetail>().addAll(newsDetails);
+        }
+        sNewsSummaryCache.put(channel, newsDetailList);
         String news = sGson.toJson(sNewsSummaryCache);
         Preference.get().setNewsSummary(news);
     }
 
-    public static List<NewsDetail> getNewsSummaryCache() {
+    public static List<NewsDetail> getNewsSummaryCache(String channel) {
         if (sNewsSummaryCache == null) {
             readFromPreference();
         }
-        if (sNewsSummaryCache.size() == 0) {
-            return sNewsSummaryCache;
+        ArrayList<NewsDetail> newsDetails = sNewsSummaryCache.get(channel);
+        if (newsDetails == null || newsDetails.size() == 0) {
+            return null;
         }
-        if (NEED_NUM > sNewsSummaryCache.size()) {
-            return sNewsSummaryCache.subList(0, sNewsSummaryCache.size() - 1);
+        if (NEED_NUM > newsDetails.size()) {
+            return newsDetails.subList(0, sNewsSummaryCache.size() - 1);
         }
-        return sNewsSummaryCache.subList(sNewsSummaryCache.size() - NEED_NUM, sNewsSummaryCache.size() - 1);
+        return newsDetails.subList(sNewsSummaryCache.size() - NEED_NUM, sNewsSummaryCache.size() - 1);
     }
 
     private static void readFromPreference() {
         String news = Preference.get().getNewsSummary();
-        if (!TextUtils.isEmpty(news) && isJsonArray(news)) {
-            Type type = new TypeToken<LinkedList<NewsDetail>>() {
+        if (!TextUtils.isEmpty(news)) {
+            Type type = new TypeToken<HashMap<String, ArrayList<NewsDetail>>>() {
             }.getType();
-            sNewsSummaryCache = sGson.fromJson(news, type);
-        } else {
-            sNewsSummaryCache = new LinkedList<>();
-        }
-    }
-
-    private static boolean isJsonArray(String news) {
-        boolean result = false;
-        try {
-            Object json = new JSONTokener(news).nextValue();
-            if (json instanceof JSONArray) {
-                result = true;
+            try {
+                sNewsSummaryCache = sGson.fromJson(news, type);
+            } catch (JsonSyntaxException exception) {
+                //这里数据类型和老的发生更改了
+                sNewsSummaryCache = new HashMap<String, ArrayList<NewsDetail>>();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } finally {
-            return result;
+        } else {
+            sNewsSummaryCache = new HashMap<String, ArrayList<NewsDetail>>();
         }
     }
 }
