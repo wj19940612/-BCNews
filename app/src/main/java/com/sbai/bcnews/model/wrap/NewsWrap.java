@@ -1,17 +1,20 @@
-package com.sbai.bcnews.model;
+package com.sbai.bcnews.model.wrap;
+
+import com.sbai.bcnews.model.NewsDetail;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.sbai.bcnews.fragment.NewsFragment.NewsAdapter.TYPE_NONE;
-import static com.sbai.bcnews.fragment.NewsFragment.NewsAdapter.TYPE_SINGLE;
-import static com.sbai.bcnews.fragment.NewsFragment.NewsAdapter.TYPE_THREE;
 
 /**
  * Created by Administrator on 2018\2\13 0013.
  */
 
-public class NewsModel {
+public class NewsWrap {
+
+    public static final int TYPE_NONE = 1;
+    public static final int TYPE_SINGLE = 2;
+    public static final int TYPE_THREE = 3;
+    public static final int TYPE_BANNER = 4;
 
     private NewsDetail mNewsDetail;
     private int imgType;
@@ -33,18 +36,18 @@ public class NewsModel {
     }
 
     //判断资讯列表中每项的图片显示模式  单张模式  3张模式
-    public static List<NewsModel> updateImgType(List<NewsDetail> newsDetails) {
+    public static List<NewsWrap> updateImgType(List<NewsDetail> newsDetails) {
         if (newsDetails == null || newsDetails.size() == 0) {
             return new ArrayList<>();
         }
-        List<NewsModel> newsModels = new ArrayList<>();
+        List<NewsWrap> newsWraps = new ArrayList<>();
         for (int i = 0; i < newsDetails.size(); i++) {
-            NewsModel newsModel = new NewsModel();
-            newsModel.setNewsDetail(newsDetails.get(i));
-            newsModel.setImgType(judgeImageType(newsDetails, i));
-            newsModels.add(newsModel);
+            NewsWrap newsWrap = new NewsWrap();
+            newsWrap.setNewsDetail(newsDetails.get(i));
+            newsWrap.setImgType(judgeImageType(newsDetails, i));
+            newsWraps.add(newsWrap);
         }
-        return newsModels;
+        return newsWraps;
     }
 
     private static int judgeImageType(List<NewsDetail> newsDetails, int position) {

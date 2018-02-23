@@ -25,7 +25,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.Banner;
 import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsDetail;
-import com.sbai.bcnews.model.NewsModel;
+import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
@@ -78,7 +78,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     EmptyView mEmptyView;
 
     private NewsAdapter mNewsAdapter;
-    private List<NewsModel> mNewsModels;
+    private List<NewsWrap> mNewsWraps;
     private List<Banner> mBanners;
 
     private HomeBanner mHomeBanner;
@@ -131,8 +131,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void initView() {
-        mNewsModels = new ArrayList<>();
-        mNewsAdapter = new NewsAdapter(getActivity(), mNewsModels, new NewsAdapter.OnItemClickListener() {
+        mNewsWraps = new ArrayList<>();
+        mNewsAdapter = new NewsAdapter(getActivity(), mNewsWraps, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
                 NewsReadCache.markNewsRead(newsDetail);
@@ -208,7 +208,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             @Override
             protected void onRespSuccessData(News data) {
                 if (data != null && data.getContent() != null && data.getContent().size() != 0) {
-                    if (mNewsModels.size() > 0 && data.getContent().get(0).getId().equals(mNewsModels.get(0).getNewsDetail().getId())) {
+                    if (mNewsWraps.size() > 0 && data.getContent().get(0).getId().equals(mNewsWraps.get(0).getNewsDetail().getId())) {
                         refreshComplete(R.string.no_more_new_news);
                     } else {
                         refreshSuccess();
@@ -216,7 +216,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     refreshSuccess();
                 }
-                if (mNewsModels.size() == 0 && (data.getContent() == null || data.getContent().size() == 0) && mEmptyView.isSelected()) {
+                if (mNewsWraps.size() == 0 && (data.getContent() == null || data.getContent().size() == 0) && mEmptyView.isSelected()) {
                     ToastUtil.show(R.string.no_news);
                 }
                 mEmptyView.setSelected(false);
@@ -235,13 +235,13 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     private void loadCacheData() {
         List<NewsDetail> newsDetails = NewsSummaryCache.getNewsSummaryCache();
-        if (mNewsModels.size() == 0) {
+        if (mNewsWraps.size() == 0) {
             newsDetails = NewsReadCache.filterReadCache(newsDetails);
             if (newsDetails == null || newsDetails.size() == 0) {
                 mEmptyView.setVisibility(View.VISIBLE);
             } else {
                 mEmptyView.setVisibility(View.GONE);
-                mNewsModels.addAll(NewsModel.updateImgType(newsDetails));
+                mNewsWraps.addAll(NewsWrap.updateImgType(newsDetails));
                 mNewsAdapter.refresh();
             }
 
@@ -258,7 +258,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         NewsSummaryCache.markNewsSummarys(data);
         data = NewsReadCache.filterReadCache(data);
         if (refresh) {
-            mNewsModels.clear();
+            mNewsWraps.clear();
         }
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
@@ -266,7 +266,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);
         }
         mPage++;
-        mNewsModels.addAll(NewsModel.updateImgType(data));
+        mNewsWraps.addAll(NewsWrap.updateImgType(data));
         mNewsAdapter.refresh();
     }
 
@@ -307,24 +307,20 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     public static class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        public static final int TYPE_NONE = 1;
-        public static final int TYPE_SINGLE = 2;
-        public static final int TYPE_THREE = 3;
-        public static final int TYPE_BANNER = 4;
-
+        
         interface OnItemClickListener {
             public void onItemClick(NewsDetail newsDetail);
         }
 
         private Context mContext;
-        private List<NewsModel> items;
+        private List<NewsWrap> items;
         private OnItemClickListener mOnItemClickListener;
         private View mHeadView;
         private int mHeaderCount;
 
-        public NewsAdapter(Context context, List<NewsModel> newsModels, OnItemClickListener onItemClickListener) {
+        public NewsAdapter(Context context, List<NewsWrap> newsWraps, OnItemClickListener onItemClickListener) {
             mContext = context;
-            items = newsModels;
+            items = newsWraps;
             mOnItemClickListener = onItemClickListener;
         }
 

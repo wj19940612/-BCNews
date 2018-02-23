@@ -606,7 +606,7 @@ public class NewsDetailActivity extends BaseActivity {
     private void requestPraise() {
         if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
             int praiseWant = mNetNewsDetail.getPraise() == 0 ? 1 : 0;
-            Apic.praiseNews(mNetNewsDetail.getId(), praiseWant).tag(TAG).callback(new Callback<Resp>() {
+            Apic.praiseNews(mNetNewsDetail.getId(), praiseWant).tag(TAG).callback(new  Callback<Resp>() {
                 @Override
                 protected void onRespSuccess(Resp resp) {
                     if (mNetNewsDetail.getPraise() == 0) {
