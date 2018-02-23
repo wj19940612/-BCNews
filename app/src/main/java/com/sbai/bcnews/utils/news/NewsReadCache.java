@@ -3,6 +3,7 @@ package com.sbai.bcnews.utils.news;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.model.NewsDetail;
@@ -27,7 +28,7 @@ public class NewsReadCache {
     private static final int TOTAL_NEWS = 200;
     private static Gson sGson = new Gson();
 
-    private static LinkedHashMap<String, Boolean> sNewsReadMapCache;
+    private static Queue<String> sNewsReadMapCache;
 
     //记录已读
     public static void markNewsRead(NewsDetail newsDetail) {
@@ -35,34 +36,33 @@ public class NewsReadCache {
             readFromPreference();
         }
 
-        sNewsReadMapCache.put(newsDetail.getId(), true);
+        if (sNewsReadMapCache.size() > TOTAL_NEWS) {
+            sNewsReadMapCache.poll();
+        }
+        sNewsReadMapCache.add(newsDetail.getId());
         String news = sGson.toJson(sNewsReadMapCache);
         Preference.get().setNewsRead(news);
     }
 
-    //过滤列表已读状态
-    public static List<NewsDetail> filterReadCache(List<NewsDetail> newsDetails) {
-        if (newsDetails == null || newsDetails.size() == 0) {
-            return newsDetails;
-        }
+    public static boolean isRead(String id){
         if (sNewsReadMapCache == null) {
             readFromPreference();
         }
-        for (NewsDetail newsDetail : newsDetails) {
-            Boolean read = sNewsReadMapCache.get(newsDetail.getId());
-            newsDetail.setRead(read == null ? false : read);
-        }
-        return newsDetails;
+        return sNewsReadMapCache.contains(id);
     }
 
     private static void readFromPreference() {
         String news = Preference.get().getNewsRead();
-        if (!TextUtils.isEmpty(news)) {
-            Type type = new TypeToken<MaxLinkedHashMap<String, Boolean>>() {
+        if (!TextUtils.isEmpty(news) && isJsonArray(news)) {
+            Type type = new TypeToken<LinkedList<String>>() {
             }.getType();
-            sNewsReadMapCache = sGson.fromJson(news, type);
+            try {
+                sNewsReadMapCache = sGson.fromJson(news, type);
+            }catch (JsonSyntaxException exception){
+                sNewsReadMapCache = new LinkedList<>();
+            }
         } else {
-            sNewsReadMapCache = new MaxLinkedHashMap<String, Boolean>();
+            sNewsReadMapCache = new LinkedList<>();
         }
     }
 
@@ -77,16 +77,6 @@ public class NewsReadCache {
             e.printStackTrace();
         } finally {
             return result;
-        }
-    }
-
-    public static class MaxLinkedHashMap<T, E> extends LinkedHashMap<T, E> {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        protected boolean removeEldestEntry(Map.Entry<T, E> eldest) {
-            //每当调用myMap.put()的时候，就会自动判断是否个数已经超过maximumSize，如果超过就删掉最旧的那条
-            return size() > TOTAL_NEWS;
         }
     }
 }

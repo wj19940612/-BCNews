@@ -231,9 +231,16 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             }
 
             @Override
+            public void onFinish() {
+                super.onFinish();
+                stopFreshOrLoadAnimation();
+            }
+
+            @Override
             public void onFailure(ReqError reqError) {
                 super.onFailure(reqError);
-                refreshFailure();
+                if (refresh)
+                    refreshFailure();
             }
 
         }).fireFreely();
@@ -242,7 +249,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private void loadCacheData() {
         List<NewsDetail> newsDetails = NewsSummaryCache.getNewsSummaryCache(mChannel);
         if (mNewsWraps.size() == 0) {
-            newsDetails = NewsReadCache.filterReadCache(newsDetails);
             if (newsDetails == null || newsDetails.size() == 0) {
                 mEmptyView.setVisibility(View.VISIBLE);
             } else {
@@ -262,7 +268,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
         mEmptyView.setVisibility(View.GONE);
         NewsSummaryCache.markNewsSummarys(mChannel, data);
-        data = NewsReadCache.filterReadCache(data);
         if (refresh) {
             mNewsWraps.clear();
         }
