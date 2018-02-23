@@ -48,7 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static com.sbai.bcnews.ExtraKeys.CHANNEL;
-import static com.sbai.bcnews.ExtraKeys.HEADER_COUNT;
+import static com.sbai.bcnews.ExtraKeys.HAS_BANNER;
 import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_GLIDING;
 
 /**
@@ -59,9 +59,6 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_GLIDING;
  * APIs:
  */
 public class NewsFragment extends RecycleViewSwipeLoadFragment {
-
-    public static final int HAS_BANNER = 1;
-    public static final int NO_BANNER = 0;
 
     public static final int BANNER_HEIGHT = 170;
 
@@ -84,22 +81,22 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private HomeBanner mHomeBanner;
 
     private int mPage;
-    private int mHeaderCount;
+    private boolean mHasBanner;
     private OnScrollListener mOnScrollListener;
     private String mChannel;
 
     public interface OnScrollListener {
-        public void onScroll(int dy);
+        void onScroll(int dy);
     }
 
     public void setOnScrollListener(OnScrollListener onScrollListener) {
         mOnScrollListener = onScrollListener;
     }
 
-    public static NewsFragment newsInstance(int headerCount, String channel) {
+    public static NewsFragment newsInstance(boolean hasBanner, String channel) {
         NewsFragment newsFragment = new NewsFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(HEADER_COUNT, headerCount);
+        bundle.putBoolean(HAS_BANNER, hasBanner);
         bundle.putString(CHANNEL, channel);
         newsFragment.setArguments(bundle);
         return newsFragment;
@@ -109,7 +106,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mHeaderCount = getArguments().getInt(HEADER_COUNT);
+            mHasBanner = getArguments().getBoolean(HAS_BANNER);
             mChannel = getArguments().getString(CHANNEL);
         }
     }
@@ -171,7 +168,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void initBannerView() {
-        if (mHeaderCount > 0) {
+        if (mHasBanner) {
             mHomeBanner = (HomeBanner) LayoutInflater.from(getActivity()).inflate(R.layout.item_banner, null);
             mHomeBanner.setLayoutParams(new RecyclerView.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(BANNER_HEIGHT, getResources())));
@@ -271,7 +268,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void requestBanners() {
-        if (mHeaderCount != 0) {
+        if (mHasBanner) {
             Apic.requestBanners().tag(TAG).callback(new Callback2D<Resp<List<Banner>>, List<Banner>>() {
                 @Override
                 protected void onRespSuccessData(List<Banner> data) {
@@ -307,9 +304,11 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     public static class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        
+
+        private static final int VIEW_TYPE_BANNER = -1;
+
         interface OnItemClickListener {
-            public void onItemClick(NewsDetail newsDetail);
+            void onItemClick(NewsDetail newsDetail);
         }
 
         private Context mContext;
@@ -327,11 +326,11 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         public void setHeaderView(View homeBanner) {
             //没banner，不要再插入头
             if (homeBanner == null) {
-                mHeaderCount = NO_BANNER;
+                mHeaderCount = 0;
                 return;
             }
             mHeadView = homeBanner;
-            mHeaderCount = HAS_BANNER;
+            mHeaderCount = 1;
             notifyItemInserted(0);//插入下标0位置
         }
 
@@ -346,29 +345,30 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public int getItemCount() {
-            if (mHeaderCount > 0)
+            if (mHeaderCount > 0) {
                 return items == null ? 0 : items.size() + 1;
-            else
+            } else {
                 return items == null ? 0 : items.size();
+            }
         }
 
 
         @Override
         public int getItemViewType(int position) {
             if (mHeadView != null && position == 0) {
-                return TYPE_BANNER;
+                return VIEW_TYPE_BANNER;
             }
             return items.get(position - mHeaderCount).getImgType();
         }
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == TYPE_BANNER) {
+            if (viewType == VIEW_TYPE_BANNER) {
                 return new BannerHolder(mHeadView);
-            } else if (viewType == TYPE_NONE) {
+            } else if (viewType == NewsWrap.DISPLAY_TYPE_NO_IMAGE) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.item_news_none, parent, false);
                 return new NoneHolder(view);
-            } else if (viewType == TYPE_SINGLE) {
+            } else if (viewType == NewsWrap.DISPLAY_TYPE_SINGLE_IMAGE) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.item_news_single, parent, false);
                 return new SingleHolder(view);
             } else {

@@ -41,8 +41,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
-import static com.sbai.bcnews.fragment.NewsFragment.HAS_BANNER;
-import static com.sbai.bcnews.fragment.NewsFragment.NO_BANNER;
 
 /**
  * Created by Administrator on 2018\2\5 0005.
@@ -250,11 +248,11 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         public Fragment getItem(int position) {
             String title = mMyChannelEntities.get(position);
             if (position == 0) {
-                NewsFragment newsFragment = NewsFragment.newsInstance(HAS_BANNER, title);
+                NewsFragment newsFragment = NewsFragment.newsInstance(true, title);
                 newsFragment.setOnScrollListener(mOnScrollListener);
                 return newsFragment;
             }
-            NewsFragment newsFragment = NewsFragment.newsInstance(NO_BANNER, title);
+            NewsFragment newsFragment = NewsFragment.newsInstance(false, title);
             newsFragment.setOnScrollListener(mOnScrollListener);
             return newsFragment;
         }

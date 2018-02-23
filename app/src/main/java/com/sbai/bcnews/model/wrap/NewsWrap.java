@@ -11,10 +11,9 @@ import java.util.List;
 
 public class NewsWrap {
 
-    public static final int TYPE_NONE = 1;
-    public static final int TYPE_SINGLE = 2;
-    public static final int TYPE_THREE = 3;
-    public static final int TYPE_BANNER = 4;
+    public static final int DISPLAY_TYPE_NO_IMAGE = 1;
+    public static final int DISPLAY_TYPE_SINGLE_IMAGE = 2;
+    public static final int DISPLAY_TYPE_THREE_IMAGE = 3;
 
     private NewsDetail mNewsDetail;
     private int imgType;
@@ -54,20 +53,20 @@ public class NewsWrap {
         int thePicNum = newsDetails.get(position).getImgs().size();
         //图片数量少于3张，一定是单张或者0张模式
         if (thePicNum == 0) {
-            return TYPE_NONE;
+            return DISPLAY_TYPE_NO_IMAGE;
         } else if (thePicNum < 3) {
-            return TYPE_SINGLE;
+            return DISPLAY_TYPE_SINGLE_IMAGE;
         } else {
             //三张图片，不一定是三张模式
             //这是前五张，那么此项一定是单张模式
             if (position <= 4) {
-                return TYPE_SINGLE;
+                return DISPLAY_TYPE_SINGLE_IMAGE;
             }
             //前面五张全是单张模式，这里才显示3张模式
             if (judgeFiveSingleMode(newsDetails, position)) {
-                return TYPE_THREE;
+                return DISPLAY_TYPE_THREE_IMAGE;
             } else {
-                return TYPE_SINGLE;
+                return DISPLAY_TYPE_SINGLE_IMAGE;
             }
         }
     }
