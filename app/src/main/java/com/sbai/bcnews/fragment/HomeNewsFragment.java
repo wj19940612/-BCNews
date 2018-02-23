@@ -31,6 +31,7 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
+import com.sbai.httplib.ReqError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +117,14 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
             @Override
             protected void onRespSuccessData(List<String> data) {
                 ChannelCacheModel contrastedChannelCacheModel = ChannelCache.contrastChannel(channelCacheModel, data);
+                ChannelCache.modifyChannel(contrastedChannelCacheModel.getMyChannelEntities(), contrastedChannelCacheModel.getOtherChannelEntities());
                 updateChannel(contrastedChannelCacheModel, true);
+            }
+
+            @Override
+            public void onFailure(ReqError reqError) {
+                super.onFailure(reqError);
+                updateChannel(channelCacheModel, true);
             }
         }).fireFreely();
     }
