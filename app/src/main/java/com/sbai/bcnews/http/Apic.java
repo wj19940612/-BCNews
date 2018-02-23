@@ -28,7 +28,24 @@ public class Apic {
     public static Api getRelatedNews(String tag, int page) {
         return Api.get("/api/news-info/news/tag/{tag}",
                 new ReqParams()
-                        .put("tag", tag));
+                        .put("tag", tag)
+                        .put("size", DEFAULT_PAGE_SIZE)
+                        .put("page", page));
+    }
+
+    /**
+     * /api/news-info/news/tag/{tag}/{id}
+     * <p>(标签)资讯相关推荐-----齐慕伟</p>
+     *
+     * @param tag
+     * @param id
+     * @return
+     */
+    public static Api getRelatedNewsRecommend(String tag, String id) {
+        return Api.get("/api/news-info/news/tag/{tag}/{id}",
+                new ReqParams()
+                        .put("tag", tag)
+                        .put("id", id));
     }
 
     /**

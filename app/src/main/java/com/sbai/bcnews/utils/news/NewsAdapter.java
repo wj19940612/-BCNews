@@ -108,7 +108,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTitle.setText(item.getTitle());
             mSource.setText(item.getSource());
             mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-            mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.text));
+            mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.text));
             mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
             mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
 
@@ -117,7 +117,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
                         mTitle.setTextColor(ContextCompat.getColor(context, R.color.unluckyText));
-                        item.setRead(true);
                         onItemClickListener.onItemClick(item);
                     }
                 }
@@ -158,7 +157,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTitle.setText(item.getTitle());
             mSource.setText(item.getSource());
             mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-            mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.text));
+            mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.text));
             mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
             mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
             if (item.getImgs() != null && item.getImgs().size() > 0) {
@@ -175,7 +174,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
                         mTitle.setTextColor(ContextCompat.getColor(context, R.color.unluckyText));
-                        item.setRead(true);
                         onItemClickListener.onItemClick(item);
                     }
                 }
@@ -219,8 +217,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTitle.setText(item.getTitle());
             mSource.setText(item.getSource());
             mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-
-            mTitle.setTextColor(item.isRead() ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.text));
+            mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.unluckyText) : ContextCompat.getColor(context, R.color.text));
             mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
             mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
             if (item.getImgs() != null && item.getImgs().size() > 0) {
@@ -257,7 +254,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
                         mTitle.setTextColor(ContextCompat.getColor(context, R.color.unluckyText));
-                        item.setRead(true);
                         onItemClickListener.onItemClick(item);
                     }
                 }

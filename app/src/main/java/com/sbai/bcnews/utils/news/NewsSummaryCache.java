@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class NewsSummaryCache {
-    private static final int TOTAL_NEWSUMMARY = 100;
+    private static final int TOTAL_SUMMARY = 100;
     private static final int NEED_NUM = 20;
 
     private static HashMap<String, ArrayList<NewsDetail>> sNewsSummaryCache;
@@ -32,7 +32,7 @@ public class NewsSummaryCache {
 
         ArrayList<NewsDetail> newsDetailList = sNewsSummaryCache.get(key);
         if (newsDetailList != null) {
-            if (newsDetailList.size() >= TOTAL_NEWSUMMARY) {
+            if (newsDetailList.size() >= TOTAL_SUMMARY) {
                 newsDetailList.clear();
             }
             newsDetailList.addAll(newsDetails);
