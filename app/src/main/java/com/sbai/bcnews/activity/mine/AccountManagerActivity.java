@@ -1,6 +1,7 @@
 package com.sbai.bcnews.activity.mine;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,6 +12,8 @@ import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.view.IconTextRow;
 import com.sbai.bcnews.view.TitleBar;
 
@@ -44,6 +47,15 @@ public class AccountManagerActivity extends BaseActivity {
         } else {
             mCloseWeChat.setVisibility(View.VISIBLE);
         }
+
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (userInfo != null) {
+            if (!TextUtils.isEmpty(userInfo.getUserPhone())) {
+                mPhoneNumber.setRowSubText(userInfo.getUserPhone());
+            }
+        }
+
+
     }
 
     @OnClick(R.id.weChatSwitch)

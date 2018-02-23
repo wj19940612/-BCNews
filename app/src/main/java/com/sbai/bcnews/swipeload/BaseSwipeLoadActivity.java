@@ -1,7 +1,6 @@
 package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.view.View;
@@ -42,64 +41,72 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
         }
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        setup(getSwipeTargetView(), getSwipeToLoadLayout(), getRefreshHeaderView(), getLoadMoreFooterView());
+    }
+
+    @Override
     public void triggerRefresh() {
         if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setRefreshing(true);
         }
     }
 
-    protected void triggerLoadMore() {
+    @Override
+    public void triggerLoadMore() {
         if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setLoadingMore(true);
         }
     }
 
-    public void refreshFail() {
-        refreshFail(getString(R.string.refresh_fail));
-    }
 
-    public void refreshFail(@StringRes int resId) {
-        refreshFail(getString(resId));
+    @Override
+    public void loadMoreComplete(@StringRes int msgRes) {
+        loadMoreComplete(getString(msgRes));
     }
 
     @Override
-    public void refreshFail(String failMsg) {
-        if (mRefreshHeaderView != null) {
-            mRefreshHeaderView.refreshFail();
+    public void loadMoreComplete(CharSequence msg) {
+        if (mLoadMoreFooterView != null) {
+            mLoadMoreFooterView.setLoadMoreSuccess(msg);
         }
         stopFreshOrLoadAnimation();
+    }
+
+    public void refreshFailure() {
+        refreshComplete(getString(R.string.refresh_fail));
     }
 
     public void refreshSuccess() {
-        refreshSuccess(getString(R.string.refresh_complete));
-    }
-
-    public void refreshSuccess(@StringRes int resId) {
-        refreshSuccess(getString(resId));
+        refreshComplete(getString(R.string.refresh_complete));
     }
 
     @Override
-    public void refreshSuccess(String successMsg) {
+    public void refreshComplete(@StringRes int resId) {
+        refreshComplete(getString(resId));
+    }
+
+
+    @Override
+    public void refreshComplete(CharSequence msg) {
         if (mRefreshHeaderView != null) {
-            mRefreshHeaderView.refreshSuccess(successMsg);
+            mRefreshHeaderView.refreshSuccess(msg);
         }
         stopFreshOrLoadAnimation();
     }
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        mSwipeTargetView = getSwipeTargetView();
-        mSwipeToLoadLayout = getSwipeToLoadLayout();
-        mRefreshHeaderView = getRefreshHeaderView();
-        mLoadMoreFooterView = getLoadMoreFooterView();
-
+    private void setup(T swipeTargetView, SwipeToLoadLayout swipeToLoadLayout,
+                       RefreshHeaderView refreshHeaderView, LoadMoreFooterView loadMoreFooterView) {
+        mSwipeTargetView = swipeTargetView;
+        mSwipeToLoadLayout = swipeToLoadLayout;
+        mRefreshHeaderView = refreshHeaderView;
+        mLoadMoreFooterView = loadMoreFooterView;
 
         if (mSwipeToLoadLayout != null) {
             mSwipeToLoadLayout.setOnLoadMoreListener(this);
             mSwipeToLoadLayout.setOnRefreshListener(this);
         }
     }
-
 }

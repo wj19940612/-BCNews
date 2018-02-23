@@ -8,6 +8,9 @@ import android.os.Parcelable;
  */
 public class UserInfo implements Parcelable {
 
+    public static final int USER_SEX_GIRL = 1;
+    public static final int USER_SEX_BOY = 2;
+
     /**
      * createTime : 1518141650000
      * id : 1658
@@ -41,10 +44,28 @@ public class UserInfo implements Parcelable {
     private String city;
     private String userAddress;
     private String introduction;
+    /**
+     * age : 25
+     * birthday : 93.12.12
+     * deviceId : asadas
+     * platform : 0
+     * source : ios
+     * userCity : huainan
+     * userEmail : 1031214092@cc.com
+     * userPass :
+     */
+
+    private int age;
+    private String birthday;
+    private String deviceId;
+    private int platform;
+    private String source;
+    private String userCity;
+    private String userEmail;
+    private String userPass;
 
     public UserInfo() {
     }
-
 
     public String getUserProvince() {
         return userProvince;
@@ -199,6 +220,70 @@ public class UserInfo implements Parcelable {
         this.userType = userType;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public int getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(int platform) {
+        this.platform = platform;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getUserCity() {
+        return userCity;
+    }
+
+    public void setUserCity(String userCity) {
+        this.userCity = userCity;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserPass() {
+        return userPass;
+    }
+
+    public void setUserPass(String userPass) {
+        this.userPass = userPass;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -225,6 +310,14 @@ public class UserInfo implements Parcelable {
         dest.writeString(this.city);
         dest.writeString(this.userAddress);
         dest.writeString(this.introduction);
+        dest.writeInt(this.age);
+        dest.writeString(this.birthday);
+        dest.writeString(this.deviceId);
+        dest.writeInt(this.platform);
+        dest.writeString(this.source);
+        dest.writeString(this.userCity);
+        dest.writeString(this.userEmail);
+        dest.writeString(this.userPass);
     }
 
     protected UserInfo(Parcel in) {
@@ -247,6 +340,14 @@ public class UserInfo implements Parcelable {
         this.city = in.readString();
         this.userAddress = in.readString();
         this.introduction = in.readString();
+        this.age = in.readInt();
+        this.birthday = in.readString();
+        this.deviceId = in.readString();
+        this.platform = in.readInt();
+        this.source = in.readString();
+        this.userCity = in.readString();
+        this.userEmail = in.readString();
+        this.userPass = in.readString();
     }
 
     public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
@@ -283,6 +384,14 @@ public class UserInfo implements Parcelable {
                 ", city='" + city + '\'' +
                 ", userAddress='" + userAddress + '\'' +
                 ", introduction='" + introduction + '\'' +
+                ", age=" + age +
+                ", birthday='" + birthday + '\'' +
+                ", deviceId='" + deviceId + '\'' +
+                ", platform=" + platform +
+                ", source='" + source + '\'' +
+                ", userCity='" + userCity + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userPass='" + userPass + '\'' +
                 '}';
     }
 }

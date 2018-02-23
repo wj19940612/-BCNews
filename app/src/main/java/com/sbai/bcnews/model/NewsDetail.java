@@ -25,6 +25,9 @@ public class NewsDetail {
     private List<String> tags;    //标签
     private int readerTime;       //需要阅读时间
     private boolean isRead;       //阅读状态已读未读
+    private int original;         //是否原创
+    private int praise;           //是否点赞 0-未点赞 1-已点赞
+    private int collect;          //是否收藏 0-未收藏 1-已收藏
 
     private int readHeight; //阅读高度,用于用户记忆浏览
 
@@ -170,5 +173,29 @@ public class NewsDetail {
 
     public void setRead(boolean read) {
         isRead = read;
+    }
+
+    public int getOriginal() {
+        return original;
+    }
+
+    public void setOriginal(int original) {
+        this.original = original;
+    }
+
+    public int getPraise() {
+        return praise;
+    }
+
+    public void setPraise(int praise) {
+        this.praise = praise;
+    }
+
+    public int getCollect() {
+        return collect;
+    }
+
+    public void setCollect(int collect) {
+        this.collect = collect;
     }
 }

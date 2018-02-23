@@ -93,6 +93,16 @@ public class Api extends RequestManager {
         return reqApi;
     }
 
+    public static Api post(String uri, ReqParams apiParams, String filePartName, File file) {
+        Api api = new Api();
+        api.mMethod = POST;
+        api.mApi = uri;
+        api.mReqParams = apiParams;
+        api.mFile = file;
+        api.mFileName = filePartName;
+        return api;
+    }
+
     public Api id(String id) {
         mId = id;
         return this;

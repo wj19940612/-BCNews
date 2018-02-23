@@ -124,7 +124,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                     protected void onRespSuccessData(List<NewsFlash> data) {
                         if (data.size() > 0 && !mNewsAdapter.isEmpty()) {
                             if (data.get(0).getId() == mNewsAdapter.getFirst().getId()) {
-                                refreshSuccess(R.string.no_more_new_news);
+                                refreshComplete(R.string.no_more_new_news);
                             } else {
                                 refreshSuccess();
                             }
@@ -137,7 +137,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                     @Override
                     public void onFailure(ReqError reqError) {
                         super.onFailure(reqError);
-                        refreshFail();
+                        refreshFailure();
                     }
 
                 }).fire();

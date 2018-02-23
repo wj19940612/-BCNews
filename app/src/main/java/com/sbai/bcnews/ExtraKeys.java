@@ -19,4 +19,10 @@ public interface ExtraKeys {
     String MISS_AVATAR = "miss_avatar";
     String PHONE = "phone";
     String NEWS_ID = "news_id";
+    String HEADER_COUNT = "header_count";
+    String CHANNEL = "channel";
+
+    String PERSONAL_INTRODUCE = "personal_introduce ";
+    String NICK_NAME = "nick_name";
+    String IMAGE_PATH = "image_path";
 }

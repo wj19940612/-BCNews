@@ -92,6 +92,13 @@
     <string name="original">原创</string>
     <string name="no_more_data">没有更多内容了</string>
     <string name="no_more_new_news">已是最新资讯</string>
+    <string name="channel_custom">频道定制</string>
+    <string name="channel_select">已选频道</string>
+    <string name="drag_to_select_channel">长按拖动调整排序</string>
+    <string name="un_select_channel">未选频道</string>
+    <string name="other_article">相关文章</string>
+    <string name="collect_fail">收藏失败</string>
+    <string name="no_news">暂无资讯，换个频道试试吧</string>
 
 
     <!--行情-->
@@ -173,6 +180,24 @@
     <string name="weChat_account">微信号</string>
     <string name="affirm_logout">确定要退出登录吗</string>
     <string name="read_history">阅读历史</string>
+    <string name="my_collect">我的收藏</string>
 
     <string name="check_related_news">查看相关资讯</string>
+
+    <string name="head_portrait">头像</string>
+    <string name="nick_name">昵称</string>
+    <string name="sex">性别</string>
+    <string name="birthday">生日</string>
+    <string name="location">地区</string>
+    <string name="personal_introduce">个人简介</string>
+    <string name="please_select">请选择</string>
+    <string name="please_set_introduce">请设置个人简介</string>
+    <string name="thirty">30</string>
+    <string name="please_input_introduce">让别人瞻仰下不凡的你吧</string>
+    <string name="save">保存</string>
+    <string name="introduce_is_too_more">简介太丰富了</string>
+
+    <string name="set_nick_name">设置昵称</string>
+    <string name="please_input_nick_name">请输入昵称</string>
+    <string name="update_success">修改成功</string>
 </resources>

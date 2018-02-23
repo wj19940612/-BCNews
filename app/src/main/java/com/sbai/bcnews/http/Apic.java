@@ -5,6 +5,8 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.httplib.ReqParams;
 
+import java.io.File;
+
 /**
  * Modified by john on 23/01/2018
  * <p>
@@ -13,7 +15,7 @@ import com.sbai.httplib.ReqParams;
  */
 public class Apic {
 
-    public static final int NORMAL_PAGESIZE = 20;
+    public static final int NORMAL_PAGE_SIZE = 20;
 
     public static final String SHARE_NEWS_URL = Api.getHost() + "/news/share/index.html?id=%s";
 
@@ -29,8 +31,24 @@ public class Apic {
         return Api.get("/api/news-info/info/details/{id}", new ReqParams().put("id", id));
     }
 
+    /**
+     * 获取资讯列表
+     *
+     * @param channel 频道名称
+     * @return
+     */
+    public static Api requestNewsListWithChannel(String channel, int page) {
+        return Api.get("/api/news-info/news/{channel}/list", new ReqParams().put("channel", channel).put("page", page).put("size", NORMAL_PAGE_SIZE));
+    }
+
+    /**
+     * 获取资讯列表-频道
+     *
+     * @param page 页数
+     * @return
+     */
     public static Api getNewsList(int page) {
-        return Api.get("/api/news-info/info/list.do", new ReqParams().put("page", page).put("size", NORMAL_PAGESIZE));
+        return Api.get("/api/news-info/info/list.do", new ReqParams().put("page", page).put("size", NORMAL_PAGE_SIZE));
     }
 
     public static Api syncSystemTime() {
@@ -66,15 +84,29 @@ public class Apic {
     /**
      * 资讯点赞 - 齐慕伟
      *
-     * @param newsId
+     * @param newsId 资讯id
+     * @param type   0-取消点赞 1-点赞
      * @return
      */
-    public static Api praiseNews(String newsId) {
-        return Api.put("/api/news-info/info/like/{id}", new ReqParams().put("id", newsId));
+    public static Api praiseNews(String newsId, int type) {
+        return Api.post("/api/news-info/news/praise/{id}", new ReqParams().put("id", newsId).put("type", type));
     }
 
     /**
-     * <<<<<<< HEAD
+     * 频道列表
+     */
+    public static Api getChannels() {
+        return Api.get("/api/news-info/news/channels");
+    }
+
+    /**
+     * 获取资讯详情相关文章
+     */
+    public static Api getOtherArticles(String channel, String id) {
+        return Api.get("/api/news-info/news/channel/{channel}/{id}", new ReqParams().put("channel", channel).put("id", id));
+    }
+
+    /**
      * 接口名称 获取验证码
      *
      * @param phone
@@ -176,12 +208,13 @@ public class Apic {
     }
 
     /**
+     * <<<<<<< HEAD
      * 查询用户反馈数据
      */
     public static Api requestFeedbackList(int page) {
         return Api.get("/api/news-user/feedback/page", new ReqParams()
                 .put("page", page)
-                .put("size", Apic.NORMAL_PAGESIZE));
+                .put("size", Apic.NORMAL_PAGE_SIZE));
     }
 
     /**
@@ -193,6 +226,20 @@ public class Apic {
                 .put("contentType", contentType));
     }
 
+    /**
+     * 用户--资讯收藏--薛松
+     *
+     * @param id         资讯id
+     * @param collectNum 0-收藏 1-取消收藏
+     * @return
+     */
+    public static Api requestCollect(String id, int collectNum) {
+        return Api.post("/api/news-user/operate/collect/{id}", new ReqParams().put("id", id).put("type", 0).put("cancel", collectNum));
+    }
+
+    public static Api requestBanners() {
+        return Api.get("/api/news-user/banner/findBannerList.do", new ReqParams().put("showType", 0));
+    }
 
     // TODO: 2018/2/8 请求运营微信账户
     public static Api requestOperationWetchatAccount() {
@@ -209,9 +256,73 @@ public class Apic {
     }
 
     /**
-     *查询行情界面是否显示接口
+     * 查询行情界面是否显示接口
      */
     public static Api requestShowMarketPageSwitch() {
         return Api.get("/dic.html");
+    }
+
+    /**
+     * 请求阅读历史数据 或者 收藏
+     *
+     * @param type
+     * @param page
+     */
+    // TODO: 2018/2/11
+    public static Api requestReadHistoryOrMyCollectData(int type, int page) {
+        return Api.get("/api/news-user/operate/list/{type}",
+                new ReqParams()
+                        .put("type", type)
+                        .put("page", page)
+                        .put("size", NORMAL_PAGE_SIZE));
+    }
+
+    /**
+     * GET
+     * 用户--用户详情--薛松
+     */
+    public static Api requestUserInfo() {
+        return Api.get("/api/news-user/user/info");
+    }
+
+    /**
+     * PUT
+     * 用户--修改用户信息--薛松
+     *
+     * @return
+     */
+    public static Api submitUserIntroduce(String introduction) {
+        return Api.post("/api/news-user/user/update",
+                new ReqParams()
+                        .put("introduction", introduction));
+    }
+
+    public static Api submitNickName(String nickName) {
+        return Api.post("/api/news-user/user/update", new ReqParams().put("userName", nickName));
+    }
+
+    public static Api updateUserInfo(String province, String city, String birthday, Integer userSex) {
+        return Api.post("/api/news-user/user/update",
+                new ReqParams()
+                        .put("userProvince", province)
+                        .put("userCity", city)
+                        .put("birthday", birthday)
+                        .put("userSex", userSex));
+    }
+
+    /**
+     * @param file
+     */
+    public static Api submitFile(File file, String fileName) {
+        return Api.post("/api/zuul/news-user/upload/file.do",
+                new ReqParams()
+                        .put("file", file),
+                fileName,
+                file);
+    }
+
+    public static Api submitPortraitPath(String data) {
+        return Api.post("/api/news-user/user/update",
+                new ReqParams().put("userPortrait", data));
     }
 }

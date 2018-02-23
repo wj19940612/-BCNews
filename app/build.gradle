@@ -109,4 +109,8 @@ dependencies {
     implementation project(path: ':httplib')
     implementation project(path: ':glide')
     implementation files('libs/SocialSDK_QQ_Simplify.jar')
+
+    implementation('cn.qqtheme.framework:WheelPicker:1.4.4') {
+        exclude group: 'com.android.support'
+    }
 }

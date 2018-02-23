@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.sbai.bcnews"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.sbai.bcnews">
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -61,9 +61,11 @@
         <activity
             android:name=".activity.MarketDetailActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.NewsDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.ChannelActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.LookBigPictureActivity"
@@ -80,7 +82,6 @@
             android:name=".activity.mine.ImageAuthCodeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseDialog"/>
-
         <activity
             android:name=".activity.mine.AboutActivity"
             android:screenOrientation="portrait"/>
@@ -126,17 +127,27 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".swipeload.ListSwipeLoadActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".swipeload.RecycleViewSwipeLoadActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.mine.ReadHistoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.MyCollectActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.PersonalDataActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.PersonalIntroduceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".activity.mine.ModifyNickNameActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
 
         <!-- meta-data -->
         <meta-data
@@ -147,13 +158,15 @@
             android:value="${UMENG_CHANNEL}"/>
 
         <service android:name=".service.PushIntentService"/>
-
         <service
             android:name=".service.PushService"
             android:exported="true"
             android:label="PushService"
             android:process=":pushservice">
         </service>
+
+        <activity android:name=".activity.mine.ClipHeadImageActivity">
+        </activity>
     </application>
 
 </manifest>

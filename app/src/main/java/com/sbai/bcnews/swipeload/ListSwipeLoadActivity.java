@@ -1,22 +1,16 @@
 package com.sbai.bcnews.swipeload;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by ${wangJie} on 2018/1/29.
@@ -27,46 +21,33 @@ import butterknife.ButterKnife;
  * 该类不可直接使用
  */
 
-public class ListSwipeLoadActivity extends BaseSwipeLoadActivity<ListView> {
+public abstract class ListSwipeLoadActivity extends BaseSwipeLoadActivity<ListView> {
 
-    @BindView(R.id.titleBar)
-    protected TitleBar mTitleBar;
-    @BindView(R.id.swipe_refresh_header)
-     RefreshHeaderView mSwipeRefreshHeader;
-    @BindView(R.id.swipe_target)
-     ListView mSwipeTarget;
-    @BindView(R.id.swipe_load_more_footer)
-    LoadMoreFooterView mSwipeLoadMoreFooter;
-    @BindView(R.id.swipeToLoadLayout)
-    SwipeToLoadLayout mSwipeToLoadLayout;
-    @BindView(R.id.rootView)
-    LinearLayout mRootView;
+    /**
+     * 根布局的view
+     * @return
+     */
+    @NonNull
+    public abstract View getContentView();
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
-        ButterKnife.bind(this);
-
-        ListView swipeTargetView = getSwipeTargetView();
-
-        if (swipeTargetView != null) {
-            swipeTargetView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(AbsListView view, int scrollState) {
-                    if (view.getLastVisiblePosition() == view.getCount() - 1
-                            && !view.canScrollVertically(1)) {
-                        triggerLoadMore();
-                    }
-                    onListViewScrollStateChanged(view, scrollState);
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        getSwipeTargetView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (view.getLastVisiblePosition() == view.getCount() - 1
+                        && !view.canScrollVertically(1)) {
+                    triggerLoadMore();
                 }
+                onListViewScrollStateChanged(view, scrollState);
+            }
 
-                @Override
-                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                    onListViewScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-                }
-            });
-        }
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                onListViewScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+            }
+        });
     }
 
     protected void onListViewScrollStateChanged(AbsListView view, int scrollState) {
@@ -77,71 +58,27 @@ public class ListSwipeLoadActivity extends BaseSwipeLoadActivity<ListView> {
 
     }
 
-    /**
-     * @return 根布局view
-     */
-    public View getContentView() {
-        return mRootView;
-    }
-
-    /**
-     * setContentView 中的布局文件id
-     *
-     * @return
-     */
-    @LayoutRes
-    public int getContentViewId() {
-        return R.layout.view_base_listview_swipe_load;
+    @NonNull
+    @Override
+    public ListView getSwipeTargetView() {
+        return getContentView().findViewById(R.id.swipe_target);
     }
 
     @NonNull
     @Override
     public SwipeToLoadLayout getSwipeToLoadLayout() {
-        View contentView = getContentView();
-        if (contentView != null) {
-            return contentView.findViewById(R.id.swipeToLoadLayout);
-        }
-        return null;
+        return getContentView().findViewById(R.id.swipeToLoadLayout);
     }
-
-    @NonNull
-    @Override
-    public ListView getSwipeTargetView() {
-        View contentView = getContentView();
-        if (contentView != null) {
-            return contentView.findViewById(R.id.swipe_target);
-        }
-        return null;
-    }
-
 
     @NonNull
     @Override
     public RefreshHeaderView getRefreshHeaderView() {
-        View contentView = getContentView();
-        if (contentView != null) {
-            return contentView.findViewById(R.id.swipe_refresh_header);
-        }
-        return null;
+        return getContentView().findViewById(R.id.swipe_refresh_header);
     }
 
     @NonNull
     @Override
     public LoadMoreFooterView getLoadMoreFooterView() {
-        View contentView = getContentView();
-        if (contentView != null) {
-            return contentView.findViewById(R.id.swipe_load_more_footer);
-        }
-        return null;
-    }
-
-    @Override
-    public void onLoadMore() {
-
-    }
-
-    @Override
-    public void onRefresh() {
-
+        return getContentView().findViewById(R.id.swipe_load_more_footer);
     }
 }
