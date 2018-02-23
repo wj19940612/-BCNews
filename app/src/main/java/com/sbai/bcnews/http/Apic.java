@@ -18,17 +18,17 @@ public class Apic {
     public static final int DEFAULT_PAGE_SIZE = 20;
 
     /**
-     * /api/news-info/news/tag/{tag}
+     * /api/news-info/news/tag/{tag}/{id}
      * <p>(标签)相关资讯-----齐慕伟</p>
      *
      * @param tag
-     * @param page
+     * @param id
      * @return
      */
-    public static Api getRelatedNews(String tag, int page) {
-        return Api.get("/api/news-info/news/tag/{tag}",
+    public static Api getRelatedNews(String tag, String id) {
+        return Api.get("/api/news-info/news/tag/{tag}/{id}",
                 new ReqParams()
-                        .put("tag", tag));
+                        .put("tag", tag).put("id",id));
     }
 
     /**

@@ -164,6 +164,7 @@ public class NewsDetailActivity extends BaseActivity {
     private NewsDetail mNewsDetail;
     private NewsDetail mNetNewsDetail;//保证是网络更新的详情
     private String mChannel;
+    private String mTag;
 
     private int mTitleHeight;
     private boolean mTitleVisible;
@@ -190,6 +191,7 @@ public class NewsDetailActivity extends BaseActivity {
     private void initData() {
         mId = getIntent().getStringExtra(ExtraKeys.NEWS_ID);
         mChannel = getIntent().getStringExtra(ExtraKeys.CHANNEL);
+        mTag = getIntent().getStringExtra(ExtraKeys.TAG);
         mNewsDetail = NewsCache.getCacheForId(mId);
     }
 
@@ -516,8 +518,26 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void requestOtherArticle() {
+        if(!TextUtils.isEmpty(mChannel)){
+            requestOtherArticleWithChannel();
+        }else if(!TextUtils.isEmpty(mTag)){
+            requestOtherArticleWithTag();
+        }
+    }
+
+    private void requestOtherArticleWithChannel(){
         String encodeChannel = Uri.encode(mChannel);
         Apic.getOtherArticles(encodeChannel, mId).tag(TAG).callback(new Callback2D<Resp<List<OtherArticle>>, List<OtherArticle>>() {
+            @Override
+            protected void onRespSuccessData(List<OtherArticle> data) {
+                updateOtherData(data);
+            }
+        }).fireFreely();
+    }
+
+    private void requestOtherArticleWithTag(){
+        String encodeChannel = Uri.encode(mTag);
+        Apic.getRelatedNews(encodeChannel, mId).tag(TAG).callback(new Callback2D<Resp<List<OtherArticle>>, List<OtherArticle>>() {
             @Override
             protected void onRespSuccessData(List<OtherArticle> data) {
                 updateOtherData(data);
