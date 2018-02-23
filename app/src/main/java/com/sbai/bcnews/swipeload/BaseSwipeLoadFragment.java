@@ -44,6 +44,22 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
         }
     }
 
+    protected void stopFreshAnimation() {
+        if (mSwipeToLoadLayout != null) {
+            if (mSwipeToLoadLayout.isRefreshing()) {
+                mSwipeToLoadLayout.setRefreshing(false);
+            }
+        }
+    }
+
+    protected void stopLoadAnimation() {
+        if (mSwipeToLoadLayout != null) {
+            if (mSwipeToLoadLayout.isLoadingMore()) {
+                mSwipeToLoadLayout.setLoadingMore(false);
+            }
+        }
+    }
+
     @Override
     public void triggerRefresh() {
         if (mSwipeToLoadLayout != null) {
@@ -67,7 +83,7 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
         if (mLoadMoreFooterView != null) {
             mLoadMoreFooterView.setLoadMoreSuccess(msg);
         }
-        stopFreshOrLoadAnimation();
+        stopLoadAnimation();
     }
 
     public void refreshFailure() {
@@ -89,7 +105,7 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
         if (mRefreshHeaderView != null) {
             mRefreshHeaderView.refreshSuccess(msg);
         }
-        stopFreshOrLoadAnimation();
+        stopFreshAnimation();
     }
 
 
@@ -106,5 +122,4 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
             mSwipeToLoadLayout.setOnRefreshListener(this);
         }
     }
-
 }

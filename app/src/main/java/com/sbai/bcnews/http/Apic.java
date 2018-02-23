@@ -17,9 +17,18 @@ public class Apic {
 
     public static final int DEFAULT_PAGE_SIZE = 20;
 
-    public interface url {
-        String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
-        String QR_CODE = Api.getFixedHost() + "/qc.png";
+    /**
+     * /api/news-info/news/tag/{tag}
+     * <p>(标签)相关资讯-----齐慕伟</p>
+     *
+     * @param tag
+     * @param page
+     * @return
+     */
+    public static Api getRelatedNews(String tag, int page) {
+        return Api.get("/api/news-info/news/tag/{tag}",
+                new ReqParams()
+                        .put("tag", tag));
     }
 
     /**
@@ -394,5 +403,10 @@ public class Apic {
                         .put("type", klineType)
                         .put("startTime", startTime)
                         .put("limit", 100));
+    }
+
+    public interface url {
+        String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
+        String QR_CODE = Api.getFixedHost() + "/qc.png";
     }
 }

@@ -7,13 +7,10 @@ import java.util.List;
  */
 
 public class News {
+
     private List<NewsDetail> content;
 
     public List<NewsDetail> getContent() {
         return content;
-    }
-
-    public void setContent(List<NewsDetail> content) {
-        this.content = content;
     }
 }
