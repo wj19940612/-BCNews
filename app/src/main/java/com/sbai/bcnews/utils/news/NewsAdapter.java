@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.fragment.NewsFragment;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.utils.DateUtil;
@@ -28,7 +27,6 @@ import butterknife.ButterKnife;
  */
 
 public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int VIEW_TYPE_BANNER = -1;
 
     public interface OnItemClickListener {
         void onItemClick(NewsDetail newsDetail);
@@ -269,12 +267,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mLine.setVisibility(View.VISIBLE);
             }
-        }
-    }
-
-    static class BannerHolder extends RecyclerView.ViewHolder {
-        public BannerHolder(View itemView) {
-            super(itemView);
         }
     }
 }
