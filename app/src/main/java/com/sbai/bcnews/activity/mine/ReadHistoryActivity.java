@@ -100,7 +100,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
         if (mSet.isEmpty()) {
             mReadHistoryAdapter.clear();
         }
-        if (data.size() < Apic.NORMAL_PAGE_SIZE) {
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
             mPage++;
