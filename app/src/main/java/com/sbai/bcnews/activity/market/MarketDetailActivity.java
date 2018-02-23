@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.activity.RelatedNewsActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
@@ -286,6 +287,8 @@ public class MarketDetailActivity extends BaseActivity {
 
     @OnClick(R.id.checkRelatedNews)
     public void onViewClicked() {
-
+        Launcher.with(getActivity(), RelatedNewsActivity.class)
+                .putExtra(ExtraKeys.DIGITAL_CURRENCY, mMarketData)
+                .execute();
     }
 }

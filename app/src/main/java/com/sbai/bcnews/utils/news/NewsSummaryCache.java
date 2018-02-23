@@ -8,17 +8,10 @@ import com.google.gson.reflect.TypeToken;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.model.NewsDetail;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONTokener;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Queue;
 
 /**
  * Created by Administrator on 2018\1\30 0030.
@@ -32,12 +25,12 @@ public class NewsSummaryCache {
 
     private static Gson sGson = new Gson();
 
-    public static void markNewsSummarys(String channel, List<NewsDetail> newsDetails) {
+    public static void markNewsSummarys(String key, List<NewsDetail> newsDetails) {
         if (sNewsSummaryCache == null) {
             readFromPreference();
         }
 
-        ArrayList<NewsDetail> newsDetailList = sNewsSummaryCache.get(channel);
+        ArrayList<NewsDetail> newsDetailList = sNewsSummaryCache.get(key);
         if (newsDetailList != null) {
             if (newsDetailList.size() >= TOTAL_SUMMARY) {
                 newsDetailList.clear();
@@ -47,16 +40,16 @@ public class NewsSummaryCache {
             newsDetailList = new ArrayList<NewsDetail>();
             newsDetailList.addAll(newsDetailList);
         }
-        sNewsSummaryCache.put(channel, newsDetailList);
+        sNewsSummaryCache.put(key, newsDetailList);
         String news = sGson.toJson(sNewsSummaryCache);
         Preference.get().setNewsSummary(news);
     }
 
-    public static List<NewsDetail> getNewsSummaryCache(String channel) {
+    public static List<NewsDetail> getNewsSummaryCache(String key) {
         if (sNewsSummaryCache == null) {
             readFromPreference();
         }
-        ArrayList<NewsDetail> newsDetails = sNewsSummaryCache.get(channel);
+        ArrayList<NewsDetail> newsDetails = sNewsSummaryCache.get(key);
         if (newsDetails == null || newsDetails.size() == 0) {
             return null;
         }

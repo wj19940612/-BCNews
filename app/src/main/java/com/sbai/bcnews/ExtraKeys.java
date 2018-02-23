@@ -21,6 +21,7 @@ public interface ExtraKeys {
     String DIGITAL_CURRENCY = "digital_currency";
     String HEADER_COUNT = "header_count";
     String CHANNEL = "channel";
+    String TAG = "tag";
     String HAS_BANNER = "has_banner";
 
     String BITMAP_PATH = "bitmap_path";
