@@ -13,11 +13,11 @@
         android:layout_height="wrap_content"
         app:backFeature="true"
         app:rightText="@string/send"
-        app:rightTextColor="@color/primaryText"
+        app:rightTextColor="@color/blackPrimary"
         app:rightTextSize="15sp"
         app:rightVisible="true"
         app:titleText="@string/preview"
-        app:titleTextColor="@color/primaryText"/>
+        app:titleTextColor="@color/blackPrimary"/>
 
     <ImageView
         android:id="@+id/imageview"

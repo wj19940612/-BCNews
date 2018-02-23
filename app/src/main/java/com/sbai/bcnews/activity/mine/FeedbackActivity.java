@@ -2,6 +2,7 @@ package com.sbai.bcnews.activity.mine;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,7 +26,7 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.Feedback;
 import com.sbai.bcnews.model.LocalUser;
-import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
+import com.sbai.bcnews.swipeload.BaseSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ThumbTransform;
@@ -33,8 +34,11 @@ import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
+import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
+import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,7 +51,7 @@ import static com.sbai.bcnews.utils.DateUtil.FORMAT_HOUR_MINUTE;
  * 意见反馈`
  */
 
-public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
+public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.swipe_target)
@@ -60,19 +64,24 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
     ImageButton mAddPic;
     @BindView(R.id.send)
     TextView mSend;
+    @BindView(R.id.swipe_refresh_header)
+    RefreshHeaderView mSwipeRefreshHeader;
+    @BindView(R.id.swipe_load_more_footer)
+    LoadMoreFooterView mSwipeLoadMoreFooter;
+    @BindView(R.id.operateArea)
+    LinearLayout mOperateArea;
+    @BindView(R.id.rootView)
+    RelativeLayout mRootView;
     private FeedbackAdapter mFeedbackAdapter;
     int mPage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_feedback);
+        ButterKnife.bind(this);
         initViews();
         requestFeedbackData(true);
-    }
-
-    @Override
-    protected int getContentViewId() {
-        return R.layout.activity_feedback;
     }
 
     private void initViews() {
@@ -81,23 +90,13 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
         mRecyclerView.setAdapter(mFeedbackAdapter);
     }
 
-    @Override
-    public void onLoadMore() {
-
-    }
-
-    @Override
-    public void onRefresh() {
-        requestFeedbackData(false);
-    }
-
     private void requestFeedbackData(final boolean needScrollToLast) {
         Apic.requestFeedbackList(mPage)
                 .tag(TAG)
                 .callback(new Callback2D<Resp<List<Feedback>>, List<Feedback>>() {
                     @Override
                     protected void onRespSuccessData(List<Feedback> data) {
-                        //  updateFeedbackData(data);
+                        updateFeedbackData(data);
                     }
 
                     @Override
@@ -135,6 +134,10 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
                     }
                 })
                 .fire();
+    }
+
+    private void updateFeedbackData(List<Feedback> data) {
+        mFeedbackAdapter.addAllData(data);
     }
 
     private void updateTheLastMessage(List<Feedback> data, String content, int contentType) {
@@ -193,6 +196,40 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
         requestSendFeedback(content, contentType);
     }
 
+    @Override
+    public void onLoadMore() {
+//       requestFeedbackData();
+    }
+
+    @Override
+    public void onRefresh() {
+        requestFeedbackData(false);
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView getSwipeTargetView() {
+        return mRecyclerView;
+    }
+
+    @NonNull
+    @Override
+    public SwipeToLoadLayout getSwipeToLoadLayout() {
+        return mSwipeToLoadLayout;
+    }
+
+    @NonNull
+    @Override
+    public RefreshHeaderView getRefreshHeaderView() {
+        return mSwipeRefreshHeader;
+    }
+
+    @NonNull
+    @Override
+    public LoadMoreFooterView getLoadMoreFooterView() {
+        return mSwipeLoadMoreFooter;
+    }
+
     static class FeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private List<Feedback> dataList;
         private Context mContext;
@@ -204,7 +241,14 @@ public class FeedbackActivity extends RecycleViewSwipeLoadActivity {
         }
 
         public void addAllData(List<Feedback> feedbacks) {
-            dataList.addAll(feedbacks);
+            if (dataList.size() > 0) {
+                for (int i = 0; i < feedbacks.size(); i++) {
+                    dataList.add(0, feedbacks.get(i));
+                }
+            } else {
+                Collections.reverse(feedbacks);
+                dataList.addAll(feedbacks);
+            }
             notifyDataSetChanged();
         }
 

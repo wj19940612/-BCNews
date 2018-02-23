@@ -56,10 +56,6 @@ public class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<Recycler
 
     }
 
-    protected int getContentViewId() {
-        return R.layout.view_base_recycleview_swipe_load;
-    }
-
     protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

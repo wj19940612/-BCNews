@@ -38,7 +38,7 @@
         android:clickable="true"
         android:gravity="center"
         android:text="@string/take_phone_cancel"
-        android:textColor="@color/primaryText"
+        android:textColor="@color/blackPrimary"
         android:textSize="17sp"/>
 
 </LinearLayout>

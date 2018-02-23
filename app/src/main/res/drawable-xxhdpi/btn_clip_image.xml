@@ -19,7 +19,7 @@
                 android:bottomRightRadius="4dp"
                 android:topLeftRadius="0dp"
                 android:topRightRadius="0dp"/>
-            <solid android:color="@color/primaryText"/>
+            <solid android:color="@color/blackPrimary"/>
         </shape>
     </item>
 
@@ -30,7 +30,7 @@
                 android:bottomRightRadius="4dp"
                 android:topLeftRadius="0dp"
                 android:topRightRadius="0dp"/>
-            <solid android:color="@color/primaryText"/>
+            <solid android:color="@color/blackPrimary"/>
         </shape>
     </item>
 
