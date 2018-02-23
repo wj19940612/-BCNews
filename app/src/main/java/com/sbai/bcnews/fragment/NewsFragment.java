@@ -77,6 +77,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private boolean mHasBanner;
     private OnScrollListener mOnScrollListener;
     private String mChannel;
+    private boolean mIsVisible;
 
     public interface OnScrollListener {
         void onScroll(int dy);
@@ -116,8 +117,19 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+        loadCacheData();
         loadData(true);
         requestBanners();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mIsVisible = true;
+        } else {
+            mIsVisible = false;
+        }
     }
 
     private void initView() {
@@ -212,7 +224,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     refreshSuccess();
                 }
-                if (mNewsWraps.size() == 0 && (data.getContent() == null || data.getContent().size() == 0) && isVisible()) {
+                if (mNewsWraps.size() == 0 && (data.getContent() == null || data.getContent().size() == 0) && mIsVisible) {
                     ToastUtil.show(R.string.no_news);
                 }
                 updateData(data.getContent(), refresh);
@@ -222,7 +234,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             public void onFailure(ReqError reqError) {
                 super.onFailure(reqError);
                 refreshFailure();
-                loadCacheData();
             }
 
         }).fireFreely();

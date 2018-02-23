@@ -37,9 +37,6 @@ public class NewsSummaryCache {
             readFromPreference();
         }
 
-        if (sNewsSummaryCache.size() >= TOTAL_NEWSUMMARY) {
-            sNewsSummaryCache.clear();
-        }
         ArrayList<NewsDetail> newsDetailList = sNewsSummaryCache.get(channel);
         if (newsDetailList != null) {
             if (newsDetailList.size() >= TOTAL_NEWSUMMARY) {
@@ -47,7 +44,8 @@ public class NewsSummaryCache {
             }
             newsDetailList.addAll(newsDetails);
         } else {
-            new ArrayList<NewsDetail>().addAll(newsDetails);
+            newsDetailList = new ArrayList<NewsDetail>();
+            newsDetailList.addAll(newsDetailList);
         }
         sNewsSummaryCache.put(channel, newsDetailList);
         String news = sGson.toJson(sNewsSummaryCache);
@@ -63,9 +61,9 @@ public class NewsSummaryCache {
             return null;
         }
         if (NEED_NUM > newsDetails.size()) {
-            return newsDetails.subList(0, sNewsSummaryCache.size() - 1);
+            return newsDetails.subList(0, newsDetails.size() - 1);
         }
-        return newsDetails.subList(sNewsSummaryCache.size() - NEED_NUM, sNewsSummaryCache.size() - 1);
+        return newsDetails.subList(newsDetails.size() - NEED_NUM, newsDetails.size() - 1);
     }
 
     private static void readFromPreference() {
