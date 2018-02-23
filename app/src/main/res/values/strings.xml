@@ -41,7 +41,7 @@
 
 
     <!-- WebView network error -->
-    <string name="check_your_net">请检查您的网络设置，并刷新！</string>
+    <string name="check_your_net">加载失败，请检查网络后重试</string>
     <string name="network_error_please_reload">网络连接失败 请重新加载</string>
     <string name="refresh">刷新</string>
     <string name="android_web_agent">ANDROID_AGENT</string>

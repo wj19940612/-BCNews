@@ -536,8 +536,8 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void requestOtherArticleWithTag(){
-        String encodeChannel = Uri.encode(mTag);
-        Apic.getRelatedNewsRecommend(encodeChannel, mId).tag(TAG).callback(new Callback2D<Resp<List<OtherArticle>>, List<OtherArticle>>() {
+        String encodeTag = Uri.encode(mTag);
+        Apic.getRelatedNewsRecommend(encodeTag, mId).tag(TAG).callback(new Callback2D<Resp<List<OtherArticle>>, List<OtherArticle>>() {
             @Override
             protected void onRespSuccessData(List<OtherArticle> data) {
                 updateOtherData(data);

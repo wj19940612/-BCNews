@@ -224,9 +224,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     refreshSuccess();
                 }
-                if (mNewsWraps.size() == 0 && (data.getContent() == null || data.getContent().size() == 0) && mIsVisible) {
-                    ToastUtil.show(R.string.no_news);
-                }
                 updateData(data.getContent(), refresh);
             }
 
