@@ -24,14 +24,14 @@ import butterknife.ButterKnife;
 
 public abstract class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity<RecyclerView> {
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
-        if (getSwipeTargetView() != null) {
-            getSwipeTargetView().addOnScrollListener(mOnScrollListener);
-        }
-    }
+//    @Override
+//    protected void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        ButterKnife.bind(this);
+//        if (getSwipeTargetView() != null) {
+//            getSwipeTargetView().addOnScrollListener(mOnScrollListener);
+//        }
+//    }
 
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

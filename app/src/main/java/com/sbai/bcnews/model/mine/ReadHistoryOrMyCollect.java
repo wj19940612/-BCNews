@@ -52,7 +52,7 @@ public class ReadHistoryOrMyCollect {
     private long readerTime;       //需要阅读时间
     private int collected;
     private long createTime;
-    private long dataId;
+    private String dataId;
     private String id;
     private int isRead;
     private int original;  //是否原创
@@ -89,11 +89,11 @@ public class ReadHistoryOrMyCollect {
         this.createTime = createTime;
     }
 
-    public long getDataId() {
+    public String getDataId() {
         return dataId;
     }
 
-    public void setDataId(long dataId) {
+    public void setDataId(String dataId) {
         this.dataId = dataId;
     }
 
