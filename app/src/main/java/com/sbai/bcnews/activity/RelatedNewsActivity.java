@@ -98,7 +98,7 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
                         .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId())
                         .putExtra(ExtraKeys.TAG, mTag).execute();
             }
-        });
+        }, true);
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeTarget.setAdapter(mNewsAdapter);
         mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {

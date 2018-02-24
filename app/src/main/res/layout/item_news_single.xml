@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    android:id="@+id/rootView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_news_item"
-    android:id="@+id/rootView">
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/splitView"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/contentRL"
@@ -26,27 +33,25 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/img"
             android:layout_marginRight="12dp"
-            android:maxLines="3"
+            android:layout_toLeftOf="@+id/img"
             android:ellipsize="end"
+            android:maxLines="3"
             android:textColor="@color/text"
             android:textSize="16sp"/>
-
-
 
         <TextView
             android:id="@+id/original"
             android:layout_width="44dp"
             android:layout_height="16dp"
             android:layout_below="@+id/title"
-            android:layout_marginTop="22dp"
             android:layout_marginRight="18dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/bg_original"
+            android:gravity="center"
+            android:text="@string/original"
             android:textColor="@color/textColorPrimary"
             android:textSize="12sp"
-            android:gravity="center"
-            android:background="@drawable/bg_original"
-            android:text="@string/original"
             android:visibility="gone"/>
 
         <TextView
@@ -56,29 +61,28 @@
             android:layout_below="@+id/title"
             android:layout_marginTop="22dp"
             android:layout_toRightOf="@+id/original"
-            android:textColor="@color/unluckyText"
-            android:textSize="12sp"
             android:gravity="center"
-            android:text="@string/original"/>
+            android:text="@string/original"
+            android:textColor="@color/unluckyText"
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/title"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="22dp"
             android:layout_toRightOf="@+id/source"
-            android:layout_marginLeft="8dp"
-            android:textColor="@color/unluckyText"
-            android:textSize="12sp"
             android:gravity="center"
-            android:text="@string/original"/>
+            android:text="@string/original"
+            android:textColor="@color/unluckyText"
+            android:textSize="12sp"/>
     </RelativeLayout>
+
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/background"
-        android:layout_below="@+id/contentRL"/>
-
-</RelativeLayout>
+        android:background="@color/background"/>
+</LinearLayout>
