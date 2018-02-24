@@ -49,7 +49,7 @@ public class ReadHistoryOrMyCollect {
 //
 
     private long collectTime;      //收藏时间
-    private long readerTime;       //需要阅读时间
+    private long readTime;       //需要阅读时间
     private int collected;
     private long createTime;
     private String dataId;
@@ -161,12 +161,12 @@ public class ReadHistoryOrMyCollect {
         this.userId = userId;
     }
 
-    public long getReaderTime() {
-        return readerTime;
+    public long getReadTime() {
+        return readTime;
     }
 
-    public void setReaderTime(long readerTime) {
-        this.readerTime = readerTime;
+    public void setReadTime(long readTime) {
+        this.readTime = readTime;
     }
 
     public List<String> getImgs() {

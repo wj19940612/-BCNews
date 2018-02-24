@@ -230,15 +230,15 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
             } else {
                 holder.itemView.setTag(HAS_STICKY_VIEW);
             }
-            holder.itemView.setContentDescription(DateUtil.formatMonth(mReadHistoryOrMyCollectList.get(position).getReaderTime()));
+            holder.itemView.setContentDescription(DateUtil.formatMonth(mReadHistoryOrMyCollectList.get(position).getReadTime()));
         }
 
         private boolean isTheSameDayNews(int position) {
             if (position == 0) return false;
             ReadHistoryOrMyCollect last = mReadHistoryOrMyCollectList.get(position - 1);
             ReadHistoryOrMyCollect nex = mReadHistoryOrMyCollectList.get(position);
-            long createTime = last.getReaderTime();
-            long nexTime = nex.getReaderTime();
+            long createTime = last.getReadTime();
+            long nexTime = nex.getReadTime();
             return DateUtil.isInThisDay(nexTime, createTime);
         }
 
@@ -285,7 +285,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
                     mAdsorbText.setVisibility(View.GONE);
                 } else {
                     mAdsorbText.setVisibility(View.VISIBLE);
-                    mAdsorbText.setText(DateUtil.formatNewsStyleTime(item.getReaderTime()));
+                    mAdsorbText.setText(DateUtil.formatNewsStyleTime(item.getReadTime()));
                 }
 
                 mNewsTitle.setText(item.getTitle());
@@ -326,7 +326,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
                     mAdsorbText.setVisibility(View.GONE);
                 } else {
                     mAdsorbText.setVisibility(View.VISIBLE);
-                    mAdsorbText.setText(DateUtil.formatNewsStyleTime(item.getReaderTime()));
+                    mAdsorbText.setText(DateUtil.formatNewsStyleTime(item.getReadTime()));
                 }
 
                 mNewsTitle.setText(item.getTitle());

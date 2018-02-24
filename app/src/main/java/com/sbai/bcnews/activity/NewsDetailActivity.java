@@ -693,7 +693,7 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void saveDetailCache() {
-        if (mNewsDetail != null && mNetNewsDetail != null && mNewsDetail.getCreateTime() != mNetNewsDetail.getCreateTime()) {
+        if (mNewsDetail != null && mNetNewsDetail != null && mNewsDetail.getUpdateTime() != mNetNewsDetail.getUpdateTime()) {
             mNetNewsDetail.setReadTime(System.currentTimeMillis());
             NewsCache.insertOrReplaceNews(mNetNewsDetail);
             new CacheThread(mNetNewsDetail).start();
