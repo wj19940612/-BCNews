@@ -325,4 +325,9 @@ public class Apic {
         return Api.post("/api/news-user/user/update",
                 new ReqParams().put("userPortrait", data));
     }
+
+    public static Api uploadImage(String picture) {
+        return Api.post("/api/news-user/upload/image.do",
+                new ReqParams().put("picture", picture));
+    }
 }

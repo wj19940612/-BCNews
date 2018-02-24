@@ -2,40 +2,43 @@ package com.sbai.bcnews.activity.mine;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.fragment.UploadImageDialogFragment;
+import com.sbai.bcnews.fragment.dialog.PreviewDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.Feedback;
+import com.sbai.bcnews.model.FeedbackResp;
 import com.sbai.bcnews.model.LocalUser;
-import com.sbai.bcnews.swipeload.BaseSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ThumbTransform;
+import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
-import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
-import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,35 +48,40 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.sbai.bcnews.model.Feedback.CONTENT_TYPE_PICTURE;
+import static com.sbai.bcnews.model.Feedback.CONTENT_TYPE_TEXT;
 import static com.sbai.bcnews.utils.DateUtil.FORMAT_HOUR_MINUTE;
 
 /**
  * 意见反馈`
  */
 
-public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
+public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, AbsListView.OnScrollListener {
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.swipe_target)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.swipeToLoadLayout)
-    SwipeToLoadLayout mSwipeToLoadLayout;
+    @BindView(android.R.id.list)
+    ListView mListView;
+    @BindView(android.R.id.empty)
+    TextView mEmpty;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.commentContent)
     EditText mCommentContent;
     @BindView(R.id.addPic)
     ImageButton mAddPic;
     @BindView(R.id.send)
     TextView mSend;
-    @BindView(R.id.swipe_refresh_header)
-    RefreshHeaderView mSwipeRefreshHeader;
-    @BindView(R.id.swipe_load_more_footer)
-    LoadMoreFooterView mSwipeLoadMoreFooter;
     @BindView(R.id.operateArea)
     LinearLayout mOperateArea;
     @BindView(R.id.rootView)
     RelativeLayout mRootView;
+
+    private int mPage = 0;
+    private boolean mLoadMoreEnable = true;
+
+    private List<Feedback> mFeedbackList;
     private FeedbackAdapter mFeedbackAdapter;
-    int mPage;
+    private boolean firstLoadData = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,18 +93,33 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
     }
 
     private void initViews() {
-        mFeedbackAdapter = new FeedbackAdapter(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mFeedbackAdapter);
+        InputFilter[] filters = new InputFilter[1];
+        filters[0] = new InputFilter.LengthFilter(200);
+        mCommentContent.setFilters(filters);
+        mCommentContent.addTextChangedListener(mContentWatcher);
+        mFeedbackList = new ArrayList<>();
+        mFeedbackAdapter = new FeedbackAdapter(this, mFeedbackList);
+        mListView.setAdapter(mFeedbackAdapter);
+        mListView.setOnScrollListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSend.setEnabled(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCommentContent.removeTextChangedListener(mContentWatcher);
     }
 
     private void requestFeedbackData(final boolean needScrollToLast) {
         Apic.requestFeedbackList(mPage)
                 .tag(TAG)
-                .callback(new Callback2D<Resp<List<Feedback>>, List<Feedback>>() {
+                .callback(new Callback2D<Resp<FeedbackResp<List<Feedback>>>, FeedbackResp<List<Feedback>>>() {
                     @Override
-                    protected void onRespSuccessData(List<Feedback> data) {
-                        updateFeedbackData(data);
+                    protected void onRespSuccessData(FeedbackResp<List<Feedback>> data) {
+                        if (data.getContent() != null) {
+                            updateFeedbackList(data.getContent(), needScrollToLast);
+                        }
                     }
 
                     @Override
@@ -107,11 +130,49 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
                     @Override
                     public void onFinish() {
                         super.onFinish();
-                        stopFreshOrLoadAnimation();
+                        stopRefreshAnimation();
                     }
                 })
                 .fire();
     }
+
+    private void listViewScrollBottom() {
+        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        mListView.setStackFromBottom(true);
+    }
+
+    private void createServiceTalk(List<Feedback> data) {
+        Feedback feedback = new Feedback();
+        feedback.setType(1);
+        feedback.setContent(getString(R.string.send_message_connect));
+        feedback.setCreateTime(System.currentTimeMillis());
+        data.add(0, feedback);
+    }
+
+    private void updateFeedbackList(List<Feedback> data, boolean needScrollToLast) {
+        if (data.size() < Apic.NORMAL_PAGE_SIZE) {
+            mLoadMoreEnable = false;
+            mSwipeRefreshLayout.setEnabled(false);
+        } else {
+            mPage++;
+        }
+        if (firstLoadData) {
+            //自己创建一个客服对话
+            createServiceTalk(data);
+            firstLoadData = false;
+        }
+        mFeedbackAdapter.addFeedbackList(data);
+        if (needScrollToLast) {
+            mListView.setSelection(View.FOCUS_DOWN);
+            mListView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mListView.setSelection(View.FOCUS_DOWN);
+                }
+            }, 240);
+        }
+    }
+
 
     private void requestSendFeedback(final String content, final int contentType) {
         Apic.requestSendFeedback(content, contentType).tag(TAG)
@@ -127,33 +188,20 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
     private void refreshChatList(final String content, final int contentType) {
         Apic.requestFeedbackList(0)
                 .tag(TAG)
-                .callback(new Callback2D<Resp<List<Feedback>>, List<Feedback>>() {
+                .callback(new Callback2D<Resp<FeedbackResp<List<Feedback>>>, FeedbackResp<List<Feedback>>>() {
                     @Override
-                    protected void onRespSuccessData(List<Feedback> data) {
-                        updateTheLastMessage(data, content, contentType);
+                    protected void onRespSuccessData(FeedbackResp<List<Feedback>> data) {
+                        if (data.getContent() != null) {
+                            updateTheLastMessage(data.getContent(), content, contentType);
+                        }
                     }
                 })
                 .fire();
     }
 
-    private void updateFeedbackData(List<Feedback> data) {
-        mFeedbackAdapter.addAllData(data);
-    }
-
-    private void updateTheLastMessage(List<Feedback> data, String content, int contentType) {
-        if (data.isEmpty()) return;
-        Feedback feedback = data.get(0);
-        mFeedbackAdapter.addData(feedback);
-
-        mRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mRecyclerView.scrollToPosition(mFeedbackAdapter.getItemCount() - 1);
-            }
-        }, 240);
-        if (contentType == Feedback.CONTENT_TYPE_TEXT) {
-            feedback.setContent(content);
-            mCommentContent.setText("");
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -162,6 +210,9 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
         switch (view.getId()) {
             case R.id.addPic:
                 if (LocalUser.getUser().isLogin()) {
+                    if (mFeedbackAdapter.getCount() > 6) {
+                        listViewScrollBottom();
+                    }
                     sendPicToCustomer();
                 } else {
                     Launcher.with(getActivity(), LoginActivity.class).execute();
@@ -169,10 +220,11 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
                 break;
             case R.id.send:
                 if (LocalUser.getUser().isLogin()) {
-                    String content = mCommentContent.getText().toString().trim();
-                    if (!TextUtils.isEmpty(content)) {
-                        requestSendFeedback(content, Feedback.CONTENT_TYPE_TEXT);
+                    if (mFeedbackAdapter.getCount() > 6) {
+                        listViewScrollBottom();
                     }
+                    String content = mCommentContent.getText().toString().trim();
+                    requestSendFeedback(content, CONTENT_TYPE_TEXT);
                 } else {
                     Launcher.with(getActivity(), LoginActivity.class).execute();
                 }
@@ -192,13 +244,14 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
 
     private void sendFeedbackImage(final String path) {
         String content = ImageUtils.compressImageToBase64(path, getActivity());
-        int contentType = Feedback.CONTENT_TYPE_PICTURE;
-        requestSendFeedback(content, contentType);
-    }
-
-    @Override
-    public void onLoadMore() {
-//       requestFeedbackData();
+        Apic.uploadImage(content).tag(TAG)
+                .callback(new Callback2D<Resp<String>, String>() {
+                    @Override
+                    protected void onRespSuccessData(String data) {
+                        requestSendFeedback(data, CONTENT_TYPE_PICTURE);
+                    }
+                })
+                .fire();
     }
 
     @Override
@@ -206,126 +259,168 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
         requestFeedbackData(false);
     }
 
-    @NonNull
+
     @Override
-    public RecyclerView getSwipeTargetView() {
-        return mRecyclerView;
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+
     }
 
-    @NonNull
     @Override
-    public SwipeToLoadLayout getSwipeToLoadLayout() {
-        return mSwipeToLoadLayout;
+    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int topRowVerticalPosition =
+                (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
+        if (mLoadMoreEnable) {
+//            mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
+            if (firstVisibleItem == 0 && topRowVerticalPosition >= 0) {
+                mSwipeRefreshLayout.setEnabled(true);
+            } else {
+                if (!mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setEnabled(false);
+                }
+            }
+
+        }
     }
 
-    @NonNull
-    @Override
-    public RefreshHeaderView getRefreshHeaderView() {
-        return mSwipeRefreshHeader;
+    private void updateTheLastMessage(List<Feedback> data, String content, int contentType) {
+        if (data.isEmpty()) return;
+        Feedback feedback = data.get(0);
+        mFeedbackAdapter.addFeedbackItem(feedback);
+
+        mListView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mListView.setSelection(mFeedbackAdapter.getCount() - 1);
+            }
+        }, 240);
+        if (contentType == CONTENT_TYPE_TEXT) {
+            feedback.setContent(content);
+            mCommentContent.setText("");
+        }
     }
 
-    @NonNull
-    @Override
-    public LoadMoreFooterView getLoadMoreFooterView() {
-        return mSwipeLoadMoreFooter;
-    }
+    private ValidationWatcher mContentWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (TextUtils.isEmpty(mCommentContent.getText().toString().trim())) {
+                mSend.setEnabled(false);
+            } else {
+                mSend.setEnabled(true);
+            }
+        }
+    };
 
-    static class FeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        private List<Feedback> dataList;
+
+    static class FeedbackAdapter extends BaseAdapter {
+
+        public static final int TYPE_USER = 0;
+        public static final int TYPE_CUSTOMER = 1;
+
         private Context mContext;
+        private List<Feedback> mFeedbackList;
 
-        public FeedbackAdapter(Context context) {
-            super();
+        public FeedbackAdapter(Context context, List<Feedback> list) {
             mContext = context;
-            dataList = new ArrayList<>();
+            mFeedbackList = list;
         }
 
-        public void addAllData(List<Feedback> feedbacks) {
-            if (dataList.size() > 0) {
-                for (int i = 0; i < feedbacks.size(); i++) {
-                    dataList.add(0, feedbacks.get(i));
+        public void addFeedbackList(List<Feedback> list) {
+            int length = list.size();
+            //如果原来已经有数据 则倒序插入
+            if (mFeedbackList.size() > 0) {
+                for (int i = 0; i < length; i++) {
+                    mFeedbackList.add(0, list.get(i));
                 }
             } else {
-                Collections.reverse(feedbacks);
-                dataList.addAll(feedbacks);
+                Collections.reverse(list);
+                mFeedbackList.addAll(list);
             }
             notifyDataSetChanged();
         }
 
-        public void addData(Feedback feedback) {
-            dataList.add(feedback);
+        public void addFeedbackItem(Feedback feedback) {
+            mFeedbackList.add(feedback);
             notifyDataSetChanged();
-        }
-
-        public void addFirst(Feedback newsFlash) {
-            dataList.add(0, newsFlash);
-            notifyItemInserted(0);
-        }
-
-        public void clear() {
-            dataList.clear();
-            notifyDataSetChanged();
-        }
-
-        public void refresh() {
-            notifyDataSetChanged();
-        }
-
-        public boolean isEmpty() {
-            return dataList.isEmpty();
-        }
-
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof UserViewHolder) {
-                ((UserViewHolder) holder).bindingData(dataList.get(position), needTitle(position), mContext);
-            } else if (holder instanceof CustomerViewHolder) {
-                ((CustomerViewHolder) holder).bindingData(dataList.get(position), needTitle(position), mContext);
-            }
 
         }
 
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            switch (viewType) {
-                case Feedback.TYPE_USER:
-                    View userView = LayoutInflater.from(mContext).inflate(R.layout.row_feedback_user, parent, false);
-                    return new UserViewHolder(userView);
-                case Feedback.TYPE_CUSTOMER:
-                    View customerView = LayoutInflater.from(mContext).inflate(R.layout.row_feedback_customer, parent, false);
-                    return new CustomerViewHolder(customerView);
-                default:
-                    return null;
-            }
+        public int getCount() {
+            return mFeedbackList.size();
         }
 
         @Override
-        public int getItemCount() {
-            return dataList.size();
+        public Object getItem(int position) {
+            return mFeedbackList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
         }
 
         @Override
         public int getItemViewType(int position) {
-            return dataList.get(position).getType();
+            if (mFeedbackList.get(position).getType() == TYPE_USER) {
+                return TYPE_USER;
+            } else {
+                return TYPE_CUSTOMER;
+            }
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return 2;
         }
 
         private boolean needTitle(int position) {
             if (position == 0) {
                 return true;
             }
+
             if (position < 0) {
                 return false;
             }
-            Feedback pre = dataList.get(position - 1);
-            Feedback next = dataList.get(position);
+
+            Feedback pre = mFeedbackList.get(position - 1);
+            Feedback next = mFeedbackList.get(position);
             //判断两个时间在不在一天内  不是就要显示标题
-            long preTime = pre.getCreateDate();
-            long nextTime = next.getCreateDate();
+            long preTime = pre.getCreateTime();
+            long nextTime = next.getCreateTime();
             return !DateUtil.isToday(nextTime, preTime);
         }
 
-        static class UserViewHolder extends RecyclerView.ViewHolder {
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            UserViewHolder userViewHolder = null;
+            CustomerViewHolder customerViewHolder = null;
+            switch (getItemViewType(position)) {
+                case TYPE_USER:
+                    if (convertView == null) {
+                        convertView = LayoutInflater.from(mContext).inflate(R.layout.row_feedback_user, null);
+                        userViewHolder = new UserViewHolder(convertView);
+                        convertView.setTag(userViewHolder);
+                    } else {
+                        userViewHolder = (UserViewHolder) convertView.getTag();
+                    }
+                    userViewHolder.bindingData(mFeedbackList.get(position), needTitle(position), mContext);
+                    break;
+                case TYPE_CUSTOMER:
+                    if (convertView == null) {
+                        convertView = LayoutInflater.from(mContext).inflate(R.layout.row_feedback_customer, null);
+                        customerViewHolder = new CustomerViewHolder(convertView);
+                        convertView.setTag(customerViewHolder);
+                    } else {
+                        customerViewHolder = (CustomerViewHolder) convertView.getTag();
+                    }
+                    customerViewHolder.bindingData(mFeedbackList.get(position), needTitle(position), mContext);
+                    break;
+            }
+            return convertView;
+        }
+
+
+        static class UserViewHolder {
             @BindView(R.id.endLineTime)
             TextView mEndLineTime;
             @BindView(R.id.timeLayout)
@@ -343,37 +438,20 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
 
 
             public UserViewHolder(View itemView) {
-                super(itemView);
                 ButterKnife.bind(this, itemView);
             }
 
             private void bindingData(final Feedback feedback, boolean needTitle, final Context context) {
                 if (needTitle) {
                     mTimeLayout.setVisibility(View.VISIBLE);
-                    if (feedback.getCreateDate() > 0) {
-                        mEndLineTime.setText(DateUtil.getFeedbackFormatTime(feedback.getCreateDate()));
-                    } else {
-                        long time = System.currentTimeMillis();
-                        if (!TextUtils.isEmpty(feedback.getCreateTime())) {
-                            time = DateUtil.convertString2Long(feedback.getCreateTime(), DateUtil.DEFAULT_FORMAT);
-                        }
-                        mEndLineTime.setText(DateUtil.getFeedbackFormatTime(time));
-                    }
+                    mEndLineTime.setText(DateUtil.getFeedbackFormatTime(feedback.getCreateTime()));
+
                 } else {
                     mTimeLayout.setVisibility(View.GONE);
                 }
-                if (feedback.getCreateDate() > 0) {
-                    mTimestamp.setText(DateUtil.format(feedback.getCreateDate(), FORMAT_HOUR_MINUTE));
-                } else {
-                    long time = System.currentTimeMillis();
-                    if (!TextUtils.isEmpty(feedback.getCreateTime())) {
-                        time = DateUtil.convertString2Long(feedback.getCreateTime(), DateUtil.DEFAULT_FORMAT);
-                    }
-                    mTimestamp.setText(DateUtil.format(time, FORMAT_HOUR_MINUTE));
-                }
-
+                mTimestamp.setText(DateUtil.format(feedback.getCreateTime(), FORMAT_HOUR_MINUTE));
                 //判断是否图片
-                if (feedback.getContentType() == Feedback.CONTENT_TYPE_TEXT) {
+                if (feedback.getContentType() == CONTENT_TYPE_TEXT) {
                     mText.setVisibility(View.VISIBLE);
                     mImage.setVisibility(View.GONE);
                     mText.setText(feedback.getContent());
@@ -400,10 +478,10 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
                     mImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            if (feedback.getContentType() == CONTENT_TYPE_PICTURE) {
-//                                PreviewDialogFragment.newInstance(feedback.getContent())
-//                                        .show(((FeedbackActivity) context).getSupportFragmentManager());
-//                            }
+                            if (feedback.getContentType() == CONTENT_TYPE_PICTURE) {
+                                PreviewDialogFragment.newInstance(feedback.getContent())
+                                        .show(((FeedbackActivity) context).getSupportFragmentManager());
+                            }
                         }
                     });
                 }
@@ -411,7 +489,7 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
 
         }
 
-        static class CustomerViewHolder extends RecyclerView.ViewHolder {
+        static class CustomerViewHolder {
             @BindView(R.id.endLineTime)
             TextView mEndLineTime;
             @BindView(R.id.timeLayout)
@@ -424,37 +502,21 @@ public class FeedbackActivity extends BaseSwipeLoadActivity<RecyclerView> {
             TextView mText;
 
             public CustomerViewHolder(View view) {
-                super(view);
                 ButterKnife.bind(this, view);
             }
 
             private void bindingData(Feedback feedback, boolean needTitle, Context context) {
                 if (needTitle) {
                     mTimeLayout.setVisibility(View.VISIBLE);
-                    //不是很清楚时间戳为何要用两个。。。。。。。。。。。。。。。。。。。。。。。。。。。。
-                    if (feedback.getCreateDate() > 0) {
-                        mEndLineTime.setText(DateUtil.getFeedbackFormatTime(feedback.getCreateDate()));
-                    } else {
-                        long time = System.currentTimeMillis();
-                        if (!TextUtils.isEmpty(feedback.getCreateTime())) {
-                            time = DateUtil.convertString2Long(feedback.getCreateTime(), DateUtil.DEFAULT_FORMAT);
-                        }
-                        mEndLineTime.setText(DateUtil.getFeedbackFormatTime(time));
-                    }
+                    mEndLineTime.setText(DateUtil.getFeedbackFormatTime(feedback.getCreateTime()));
+
                 } else {
                     mTimeLayout.setVisibility(View.GONE);
                 }
-                if (feedback.getCreateDate() > 0) {
-                    mTimestamp.setText(DateUtil.format(feedback.getCreateDate(), FORMAT_HOUR_MINUTE));
-                } else {
-                    long time = System.currentTimeMillis();
-                    if (!TextUtils.isEmpty(feedback.getCreateTime())) {
-                        time = DateUtil.convertString2Long(feedback.getCreateTime(), DateUtil.DEFAULT_FORMAT);
-                    }
-                    mTimestamp.setText(DateUtil.format(time, FORMAT_HOUR_MINUTE));
-                }
+                mTimestamp.setText(DateUtil.format(feedback.getCreateTime(), FORMAT_HOUR_MINUTE));
                 mText.setText(feedback.getContent());
-                GlideApp.with(context).load(R.drawable.ic_feedback_service)
+                GlideApp.with(context).load(feedback.getReplyUserPortrait())
+                        .placeholder(R.drawable.ic_feedback_service)
                         .circleCrop()
                         .into(mHeadImage);
             }

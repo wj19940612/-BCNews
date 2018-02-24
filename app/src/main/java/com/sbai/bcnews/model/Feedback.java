@@ -6,11 +6,8 @@ package com.sbai.bcnews.model;
 
 public class Feedback {
 
-    public static int CONTENT_TYPE_TEXT = 1;
-    public static int CONTENT_TYPE_PICTURE = 2;
-
-    public static final int TYPE_USER = 0;
-    public static final int TYPE_CUSTOMER = 1;
+    public static int CONTENT_TYPE_TEXT = 0;
+    public static int CONTENT_TYPE_PICTURE = 1;
 
 
     /**
@@ -27,10 +24,10 @@ public class Feedback {
      */
 
     private String replyName;
+    private String replyUserPortrait;
     private String content;
     private int contentType;
-    private long createDate;
-    private String createTime;
+    private long createTime;
     private int id;
     private int status;
     private int type;
@@ -39,11 +36,19 @@ public class Feedback {
     private String userPortrait;
     private String portrait;
 
-    public String getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public String getReplyUserPortrait() {
+        return replyUserPortrait;
+    }
+
+    public void setReplyUserPortrait(String replyUserPortrait) {
+        this.replyUserPortrait = replyUserPortrait;
+    }
+
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 
@@ -77,14 +82,6 @@ public class Feedback {
 
     public void setContentType(int contentType) {
         this.contentType = contentType;
-    }
-
-    public long getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(long createDate) {
-        this.createDate = createDate;
     }
 
     public int getId() {

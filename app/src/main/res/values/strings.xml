@@ -200,4 +200,5 @@
     <string name="set_nick_name">设置昵称</string>
     <string name="please_input_nick_name">请输入昵称</string>
     <string name="update_success">修改成功</string>
+    <string name="send_message_connect">您好，欢迎反馈！反馈时附上界面截屏，可以更好地给我们反馈问题哦~</string>
 </resources>

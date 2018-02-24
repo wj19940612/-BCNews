@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,38 +18,43 @@
         app:titleText="@string/bcnews_team"
         app:titleTextColor="@color/blackPrimary"/>
 
-    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
-        android:id="@+id/swipeToLoadLayout"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_above="@+id/operateArea"
         android:layout_below="@+id/titleBar"
-        app:default_to_loading_more_scrolling_duration="500"
-        app:load_more_complete_delay_duration="0"
-        app:load_more_final_drag_offset="@dimen/load_more_final_offset_google"
-        app:load_more_trigger_offset="@dimen/load_more_trigger_offset_google"
-        app:refresh_final_drag_offset="@dimen/refresh_final_offset_google"
-        app:refresh_trigger_offset="@dimen/refresh_trigger_offset_google"
-        app:swipe_style="classic">
+        android:layout_weight="1"
+        android:background="@color/background">
 
-        <com.zcmrr.swipelayout.header.RefreshHeaderView
-            android:id="@+id/swipe_refresh_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/swipe_target"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background"
-            android:clipToPadding="false"
-            android:paddingTop="12dp"/>
+            android:orientation="vertical">
 
-        <com.zcmrr.swipelayout.foot.LoadMoreFooterView
-            android:id="@+id/swipe_load_more_footer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background"
+                android:clipToPadding="false"
+                android:divider="@null"
+                android:listSelector="@android:color/transparent"
+                android:paddingBottom="10dp"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@android:id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:drawablePadding="10dp"
+                android:gravity="center_horizontal"
+                android:paddingTop="150dp"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/operateArea"
@@ -81,7 +87,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1.1"
             android:background="@null"
-            android:src="@drawable/ic_share_qq"/>
+            android:src="@drawable/ic_opinion_addpic"/>
 
 
         <View
@@ -89,14 +95,21 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:background="@color/split"/>
+            android:background="@color/split"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/send"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1.1"
+            android:background="@drawable/btn_send"
             android:gravity="center"
+            android:text="@string/send"
+            android:textColor="@android:color/white"
             android:textSize="15sp"
             android:visibility="visible"/>
     </LinearLayout>
