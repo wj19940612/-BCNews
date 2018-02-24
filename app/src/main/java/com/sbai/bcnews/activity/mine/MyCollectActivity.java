@@ -14,12 +14,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.ThreeImageLayout;
@@ -60,8 +63,6 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         setContentView(R.layout.activity_my_collect);
         ButterKnife.bind(this);
         initView();
-
-        requestCollectNews();
     }
 
     private void initView() {
@@ -108,6 +109,12 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 mMyCollectAdapter.add(readHistoryOrMyCollect);
             }
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        onRefresh();
     }
 
     @Override
@@ -217,7 +224,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(final ReadHistoryOrMyCollect item, int position, Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener) {
+            public void bindDataWithView(final ReadHistoryOrMyCollect item, int position, final Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener) {
 
                 if (position == 0) {
                     mFirstSplit.setVisibility(View.VISIBLE);
@@ -225,11 +232,13 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                     mFirstSplit.setVisibility(View.GONE);
                 }
 
-                mContentRoot.setOnLongClickListener(new View.OnLongClickListener() {
+                mContentRoot.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
-                        ToastUtil.show(item.getTitle());
-                        return false;
+                    public void onClick(View v) {
+                        Launcher.with(context, NewsDetailActivity.class)
+                                .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
+                                .putExtra(ExtraKeys.TAG, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
+                                .execute();
                     }
                 });
 
@@ -268,18 +277,20 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(final ReadHistoryOrMyCollect item, int position, Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener) {
+            public void bindDataWithView(final ReadHistoryOrMyCollect item, int position, final Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener) {
                 if (position == 0) {
                     mFirstSplit.setVisibility(View.VISIBLE);
                 } else {
                     mFirstSplit.setVisibility(View.GONE);
                 }
 
-                mContentRoot.setOnLongClickListener(new View.OnLongClickListener() {
+                mContentRoot.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
-                        ToastUtil.show(item.getTitle());
-                        return false;
+                    public void onClick(View v) {
+                        Launcher.with(context, NewsDetailActivity.class)
+                                .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
+                                .putExtra(ExtraKeys.TAG, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
+                                .execute();
                     }
                 });
 

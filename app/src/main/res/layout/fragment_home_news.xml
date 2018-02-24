@@ -49,10 +49,17 @@
 
     </RelativeLayout>
 
+    <View
+        android:id="@+id/split"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/layout"
+        android:background="@color/background"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout"/>
+        android:layout_below="@+id/split"/>
 
 </RelativeLayout>

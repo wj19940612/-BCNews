@@ -22,6 +22,7 @@ import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.OnItemClickListener;
+import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.EmptyRecyclerView;
 import com.sbai.bcnews.view.ThreeImageLayout;
 import com.sbai.bcnews.view.TitleBar;
@@ -67,10 +68,14 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
         mSet = new HashSet<>();
         if (LocalUser.getUser().isLogin()) {
             requestReadHistoryData();
-        }else {
+        } else {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
             mSwipeToLoadLayout.setRefreshing(false);
             // TODO: 2018/2/12 获取缓存数据
+            List<ReadHistoryOrMyCollect> data = NewsCache.getReadHistory();
+            if (data != null && data.size() != 0) {
+                updateReadHistoryData(data,true);
+            }
         }
     }
 
@@ -83,7 +88,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
                     protected void onRespSuccess(ListResp<ReadHistoryOrMyCollect> resp) {
                         List<ReadHistoryOrMyCollect> listData = resp.getListData();
                         if (listData != null && !listData.isEmpty()) {
-                            updateReadHistoryData(listData);
+                            updateReadHistoryData(listData,false);
                         }
                     }
 
@@ -96,14 +101,16 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
                 .fire();
     }
 
-    private void updateReadHistoryData(List<ReadHistoryOrMyCollect> data) {
+    private void updateReadHistoryData(List<ReadHistoryOrMyCollect> data, boolean cache) {
         if (mSet.isEmpty()) {
             mReadHistoryAdapter.clear();
         }
-        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
-            mSwipeToLoadLayout.setLoadMoreEnabled(false);
-        } else {
-            mPage++;
+        if (!cache) {
+            if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
+                mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            } else {
+                mPage++;
+            }
         }
 
         for (ReadHistoryOrMyCollect readHistoryOrMyCollect : data) {
