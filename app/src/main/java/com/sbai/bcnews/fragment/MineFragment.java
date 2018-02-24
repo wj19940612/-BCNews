@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.mine.FeedbackActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.activity.mine.MyCollectActivity;
 import com.sbai.bcnews.activity.mine.PersonalDataActivity;
@@ -159,6 +160,7 @@ public class MineFragment extends BaseFragment {
                 umengEventCount(UmengCountEventId.MINE_CONTRIBUTE);
                 break;
             case R.id.feedBack:
+                Launcher.with(getActivity(), FeedbackActivity.class).execute();
                 break;
             case R.id.setting:
                 umengEventCount(UmengCountEventId.MINE_SETTING);
