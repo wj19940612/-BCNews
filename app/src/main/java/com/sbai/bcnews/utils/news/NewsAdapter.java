@@ -35,11 +35,20 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private List<NewsWrap> items;
     private NewsAdapter.OnItemClickListener mOnItemClickListener;
+    private boolean mSplitViewVisible;
 
     public NewsAdapter(Context context, List<NewsWrap> newsWraps, OnItemClickListener onItemClickListener) {
         mContext = context;
         items = newsWraps;
         mOnItemClickListener = onItemClickListener;
+        mSplitViewVisible = false;
+    }
+
+    public NewsAdapter(Context context, List<NewsWrap> newsWraps, OnItemClickListener onItemClickListener, boolean splitViewVisible) {
+        mContext = context;
+        items = newsWraps;
+        mOnItemClickListener = onItemClickListener;
+        mSplitViewVisible = splitViewVisible;
     }
 
     @Override
@@ -60,7 +69,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-         if (viewType == NewsWrap.DISPLAY_TYPE_NO_IMAGE) {
+        if (viewType == NewsWrap.DISPLAY_TYPE_NO_IMAGE) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_news_none, parent, false);
             return new NewsAdapter.NoneHolder(view);
         } else if (viewType == NewsWrap.DISPLAY_TYPE_SINGLE_IMAGE) {
@@ -74,18 +83,20 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-         if (holder instanceof NewsAdapter.NoneHolder) {
-            ((NewsAdapter.NoneHolder) holder).bindingData(mContext, items.get(position ).getNewsDetail(), position, getItemCount(), mOnItemClickListener);
+        if (holder instanceof NewsAdapter.NoneHolder) {
+            ((NewsAdapter.NoneHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible);
         } else if (holder instanceof NewsAdapter.SingleHolder) {
-            ((NewsAdapter.SingleHolder) holder).bindingData(mContext, items.get(position ).getNewsDetail(), position, getItemCount(), mOnItemClickListener);
+            ((NewsAdapter.SingleHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible);
         } else {
-            ((NewsAdapter.ThreeHolder) holder).bindingData(mContext, items.get(position ).getNewsDetail(), position, getItemCount(), mOnItemClickListener);
+            ((NewsAdapter.ThreeHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener);
         }
     }
 
     static class NoneHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.rootView)
         View mRootView;
+        @BindView(R.id.splitView)
+        View mSplitView;
         @BindView(R.id.title)
         TextView mTitle;
         @BindView(R.id.original)
@@ -104,7 +115,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ButterKnife.bind(this, view);
         }
 
-        public void bindingData(final Context context, final NewsDetail item, int position, int count, final NewsAdapter.OnItemClickListener onItemClickListener) {
+        public void bindingData(final Context context, final NewsDetail item, int position, int count,
+                                final OnItemClickListener onItemClickListener, boolean splitViewVisible) {
+            if (position == 0 && splitViewVisible) {
+                mSplitView.setVisibility(View.VISIBLE);
+            } else {
+                mSplitView.setVisibility(View.GONE);
+            }
             mTitle.setText(item.getTitle());
             mSource.setText(item.getSource());
             mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
@@ -133,6 +150,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     static class SingleHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.rootView)
         View mRootView;
+        @BindView(R.id.splitView)
+        View mSplitView;
         @BindView(R.id.img)
         ImageView mImg;
         @BindView(R.id.title)
@@ -153,7 +172,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ButterKnife.bind(this, view);
         }
 
-        public void bindingData(final Context context, final NewsDetail item, int position, int count, final NewsAdapter.OnItemClickListener onItemClickListener) {
+        public void bindingData(final Context context, final NewsDetail item, int position, int count,
+                                final OnItemClickListener onItemClickListener, boolean splitViewVisible) {
+            if (position == 0 && splitViewVisible) {
+                mSplitView.setVisibility(View.VISIBLE);
+            } else {
+                mSplitView.setVisibility(View.GONE);
+            }
             mTitle.setText(item.getTitle());
             mSource.setText(item.getSource());
             mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
@@ -213,7 +238,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ButterKnife.bind(this, view);
         }
 
-        public void bindingData(final Context context, final NewsDetail item, int position, int count, final NewsAdapter.OnItemClickListener onItemClickListener) {
+        public void bindingData(final Context context, final NewsDetail item, int position, int count,
+                                final NewsAdapter.OnItemClickListener onItemClickListener) {
             mTitle.setText(item.getTitle());
             mSource.setText(item.getSource());
             mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
