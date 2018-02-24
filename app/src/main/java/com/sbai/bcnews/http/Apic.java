@@ -255,8 +255,31 @@ public class Apic {
     }
 
     /**
+     * <<<<<<< HEAD
+     * <<<<<<< HEAD
+     * 查询用户反馈数据
+     */
+    public static Api requestFeedbackList(int page) {
+        return Api.get("/api/news-user/feedback/page", new ReqParams()
+                .put("page", page)
+                .put("size", Apic.DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * 提交用户反馈数据
+     */
+    public static Api requestSendFeedback(String content, int contentType) {
+        return Api.post("/api/news-user/feedback/add", new ReqParams()
+                .put("content", content)
+                .put("contentType", contentType));
+    }
+
+    /**
+     * 用户--资讯收藏--薛松
+     * =======
      * /api/news-user/operate/collect/{id}
      * <p>用户--收藏--薛松</p>
+     * >>>>>>> dev
      *
      * @param id         资讯id
      * @param collectNum 0-收藏 1-取消收藏
@@ -386,6 +409,11 @@ public class Apic {
     public static Api submitPortraitPath(String data) {
         return Api.post("/api/news-user/user/update",
                 new ReqParams().put("userPortrait", data));
+    }
+
+    public static Api uploadImage(String picture) {
+        return Api.post("/api/news-user/upload/image.do",
+                new ReqParams().put("picture", picture));
     }
 
     /**

@@ -17,7 +17,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
-
 import com.sbai.bcnews.R;
 
 import java.util.ArrayList;

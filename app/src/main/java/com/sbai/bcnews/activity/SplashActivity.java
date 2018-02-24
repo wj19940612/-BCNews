@@ -5,6 +5,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.mine.FeedbackActivity;
+import com.sbai.bcnews.model.Feedback;
 import com.sbai.bcnews.utils.Launcher;
 
 import butterknife.BindView;
