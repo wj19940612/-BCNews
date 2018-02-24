@@ -92,7 +92,7 @@ public class NewsCache {
 
     private static ReadHistoryOrMyCollect copyToReadHistory(NewsDetail newsDetail) {
         ReadHistoryOrMyCollect readHistoryOrMyCollect = new ReadHistoryOrMyCollect();
-        readHistoryOrMyCollect.setReaderTime(newsDetail.getReadTime());
+        readHistoryOrMyCollect.setReadTime(newsDetail.getReadTime());
         readHistoryOrMyCollect.setCreateTime(newsDetail.getCreateTime());
         readHistoryOrMyCollect.setDataId(newsDetail.getId());
         readHistoryOrMyCollect.setIsRead(1);
@@ -104,6 +104,16 @@ public class NewsCache {
         return readHistoryOrMyCollect;
     }
 
+    public static String getUploadJson(){
+        List<UploadNews> uploadNewsList = new ArrayList<>();
+        for(NewsDetail newsDetail : sNewsCache.values()){
+            UploadNews uploadNews = new UploadNews();
+            uploadNews.setDataId(newsDetail.getId());
+            uploadNews.setReadTime(newsDetail.getReadTime());
+        }
+        return sGson.toJson(uploadNewsList);
+    }
+
     public static class MaxLinkedHashMap<T, E> extends LinkedHashMap<T, E> {
         private static final long serialVersionUID = 1L;
 
@@ -111,6 +121,27 @@ public class NewsCache {
         protected boolean removeEldestEntry(Map.Entry<T, E> eldest) {
             //每当调用myMap.put()的时候，就会自动判断是否个数已经超过maximumSize，如果超过就删掉最旧的那条
             return size() > TOTAL_NEWS;
+        }
+    }
+
+    public static class UploadNews{
+        private long readTime;
+        private String dataId;
+
+        public long getReadTime() {
+            return readTime;
+        }
+
+        public void setReadTime(long readTime) {
+            this.readTime = readTime;
+        }
+
+        public String getDataId() {
+            return dataId;
+        }
+
+        public void setDataId(String dataId) {
+            this.dataId = dataId;
         }
     }
 }

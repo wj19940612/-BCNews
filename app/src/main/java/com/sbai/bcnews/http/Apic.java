@@ -18,6 +18,13 @@ public class Apic {
     public static final int DEFAULT_PAGE_SIZE = 20;
 
     /**
+     * 用户--同步阅读记录--薛松
+     */
+    public static Api uploadReadHistory(String readText,String deviceId){
+        return Api.post("/api/news-user/operate/read/device",new ReqParams().put("read",readText).put("deviceId",deviceId));
+    }
+
+    /**
      * /api/news-info/news/tag/{tag}
      * <p>(标签)相关资讯-----齐慕伟</p>
      *
@@ -56,7 +63,7 @@ public class Apic {
      * @return
      */
     public static Api getNewsDetail(String id) {
-        return Api.get("/api/news-info/info/details/{id}",
+        return Api.get("/api/news-info/news/detail/{id}",
                 new ReqParams()
                         .put("id", id));
     }

@@ -1,13 +1,19 @@
 package com.sbai.bcnews.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.HomeNewsFragment;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.MineFragment;
@@ -15,9 +21,12 @@ import com.sbai.bcnews.fragment.NewsFlashFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.market.MarketPageSwitch;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
+import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.bcnews.utils.UmengCountEventId;
+import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.BottomTabs;
 import com.sbai.bcnews.view.ScrollableViewPager;
 
@@ -42,10 +51,20 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        initBroadcastReceiver();
 
         initViews();
         requestShowMarketPageSwitch();
     }
+
+    private BroadcastReceiver mLoginBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase(LoginActivity.ACTION_LOGIN_SUCCESS)) {
+                requestCacheUpload();
+            }
+        }
+    };
 
     private void requestShowMarketPageSwitch() {
         mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.VISIBLE);
@@ -60,6 +79,14 @@ public class MainActivity extends BaseActivity {
                     }
                 })
                 .fire();
+    }
+
+    private void requestCacheUpload() {
+        if (LocalUser.getUser().isLogin()) {
+            String deviceId = AppInfo.getDeviceHardwareId(this);
+            String uploadText = NewsCache.getUploadJson();
+            Apic.uploadReadHistory(uploadText, deviceId).tag(TAG).fireFreely();
+        }
     }
 
     private void initViews() {
@@ -120,6 +147,20 @@ public class MainActivity extends BaseActivity {
                 umengEventCount(UmengCountEventId.TAB_MINE);
                 break;
         }
+    }
+
+    private void initBroadcastReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LoginActivity.ACTION_LOGIN_SUCCESS);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mLoginBroadcastReceiver, intentFilter);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLoginBroadcastReceiver);
     }
 
     private static class MainFragmentsAdapter extends FragmentPagerAdapter {

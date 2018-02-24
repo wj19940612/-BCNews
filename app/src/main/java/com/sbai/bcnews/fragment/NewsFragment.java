@@ -273,7 +273,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         } else {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);
         }
-        mPage++;
+        if (data.size() != 0)
+            mPage++;
         mNewsWraps.addAll(NewsWrap.updateImgType(data));
         mNewsAdapter.notifyDataSetChanged();
     }
