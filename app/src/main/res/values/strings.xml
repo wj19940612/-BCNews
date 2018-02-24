@@ -152,6 +152,19 @@
     <string name="change_image_auth_code">看不清？</string>
     <string name="change_image">换一张</string>
 
+    <!--我的-->
+    <string name="company_info">浙江松柏信息技术有限公司\nCopyright@2017</string>
+    <string name="bcnews_user_agreement">《区块财经用户协议》</string>
+    <string name="cooperation_click_copy">商务合作(点击复制)</string>
+    <string name="version_">V%1$s</string>
+    <string name="copy_success">复制成功</string>
+    <string name="bcnews_team">区块财经团队</string>
+    <string name="expect_your_feedback">期待您的反馈</string>
+
+    <string name="send">发送</string>
+    <string name="gallery">相册</string>
+    <string name="preview">预览</string>
+    <string name="all_image">所有图片</string>
 
     <string name="me_want_contribute">我要投稿</string>
     <string name="feed_back">意见反馈</string>
@@ -171,7 +184,6 @@
     <string name="affirm_logout">确定要退出登录吗</string>
     <string name="read_history">阅读历史</string>
     <string name="related_news">相关资讯</string>
-    <string name="copy_success">复制成功</string>
     <string name="my_collect">我的收藏</string>
 
     <string name="head_portrait">头像</string>
@@ -190,4 +202,5 @@
     <string name="set_nick_name">设置昵称</string>
     <string name="please_input_nick_name">请输入昵称</string>
     <string name="update_success">修改成功</string>
+    <string name="send_message_connect">您好，欢迎反馈！反馈时附上界面截屏，可以更好地给我们反馈问题哦~</string>
 </resources>

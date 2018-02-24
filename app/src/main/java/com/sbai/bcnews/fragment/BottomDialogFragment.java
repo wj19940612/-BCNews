@@ -14,7 +14,6 @@ import android.view.WindowManager;
 
 import com.sbai.bcnews.R;
 
-
 /**
  * 底部弹窗基础类
  */

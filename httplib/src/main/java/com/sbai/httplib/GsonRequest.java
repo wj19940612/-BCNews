@@ -1,5 +1,7 @@
 package com.sbai.httplib;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -13,6 +15,7 @@ import com.google.gson.JsonSyntaxException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Map;
+
 /**
  * Modified by john on 18/01/2018
  * <p>
@@ -81,6 +84,7 @@ public class GsonRequest<T> extends Request<T> {
         String json;
         try {
             json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            Log.d("Volley", "origin_data:" + json);
 
             CookieManger.getInstance().parse(response.headers);
 
