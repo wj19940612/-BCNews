@@ -150,7 +150,7 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
     }
 
     private void updateFeedbackList(List<Feedback> data, boolean needScrollToLast) {
-        if (data.size() < Apic.NORMAL_PAGE_SIZE) {
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mLoadMoreEnable = false;
             mSwipeRefreshLayout.setEnabled(false);
         } else {

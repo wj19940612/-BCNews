@@ -111,7 +111,7 @@ public class BottomTabs extends LinearLayout {
         tabTextView.setNum(num);
     }
 
-    public void setIndexTabVisibility(int index, int visible) {
+    public void setTabVisibility(int index, int visible) {
         View childAt = getChildAt(index);
         childAt.setVisibility(visible);
     }

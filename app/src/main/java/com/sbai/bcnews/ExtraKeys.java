@@ -19,8 +19,14 @@ public interface ExtraKeys {
     String MISS_AVATAR = "miss_avatar";
     String PHONE = "phone";
     String NEWS_ID = "news_id";
+
+    String DIGITAL_CURRENCY = "digital_currency";
     String HEADER_COUNT = "header_count";
     String CHANNEL = "channel";
+    String TAG = "tag";
+    String HAS_BANNER = "has_banner";
+
+    String BITMAP_PATH = "bitmap_path";
 
     String PERSONAL_INTRODUCE = "personal_introduce ";
     String NICK_NAME = "nick_name";

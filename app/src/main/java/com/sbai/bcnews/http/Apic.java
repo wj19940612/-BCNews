@@ -15,40 +15,64 @@ import java.io.File;
  */
 public class Apic {
 
-    public static final int NORMAL_PAGE_SIZE = 20;
-
-    public static final String SHARE_NEWS_URL = Api.getHost() + "/news/share/index.html?id=%s";
-
-    public static final String DOWNLOAD_URL = Api.getHost() + "/qc.png";
+    public static final int DEFAULT_PAGE_SIZE = 20;
 
     /**
-     * 资讯详情 - 齐慕伟
+     * /api/news-info/news/tag/{tag}
+     * <p>(标签)相关资讯-----齐慕伟</p>
+     *
+     * @param tag
+     * @param page
+     * @return
+     */
+    public static Api getRelatedNews(String tag, int page) {
+        return Api.get("/api/news-info/news/tag/{tag}",
+                new ReqParams()
+                        .put("tag", tag)
+                        .put("size", DEFAULT_PAGE_SIZE)
+                        .put("page", page));
+    }
+
+    /**
+     * /api/news-info/news/tag/{tag}/{id}
+     * <p>(标签)资讯相关推荐-----齐慕伟</p>
+     *
+     * @param tag
+     * @param id
+     * @return
+     */
+    public static Api getRelatedNewsRecommend(String tag, String id) {
+        return Api.get("/api/news-info/news/tag/{tag}/{id}",
+                new ReqParams()
+                        .put("tag", tag)
+                        .put("id", id));
+    }
+
+    /**
+     * /api/news-info/news/detail/{id}
+     * <p>资讯详情 - 齐慕伟</p>
      *
      * @param id
      * @return
      */
     public static Api getNewsDetail(String id) {
-        return Api.get("/api/news-info/info/details/{id}", new ReqParams().put("id", id));
+        return Api.get("/api/news-info/info/details/{id}",
+                new ReqParams()
+                        .put("id", id));
     }
 
     /**
-     * 获取资讯列表
+     * /api/news-info/news/{channel}/list
+     * <p>获取资讯列表 - 齐慕伟</p>
      *
      * @param channel 频道名称
      * @return
      */
     public static Api requestNewsListWithChannel(String channel, int page) {
-        return Api.get("/api/news-info/news/{channel}/list", new ReqParams().put("channel", channel).put("page", page).put("size", NORMAL_PAGE_SIZE));
-    }
-
-    /**
-     * 获取资讯列表-频道
-     *
-     * @param page 页数
-     * @return
-     */
-    public static Api getNewsList(int page) {
-        return Api.get("/api/news-info/info/list.do", new ReqParams().put("page", page).put("size", NORMAL_PAGE_SIZE));
+        return Api.get("/api/news-info/news/{channel}/list",
+                new ReqParams()
+                        .put("channel", channel)
+                        .put("page", page).put("size", DEFAULT_PAGE_SIZE));
     }
 
     public static Api syncSystemTime() {
@@ -56,58 +80,74 @@ public class Apic {
     }
 
     /**
-     * 0请求小于时间戳的数据
-     * 1请求大于时间戳的数据
+     * /api/news-info/info/information.do
+     * <p>快讯列表-----齐慕伟</p>
      *
      * @param time
-     * @param status
+     * @param status 0 请求小于时间戳的数据, 1 请求大于时间戳的数据
      * @return
      */
     public static Api getNewsFlash(long time, int status) {
-        return Api.get("/api/news-info/info/information.do", new ReqParams().put("time", time).put("status", status));
+        return Api.get("/api/news-info/info/information.do",
+                new ReqParams()
+                        .put("time", time)
+                        .put("status", status));
     }
 
     /**
-     * 行情列表 (ws)
+     * /api/news-quota/quota/list
+     * <p>行情列表 (ws)</p>
      *
      * @param exchangeCode
      * @return
      */
     public static Api requestMarkListData(String exchangeCode) {
-        return Api.get("/api/news-quota/quota/list", new ReqParams().put("exchangeCode", exchangeCode));
-    }
-
-    public static Api getNewsFlash(int page) {
-        return Api.get("/api/news-info/info/information.do", new ReqParams().put("page", page));
+        return Api.get("/api/news-quota/quota/list",
+                new ReqParams()
+                        .put("exchangeCode", exchangeCode));
     }
 
     /**
-     * 资讯点赞 - 齐慕伟
+     * /api/news-info/news/praise/{id}
+     * <p>资讯点赞 - 齐慕伟</p>
      *
      * @param newsId 资讯id
      * @param type   0-取消点赞 1-点赞
      * @return
      */
     public static Api praiseNews(String newsId, int type) {
-        return Api.post("/api/news-info/news/praise/{id}", new ReqParams().put("id", newsId).put("type", type));
+        return Api.post("/api/news-info/news/praise/{id}",
+                new ReqParams()
+                        .put("id", newsId)
+                        .put("type", type));
     }
 
     /**
-     * 频道列表
+     * /api/news-info/news/channels
+     * <p>频道列表-----齐慕伟</p>
      */
     public static Api getChannels() {
         return Api.get("/api/news-info/news/channels");
     }
 
     /**
-     * 获取资讯详情相关文章
+     * /api/news-info/news/channel/{channel}/{id}
+     * <p> (频道)资讯相关推荐-----齐慕伟</p>
+     *
+     * @param channel
+     * @param id
+     * @return
      */
     public static Api getOtherArticles(String channel, String id) {
-        return Api.get("/api/news-info/news/channel/{channel}/{id}", new ReqParams().put("channel", channel).put("id", id));
+        return Api.get("/api/news-info/news/channel/{channel}/{id}",
+                new ReqParams()
+                        .put("channel", channel)
+                        .put("id", id));
     }
 
     /**
-     * 接口名称 获取验证码
+     * /api/news-user/login/msg/{phone}
+     * <p>用户--发送短信验证码--薛松</p>
      *
      * @param phone
      * @return
@@ -117,7 +157,8 @@ public class Apic {
     }
 
     /**
-     * 接口名称 获取验证码
+     * /api/news-user/login/msg/{phone}
+     * <p>用户--发送短信验证码--薛松</p>
      *
      * @param phone
      * @param imgCode
@@ -130,7 +171,8 @@ public class Apic {
     }
 
     /**
-     * 图片验证码地址
+     * /api/news-user/login/get/image/{phone}
+     * <p>用户--获取图片验证码--薛松</p>
      *
      * @param phone
      * @return
@@ -141,7 +183,8 @@ public class Apic {
     }
 
     /**
-     * 接口名称 验证码快捷登入
+     * /api/news-user/login/quick/{phone}/{msgCode}
+     * <p>用户--手机验证码快速登录--薛松</p>
      *
      * @param authCode 短信验证码
      * @param phone    手机
@@ -159,7 +202,9 @@ public class Apic {
     }
 
     /**
-     * 接口名称 快捷登入(for 微信)
+     * /api/news-user/login/quick/{phone}/{msgCode}
+     * <p>用户--手机验证码快速登录--薛松</p>
+     * <p>快捷登入(for 微信)</p>
      *
      * @param authCode 短信验证码
      * @param phone    手机
@@ -181,7 +226,8 @@ public class Apic {
     }
 
     /**
-     * 接口名称 绑定微信
+     * /api/news-user/user/bound/{openId}
+     * <p>用户--绑定微信--薛松</p>
      *
      * @return
      */
@@ -194,7 +240,8 @@ public class Apic {
     }
 
     /**
-     * 微信登录
+     * /api/news-user/user/bound/{openId}
+     * <p>用户--微信快速登录--薛松</p>
      *
      * @param openId
      * @return
@@ -209,12 +256,13 @@ public class Apic {
 
     /**
      * <<<<<<< HEAD
+     * <<<<<<< HEAD
      * 查询用户反馈数据
      */
     public static Api requestFeedbackList(int page) {
         return Api.get("/api/news-user/feedback/page", new ReqParams()
                 .put("page", page)
-                .put("size", Apic.NORMAL_PAGE_SIZE));
+                .put("size", Apic.DEFAULT_PAGE_SIZE));
     }
 
     /**
@@ -228,17 +276,31 @@ public class Apic {
 
     /**
      * 用户--资讯收藏--薛松
+     * =======
+     * /api/news-user/operate/collect/{id}
+     * <p>用户--收藏--薛松</p>
+     * >>>>>>> dev
      *
      * @param id         资讯id
      * @param collectNum 0-收藏 1-取消收藏
      * @return
      */
     public static Api requestCollect(String id, int collectNum) {
-        return Api.post("/api/news-user/operate/collect/{id}", new ReqParams().put("id", id).put("type", 0).put("cancel", collectNum));
+        return Api.post("/api/news-user/operate/collect/{id}", new ReqParams()
+                .put("id", id).put("type", 0)
+                .put("cancel", collectNum));
     }
 
+    /**
+     * /api/news-user/banner/findBannerList.do
+     * <p>首页--获取banner--薛松</p>
+     *
+     * @return
+     */
     public static Api requestBanners() {
-        return Api.get("/api/news-user/banner/findBannerList.do", new ReqParams().put("showType", 0));
+        return Api.get("/api/news-user/banner/findBannerList.do",
+                new ReqParams()
+                        .put("showType", 0));
     }
 
     // TODO: 2018/2/8 请求运营微信账户
@@ -246,6 +308,12 @@ public class Apic {
         return Api.get("");
     }
 
+    /**
+     * /api/news-user/login/logout
+     * <p>用户--退出登录--薛松</p>
+     *
+     * @return
+     */
     public static Api logout() {
         return Api.post("/api/news-user/login/logout");
     }
@@ -256,7 +324,24 @@ public class Apic {
     }
 
     /**
-     * 查询行情界面是否显示接口
+     * /api/news-quota/quota/{code}/trend
+     * <p>分时图列表</p>
+     *
+     * @param exchangeCode
+     * @param code
+     */
+    // TODO: 2018/2/6 没有完善
+    public static Api requestTimeSharingPlanData(String code, String exchangeCode) {
+        return Api.get("/api/news-quota/quota/{code}/trend",
+                new ReqParams()
+                        .put("code", code)
+                        .put("exchangeCode", exchangeCode));
+
+    }
+
+    /**
+     * /dic.html
+     * <p>查询行情界面是否显示接口</p>
      */
     public static Api requestShowMarketPageSwitch() {
         return Api.get("/dic.html");
@@ -274,7 +359,7 @@ public class Apic {
                 new ReqParams()
                         .put("type", type)
                         .put("page", page)
-                        .put("size", NORMAL_PAGE_SIZE));
+                        .put("size", DEFAULT_PAGE_SIZE));
     }
 
     /**
@@ -329,5 +414,44 @@ public class Apic {
     public static Api uploadImage(String picture) {
         return Api.post("/api/news-user/upload/image.do",
                 new ReqParams().put("picture", picture));
+    }
+
+    /**
+     * /api/news-quota/quota/{code}
+     * <p>请求单个数字货币的行情</p>
+     *
+     * @param code
+     * @param exchangeCode
+     * @return
+     */
+    public static Api reqSingleMarket(String code, String exchangeCode) {
+        return Api.get("/api/news-quota/quota/{code}",
+                new ReqParams()
+                        .put("code", code)
+                        .put("exchangeCode", exchangeCode));
+    }
+
+    /**
+     * /api/news-quota/quota/{code}/k
+     * <p>获取 k 线数据</p>
+     *
+     * @param code
+     * @param exchangeCode
+     * @param klineType
+     * @return
+     */
+    public static Api reqKlineMarket(String code, String exchangeCode, String klineType, String startTime) {
+        return Api.get("/api/news-quota/quota/{code}/k",
+                new ReqParams()
+                        .put("code", code)
+                        .put("exchangeCode", exchangeCode)
+                        .put("type", klineType)
+                        .put("startTime", startTime)
+                        .put("limit", 100));
+    }
+
+    public interface url {
+        String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
+        String QR_CODE = Api.getFixedHost() + "/qc.png";
     }
 }

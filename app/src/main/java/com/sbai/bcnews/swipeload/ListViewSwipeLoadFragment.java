@@ -35,7 +35,7 @@ public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment<Li
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.view_base_listview_swipe_load, container, false);
+        View view = inflater.inflate(R.layout.fragment_listview_swipe_load, container, false);
         mBind = ButterKnife.bind(this, view);
         return view;
     }

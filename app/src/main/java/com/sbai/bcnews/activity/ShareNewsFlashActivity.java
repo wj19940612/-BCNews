@@ -99,7 +99,7 @@ public class ShareNewsFlashActivity extends BaseActivity {
             }
         }
         GlideApp.with(getActivity())
-                .load(Apic.DOWNLOAD_URL)
+                .load(Apic.url.QR_CODE)
                 .into(mDownloadImg);
     }
 

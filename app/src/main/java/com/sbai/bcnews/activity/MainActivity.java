@@ -43,21 +43,19 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mBottomTabs.setIndexTabVisibility(2, View.VISIBLE);
         initViews();
         requestShowMarketPageSwitch();
     }
 
     private void requestShowMarketPageSwitch() {
+        mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.VISIBLE);
         Apic.requestShowMarketPageSwitch()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<MarketPageSwitch>, MarketPageSwitch>() {
                     @Override
                     protected void onRespSuccessData(MarketPageSwitch data) {
                         if (data.getQuota() == MarketPageSwitch.SHOW_MARKET_PAGE) {
-                            mBottomTabs.setIndexTabVisibility(2, View.VISIBLE);
-                            mMainFragmentsAdapter.setShowMarketPage(true);
-                            mMainFragmentsAdapter.notifyDataSetChanged();
+                            mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.VISIBLE);
                         }
                     }
                 })
@@ -132,10 +130,6 @@ public class MainActivity extends BaseActivity {
         public MainFragmentsAdapter(FragmentManager fm) {
             super(fm);
             mFragmentManager = fm;
-        }
-
-        public void setShowMarketPage(boolean showMarketPage) {
-            mShowMarketPage = showMarketPage;
         }
 
         @Override

@@ -15,7 +15,7 @@
         app:backFeature="true"
         app:backIcon="@drawable/ic_tb_back_black"
         app:leftViewLeftPadding="14dp"
-        app:textSingle="true"
+        android:maxLines="1"
         app:titleLeftMargin="50dp"
         app:titleRightMargin="50dp"
         app:titleText="@string/news_detail"

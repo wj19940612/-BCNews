@@ -93,8 +93,6 @@
                 android:text="@string/download_app"
                 android:textColor="@color/unluckyText"
                 android:textSize="12sp"/>
-
-
         </LinearLayout>
     </ScrollView>
 

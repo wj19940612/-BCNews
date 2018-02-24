@@ -31,6 +31,7 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
+import com.sbai.httplib.ReqError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +42,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
-import static com.sbai.bcnews.fragment.NewsFragment.HAS_BANNER;
-import static com.sbai.bcnews.fragment.NewsFragment.NO_BANNER;
 
 /**
  * Created by Administrator on 2018\2\5 0005.
@@ -74,7 +73,6 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     private PagerAdapter mPagerAdapter;
     private ChannelCacheModel mChannelCacheModel;
     private List<String> mMyChannels;
-    private int mCurrentItem;
     private boolean mAnimating;
     private int mTitleScrollState;  //0-默认 1-已经滚上去了
 
@@ -119,7 +117,14 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
             @Override
             protected void onRespSuccessData(List<String> data) {
                 ChannelCacheModel contrastedChannelCacheModel = ChannelCache.contrastChannel(channelCacheModel, data);
+                ChannelCache.modifyChannel(contrastedChannelCacheModel.getMyChannelEntities(), contrastedChannelCacheModel.getOtherChannelEntities());
                 updateChannel(contrastedChannelCacheModel, true);
+            }
+
+            @Override
+            public void onFailure(ReqError reqError) {
+                super.onFailure(reqError);
+                updateChannel(channelCacheModel, true);
             }
         }).fireFreely();
     }
@@ -138,12 +143,8 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mViewPager.setOffscreenPageLimit(myChannelEntities.size() - 1);
         mMyChannels.clear();
         mMyChannels.addAll(myChannelEntities);
-//        mMyChannels.addAll(myChannelEntities);
         mPagerAdapter.notifyDataSetChanged();
-        if (mCurrentItem < mChannelCacheModel.getMyChannelEntities().size() - 1)
-            mViewPager.setCurrentItem(mCurrentItem, false);
-        else
-            mViewPager.setCurrentItem(mChannelCacheModel.getMyChannelEntities().size() - 1, false);
+        mViewPager.setCurrentItem(0, false);
         mTabLayout.setViewPager(mViewPager);
     }
 
@@ -157,7 +158,6 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toChannel:
-                mCurrentItem = mViewPager.getCurrentItem();
                 Launcher.with(this, ChannelActivity.class).putExtra(ExtraKeys.CHANNEL, mChannelCacheModel).excuteForResultFragment(REQUEST_CODE_CHANNEL);
                 break;
         }
@@ -166,8 +166,13 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CHANNEL && resultCode == RESULT_OK) {
-            mChannelCacheModel = data.getParcelableExtra(ExtraKeys.CHANNEL);
-            updateChannel(mChannelCacheModel, false);
+            ChannelCacheModel newChannelCacheModel = data.getParcelableExtra(ExtraKeys.CHANNEL);
+            if (newChannelCacheModel != null && mChannelCacheModel != null) {
+                if (!ChannelCache.isSameChannel(newChannelCacheModel, mChannelCacheModel)) {
+                    mChannelCacheModel = newChannelCacheModel;
+                    updateChannel(mChannelCacheModel, true);
+                }
+            }
         }
     }
 
@@ -251,11 +256,11 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         public Fragment getItem(int position) {
             String title = mMyChannelEntities.get(position);
             if (position == 0) {
-                NewsFragment newsFragment = NewsFragment.newsInstance(HAS_BANNER,title);
+                NewsFragment newsFragment = NewsFragment.newsInstance(true, title);
                 newsFragment.setOnScrollListener(mOnScrollListener);
                 return newsFragment;
             }
-            NewsFragment newsFragment = NewsFragment.newsInstance(NO_BANNER,title);
+            NewsFragment newsFragment = NewsFragment.newsInstance(false, title);
             newsFragment.setOnScrollListener(mOnScrollListener);
             return newsFragment;
         }

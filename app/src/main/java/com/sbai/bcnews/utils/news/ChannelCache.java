@@ -85,7 +85,7 @@ public class ChannelCache {
                 if (!myChannels.contains(channel) && !otherChannels.contains(channel)) {
                     otherChannels.add(channel);
                 }
-            } else if(myChannels != null && otherChannels == null) {
+            } else if (myChannels != null && otherChannels == null) {
                 if (!myChannels.contains(channel)) {
                     otherChannels = new ArrayList<String>();
                     otherChannels.add(channel);
@@ -97,5 +97,25 @@ public class ChannelCache {
         newChannelCacheModel.setOtherChannelEntities(otherChannels);
         newChannelCacheModel.setModified(modified);
         return newChannelCacheModel;
+    }
+
+    public static boolean isSameChannel(ChannelCacheModel newChannelCacheModel, ChannelCacheModel oldChannelCacheModel) {
+        //size不同 说明变化了
+        if (newChannelCacheModel.getMyChannelEntities() != null && oldChannelCacheModel.getMyChannelEntities() != null) {
+            if (newChannelCacheModel.getMyChannelEntities().size() != oldChannelCacheModel.getMyChannelEntities().size()) {
+                return false;
+            }
+
+            for (int i = 0; i < newChannelCacheModel.getMyChannelEntities().size(); i++) {
+                String newChannel = newChannelCacheModel.getMyChannelEntities().get(i);
+                String oldChannel = oldChannelCacheModel.getMyChannelEntities().get(i);
+                //第i项内容不同，变化了
+                if (oldChannel == null || !newChannel.equals(oldChannel)) {
+                    return false;
+                }
+            }
+        }
+        //size 想通 每一项都相同
+        return true;
     }
 }

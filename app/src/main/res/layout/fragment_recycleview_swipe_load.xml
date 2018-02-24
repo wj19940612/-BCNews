@@ -27,7 +27,6 @@
         app:refresh_trigger_offset="@dimen/refresh_trigger_offset_google"
         app:swipe_style="classic">
 
-
         <com.zcmrr.swipelayout.header.RefreshHeaderView
             android:id="@+id/swipe_refresh_header"
             android:layout_width="match_parent"

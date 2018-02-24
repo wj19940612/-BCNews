@@ -76,5 +76,8 @@
         <item name="android:textColor">@color/unluckyText</item>
     </style>
 
-
+    <style name="TabLayoutText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/luckyText</item>
+    </style>
 </resources>

@@ -11,18 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.market.MarketDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.market.MarketData;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.FinanceUtil;
+import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.MarketDataUtils;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.httplib.ReqError;
 
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +45,6 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
     private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 6000;
 
-
     private MarkListAdapter mMarkListAdapter;
 
     @Override
@@ -52,7 +54,6 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         initRecycleView();
         requestMarketListData();
     }
-
 
     @Override
     public void onPause() {
@@ -103,6 +104,10 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         mMarkListAdapter.setOnItemClickListener(new OnItemClickListener<MarketData>() {
             @Override
             public void onItemClick(MarketData marketData, int position) {
+                Launcher.with(getActivity(), MarketDetailActivity.class)
+                        .putExtra(ExtraKeys.DIGITAL_CURRENCY, marketData)
+                        .execute();
+
                 umengEventCount(UmengCountEventId.MARKET_LIST_TAB);
             }
         });
@@ -237,18 +242,20 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                 mBourseName.setText(marketData.getExchangeCode());
                 mMarketName.setText(marketData.getName().toUpperCase());
                 mNumberCurrency.setText(marketData.getCurrencyMoney());
-                mDealNumber.setText(formatExchangeVolume(context, marketData.getLastVolume()));
+                mDealNumber.setText(context.getString(R.string.market_volume,
+                        MarketDataUtils.formatVolume(marketData.getLastVolume())));
 
                 boolean isRise = marketData.getUpDropSpeed() >= 0;
                 mUsPrice.setSelected(isRise);
                 mYuanPrice.setSelected(isRise);
                 mPriceChangeRatio.setSelected(isRise);
 
-                mUsPrice.setText(formatMoneyCurrencyUsPrice(marketData.getLastPrice(), context));
+                mUsPrice.setText(MarketDataUtils.formatDollarWithSign(marketData.getLastPrice()));
 
-                mYuanPrice.setText(formatMoneyCurrencyCNPrice(marketData, context));
+                mYuanPrice.setText(MarketDataUtils.formatRmbWithSign(
+                        FinanceUtil.multiply(marketData.getLastPrice(), marketData.getRate()).doubleValue()));
 
-                mPriceChangeRatio.setText(formatPriceChangeRadio(marketData.getUpDropSpeed(), context));
+                mPriceChangeRatio.setText(MarketDataUtils.percentWithPrefix(marketData.getUpDropSpeed()));
 
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -258,39 +265,6 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                         }
                     }
                 });
-            }
-
-            private String formatPriceChangeRadio(double priceChangeRadio, Context context) {
-                if (priceChangeRadio < 0) {
-                    return FinanceUtil.downToPercentage(priceChangeRadio, 2);
-                }
-                return context.getString(R.string.up_range, FinanceUtil.downToPercentage(priceChangeRadio, 2));
-            }
-
-            private String formatMoneyCurrencyCNPrice(MarketData marketData, Context context) {
-                double cnPrice = FinanceUtil.multiply(marketData.getLastPrice(), marketData.getRate()).doubleValue();
-                return context.getString(R.string.product_price_cn, FinanceUtil.formatWithScale(cnPrice, 2, RoundingMode.DOWN));
-            }
-
-            private String formatMoneyCurrencyUsPrice(double lastPrice, Context context) {
-                String price = "";
-                if (lastPrice >= 10) {
-                    price = FinanceUtil.formatWithScale(lastPrice, 2, RoundingMode.DOWN);
-                } else {
-                    price = FinanceUtil.formatWithScale(lastPrice, 4, RoundingMode.DOWN);
-                }
-                return context.getString(R.string.product_price_us, price);
-            }
-
-            private String formatExchangeVolume(Context context, double volume) {
-                String exchangeVolume = "";
-                if (volume >= 10000) {
-                    float v = FinanceUtil.divide(volume, 10000, 1, RoundingMode.DOWN).floatValue();
-                    exchangeVolume = context.getString(R.string.ten_thousand_number, " " + String.valueOf(v));
-                } else {
-                    exchangeVolume = FinanceUtil.formatWithScale(volume, 1, RoundingMode.DOWN);
-                }
-                return context.getString(R.string.market_volume, " " + exchangeVolume);
             }
         }
 

@@ -41,6 +41,22 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
         }
     }
 
+    protected void stopFreshAnimation() {
+        if (mSwipeToLoadLayout != null) {
+            if (mSwipeToLoadLayout.isRefreshing()) {
+                mSwipeToLoadLayout.setRefreshing(false);
+            }
+        }
+    }
+
+    protected void stopLoadAnimation() {
+        if (mSwipeToLoadLayout != null) {
+            if (mSwipeToLoadLayout.isLoadingMore()) {
+                mSwipeToLoadLayout.setLoadingMore(false);
+            }
+        }
+    }
+
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -61,7 +77,6 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
         }
     }
 
-
     @Override
     public void loadMoreComplete(@StringRes int msgRes) {
         loadMoreComplete(getString(msgRes));
@@ -72,7 +87,7 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
         if (mLoadMoreFooterView != null) {
             mLoadMoreFooterView.setLoadMoreSuccess(msg);
         }
-        stopFreshOrLoadAnimation();
+        stopLoadAnimation();
     }
 
     public void refreshFailure() {
@@ -88,13 +103,12 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
         refreshComplete(getString(resId));
     }
 
-
     @Override
     public void refreshComplete(CharSequence msg) {
         if (mRefreshHeaderView != null) {
             mRefreshHeaderView.refreshSuccess(msg);
         }
-        stopFreshOrLoadAnimation();
+        stopFreshAnimation();
     }
 
     private void setup(T swipeTargetView, SwipeToLoadLayout swipeToLoadLayout,

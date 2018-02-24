@@ -42,7 +42,6 @@ public abstract class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity
     }
 
     protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
-
     }
 
     protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {

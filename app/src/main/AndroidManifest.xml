@@ -59,7 +59,13 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.MarketDetailActivity"
+            android:name=".activity.market.MarketDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.market.ShareMarketActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.RelatedNewsActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.NewsDetailActivity"
@@ -152,6 +158,9 @@
         <activity
             android:name=".fragment.ImageSelectActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.ClipHeadImageActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- meta-data -->
         <meta-data
@@ -168,9 +177,6 @@
             android:label="PushService"
             android:process=":pushservice">
         </service>
-
-        <activity android:name=".activity.mine.ClipHeadImageActivity">
-        </activity>
     </application>
 
 </manifest>

@@ -31,7 +31,7 @@
     <!--每个页面都会添加的 TitleBar-->
     <declare-styleable name="TitleBar">
         <attr name="titleText" format="reference|string"/>
-        <attr name="titleTextSize" format="dimension"/>
+        <attr name="titleTextSize" format="dimension|reference"/>
         <attr name="titleTextColor" format="color"/>
         <attr name="titleTextAlpha" format="float"/>
         <attr name="customView" format="reference"/>
@@ -44,10 +44,13 @@
         <attr name="rightVisible" format="boolean"/>
         <attr name="backFeature" format="boolean"/>
         <attr name="backIcon" format="reference"/>
+        <attr name="backText" format="reference|string"/>
+        <attr name="backTextSize" format="dimension|reference"/>
+        <attr name="backTextColor" format="color"/>
         <attr name="hasBottomSplitLine"/>
         <attr name="splitLineColor"/>
         <attr name="leftViewLeftPadding" format="dimension|reference"/>
-        <attr name="textSingle" format="boolean"/>
+        <attr name="android:maxLines"/>
         <attr name="titleLeftMargin" format="dimension|reference"/>
         <attr name="titleRightMargin" format="dimension|reference"/>
     </declare-styleable>

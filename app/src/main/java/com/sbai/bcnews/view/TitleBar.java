@@ -42,6 +42,9 @@ public class TitleBar extends RelativeLayout {
     private boolean mRightVisible;
     private boolean mBackFeature;
     private Drawable mBackIcon;
+    private CharSequence mBackText;
+    private float mBackTextSize;
+    private ColorStateList mBackTextColor;
 
     private TextView mTitleView;
     private TextView mLeftView;
@@ -56,7 +59,7 @@ public class TitleBar extends RelativeLayout {
     private Drawable mRightTextRightImage;
     private int mLeftViewLeftPadding;
     private ImageView mRightImageView;
-    private boolean mTextSingle;
+    private int mMaxLines;
     private int mTitleLeftMargin;
     private int mTitleRightMargin;
 
@@ -102,6 +105,9 @@ public class TitleBar extends RelativeLayout {
         mRightVisible = typedArray.getBoolean(R.styleable.TitleBar_rightVisible, false);
         mBackFeature = typedArray.getBoolean(R.styleable.TitleBar_backFeature, false);
         mBackIcon = typedArray.getDrawable(R.styleable.TitleBar_backIcon);
+        mBackText = typedArray.getText(R.styleable.TitleBar_backText);
+        mBackTextSize = typedArray.getDimension(R.styleable.TitleBar_backTextSize, defaultFontSize);
+        mBackTextColor = typedArray.getColorStateList(R.styleable.TitleBar_backTextColor);
         int customViewResId = typedArray.getResourceId(R.styleable.TitleBar_customView, -1);
         if (customViewResId != -1) {
             mCustomView = LayoutInflater.from(getContext()).inflate(customViewResId, null);
@@ -114,7 +120,7 @@ public class TitleBar extends RelativeLayout {
         mSplitLineHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, HEIGHT_SPLIT_LINE_DP,
                 getResources().getDisplayMetrics());
         mLeftViewLeftPadding = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_leftViewLeftPadding, -1);
-        mTextSingle = typedArray.getBoolean(R.styleable.TitleBar_textSingle, false);
+        mMaxLines = typedArray.getInt(R.styleable.TitleBar_android_maxLines, -1);
         mTitleLeftMargin = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_titleLeftMargin, 0);
         mTitleRightMargin = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_titleRightMargin, 0);
         typedArray.recycle();
@@ -144,6 +150,7 @@ public class TitleBar extends RelativeLayout {
 
         // center view
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, fixedHeight);
+        params.setMargins(mTitleLeftMargin, 0, mTitleRightMargin, 0);
         if (mCustomView != null) {
             addView(mCustomView, params);
         } else {
@@ -152,12 +159,9 @@ public class TitleBar extends RelativeLayout {
             addView(mTitleView, params);
         }
 
-        if (mTextSingle) {
-            mTitleView.setMaxLines(1);
+        if (mMaxLines != -1) {
+            mTitleView.setMaxLines(mMaxLines);
             mTitleView.setEllipsize(TextUtils.TruncateAt.END);
-            LayoutParams titleParams = (LayoutParams) mTitleView.getLayoutParams();
-            titleParams.setMargins(mTitleLeftMargin, 0, mTitleRightMargin, 0);
-            mTitleView.setLayoutParams(titleParams);
         }
 
         // left view
@@ -172,6 +176,9 @@ public class TitleBar extends RelativeLayout {
         addView(mLeftView, params);
         if (mBackFeature) {
             setBackButtonIcon(mBackIcon);
+            setBackText(mBackText);
+            setBackTextSize(TypedValue.COMPLEX_UNIT_PX, mBackTextSize);
+            setBackTextColor(mBackTextColor);
             mLeftView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -215,6 +222,30 @@ public class TitleBar extends RelativeLayout {
         setRightVisible(mRightVisible);
     }
 
+    private void setBackTextColor(ColorStateList backTextColor) {
+        mBackTextColor = backTextColor;
+        if (mBackTextColor != null) {
+            mLeftView.setTextColor(mBackTextColor);
+        } else {
+            mLeftView.setTextColor(ColorStateList.valueOf(Color.parseColor("#222222")));
+        }
+    }
+
+    public void setBackTextSize(int unit, float backTextSize) {
+        mLeftView.setTextSize(unit, backTextSize);
+        mBackTextSize = mLeftView.getTextSize();
+    }
+
+    public void setBackTextSize(float backTextSize) {
+        mLeftView.setTextSize(backTextSize);
+        mBackTextSize = mLeftView.getTextSize();
+    }
+
+    public void setBackText(CharSequence backText) {
+        mBackText = backText;
+        mLeftView.setText(backText);
+    }
+
     private void onBackClick(View view) {
         if (getContext() instanceof Activity) {
             Activity activity = (Activity) getContext();
@@ -228,10 +259,6 @@ public class TitleBar extends RelativeLayout {
         } else { // default icon
             mLeftView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tb_back_black, 0, 0, 0);
         }
-    }
-
-    public void setBackButtonIcon(int backIcon) {
-        mLeftView.setCompoundDrawablesWithIntrinsicBounds(backIcon, 0, 0, 0);
     }
 
     public void setTitle(int resid) {
@@ -271,20 +298,6 @@ public class TitleBar extends RelativeLayout {
     public void setRightText(CharSequence rightText) {
         mRightText = rightText;
         mRightView.setText(rightText);
-    }
-
-    public void setLeftText(String text) {
-        mLeftView.setText(text);
-        mLeftView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-    }
-
-    public void setLeftText(int textResId) {
-        mLeftView.setText(textResId);
-        mLeftView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-    }
-
-    public void setLeftTextColor(int color) {
-        mLeftView.setTextColor(color);
     }
 
     public void setRightTextSize(int unit, float rightTextSize) {

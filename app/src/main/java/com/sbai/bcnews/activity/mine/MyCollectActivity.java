@@ -97,7 +97,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         if (mSet.isEmpty()) {
             mMyCollectAdapter.clear();
         }
-        if (data.size() < Apic.NORMAL_PAGE_SIZE) {
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
             mPage++;
