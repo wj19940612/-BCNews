@@ -42,6 +42,7 @@ public class MarketData implements Parcelable{
     private double lastPrice;    // 最新 成交价
     private double lastVolume;   // 最新量（最新成交总量）
     private double lowestPrice;
+    private double marketValue;  // 市值
     private String name;         // 基准货币
     private double rate;         //兑换rmb 汇率
     private int status;
@@ -55,141 +56,77 @@ public class MarketData implements Parcelable{
         return askPrice;
     }
 
-    public void setAskPrice(double askPrice) {
-        this.askPrice = askPrice;
-    }
-
     public double getBidPrice() {
         return bidPrice;
-    }
-
-    public void setBidPrice(double bidPrice) {
-        this.bidPrice = bidPrice;
     }
 
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public String getCurrencyMoney() {
         return currencyMoney;
-    }
-
-    public void setCurrencyMoney(String currencyMoney) {
-        this.currencyMoney = currencyMoney;
     }
 
     public String getExchangeCode() {
         return exchangeCode;
     }
 
-    public void setExchangeCode(String exchangeCode) {
-        this.exchangeCode = exchangeCode;
-    }
-
     public double getHighestPrice() {
         return highestPrice;
-    }
-
-    public void setHighestPrice(double highestPrice) {
-        this.highestPrice = highestPrice;
     }
 
     public double getLastPrice() {
         return lastPrice;
     }
 
-    public void setLastPrice(double lastPrice) {
-        this.lastPrice = lastPrice;
-    }
-
     public double getLastVolume() {
         return lastVolume;
-    }
-
-    public void setLastVolume(double lastVolume) {
-        this.lastVolume = lastVolume;
     }
 
     public double getLowestPrice() {
         return lowestPrice;
     }
 
-    public void setLowestPrice(double lowestPrice) {
-        this.lowestPrice = lowestPrice;
+    public double getMarketValue() {
+        return marketValue;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public double getRate() {
         return rate;
-    }
-
-    public void setRate(double rate) {
-        this.rate = rate;
     }
 
     public int getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     public String getTradeDay() {
         return tradeDay;
-    }
-
-    public void setTradeDay(String tradeDay) {
-        this.tradeDay = tradeDay;
     }
 
     public double getUpDropSpeed() {
         return upDropSpeed;
     }
 
-    public void setUpDropSpeed(double upDropSpeed) {
-        this.upDropSpeed = upDropSpeed;
-    }
-
     public long getUpTime() {
         return upTime;
-    }
-
-    public void setUpTime(long upTime) {
-        this.upTime = upTime;
     }
 
     public String getUpTimeFormat() {
         return upTimeFormat;
     }
 
-    public void setUpTimeFormat(String upTimeFormat) {
-        this.upTimeFormat = upTimeFormat;
-    }
-
     public double getVolume() {
         return volume;
     }
 
-    public void setVolume(double volume) {
-        this.volume = volume;
-    }
-
     @Override
     public String toString() {
-        return "MarketListData{" +
+        return "MarketData{" +
                 "askPrice=" + askPrice +
                 ", bidPrice=" + bidPrice +
                 ", code='" + code + '\'' +
@@ -199,6 +136,7 @@ public class MarketData implements Parcelable{
                 ", lastPrice=" + lastPrice +
                 ", lastVolume=" + lastVolume +
                 ", lowestPrice=" + lowestPrice +
+                ", marketValue=" + marketValue +
                 ", name='" + name + '\'' +
                 ", rate=" + rate +
                 ", status=" + status +
@@ -226,6 +164,7 @@ public class MarketData implements Parcelable{
         dest.writeDouble(this.lastPrice);
         dest.writeDouble(this.lastVolume);
         dest.writeDouble(this.lowestPrice);
+        dest.writeDouble(this.marketValue);
         dest.writeString(this.name);
         dest.writeDouble(this.rate);
         dest.writeInt(this.status);
@@ -249,6 +188,7 @@ public class MarketData implements Parcelable{
         this.lastPrice = in.readDouble();
         this.lastVolume = in.readDouble();
         this.lowestPrice = in.readDouble();
+        this.marketValue = in.readDouble();
         this.name = in.readString();
         this.rate = in.readDouble();
         this.status = in.readInt();

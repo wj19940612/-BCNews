@@ -319,7 +319,7 @@ public class FinanceUtil {
      * @param scale
      * @return 处理后的字符串
      */
-    private static String formatWithThousandsSeparator(double value, int scale, RoundingMode roundingMode) {
+    public static String formatWithThousandsSeparator(double value, int scale, RoundingMode roundingMode) {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance();
         decimalFormat.setMaximumFractionDigits(scale);
         decimalFormat.setMinimumFractionDigits(scale);

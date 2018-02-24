@@ -96,6 +96,18 @@ public class MarketDetailActivity extends BaseActivity {
         requestSingleMarket();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        stopScheduleJob();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopScheduleJob();
+    }
+
     private void initCharts() {
         KlineChart.Settings klineSettings = new KlineChart.Settings();
         klineSettings.setBaseLines(5);
@@ -143,7 +155,7 @@ public class MarketDetailActivity extends BaseActivity {
         mAskPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getAskPrice())
                 + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getAskPrice()));
 
-        mMarketValue.setText("--"); // TODO: 11/02/2018 市值数据未提供
+        mMarketValue.setText(MarketDataUtils.formatMarketValue(mMarketData.getMarketValue()));
         mLowestPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getLowestPrice())
                 + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getLowestPrice()));
         mBidPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getBidPrice())
@@ -215,7 +227,7 @@ public class MarketDetailActivity extends BaseActivity {
 
     @Override
     public void onTimeUp(int count) {
-        // TODO: 11/02/2018 定时刷新
+        requestSingleMarket();
     }
 
     private TabLayout.OnTabSelectedListener mOnTabSelectedListener = new TabLayout.OnTabSelectedListener() {
