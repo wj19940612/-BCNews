@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.model.NewsDetail;
+import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +20,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+
+import static com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect.MESSAGE_TYPE_READ_HISTORY;
 
 /**
  * Created by Administrator on 2018\1\26 0026.
@@ -72,6 +75,33 @@ public class NewsCache {
         }
         NewsDetail newsDetail = sNewsCache.get(id);
         return newsDetail;
+    }
+
+    //遍历缓存,并转换为ReadHistoryOrMyCollect数据
+    public static List<ReadHistoryOrMyCollect> getReadHistory(){
+        if (sNewsCache == null) {
+            readFromPreference();
+        }
+        List<ReadHistoryOrMyCollect> readHistoryOrMyCollects = new ArrayList<>();
+        for(NewsDetail newsDetail : sNewsCache.values()){
+            ReadHistoryOrMyCollect readHistoryOrMyCollect = copyToReadHistory(newsDetail);
+            readHistoryOrMyCollects.add(readHistoryOrMyCollect);
+        }
+        return readHistoryOrMyCollects;
+    }
+
+    private static ReadHistoryOrMyCollect copyToReadHistory(NewsDetail newsDetail) {
+        ReadHistoryOrMyCollect readHistoryOrMyCollect = new ReadHistoryOrMyCollect();
+        readHistoryOrMyCollect.setReaderTime(newsDetail.getReadTime());
+        readHistoryOrMyCollect.setCreateTime(newsDetail.getCreateTime());
+        readHistoryOrMyCollect.setDataId(newsDetail.getId());
+        readHistoryOrMyCollect.setIsRead(1);
+        readHistoryOrMyCollect.setOriginal(newsDetail.getOriginal());
+        readHistoryOrMyCollect.setSource(newsDetail.getSource());
+        readHistoryOrMyCollect.setTitle(newsDetail.getTitle());
+        readHistoryOrMyCollect.setType(MESSAGE_TYPE_READ_HISTORY);
+        readHistoryOrMyCollect.setImgs(newsDetail.getImgs());
+        return readHistoryOrMyCollect;
     }
 
     public static class MaxLinkedHashMap<T, E> extends LinkedHashMap<T, E> {
