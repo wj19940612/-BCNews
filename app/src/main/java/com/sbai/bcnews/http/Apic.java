@@ -177,9 +177,8 @@ public class Apic {
      * @param phone
      * @return
      */
-    public static Api getImageAuthCode(String phone) {
-        return Api.post("/api/news-user/login/get/image/{phone}", new ReqParams()
-                .put("phone", phone));
+    public static String getImageAuthCode(String phone) {
+        return Api.getFixedHost() + "/api/news-user/login/download/image/" + phone;
     }
 
     /**

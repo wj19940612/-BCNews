@@ -22,6 +22,8 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.glide.GlideApp;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -61,16 +63,10 @@ public class ImageAuthCodeActivity extends DialogBaseActivity {
     }
 
     private void requestImageAuthCode() {
-        Apic.getImageAuthCode(mPhone)
-                .callback(new Callback2D<Resp<String>, String>() {
-                    @Override
-                    protected void onRespSuccessData(String data) {
-                        GlideApp.with(getActivity()).load(data)
-                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .skipMemoryCache(true)
-                                .into(mImageAuthCode);
-                    }
-                }).fireFreely();
+        GlideApp.with(getActivity()).load(Apic.getImageAuthCode(mPhone))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(mImageAuthCode);
     }
 
     private void initData(Intent intent) {
