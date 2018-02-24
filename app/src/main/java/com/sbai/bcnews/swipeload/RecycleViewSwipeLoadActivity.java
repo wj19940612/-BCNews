@@ -27,10 +27,10 @@ public abstract class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
-        if (getSwipeTargetView() != null) {
-            getSwipeTargetView().addOnScrollListener(mOnScrollListener);
-        }
+//        ButterKnife.bind(this);
+//        if (getSwipeTargetView() != null) {
+//            getSwipeTargetView().addOnScrollListener(mOnScrollListener);
+//        }
     }
 
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
