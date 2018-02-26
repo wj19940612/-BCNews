@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.sbai.bcnews.R;
@@ -85,7 +86,8 @@ public class MainActivity extends BaseActivity {
         if (LocalUser.getUser().isLogin()) {
             String deviceId = AppInfo.getDeviceHardwareId(this);
             String uploadText = NewsCache.getUploadJson();
-            Apic.uploadReadHistory(uploadText, deviceId).tag(TAG).fireFreely();
+            if (!TextUtils.isEmpty(uploadText))
+                Apic.uploadReadHistory(uploadText, deviceId).tag(TAG).fireFreely();
         }
     }
 

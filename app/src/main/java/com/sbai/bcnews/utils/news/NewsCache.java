@@ -29,18 +29,18 @@ import static com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect.MESSAGE_TYPE_REA
 
 public class NewsCache {
     private static final int TOTAL_NEWS = 200;
-    private static MaxLinkedHashMap<String,NewsDetail> sNewsCache;
+    private static MaxLinkedHashMap<String, NewsDetail> sNewsCache;
     private static Gson sGson = new Gson();
 
 
     private static void readFromPreference() {
         String news = Preference.get().getNewsDetail();
         if (!TextUtils.isEmpty(news)) {
-            Type type = new TypeToken<MaxLinkedHashMap<String,NewsDetail>>() {
+            Type type = new TypeToken<MaxLinkedHashMap<String, NewsDetail>>() {
             }.getType();
             sNewsCache = sGson.fromJson(news, type);
         } else {
-            sNewsCache = new MaxLinkedHashMap<String,NewsDetail>();
+            sNewsCache = new MaxLinkedHashMap<String, NewsDetail>();
         }
     }
 
@@ -63,7 +63,7 @@ public class NewsCache {
         if (sNewsCache == null) {
             readFromPreference();
         }
-        sNewsCache.put(newsDetail.getId(),newsDetail);
+        sNewsCache.put(newsDetail.getId(), newsDetail);
         String news = sGson.toJson(sNewsCache);
         Preference.get().setNewsDetail(news);
     }
@@ -78,12 +78,12 @@ public class NewsCache {
     }
 
     //遍历缓存,并转换为ReadHistoryOrMyCollect数据
-    public static List<ReadHistoryOrMyCollect> getReadHistory(){
+    public static List<ReadHistoryOrMyCollect> getReadHistory() {
         if (sNewsCache == null) {
             readFromPreference();
         }
         List<ReadHistoryOrMyCollect> readHistoryOrMyCollects = new ArrayList<>();
-        for(NewsDetail newsDetail : sNewsCache.values()){
+        for (NewsDetail newsDetail : sNewsCache.values()) {
             ReadHistoryOrMyCollect readHistoryOrMyCollect = copyToReadHistory(newsDetail);
             readHistoryOrMyCollects.add(readHistoryOrMyCollect);
         }
@@ -104,9 +104,12 @@ public class NewsCache {
         return readHistoryOrMyCollect;
     }
 
-    public static String getUploadJson(){
+    public static String getUploadJson() {
+        if (sNewsCache == null) {
+            readFromPreference();
+        }
         List<UploadNews> uploadNewsList = new ArrayList<>();
-        for(NewsDetail newsDetail : sNewsCache.values()){
+        for (NewsDetail newsDetail : sNewsCache.values()) {
             UploadNews uploadNews = new UploadNews();
             uploadNews.setDataId(newsDetail.getId());
             uploadNews.setReadTime(newsDetail.getReadTime());
@@ -124,7 +127,7 @@ public class NewsCache {
         }
     }
 
-    public static class UploadNews{
+    public static class UploadNews {
         private long readTime;
         private String dataId;
 
