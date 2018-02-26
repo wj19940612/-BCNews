@@ -56,17 +56,29 @@ public class ClipHeadImageActivity extends BaseActivity {
     }
 
     private void submitFile() {
+//        Bitmap clipBitmap = mClipImageLayout.clip(Bitmap.Config.RGB_565);
+//        File file = ImageUtils.bitmapToFile(clipBitmap, "image");
+//        Log.d(TAG, "onViewClicked: " + file.length());
+//        Apic.submitFile(file, "image")
+//                .tag(TAG)
+//                .timeout(10_000)
+//                .callback(new Callback2D<Resp<String>, String>() {
+//                    @Override
+//                    protected void onRespSuccessData(String data) {
+////                                UserInfo userInfo = LocalUser.getUser().getUserInfo();
+////                                userInfo.setUserPortrait();
+//                        submitPortraitPath(data);
+//                    }
+//                })
+//                .fire();
         Bitmap clipBitmap = mClipImageLayout.clip(Bitmap.Config.RGB_565);
-        File file = ImageUtils.bitmapToFile(clipBitmap, "image");
-        Log.d(TAG, "onViewClicked: " + file.length());
-        Apic.submitFile(file, "image")
+        String picture = ImageUtils.bitmapToBase64(clipBitmap);
+        Apic.uploadImage(picture)
                 .tag(TAG)
                 .timeout(10_000)
                 .callback(new Callback2D<Resp<String>, String>() {
                     @Override
                     protected void onRespSuccessData(String data) {
-//                                UserInfo userInfo = LocalUser.getUser().getUserInfo();
-//                                userInfo.setUserPortrait();
                         submitPortraitPath(data);
                     }
                 })
