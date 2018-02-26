@@ -17,11 +17,16 @@ public class Apic {
 
     public static final int DEFAULT_PAGE_SIZE = 20;
 
+
+    //关于我们界面链接
+    public static final String WEB_URI_ABOUT_PAGE = Api.getFixedHost() + "/news/banner/about.html";
+
+
     /**
      * 用户--同步阅读记录--薛松
      */
-    public static Api uploadReadHistory(String readText,String deviceId){
-        return Api.post("/api/news-user/operate/read/device",new ReqParams().put("read",readText).put("deviceId",deviceId));
+    public static Api uploadReadHistory(String readText, String deviceId) {
+        return Api.post("/api/news-user/operate/read/device", new ReqParams().put("read", readText).put("deviceId", deviceId));
     }
 
     /**
@@ -324,9 +329,14 @@ public class Apic {
         return Api.post("/api/news-user/login/logout");
     }
 
-    // TODO: 2018/2/9 解绑微信号
+    /**
+     * POST
+     * 用户--取消微信绑定--薛松
+     *
+     * @return
+     */
     public static Api unbindWeChatAccount() {
-        return Api.post("");
+        return Api.post("/api/news-user/user/bound/cancel");
     }
 
     /**
