@@ -1,4 +1,4 @@
-package com.sbai.chart;
+package com.sbai.chart.kline;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -12,6 +12,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sbai.chart.ChartSettings;
+import com.sbai.chart.R;
 import com.sbai.chart.domain.KlineViewData;
 
 import java.text.SimpleDateFormat;

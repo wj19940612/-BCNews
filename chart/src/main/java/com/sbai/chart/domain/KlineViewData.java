@@ -2,9 +2,10 @@ package com.sbai.chart.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
-public class KlineViewData implements Parcelable {
+public class KlineViewData implements Parcelable, Comparable<KlineViewData> {
 
     /**
      * closePrice : 1179.2
@@ -20,7 +21,7 @@ public class KlineViewData implements Parcelable {
     private float maxPrice;
     private float minPrice;
     private float openPrice;
-    private long nowVolume;
+    private double nowVolume;
     private String day;
     private String time;
     private long timeStamp;
@@ -56,7 +57,7 @@ public class KlineViewData implements Parcelable {
         return timeStamp;
     }
 
-    public long getNowVolume() {
+    public double getNowVolume() {
         return nowVolume;
     }
 
@@ -98,6 +99,7 @@ public class KlineViewData implements Parcelable {
                 '}';
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -109,7 +111,7 @@ public class KlineViewData implements Parcelable {
         dest.writeFloat(this.maxPrice);
         dest.writeFloat(this.minPrice);
         dest.writeFloat(this.openPrice);
-        dest.writeLong(this.nowVolume);
+        dest.writeDouble(this.nowVolume);
         dest.writeString(this.day);
         dest.writeString(this.time);
         dest.writeLong(this.timeStamp);
@@ -124,14 +126,14 @@ public class KlineViewData implements Parcelable {
         this.maxPrice = in.readFloat();
         this.minPrice = in.readFloat();
         this.openPrice = in.readFloat();
-        this.nowVolume = in.readLong();
+        this.nowVolume = in.readDouble();
         this.day = in.readString();
         this.time = in.readString();
         this.timeStamp = in.readLong();
         this.movingAverages = in.readSparseArray(Float.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<KlineViewData> CREATOR = new Parcelable.Creator<KlineViewData>() {
+    public static final Creator<KlineViewData> CREATOR = new Creator<KlineViewData>() {
         @Override
         public KlineViewData createFromParcel(Parcel source) {
             return new KlineViewData(source);
@@ -142,4 +144,9 @@ public class KlineViewData implements Parcelable {
             return new KlineViewData[size];
         }
     };
+
+    @Override
+    public int compareTo(@NonNull KlineViewData o) {
+        return (int) (this.timeStamp - o.getTimeStamp());
+    }
 }

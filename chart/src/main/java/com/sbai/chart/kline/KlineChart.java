@@ -1,4 +1,4 @@
-package com.sbai.chart;
+package com.sbai.chart.kline;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,6 +10,9 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 
+import com.sbai.chart.ChartSettings;
+import com.sbai.chart.ChartView;
+import com.sbai.chart.ColorCfg;
 import com.sbai.chart.domain.KlineViewData;
 
 import java.math.BigDecimal;
@@ -37,7 +40,6 @@ public class KlineChart extends ChartView {
     private SparseArray<String> mMAColors;
     private OnTouchLinesAppearListener mOnTouchLinesAppearListener;
     private KlineView.OnReachBorderListener mOnReachBorderListener;
-    private KlineView.OnReachBorderListener mReachBorderListener;
 
     // visible points index range
     private int mStart;
@@ -276,15 +278,15 @@ public class KlineChart extends ChartView {
     }
 
     @Override
-    protected void calculateIndexesBaseLines(long[] indexesBaseLines) {
+    protected void calculateIndexesBaseLines(double[] indexesBaseLines) {
         if (mDataList != null && mDataList.size() > 0) {
-            long maxVolume = mDataList.get(mStart).getNowVolume();
+            double maxVolume = mDataList.get(mStart).getNowVolume();
             for (int i = mStart; i < mEnd; i++) {
                 if (maxVolume < mDataList.get(i).getNowVolume()) {
                     maxVolume = mDataList.get(i).getNowVolume();
                 }
             }
-            long volumeRange = maxVolume / (indexesBaseLines.length - 1);
+            double volumeRange = maxVolume / (indexesBaseLines.length - 1);
             indexesBaseLines[0] = maxVolume;
             indexesBaseLines[indexesBaseLines.length - 1] = 0;
             for (int i = indexesBaseLines.length - 2; i > 0; i--) {
@@ -303,7 +305,7 @@ public class KlineChart extends ChartView {
 
     @Override
     protected void drawTitleAboveBaselines(float[] baselines, int left, int top, int width, int height,
-                                           long[] indexesBaseLines, int left2, int top2, int width2, int height2,
+                                           double[] indexesBaseLines, int left2, int top2, int width2, int height2,
                                            int touchIndex, Canvas canvas) {
         float textX = left + width - mTextMargin;
         float verticalInterval = mTextMargin * 2;
@@ -347,7 +349,7 @@ public class KlineChart extends ChartView {
 
     @Override
     protected void drawBaseLines(boolean indexesEnable, float[] baselines, int left, int top, int width, int height,
-                                 long[] indexesBaseLines, int left2, int top2, int width2, int height2, Canvas canvas) {
+                                 double[] indexesBaseLines, int left2, int top2, int width2, int height2, Canvas canvas) {
         if (baselines == null || baselines.length < 2) return;
 
         if (mDataList == null || mDataList.isEmpty()) return;
@@ -393,7 +395,7 @@ public class KlineChart extends ChartView {
         }
     }
 
-    protected String formatIndexesNumber(long value) {
+    protected String formatIndexesNumber(double value) {
         if (mSettings.getIndexesType() == Settings.INDEXES_VOL) {
             formatNumber(value, 0);
         }

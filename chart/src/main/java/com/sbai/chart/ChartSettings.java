@@ -3,7 +3,7 @@ package com.sbai.chart;
 public class ChartSettings {
 
     private float[] mBaseLines;
-    private long[] mIndexesBaseLines;
+    private double[] mIndexesBaseLines;
     private boolean mIndexesEnable;
     private boolean mIndexesTouchLineEnable;
     private int mNumberScale;
@@ -13,7 +13,7 @@ public class ChartSettings {
 
     public ChartSettings() {
         mBaseLines = new float[0];
-        mIndexesBaseLines = new long[0];
+        mIndexesBaseLines = new double[0];
         mIndexesEnable = false;
         mNumberScale = 2;
         mXAxis = 0;
@@ -39,7 +39,7 @@ public class ChartSettings {
         mBaseLines = new float[baseLines];
     }
 
-    public long[] getIndexesBaseLines() {
+    public double[] getIndexesBaseLines() {
         return mIndexesBaseLines;
     }
 
@@ -47,7 +47,7 @@ public class ChartSettings {
         if (indexesBaseLines < 2) {
             indexesBaseLines = 2;
         }
-        mIndexesBaseLines = new long[indexesBaseLines];
+        mIndexesBaseLines = new double[indexesBaseLines];
     }
 
     public boolean isIndexesEnable() {
