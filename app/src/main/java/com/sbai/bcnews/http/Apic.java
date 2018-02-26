@@ -18,6 +18,11 @@ public class Apic {
     public static final int DEFAULT_PAGE_SIZE = 20;
 
 
+    public interface url {
+        String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
+        String QR_CODE = Api.getFixedHost() + "/qc.png";
+    }
+
     //关于我们界面链接
     public static final String WEB_URI_ABOUT_PAGE = Api.getFixedHost() + "/news/banner/about.html";
 
@@ -314,9 +319,8 @@ public class Apic {
                         .put("showType", 0));
     }
 
-    // TODO: 2018/2/8 请求运营微信账户
-    public static Api requestOperationWetchatAccount() {
-        return Api.get("");
+    public static Api requestOperationWeChatAccount(String type) {
+        return Api.get("/api/news-user/dictionary/json.do", new ReqParams().put("type", type));
     }
 
     /**
@@ -466,8 +470,4 @@ public class Apic {
                         .put("limit", 100));
     }
 
-    public interface url {
-        String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
-        String QR_CODE = Api.getFixedHost() + "/qc.png";
-    }
 }
