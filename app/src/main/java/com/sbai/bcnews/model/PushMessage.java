@@ -14,6 +14,14 @@ public class PushMessage {
     private int type;
     private String url;
 
+    public boolean isNews() {
+        return type == 0;
+    }
+
+    public boolean isNewsFlash() {
+        return type == 1;
+    }
+
     public int getClassify() {
         return classify;
     }
