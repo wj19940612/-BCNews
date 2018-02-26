@@ -1,11 +1,15 @@
 package com.sbai.bcnews.service;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
@@ -20,7 +24,10 @@ import com.igexin.sdk.PushManager;
 import com.igexin.sdk.message.GTCmdMessage;
 import com.igexin.sdk.message.GTTransmitMessage;
 import com.igexin.sdk.message.SetTagCmdMessage;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.MainActivity;
+import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.model.PushMessage;
 
 
@@ -89,17 +96,24 @@ public class PushIntentService extends GTIntentService {
         } catch (JsonSyntaxException e) {
             Log.d(TAG, "handleMessage: " + e.toString());
         }
-
     }
 
-    private void createNotification(Context context, PushMessage pushMessage) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentTitle(pushMessage.getTitle());
-        builder.setContentText(pushMessage.getMsg());
+    private void createNotification(Context context, PushMessage pushMessageModel) {
+        String channelId = getString(R.string.app_name);
+        boolean b = !TextUtils.isEmpty(pushMessageModel.getTitle());
+        String notificationTitle;
+        if (b) {
+            notificationTitle = pushMessageModel.getTitle();
+        } else {
+            notificationTitle = channelId;
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
+        builder.setContentTitle(notificationTitle);
+        builder.setContentText(pushMessageModel.getMsg());
         builder.setAutoCancel(true);
         builder.setWhen(System.currentTimeMillis());
         String brand = Build.BRAND;
-        PendingIntent intent = setPendingIntent(context, pushMessage);
+        PendingIntent intent = setPendingIntent(context, pushMessageModel);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         if (!TextUtils.isEmpty(brand) && brand.equalsIgnoreCase(PHONE_BRAND_SAMSUNG)) {
             Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
@@ -108,12 +122,42 @@ public class PushIntentService extends GTIntentService {
         builder.setContentIntent(intent);
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+//        notificationManager.notify(R.string.app_name, builder.build());
+        int notificationId = (int) pushMessageModel.getCreateTime();
+        if (notificationManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel notificationChannel = createNotificationChannel(channelId, notificationManager);
+            }
+            notificationManager.notify(notificationId, builder.build());
+        }
+    }
+
+    @SuppressLint("InlinedApi")
+    private NotificationChannel createNotificationChannel(String channelId, NotificationManager notificationManager) {
+        NotificationChannel notificationChannel = new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT);
+        notificationChannel.enableLights(true);   //开启指示灯，如果设备有的话。
+        notificationChannel.enableVibration(true); //开启震动
+        notificationChannel.setLightColor(Color.RED); // 设置指示灯颜色
+        notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);//设置是否应在锁定屏幕上显示此频道的通知
+        notificationChannel.setShowBadge(true);  //设置是否显示角标
+        notificationChannel.setBypassDnd(true);  // 设置绕过免打扰模式
+        notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400}); //设置震动频率
+        notificationChannel.setDescription(channelId);
+        notificationManager.createNotificationChannel(notificationChannel);
+        return notificationChannel;
     }
 
     @NonNull
     private PendingIntent setPendingIntent(Context context, PushMessage data) {
         Intent intent = null;
+        if (data.isNews()) {
+            intent = new Intent(context, NewsDetailActivity.class);
+            intent.putExtra(ExtraKeys.NEWS_ID, data.getDataId());
+//            intent.putExtra(ExtraKeys.CHANNEL, );
+        } else if (data.isNewsFlash()) {
+            intent = new Intent(context, MainActivity.class);
+            intent.putExtra(ExtraKeys.PAGE_INDEX, MainActivity.PAGE_POSITION_NEWS_FLASH);
+        }
         if (intent != null) {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }

@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.HomeNewsFragment;
@@ -131,6 +132,8 @@ public class MainActivity extends BaseActivity {
             ((BaseSwipeLoadFragment) fragment).triggerRefresh();
         } else if (fragment instanceof MineFragment) {
             ((MineFragment) fragment).refreshUserData();
+        }else if(fragment instanceof HomeNewsFragment){
+            ((HomeNewsFragment)fragment).triggerRefresh();
         }
     }
 
@@ -157,6 +160,15 @@ public class MainActivity extends BaseActivity {
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mLoginBroadcastReceiver, intentFilter);
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int pageIndex = intent.getIntExtra(ExtraKeys.PAGE_INDEX, 0);
+        if (0 <= pageIndex && pageIndex < mViewPager.getChildCount()) {
+            mViewPager.setCurrentItem(pageIndex, false);
+        }
     }
 
     @Override

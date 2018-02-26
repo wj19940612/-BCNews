@@ -63,7 +63,7 @@ public class HomeBanner extends FrameLayout {
     private void processAttrs(AttributeSet attrs) {
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.HomeBanner);
 
-        mIsRectIndicator = typedArray.getBoolean(R.styleable.HomeBanner_isRectIndicator, true);
+        mIsRectIndicator = typedArray.getBoolean(R.styleable.HomeBanner_isRectIndicator, false);
 
         typedArray.recycle();
     }

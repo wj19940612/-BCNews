@@ -33,4 +33,5 @@ public interface ExtraKeys {
     String IMAGE_PATH = "image_path";
 
     String WEB_URL = "web_url";
+    String PAGE_INDEX = "page_index";
 }
