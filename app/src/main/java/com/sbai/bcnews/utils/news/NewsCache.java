@@ -91,7 +91,7 @@ public class NewsCache {
         ReadHistoryOrMyCollect readHistoryOrMyCollect = new ReadHistoryOrMyCollect();
         readHistoryOrMyCollect.setReadTime(newsDetail.getReadTime());
         readHistoryOrMyCollect.setCreateTime(newsDetail.getCreateTime());
-        readHistoryOrMyCollect.setId(newsDetail.getId());
+        readHistoryOrMyCollect.setDataId(newsDetail.getId());
         readHistoryOrMyCollect.setIsRead(1);
         readHistoryOrMyCollect.setOriginal(newsDetail.getOriginal());
         readHistoryOrMyCollect.setSource(newsDetail.getSource());

@@ -185,6 +185,7 @@
     <string name="read_history">阅读历史</string>
     <string name="related_news">相关资讯</string>
     <string name="my_collect">我的收藏</string>
+    <string name="cancel_collect">取消收藏</string>
 
     <string name="head_portrait">头像</string>
     <string name="nick_name">昵称</string>

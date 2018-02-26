@@ -292,18 +292,16 @@ public class Apic {
 
     /**
      * 用户--资讯收藏--薛松
-     * =======
      * /api/news-user/operate/collect/{id}
-     * <p>用户--收藏--薛松</p>
-     * >>>>>>> dev
      *
      * @param id         资讯id
      * @param collectNum 0-收藏 1-取消收藏
      * @return
      */
-    public static Api requestCollect(String id, int collectNum) {
+    public static Api collectOrCancelCollect(String id, int collectNum, int type) {
         return Api.post("/api/news-user/operate/collect/{id}", new ReqParams()
-                .put("id", id).put("type", 0)
+                .put("id", id)
+                .put("type", type)
                 .put("cancel", collectNum));
     }
 
@@ -373,7 +371,6 @@ public class Apic {
      * @param type
      * @param page
      */
-    // TODO: 2018/2/11
     public static Api requestReadHistoryOrMyCollectData(int type, int page) {
         return Api.get("/api/news-user/operate/list/{type}",
                 new ReqParams()

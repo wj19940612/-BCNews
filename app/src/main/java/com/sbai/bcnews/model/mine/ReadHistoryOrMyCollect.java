@@ -9,8 +9,11 @@ import java.util.List;
 
 public class ReadHistoryOrMyCollect {
 
-    public static final int MESSAGE_TYPE_MYCOLLECT = 0;
+    public static final int MESSAGE_TYPE_COLLECT = 0;
     public static final int MESSAGE_TYPE_READ_HISTORY = 1;
+
+    public static final int CANCEL_COLLECT = 1;
+
     /**
      * collectTime : 1518317883000
      * collected : 1

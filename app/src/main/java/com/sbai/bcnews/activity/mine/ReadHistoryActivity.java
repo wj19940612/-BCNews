@@ -130,7 +130,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
         }
 
         for (ReadHistoryOrMyCollect readHistoryOrMyCollect : data) {
-            if (mSet.add(readHistoryOrMyCollect.getId())) {
+            if (mSet.add(readHistoryOrMyCollect.getDataId())) {
                 mReadHistoryAdapter.add(readHistoryOrMyCollect);
             }
         }

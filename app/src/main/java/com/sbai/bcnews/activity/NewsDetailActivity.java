@@ -34,6 +34,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.OtherArticle;
+import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
@@ -652,7 +653,7 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void collect() {
         if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
-            Apic.requestCollect(mNetNewsDetail.getId(), mNetNewsDetail.getCollect()).tag(TAG).callback(new Callback<Resp>() {
+            Apic.collectOrCancelCollect(mNetNewsDetail.getId(), mNetNewsDetail.getCollect(), ReadHistoryOrMyCollect.MESSAGE_TYPE_COLLECT).tag(TAG).callback(new Callback<Resp>() {
                 @Override
                 protected void onRespSuccess(Resp resp) {
                     if (mNetNewsDetail.getCollect() == 0) {
