@@ -29,6 +29,7 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ChannelCacheModel;
+import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.ChannelCache;
@@ -228,6 +229,12 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         valueAnimator.setDuration(300);
         mAnimating = true;
         valueAnimator.start();
+    }
+
+    //外部调用  双击滑到顶部刷新
+    public void triggerRefresh(){
+        RecycleViewSwipeLoadFragment recycleViewSwipeLoadFragment = (RecycleViewSwipeLoadFragment) mPagerAdapter.getFragment(mViewPager.getCurrentItem());
+        recycleViewSwipeLoadFragment.triggerRefresh();
     }
 
     public static class PagerAdapter extends FragmentPagerAdapter {

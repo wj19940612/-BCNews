@@ -131,6 +131,8 @@ public class MainActivity extends BaseActivity {
             ((BaseSwipeLoadFragment) fragment).triggerRefresh();
         } else if (fragment instanceof MineFragment) {
             ((MineFragment) fragment).refreshUserData();
+        }else if(fragment instanceof HomeNewsFragment){
+            ((HomeNewsFragment)fragment).triggerRefresh();
         }
     }
 
