@@ -271,8 +271,6 @@ public class Apic {
     }
 
     /**
-     * <<<<<<< HEAD
-     * <<<<<<< HEAD
      * 查询用户反馈数据
      */
     public static Api requestFeedbackList(int page) {

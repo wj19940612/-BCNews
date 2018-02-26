@@ -24,6 +24,7 @@ import java.util.List;
 public class KlineChart extends ChartView {
 
     private static final int CANDLES_WIDTH_DP = 6; //dp
+    private static final float LINE_WIDTH = 1;
 
     public static final String DATE_FORMAT_DAY_MIN = "HH:mm";
 
@@ -47,6 +48,7 @@ public class KlineChart extends ChartView {
     private int mLength;
 
     private float mCandleWidth;
+    private float mLineWidth;
     private boolean mInitData;
 
     public KlineChart(Context context) {
@@ -92,6 +94,7 @@ public class KlineChart extends ChartView {
         mDateFormat = new SimpleDateFormat(DATE_FORMAT_DAY_MIN);
         mDate = new Date();
         mCandleWidth = dp2Px(CANDLES_WIDTH_DP);
+        mLineWidth = dp2Px(LINE_WIDTH);
 
         mMovingAverages = new int[]{5, 10};
         mMAColors = new SparseArray<>(mMovingAverages.length);
@@ -175,7 +178,7 @@ public class KlineChart extends ChartView {
 
     protected void setMovingAveragesPaint(Paint paint, int movingAverage) {
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(1);
+        paint.setStrokeWidth(mLineWidth);
         paint.setPathEffect(null);
         paint.setColor(Color.parseColor(mMAColors.get(movingAverage)));
     }
@@ -190,6 +193,7 @@ public class KlineChart extends ChartView {
 
     protected void setTouchLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartColor.BLACK.get()));
+        paint.setStrokeWidth(mLineWidth);
         paint.setStyle(Paint.Style.STROKE);
         paint.setPathEffect(null);
         applyColorConfiguration(paint, ColorCfg.TOUCH_LINE);

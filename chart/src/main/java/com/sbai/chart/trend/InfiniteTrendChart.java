@@ -32,8 +32,11 @@ import java.util.List;
  */
 public class InfiniteTrendChart extends ChartView {
 
-    private static final float VOLUME_WIDTH_DP = 6f; //dp
-    private static final float DATA_LINE_WIDTH_DP = 2f;
+    private static final float VOLUME_WIDTH = 6f; //dp
+    private static final float DATA_LINE_WIDTH = 2f;
+    private static final float TOUCH_LINE_WIDTH = 1;
+    private static final float OUTER_CIRCLE_RADIUS = 3.5f;
+    private static final float INNER_CIRCLE_RADIUS = 2.5f;
 
     public interface OnReachBorderListener {
 
@@ -70,6 +73,8 @@ public class InfiniteTrendChart extends ChartView {
     private float mVolumeWidth;
     private float mDataLineWidth;
     private float mTouchLineWidth;
+    private float mOuterCircleRadius;
+    private float mInnerCircleRadius;
 
     private boolean mInitData;
 
@@ -97,7 +102,7 @@ public class InfiniteTrendChart extends ChartView {
 
     protected void setTouchLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartColor.BLACK.get()));
-        paint.setStrokeWidth(1);
+        paint.setStrokeWidth(mTouchLineWidth);
         paint.setStyle(Paint.Style.STROKE);
         paint.setPathEffect(null);
     }
@@ -112,6 +117,16 @@ public class InfiniteTrendChart extends ChartView {
         paint.setColor(Color.parseColor(ChartView.ChartColor.WHITE.get()));
         paint.setTextSize(mBigFontSize);
         paint.setPathEffect(null);
+    }
+
+    private void setOuterCirclePaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartColor.WHITE.get()));
+        paint.setStyle(Paint.Style.FILL);
+    }
+
+    private void setInnerCirclePaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartColor.BLACK.get()));
+        paint.setStyle(Paint.Style.FILL);
     }
 
     public InfiniteTrendChart(Context context) {
@@ -137,8 +152,11 @@ public class InfiniteTrendChart extends ChartView {
         mFirstVisibleIndex = Integer.MAX_VALUE;
         mLastVisibleIndex = Integer.MIN_VALUE;
 
-        mVolumeWidth = dp2Px(VOLUME_WIDTH_DP);
-        mDataLineWidth = dp2Px(DATA_LINE_WIDTH_DP);
+        mVolumeWidth = dp2Px(VOLUME_WIDTH);
+        mDataLineWidth = dp2Px(DATA_LINE_WIDTH);
+        mTouchLineWidth = dp2Px(TOUCH_LINE_WIDTH);
+        mOuterCircleRadius = dp2Px(OUTER_CIRCLE_RADIUS);
+        mInnerCircleRadius = dp2Px(INNER_CIRCLE_RADIUS);
     }
 
     public void initWithData(List<TrendData> dataList) {
@@ -443,6 +461,12 @@ public class InfiniteTrendChart extends ChartView {
             float priceY = redRect.top + rectHeight / 2 + mOffset4CenterBigText;
             setTouchLineTextPaint(sPaint);
             canvas.drawText(price, priceX, priceY, sPaint);
+
+            // center circle
+            setOuterCirclePaint(sPaint);
+            canvas.drawCircle(touchX, touchY, mOuterCircleRadius, sPaint);
+            setInnerCirclePaint(sPaint);
+            canvas.drawCircle(touchX, touchY, mInnerCircleRadius, sPaint);
         }
     }
 
