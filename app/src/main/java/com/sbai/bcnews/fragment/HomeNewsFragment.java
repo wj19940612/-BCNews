@@ -2,6 +2,7 @@ package com.sbai.bcnews.fragment;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,8 +12,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,7 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ChannelCacheModel;
+import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.ChannelCache;
@@ -33,6 +37,7 @@ import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
 import com.sbai.httplib.ReqError;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -226,6 +231,12 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         valueAnimator.start();
     }
 
+    //外部调用  双击滑到顶部刷新
+    public void triggerRefresh(){
+        RecycleViewSwipeLoadFragment recycleViewSwipeLoadFragment = (RecycleViewSwipeLoadFragment) mPagerAdapter.getFragment(mViewPager.getCurrentItem());
+        recycleViewSwipeLoadFragment.triggerRefresh();
+    }
+
     public static class PagerAdapter extends FragmentPagerAdapter {
 
         private Context mContext;
@@ -252,6 +263,24 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
             return super.getPageTitle(position);
         }
 
+        //在notify的时候动态刷新，先要移除老的，否则不更新
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            removeFragment(container, position);
+            return super.instantiateItem(container, position);
+        }
+
+        private void removeFragment(ViewGroup container, int index) {
+            String tag = getFragmentTag(container.getId(), index);
+            Fragment fragment = mFragmentManager.findFragmentByTag(tag);
+            if (fragment == null)
+                return;
+            FragmentTransaction ft = mFragmentManager.beginTransaction();
+            ft.remove(fragment);
+            ft.commit();
+            mFragmentManager.executePendingTransactions();
+        }
+
         @Override
         public Fragment getItem(int position) {
             String title = mMyChannelEntities.get(position);
@@ -263,6 +292,26 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
             NewsFragment newsFragment = NewsFragment.newsInstance(false, title);
             newsFragment.setOnScrollListener(mOnScrollListener);
             return newsFragment;
+        }
+
+        private String getFragmentTag(int viewId, int index) {
+            try {
+                Class<FragmentPagerAdapter> cls = FragmentPagerAdapter.class;
+                Class<?>[] parameterTypes = {int.class, long.class};
+                Method method = cls.getDeclaredMethod("makeFragmentName",
+                        parameterTypes);
+                method.setAccessible(true);
+                String tag = (String) method.invoke(this, viewId, index);
+                return tag;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "";
+            }
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override

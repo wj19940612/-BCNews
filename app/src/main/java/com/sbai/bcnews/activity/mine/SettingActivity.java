@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.AppOpsManager;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
@@ -109,11 +112,13 @@ public class SettingActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.notificationSwitch:
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                startActivity(intent);
                 break;
             case R.id.personalData:
                 umengEventCount(UmengCountEventId.SETTING_PERSONAL_DATE);
                 if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(),PersonalDataActivity.class).execute();
+                    Launcher.with(getActivity(), PersonalDataActivity.class).execute();
                 } else {
                     Launcher.with(getActivity(), LoginActivity.class).execute();
                 }
@@ -128,6 +133,10 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.aboutBcnews:
                 umengEventCount(UmengCountEventId.SETTING_ABOUT_APP);
+                Launcher.with(getActivity(), WebActivity.class)
+                        .putExtra(WebActivity.EX_URL, Apic.url.WEB_URI_ABOUT_PAGE)
+                        .putExtra(WebActivity.EX_TITLE,getString(R.string.about_bcnews))
+                        .execute();
                 break;
             case R.id.logout:
                 logout();
@@ -136,23 +145,23 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void logout() {
-        SmartDialog.with(getActivity(),R.string.affirm_logout)
-               .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                   @Override
-                   public void onClick(Dialog dialog) {
-                       Apic.logout()
-                               .tag(TAG)
-                               .callback(new Callback<Resp<Object>>() {
+        SmartDialog.with(getActivity(), R.string.affirm_logout)
+                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        Apic.logout()
+                                .tag(TAG)
+                                .callback(new Callback<Resp<Object>>() {
 
-                                   @Override
-                                   protected void onRespSuccess(Resp<Object> resp) {
-                                       LocalUser.getUser().logout();
-                                       finish();
-                                   }
-                               })
-                               .fire();
-                   }
-               })
+                                    @Override
+                                    protected void onRespSuccess(Resp<Object> resp) {
+                                        LocalUser.getUser().logout();
+                                        finish();
+                                    }
+                                })
+                                .fire();
+                    }
+                })
                 .show();
 
     }

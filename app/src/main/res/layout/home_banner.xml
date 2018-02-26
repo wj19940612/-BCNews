@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="120dp">
+    android:layout_height="match_parent">
 
     <com.sbai.bcnews.view.InfiniteViewPager
         android:id="@+id/viewPager"
@@ -17,8 +17,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="14dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginRight="12dp"
         app:indicatorsInterval="4dp"
         app:infinite="true"
         app:point="#d8d8d8"

@@ -31,4 +31,7 @@ public interface ExtraKeys {
     String PERSONAL_INTRODUCE = "personal_introduce ";
     String NICK_NAME = "nick_name";
     String IMAGE_PATH = "image_path";
+
+    String WEB_URL = "web_url";
+    String PAGE_INDEX = "page_index";
 }

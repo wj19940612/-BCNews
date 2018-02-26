@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.mine.FeedbackActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.activity.mine.MyCollectActivity;
 import com.sbai.bcnews.activity.mine.PersonalDataActivity;
@@ -26,13 +27,18 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
+import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
+import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
+import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.IconTextRow;
 import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.glide.GlideApp;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,6 +98,12 @@ public class MineFragment extends BaseFragment {
         } else {
             mUserName.setText(R.string.click_login);
             updateUserCollectNumber(0);
+            int readHistorySize = 0;
+            List<ReadHistoryOrMyCollect> data = NewsCache.getReadHistory();
+            if (data != null) {
+                readHistorySize = data.size();
+            }
+            updateUserReadHistory(readHistorySize);
         }
     }
 
@@ -155,10 +167,11 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), ReadHistoryActivity.class).execute();
                 break;
             case R.id.contribute:
-                requestOperationWetchatAccount();
+                requestOperationWeChatAccount();
                 umengEventCount(UmengCountEventId.MINE_CONTRIBUTE);
                 break;
             case R.id.feedBack:
+                Launcher.with(getActivity(), FeedbackActivity.class).execute();
                 break;
             case R.id.setting:
                 umengEventCount(UmengCountEventId.MINE_SETTING);
@@ -167,19 +180,19 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    private void requestOperationWetchatAccount() {
-        Apic.requestOperationWetchatAccount()
+    private void requestOperationWeChatAccount() {
+        Apic.requestOperationWeChatAccount(Operation.OPERATION_REQ_TYPE_WECHAT)
                 .tag(TAG)
-                .callback(new Callback2D<Resp<String>, String>() {
+                .callback(new Callback2D<Resp<Operation>, Operation>() {
                     @Override
-                    protected void onRespSuccessData(String data) {
-                        showAddWetchatAccountDialog(data);
+                    protected void onRespSuccessData(Operation data) {
+                        showAddWeChatAccountDialog(data.getSYS_OPERATE_WX());
                     }
                 })
                 .fire();
     }
 
-    private void showAddWetchatAccountDialog(final String data) {
+    private void showAddWeChatAccountDialog(final String data) {
         SmartDialog.with(getActivity(), getString(R.string.please_add_us_wechat_account, data))
                 .setPositive(R.string.copy_us_wechat_account, new SmartDialog.OnClickListener() {
                     @Override

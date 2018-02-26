@@ -11,19 +11,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.activity.mine.MyCollectActivity.MyCollectAdapter.OnDeleteCollectListener;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.ListResp;
+import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.OnItemClickListener;
-import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.ThreeImageLayout;
 import com.sbai.bcnews.view.TitleBar;
+import com.sbai.bcnews.view.move.SwipeItemLayout;
 import com.sbai.glide.GlideApp;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
@@ -60,19 +66,37 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         setContentView(R.layout.activity_my_collect);
         ButterKnife.bind(this);
         initView();
-
-        requestCollectNews();
     }
 
     private void initView() {
         mSet = new HashSet<>();
         mMyCollectAdapter = new MyCollectAdapter(this, new ArrayList<ReadHistoryOrMyCollect>());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(this));
+        mSwipeTarget.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(this));
         mSwipeTarget.setAdapter(mMyCollectAdapter);
+
+        mMyCollectAdapter.setOnDeleteCollectListener(new OnDeleteCollectListener() {
+            @Override
+            public void onDeleteCollect(final int position, final ReadHistoryOrMyCollect readHistoryOrMyCollect) {
+                cancelCollect(position, readHistoryOrMyCollect);
+            }
+        });
+    }
+
+    private void cancelCollect(final int position, final ReadHistoryOrMyCollect readHistoryOrMyCollect) {
+        Apic.collectOrCancelCollect(readHistoryOrMyCollect.getDataId(), ReadHistoryOrMyCollect.CANCEL_COLLECT, ReadHistoryOrMyCollect.MESSAGE_TYPE_COLLECT)
+                .callback(new Callback<Resp<Object>>() {
+
+                    @Override
+                    protected void onRespSuccess(Resp<Object> resp) {
+                        mMyCollectAdapter.removeItem(position, readHistoryOrMyCollect);
+                    }
+                })
+                .fire();
     }
 
     private void requestCollectNews() {
-        Apic.requestReadHistoryOrMyCollectData(ReadHistoryOrMyCollect.MESSAGE_TYPE_MYCOLLECT, mPage)
+        Apic.requestReadHistoryOrMyCollectData(ReadHistoryOrMyCollect.MESSAGE_TYPE_COLLECT, mPage)
                 .tag(TAG)
                 .callback(new Callback<ListResp<ReadHistoryOrMyCollect>>() {
 
@@ -91,6 +115,8 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                     }
                 })
                 .fire();
+
+
     }
 
     private void updateMyCollectData(List<ReadHistoryOrMyCollect> data) {
@@ -104,10 +130,16 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         }
 
         for (ReadHistoryOrMyCollect readHistoryOrMyCollect : data) {
-            if (mSet.add(readHistoryOrMyCollect.getId())) {
+            if (mSet.add(readHistoryOrMyCollect.getDataId())) {
                 mMyCollectAdapter.add(readHistoryOrMyCollect);
             }
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        onRefresh();
     }
 
     @Override
@@ -128,19 +160,29 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         requestCollectNews();
     }
 
+
     public static class MyCollectAdapter extends RecyclerView.Adapter {
 
         private static final int ITEM_TYPE_NONE_OR_SINGLE = 0;
         private static final int ITEM_TYPE_THREE_IMAGE = 1;
 
+        public OnDeleteCollectListener mOnDeleteCollectListener;
+
+
+        public interface OnDeleteCollectListener {
+            void onDeleteCollect(int position, ReadHistoryOrMyCollect readHistoryOrMyCollect);
+        }
+
 
         private ArrayList<ReadHistoryOrMyCollect> mReadHistoryOrMyCollectList;
         private Context mContext;
         private OnItemClickListener<ReadHistoryOrMyCollect> mOnItemClickListener;
+        private MyCollectAdapter mMyCollectAdapter;
 
         public MyCollectAdapter(Context context, ArrayList<ReadHistoryOrMyCollect> readHistoryOrMyCollectList) {
             mReadHistoryOrMyCollectList = readHistoryOrMyCollectList;
             mContext = context;
+            mMyCollectAdapter = this;
         }
 
         public void add(ReadHistoryOrMyCollect readHistoryOrMyCollect) {
@@ -153,27 +195,36 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
             notifyDataSetChanged();
         }
 
+        public void removeItem(int position, ReadHistoryOrMyCollect readHistoryOrMyCollect) {
+            mReadHistoryOrMyCollectList.remove(position);
+            notifyDataSetChanged();
+        }
+
+        public void setOnDeleteCollectListener(OnDeleteCollectListener deleteCollectListener) {
+            mOnDeleteCollectListener = deleteCollectListener;
+        }
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             switch (viewType) {
                 case ITEM_TYPE_NONE_OR_SINGLE:
                     View view = LayoutInflater.from(mContext).inflate(R.layout.row_mycollect_single_or_none_image, parent, false);
-                    return new MyCollectAdapter.NoneOrSingleImageViewHolder(view);
+                    return new NoneOrSingleImageViewHolder(view);
                 case ITEM_TYPE_THREE_IMAGE:
                     View inflate = LayoutInflater.from(mContext).inflate(R.layout.row_mycollect_three_image, parent, false);
-                    return new MyCollectAdapter.ThreeImageViewHolder(inflate);
+                    return new ThreeImageViewHolder(inflate);
             }
             return null;
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof MyCollectAdapter.NoneOrSingleImageViewHolder) {
-                MyCollectAdapter.NoneOrSingleImageViewHolder noneOrSingleImageViewHolder = (MyCollectAdapter.NoneOrSingleImageViewHolder) holder;
-                noneOrSingleImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemClickListener);
-            } else if (holder instanceof MyCollectAdapter.ThreeImageViewHolder) {
-                MyCollectAdapter.ThreeImageViewHolder threeImageViewHolder = (MyCollectAdapter.ThreeImageViewHolder) holder;
-                threeImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemClickListener);
+            if (holder instanceof NoneOrSingleImageViewHolder) {
+                NoneOrSingleImageViewHolder noneOrSingleImageViewHolder = (NoneOrSingleImageViewHolder) holder;
+                noneOrSingleImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnDeleteCollectListener);
+            } else if (holder instanceof ThreeImageViewHolder) {
+                ThreeImageViewHolder threeImageViewHolder = (ThreeImageViewHolder) holder;
+                threeImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnDeleteCollectListener);
             }
         }
 
@@ -199,8 +250,6 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         }
 
         static class NoneOrSingleImageViewHolder extends RecyclerView.ViewHolder {
-            @BindView(R.id.firstSplit)
-            View mFirstSplit;
             @BindView(R.id.newsTitle)
             TextView mNewsTitle;
             @BindView(R.id.cover)
@@ -209,27 +258,40 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
             TextView mOriginal;
             @BindView(R.id.source)
             TextView mSource;
-            @BindView(R.id.contentRoot)
-            RelativeLayout mContentRoot;
+            @BindView(R.id.main)
+            RelativeLayout mMain;
+            @BindView(R.id.deleteCollect)
+            TextView mDeleteCollect;
+            @BindView(R.id.split)
+            Space mSplit;
 
             NoneOrSingleImageViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(final ReadHistoryOrMyCollect item, int position, Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener) {
+            public void bindDataWithView(final ReadHistoryOrMyCollect item, final int position, final Context context, final OnDeleteCollectListener onDeleteCollectListener) {
 
                 if (position == 0) {
-                    mFirstSplit.setVisibility(View.VISIBLE);
+                    mSplit.setVisibility(View.VISIBLE);
                 } else {
-                    mFirstSplit.setVisibility(View.GONE);
+                    mSplit.setVisibility(View.GONE);
                 }
 
-                mContentRoot.setOnLongClickListener(new View.OnLongClickListener() {
+                mMain.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
-                        ToastUtil.show(item.getTitle());
-                        return false;
+                    public void onClick(View v) {
+                        Launcher.with(context, NewsDetailActivity.class)
+                                .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
+                                .putExtra(ExtraKeys.TAG, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
+                                .execute();
+                    }
+                });
+
+                mDeleteCollect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onDeleteCollectListener.onDeleteCollect(position, item);
                     }
                 });
 
@@ -251,7 +313,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
 
         static class ThreeImageViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.firstSplit)
-            View mFirstSplit;
+            Space mSplit;
             @BindView(R.id.newsTitle)
             TextView mNewsTitle;
             @BindView(R.id.threeImageLayout)
@@ -260,26 +322,37 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
             TextView mOriginal;
             @BindView(R.id.source)
             TextView mSource;
-            @BindView(R.id.contentRoot)
-            RelativeLayout mContentRoot;
+            @BindView(R.id.main)
+            RelativeLayout mMain;
+            @BindView(R.id.deleteCollect)
+            TextView mDeleteCollect;
 
             ThreeImageViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(final ReadHistoryOrMyCollect item, int position, Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener) {
+            public void bindDataWithView(final ReadHistoryOrMyCollect item, final int position, final Context context, final OnDeleteCollectListener onDeleteCollectListener) {
                 if (position == 0) {
-                    mFirstSplit.setVisibility(View.VISIBLE);
+                    mSplit.setVisibility(View.VISIBLE);
                 } else {
-                    mFirstSplit.setVisibility(View.GONE);
+                    mSplit.setVisibility(View.GONE);
                 }
 
-                mContentRoot.setOnLongClickListener(new View.OnLongClickListener() {
+                mMain.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
-                        ToastUtil.show(item.getTitle());
-                        return false;
+                    public void onClick(View v) {
+                        Launcher.with(context, NewsDetailActivity.class)
+                                .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
+                                .putExtra(ExtraKeys.TAG, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
+                                .execute();
+                    }
+                });
+
+                mDeleteCollect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onDeleteCollectListener.onDeleteCollect(position, item);
                     }
                 });
 

@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/headPortrait"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="47dp"
             tools:src="@drawable/ic_default_head_portrait"/>

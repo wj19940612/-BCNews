@@ -147,7 +147,7 @@ public class PersonalDataActivity extends BaseActivity {
 
         mIntroduce.setText(data.getIntroduction());
         mBirthday.setSubText(data.getBirthday());
-        mLocation.setSubText(data.getUserProvince()+" "+data.getUserCity());
+        mLocation.setSubText(data.getUserProvince() + " " + data.getUserCity());
     }
 
     private void updateUserPortrait(String portrait) {

@@ -34,6 +34,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.OtherArticle;
+import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
@@ -518,14 +519,14 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void requestOtherArticle() {
-        if(!TextUtils.isEmpty(mChannel)){
+        if (!TextUtils.isEmpty(mChannel)) {
             requestOtherArticleWithChannel();
-        }else if(!TextUtils.isEmpty(mTag)){
+        } else if (!TextUtils.isEmpty(mTag)) {
             requestOtherArticleWithTag();
         }
     }
 
-    private void requestOtherArticleWithChannel(){
+    private void requestOtherArticleWithChannel() {
         String encodeChannel = Uri.encode(mChannel);
         Apic.getOtherArticles(encodeChannel, mId).tag(TAG).callback(new Callback2D<Resp<List<OtherArticle>>, List<OtherArticle>>() {
             @Override
@@ -535,7 +536,7 @@ public class NewsDetailActivity extends BaseActivity {
         }).fireFreely();
     }
 
-    private void requestOtherArticleWithTag(){
+    private void requestOtherArticleWithTag() {
         String encodeTag = Uri.encode(mTag);
         Apic.getRelatedNewsRecommend(encodeTag, mId).tag(TAG).callback(new Callback2D<Resp<List<OtherArticle>>, List<OtherArticle>>() {
             @Override
@@ -626,7 +627,7 @@ public class NewsDetailActivity extends BaseActivity {
     private void requestPraise() {
         if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
             int praiseWant = mNetNewsDetail.getPraise() == 0 ? 1 : 0;
-            Apic.praiseNews(mNetNewsDetail.getId(), praiseWant).tag(TAG).callback(new  Callback<Resp>() {
+            Apic.praiseNews(mNetNewsDetail.getId(), praiseWant).tag(TAG).callback(new Callback<Resp>() {
                 @Override
                 protected void onRespSuccess(Resp resp) {
                     if (mNetNewsDetail.getPraise() == 0) {
@@ -634,6 +635,7 @@ public class NewsDetailActivity extends BaseActivity {
                         mNetNewsDetail.setPraiseCount(mNetNewsDetail.getPraiseCount() + 1);
                         umengEventCount(UmengCountEventId.NEWS04);
                     } else {
+                        mNetNewsDetail.setPraiseCount(mNetNewsDetail.getPraiseCount() - 1);
                         mNetNewsDetail.setPraise(0);
                     }
                     updatePraiseCollect(mNetNewsDetail);
@@ -652,7 +654,7 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void collect() {
         if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
-            Apic.requestCollect(mNetNewsDetail.getId(), mNetNewsDetail.getCollect()).tag(TAG).callback(new Callback<Resp>() {
+            Apic.collectOrCancelCollect(mNetNewsDetail.getId(), mNetNewsDetail.getCollect(), ReadHistoryOrMyCollect.MESSAGE_TYPE_COLLECT).tag(TAG).callback(new Callback<Resp>() {
                 @Override
                 protected void onRespSuccess(Resp resp) {
                     if (mNetNewsDetail.getCollect() == 0) {
@@ -693,7 +695,7 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void saveDetailCache() {
-        if (mNewsDetail != null && mNetNewsDetail != null && mNewsDetail.getCreateTime() != mNetNewsDetail.getCreateTime()) {
+        if (mNewsDetail != null && mNetNewsDetail != null && mNewsDetail.getUpdateTime() != mNetNewsDetail.getUpdateTime()) {
             mNetNewsDetail.setReadTime(System.currentTimeMillis());
             NewsCache.insertOrReplaceNews(mNetNewsDetail);
             new CacheThread(mNetNewsDetail).start();

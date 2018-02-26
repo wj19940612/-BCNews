@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -206,6 +207,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void triggerRefresh() {
         super.triggerRefresh();
+        Log.e("zzz","triggerRefresh");
         smoothScrollToTop();
         onRefresh();
     }
@@ -273,7 +275,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         } else {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);
         }
-        mPage++;
+        if (data.size() != 0)
+            mPage++;
         mNewsWraps.addAll(NewsWrap.updateImgType(data));
         mNewsAdapter.notifyDataSetChanged();
     }

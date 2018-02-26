@@ -1,7 +1,6 @@
 package com.sbai.bcnews.utils.news;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -16,10 +15,8 @@ import org.json.JSONTokener;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 import static com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect.MESSAGE_TYPE_READ_HISTORY;
 
@@ -29,18 +26,18 @@ import static com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect.MESSAGE_TYPE_REA
 
 public class NewsCache {
     private static final int TOTAL_NEWS = 200;
-    private static MaxLinkedHashMap<String,NewsDetail> sNewsCache;
+    private static MaxLinkedHashMap<String, NewsDetail> sNewsCache;
     private static Gson sGson = new Gson();
 
 
     private static void readFromPreference() {
         String news = Preference.get().getNewsDetail();
         if (!TextUtils.isEmpty(news)) {
-            Type type = new TypeToken<MaxLinkedHashMap<String,NewsDetail>>() {
+            Type type = new TypeToken<MaxLinkedHashMap<String, NewsDetail>>() {
             }.getType();
             sNewsCache = sGson.fromJson(news, type);
         } else {
-            sNewsCache = new MaxLinkedHashMap<String,NewsDetail>();
+            sNewsCache = new MaxLinkedHashMap<String, NewsDetail>();
         }
     }
 
@@ -63,7 +60,7 @@ public class NewsCache {
         if (sNewsCache == null) {
             readFromPreference();
         }
-        sNewsCache.put(newsDetail.getId(),newsDetail);
+        sNewsCache.put(newsDetail.getId(), newsDetail);
         String news = sGson.toJson(sNewsCache);
         Preference.get().setNewsDetail(news);
     }
@@ -78,12 +75,12 @@ public class NewsCache {
     }
 
     //遍历缓存,并转换为ReadHistoryOrMyCollect数据
-    public static List<ReadHistoryOrMyCollect> getReadHistory(){
+    public static List<ReadHistoryOrMyCollect> getReadHistory() {
         if (sNewsCache == null) {
             readFromPreference();
         }
         List<ReadHistoryOrMyCollect> readHistoryOrMyCollects = new ArrayList<>();
-        for(NewsDetail newsDetail : sNewsCache.values()){
+        for (NewsDetail newsDetail : sNewsCache.values()) {
             ReadHistoryOrMyCollect readHistoryOrMyCollect = copyToReadHistory(newsDetail);
             readHistoryOrMyCollects.add(readHistoryOrMyCollect);
         }
@@ -92,7 +89,7 @@ public class NewsCache {
 
     private static ReadHistoryOrMyCollect copyToReadHistory(NewsDetail newsDetail) {
         ReadHistoryOrMyCollect readHistoryOrMyCollect = new ReadHistoryOrMyCollect();
-        readHistoryOrMyCollect.setReaderTime(newsDetail.getReadTime());
+        readHistoryOrMyCollect.setReadTime(newsDetail.getReadTime());
         readHistoryOrMyCollect.setCreateTime(newsDetail.getCreateTime());
         readHistoryOrMyCollect.setDataId(newsDetail.getId());
         readHistoryOrMyCollect.setIsRead(1);
@@ -104,6 +101,19 @@ public class NewsCache {
         return readHistoryOrMyCollect;
     }
 
+    public static String getUploadJson() {
+        if (sNewsCache == null) {
+            readFromPreference();
+        }
+        List<UploadNews> uploadNewsList = new ArrayList<>();
+        for (NewsDetail newsDetail : sNewsCache.values()) {
+            UploadNews uploadNews = new UploadNews();
+            uploadNews.setDataId(newsDetail.getId());
+            uploadNews.setReadTime(newsDetail.getReadTime());
+        }
+        return sGson.toJson(uploadNewsList);
+    }
+
     public static class MaxLinkedHashMap<T, E> extends LinkedHashMap<T, E> {
         private static final long serialVersionUID = 1L;
 
@@ -111,6 +121,27 @@ public class NewsCache {
         protected boolean removeEldestEntry(Map.Entry<T, E> eldest) {
             //每当调用myMap.put()的时候，就会自动判断是否个数已经超过maximumSize，如果超过就删掉最旧的那条
             return size() > TOTAL_NEWS;
+        }
+    }
+
+    public static class UploadNews {
+        private long readTime;
+        private String dataId;
+
+        public long getReadTime() {
+            return readTime;
+        }
+
+        public void setReadTime(long readTime) {
+            this.readTime = readTime;
+        }
+
+        public String getDataId() {
+            return dataId;
+        }
+
+        public void setDataId(String dataId) {
+            this.dataId = dataId;
         }
     }
 }

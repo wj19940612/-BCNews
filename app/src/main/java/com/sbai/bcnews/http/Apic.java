@@ -17,6 +17,23 @@ public class Apic {
 
     public static final int DEFAULT_PAGE_SIZE = 20;
 
+
+    public interface url {
+        String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
+
+        String QR_CODE = Api.getFixedHost() + "/qc.png";
+
+        //关于我们界面链接
+        String WEB_URI_ABOUT_PAGE = Api.getFixedHost() + "/news/banner/about.html";
+    }
+
+    /**
+     * 用户--同步阅读记录--薛松
+     */
+    public static Api uploadReadHistory(String readText, String deviceId) {
+        return Api.post("/api/news-user/operate/read/device", new ReqParams().put("read", readText).put("deviceId", deviceId));
+    }
+
     /**
      * /api/news-info/news/tag/{tag}
      * <p>(标签)相关资讯-----齐慕伟</p>
@@ -56,7 +73,7 @@ public class Apic {
      * @return
      */
     public static Api getNewsDetail(String id) {
-        return Api.get("/api/news-info/info/details/{id}",
+        return Api.get("/api/news-info/news/detail/{id}",
                 new ReqParams()
                         .put("id", id));
     }
@@ -177,9 +194,8 @@ public class Apic {
      * @param phone
      * @return
      */
-    public static Api getImageAuthCode(String phone) {
-        return Api.post("/api/news-user/login/get/image/{phone}", new ReqParams()
-                .put("phone", phone));
+    public static String getImageAuthCode(String phone) {
+        return Api.getFixedHost() + "/api/news-user/login/download/image/" + phone;
     }
 
     /**
@@ -276,18 +292,16 @@ public class Apic {
 
     /**
      * 用户--资讯收藏--薛松
-     * =======
      * /api/news-user/operate/collect/{id}
-     * <p>用户--收藏--薛松</p>
-     * >>>>>>> dev
      *
      * @param id         资讯id
      * @param collectNum 0-收藏 1-取消收藏
      * @return
      */
-    public static Api requestCollect(String id, int collectNum) {
+    public static Api collectOrCancelCollect(String id, int collectNum, int type) {
         return Api.post("/api/news-user/operate/collect/{id}", new ReqParams()
-                .put("id", id).put("type", 0)
+                .put("id", id)
+                .put("type", type)
                 .put("cancel", collectNum));
     }
 
@@ -298,14 +312,11 @@ public class Apic {
      * @return
      */
     public static Api requestBanners() {
-        return Api.get("/api/news-user/banner/findBannerList.do",
-                new ReqParams()
-                        .put("showType", 0));
+        return Api.get("/api/news-user/banner/findBannerList.do");
     }
 
-    // TODO: 2018/2/8 请求运营微信账户
-    public static Api requestOperationWetchatAccount() {
-        return Api.get("");
+    public static Api requestOperationWeChatAccount(String type) {
+        return Api.get("/api/news-user/dictionary/json.do", new ReqParams().put("type", type));
     }
 
     /**
@@ -318,9 +329,14 @@ public class Apic {
         return Api.post("/api/news-user/login/logout");
     }
 
-    // TODO: 2018/2/9 解绑微信号
+    /**
+     * POST
+     * 用户--取消微信绑定--薛松
+     *
+     * @return
+     */
     public static Api unbindWeChatAccount() {
-        return Api.post("");
+        return Api.post("/api/news-user/user/bound/cancel");
     }
 
     /**
@@ -353,7 +369,6 @@ public class Apic {
      * @param type
      * @param page
      */
-    // TODO: 2018/2/11
     public static Api requestReadHistoryOrMyCollectData(int type, int page) {
         return Api.get("/api/news-user/operate/list/{type}",
                 new ReqParams()
@@ -464,10 +479,5 @@ public class Apic {
                         .put("code", code)
                         .put("exchangeCode", exchangeCode)
                         .put("endTime", endTime));
-    }
-
-    public interface url {
-        String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
-        String QR_CODE = Api.getFixedHost() + "/qc.png";
     }
 }

@@ -244,14 +244,7 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
 
     private void sendFeedbackImage(final String path) {
         String content = ImageUtils.compressImageToBase64(path, getActivity());
-        Apic.uploadImage(content).tag(TAG)
-                .callback(new Callback2D<Resp<String>, String>() {
-                    @Override
-                    protected void onRespSuccessData(String data) {
-                        requestSendFeedback(data, CONTENT_TYPE_PICTURE);
-                    }
-                })
-                .fire();
+        requestSendFeedback(content, CONTENT_TYPE_PICTURE);
     }
 
     @Override
@@ -459,8 +452,9 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
                     mText.setVisibility(View.GONE);
                     mImage.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(feedback.getContent())
+                            .centerCrop()
                             .transform(new ThumbTransform(context))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(mImage);
                 }
                 if (!TextUtils.isEmpty(feedback.getUserPortrait())) {

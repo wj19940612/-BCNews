@@ -11,6 +11,7 @@ import com.sbai.bcnews.model.NewsDetail;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -60,10 +61,11 @@ public class ChannelCache {
         //删除在远端没有的频道
         List<String> myChannels = channelCacheModel.getMyChannelEntities();
         if (myChannels != null && myChannels.size() != 0) {
-            for (String channel : myChannels) {
-                //这个频道在远端已经没了，剔除
+            Iterator<String> myChannelIt = myChannels.iterator();
+            while (myChannelIt.hasNext()) {
+                String channel = myChannelIt.next();
                 if (!netChannels.contains(channel)) {
-                    myChannels.remove(channel);
+                    myChannelIt.remove();
                     modified = true;
                 }
             }
@@ -71,10 +73,12 @@ public class ChannelCache {
 
         List<String> otherChannels = channelCacheModel.getOtherChannelEntities();
         if (otherChannels != null && otherChannels.size() != 0) {
-            for (String channel : otherChannels) {
-                //这个频道在远端已经没了，剔除
-                if (!netChannels.contains(channel)) {
-                    otherChannels.remove(channel);
+            Iterator<String> otherIt = otherChannels.iterator();
+            while(otherIt.hasNext()){
+                String channel = otherIt.next();
+                if(!netChannels.contains(channel)){
+                    //这个频道在远端已经没了，剔除
+                    otherIt.remove();
                 }
             }
         }

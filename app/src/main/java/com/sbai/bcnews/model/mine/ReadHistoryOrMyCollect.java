@@ -9,8 +9,11 @@ import java.util.List;
 
 public class ReadHistoryOrMyCollect {
 
-    public static final int MESSAGE_TYPE_MYCOLLECT= 0;
+    public static final int MESSAGE_TYPE_COLLECT = 0;
     public static final int MESSAGE_TYPE_READ_HISTORY = 1;
+
+    public static final int CANCEL_COLLECT = 1;
+
     /**
      * collectTime : 1518317883000
      * collected : 1
@@ -49,7 +52,7 @@ public class ReadHistoryOrMyCollect {
 //
 
     private long collectTime;      //收藏时间
-    private long readerTime;       //需要阅读时间
+    private long readTime;       //需要阅读时间
     private int collected;
     private long createTime;
     private String dataId;
@@ -62,6 +65,7 @@ public class ReadHistoryOrMyCollect {
     private int type;
     private int userId;
     private List<String> imgs;    //图片集合
+    private List<String> channel;
 
     private int readHeight; //阅读高度,用于用户记忆浏览
 
@@ -161,12 +165,12 @@ public class ReadHistoryOrMyCollect {
         this.userId = userId;
     }
 
-    public long getReaderTime() {
-        return readerTime;
+    public long getReadTime() {
+        return readTime;
     }
 
-    public void setReaderTime(long readerTime) {
-        this.readerTime = readerTime;
+    public void setReadTime(long readTime) {
+        this.readTime = readTime;
     }
 
     public List<String> getImgs() {
@@ -183,5 +187,13 @@ public class ReadHistoryOrMyCollect {
 
     public void setReadHeight(int readHeight) {
         this.readHeight = readHeight;
+    }
+
+    public List<String> getChannel() {
+        return channel;
+    }
+
+    public void setChannel(List<String> channel) {
+        this.channel = channel;
     }
 }

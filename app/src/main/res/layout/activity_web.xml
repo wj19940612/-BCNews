@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:contextRef=".activity.MainActivity">
+    tools:contextRef=".activity.WebActivity">
+
+    <com.sbai.bcnews.view.TitleBar
+        android:background="@android:color/white"
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:hasBottomSplitLine="true"
+        app:splitLineColor="@color/split"
+        app:titleTextColor="@color/text"/>
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentTop="true"
+        android:layout_below="@+id/titleBar"
+        android:indeterminateDrawable="@android:color/black"
+        android:max="100"
+        android:progressDrawable="@drawable/progress"/>
 
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/progressbar"
         android:visibility="visible"/>
 
     <LinearLayout
@@ -36,13 +61,5 @@
             android:textSize="16sp"/>
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progressbar"
-        style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_alignParentTop="true"
-        android:indeterminateDrawable="@android:color/black"
-        android:max="100"
-        android:progressDrawable="@drawable/progress"/>
+
 </RelativeLayout>

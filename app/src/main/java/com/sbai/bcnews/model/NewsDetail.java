@@ -27,6 +27,7 @@ public class NewsDetail {
     private int original;         //是否原创
     private int praise;           //是否点赞 0-未点赞 1-已点赞
     private int collect;          //是否收藏 0-未收藏 1-已收藏
+    private long updateTime;      //更新时间
     private long readTime;        //阅读时机
 
     private int readHeight; //阅读高度,用于用户记忆浏览
@@ -197,5 +198,13 @@ public class NewsDetail {
 
     public void setReadTime(long readTime) {
         this.readTime = readTime;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
     }
 }

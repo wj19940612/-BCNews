@@ -59,6 +59,7 @@ android {
 
     productFlavors {
         dev {
+            minSdkVersion 21
             buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
         }
 
