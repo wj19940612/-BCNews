@@ -8,6 +8,11 @@ import android.os.Parcelable;
  */
 public class UserInfo implements Parcelable {
 
+
+    public static final int WECHAT_BIND_STATUS_NOT_BIND = 0;
+    public static final int WECHAT_BIND_STATUS_BIND = 1;
+    public static final int WECHAT_BIND_STATUS_UNBIND = 2;
+
     public static final int USER_SEX_GIRL = 1;
     public static final int USER_SEX_BOY = 2;
 
@@ -64,7 +69,36 @@ public class UserInfo implements Parcelable {
     private String userEmail;
     private String userPass;
 
+
+    private String wxOpenId;
+    private int wxBound; //微信是否绑定:0未绑定微信,1绑定,2解绑
+    private String wxName;
+
     public UserInfo() {
+    }
+
+    public String getWxOpenId() {
+        return wxOpenId;
+    }
+
+    public void setWxOpenId(String wxOpenId) {
+        this.wxOpenId = wxOpenId;
+    }
+
+    public int getWxBound() {
+        return wxBound;
+    }
+
+    public void setWxBound(int wxBound) {
+        this.wxBound = wxBound;
+    }
+
+    public String getWxName() {
+        return wxName;
+    }
+
+    public void setWxName(String wxName) {
+        this.wxName = wxName;
     }
 
     public String getUserProvince() {
