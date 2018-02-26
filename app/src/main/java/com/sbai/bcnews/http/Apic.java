@@ -304,9 +304,7 @@ public class Apic {
      * @return
      */
     public static Api requestBanners() {
-        return Api.get("/api/news-user/banner/findBannerList.do",
-                new ReqParams()
-                        .put("showType", 0));
+        return Api.get("/api/news-user/banner/findBannerList.do");
     }
 
     // TODO: 2018/2/8 请求运营微信账户
