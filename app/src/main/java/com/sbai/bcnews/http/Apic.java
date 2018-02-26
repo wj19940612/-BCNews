@@ -20,8 +20,8 @@ public class Apic {
     /**
      * 用户--同步阅读记录--薛松
      */
-    public static Api uploadReadHistory(String readText,String deviceId){
-        return Api.post("/api/news-user/operate/read/device",new ReqParams().put("read",readText).put("deviceId",deviceId));
+    public static Api uploadReadHistory(String readText, String deviceId) {
+        return Api.post("/api/news-user/operate/read/device", new ReqParams().put("read", readText).put("deviceId", deviceId));
     }
 
     /**

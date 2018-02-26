@@ -56,44 +56,29 @@ public class ClipHeadImageActivity extends BaseActivity {
     }
 
     private void submitFile() {
-//        Bitmap clipBitmap = mClipImageLayout.clip(Bitmap.Config.RGB_565);
-//        File file = ImageUtils.bitmapToFile(clipBitmap, "image");
-//        Log.d(TAG, "onViewClicked: " + file.length());
-//        Apic.submitFile(file, "image")
-//                .tag(TAG)
-//                .timeout(10_000)
-//                .callback(new Callback2D<Resp<String>, String>() {
-//                    @Override
-//                    protected void onRespSuccessData(String data) {
-////                                UserInfo userInfo = LocalUser.getUser().getUserInfo();
-////                                userInfo.setUserPortrait();
-//                        submitPortraitPath(data);
-//                    }
-//                })
-//                .fire();
         Bitmap clipBitmap = mClipImageLayout.clip(Bitmap.Config.RGB_565);
         String picture = ImageUtils.bitmapToBase64(clipBitmap);
-        Apic.uploadImage(picture)
-                .tag(TAG)
-                .timeout(10_000)
-                .callback(new Callback2D<Resp<String>, String>() {
-                    @Override
-                    protected void onRespSuccessData(String data) {
-                        submitPortraitPath(data);
-                    }
-                })
-                .fire();
+        submitPortraitPath(picture);
     }
 
     private void submitPortraitPath(final String data) {
         Apic.submitPortraitPath(data)
                 .callback(new Callback<Resp<Object>>() {
-
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
-                        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-                        userInfo.setUserPortrait(data);
-                        LocalUser.getUser().setUserInfo(userInfo);
+                        requestUserInfo();
+                    }
+                })
+                .fire();
+    }
+
+    private void requestUserInfo() {
+        Apic.requestUserInfo()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<UserInfo>, UserInfo>() {
+                    @Override
+                    protected void onRespSuccessData(UserInfo data) {
+                        LocalUser.getUser().setUserInfo(data);
                         setResult(RESULT_OK);
                         finish();
                     }
