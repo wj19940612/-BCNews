@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
@@ -39,8 +39,8 @@ import butterknife.ButterKnife;
 
 public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
 
-    //    @BindView(R.id.adsorb_text)
-//    TextView mAdsorbText;
+    @BindView(R.id.adsorb_text)
+    TextView mAdsorbText;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
@@ -52,7 +52,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
-    LinearLayout mRootView;
+    RelativeLayout mRootView;
     private ReadHistoryAdapter mReadHistoryAdapter;
 
     private int mPage;
@@ -69,12 +69,28 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
         if (LocalUser.getUser().isLogin()) {
             requestReadHistoryData();
         } else {
+            mSwipeToLoadLayout.setRefreshEnabled(false);
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
-            mSwipeToLoadLayout.setRefreshing(false);
             // TODO: 2018/2/12 获取缓存数据
             List<ReadHistoryOrMyCollect> data = NewsCache.getReadHistory();
+
+
             if (data != null && data.size() != 0) {
-                updateReadHistoryData(data,true);
+                for (int i = 0; i < data.size(); i++) {
+                    ReadHistoryOrMyCollect readHistoryOrMyCollect = data.get(i);
+
+                    if (i > 2 && i < 5) {
+                        readHistoryOrMyCollect.setReadTime(1519535655000L); //2/25/13
+                    } else if (i > 5 && i < 8) {
+                        readHistoryOrMyCollect.setReadTime(1516857255000L); // 1/25/13
+                    }
+                    if (i > 9 && i < 13) {
+                        readHistoryOrMyCollect.setReadTime(1485321255000L); //2017/
+                    } else if (i > 20) {
+                        readHistoryOrMyCollect.setReadTime(1451711540000L);
+                    }
+                }
+                updateReadHistoryData(data, true);
             }
         }
     }
@@ -88,7 +104,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
                     protected void onRespSuccess(ListResp<ReadHistoryOrMyCollect> resp) {
                         List<ReadHistoryOrMyCollect> listData = resp.getListData();
                         if (listData != null && !listData.isEmpty()) {
-                            updateReadHistoryData(listData,false);
+                            updateReadHistoryData(listData, false);
                         }
                     }
 
@@ -147,32 +163,35 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
         mSwipeToLoadLayout.setLoadMoreEnabled(true);
     }
 
+
     @Override
-    protected void onRecycleViewScrollStateChanged(RecyclerView recyclerView, int newState) {
-        super.onRecycleViewScrollStateChanged(recyclerView, newState);
-//        View stickyInfoView = recyclerView.findChildViewUnder(
-//                mAdsorbText.getMeasuredWidth() / 2, 5);
-//
-//        if (stickyInfoView != null && stickyInfoView.getContentDescription() != null) {
-//            mAdsorbText.setText(String.valueOf(stickyInfoView.getContentDescription()));
-//        }
-//
-//        View transInfoView = recyclerView.findChildViewUnder(
-//                mAdsorbText.getMeasuredWidth() / 2, mAdsorbText.getMeasuredHeight() + 1);
-//        if (transInfoView != null && transInfoView.getTag() != null) {
-//            int transViewStatus = (int) transInfoView.getTag();
-//            int dealtY = transInfoView.getTop() - mAdsorbText.getMeasuredHeight();
-//
-//            if (transViewStatus == ReadHistoryAdapter.HAS_STICKY_VIEW) {
-//                if (transInfoView.getTop() > 0) {
-//                    mAdsorbText.setTranslationY(dealtY);
-//                } else {
-//                    mAdsorbText.setTranslationY(0);
-//                }
-//            } else if (transViewStatus == ReadHistoryAdapter.NONE_STICKY_VIEW) {
-//                mAdsorbText.setTranslationY(0);
-//            }
-//        }
+    protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onRecycleViewScrolled(recyclerView, dx, dy);
+        View stickyInfoView = recyclerView.findChildViewUnder(
+                mAdsorbText.getMeasuredWidth() / 2, 5);
+
+        if (stickyInfoView != null && stickyInfoView.getContentDescription() != null) {
+            mAdsorbText.setText(String.valueOf(stickyInfoView.getContentDescription()));
+        }
+
+        View transInfoView = recyclerView.findChildViewUnder(
+                mAdsorbText.getMeasuredWidth() / 2, mAdsorbText.getMeasuredHeight() + 1);
+        if (transInfoView != null && transInfoView.getTag() != null) {
+            int transViewStatus = (int) transInfoView.getTag();
+            int dealtY = transInfoView.getTop() - mAdsorbText.getMeasuredHeight();
+
+//            Log.d(TAG, "onRecycleViewScrollStateChanged: " + dealtY);
+
+            if (transViewStatus == ReadHistoryAdapter.HAS_STICKY_VIEW) {
+                if (transInfoView.getTop() > 0) {
+                    mAdsorbText.setTranslationY(dealtY);
+                } else {
+                    mAdsorbText.setTranslationY(0);
+                }
+            } else if (transViewStatus == ReadHistoryAdapter.NONE_STICKY_VIEW) {
+                mAdsorbText.setTranslationY(0);
+            }
+        }
     }
 
     public static class ReadHistoryAdapter extends RecyclerView.Adapter {
@@ -217,29 +236,29 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            boolean theSameDayNews = isTheSameDayNews(position);
+            boolean theDifferentDayNews = isTheDifferentNews(position);
             if (holder instanceof NoneOrSingleImageViewHolder) {
                 NoneOrSingleImageViewHolder noneOrSingleImageViewHolder = (NoneOrSingleImageViewHolder) holder;
-                noneOrSingleImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemClickListener, theSameDayNews);
+                noneOrSingleImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemClickListener, theDifferentDayNews);
             } else if (holder instanceof ThreeImageViewHolder) {
                 ThreeImageViewHolder threeImageViewHolder = (ThreeImageViewHolder) holder;
-                threeImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemClickListener, theSameDayNews);
+                threeImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemClickListener, theDifferentDayNews);
             }
-            if (theSameDayNews) {
-                holder.itemView.setTag(NONE_STICKY_VIEW);
-            } else {
+            if (theDifferentDayNews) {
                 holder.itemView.setTag(HAS_STICKY_VIEW);
+            } else {
+                holder.itemView.setTag(NONE_STICKY_VIEW);
             }
-            holder.itemView.setContentDescription(DateUtil.formatMonth(mReadHistoryOrMyCollectList.get(position).getReadTime()));
+            holder.itemView.setContentDescription(DateUtil.formatNewsStyleTime(mReadHistoryOrMyCollectList.get(position).getReadTime()));
         }
 
-        private boolean isTheSameDayNews(int position) {
+        private boolean isTheDifferentNews(int position) {
             if (position == 0) return false;
             ReadHistoryOrMyCollect last = mReadHistoryOrMyCollectList.get(position - 1);
             ReadHistoryOrMyCollect nex = mReadHistoryOrMyCollectList.get(position);
             long createTime = last.getReadTime();
             long nexTime = nex.getReadTime();
-            return DateUtil.isInThisDay(nexTime, createTime);
+            return !DateUtil.isInThisDay(nexTime, createTime);
         }
 
         @Override
@@ -279,13 +298,13 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(ReadHistoryOrMyCollect item, int position, Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener, boolean theSameDayNews) {
+            public void bindDataWithView(ReadHistoryOrMyCollect item, int position, Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener, boolean theDifferentDayNews) {
 
-                if (theSameDayNews) {
-                    mAdsorbText.setVisibility(View.GONE);
-                } else {
-                    mAdsorbText.setVisibility(View.VISIBLE);
+                if (theDifferentDayNews) {
                     mAdsorbText.setText(DateUtil.formatNewsStyleTime(item.getReadTime()));
+                    mAdsorbText.setVisibility(View.VISIBLE);
+                } else {
+                    mAdsorbText.setVisibility(View.GONE);
                 }
 
                 mNewsTitle.setText(item.getTitle());
@@ -321,12 +340,12 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(ReadHistoryOrMyCollect item, int position, Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener, boolean theSameDayNews) {
-                if (theSameDayNews) {
-                    mAdsorbText.setVisibility(View.GONE);
-                } else {
+            public void bindDataWithView(ReadHistoryOrMyCollect item, int position, Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener, boolean theDifferentDayNews) {
+                if (theDifferentDayNews) {
                     mAdsorbText.setVisibility(View.VISIBLE);
                     mAdsorbText.setText(DateUtil.formatNewsStyleTime(item.getReadTime()));
+                } else {
+                    mAdsorbText.setVisibility(View.GONE);
                 }
 
                 mNewsTitle.setText(item.getTitle());

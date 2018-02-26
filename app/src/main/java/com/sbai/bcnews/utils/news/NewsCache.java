@@ -1,7 +1,6 @@
 package com.sbai.bcnews.utils.news;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -16,10 +15,8 @@ import org.json.JSONTokener;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 import static com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect.MESSAGE_TYPE_READ_HISTORY;
 
@@ -94,7 +91,7 @@ public class NewsCache {
         ReadHistoryOrMyCollect readHistoryOrMyCollect = new ReadHistoryOrMyCollect();
         readHistoryOrMyCollect.setReadTime(newsDetail.getReadTime());
         readHistoryOrMyCollect.setCreateTime(newsDetail.getCreateTime());
-        readHistoryOrMyCollect.setDataId(newsDetail.getId());
+        readHistoryOrMyCollect.setId(newsDetail.getId());
         readHistoryOrMyCollect.setIsRead(1);
         readHistoryOrMyCollect.setOriginal(newsDetail.getOriginal());
         readHistoryOrMyCollect.setSource(newsDetail.getSource());

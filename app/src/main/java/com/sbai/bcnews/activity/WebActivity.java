@@ -29,6 +29,11 @@ import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.Network;
 import com.sbai.bcnews.view.ShareDialog;
+import com.sbai.bcnews.view.TitleBar;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.sbai.bcnews.utils.Network.registerNetworkChangeReceiver;
 import static com.sbai.bcnews.utils.Network.unregisterNetworkChangeReceiver;
@@ -41,11 +46,17 @@ public class WebActivity extends BaseActivity {
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
     public static final String EX_HTML = "html";
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
+    @BindView(R.id.progressbar)
+    ProgressBar mProgress;
+    @BindView(R.id.webView)
+    WebView mWebView;
+    @BindView(R.id.refreshButton)
+    Button mRefreshButton;
+    @BindView(R.id.errorPage)
+    LinearLayout mErrorPage;
 
-    private ProgressBar mProgress;
-    private WebView mWebView;
-    private LinearLayout mErrorPage;
-    private Button mRefreshButton;
 
     private boolean mLoadSuccess;
     protected String mPageUrl;
@@ -59,6 +70,7 @@ public class WebActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        ButterKnife.bind(this);
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
         initData(getIntent());
@@ -87,7 +99,6 @@ public class WebActivity extends BaseActivity {
     }
 
 
-
     protected void initData(Intent intent) {
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
@@ -107,18 +118,6 @@ public class WebActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(false);
         }
-
-        mProgress = (ProgressBar) findViewById(R.id.progressbar);
-        mErrorPage = (LinearLayout) findViewById(R.id.errorPage);
-        mWebView = (WebView) findViewById(R.id.webView);
-
-        mRefreshButton = (Button) findViewById(R.id.refreshButton);
-        mRefreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mWebView.reload();
-            }
-        });
 
         // init cookies
         syncCookies(mPageUrl);
@@ -242,6 +241,11 @@ public class WebActivity extends BaseActivity {
         return "<html>" + head + bodyHTML + "</html>";
     }
 
+    @OnClick(R.id.refreshButton)
+    public void onViewClicked() {
+        mWebView.reload();
+    }
+
     protected class WebViewClient extends android.webkit.WebViewClient {
 
         @Override
@@ -274,6 +278,15 @@ public class WebActivity extends BaseActivity {
                 mWebView.setVisibility(View.GONE);
                 mErrorPage.setVisibility(View.VISIBLE);
             }
+            if (isNeedViewTitle()) {
+                String titleText = view.getTitle();
+                if (!TextUtils.isEmpty(titleText) && !url.contains(titleText)) {
+                    mTitle = titleText;
+                }
+                mTitleBar.setTitle(mTitle);
+            } else {
+                mTitleBar.setTitle(mTitle);
+            }
         }
 
         @Override
@@ -302,6 +315,10 @@ public class WebActivity extends BaseActivity {
             }
             return super.shouldOverrideUrlLoading(view, url);
         }
+    }
+
+    private boolean isNeedViewTitle() {
+        return true;
     }
 
     protected boolean onShouldOverrideUrlLoading(WebView view, String url) {

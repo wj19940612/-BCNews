@@ -452,8 +452,9 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
                     mText.setVisibility(View.GONE);
                     mImage.setVisibility(View.VISIBLE);
                     GlideApp.with(context).load(feedback.getContent())
+                            .centerCrop()
                             .transform(new ThumbTransform(context))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(mImage);
                 }
                 if (!TextUtils.isEmpty(feedback.getUserPortrait())) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,18 +14,16 @@
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="@string/read_history"
-        app:backFeature="true"/>
+        app:backFeature="true"
+        app:titleText="@string/read_history"/>
+
 
     <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/adsorb_text"
         app:default_to_loading_more_scrolling_duration="500"
-        app:layout_constraintTop_toBottomOf="@+id/titleBar"
         app:load_more_complete_delay_duration="0"
         app:load_more_final_drag_offset="@dimen/load_more_final_offset_google"
         app:load_more_trigger_offset="@dimen/load_more_trigger_offset_google"
@@ -45,21 +43,22 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"/>
 
-        <!--<TextView-->
-            <!--android:id="@+id/adsorb_text"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="32dp"-->
-            <!--android:background="@color/background"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:paddingLeft="13dp"-->
-            <!--android:textColor="@color/unluckyText"-->
-            <!--android:textSize="13sp"-->
-            <!--tools:text="2月"/>-->
-
         <com.zcmrr.swipelayout.foot.LoadMoreFooterView
             android:id="@+id/swipe_load_more_footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/adsorb_text"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_below="@+id/titleBar"
+        android:background="@color/background"
+        android:gravity="center_vertical"
+        android:paddingLeft="13dp"
+        android:textColor="@color/unluckyText"
+        android:textSize="13sp"
+        tools:text="2月"/>
+</RelativeLayout>
