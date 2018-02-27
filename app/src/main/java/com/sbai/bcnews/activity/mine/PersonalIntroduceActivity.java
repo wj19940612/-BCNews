@@ -68,6 +68,7 @@ public class PersonalIntroduceActivity extends BaseActivity {
         public void afterTextChanged(Editable s) {
             boolean submitEnable = checkSubmitEnable();
             if (mSubmitIntroduce.isEnabled() != submitEnable) {
+                mPersonalIntroduce.setSelection(s.length());
                 mSubmitIntroduce.setEnabled(submitEnable);
             }
         }

@@ -247,12 +247,10 @@ public class Apic {
      *
      * @return
      */
-    public static Api requestBindWeChat(String openId, String name, String iconUrl, int sex) {
+    public static Api requestBindWeChat(String openId, String name) {
         return Api.post("/api/news-user/user/bound/{openId}", new ReqParams()
                 .put("openId", openId)
-                .put("name", name)
-                .put("iconUrl", iconUrl)
-                .put("sex", sex));
+                .put("name", name));
     }
 
     /**

@@ -71,25 +71,9 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
         } else {
             mSwipeToLoadLayout.setRefreshEnabled(false);
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
-            // TODO: 2018/2/12 获取缓存数据
             List<ReadHistoryOrMyCollect> data = NewsCache.getReadHistory();
 
-
             if (data != null && data.size() != 0) {
-                for (int i = 0; i < data.size(); i++) {
-                    ReadHistoryOrMyCollect readHistoryOrMyCollect = data.get(i);
-
-                    if (i > 2 && i < 5) {
-                        readHistoryOrMyCollect.setReadTime(1519535655000L); //2/25/13
-                    } else if (i > 5 && i < 8) {
-                        readHistoryOrMyCollect.setReadTime(1516857255000L); // 1/25/13
-                    }
-                    if (i > 9 && i < 13) {
-                        readHistoryOrMyCollect.setReadTime(1485321255000L); //2017/
-                    } else if (i > 20) {
-                        readHistoryOrMyCollect.setReadTime(1451711540000L);
-                    }
-                }
                 updateReadHistoryData(data, true);
             }
         }

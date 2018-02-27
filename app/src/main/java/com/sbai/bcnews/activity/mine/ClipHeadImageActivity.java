@@ -3,7 +3,6 @@ package com.sbai.bcnews.activity.mine;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.View;
 
 import com.sbai.bcnews.ExtraKeys;
@@ -15,10 +14,9 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.clipimage.ClipImageLayout;
-
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,6 +61,8 @@ public class ClipHeadImageActivity extends BaseActivity {
 
     private void submitPortraitPath(final String data) {
         Apic.submitPortraitPath(data)
+                .timeout(10_000)
+                .indeterminate(this)
                 .callback(new Callback<Resp<Object>>() {
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
@@ -79,6 +79,7 @@ public class ClipHeadImageActivity extends BaseActivity {
                     @Override
                     protected void onRespSuccessData(UserInfo data) {
                         LocalUser.getUser().setUserInfo(data);
+                        ToastUtil.show(R.string.modify_success);
                         setResult(RESULT_OK);
                         finish();
                     }
