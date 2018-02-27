@@ -178,7 +178,7 @@
         android:id="@+id/weChatLogin"
         android:layout_width="140dp"
         android:layout_height="44dp"
-        android:layout_above="@+id/agree"
+        android:layout_above="@+id/agreeWrapper"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="23dp"
         android:background="@drawable/btn_wechat_login"
@@ -191,15 +191,31 @@
         android:textSize="14sp"
         android:visibility="visible"/>
 
-    <TextView
-        android:id="@+id/agree"
+    <LinearLayout
+        android:id="@+id/agreeWrapper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:gravity="center"
-        android:text="@string/bcnews_agreement"
-        android:textColor="@color/unluckyText"
-        android:textSize="12sp"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/login_agree"
+            android:textColor="@color/unluckyText"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/agree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/bcnews_agreement"
+            android:textColor="#476192"
+            android:textSize="12sp"/>
+    </LinearLayout>
 </RelativeLayout>
