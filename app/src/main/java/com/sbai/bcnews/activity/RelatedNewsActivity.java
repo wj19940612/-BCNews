@@ -136,6 +136,7 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
                             }
 
                             if (mNewsWrapList.isEmpty()) {
+                                mEmptyView.setNoData(getString(R.string.no_other_news));
                                 mEmptyView.setVisibility(View.VISIBLE);
                                 mSwipeToLoadLayout.setRefreshEnabled(false);
                             } else {
@@ -164,6 +165,8 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
                     @Override
                     public void onFailure(ReqError reqError) {
                         super.onFailure(reqError);
+                        mEmptyView.setNoNet();
+                        mEmptyView.setVisibility(View.VISIBLE);
                         refreshFailure();
                     }
 

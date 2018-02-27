@@ -207,7 +207,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void triggerRefresh() {
         super.triggerRefresh();
-        Log.e("zzz","triggerRefresh");
         smoothScrollToTop();
         onRefresh();
     }
@@ -226,6 +225,12 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     refreshSuccess();
                 }
+                if (mNewsWraps.size() == 0 && data.getContent().size() == 0) {
+                    mEmptyView.setNoData(getString(R.string.no_main_news));
+                    mEmptyView.setVisibility(View.VISIBLE);
+                }else{
+                    mEmptyView.setVisibility(View.GONE);
+                }
                 updateData(data.getContent(), refresh);
             }
 
@@ -238,6 +243,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             @Override
             public void onFailure(ReqError reqError) {
                 super.onFailure(reqError);
+                mEmptyView.setNoNet();
+                mEmptyView.setVisibility(View.VISIBLE);
                 if (refresh)
                     refreshFailure();
             }

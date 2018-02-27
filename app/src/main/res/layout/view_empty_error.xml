@@ -25,7 +25,7 @@
         android:src="@drawable/ic_news_error"/>
 
     <Button
-        android:id="@+id/btn_refresh"
+        android:id="@+id/btnRefresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/icon"
@@ -37,5 +37,16 @@
         android:text="@string/now_refresh"
         android:textColor="@color/btn_empty"
         android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/noData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/icon"
+        android:layout_marginTop="20dp"
+        android:textSize="14sp"
+        android:textColor="@color/assistText"
+        android:text="@string/news"/>
 
 </merge>

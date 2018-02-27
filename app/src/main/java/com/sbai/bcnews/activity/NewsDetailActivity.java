@@ -760,6 +760,7 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void shareToPlatform(SHARE_MEDIA platform) {
+        umengEventCount(UmengCountEventId.NEWS05);
         if (mNewsDetail == null) return;
         UMWeb mWeb = new UMWeb(String.format(Apic.url.SHARE_NEWS, mNewsDetail.getId()));
         mWeb.setTitle(mNewsDetail.getTitle());

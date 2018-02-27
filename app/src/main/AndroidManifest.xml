@@ -72,7 +72,8 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ChannelActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityEntryAnimation"/>
         <activity
             android:name=".activity.LookBigPictureActivity"
             android:screenOrientation="portrait"/>
