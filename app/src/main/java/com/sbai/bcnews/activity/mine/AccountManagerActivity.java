@@ -81,7 +81,7 @@ public class AccountManagerActivity extends BaseActivity {
     }
 
     private void bindWeChat(UserInfo userInfo) {
-        Apic.requestBindWeChat(userInfo.getWxOpenId(), userInfo.getWxName(), null, 0)
+        Apic.requestBindWeChat(userInfo.getWxOpenId(), userInfo.getWxName())
                 .tag(TAG)
                 .callback(new Callback<Resp<Object>>() {
 

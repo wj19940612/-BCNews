@@ -42,6 +42,7 @@ android {
         }
         debug {
             ext.enableCrashlytics = false
+            signingConfig signingConfigs.release
         }
     }
 

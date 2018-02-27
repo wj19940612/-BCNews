@@ -110,6 +110,7 @@ public class NewsCache {
             UploadNews uploadNews = new UploadNews();
             uploadNews.setDataId(newsDetail.getId());
             uploadNews.setReadTime(newsDetail.getReadTime());
+            uploadNewsList.add(uploadNews);
         }
         return sGson.toJson(uploadNewsList);
     }
