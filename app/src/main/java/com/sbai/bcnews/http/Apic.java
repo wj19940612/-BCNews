@@ -21,10 +21,13 @@ public class Apic {
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
 
+
         String QR_CODE = Api.getFixedHost() + "/qc.png";
 
         //关于我们界面链接
         String WEB_URI_ABOUT_PAGE = Api.getFixedHost() + "/news/banner/about.html";
+        //用户协议
+        String WEB_URI_AGREEMENT = Api.getFixedHost() + "/news/banner/agreement.html?code=1";
     }
 
     /**

@@ -79,6 +79,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ShareNewsFlashActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityEntryAnimation"/>
         <activity

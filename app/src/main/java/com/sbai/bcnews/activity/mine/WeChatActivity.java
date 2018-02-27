@@ -69,6 +69,10 @@ public abstract class WeChatActivity extends BaseActivity {
         return mWeChatOpenid;
     }
 
+    public void setWeChatOpenid(String weChatOpenid) {
+        mWeChatOpenid = weChatOpenid;
+    }
+
     public String getWeChatName() {
         return mWeChatName;
     }

@@ -37,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical"
             android:paddingBottom="20dp"
             android:visibility="gone">
@@ -53,9 +54,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:gravity="center"
                 android:textColor="@color/text"
                 android:textSize="15sp"
-                tools:text="蓝色星痕"/>
+                tools:text="蓝色"/>
 
         </LinearLayout>
 

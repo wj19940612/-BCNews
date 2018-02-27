@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
@@ -292,7 +293,9 @@ public class LoginActivity extends WeChatActivity {
                 weChatLogin();
                 break;
             case R.id.agree:
-                // TODO: 2018-02-07  
+                Launcher.with(getActivity(), WebActivity.class)
+                        .putExtra(WebActivity.EX_URL, Apic.url.WEB_URI_AGREEMENT)
+                        .execute();
             default:
                 break;
         }
@@ -317,6 +320,8 @@ public class LoginActivity extends WeChatActivity {
                     protected void onRespFailure(Resp failedResp) {
                         if (failedResp.getCode() == Resp.CODE_NO_BIND_WE_CHAT) {
                             updateBindPhoneViews();
+                        } else {
+                            setWeChatOpenid(null);
                         }
                     }
                 }).fireFreely();
