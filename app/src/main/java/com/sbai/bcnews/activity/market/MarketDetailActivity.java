@@ -22,6 +22,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.market.MarketData;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.MarketDataUtils;
+import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.HackTabLayout;
 import com.sbai.bcnews.view.TitleBar;
@@ -216,6 +217,7 @@ public class MarketDetailActivity extends BaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                umengEventCount(UmengCountEventId.MARKET_SHARE);
                 Bitmap bitmap = getScreenShot(mScreenShotArea);
                 File file = ImageUtils.getUtil().saveBitmap(bitmap, createFilename());
                 Launcher.with(getActivity(), ShareMarketActivity.class)
@@ -320,6 +322,7 @@ public class MarketDetailActivity extends BaseActivity {
 
     @OnClick(R.id.checkRelatedNews)
     public void onViewClicked() {
+        umengEventCount(UmengCountEventId.MARKET_RELEATE_NEWS);
         Launcher.with(getActivity(), RelatedNewsActivity.class)
                 .putExtra(ExtraKeys.DIGITAL_CURRENCY, mMarketData)
                 .execute();
