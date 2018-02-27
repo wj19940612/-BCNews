@@ -100,7 +100,8 @@ public class MineFragment extends BaseFragment {
                     @Override
                     protected void onRespSuccessData(MsgNumber data) {
                         updateUserCollectNumber(data.getCollect());
-                        updateUserReadHistory(data.getRead());
+                        updateUserReadHistory(data.getRead()
+                        );
                     }
                 })
                 .fire();
