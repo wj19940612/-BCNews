@@ -7,6 +7,9 @@ public class Resp<T> {
     //未绑定微信
     public static final int CODE_NO_BIND_WE_CHAT = 1115;
 
+    //文章已经被下架
+    public static final int CODE_ARTICLE_ALREADY_SOLD_OUT = 1126;
+
     private int code;
     private String msg;
     private int page;

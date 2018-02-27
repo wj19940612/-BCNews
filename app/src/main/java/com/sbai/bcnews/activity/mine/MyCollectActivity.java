@@ -102,6 +102,14 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                     protected void onRespSuccess(Resp<Object> resp) {
                         mMyCollectAdapter.removeItem(position, readHistoryOrMyCollect);
                     }
+
+                    @Override
+                    protected void onRespFailure(Resp failedResp) {
+                        super.onRespFailure(failedResp);
+                        if (failedResp.getCode() == Resp.CODE_ARTICLE_ALREADY_SOLD_OUT) {
+                            mMyCollectAdapter.removeItem(position, readHistoryOrMyCollect);
+                        }
+                    }
                 })
                 .fire();
     }
