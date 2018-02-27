@@ -20,11 +20,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
-import com.sbai.bcnews.fragment.UploadImageDialogFragment;
 import com.sbai.bcnews.fragment.dialog.PreviewDialogFragment;
+import com.sbai.bcnews.fragment.dialog.UploadUserImageDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
@@ -233,8 +232,8 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
     }
 
     private void sendPicToCustomer() {
-        UploadImageDialogFragment.newInstance(UploadImageDialogFragment.IMAGE_TYPE_OPEN_CUSTOM_GALLERY)
-                .setOnImagePathListener(new UploadImageDialogFragment.OnImagePathListener() {
+        UploadUserImageDialogFragment.newInstance(UploadUserImageDialogFragment.IMAGE_TYPE_OPEN_CUSTOM_GALLERY)
+                .setOnImagePathListener(new UploadUserImageDialogFragment.OnImagePathListener() {
                     @Override
                     public void onImagePath(int index, String imagePath) {
                         sendFeedbackImage(imagePath);

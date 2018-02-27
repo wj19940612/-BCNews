@@ -21,6 +21,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.LookBigPictureActivity;
 import com.sbai.bcnews.activity.mine.ClipHeadImageActivity;
 import com.sbai.bcnews.fragment.BottomDialogFragment;
+import com.sbai.bcnews.fragment.ImageSelectActivity;
 import com.sbai.bcnews.utils.FileUtils;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.PermissionUtil;
@@ -207,9 +208,9 @@ public class UploadUserImageDialogFragment extends BottomDialogFragment {
 
     private void openGalleryPage() {
         if (mImageDealType == IMAGE_TYPE_OPEN_CUSTOM_GALLERY) {
-//            Intent openGalleryIntent = new Intent(getContext(), ImageSelectActivity.class);
-//            openGalleryIntent.putExtra(Launcher.EX_PAYLOAD, 0);
-//            startActivityForResult(openGalleryIntent, REQ_CODE_TAKE_PHONE_FROM_GALLERY);
+            Intent openGalleryIntent = new Intent(getContext(), ImageSelectActivity.class);
+            openGalleryIntent.putExtra(ExtraKeys.IMAGE, 0);
+            startActivityForResult(openGalleryIntent, REQ_CODE_TAKE_PHONE_FROM_GALLERY);
         } else {
             Intent openAlbumIntent = new Intent(
                     Intent.ACTION_PICK);
