@@ -200,7 +200,7 @@ public class MineFragment extends BaseFragment {
     }
 
     private void requestOperationWeChatAccount() {
-        Apic.requestOperationWeChatAccount(Operation.OPERATION_REQ_TYPE_WECHAT)
+        Apic.requestOperationSetting(Operation.OPERATION_TYPE_WE_CHAT)
                 .tag(TAG)
                 .callback(new Callback2D<Resp<Operation>, Operation>() {
                     @Override

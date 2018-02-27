@@ -311,7 +311,7 @@ public class Apic {
         return Api.get("/api/news-user/banner/findBannerList.do");
     }
 
-    public static Api requestOperationWeChatAccount(String type) {
+    public static Api requestOperationSetting(String type) {
         return Api.get("/api/news-user/dictionary/json.do", new ReqParams().put("type", type));
     }
 
@@ -351,13 +351,6 @@ public class Apic {
 
     }
 
-    /**
-     * /dic.html
-     * <p>查询行情界面是否显示接口</p>
-     */
-    public static Api requestShowMarketPageSwitch() {
-        return Api.get("/dic.html");
-    }
 
     /**
      * 请求阅读历史数据 或者 收藏
