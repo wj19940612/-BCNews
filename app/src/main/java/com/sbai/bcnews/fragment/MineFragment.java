@@ -27,6 +27,7 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
+import com.sbai.bcnews.model.mine.MsgNumber;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.utils.Launcher;
@@ -80,12 +81,29 @@ public class MineFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         updateUserLoginStatus();
+        refreshUserData();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            refreshUserData();
+        }
+    }
 
     public void refreshUserData() {
-        // TODO: 2018/2/8  我的tab：点击可刷新头像、昵称、收藏、历史等数据，当然是登录状态下；
-
+        if (!LocalUser.getUser().isLogin()) return;
+        Apic.requestUserReadOrCollectNumber()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<MsgNumber>, MsgNumber>() {
+                    @Override
+                    protected void onRespSuccessData(MsgNumber data) {
+                        updateUserCollectNumber(data.getCollect());
+                        updateUserReadHistory(data.getRead());
+                    }
+                })
+                .fire();
     }
 
     private void updateUserLoginStatus() {
