@@ -51,6 +51,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mTitleBar.setTitle(R.string.market);
+        mTitleBar.setBackFeature(false);
         initRecycleView();
         requestMarketListData();
     }

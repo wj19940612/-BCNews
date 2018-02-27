@@ -246,6 +246,13 @@ public class WebActivity extends BaseActivity {
         mWebView.reload();
     }
 
+    public void updateTitleText(String titleContent) {
+        if (isNeedViewTitle()) {
+            mTitle = titleContent;
+            mTitleBar.setTitle(mTitle);
+        }
+    }
+
     protected class WebViewClient extends android.webkit.WebViewClient {
 
         @Override

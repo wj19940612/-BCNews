@@ -175,19 +175,7 @@ public class TitleBar extends RelativeLayout {
         mLeftView.setPadding(mLeftViewLeftPadding, 0, paddingHorizontal, 0);
         addView(mLeftView, params);
         if (mBackFeature) {
-            setBackButtonIcon(mBackIcon);
-            setBackText(mBackText);
-            setBackTextSize(TypedValue.COMPLEX_UNIT_PX, mBackTextSize);
-            setBackTextColor(mBackTextColor);
-            mLeftView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onBackClick(view);
-                    if (mBackClickListener != null) {
-                        mBackClickListener.onClick();
-                    }
-                }
-            });
+            setBackFeature(true);
         }
 
         // right view
@@ -228,6 +216,31 @@ public class TitleBar extends RelativeLayout {
             mLeftView.setTextColor(mBackTextColor);
         } else {
             mLeftView.setTextColor(ColorStateList.valueOf(Color.parseColor("#222222")));
+        }
+    }
+
+    public void setBackFeature(boolean backFeature) {
+        mBackFeature = backFeature;
+        if(backFeature){
+            setBackButtonIcon(mBackIcon);
+            setBackText(mBackText);
+            setBackTextSize(TypedValue.COMPLEX_UNIT_PX, mBackTextSize);
+            setBackTextColor(mBackTextColor);
+            mLeftView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackClick(view);
+                    if (mBackClickListener != null) {
+                        mBackClickListener.onClick();
+                    }
+                }
+            });
+        }else {
+            mLeftView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            setBackText(mBackText);
+            setBackTextSize(TypedValue.COMPLEX_UNIT_PX, mBackTextSize);
+            setBackTextColor(mBackTextColor);
+            mLeftView.setOnClickListener(null);
         }
     }
 
