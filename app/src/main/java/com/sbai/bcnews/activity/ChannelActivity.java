@@ -38,6 +38,7 @@ public class ChannelActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.slide_in_from_bottom, 0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel);
         ButterKnife.bind(this);
@@ -50,6 +51,12 @@ public class ChannelActivity extends AppCompatActivity {
         super.onStop();
         if (mChannelCacheModel != null && mChannelCacheModel.getMyChannelEntities() != null && mChannelCacheModel.getMyChannelEntities().size() != 0)
             ChannelCache.modifyChannel(mChannelCacheModel.getMyChannelEntities(), mChannelCacheModel.getOtherChannelEntities());
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, R.anim.slide_out_to_bottom);
     }
 
     private void initData() {

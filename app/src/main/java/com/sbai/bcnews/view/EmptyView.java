@@ -25,8 +25,10 @@ public class EmptyView extends RelativeLayout {
     TextView mErrorTxt;
     @BindView(R.id.icon)
     ImageView mIcon;
-    @BindView(R.id.btn_refresh)
+    @BindView(R.id.btnRefresh)
     Button mBtnRefresh;
+    @BindView(R.id.noData)
+    TextView mNoData;
 
     private Context mContext;
     private OnRefreshButtonClickListener mOnRefreshButtonClickListener;
@@ -59,11 +61,24 @@ public class EmptyView extends RelativeLayout {
         mOnRefreshButtonClickListener = onRefreshButtonClickListener;
     }
 
+    public void setNoNet() {
+        mErrorTxt.setVisibility(View.VISIBLE);
+        mBtnRefresh.setVisibility(View.VISIBLE);
+        mNoData.setVisibility(View.GONE);
+    }
 
-    @OnClick(R.id.btn_refresh)
+    public void setNoData(String tip) {
+        mErrorTxt.setVisibility(View.GONE);
+        mBtnRefresh.setVisibility(View.GONE);
+        mNoData.setVisibility(View.VISIBLE);
+        mNoData.setText(tip);
+    }
+
+
+    @OnClick(R.id.btnRefresh)
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_refresh:
+            case R.id.btnRefresh:
                 if (mOnRefreshButtonClickListener != null) {
                     mOnRefreshButtonClickListener.onRefreshClick();
                 }
