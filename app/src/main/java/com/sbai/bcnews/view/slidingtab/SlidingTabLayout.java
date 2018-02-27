@@ -91,6 +91,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     private final SlidingTabStrip mTabStrip;
 
+    private boolean mSlidingSwitch = true;
+
     public SlidingTabLayout(Context context) {
         this(context, null);
     }
@@ -120,9 +122,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
     /**
      * 设置该属性，均分默认的 tab（TextView）
      *
-     * @author Johnz
-     *
      * @param distributeEvenly
+     * @author Johnz
      */
     public void setDistributeEvenly(boolean distributeEvenly) {
         mDistributeEvenly = distributeEvenly;
@@ -150,9 +151,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
     /**
      * Sets the padding to be used for controlling the selected tab width.
      *
-     * @author Johnz
-     *
      * @param padding
+     * @author Johnz
      */
     public void setSelectedIndicatorPadding(float padding) {
         mTabStrip.setSelectedIndicatorPadding(padding);
@@ -161,9 +161,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
     /**
      * 设置 indicator 的厚度
      *
-     * @author hcc
-     *
      * @param height
+     * @author hcc
      */
     public void setSelectedIndicatorThickness(int height) {
         mTabStrip.setSelectedIndicatorThickness(height);
@@ -215,10 +214,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     /**
      * 设置默认 tabview 中文字的颜色
-
-     * @author wj
      *
      * @param textColorRes
+     * @author wj
      */
     public void setTabViewTextColor(int textColorRes) {
         mTabViewTextColor = ContextCompat.getColorStateList(getContext(), textColorRes);
@@ -227,9 +225,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
     /**
      * 设置默认 tabview 中文字的颜色
      *
-     * @author wj
-     *
      * @param textColor
+     * @author wj
      */
     public void setTabViewTextColor(ColorStateList textColor) {
         mTabViewTextColor = textColor;
@@ -238,9 +235,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
     /**
      * 设置默认 tabview 中文字的字体
      *
-     * @author Johnz
-     *
      * @param tabViewTextSize
+     * @author Johnz
      */
     public void setTabViewTextSize(int tabViewTextSize) {
         mTabViewTextSize = tabViewTextSize;
@@ -258,12 +254,20 @@ public class SlidingTabLayout extends HorizontalScrollView {
     /**
      * 控制是否存在底分割线
      *
-     * @author Johnz
-     *
      * @param hasBottomBorder
+     * @author Johnz
      */
     public void setHasBottomBorder(boolean hasBottomBorder) {
         mTabStrip.setHasBottomBorder(hasBottomBorder);
+    }
+
+    /**
+     * 点击tab是否滑动切换
+     *
+     * @param slidingSwitch
+     */
+    public void setSlidingSwitch(boolean slidingSwitch) {
+        mSlidingSwitch = slidingSwitch;
     }
 
     /**
@@ -416,9 +420,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
     /**
      * 设置 position 位置的选中状态
      *
-     * @author JohnZ
-     *
      * @param position
+     * @author JohnZ
      */
     public void selectItem(int position) {
         for (int i = 0; i < mTabStrip.getChildCount(); i++) {
@@ -435,7 +438,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         public void onClick(View v) {
             for (int i = 0; i < mTabStrip.getChildCount(); i++) {
                 if (v == mTabStrip.getChildAt(i)) {
-                    mViewPager.setCurrentItem(i);
+                    mViewPager.setCurrentItem(i, mSlidingSwitch);
                     return;
                 }
             }

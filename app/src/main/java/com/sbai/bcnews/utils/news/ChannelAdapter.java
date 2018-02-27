@@ -119,7 +119,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position ) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyViewHolder) {
             MyViewHolder myHolder = (MyViewHolder) holder;
             myHolder.mChannel.setText(mMyChannelItems.get(position - COUNT_PRE_MY_HEADER));
@@ -150,7 +150,10 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         myHolder.mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                moveMyToOther(myHolder);
+                int position = myHolder.getAdapterPosition();
+                if (position != COUNT_PRE_MY_HEADER) {
+                    moveMyToOther(myHolder);
+                }
             }
         });
 
@@ -193,7 +196,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         otherHolder.mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    moveOtherToMy(otherHolder);
+                moveOtherToMy(otherHolder);
             }
         });
     }
