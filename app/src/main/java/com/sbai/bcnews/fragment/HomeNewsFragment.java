@@ -111,7 +111,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mTabLayout.setCustomTabView(R.layout.view_home_tab, R.id.tab);
         mTabLayout.setSelectedIndicatorPadding(Display.dp2Px(15, getResources()));
         mTabLayout.setSelectedIndicatorColors(Color.BLACK);
-        mTabLayout.setSelectedIndicatorThickness(2);
+        mTabLayout.setSelectedIndicatorThickness(4);
         mTabLayout.setHasBottomBorder(false);
     }
 

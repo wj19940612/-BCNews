@@ -27,8 +27,10 @@ import com.sbai.bcnews.view.HackTabLayout;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.autofit.AutofitTextView;
 import com.sbai.bcnews.view.market.KlineDataPlane;
-import com.sbai.chart.KlineChart;
 import com.sbai.chart.domain.KlineViewData;
+import com.sbai.chart.domain.TrendData;
+import com.sbai.chart.kline.KlineChart;
+import com.sbai.chart.trend.InfiniteTrendChart;
 
 import java.io.File;
 import java.util.Collections;
@@ -71,7 +73,7 @@ public class MarketDetailActivity extends BaseActivity {
     @BindView(R.id.klineChart)
     KlineChart mKlineChart;
     @BindView(R.id.trendChart)
-    TextView mTrendChart;
+    InfiniteTrendChart mTrendChart;
     @BindView(R.id.screenShotArea)
     RelativeLayout mScreenShotArea;
 
@@ -94,9 +96,44 @@ public class MarketDetailActivity extends BaseActivity {
         updateMarketView();
 
         requestSingleMarket();
+
+        showTrendView();
+        requestTrendData();
+    }
+
+    private void requestTrendData() {
+        Apic.reqTrendData(mCode, mExchangeCode, null).tag(TAG)
+                .callback(new Callback2D<Resp<List<TrendData>>, List<TrendData>>() {
+                    @Override
+                    protected void onRespSuccessData(List<TrendData> data) {
+                        Collections.sort(data);
+                        mTrendChart.initWithData(data);
+                    }
+                }).fireFreely();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        stopScheduleJob();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopScheduleJob();
     }
 
     private void initCharts() {
+        InfiniteTrendChart.Settings settings = new InfiniteTrendChart.Settings();
+        settings.setBaseLines(5);
+        settings.setNumberScale(mMarketData.getHighestPrice() >= 10 ? 2 : 4);
+        settings.setXAxis(45);
+        settings.setIndexesType(KlineChart.Settings.INDEXES_VOL);
+        settings.setIndexesEnable(true);
+        settings.setIndexesBaseLines(2);
+        mTrendChart.setSettings(settings);
+
         KlineChart.Settings klineSettings = new KlineChart.Settings();
         klineSettings.setBaseLines(5);
         klineSettings.setNumberScale(mMarketData.getHighestPrice() >= 10 ? 2 : 4);
@@ -120,8 +157,6 @@ public class MarketDetailActivity extends BaseActivity {
                 mKlinePlane.setVisibility(View.INVISIBLE);
             }
         });
-
-        showTrendView();
     }
 
     /*设置最新价，人民币换算，涨跌幅以及颜色，以及一些基本的数据*/
@@ -143,7 +178,7 @@ public class MarketDetailActivity extends BaseActivity {
         mAskPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getAskPrice())
                 + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getAskPrice()));
 
-        mMarketValue.setText("--"); // TODO: 11/02/2018 市值数据未提供
+        mMarketValue.setText(MarketDataUtils.formatMarketValue(mMarketData.getMarketValue()));
         mLowestPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getLowestPrice())
                 + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getLowestPrice()));
         mBidPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getBidPrice())
@@ -215,7 +250,7 @@ public class MarketDetailActivity extends BaseActivity {
 
     @Override
     public void onTimeUp(int count) {
-        // TODO: 11/02/2018 定时刷新
+        requestSingleMarket();
     }
 
     private TabLayout.OnTabSelectedListener mOnTabSelectedListener = new TabLayout.OnTabSelectedListener() {
@@ -224,6 +259,7 @@ public class MarketDetailActivity extends BaseActivity {
             switch (tab.getPosition()) {
                 case 0:
                     showTrendView();
+                    requestTrendData();
                     break;
                 case 1:
                     showKlineView();
@@ -276,10 +312,7 @@ public class MarketDetailActivity extends BaseActivity {
                 .callback(new Callback2D<Resp<List<KlineViewData>>, List<KlineViewData>>() {
                     @Override
                     protected void onRespSuccessData(List<KlineViewData> data) {
-                        if (data.size() > 1 && data.get(0).getTimeStamp() > data.get(1).getTimeStamp()) {
-                            // 第一个数据是最新数据，reverse
-                            Collections.reverse(data);
-                        }
+                        Collections.sort(data);
                         mKlineChart.setDataList(data);
                     }
                 }).fire();

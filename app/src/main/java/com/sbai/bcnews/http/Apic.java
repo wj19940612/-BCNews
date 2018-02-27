@@ -20,12 +20,12 @@ public class Apic {
 
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
+
         String QR_CODE = Api.getFixedHost() + "/qc.png";
+
+        //关于我们界面链接
+        String WEB_URI_ABOUT_PAGE = Api.getFixedHost() + "/news/banner/about.html";
     }
-
-    //关于我们界面链接
-    public static final String WEB_URI_ABOUT_PAGE = Api.getFixedHost() + "/news/banner/about.html";
-
 
     /**
      * 用户--同步阅读记录--薛松
@@ -451,14 +451,29 @@ public class Apic {
      * @param klineType
      * @return
      */
-    public static Api reqKlineMarket(String code, String exchangeCode, String klineType, String startTime) {
+    public static Api reqKlineMarket(String code, String exchangeCode, String klineType, String endTime) {
         return Api.get("/api/news-quota/quota/{code}/k",
                 new ReqParams()
                         .put("code", code)
                         .put("exchangeCode", exchangeCode)
                         .put("type", klineType)
-                        .put("startTime", startTime)
+                        .put("endTime", endTime)
                         .put("limit", 100));
     }
 
+    /**
+     * /api/news-quota/quota/{code}/trend
+     * <p>获取分时图数据</p>
+     *
+     * @param code
+     * @param exchangeCode
+     * @param endTime
+     */
+    public static Api reqTrendData(String code, String exchangeCode, String endTime) {
+        return Api.get("/api/news-quota/quota/{code}/trend",
+                new ReqParams()
+                        .put("code", code)
+                        .put("exchangeCode", exchangeCode)
+                        .put("endTime", endTime));
+    }
 }

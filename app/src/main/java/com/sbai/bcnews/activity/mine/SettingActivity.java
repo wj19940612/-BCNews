@@ -134,7 +134,7 @@ public class SettingActivity extends BaseActivity {
             case R.id.aboutBcnews:
                 umengEventCount(UmengCountEventId.SETTING_ABOUT_APP);
                 Launcher.with(getActivity(), WebActivity.class)
-                        .putExtra(WebActivity.EX_URL, Apic.WEB_URI_ABOUT_PAGE)
+                        .putExtra(WebActivity.EX_URL, Apic.url.WEB_URI_ABOUT_PAGE)
                         .putExtra(WebActivity.EX_TITLE,getString(R.string.about_bcnews))
                         .execute();
                 break;

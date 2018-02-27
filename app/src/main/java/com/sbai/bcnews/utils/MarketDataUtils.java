@@ -93,4 +93,14 @@ public class MarketDataUtils {
         }
         return "+" + formatDollar(dollar);
     }
+
+    /**
+     * 格式化市值保留整数，千分符号分割
+     *
+     * @param marketValue
+     * @return
+     */
+    public static String formatMarketValue(double marketValue) {
+        return FinanceUtil.formatWithThousandsSeparator(marketValue, 0, RoundingMode.DOWN);
+    }
 }

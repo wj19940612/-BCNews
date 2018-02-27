@@ -25,8 +25,9 @@ public abstract class ChartView extends View {
         TEXT("#999999"),
         WHITE("#ffffff"),
         GREEN("#39ae13"),
-        BLACK("#222222"),
+        BLACK("#494949"),
         DASH("#979797"),
+        BLUE("#629cd3"),
         RED("#f62048");
 
         private String value;
@@ -475,14 +476,14 @@ public abstract class ChartView extends View {
      * @param canvas
      */
     protected void drawTitleAboveBaselines(float[] baselines, int left, int top, int width, int height,
-                                           long[] indexesBaseLines, int left2, int top2, int width2, int height2,
+                                           double[] indexesBaseLines, int left2, int top2, int width2, int height2,
                                            int touchIndex, Canvas canvas) {
 
     }
 
     protected abstract void calculateBaseLines(float[] baselines);
 
-    protected abstract void calculateIndexesBaseLines(long[] indexesBaseLines);
+    protected abstract void calculateIndexesBaseLines(double[] indexesBaseLines);
 
     /**
      * draw top baselines and bottom indexes baselines
@@ -502,7 +503,7 @@ public abstract class ChartView extends View {
      */
     protected abstract void drawBaseLines(boolean indexesEnable,
                                           float[] baselines, int left, int top, int width, int height,
-                                          long[] indexesBaseLines, int left2, int top2, int width2, int height2,
+                                          double[] indexesBaseLines, int left2, int top2, int width2, int height2,
                                           Canvas canvas);
 
     /**
@@ -613,17 +614,17 @@ public abstract class ChartView extends View {
         return y + getPaddingTop();
     }
 
-    protected float getIndexesChartY(long y) {
+    protected float getIndexesChartY(double y) {
         // When values beyond indexes baselines, eg. mv. return -1
-        long[] indexesBaseLines = mSettings.getIndexesBaseLines();
+        double[] indexesBaseLines = mSettings.getIndexesBaseLines();
         if (y > indexesBaseLines[0] || y < indexesBaseLines[indexesBaseLines.length - 1]) {
             return -1;
         }
 
         int height = getBottomPartHeight();
 
-        float chartY = (indexesBaseLines[0] - y) * 1.0f /
-                (indexesBaseLines[0] - indexesBaseLines[indexesBaseLines.length - 1]) * height;
+        float chartY = (float) ((indexesBaseLines[0] - y) * 1.0f /
+                        (indexesBaseLines[0] - indexesBaseLines[indexesBaseLines.length - 1]) * height);
 
         return chartY + getPaddingTop() + getTopPartHeight() + mCenterPartHeight;
     }

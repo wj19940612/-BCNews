@@ -214,17 +214,15 @@
                 android:layout_height="220dp"
                 android:layout_below="@id/tabLayout">
 
-                <com.sbai.chart.KlineChart
+                <com.sbai.chart.kline.KlineChart
                     android:id="@+id/klineChart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
-                <TextView
+                <com.sbai.chart.trend.InfiniteTrendChart
                     android:id="@+id/trendChart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="trend chart"/>
+                    android:layout_height="match_parent"/>
             </FrameLayout>
         </RelativeLayout>
     </RelativeLayout>
