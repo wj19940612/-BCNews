@@ -21,6 +21,7 @@ import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.MineFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
@@ -88,7 +89,17 @@ public class MainActivity extends BaseActivity {
             String deviceId = AppInfo.getDeviceHardwareId(this);
             String uploadText = NewsCache.getUploadJson();
             if (!TextUtils.isEmpty(uploadText))
-                Apic.uploadReadHistory(uploadText, deviceId).tag(TAG).fireFreely();
+                Apic.uploadReadHistory(uploadText, deviceId)
+                        .tag(TAG)
+                        .callback(new Callback<Resp<Object>>() {
+
+                            @Override
+                            protected void onRespSuccess(Resp<Object> resp) {
+                                MineFragment mineFragment = (MineFragment) mMainFragmentsAdapter.getFragment(PAGE_POSITION_MINE);
+                                mineFragment.refreshUserData();
+                            }
+                        })
+                        .fireFreely();
         }
     }
 
@@ -132,8 +143,8 @@ public class MainActivity extends BaseActivity {
             ((BaseSwipeLoadFragment) fragment).triggerRefresh();
         } else if (fragment instanceof MineFragment) {
             ((MineFragment) fragment).refreshUserData();
-        }else if(fragment instanceof HomeNewsFragment){
-            ((HomeNewsFragment)fragment).triggerRefresh();
+        } else if (fragment instanceof HomeNewsFragment) {
+            ((HomeNewsFragment) fragment).triggerRefresh();
         }
     }
 

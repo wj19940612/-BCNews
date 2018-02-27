@@ -189,6 +189,7 @@
     <string name="related_news">相关资讯</string>
     <string name="my_collect">我的收藏</string>
     <string name="cancel_collect">取消收藏</string>
+    <string name="sure_delete_this_content">确定要删掉该条内容吗</string>
 
     <string name="head_portrait">头像</string>
     <string name="nick_name">昵称</string>

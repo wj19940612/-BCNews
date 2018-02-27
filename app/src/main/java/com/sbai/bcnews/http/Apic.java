@@ -476,4 +476,15 @@ public class Apic {
                         .put("exchangeCode", exchangeCode)
                         .put("endTime", endTime));
     }
+
+    /**
+     * /api/news-user/operate/read/coolect/count
+     * GET
+     * 用户--收藏阅读数量--薛松
+     *
+     * @return
+     */
+    public static Api requestUserReadOrCollectNumber() {
+        return Api.get("/api/news-user/operate/read/coolect/count");
+    }
 }

@@ -21,6 +21,7 @@ import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.ValidationWatcher;
+import com.sbai.bcnews.utils.inputfilter.EmojiFilter;
 import com.sbai.bcnews.view.TitleBar;
 
 import butterknife.BindView;
@@ -49,7 +50,7 @@ public class ModifyNickNameActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mUserNameInput.addTextChangedListener(mValidationWatcher);
-        mUserNameInput.setFilters(new InputFilter[]{filter});
+        mUserNameInput.setFilters(new InputFilter[]{filter,new EmojiFilter()});
 
         String nickName = getIntent().getStringExtra(ExtraKeys.NICK_NAME);
         mUserNameInput.setText(nickName);

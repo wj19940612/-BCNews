@@ -30,6 +30,7 @@ import com.sbai.bcnews.utils.KeyBoardUtils;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrFormatter;
 import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.glide.GlideApp;
 
@@ -277,6 +278,7 @@ public class LoginActivity extends WeChatActivity {
                 mPhoneNumber.setText("");
                 break;
             case R.id.getAuthCode:
+                umengEventCount(UmengCountEventId.LOGIN_AUTHCODE);
                 requestAuthCode();
                 mPhoneNumberClear.setVisibility(View.INVISIBLE);
                 mAuthCode.requestFocus();
@@ -286,6 +288,7 @@ public class LoginActivity extends WeChatActivity {
                 login();
                 break;
             case R.id.weChatLogin:
+                umengEventCount(UmengCountEventId.LOGIN_WECHAT);
                 weChatLogin();
                 break;
             case R.id.agree:
