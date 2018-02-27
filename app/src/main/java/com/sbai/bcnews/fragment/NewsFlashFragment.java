@@ -326,7 +326,6 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                     public void onClick(View view) {
                         MobclickAgent.onEvent(context, UmengCountEventId.NEWS_FLASH_SHARE);
                         Launcher.with(context, ShareNewsFlashActivity.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 .putExtra(ExtraKeys.NEWS_FLASH, newsFlash)
                                 .execute();
                     }

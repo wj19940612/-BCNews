@@ -114,6 +114,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mTabLayout.setSelectedIndicatorColors(Color.BLACK);
         mTabLayout.setSelectedIndicatorThickness(4);
         mTabLayout.setHasBottomBorder(false);
+        mTabLayout.setSlidingSwitch(false);
     }
 
     private void getChannels() {

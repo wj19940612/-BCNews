@@ -477,7 +477,7 @@
     <LinearLayout
         android:id="@+id/collectAndShareLayout"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bg_collect"
         android:orientation="horizontal">
