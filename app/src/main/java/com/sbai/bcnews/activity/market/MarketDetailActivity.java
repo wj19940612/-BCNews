@@ -175,15 +175,15 @@ public class MarketDetailActivity extends BaseActivity {
 
         mVolume.setText(MarketDataUtils.formatVolume(mMarketData.getVolume()));
         mHighest.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getHighestPrice())
-                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getHighestPrice()));
+                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getHighestPrice() * mMarketData.getRate()));
         mAskPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getAskPrice())
-                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getAskPrice()));
+                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getAskPrice() * mMarketData.getRate()));
 
         mMarketValue.setText(MarketDataUtils.formatMarketValue(mMarketData.getMarketValue()));
         mLowestPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getLowestPrice())
-                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getLowestPrice()));
+                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getLowestPrice() * mMarketData.getRate()));
         mBidPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getBidPrice())
-                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getBidPrice()));
+                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getBidPrice() * mMarketData.getRate()));
     }
 
     private void requestSingleMarket() {
