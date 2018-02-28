@@ -48,7 +48,7 @@
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/personalData"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/default_height"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_white"
         app:hasBottomSplitLine="true"
@@ -60,7 +60,7 @@
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/accountManager"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/default_height"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_white"
         app:hasBottomSplitLine="true"
         app:layout_constraintTop_toBottomOf="@+id/personalData"
@@ -71,7 +71,7 @@
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/aboutBcnews"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/default_height"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_white"
         app:layout_constraintTop_toBottomOf="@+id/accountManager"
