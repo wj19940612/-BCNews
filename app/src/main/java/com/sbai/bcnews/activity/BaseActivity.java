@@ -18,9 +18,11 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.ScreenShotListenManager;
 import com.sbai.bcnews.utils.SecurityUtil;
 import com.sbai.bcnews.utils.TimerHandler;
 import com.sbai.bcnews.view.RequestProgress;
+import com.sbai.bcnews.view.ScreenShotView;
 import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.httplib.ReqIndeterminate;
 import com.umeng.analytics.MobclickAgent;
@@ -51,6 +53,7 @@ public class BaseActivity extends StatusBarActivity implements
 
     private TimerHandler mTimerHandler;
     private RequestProgress mRequestProgress;
+    private ScreenShotListenManager mScreenShotListenManager;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -79,6 +82,17 @@ public class BaseActivity extends StatusBarActivity implements
         //TODO 服务器还没这个接口，经常打印toast
 //        SysTime.getSysTime().sync();
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+        initScreenShotListener();
+    }
+
+    private void initScreenShotListener() {
+        mScreenShotListenManager = ScreenShotListenManager.newInstance(this);
+        mScreenShotListenManager.setListener(new ScreenShotListenManager.OnScreenShotListener() {
+            @Override
+            public void onShot(String imagePath) {
+                ScreenShotView.show(getActivity(), imagePath, 5 * 1000);
+            }
+        });
     }
 
     private void scrollToTop(View view) {
@@ -130,12 +144,14 @@ public class BaseActivity extends StatusBarActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        mScreenShotListenManager.startListen();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(ACTION_TOKEN_EXPIRED));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        mScreenShotListenManager.stopListen();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 

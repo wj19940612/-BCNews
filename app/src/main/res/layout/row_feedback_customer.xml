@@ -31,12 +31,12 @@
                     android:id="@+id/endLineTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:background="@drawable/bg_gray_round"
                     android:gravity="center"
-                    android:textColor="@color/unluckyText"
-                    android:textSize="12sp"/>
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/blackPrimary"
+                    android:textSize="10sp"/>
 
 
                 <Space

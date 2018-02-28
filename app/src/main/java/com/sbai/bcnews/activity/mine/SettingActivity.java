@@ -21,6 +21,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.PermissionUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.IconTextRow;
 import com.sbai.bcnews.view.SmartDialog;
@@ -64,48 +65,12 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mNotificationSwitch.setSelected(isNotificationEnabled());
+        mNotificationSwitch.setSelected(PermissionUtil.isNotificationEnabled(this));
         if (LocalUser.getUser().isLogin()) {
             mLogout.setVisibility(View.VISIBLE);
         } else {
             mLogout.setVisibility(View.GONE);
         }
-    }
-
-    /**
-     * 获取通知栏权限是否开启
-     */
-    @SuppressLint("NewApi")
-    public boolean isNotificationEnabled() {
-
-        AppOpsManager mAppOps = (AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE);
-        ApplicationInfo appInfo = this.getApplicationInfo();
-        String pkg = this.getApplicationContext().getPackageName();
-        int uid = appInfo.uid;
-
-        Class appOpsClass = null;
-      /* Context.APP_OPS_MANAGER */
-        try {
-            appOpsClass = Class.forName(AppOpsManager.class.getName());
-            Method checkOpNoThrowMethod = appOpsClass.getMethod(CHECK_OP_NO_THROW, Integer.TYPE, Integer.TYPE,
-                    String.class);
-            Field opPostNotificationValue = appOpsClass.getDeclaredField(OP_POST_NOTIFICATION);
-
-            int value = (Integer) opPostNotificationValue.get(Integer.class);
-            return ((Integer) checkOpNoThrowMethod.invoke(mAppOps, value, uid, pkg) == AppOpsManager.MODE_ALLOWED);
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     @OnClick({R.id.notificationSwitch, R.id.personalData, R.id.accountManager, R.id.aboutBcnews, R.id.logout})
@@ -135,7 +100,7 @@ public class SettingActivity extends BaseActivity {
                 umengEventCount(UmengCountEventId.SETTING_ABOUT_APP);
                 Launcher.with(getActivity(), WebActivity.class)
                         .putExtra(WebActivity.EX_URL, Apic.url.WEB_URI_ABOUT_PAGE)
-                        .putExtra(WebActivity.EX_TITLE,getString(R.string.about_bcnews))
+                        .putExtra(WebActivity.EX_TITLE, getString(R.string.about_bcnews))
                         .execute();
                 break;
             case R.id.logout:
