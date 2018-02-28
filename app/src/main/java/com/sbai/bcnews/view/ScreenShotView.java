@@ -3,7 +3,6 @@ package com.sbai.bcnews.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Looper;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,7 @@ import android.widget.Toast;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.FeedbackActivity;
+import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.glide.GlideApp;
 
@@ -37,7 +37,7 @@ public class ScreenShotView {
         dialogWindow.requestFeature(Window.FEATURE_NO_TITLE);
         dialogWindow.setContentView(rootView);
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-        lp.y = 300;
+        lp.y = (int) Display.dp2Px(80, context.getResources());
         dialogWindow.setAttributes(lp);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();

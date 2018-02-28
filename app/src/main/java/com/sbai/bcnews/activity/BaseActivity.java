@@ -93,7 +93,6 @@ public class BaseActivity extends StatusBarActivity implements
                 ScreenShotView.show(getActivity(), imagePath, 5 * 1000);
             }
         });
-        mScreenShotListenManager.startListen();
     }
 
     private void scrollToTop(View view) {
@@ -145,12 +144,14 @@ public class BaseActivity extends StatusBarActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        mScreenShotListenManager.startListen();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(ACTION_TOKEN_EXPIRED));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        mScreenShotListenManager.stopListen();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
@@ -163,7 +164,6 @@ public class BaseActivity extends StatusBarActivity implements
         mRequestProgress.dismissAll();
 
         stopScheduleJob();
-        mScreenShotListenManager.stopListen();
     }
 
     protected FragmentActivity getActivity() {
