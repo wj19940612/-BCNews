@@ -35,7 +35,7 @@ public class StrFormatter {
      * @return
      */
     public static String getFormatSafetyPhoneNumber(String phoneNoSpace) {
-        return phoneNoSpace.substring(0, 3) + " **** " + phoneNoSpace.substring(phoneNoSpace.length() - 4);
+        return phoneNoSpace.substring(0, 3) + "****" + phoneNoSpace.substring(phoneNoSpace.length() - 4);
     }
 
 
