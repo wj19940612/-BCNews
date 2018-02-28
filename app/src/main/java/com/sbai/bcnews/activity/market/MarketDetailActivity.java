@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -24,10 +23,10 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.MarketDataUtils;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.image.ImageUtils;
-import com.sbai.bcnews.view.HackTabLayout;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.autofit.AutofitTextView;
 import com.sbai.bcnews.view.market.KlineDataPlane;
+import com.sbai.bcnews.view.tabLayout.TabLayout;
 import com.sbai.chart.domain.KlineViewData;
 import com.sbai.chart.domain.TrendData;
 import com.sbai.chart.kline.KlineChart;
@@ -64,7 +63,7 @@ public class MarketDetailActivity extends BaseActivity {
     @BindView(R.id.checkRelatedNews)
     TextView mCheckRelatedNews;
     @BindView(R.id.tabLayout)
-    HackTabLayout mTabLayout;
+    TabLayout mTabLayout;
     @BindView(R.id.lowestPrice)
     TextView mLowestPrice;
     @BindView(R.id.bidPrice)
