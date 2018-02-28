@@ -500,6 +500,15 @@ public class NewsDetailActivity extends BaseActivity {
             }
 
             @Override
+            protected void onRespFailure(Resp failedResp) {
+                super.onRespFailure(failedResp);
+                //收藏文章没有查到
+                if (failedResp.getCode() == Resp.CODE_MSG_NOT_FIND) {
+                    finish();
+                }
+            }
+
+            @Override
             public void onFailure(ReqError reqError) {
                 super.onFailure(reqError);
                 if (refresh)
