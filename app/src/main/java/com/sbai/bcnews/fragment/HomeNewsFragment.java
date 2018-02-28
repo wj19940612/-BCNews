@@ -147,6 +147,8 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     }
 
     private void updateViewPager(List<String> myChannelEntities) {
+        if (myChannelEntities == null || myChannelEntities.size() == 0)
+            return;
         mViewPager.setOffscreenPageLimit(myChannelEntities.size() - 1);
         mMyChannels.clear();
         mMyChannels.addAll(myChannelEntities);
