@@ -283,7 +283,7 @@ public class ImageSelectActivity extends BaseActivity {
     private void notifyRefresh() {
         Intent intent = new Intent();
         if (mCanSelectedAmount == 0) {
-            intent.putExtra(ExtraKeys.IMAGE, listSelectedPath.get(0));
+            intent.putExtra(ExtraKeys.IMAGE_PATH, listSelectedPath.get(0));
         } else {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < listSelectedPath.size(); i++) {
@@ -291,7 +291,7 @@ public class ImageSelectActivity extends BaseActivity {
             }
             String paths = sb.toString();
             if (paths.length() > 0) {
-                intent.putExtra(ExtraKeys.IMAGE, paths.substring(0, paths.length() - 1));
+                intent.putExtra(ExtraKeys.IMAGE_PATH, paths.substring(0, paths.length() - 1));
             }
 
         }

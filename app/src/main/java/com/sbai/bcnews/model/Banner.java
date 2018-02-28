@@ -35,6 +35,10 @@ public class Banner implements Parcelable {
     public static final String USER_FEEDBACK = "user_feedback";//意见反馈
     public static final String APPRAISE = "appraise";//乐米学分页
 
+    public static final int JUMP_TYPE_RICH_TEXT = 0;
+    public static final int JUMP_TYPE_HTML = 1;
+    public static final int JUMP_TYPE_NEWS = 2;
+
 
     /**
      * 首页banner
@@ -75,7 +79,8 @@ public class Banner implements Parcelable {
     private String subTitle;//副标题
     private int userCount;//参与人数
     private String montageData;//活动关键字
-    private String jumpType;//原生页面要跳到哪个原生页面
+    private int jumpType;//原生页面要跳到哪个原生页面
+    private String jumpContent;
     private String jumpId;//原生页面跳过去带Id传过去
 
     //gift 独有的
@@ -256,11 +261,11 @@ public class Banner implements Parcelable {
         this.montageData = montageData;
     }
 
-    public String getJumpType() {
+    public int getJumpType() {
         return jumpType;
     }
 
-    public void setJumpType(String jumpType) {
+    public void setJumpType(int jumpType) {
         this.jumpType = jumpType;
     }
 
@@ -270,6 +275,14 @@ public class Banner implements Parcelable {
 
     public void setJumpId(String jumpId) {
         this.jumpId = jumpId;
+    }
+
+    public String getJumpContent() {
+        return jumpContent;
+    }
+
+    public void setJumpContent(String jumpContent) {
+        this.jumpContent = jumpContent;
     }
 
     @Override
@@ -323,8 +336,9 @@ public class Banner implements Parcelable {
         dest.writeString(this.montageData);
         dest.writeInt(this.clicks);
         dest.writeString(this.smallPic);
-        dest.writeString(this.jumpType);
+        dest.writeInt(this.jumpType);
         dest.writeString(this.jumpId);
+        dest.writeString(this.jumpContent);
     }
 
     protected Banner(Parcel in) {
@@ -350,7 +364,8 @@ public class Banner implements Parcelable {
         this.clicks = in.readInt();
         this.smallPic = in.readString();
         this.jumpId = in.readString();
-        this.jumpType = in.readString();
+        this.jumpType = in.readInt();
+        this.jumpContent = in.readString();
     }
 
     public static final Creator<Banner> CREATOR = new Creator<Banner>() {

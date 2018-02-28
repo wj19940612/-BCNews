@@ -107,6 +107,12 @@ public class PersonalDataActivity extends BaseActivity {
         if (mSex.getSubText().equalsIgnoreCase(SEX_BOY) || mSex.getSubText().equalsIgnoreCase(SEX_GIRL)) {
             sex = mSex.getSubText().equalsIgnoreCase(SEX_BOY) ? UserInfo.USER_SEX_BOY : UserInfo.USER_SEX_GIRL;
         }
+        if (TextUtils.isEmpty(birthdy)
+                && sex == null
+                && TextUtils.isEmpty(mUserInfo.getUserProvince())
+                && TextUtils.isEmpty(mUserInfo.getUserCity())) {
+            return;
+        }
 
         Apic.updateUserInfo(mUserInfo.getUserProvince(), mUserInfo.getUserCity(), birthdy, sex)
                 .callback(new Callback<Resp<Object>>() {
@@ -147,7 +153,10 @@ public class PersonalDataActivity extends BaseActivity {
 
         mIntroduce.setText(data.getIntroduction());
         mBirthday.setSubText(data.getBirthday());
-        mLocation.setSubText(data.getUserProvince() + " " + data.getUserCity());
+
+        if (!TextUtils.isEmpty(data.getUserProvince()) && !TextUtils.isEmpty(data.getUserCity())) {
+            mLocation.setSubText(data.getUserProvince() + " " + data.getUserCity());
+        }
     }
 
     private void updateUserPortrait(String portrait) {

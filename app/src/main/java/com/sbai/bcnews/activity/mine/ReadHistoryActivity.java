@@ -13,7 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.ListResp;
@@ -21,6 +23,7 @@ import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.EmptyRecyclerView;
@@ -77,6 +80,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
                 updateReadHistoryData(data, true);
             }
         }
+
     }
 
     private void requestReadHistoryData() {
@@ -131,6 +135,16 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
         mReadHistoryAdapter = new ReadHistoryAdapter(this, new ArrayList<ReadHistoryOrMyCollect>());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(this));
         mSwipeTarget.setAdapter(mReadHistoryAdapter);
+
+        mReadHistoryAdapter.setOnItemClickListener(new OnItemClickListener<ReadHistoryOrMyCollect>() {
+            @Override
+            public void onItemClick(ReadHistoryOrMyCollect item, int position) {
+                Launcher.with(getActivity(), NewsDetailActivity.class)
+                        .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
+                        .putExtra(ExtraKeys.TAG, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
+                        .execute();
+            }
+        });
     }
 
 
@@ -186,6 +200,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
         public static final int HAS_STICKY_VIEW = 2;
         public static final int NONE_STICKY_VIEW = 3;
 
+
         private ArrayList<ReadHistoryOrMyCollect> mReadHistoryOrMyCollectList;
         private Context mContext;
         private OnItemClickListener<ReadHistoryOrMyCollect> mOnItemClickListener;
@@ -203,6 +218,10 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
         public void clear() {
             mReadHistoryOrMyCollectList.clear();
             notifyDataSetChanged();
+        }
+
+        public void setOnItemClickListener(OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener) {
+            mOnItemClickListener = onItemClickListener;
         }
 
         @Override
@@ -276,13 +295,15 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
             TextView mOriginal;
             @BindView(R.id.source)
             TextView mSource;
+            @BindView(R.id.contentRoot)
+            RelativeLayout mContentRoot;
 
             NoneOrSingleImageViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(ReadHistoryOrMyCollect item, int position, Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener, boolean theDifferentDayNews) {
+            public void bindDataWithView(final ReadHistoryOrMyCollect item, final int position, Context context, final OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener, boolean theDifferentDayNews) {
 
                 if (theDifferentDayNews) {
                     mAdsorbText.setText(DateUtil.formatNewsStyleTime(item.getReadTime()));
@@ -290,6 +311,15 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
                 } else {
                     mAdsorbText.setVisibility(View.GONE);
                 }
+
+                mContentRoot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(item, position);
+                        }
+                    }
+                });
 
                 mNewsTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
@@ -318,19 +348,30 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
             TextView mOriginal;
             @BindView(R.id.source)
             TextView mSource;
+            @BindView(R.id.contentRoot)
+            RelativeLayout mContentRoot;
 
             ThreeImageViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(ReadHistoryOrMyCollect item, int position, Context context, OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener, boolean theDifferentDayNews) {
+            public void bindDataWithView(final ReadHistoryOrMyCollect item, final int position, Context context, final OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener, boolean theDifferentDayNews) {
                 if (theDifferentDayNews) {
                     mAdsorbText.setVisibility(View.VISIBLE);
                     mAdsorbText.setText(DateUtil.formatNewsStyleTime(item.getReadTime()));
                 } else {
                     mAdsorbText.setVisibility(View.GONE);
                 }
+
+                mContentRoot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(item, position);
+                        }
+                    }
+                });
 
                 mNewsTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());

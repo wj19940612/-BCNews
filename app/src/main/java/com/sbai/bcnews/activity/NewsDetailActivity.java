@@ -546,7 +546,7 @@ public class NewsDetailActivity extends BaseActivity {
         }).fireFreely();
     }
 
-    private void updateOtherData(List<OtherArticle> data) {
+    private void updateOtherData(final List<OtherArticle> data) {
         if (data == null || data.size() == 0) {
             return;
         }
@@ -567,6 +567,15 @@ public class NewsDetailActivity extends BaseActivity {
         } else {
             mFirstImg.setVisibility(View.GONE);
         }
+        mFirstArticle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!TextUtils.isEmpty(mChannel))
+                    Launcher.with(NewsDetailActivity.this, NewsDetailActivity.class).putExtra(ExtraKeys.CHANNEL, mChannel).putExtra(ExtraKeys.NEWS_ID, data.get(0).getId()).execute();
+                else if (!TextUtils.isEmpty(mTag))
+                    Launcher.with(NewsDetailActivity.this, NewsDetailActivity.class).putExtra(ExtraKeys.TAG, mTag).putExtra(ExtraKeys.NEWS_ID, data.get(0).getId()).execute();
+            }
+        });
 
         if (data.size() > 1) {
             mSecondArticle.setVisibility(View.VISIBLE);
@@ -586,6 +595,16 @@ public class NewsDetailActivity extends BaseActivity {
             }
         }
 
+        mSecondArticle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!TextUtils.isEmpty(mChannel))
+                    Launcher.with(NewsDetailActivity.this, NewsDetailActivity.class).putExtra(ExtraKeys.CHANNEL, mChannel).putExtra(ExtraKeys.NEWS_ID, data.get(1).getId()).execute();
+                else if (!TextUtils.isEmpty(mTag))
+                    Launcher.with(NewsDetailActivity.this, NewsDetailActivity.class).putExtra(ExtraKeys.TAG, mTag).putExtra(ExtraKeys.NEWS_ID, data.get(1).getId()).execute();
+            }
+        });
+
         if (data.size() > 2) {
             mThirdArticle.setVisibility(View.VISIBLE);
             mThirdTitle.setText(data.get(2).getTitle());
@@ -602,11 +621,24 @@ public class NewsDetailActivity extends BaseActivity {
             } else {
                 mThirdImg.setVisibility(View.GONE);
             }
+
+            mThirdArticle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!TextUtils.isEmpty(mChannel))
+                        Launcher.with(NewsDetailActivity.this, NewsDetailActivity.class).putExtra(ExtraKeys.CHANNEL, mChannel).putExtra(ExtraKeys.NEWS_ID, data.get(2).getId()).execute();
+                    else if (!TextUtils.isEmpty(mTag))
+                        Launcher.with(NewsDetailActivity.this, NewsDetailActivity.class).putExtra(ExtraKeys.TAG, mTag).putExtra(ExtraKeys.NEWS_ID, data.get(2).getId()).execute();
+                }
+            });
         }
     }
 
     private void updatePraiseCollect(NewsDetail newsDetail) {
         int praiseCount = newsDetail.getPraiseCount();
+        //如果自己已经点赞过，但是服务器那边点赞数量是0，置成1
+        if (newsDetail.getPraise() > 0 && newsDetail.getPraiseCount() == 0)
+            praiseCount = 1;
         if (praiseCount == 0) {
             mPraiseCount.setText(R.string.news_praise);
         } else {

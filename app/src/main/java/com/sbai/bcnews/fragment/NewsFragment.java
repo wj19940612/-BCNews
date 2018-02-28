@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
@@ -56,6 +58,8 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_GLIDING;
 public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     public static final int BANNER_HEIGHT = 170;
+    public static final int TIME_ONE = 1000;//1次轮询为1s
+    public static final int TIME_HANDLER_THREE = 3;//3次轮询时间
 
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
@@ -124,6 +128,26 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        startScheduleJob(TIME_ONE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopScheduleJob();
+    }
+
+    @Override
+    public void onTimeUp(int count) {
+        super.onTimeUp(count);
+        if (count % TIME_HANDLER_THREE == 0 && mHomeBanner != null) {
+            mHomeBanner.nextAdvertisement();
+        }
+    }
+
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
@@ -183,6 +207,21 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             mHomeBanner = (HomeBanner) LayoutInflater.from(getActivity()).inflate(R.layout.item_banner, null);
             mHomeBanner.setLayoutParams(new RecyclerView.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(BANNER_HEIGHT, getResources())));
+            mHomeBanner.setOnViewClickListener(new HomeBanner.OnViewClickListener() {
+                @Override
+                public void onBannerClick(Banner information) {
+                    if (information.getJumpType() == Banner.JUMP_TYPE_RICH_TEXT && !TextUtils.isEmpty(information.getContent())) {
+                        Launcher.with(getActivity(), WebActivity.class)
+                                .putExtra(WebActivity.EX_HTML, information.getJumpContent())
+                                .execute();
+                    } else if (information.getJumpType() == Banner.JUMP_TYPE_HTML) {
+                        Launcher.with(getActivity(), WebActivity.class)
+                                .putExtra(WebActivity.EX_URL, information.getJumpContent())
+                                .putExtra(WebActivity.EX_TITLE, information.getTitle())
+                                .execute();
+                    }
+                }
+            });
         }
     }
 
@@ -228,7 +267,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 if (mNewsWraps.size() == 0 && data.getContent().size() == 0) {
                     mEmptyView.setNoData(getString(R.string.no_main_news));
                     mEmptyView.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     mEmptyView.setVisibility(View.GONE);
                 }
                 updateData(data.getContent(), refresh);

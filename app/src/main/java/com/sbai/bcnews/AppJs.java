@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 import com.sbai.bcnews.activity.NewsDetailActivity;
@@ -166,6 +165,19 @@ public class AppJs {
                 @Override
                 public void run() {
                     activity.openBigImage(img);
+                }
+            });
+        }
+    }
+
+    @JavascriptInterface
+    public void updateTitleText(final String titleContent) {
+        if (mContext instanceof WebActivity) {
+            final WebActivity activity = (WebActivity) mContext;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    activity.updateTitleText(titleContent);
                 }
             });
         }

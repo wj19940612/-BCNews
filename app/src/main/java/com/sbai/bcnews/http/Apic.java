@@ -21,10 +21,13 @@ public class Apic {
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
 
+
         String QR_CODE = Api.getFixedHost() + "/qc.png";
 
         //关于我们界面链接
         String WEB_URI_ABOUT_PAGE = Api.getFixedHost() + "/news/banner/about.html";
+        //用户协议
+        String WEB_URI_AGREEMENT = Api.getFixedHost() + "/news/banner/agreement.html?code=1";
     }
 
     /**
@@ -311,7 +314,7 @@ public class Apic {
         return Api.get("/api/news-user/banner/findBannerList.do");
     }
 
-    public static Api requestOperationWeChatAccount(String type) {
+    public static Api requestOperationSetting(String type) {
         return Api.get("/api/news-user/dictionary/json.do", new ReqParams().put("type", type));
     }
 
@@ -351,13 +354,6 @@ public class Apic {
 
     }
 
-    /**
-     * /dic.html
-     * <p>查询行情界面是否显示接口</p>
-     */
-    public static Api requestShowMarketPageSwitch() {
-        return Api.get("/dic.html");
-    }
 
     /**
      * 请求阅读历史数据 或者 收藏
