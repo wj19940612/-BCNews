@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 
+import com.sbai.bcnews.App;
 import com.sbai.bcnews.utils.FileUtils;
 
 import java.io.BufferedOutputStream;
@@ -187,12 +188,36 @@ public class ImageUtils {
         return bitmapToBase64(compressWithLs(urlPath, context));
     }
 
+    public static String compressImageToBase64(Bitmap bitmap, Context context) {
+        return compressImageToBase64(bitmap, context, App.getAppContext().getFilesDir().getPath() + "/" + System.currentTimeMillis() + ".jpg");
+    }
+
+    public static String compressImageToBase64(Bitmap bitmap, Context context, String fileName) {
+        File file = bitmapToFile(bitmap, fileName);
+        if (file != null && file.exists()) {
+            return bitmapToBase64(compressWithLs(file, context));
+        }
+        return bitmapToBase64(bitmap);
+    }
+
     public static String compressImageToBase64(String urlPath) {
         return bitmapToBase64(compressScale(urlPath));
     }
 
 
     private static Bitmap compressWithLs(String path, Context context) {
+        Luban.Builder builder = Luban.with(context)
+                .load(path)
+                .ignoreBy(100)
+                .setTargetDir(getPath());
+        File file = builder.launchOnly();
+        if (file != null) {
+            return BitmapFactory.decodeFile(file.getPath());
+        }
+        return null;
+    }
+
+    private static Bitmap compressWithLs(File path, Context context) {
         Luban.Builder builder = Luban.with(context)
                 .load(path)
                 .ignoreBy(100)

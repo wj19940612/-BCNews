@@ -8,6 +8,7 @@ import java.util.List;
 //资讯详情
 public class NewsDetail {
 
+    private List<String> channel; //渠道
     private String content;  //h5内容
     private long createTime;
     private String detail;  //一级类型描述
@@ -206,5 +207,13 @@ public class NewsDetail {
 
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public List<String> getChannel() {
+        return channel;
+    }
+
+    public void setChannel(List<String> channel) {
+        this.channel = channel;
     }
 }

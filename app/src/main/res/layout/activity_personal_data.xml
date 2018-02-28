@@ -62,7 +62,7 @@
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/nickName"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_white"
         app:hasBottomSplitLine="true"
         app:layout_constraintTop_toBottomOf="@+id/headImageLayout"
@@ -73,7 +73,7 @@
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/sex"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_white"
         app:layout_constraintTop_toBottomOf="@+id/nickName"
         app:rightIcon="@drawable/ic_common_right_arrow"
@@ -84,7 +84,7 @@
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/birthday"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:background="@drawable/bg_white"
         app:hasBottomSplitLine="true"
@@ -97,7 +97,7 @@
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/location"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_white"
         app:hasBottomSplitLine="true"
         app:layout_constraintTop_toBottomOf="@+id/birthday"
@@ -109,7 +109,7 @@
     <LinearLayout
         android:id="@+id/personalIntroduce"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="50dp"
         android:background="@drawable/bg_white"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"

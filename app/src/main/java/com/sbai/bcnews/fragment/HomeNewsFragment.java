@@ -235,9 +235,10 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     }
 
     //外部调用  双击滑到顶部刷新
-    public void triggerRefresh(){
+    public void triggerRefresh() {
         RecycleViewSwipeLoadFragment recycleViewSwipeLoadFragment = (RecycleViewSwipeLoadFragment) mPagerAdapter.getFragment(mViewPager.getCurrentItem());
-        recycleViewSwipeLoadFragment.triggerRefresh();
+        if (recycleViewSwipeLoadFragment != null)
+            recycleViewSwipeLoadFragment.triggerRefresh();
     }
 
     public static class PagerAdapter extends FragmentPagerAdapter {

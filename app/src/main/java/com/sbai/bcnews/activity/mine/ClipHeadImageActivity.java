@@ -54,9 +54,10 @@ public class ClipHeadImageActivity extends BaseActivity {
     }
 
     private void submitFile() {
-        Bitmap clipBitmap = mClipImageLayout.clip(Bitmap.Config.RGB_565);
-        String picture = ImageUtils.bitmapToBase64(clipBitmap);
-        submitPortraitPath(picture);
+        Bitmap clipBitmap = mClipImageLayout.clip();
+//        String picture = ImageUtils.bitmapToBase64(clipBitmap);
+        String base64 = ImageUtils.compressImageToBase64(clipBitmap, getActivity());
+        submitPortraitPath(base64);
     }
 
     private void submitPortraitPath(final String data) {
