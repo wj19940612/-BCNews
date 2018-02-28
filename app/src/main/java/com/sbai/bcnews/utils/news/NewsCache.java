@@ -14,6 +14,8 @@ import org.json.JSONTokener;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +62,7 @@ public class NewsCache {
         if (sNewsCache == null) {
             readFromPreference();
         }
+
         sNewsCache.put(newsDetail.getId(), newsDetail);
         String news = sGson.toJson(sNewsCache);
         Preference.get().setNewsDetail(news);
@@ -70,6 +73,7 @@ public class NewsCache {
         if (sNewsCache == null) {
             readFromPreference();
         }
+
         NewsDetail newsDetail = sNewsCache.get(id);
         return newsDetail;
     }
@@ -84,6 +88,14 @@ public class NewsCache {
             ReadHistoryOrMyCollect readHistoryOrMyCollect = copyToReadHistory(newsDetail);
             readHistoryOrMyCollects.add(readHistoryOrMyCollect);
         }
+
+        Collections.sort(readHistoryOrMyCollects, new Comparator<ReadHistoryOrMyCollect>() {
+            @Override
+            public int compare(ReadHistoryOrMyCollect o1, ReadHistoryOrMyCollect o2) {
+                return (int) (o2.getReadTime() - o1.getReadTime());
+            }
+        });
+
         return readHistoryOrMyCollects;
     }
 

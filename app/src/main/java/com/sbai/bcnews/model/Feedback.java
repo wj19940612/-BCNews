@@ -30,7 +30,7 @@ public class Feedback {
     private long createTime;
     private int id;
     private int status;
-    private int type;
+    private int direction;
     private String userName;
     private String userPhone;
     private String userPortrait;
@@ -101,11 +101,11 @@ public class Feedback {
     }
 
     public int getType() {
-        return type;
+        return direction;
     }
 
     public void setType(int type) {
-        this.type = type;
+        this.direction = type;
     }
 
     public String getUserName() {

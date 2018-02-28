@@ -33,7 +33,14 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
 
     private OnStartRefreshListener mOnStartRefreshListener;
 
-    public interface OnStartRefreshListener{
+    private static final int[] mOffsetDrawble = new int[]{R.drawable.ic_refresh_0, R.drawable.ic_refresh_1, R.drawable.ic_refresh_2, R.drawable.ic_refresh_3,
+            R.drawable.ic_refresh_4, R.drawable.ic_refresh_5, R.drawable.ic_refresh_6, R.drawable.ic_refresh_7,
+            R.drawable.ic_refresh_8, R.drawable.ic_refresh_9, R.drawable.ic_refresh_10, R.drawable.ic_refresh_11,
+            R.drawable.ic_refresh_12, R.drawable.ic_refresh_13, R.drawable.ic_refresh_14, R.drawable.ic_refresh_15, R.drawable.ic_refresh_16};
+
+    private int mOffsetHeight;
+
+    public interface OnStartRefreshListener {
         public void onStartRefresh();
     }
 
@@ -56,9 +63,12 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
         ivArrow = view.findViewById(R.id.ivArrow);
         addView(view);
         mRefreshCompleteText = getContext().getString(R.string.refresh_complete);
+
+        mOffsetHeight = getResources().getDimensionPixelOffset(R.dimen.refresh_final_offset_google);
+        mOffsetHeight = mOffsetHeight - mOffsetHeight / 3;
     }
 
-    public void setStartRefreshListener(OnStartRefreshListener onStartRefreshListener){
+    public void setStartRefreshListener(OnStartRefreshListener onStartRefreshListener) {
         mOnStartRefreshListener = onStartRefreshListener;
     }
 
@@ -78,40 +88,44 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
 
     @Override
     public void onPrepare() {
-        Log.d(TAG, "onPrepare()");
         reset();
-        ivArrow.setImageResource(R.drawable.refresh_start);
-        AnimationDrawable refreshStartDrawable = (AnimationDrawable) ivArrow.getDrawable();
-        refreshStartDrawable.start();
-        if(mOnStartRefreshListener!=null){
+//        ivArrow.setImageResource(R.drawable.refresh_start);
+//        AnimationDrawable refreshStartDrawable = (AnimationDrawable) ivArrow.getDrawable();
+//        refreshStartDrawable.start();
+        if (mOnStartRefreshListener != null) {
             mOnStartRefreshListener.onStartRefresh();
         }
     }
 
+    private int offset = 0;
+
     @Override
     public void onMove(int y, boolean isComplete, boolean automatic) {
         if (!isComplete) {
-            if (y > mHeaderHeight) {
-                if (!rotated) {
-                    rotated = true;
-                }
-            } else if (y < mHeaderHeight) {
-                if (rotated) {
-                    rotated = false;
-                }
-
+//            if (y > mHeaderHeight) {
+//                if (!rotated) {
+//                    rotated = true;
+//                }
+//            } else if (y < mHeaderHeight) {
+//                if (rotated) {
+//                    rotated = false;
+//                }
+            int i = y / 17;
+            if (i != offset) {
+                if (i > 16) i = 16;
+                ivArrow.setImageResource(mOffsetDrawble[i]);
+                Log.d(TAG, "aaaa: " + i);
+                offset = i;
             }
         }
     }
 
     @Override
     public void onRelease() {
-        Log.d(TAG, "onRelease: ");
     }
 
     @Override
     public void onComplete() {
-        Log.d(TAG, "onComplete: ");
         rotated = false;
         ivArrow.clearAnimation();
         ivArrow.setVisibility(GONE);
@@ -120,12 +134,12 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
 
     @Override
     public void onReset() {
-        Log.d(TAG, "onReset: ");
         rotated = false;
         reset();
     }
 
     private void reset() {
+        offset = 0;
         ivArrow.setVisibility(VISIBLE);
         mRefreshCompleteText = "";
         tvRefresh.setVisibility(INVISIBLE);
@@ -158,11 +172,11 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
         setRefreshCompleteText(R.string.refresh_complete);
     }
 
-    public void refreshSuccess(CharSequence toast){
+    public void refreshSuccess(CharSequence toast) {
         setRefreshCompleteText(toast);
     }
 
-    public void refreshSuccess(int toast){
+    public void refreshSuccess(int toast) {
         setRefreshCompleteText(toast);
 
     }

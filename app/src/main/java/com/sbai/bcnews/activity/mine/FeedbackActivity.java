@@ -1,8 +1,12 @@
 package com.sbai.bcnews.activity.mine;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -20,6 +24,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.fragment.dialog.PreviewDialogFragment;
@@ -82,13 +87,45 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
     private FeedbackAdapter mFeedbackAdapter;
     private boolean firstLoadData = true;
 
+    private BroadcastReceiver mLoginBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase(LoginActivity.ACTION_LOGIN_SUCCESS)) {
+                requestFeedbackData(false);
+            }
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
         ButterKnife.bind(this);
+        initData(getIntent());
         initViews();
+        initBroadcastReceiver();
         requestFeedbackData(true);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        initData(intent);
+    }
+
+    private void initBroadcastReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LoginActivity.ACTION_LOGIN_SUCCESS);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mLoginBroadcastReceiver, intentFilter);
+
+    }
+
+    private void initData(Intent intent) {
+        String imagePath = intent.getStringExtra(ExtraKeys.IMAGE_PATH);
+        if (imagePath != null) {
+            sendFeedbackImage(imagePath);
+        }
     }
 
     private void initViews() {
@@ -108,6 +145,7 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
     protected void onDestroy() {
         super.onDestroy();
         mCommentContent.removeTextChangedListener(mContentWatcher);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLoginBroadcastReceiver);
     }
 
     private void requestFeedbackData(final boolean needScrollToLast) {
@@ -208,25 +246,18 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.addPic:
-                if (LocalUser.getUser().isLogin()) {
-                    if (mFeedbackAdapter.getCount() > 6) {
-                        listViewScrollBottom();
-                    }
-                    sendPicToCustomer();
-                } else {
-                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                if (mFeedbackAdapter.getCount() > 6) {
+                    listViewScrollBottom();
                 }
+                sendPicToCustomer();
+
                 break;
             case R.id.send:
-                if (LocalUser.getUser().isLogin()) {
-                    if (mFeedbackAdapter.getCount() > 6) {
-                        listViewScrollBottom();
-                    }
-                    String content = mCommentContent.getText().toString().trim();
-                    requestSendFeedback(content, CONTENT_TYPE_TEXT);
-                } else {
-                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                if (mFeedbackAdapter.getCount() > 6) {
+                    listViewScrollBottom();
                 }
+                String content = mCommentContent.getText().toString().trim();
+                requestSendFeedback(content, CONTENT_TYPE_TEXT);
                 break;
         }
     }
