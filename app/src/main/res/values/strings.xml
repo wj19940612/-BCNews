@@ -103,7 +103,6 @@
     <string name="no_main_news">暂无资讯</string>
 
 
-
     <!--行情-->
     <string name="market_volume">量%1$s</string>
     <string name="volume">交易量</string>
@@ -210,4 +209,8 @@
     <string name="update_success">修改成功</string>
     <string name="send_message_connect">您好，欢迎反馈！反馈时附上界面截屏，可以更好地给我们反馈问题哦~</string>
     <string name="modify_success">修改成功</string>
+
+    <string name="have_good_article_how_to_tell_you">有优质的内容\n怎么第一时间告诉你呢</string>
+    <string name="now_notify_me">马上通知我</string>
+    <string name="feedback_question">反馈问题</string>
 </resources>
