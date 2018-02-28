@@ -157,6 +157,12 @@ public class KlineChart extends ChartView {
         mOnReachBorderListener = onReachBorderListener;
     }
 
+    protected void setRectBgPaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartColor.BLACK.get()));
+        paint.setStyle(Paint.Style.FILL);
+        paint.setPathEffect(null);
+    }
+
     private void setCandleLinePaint(Paint paint, String color) {
         paint.setColor(Color.parseColor(color));
         paint.setStyle(Paint.Style.STROKE);
@@ -636,8 +642,59 @@ public class KlineChart extends ChartView {
 
             // draw cross line: vertical line and horizontal line
             setTouchLinePaint(sPaint);
+//            Path path = getPath();
+//            path.moveTo(touchX, top);
+//            path.lineTo(touchX, top + height);
+//            canvas.drawPath(path, sPaint);
             canvas.drawLine(touchX, top, touchX, top + height, sPaint);
-            canvas.drawLine(left, touchY, left + width, touchY, sPaint);
+//            path = getPath();
+//            path.moveTo(left, touchY);
+//            path.lineTo(left + width - mPriceAreaWidth, touchY);
+//            canvas.drawPath(path, sPaint);
+            canvas.drawLine(left, touchY, left + width - mPriceAreaWidth, touchY, sPaint);
+
+            // draw date connect to vertical line
+            String date = formatTimestamp(data);
+            setTouchLineTextPaint(sPaint);
+            float dateWidth = sPaint.measureText(date);
+            RectF redRect = getBigFontBgRectF(0, 0, dateWidth);
+            float rectHeight = redRect.height();
+            float rectWidth = redRect.width();
+            redRect.left = touchX - rectWidth / 2;
+            redRect.top = top + height;
+            if (redRect.left < left) { // rect will touch left border
+                redRect.left = left;
+            }
+            if (redRect.left + rectWidth > left + width) { // rect will touch right border
+                redRect.left = left + width - rectWidth;
+            }
+            redRect.right = redRect.left + rectWidth;
+            redRect.bottom = redRect.top + rectHeight;
+            setRectBgPaint(sPaint);
+            canvas.drawRoundRect(redRect, 2, 2, sPaint);
+            float dateX = redRect.left + (rectWidth - dateWidth) / 2;
+            float dateY = top + height + rectHeight / 2 + mOffset4CenterBigText;
+            setTouchLineTextPaint(sPaint);
+            canvas.drawText(date, dateX, dateY, sPaint);
+
+            // draw price connect to horizontal line
+            String price = formatNumber(data.getClosePrice());
+            setTouchLineTextPaint(sPaint);
+            float priceWidth = sPaint.measureText(price);
+            float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
+            float priceX = left + width - priceMargin - priceWidth;
+            redRect = getBigFontBgRectF(priceX, touchY + mOffset4CenterBigText, priceWidth);
+            rectHeight = redRect.height();
+            redRect.top -= rectHeight / 2;
+            if (redRect.top < top) {
+                redRect.top = top;
+            }
+            redRect.bottom = redRect.top + rectHeight;
+            setRectBgPaint(sPaint);
+            canvas.drawRoundRect(redRect, 2, 2, sPaint);
+            float priceY = redRect.top + rectHeight / 2 + mOffset4CenterBigText;
+            setTouchLineTextPaint(sPaint);
+            canvas.drawText(price, priceX, priceY, sPaint);
 
             /**if (indexesEnable) {
                 float touchY2 = getIndexesChartY(data.getNowVolume());
