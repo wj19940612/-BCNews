@@ -107,6 +107,12 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
         requestFeedbackData(true);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        initData(intent);
+    }
+
     private void initBroadcastReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LoginActivity.ACTION_LOGIN_SUCCESS);
