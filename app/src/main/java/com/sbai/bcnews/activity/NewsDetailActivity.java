@@ -70,6 +70,8 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_NORMAL;
 
 public class NewsDetailActivity extends BaseActivity {
 
+    public static final int REQUEST_CODE_LOGIN = 12;
+
     @BindView(R.id.webView)
     WebView mWebView;
     @BindView(R.id.titleBar)
@@ -680,7 +682,7 @@ public class NewsDetailActivity extends BaseActivity {
                 }
             }).fireFreely();
         } else if (mNetNewsDetail != null) {
-            Launcher.with(this, LoginActivity.class).execute();
+            Launcher.with(this, LoginActivity.class).executeForResult(REQUEST_CODE_LOGIN);
         }
     }
 
@@ -705,7 +707,7 @@ public class NewsDetailActivity extends BaseActivity {
                 }
             }).fireFreely();
         } else if (!LocalUser.getUser().isLogin()) {
-            Launcher.with(this, LoginActivity.class).execute();
+            Launcher.with(this, LoginActivity.class).executeForResult(REQUEST_CODE_LOGIN);
         }
     }
 
@@ -833,6 +835,9 @@ public class NewsDetailActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
+            requestDetailData();
+        }
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 

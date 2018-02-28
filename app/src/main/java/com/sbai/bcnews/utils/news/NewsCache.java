@@ -98,6 +98,7 @@ public class NewsCache {
         readHistoryOrMyCollect.setTitle(newsDetail.getTitle());
         readHistoryOrMyCollect.setType(MESSAGE_TYPE_READ_HISTORY);
         readHistoryOrMyCollect.setImgs(newsDetail.getImgs());
+        readHistoryOrMyCollect.setChannel(newsDetail.getChannel());
         return readHistoryOrMyCollect;
     }
 
