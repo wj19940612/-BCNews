@@ -2,10 +2,8 @@ package com.sbai.bcnews.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -21,7 +19,6 @@ import com.sbai.bcnews.model.market.MarketData;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.Launcher;
-import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.news.NewsAdapter;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
@@ -85,10 +82,9 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
     }
 
     private void initViews() {
-        SpannableString spannableString = StrUtil.mergeTextWithColor(
-                mMarketData.getName().toUpperCase() + "/" + mMarketData.getCurrencyMoney().toUpperCase(),
-                " " + mMarketData.getExchangeCode(), ContextCompat.getColor(getActivity(), R.color.luckyText));
-                mTitleBar.setBackText(spannableString);
+        String backText = mMarketData.getName().toUpperCase() +
+                "/" + mMarketData.getCurrencyMoney().toUpperCase();
+        mTitleBar.setBackText(backText);
 
         mNewsAdapter = new NewsAdapter(getActivity(), mNewsWrapList, new NewsAdapter.OnItemClickListener() {
             @Override
