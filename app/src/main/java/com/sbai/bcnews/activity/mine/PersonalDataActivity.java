@@ -167,10 +167,10 @@ public class PersonalDataActivity extends BaseActivity {
                 .into(mUserHeadImage);
     }
 
-    @OnClick({R.id.userHeadImage, R.id.nickName, R.id.sex, R.id.birthday, R.id.location, R.id.personalIntroduce})
+    @OnClick({R.id.headImageLayout, R.id.nickName, R.id.sex, R.id.birthday, R.id.location, R.id.personalIntroduce})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.userHeadImage:
+            case R.id.headImageLayout:
                 UploadUserImageDialogFragment uploadUserImageDialogFragment = UploadUserImageDialogFragment.newInstance(
                         UploadUserImageDialogFragment.IMAGE_TYPE_CLIPPING_IMAGE_SCALE_OR_MOVE);
                 uploadUserImageDialogFragment.show(getSupportFragmentManager());

@@ -17,7 +17,6 @@ import android.widget.ScrollView;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.model.LocalUser;
-import com.sbai.bcnews.model.SysTime;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.SecurityUtil;
 import com.sbai.bcnews.utils.TimerHandler;
