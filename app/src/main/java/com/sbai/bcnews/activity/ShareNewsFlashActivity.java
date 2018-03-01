@@ -64,6 +64,8 @@ public class ShareNewsFlashActivity extends BaseActivity {
     @BindView(R.id.downloadImg)
     ImageView mDownloadImg;
 
+    private long mId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         overridePendingTransition(R.anim.slide_in_from_bottom, 0);
@@ -88,6 +90,7 @@ public class ShareNewsFlashActivity extends BaseActivity {
     private void initData(Intent intent) {
         NewsFlash newsFlash = intent.getParcelableExtra(ExtraKeys.NEWS_FLASH);
         if (newsFlash != null) {
+            mId = newsFlash.getId();
             mWeek.setText(getString(R.string.week_, DateUtil.getDayOfWeek(newsFlash.getReleaseTime())));
             mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()).concat(" ").concat(getString(R.string.news_flash)));
             if (newsFlash.isImportant()) {
@@ -151,6 +154,9 @@ public class ShareNewsFlashActivity extends BaseActivity {
                 .setCallback(mUMShareListener)
                 .setPlatform(platform)
                 .share();
+        if (mId > 0) {
+            Apic.share(mId, 1).tag(TAG).fireFreely();
+        }
     }
 
     private UMShareListener mUMShareListener = new UMShareListener() {

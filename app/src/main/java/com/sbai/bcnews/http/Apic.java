@@ -483,4 +483,12 @@ public class Apic {
     public static Api requestUserReadOrCollectNumber() {
         return Api.get("/api/news-user/operate/read/coolect/count");
     }
+
+    public static Api share(Object id, int type) {
+        return Api.post("/api/news-info/news/share/{id}",
+                new ReqParams()
+                        .put("id", id)
+                        .put("type", type));
+    }
+
 }
