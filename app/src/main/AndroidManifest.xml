@@ -39,6 +39,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity
