@@ -175,7 +175,7 @@ public class FinanceUtil {
             BigDecimal newValue = divide(value, 100000000.000, unitizeScale, RoundingMode.DOWN);
             return newValue.toString() + unit;
         }
-        return formatWithScale(value, scale);
+        return formatWithScale(value, unitizeScale);
     }
 
     /**
