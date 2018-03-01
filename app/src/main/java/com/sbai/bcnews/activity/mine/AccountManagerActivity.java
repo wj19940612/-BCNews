@@ -8,12 +8,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrFormatter;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.IconTextRow;
@@ -24,6 +26,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AccountManagerActivity extends WeChatActivity {
+
+    private static final int REQ_CODE_WE_CHAT_BIND = 5004;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -42,6 +46,10 @@ public class AccountManagerActivity extends WeChatActivity {
         setContentView(R.layout.activity_account_manager);
         ButterKnife.bind(this);
 
+        updateUserInfo();
+    }
+
+    private void updateUserInfo() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         if (userInfo != null) {
             changeUserWeChatBindStatus(userInfo.getWxBound());
@@ -126,7 +134,10 @@ public class AccountManagerActivity extends WeChatActivity {
                     @Override
                     protected void onRespFailure(Resp failedResp) {
                         if (failedResp.getCode() == Resp.CODE_NO_BIND_WE_CHAT) {
-//                            updateBindPhoneViews();
+                            Launcher.with(getActivity(), LoginActivity.class)
+                                    .putExtra(ExtraKeys.We_CHAT, 1)
+                                    .putExtra(ExtraKeys.WE_CHAT_OPENID, getWeChatOpenid())
+                                    .executeForResult(REQ_CODE_WE_CHAT_BIND);
                         } else {
                             setWeChatOpenid(null);
                         }
@@ -137,5 +148,13 @@ public class AccountManagerActivity extends WeChatActivity {
     @Override
     protected void bindFailure() {
         ToastUtil.show(R.string.cancel_login);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_WE_CHAT_BIND && resultCode == RESULT_OK) {
+            updateUserInfo();
+        }
     }
 }
