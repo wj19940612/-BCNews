@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
  * Modified by john on 18/01/2018
  * <p>
  * Description:
- *
+ * <p>
  * http 请求基础管理类
  */
 public class RequestManager {

@@ -147,6 +147,8 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     }
 
     private void updateViewPager(List<String> myChannelEntities) {
+        if (myChannelEntities == null || myChannelEntities.size() == 0)
+            return;
         mViewPager.setOffscreenPageLimit(myChannelEntities.size() - 1);
         mMyChannels.clear();
         mMyChannels.addAll(myChannelEntities);
@@ -235,9 +237,10 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     }
 
     //外部调用  双击滑到顶部刷新
-    public void triggerRefresh(){
+    public void triggerRefresh() {
         RecycleViewSwipeLoadFragment recycleViewSwipeLoadFragment = (RecycleViewSwipeLoadFragment) mPagerAdapter.getFragment(mViewPager.getCurrentItem());
-        recycleViewSwipeLoadFragment.triggerRefresh();
+        if (recycleViewSwipeLoadFragment != null)
+            recycleViewSwipeLoadFragment.triggerRefresh();
     }
 
     public static class PagerAdapter extends FragmentPagerAdapter {

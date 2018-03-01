@@ -159,7 +159,7 @@
                 android:id="@+id/login"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:background="@drawable/btn_yellow_rounded"
+                android:background="@drawable/btn_yellow_small_rounded"
                 android:enabled="false"
                 android:gravity="center"
                 android:text="@string/fast_login"

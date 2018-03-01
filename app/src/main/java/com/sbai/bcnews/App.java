@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.igexin.sdk.PushManager;
 import com.sbai.bcnews.activity.CrashInfoActivity;
@@ -12,6 +13,9 @@ import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.service.PushIntentService;
 import com.sbai.bcnews.service.PushService;
 import com.sbai.bcnews.utils.BuildConfigUtils;
+import com.sbai.bcnews.utils.ScreenShotListenManager;
+import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.view.ScreenShotView;
 import com.sbai.httplib.ReqLogger;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
