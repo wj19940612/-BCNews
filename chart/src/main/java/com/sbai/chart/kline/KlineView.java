@@ -127,10 +127,6 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         mKlineChart.setDayLine(dayLine);
     }
 
-    public void clearData() {
-        mKlineChart.clearData();
-    }
-
     public boolean isLastDataVisible() {
         return mKlineChart.isLastDataVisible();
     }

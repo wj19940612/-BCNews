@@ -134,6 +134,7 @@ public class KlineChart extends ChartView {
 
     public void initWithData(List<KlineViewData> dataList) {
         mDataList = dataList;
+        resetChart();
         redraw();
     }
 
@@ -600,7 +601,9 @@ public class KlineChart extends ChartView {
         return getStartPointOffset() == 0;
     }
 
-    public void clearData() {
+    @Override
+    protected void resetChart() {
+        super.resetChart();
         mStart = 0;
         mEnd = 0;
         mLength = 0;
@@ -608,9 +611,6 @@ public class KlineChart extends ChartView {
 
         mFirstVisibleIndex = Integer.MAX_VALUE;
         mLastVisibleIndex = Integer.MIN_VALUE;
-
-        resetChart();
-        initWithData(null);
     }
 
     @Override

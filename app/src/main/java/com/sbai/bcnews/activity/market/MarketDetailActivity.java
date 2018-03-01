@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -23,6 +24,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.market.MarketData;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.MarketDataUtils;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.TitleBar;
@@ -83,6 +85,9 @@ public class MarketDetailActivity extends BaseActivity {
     private String mCode;
     private String mExchangeCode;
 
+    private boolean mRefreshTrendWhenArriveRight;
+    private boolean mRefreshKlineWhenArriveRight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,21 +106,6 @@ public class MarketDetailActivity extends BaseActivity {
 
         showTrendView();
         requestTrendData(null);
-    }
-
-    private void requestTrendData(final String endTime) {
-        Apic.reqTrendData(mCode, mExchangeCode, Uri.encode(endTime)).tag(TAG)
-                .callback(new Callback2D<Resp<List<TrendData>>, List<TrendData>>() {
-                    @Override
-                    protected void onRespSuccessData(List<TrendData> data) {
-                        Collections.sort(data);
-                        if (TextUtils.isEmpty(endTime)) {
-                            mTrendChart.initWithData(data);
-                        } else {
-                            mTrendChart.addHistoryData(data);
-                        }
-                    }
-                }).fireFreely();
     }
 
     @Override
@@ -147,7 +137,9 @@ public class MarketDetailActivity extends BaseActivity {
 
             @Override
             public void onArriveRight(TrendData theRight) {
-
+                if (mRefreshTrendWhenArriveRight) {
+                    requestTrendData(null);
+                }
             }
         });
 
@@ -183,6 +175,11 @@ public class MarketDetailActivity extends BaseActivity {
 
             @Override
             public void onArriveRight(KlineViewData theRight) {
+                if (mRefreshKlineWhenArriveRight) {
+                    String klineType = (String) mKlineChart.getTag();
+                    requestKlineMarket(klineType, null);
+                    Log.d("Temp", "onArriveRight: requestKlineMarket");
+                }
             }
         });
     }
@@ -211,17 +208,6 @@ public class MarketDetailActivity extends BaseActivity {
                 + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getLowestPrice() * mMarketData.getRate()));
         mBidPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getBidPrice())
                 + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getBidPrice() * mMarketData.getRate()));
-    }
-
-    private void requestSingleMarket() {
-        Apic.reqSingleMarket(mMarketData.getCode(), mMarketData.getExchangeCode()).tag(TAG)
-                .callback(new Callback2D<Resp<MarketData>, MarketData>() {
-                    @Override
-                    protected void onRespSuccessData(MarketData data) {
-                        mMarketData = data;
-                        updateMarketView();
-                    }
-                }).fireFreely();
     }
 
     private void initData(Intent intent) {
@@ -280,6 +266,31 @@ public class MarketDetailActivity extends BaseActivity {
     @Override
     public void onTimeUp(int count) {
         requestSingleMarket();
+
+        int seconds = count * 5;
+        if (mTrendChart.getVisibility() == View.VISIBLE && seconds % 60 == 0) {
+            if (mTrendChart.getTransactionX() != 0) {
+                mRefreshTrendWhenArriveRight = true;
+            } else {
+                requestTrendData(null);
+            }
+        }
+
+        if (mKlineChart.getVisibility() == View.VISIBLE) {
+            String klineType = (String) mKlineChart.getTag();
+            if (klineType == null || klineType.equals("day")) return;
+
+            int klineSeconds = Integer.valueOf(klineType) * 60;
+            if (seconds % klineSeconds == 0) {
+                if (mKlineChart.getTransactionX() != 0) {
+                    mRefreshKlineWhenArriveRight = true;
+                    Log.d("Temp", "onTimeUp: mRefreshKlineWhenArriveRight");
+                } else {
+                    requestKlineMarket(klineType, null);
+                    Log.d("Temp", "onTimeUp: requestKlineMarket");
+                }
+            }
+        }
     }
 
     private TabLayout.OnTabSelectedListener mOnTabSelectedListener = new TabLayout.OnTabSelectedListener() {
@@ -335,21 +346,56 @@ public class MarketDetailActivity extends BaseActivity {
         mTrendChart.setVisibility(View.VISIBLE);
     }
 
+    private void requestSingleMarket() {
+        Apic.reqSingleMarket(mMarketData.getCode(), mMarketData.getExchangeCode()).tag(TAG)
+                .callback(new Callback2D<Resp<MarketData>, MarketData>() {
+                    @Override
+                    protected void onRespSuccessData(MarketData data) {
+                        mMarketData = data;
+                        updateMarketView();
+                    }
+                }).fireFreely();
+    }
+
     private void requestKlineMarket(String klineType, final String endTime) {
-        mKlineChart.clearData();
-        mTrendChart.setTag(klineType);
-        Apic.reqKlineMarket(mCode, mExchangeCode, klineType, endTime).tag(TAG)
+        mKlineChart.setTag(klineType);
+        Apic.reqKlineMarket(mCode, mExchangeCode, klineType, Uri.encode(endTime)).tag(TAG)
                 .callback(new Callback2D<Resp<List<KlineViewData>>, List<KlineViewData>>() {
                     @Override
                     protected void onRespSuccessData(List<KlineViewData> data) {
                         Collections.sort(data);
                         if (TextUtils.isEmpty(endTime)) {
                             mKlineChart.initWithData(data);
+                            mRefreshKlineWhenArriveRight = false;
                         } else {
+                            if (data.isEmpty()) {
+                                ToastUtil.show(R.string.there_is_no_more_data);
+                                return;
+                            }
                             mKlineChart.addHistoryData(data);
                         }
                     }
-                }).fire();
+                }).fireFreely();
+    }
+
+    private void requestTrendData(final String endTime) {
+        Apic.reqTrendData(mCode, mExchangeCode, Uri.encode(endTime)).tag(TAG)
+                .callback(new Callback2D<Resp<List<TrendData>>, List<TrendData>>() {
+                    @Override
+                    protected void onRespSuccessData(List<TrendData> data) {
+                        Collections.sort(data);
+                        if (TextUtils.isEmpty(endTime)) {
+                            mTrendChart.initWithData(data);
+                            mRefreshTrendWhenArriveRight = false;
+                        } else {
+                            if (data.isEmpty()) {
+                                ToastUtil.show(R.string.there_is_no_more_data);
+                                return;
+                            }
+                            mTrendChart.addHistoryData(data);
+                        }
+                    }
+                }).fireFreely();
     }
 
     @OnClick(R.id.checkRelatedNews)

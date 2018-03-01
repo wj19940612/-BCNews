@@ -163,12 +163,25 @@ public class InfiniteTrendChart extends ChartView {
 
     public void initWithData(List<TrendData> dataList) {
         mDataList = dataList;
+        resetChart();
         redraw();
     }
 
     public void addHistoryData(List<TrendData> dataList) {
         mDataList.addAll(0, dataList);
         redraw();
+    }
+
+    @Override
+    protected void resetChart() {
+        super.resetChart();
+        mStart = 0;
+        mEnd = 0;
+        mLength = 0;
+        mVisibleList.clear();
+
+        mFirstVisibleIndex = Integer.MAX_VALUE;
+        mLastVisibleIndex = Integer.MIN_VALUE;
     }
 
     @Override
