@@ -796,6 +796,12 @@ public class NewsDetailActivity extends BaseActivity {
                 .setTitleVisible(false)
                 .setShareTitle(mNewsDetail.getTitle())
                 .setShareDescription(getSummaryData())
+                .setListener(new ShareDialog.OnShareDialogCallback() {
+                    @Override
+                    public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {
+                        Apic.share(mNewsDetail.getId(), 0).tag(TAG).fireFreely();
+                    }
+                })
                 .setShareUrl(String.format(Apic.url.SHARE_NEWS, mNewsDetail.getId()))
                 .setShareThumbUrl(shareThumbUrl)
                 .show();
@@ -820,6 +826,7 @@ public class NewsDetailActivity extends BaseActivity {
                 .setPlatform(platform)
                 .setCallback(mUMShareListener)
                 .share();
+        Apic.share(mNewsDetail.getId(), 0).tag(TAG).fireFreely();
 
     }
 

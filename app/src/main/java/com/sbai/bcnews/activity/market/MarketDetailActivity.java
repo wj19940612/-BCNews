@@ -200,7 +200,7 @@ public class MarketDetailActivity extends BaseActivity {
         mLastPrice.setTextColor(ContextCompat.getColor(getActivity(), color));
         mPriceChange.setTextColor(ContextCompat.getColor(getActivity(), color));
 
-        mVolume.setText(MarketDataUtils.formatVolume(mMarketData.getVolume()));
+        mVolume.setText(MarketDataUtils.formatVolume(mMarketData.getLastVolume()));
         mHighest.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getHighestPrice())
                 + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getHighestPrice() * mMarketData.getRate()));
         mAskPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getAskPrice())
