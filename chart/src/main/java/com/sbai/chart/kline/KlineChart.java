@@ -23,6 +23,13 @@ import java.util.List;
 
 public class KlineChart extends ChartView {
 
+    public interface OnDragListener {
+
+        void onArriveLeft(KlineViewData theLeft);
+
+        void onArriveRight(KlineViewData theRight);
+    }
+
     private static final int CANDLES_WIDTH_DP = 6; //dp
     private static final float LINE_WIDTH = 1;
 
@@ -40,7 +47,7 @@ public class KlineChart extends ChartView {
     private int[] mMovingAverages;
     private SparseArray<String> mMAColors;
     private OnTouchLinesAppearListener mOnTouchLinesAppearListener;
-    private KlineView.OnReachBorderListener mOnReachBorderListener;
+    private OnDragListener mOnDragListener;
 
     // visible points index range
     private int mStart;
@@ -49,7 +56,6 @@ public class KlineChart extends ChartView {
 
     private float mCandleWidth;
     private float mLineWidth;
-    private boolean mInitData;
 
     public KlineChart(Context context) {
         super(context);
@@ -126,9 +132,8 @@ public class KlineChart extends ChartView {
         redraw();
     }
 
-    public void setDataList(List<KlineViewData> dataList) {
+    public void initWithData(List<KlineViewData> dataList) {
         mDataList = dataList;
-        mInitData = true;
         redraw();
     }
 
@@ -153,8 +158,8 @@ public class KlineChart extends ChartView {
         mOnTouchLinesAppearListener = onTouchLinesAppearListener;
     }
 
-    public void setOnReachBorderListener(KlineView.OnReachBorderListener onReachBorderListener) {
-        mOnReachBorderListener = onReachBorderListener;
+    public void setOnDragListener(OnDragListener onDragListener) {
+        mOnDragListener = onDragListener;
     }
 
     protected void setRectBgPaint(Paint paint) {
@@ -568,17 +573,15 @@ public class KlineChart extends ChartView {
     protected void onDraw(Canvas canvas) {
         calculateStartAndEndPosition();
         super.onDraw(canvas);
-        if (mOnReachBorderListener != null && mDataList != null &&
-                mDataList.size() > mSettings.getXAxis() && mStart == 0) {
-            mOnReachBorderListener.onReachLeftBorder(mDataList.get(mStart), mDataList);
-        }
-        if (mOnReachBorderListener != null && mDataList != null &&
-                mDataList.size() > mSettings.getXAxis() && mEnd == mDataList.size()) {
-            if (mInitData) {
-                mInitData = false;
-                return;
+        if (isDragging()) {
+            if (mOnDragListener != null && mDataList != null &&
+                    mDataList.size() > mSettings.getXAxis() && mStart == 0) {
+                mOnDragListener.onArriveLeft(mDataList.get(mStart));
             }
-            mOnReachBorderListener.onReachRightBorder(mDataList.get(mEnd - 1), mDataList);
+            if (mOnDragListener != null && mDataList != null &&
+                    mDataList.size() > mSettings.getXAxis() && mEnd == mDataList.size()) {
+                mOnDragListener.onArriveRight(mDataList.get(mEnd - 1));
+            }
         }
     }
 
@@ -607,7 +610,7 @@ public class KlineChart extends ChartView {
         mLastVisibleIndex = Integer.MIN_VALUE;
 
         resetChart();
-        setDataList(null);
+        initWithData(null);
     }
 
     @Override

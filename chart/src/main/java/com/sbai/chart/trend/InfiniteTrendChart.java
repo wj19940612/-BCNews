@@ -38,11 +38,11 @@ public class InfiniteTrendChart extends ChartView {
     private static final float OUTER_CIRCLE_RADIUS = 3.5f;
     private static final float INNER_CIRCLE_RADIUS = 2.5f;
 
-    public interface OnReachBorderListener {
+    public interface OnDragListener {
 
-        void onReachLeftBorder(TrendData theLeft, List<TrendData> dataList);
+        void onArriveLeft(TrendData theLeft);
 
-        void onReachRightBorder(TrendData theRight, List<TrendData> dataList);
+        void onArriveRight(TrendData theRight);
     }
 
     public interface OnTouchLinesAppearListener {
@@ -69,14 +69,16 @@ public class InfiniteTrendChart extends ChartView {
     private int mEnd;
     private int mLength;
     private OnTouchLinesAppearListener mOnTouchLinesAppearListener;
-    private OnReachBorderListener mOnReachBorderListener;
+    private OnDragListener mOnDragListener;
     private float mVolumeWidth;
     private float mDataLineWidth;
     private float mTouchLineWidth;
     private float mOuterCircleRadius;
     private float mInnerCircleRadius;
 
-    private boolean mInitData;
+    public void setOnDragListener(OnDragListener onDragListener) {
+        mOnDragListener = onDragListener;
+    }
 
     protected void setRealTimeLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartColor.BLUE.get()));
@@ -161,7 +163,11 @@ public class InfiniteTrendChart extends ChartView {
 
     public void initWithData(List<TrendData> dataList) {
         mDataList = dataList;
-        mInitData = true;
+        redraw();
+    }
+
+    public void addHistoryData(List<TrendData> dataList) {
+        mDataList.addAll(0, dataList);
         redraw();
     }
 
@@ -378,6 +384,16 @@ public class InfiniteTrendChart extends ChartView {
     protected void onDraw(Canvas canvas) {
         calculateStartAndEndPosition();
         super.onDraw(canvas);
+        if (isDragging()) {
+            if (mOnDragListener != null && mDataList != null &&
+                    mDataList.size() > mSettings.getXAxis() && mStart == 0) {
+                mOnDragListener.onArriveLeft(mDataList.get(mStart));
+            }
+            if (mOnDragListener != null && mDataList != null &&
+                    mDataList.size() > mSettings.getXAxis() && mEnd == mDataList.size()) {
+                mOnDragListener.onArriveRight(mDataList.get(mEnd - 1));
+            }
+        }
     }
 
     @Override

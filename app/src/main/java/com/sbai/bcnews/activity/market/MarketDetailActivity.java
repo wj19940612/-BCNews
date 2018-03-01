@@ -3,9 +3,11 @@ package com.sbai.bcnews.activity.market;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -98,16 +100,20 @@ public class MarketDetailActivity extends BaseActivity {
         requestSingleMarket();
 
         showTrendView();
-        requestTrendData();
+        requestTrendData(null);
     }
 
-    private void requestTrendData() {
-        Apic.reqTrendData(mCode, mExchangeCode, null).tag(TAG)
+    private void requestTrendData(final String endTime) {
+        Apic.reqTrendData(mCode, mExchangeCode, Uri.encode(endTime)).tag(TAG)
                 .callback(new Callback2D<Resp<List<TrendData>>, List<TrendData>>() {
                     @Override
                     protected void onRespSuccessData(List<TrendData> data) {
                         Collections.sort(data);
-                        mTrendChart.initWithData(data);
+                        if (TextUtils.isEmpty(endTime)) {
+                            mTrendChart.initWithData(data);
+                        } else {
+                            mTrendChart.addHistoryData(data);
+                        }
                     }
                 }).fireFreely();
     }
@@ -115,7 +121,7 @@ public class MarketDetailActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        stopScheduleJob();
+        startScheduleJob(5000);
     }
 
     @Override
@@ -133,6 +139,17 @@ public class MarketDetailActivity extends BaseActivity {
         settings.setIndexesEnable(true);
         settings.setIndexesBaseLines(2);
         mTrendChart.setSettings(settings);
+        mTrendChart.setOnDragListener(new InfiniteTrendChart.OnDragListener() {
+            @Override
+            public void onArriveLeft(TrendData theLeft) {
+                requestTrendData(theLeft.getTime());
+            }
+
+            @Override
+            public void onArriveRight(TrendData theRight) {
+
+            }
+        });
 
         KlineChart.Settings klineSettings = new KlineChart.Settings();
         klineSettings.setBaseLines(5);
@@ -155,6 +172,17 @@ public class MarketDetailActivity extends BaseActivity {
             public void onDisappear() {
                 mTabLayout.setVisibility(View.VISIBLE);
                 mKlinePlane.setVisibility(View.INVISIBLE);
+            }
+        });
+        mKlineChart.setOnDragListener(new KlineChart.OnDragListener() {
+            @Override
+            public void onArriveLeft(KlineViewData theLeft) {
+                String klineType = (String) mKlineChart.getTag();
+                requestKlineMarket(klineType, theLeft.getTime());
+            }
+
+            @Override
+            public void onArriveRight(KlineViewData theRight) {
             }
         });
     }
@@ -260,27 +288,27 @@ public class MarketDetailActivity extends BaseActivity {
             switch (tab.getPosition()) {
                 case 0:
                     showTrendView();
-                    requestTrendData();
+                    requestTrendData(null);
                     break;
                 case 1:
                     showKlineView();
-                    requestKlineMarket("5");
+                    requestKlineMarket("5", null);
                     break;
                 case 2:
                     showKlineView();
-                    requestKlineMarket("15");
+                    requestKlineMarket("15", null);
                     break;
                 case 3:
                     showKlineView();
-                    requestKlineMarket("30");
+                    requestKlineMarket("30", null);
                     break;
                 case 4:
                     showKlineView();
-                    requestKlineMarket("60");
+                    requestKlineMarket("60", null);
                     break;
                 case 5:
                     showKlineView();
-                    requestKlineMarket("day");
+                    requestKlineMarket("day", null);
                     break;
 
             }
@@ -307,14 +335,19 @@ public class MarketDetailActivity extends BaseActivity {
         mTrendChart.setVisibility(View.VISIBLE);
     }
 
-    private void requestKlineMarket(String klineType) {
+    private void requestKlineMarket(String klineType, final String endTime) {
         mKlineChart.clearData();
-        Apic.reqKlineMarket(mCode, mExchangeCode, klineType, null).tag(TAG)
+        mTrendChart.setTag(klineType);
+        Apic.reqKlineMarket(mCode, mExchangeCode, klineType, endTime).tag(TAG)
                 .callback(new Callback2D<Resp<List<KlineViewData>>, List<KlineViewData>>() {
                     @Override
                     protected void onRespSuccessData(List<KlineViewData> data) {
                         Collections.sort(data);
-                        mKlineChart.setDataList(data);
+                        if (TextUtils.isEmpty(endTime)) {
+                            mKlineChart.initWithData(data);
+                        } else {
+                            mKlineChart.addHistoryData(data);
+                        }
                     }
                 }).fire();
     }

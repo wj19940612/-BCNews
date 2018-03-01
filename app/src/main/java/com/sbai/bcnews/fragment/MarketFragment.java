@@ -43,7 +43,7 @@ import butterknife.ButterKnife;
  */
 public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
-    private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 6000;
+    private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 5000;
 
     private MarkListAdapter mMarkListAdapter;
 
