@@ -72,6 +72,7 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_NORMAL;
 public class NewsDetailActivity extends BaseActivity {
 
     public static final int REQUEST_CODE_LOGIN = 12;
+    public static final int REQ_CODE_CANCEL_COLLECT = 2265;
 
     @BindView(R.id.webView)
     WebView mWebView;
@@ -717,6 +718,9 @@ public class NewsDetailActivity extends BaseActivity {
                         mNetNewsDetail.setCollect(1);
                         umengEventCount(UmengCountEventId.NEWS04);
                     } else {
+                        Intent intent = new Intent();
+                        intent.putExtra(ExtraKeys.TAG, mNetNewsDetail.getId());
+                        setResult(RESULT_OK, intent);
                         mNetNewsDetail.setCollect(0);
                     }
                     updatePraiseCollect(mNetNewsDetail);
