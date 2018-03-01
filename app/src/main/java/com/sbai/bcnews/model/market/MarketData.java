@@ -27,6 +27,7 @@ public class MarketData implements Parcelable{
      * rate : 6.35
      * status : 0
      * tradeDay : 2018-01-26
+     * upDropPrice : -0.05150000000000021
      * upDropSpeed : -0.13157894736842
      * upTime : 1516950438965
      * upTimeFormat : 2018-01-26 15:07:18
@@ -47,6 +48,7 @@ public class MarketData implements Parcelable{
     private double rate;         //兑换rmb 汇率
     private int status;
     private String tradeDay;
+    private double upDropPrice;  // 涨跌值
     private double upDropSpeed;  //涨跌幅
     private long upTime;
     private String upTimeFormat;
@@ -124,6 +126,10 @@ public class MarketData implements Parcelable{
         return volume;
     }
 
+    public double getUpDropPrice() {
+        return upDropPrice;
+    }
+
     @Override
     public String toString() {
         return "MarketData{" +
@@ -141,6 +147,7 @@ public class MarketData implements Parcelable{
                 ", rate=" + rate +
                 ", status=" + status +
                 ", tradeDay='" + tradeDay + '\'' +
+                ", upDropPrice=" + upDropPrice +
                 ", upDropSpeed=" + upDropSpeed +
                 ", upTime=" + upTime +
                 ", upTimeFormat='" + upTimeFormat + '\'' +
@@ -169,6 +176,7 @@ public class MarketData implements Parcelable{
         dest.writeDouble(this.rate);
         dest.writeInt(this.status);
         dest.writeString(this.tradeDay);
+        dest.writeDouble(this.upDropPrice);
         dest.writeDouble(this.upDropSpeed);
         dest.writeLong(this.upTime);
         dest.writeString(this.upTimeFormat);
@@ -193,6 +201,7 @@ public class MarketData implements Parcelable{
         this.rate = in.readDouble();
         this.status = in.readInt();
         this.tradeDay = in.readString();
+        this.upDropPrice = in.readDouble();
         this.upDropSpeed = in.readDouble();
         this.upTime = in.readLong();
         this.upTimeFormat = in.readString();
