@@ -147,7 +147,7 @@ public class AccountManagerActivity extends WeChatActivity {
 
     @Override
     protected void bindFailure() {
-        ToastUtil.show(R.string.cancel_login);
+        ToastUtil.show(R.string.cancel_bind);
     }
 
     @Override

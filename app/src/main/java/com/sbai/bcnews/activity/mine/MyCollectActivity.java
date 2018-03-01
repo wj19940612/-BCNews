@@ -2,6 +2,7 @@ package com.sbai.bcnews.activity.mine;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,6 +61,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
     private int mPage;
     private HashSet<String> mSet;
     private MyCollectAdapter mMyCollectAdapter;
+    private ArrayList<ReadHistoryOrMyCollect> mReadHistoryOrMyCollectList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,11 +69,13 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         setContentView(R.layout.activity_my_collect);
         ButterKnife.bind(this);
         initView();
+        onRefresh();
     }
 
     private void initView() {
         mSet = new HashSet<>();
-        mMyCollectAdapter = new MyCollectAdapter(this, new ArrayList<ReadHistoryOrMyCollect>());
+        mReadHistoryOrMyCollectList = new ArrayList<>();
+        mMyCollectAdapter = new MyCollectAdapter(this, mReadHistoryOrMyCollectList);
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(this));
         mSwipeTarget.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(this));
         mSwipeTarget.setAdapter(mMyCollectAdapter);
@@ -155,11 +159,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         }
     }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        onRefresh();
-    }
+
 
     @Override
     public View getContentView() {
@@ -179,6 +179,26 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         requestCollectNews();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case NewsDetailActivity.REQ_CODE_CANCEL_COLLECT:
+                    String id = data.getStringExtra(ExtraKeys.TAG);
+                    if (!TextUtils.isEmpty(id)) {
+                        for (ReadHistoryOrMyCollect readHistoryOrMyCollect : mReadHistoryOrMyCollectList) {
+                            if (id.equalsIgnoreCase(readHistoryOrMyCollect.getId())) {
+                                mReadHistoryOrMyCollectList.remove(readHistoryOrMyCollect);
+                                mMyCollectAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+    }
 
     public static class MyCollectAdapter extends RecyclerView.Adapter {
 
@@ -292,7 +312,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                         Launcher.with(context, NewsDetailActivity.class)
                                 .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
                                 .putExtra(ExtraKeys.TAG, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
-                                .execute();
+                                .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
                     }
                 });
 
@@ -355,7 +375,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                         Launcher.with(context, NewsDetailActivity.class)
                                 .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
                                 .putExtra(ExtraKeys.TAG, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
-                                .execute();
+                                .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
                     }
                 });
 

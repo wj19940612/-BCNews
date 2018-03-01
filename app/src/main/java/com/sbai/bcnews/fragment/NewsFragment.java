@@ -130,6 +130,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onResume() {
         super.onResume();
+        refreshReadStatus();
         startScheduleJob(TIME_ONE);
     }
 
@@ -162,7 +163,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         NewsAdapter newsAdapter = new NewsAdapter(getActivity(), mNewsWraps, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
-                NewsReadCache.markNewsRead(newsDetail);
                 Launcher.with(getActivity(), NewsDetailActivity.class)
                         .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId())
                         .putExtra(CHANNEL, mChannel).execute();
@@ -350,22 +350,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
     }
 
-    private List<Banner> getTestBanner() {
-        Banner banner = new Banner();
-        banner.setClicks(455);
-        banner.setContent("https://lemi.ailemi.com/lm/activityk.html");
-        banner.setCover("https://esongb.oss-cn-shanghai.aliyuncs.com/ueditor/1514517627375015440.png");
-        banner.setId("5a45b48a87761dd50d4e52ec");
-
-        Banner banner1 = new Banner();
-        banner1.setClicks(455);
-        banner1.setContent("https://lemi.ailemi.com/lm/banner/acer.html");
-        banner1.setCover("https://esongb.oss-cn-shanghai.aliyuncs.com/ueditor/1513563771235023353.png");
-        banner1.setId("5a3726af87761961bba3372c");
-        List<Banner> homeBanners = new ArrayList<>();
-        homeBanners.add(banner);
-        homeBanners.add(banner1);
-        return homeBanners;
+    private void refreshReadStatus() {
+        if (mNewsWraps != null && mNewsWraps.size() != 0) {
+            mNewsAdapter.notifyDataSetChanged();
+        }
     }
 
 }

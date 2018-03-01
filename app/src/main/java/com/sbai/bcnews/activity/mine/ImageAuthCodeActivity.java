@@ -9,7 +9,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.Key;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.EmptySignature;
+import com.bumptech.glide.signature.MediaStoreSignature;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.gson.JsonObject;
 
 import com.sbai.bcnews.ExtraKeys;
@@ -23,6 +27,7 @@ import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.glide.GlideApp;
 
 import java.io.File;
+import java.security.MessageDigest;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +69,12 @@ public class ImageAuthCodeActivity extends DialogBaseActivity {
 
     private void requestImageAuthCode() {
         GlideApp.with(getActivity()).load(Apic.getImageAuthCode(mPhone))
+                .signature(new Key() {
+                    @Override
+                    public void updateDiskCacheKey(MessageDigest messageDigest) {
+                        messageDigest.reset();
+                    }
+                })
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(mImageAuthCode);

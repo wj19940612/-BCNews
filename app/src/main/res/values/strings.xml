@@ -77,7 +77,7 @@
         <item>@drawable/tab_news</item>
         <item>@drawable/tab_flash_news</item>
         <item>@drawable/tab_market</item>
-        <item>@drawable/tab_market</item>
+        <item>@drawable/tab_mine</item>
     </integer-array>
     <string name="share_news_flash">分享快讯</string>
     <string name="week_">星期%1$s</string>
@@ -141,6 +141,7 @@
     <string name="fast_login">快速登录</string>
     <string name="login_success">登录成功</string>
     <string name="cancel_login">取消登录</string>
+    <string name="cancel_bind">取消绑定</string>
     <string name="auth_code_had_sent_">验证码已发送至%1$s</string>
     <string name="reset_password_success">重设密码成功，请重新登录</string>
     <string name="_seconds">%1$ds</string>
@@ -213,4 +214,5 @@
     <string name="have_good_article_how_to_tell_you">有优质的内容\n怎么第一时间告诉你呢</string>
     <string name="now_notify_me">马上通知我</string>
     <string name="feedback_question">反馈问题</string>
+    <string name="input_text_is_more_rich">简介太丰富了</string>
 </resources>

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:orientation="vertical"
     tools:context="com.sbai.bcnews.activity.mine.PersonalIntroduceActivity">
 
     <com.sbai.bcnews.view.TitleBar
@@ -15,24 +16,28 @@
         app:backFeature="true"
         app:titleText="@string/please_set_introduce"/>
 
-
-    <EditText
-        android:id="@+id/personalIntroduce"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="85dp"
         android:layout_marginTop="14dp"
         android:background="@android:color/white"
-        android:gravity="start"
-        android:hint="@string/please_input_introduce"
-        android:maxLength="30"
-        android:minHeight="100dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="12dp"
-        android:textColorHint="@color/unluckyText"
-        android:textCursorDrawable="@drawable/edit_cursor"
-        android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@+id/titleBar"/>
+        android:padding="12dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar">
+
+        <EditText
+            android:lineSpacingExtra="3dp"
+            android:id="@+id/personalIntroduce"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:gravity="start"
+            android:hint="@string/please_input_introduce"
+            android:textColorHint="@color/unluckyText"
+            android:textCursorDrawable="@drawable/edit_cursor"
+            android:textSize="15sp"/>
+    </ScrollView>
 
     <TextView
         android:id="@+id/wordsNumber"
@@ -46,7 +51,7 @@
         android:text="@string/thirty"
         android:textColor="@color/unluckyText"
         android:textSize="10sp"
-        app:layout_constraintTop_toBottomOf="@+id/personalIntroduce"/>
+        app:layout_constraintTop_toBottomOf="@+id/scrollView"/>
 
     <TextView
         android:id="@+id/submitIntroduce"
@@ -63,4 +68,4 @@
         android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@+id/wordsNumber"/>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
