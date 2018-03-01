@@ -40,6 +40,7 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
+import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.NewsScrollView;
 import com.sbai.bcnews.view.ShareDialog;
@@ -175,6 +176,7 @@ public class NewsDetailActivity extends BaseActivity {
     private int mScrollY;
     private boolean mAnimating;
     private int mTitleScrollState;  //0-默认 1-已经滚下去了
+    private List<OtherArticle> mOtherArticles;
 
     public static final String INFO_HTML_META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\">";
 
@@ -191,11 +193,18 @@ public class NewsDetailActivity extends BaseActivity {
         requestOtherArticle();
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        updateOtherData(mOtherArticles);
+    }
+
     private void initData() {
         mId = getIntent().getStringExtra(ExtraKeys.NEWS_ID);
         mChannel = getIntent().getStringExtra(ExtraKeys.CHANNEL);
         mTag = getIntent().getStringExtra(ExtraKeys.TAG);
         mNewsDetail = NewsCache.getCacheForId(mId);
+        NewsReadCache.markNewsRead(mId);
     }
 
     private void initView() {
@@ -561,10 +570,12 @@ public class NewsDetailActivity extends BaseActivity {
         if (data == null || data.size() == 0) {
             return;
         }
+        mOtherArticles = data;
         mSplit.setVisibility(View.VISIBLE);
         mOtherArticleTip.setVisibility(View.VISIBLE);
         mFirstArticle.setVisibility(View.VISIBLE);
         mFirstTitle.setText(data.get(0).getTitle());
+        mFirstTitle.setTextColor(NewsReadCache.isRead(data.get(0).getId()) ? ContextCompat.getColor(this, R.color.unluckyText) : ContextCompat.getColor(this, R.color.text));
         mFirstOriginal.setVisibility(data.get(0).getOriginal() > 0 ? View.VISIBLE : View.GONE);
         mFirstSource.setText(data.get(0).getSource());
         mFirstSource.setVisibility(TextUtils.isEmpty(data.get(0).getSource()) ? View.GONE : View.VISIBLE);
@@ -591,6 +602,7 @@ public class NewsDetailActivity extends BaseActivity {
         if (data.size() > 1) {
             mSecondArticle.setVisibility(View.VISIBLE);
             mSecondTitle.setText(data.get(1).getTitle());
+            mSecondTitle.setTextColor(NewsReadCache.isRead(data.get(1).getId()) ? ContextCompat.getColor(this, R.color.unluckyText) : ContextCompat.getColor(this, R.color.text));
             mSecondOriginal.setVisibility(data.get(1).getOriginal() > 0 ? View.VISIBLE : View.GONE);
             mSecondSource.setText(data.get(1).getSource());
             mSecondTime.setText(DateUtil.formatNewsStyleTime(data.get(1).getReleaseTime()));
@@ -619,6 +631,7 @@ public class NewsDetailActivity extends BaseActivity {
         if (data.size() > 2) {
             mThirdArticle.setVisibility(View.VISIBLE);
             mThirdTitle.setText(data.get(2).getTitle());
+            mThirdTitle.setTextColor(NewsReadCache.isRead(data.get(2).getId()) ? ContextCompat.getColor(this, R.color.unluckyText) : ContextCompat.getColor(this, R.color.text));
             mThirdOriginal.setVisibility(data.get(2).getOriginal() > 0 ? View.VISIBLE : View.GONE);
             mThirdSource.setText(data.get(2).getSource());
             mThirdTime.setText(DateUtil.formatNewsStyleTime(data.get(2).getReleaseTime()));

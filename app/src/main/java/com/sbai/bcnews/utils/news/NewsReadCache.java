@@ -31,7 +31,7 @@ public class NewsReadCache {
     private static Queue<String> sNewsReadMapCache;
 
     //记录已读
-    public static void markNewsRead(NewsDetail newsDetail) {
+    public static void markNewsRead(String newsId) {
         if (sNewsReadMapCache == null) {
             readFromPreference();
         }
@@ -39,7 +39,7 @@ public class NewsReadCache {
         if (sNewsReadMapCache.size() > TOTAL_NEWS) {
             sNewsReadMapCache.poll();
         }
-        sNewsReadMapCache.add(newsDetail.getId());
+        sNewsReadMapCache.add(newsId);
         String news = sGson.toJson(sNewsReadMapCache);
         Preference.get().setNewsRead(news);
     }

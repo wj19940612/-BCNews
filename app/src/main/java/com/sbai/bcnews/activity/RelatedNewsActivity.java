@@ -89,7 +89,6 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
         mNewsAdapter = new NewsAdapter(getActivity(), mNewsWrapList, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
-                NewsReadCache.markNewsRead(newsDetail);
                 Launcher.with(getActivity(), NewsDetailActivity.class)
                         .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId())
                         .putExtra(ExtraKeys.TAG, mTag).execute();
