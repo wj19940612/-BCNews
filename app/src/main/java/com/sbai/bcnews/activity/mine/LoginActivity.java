@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.sbai.bcnews.ExtraKeys;
-import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.http.Apic;
@@ -44,6 +43,8 @@ public class LoginActivity extends WeChatActivity {
 
     private static final int REQ_CODE_REGISTER = 888;
     private static final int REQ_CODE_IMAGE_AUTH_CODE = 889;
+
+    private static final int WE_CHAT_BIND = 1;
 
     @BindView(R.id.rootView)
     RelativeLayout mRootView;
@@ -118,6 +119,13 @@ public class LoginActivity extends WeChatActivity {
         initListener();
 
         setKeyboardHelper();
+
+        int weChatType = getIntent().getIntExtra(ExtraKeys.We_CHAT, 0);
+        String weChatOpenId = getIntent().getStringExtra(ExtraKeys.WE_CHAT_OPENID);
+        if (weChatType == WE_CHAT_BIND && !TextUtils.isEmpty(weChatOpenId)) {
+            setWeChatOpenid(weChatOpenId);
+            updateBindPhoneViews();
+        }
     }
 
     private void initListener() {

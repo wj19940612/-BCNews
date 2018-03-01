@@ -319,6 +319,42 @@ public class UserInfo implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return "UserInfo{" +
+                "userPortrait='" + userPortrait + '\'' +
+                ", userName='" + userName + '\'' +
+                ", collectCount=" + collectCount +
+                ", readCount=" + readCount +
+                ", createTime=" + createTime +
+                ", id=" + id +
+                ", lastLoginTime=" + lastLoginTime +
+                ", loginErrorNum=" + loginErrorNum +
+                ", loginIp='" + loginIp + '\'' +
+                ", loginNum=" + loginNum +
+                ", registrationIp='" + registrationIp + '\'' +
+                ", status=" + status +
+                ", userPhone='" + userPhone + '\'' +
+                ", userSex=" + userSex +
+                ", userType=" + userType +
+                ", userProvince='" + userProvince + '\'' +
+                ", city='" + city + '\'' +
+                ", userAddress='" + userAddress + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", age=" + age +
+                ", birthday='" + birthday + '\'' +
+                ", deviceId='" + deviceId + '\'' +
+                ", platform=" + platform +
+                ", source='" + source + '\'' +
+                ", userCity='" + userCity + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userPass='" + userPass + '\'' +
+                ", wxOpenId='" + wxOpenId + '\'' +
+                ", wxBound=" + wxBound +
+                ", wxName='" + wxName + '\'' +
+                '}';
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -352,6 +388,9 @@ public class UserInfo implements Parcelable {
         dest.writeString(this.userCity);
         dest.writeString(this.userEmail);
         dest.writeString(this.userPass);
+        dest.writeString(this.wxOpenId);
+        dest.writeInt(this.wxBound);
+        dest.writeString(this.wxName);
     }
 
     protected UserInfo(Parcel in) {
@@ -382,6 +421,9 @@ public class UserInfo implements Parcelable {
         this.userCity = in.readString();
         this.userEmail = in.readString();
         this.userPass = in.readString();
+        this.wxOpenId = in.readString();
+        this.wxBound = in.readInt();
+        this.wxName = in.readString();
     }
 
     public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
@@ -395,39 +437,6 @@ public class UserInfo implements Parcelable {
             return new UserInfo[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-                "userPortrait='" + userPortrait + '\'' +
-                ", userName='" + userName + '\'' +
-                ", collectCount=" + collectCount +
-                ", readCount=" + readCount +
-                ", createTime=" + createTime +
-                ", id=" + id +
-                ", lastLoginTime=" + lastLoginTime +
-                ", loginErrorNum=" + loginErrorNum +
-                ", loginIp='" + loginIp + '\'' +
-                ", loginNum=" + loginNum +
-                ", registrationIp='" + registrationIp + '\'' +
-                ", status=" + status +
-                ", userPhone='" + userPhone + '\'' +
-                ", userSex=" + userSex +
-                ", userType=" + userType +
-                ", userProvince='" + userProvince + '\'' +
-                ", city='" + city + '\'' +
-                ", userAddress='" + userAddress + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", age=" + age +
-                ", birthday='" + birthday + '\'' +
-                ", deviceId='" + deviceId + '\'' +
-                ", platform=" + platform +
-                ", source='" + source + '\'' +
-                ", userCity='" + userCity + '\'' +
-                ", userEmail='" + userEmail + '\'' +
-                ", userPass='" + userPass + '\'' +
-                '}';
-    }
 }
 
 

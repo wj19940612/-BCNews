@@ -35,8 +35,8 @@
                     android:gravity="center"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:textColor="@color/blackPrimary"
-                    android:textSize="10sp"/>
+                    android:textColor="#82848A"
+                    android:textSize="12sp"/>
 
 
                 <Space

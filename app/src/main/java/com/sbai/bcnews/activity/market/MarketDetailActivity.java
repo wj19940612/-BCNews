@@ -165,14 +165,14 @@ public class MarketDetailActivity extends BaseActivity {
         mLastPrice.setText(MarketDataUtils.formatDollar(lastPrice));
         // mPriceChange show last price in RMB, and price change
         mPriceChange.setText(MarketDataUtils.formatRmbWithSign(lastPrice * mMarketData.getRate()) + '\n'
-                + MarketDataUtils.formatDollarWithPrefix(lastPrice * mMarketData.getUpDropSpeed())
+                + MarketDataUtils.formatDollarWithPrefix(mMarketData.getUpDropPrice())
                 + "  " + MarketDataUtils.percentWithPrefix(mMarketData.getUpDropSpeed()));
 
         int color = mMarketData.getUpDropSpeed() < 0 ? R.color.redPrimary : R.color.greenPrimary;
         mLastPrice.setTextColor(ContextCompat.getColor(getActivity(), color));
         mPriceChange.setTextColor(ContextCompat.getColor(getActivity(), color));
 
-        mVolume.setText(MarketDataUtils.formatVolume(mMarketData.getVolume()));
+        mVolume.setText(MarketDataUtils.formatVolume(mMarketData.getLastVolume()));
         mHighest.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getHighestPrice())
                 + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getHighestPrice() * mMarketData.getRate()));
         mAskPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getAskPrice())
