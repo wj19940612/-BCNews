@@ -31,7 +31,7 @@
                     android:id="@+id/endLineTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_gray_round"
+                    android:background="@drawable/bg_feedback_time"
                     android:gravity="center"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
@@ -79,7 +79,15 @@
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/timestamp"
                     android:background="@drawable/ic_opinion_bg_leftcorner"
-                    android:padding="13dp">
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:scaleType="centerCrop"/>
 
                     <TextView
                         android:id="@+id/text"

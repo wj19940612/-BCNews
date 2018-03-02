@@ -491,4 +491,8 @@ public class Apic {
                         .put("type", type));
     }
 
+    public static Api reqUseWxInfo() {
+        return Api.post("/api/news-user/user/use/wx");
+    }
+
 }

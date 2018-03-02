@@ -60,9 +60,6 @@ public class MainActivity extends BaseActivity {
 
         initViews();
         requestShowMarketPageSwitch();
-        if (!PermissionUtil.isNotificationEnabled(getActivity())) {
-            new OpenNotifyDialogFragment().show(getSupportFragmentManager());
-        }
     }
 
     private BroadcastReceiver mLoginBroadcastReceiver = new BroadcastReceiver() {
