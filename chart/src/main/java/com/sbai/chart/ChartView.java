@@ -715,7 +715,7 @@ public abstract class ChartView extends View {
         decimalFormat.setMinimumFractionDigits(numberScale);
         decimalFormat.setMinimumIntegerDigits(1);
         decimalFormat.setGroupingUsed(false);
-        decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
+        decimalFormat.setRoundingMode(RoundingMode.HALF_DOWN);
 
         String v = decimalFormat.format(value);
         return v;
