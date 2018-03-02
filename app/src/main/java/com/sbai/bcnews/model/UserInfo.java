@@ -73,12 +73,17 @@ public class UserInfo implements Parcelable {
     private String wxOpenId;
     private int wxBound; //微信是否绑定:0未绑定微信,1绑定,2解绑
     private String wxName;
+    private int isModifyPortrait;
 
     public UserInfo() {
     }
 
     public String getWxOpenId() {
         return wxOpenId;
+    }
+
+    public boolean isModifyPortrait() {
+        return isModifyPortrait == 1;
     }
 
     public void setWxOpenId(String wxOpenId) {
@@ -391,6 +396,7 @@ public class UserInfo implements Parcelable {
         dest.writeString(this.wxOpenId);
         dest.writeInt(this.wxBound);
         dest.writeString(this.wxName);
+        dest.writeInt(this.isModifyPortrait);
     }
 
     protected UserInfo(Parcel in) {
@@ -424,6 +430,7 @@ public class UserInfo implements Parcelable {
         this.wxOpenId = in.readString();
         this.wxBound = in.readInt();
         this.wxName = in.readString();
+        this.isModifyPortrait = in.readInt();
     }
 
     public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {

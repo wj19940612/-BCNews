@@ -254,11 +254,6 @@ public class SmartDialog {
         return this;
     }
 
-    public SmartDialog setNegative(int textId) {
-        mNegativeId = textId;
-        return this;
-    }
-
 
     public SmartDialog setNegativeVisible(int visable) {
         mNegativeVisible = visable;

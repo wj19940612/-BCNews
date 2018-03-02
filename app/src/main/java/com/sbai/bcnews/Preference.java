@@ -54,6 +54,7 @@ public class Preference {
         String NEWS_BIG_IMAGE = "news_big_image";
         String NEWS_CHANNEL = "news_channel";
         String NEWS_PRAISE = "news_praise";
+        String FIRST_PRAISE = "first_praise";
     }
 
     private static Preference sInstance;
@@ -262,5 +263,16 @@ public class Preference {
         String key = Key.NEWS_PRAISE;
         return mPrefs.getString(key, null);
     }
+
+    public boolean isFirstPraise() {
+        String key = Key.FIRST_PRAISE;
+        return mPrefs.getBoolean(key, true);
+    }
+
+    public void setFirstPraise(boolean firstPraise) {
+        String key = Key.FIRST_PRAISE;
+        apply(key, firstPraise);
+    }
+
 
 }
