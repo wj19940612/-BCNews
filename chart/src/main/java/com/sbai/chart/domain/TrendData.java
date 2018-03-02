@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 /**
  * Modified by john on 24/02/2018
  * <p>
- * Description:
+ * Description: 分时图数据结构
  * <p>
  * APIs:
  */

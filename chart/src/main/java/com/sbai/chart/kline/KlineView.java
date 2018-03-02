@@ -22,21 +22,12 @@ import java.util.List;
 
 public class KlineView extends RelativeLayout implements KlineChart.OnTouchLinesAppearListener {
 
-    public interface OnReachBorderListener {
-
-        void onReachLeftBorder(KlineViewData theLeft, List<KlineViewData> dataList);
-
-        void onReachRightBorder(KlineViewData theRight, List<KlineViewData> dataList);
-    }
-
     private KlineChart mKlineChart;
     private View mLeftSideBar;
     private View mRightSideBar;
     private boolean mIsDayLine;
 
     private SimpleDateFormat mDateFormat;
-
-    private OnReachBorderListener mOnReachBorderListener;
 
     public KlineView(Context context) {
         super(context);
@@ -83,13 +74,6 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, res.getDisplayMetrics());
     }
 
-    public void setOnReachBorderListener(OnReachBorderListener onReachBorderListener) {
-        mOnReachBorderListener = onReachBorderListener;
-        if (mKlineChart != null) {
-            mKlineChart.setOnReachBorderListener(mOnReachBorderListener);
-        }
-    }
-
     private void setSideBar(View sideBar, KlineViewData data, KlineViewData previousData) {
         TextView time = (TextView) sideBar.findViewById(R.id.time);
         TextView openPrice = (TextView) sideBar.findViewById(R.id.openPrice);
@@ -131,7 +115,7 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
     }
 
     public void setDataList(List<KlineViewData> dataList) {
-        mKlineChart.setDataList(dataList);
+        mKlineChart.initWithData(dataList);
     }
 
     public void addHistoryData(List<KlineViewData> dataList) {
@@ -141,10 +125,6 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
     public void setDayLine(boolean dayLine) {
         mIsDayLine = dayLine;
         mKlineChart.setDayLine(dayLine);
-    }
-
-    public void clearData() {
-        mKlineChart.clearData();
     }
 
     public boolean isLastDataVisible() {
