@@ -18,7 +18,6 @@ import java.util.List;
  */
 
 public class NewsSummaryCache {
-    private static final int TOTAL_SUMMARY = 100;
     private static final int NEED_NUM = 20;
 
     private static HashMap<String, ArrayList<NewsDetail>> sNewsSummaryCache;
@@ -32,13 +31,11 @@ public class NewsSummaryCache {
 
         ArrayList<NewsDetail> newsDetailList = sNewsSummaryCache.get(key);
         if (newsDetailList != null) {
-            if (newsDetailList.size() >= TOTAL_SUMMARY) {
-                newsDetailList.clear();
-            }
+            newsDetailList.clear();
             newsDetailList.addAll(newsDetails);
         } else {
-            newsDetailList = new ArrayList<NewsDetail>();
-            newsDetailList.addAll(newsDetailList);
+            newsDetailList = new ArrayList<>();
+            newsDetailList.addAll(newsDetails);
         }
         sNewsSummaryCache.put(key, newsDetailList);
         String news = sGson.toJson(sNewsSummaryCache);
@@ -53,10 +50,7 @@ public class NewsSummaryCache {
         if (newsDetails == null || newsDetails.size() == 0) {
             return null;
         }
-        if (NEED_NUM > newsDetails.size()) {
-            return newsDetails.subList(0, newsDetails.size() - 1);
-        }
-        return newsDetails.subList(newsDetails.size() - NEED_NUM, newsDetails.size() - 1);
+        return newsDetails;
     }
 
     private static void readFromPreference() {

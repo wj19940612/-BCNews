@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.Banner;
 import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.glide.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -202,12 +203,11 @@ public class HomeBanner extends FrameLayout {
         public Object instantiateItem(ViewGroup container, int position) {
             int pos = position;
             ImageView imageView = new ImageView(mContext);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             final Banner information = mList.get(pos);
 
             container.addView(imageView);
             if (!TextUtils.isEmpty(information.getCover())) {
-                Glide.with(mContext).load(information.getCover()).into(imageView);
+                GlideApp.with(mContext).load(information.getCover()).centerCrop().into(imageView);
             }
             imageView.setOnClickListener(new OnClickListener() {
                 @Override

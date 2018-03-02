@@ -14,7 +14,7 @@ public class FinanceUtil {
 
     private static final int DEFAULT_SCALE = 2;
 
-    private static final RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.HALF_EVEN;
+    private static final RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.DOWN;
 
     public static final int TEN_THOUSAND = 10000;
     public static final int ONE_HUNDRED_MILLION = 10000_0000;
@@ -235,7 +235,7 @@ public class FinanceUtil {
      * @return 处理后的字符串
      */
     public static String formatWithScale(double value, int scale) {
-        return formatWithScale(value, scale, RoundingMode.HALF_EVEN);
+        return formatWithScale(value, scale, DEFAULT_ROUNDING_MODE);
     }
 
     /**
@@ -309,7 +309,7 @@ public class FinanceUtil {
      * @return 处理后的字符串
      */
     public static String formatWithThousandsSeparator(double value, int scale) {
-        return formatWithThousandsSeparator(value, scale, RoundingMode.HALF_EVEN);
+        return formatWithThousandsSeparator(value, scale, DEFAULT_ROUNDING_MODE);
     }
 
     /**

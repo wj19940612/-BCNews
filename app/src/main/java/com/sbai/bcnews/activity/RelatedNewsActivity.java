@@ -160,8 +160,10 @@ public class RelatedNewsActivity extends RecycleViewSwipeLoadActivity {
                     @Override
                     public void onFailure(ReqError reqError) {
                         super.onFailure(reqError);
-                        mEmptyView.setNoNet();
-                        mEmptyView.setVisibility(View.VISIBLE);
+                        if (mNewsWrapList.size() == 0)
+                            mEmptyView.setVisibility(View.VISIBLE);
+                        else
+                            mEmptyView.setVisibility(View.GONE);
                         refreshFailure();
                     }
 

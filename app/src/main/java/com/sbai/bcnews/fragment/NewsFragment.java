@@ -283,7 +283,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             public void onFailure(ReqError reqError) {
                 super.onFailure(reqError);
                 mEmptyView.setNoNet();
-                mEmptyView.setVisibility(View.VISIBLE);
+                if (mNewsWraps.size() == 0)
+                    mEmptyView.setVisibility(View.VISIBLE);
+                else
+                    mEmptyView.setVisibility(View.GONE);
                 if (refresh)
                     refreshFailure();
             }
@@ -312,8 +315,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             return;
         }
         mEmptyView.setVisibility(View.GONE);
-        NewsSummaryCache.markNewsSummarys(mChannel, data);
         if (refresh) {
+            NewsSummaryCache.markNewsSummarys(mChannel, data);
             mNewsWraps.clear();
         }
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
