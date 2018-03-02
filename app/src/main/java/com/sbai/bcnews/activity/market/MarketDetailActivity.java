@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -178,7 +177,6 @@ public class MarketDetailActivity extends BaseActivity {
                 if (mRefreshKlineWhenArriveRight) {
                     String klineType = (String) mKlineChart.getTag();
                     requestKlineMarket(klineType, null);
-                    Log.d("Temp", "onArriveRight: requestKlineMarket");
                 }
             }
         });
@@ -284,10 +282,8 @@ public class MarketDetailActivity extends BaseActivity {
             if (seconds % klineSeconds == 0) {
                 if (mKlineChart.getTransactionX() != 0) {
                     mRefreshKlineWhenArriveRight = true;
-                    Log.d("Temp", "onTimeUp: mRefreshKlineWhenArriveRight");
                 } else {
                     requestKlineMarket(klineType, null);
-                    Log.d("Temp", "onTimeUp: requestKlineMarket");
                 }
             }
         }
