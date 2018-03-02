@@ -1,5 +1,6 @@
 package com.sbai.bcnews.activity;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,8 @@ import com.sbai.httplib.ReqIndeterminate;
 import com.umeng.analytics.MobclickAgent;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Modified by john on 18/01/2018
@@ -54,6 +57,7 @@ public class BaseActivity extends StatusBarActivity implements
     private TimerHandler mTimerHandler;
     private RequestProgress mRequestProgress;
     private ScreenShotListenManager mScreenShotListenManager;
+    private List<Dialog> mDialogList;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -90,7 +94,11 @@ public class BaseActivity extends StatusBarActivity implements
         mScreenShotListenManager.setListener(new ScreenShotListenManager.OnScreenShotListener() {
             @Override
             public void onShot(String imagePath) {
-                ScreenShotView.show(getActivity(), imagePath, 5 * 1000);
+                if (mDialogList == null) {
+                    mDialogList = new ArrayList<>();
+                }
+                Dialog dialog = ScreenShotView.show(getActivity(), imagePath, 5 * 1000);
+                mDialogList.add(dialog);
             }
         });
     }
@@ -161,9 +169,22 @@ public class BaseActivity extends StatusBarActivity implements
         Api.cancel(TAG);
 
         SmartDialog.dismiss(this);
+
+        dismissScreenDialog();
+
         mRequestProgress.dismissAll();
 
         stopScheduleJob();
+    }
+
+    private void dismissScreenDialog() {
+        if (mDialogList != null && mDialogList.size() > 0) {
+            for (Dialog dialog : mDialogList) {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+            }
+        }
     }
 
     protected FragmentActivity getActivity() {

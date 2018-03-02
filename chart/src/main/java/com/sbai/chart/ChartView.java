@@ -411,6 +411,14 @@ public abstract class ChartView extends View {
         return false;
     }
 
+    protected boolean isDragging() {
+        return mAction == Action.DRAG;
+    }
+
+    public float getTransactionX() {
+        return mTransactionX;
+    }
+
     protected int calculateTouchIndex(MotionEvent e) {
         return -1;
     }

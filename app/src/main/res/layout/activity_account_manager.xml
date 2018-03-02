@@ -18,7 +18,7 @@
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/phoneNumber"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/default_height"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_white"
         app:hasBottomSplitLine="true"
@@ -29,7 +29,7 @@
     <LinearLayout
         android:id="@+id/closeWeChat"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/default_height"
+        android:layout_height="50dp"
         android:background="@drawable/bg_white"
         android:gravity="center"
         android:paddingLeft="14dp"

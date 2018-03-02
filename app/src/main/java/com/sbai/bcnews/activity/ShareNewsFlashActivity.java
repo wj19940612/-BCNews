@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -94,11 +95,21 @@ public class ShareNewsFlashActivity extends BaseActivity {
             mWeek.setText(getString(R.string.week_, DateUtil.getDayOfWeek(newsFlash.getReleaseTime())));
             mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()).concat(" ").concat(getString(R.string.news_flash)));
             if (newsFlash.isImportant()) {
-                mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
-                        Color.parseColor("#476E92"), Color.parseColor("#476E92")));
+                if (TextUtils.isEmpty(newsFlash.getTitle())) {
+                    mContent.setText(newsFlash.getContent());
+                    mContent.setTextColor(Color.parseColor("#476E92"));
+                } else {
+                    mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
+                            Color.parseColor("#476E92"), Color.parseColor("#476E92")));
+                }
             } else {
-                mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
-                        Color.parseColor("#494949"), Color.parseColor("#494949")));
+                if (TextUtils.isEmpty(newsFlash.getTitle())) {
+                    mContent.setText(newsFlash.getContent());
+                    mContent.setTextColor(Color.parseColor("#476E92"));
+                } else {
+                    mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
+                            Color.parseColor("#494949"), Color.parseColor("#494949")));
+                }
             }
         }
         GlideApp.with(getActivity())

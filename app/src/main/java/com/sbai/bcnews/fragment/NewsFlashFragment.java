@@ -315,11 +315,21 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 }
                 mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()));
                 if (newsFlash.isImportant()) {
-                    mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
-                            Color.parseColor("#476E92"), Color.parseColor("#476E92")));
+                    if (TextUtils.isEmpty(newsFlash.getTitle())) {
+                        mContent.setText(newsFlash.getContent());
+                        mContent.setTextColor(Color.parseColor("#476E92"));
+                    } else {
+                        mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
+                                Color.parseColor("#476E92"), Color.parseColor("#476E92")));
+                    }
                 } else {
-                    mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
-                            Color.parseColor("#494949"), Color.parseColor("#494949")));
+                    if (TextUtils.isEmpty(newsFlash.getTitle())) {
+                        mContent.setText(newsFlash.getContent());
+                        mContent.setTextColor(Color.parseColor("#476E92"));
+                    } else {
+                        mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
+                                Color.parseColor("#494949"), Color.parseColor("#494949")));
+                    }
                 }
                 mShare.setOnClickListener(new View.OnClickListener() {
                     @Override

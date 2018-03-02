@@ -114,7 +114,6 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
             if (i != offset) {
                 if (i > 16) i = 16;
                 ivArrow.setImageResource(mOffsetDrawble[i]);
-                Log.d(TAG, "aaaa: " + i);
                 offset = i;
             }
         }

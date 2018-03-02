@@ -1,6 +1,7 @@
 package com.sbai.bcnews.activity.mine;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.widget.EditText;
@@ -47,6 +48,10 @@ public class PersonalIntroduceActivity extends BaseActivity {
     @OnClick(R.id.submitIntroduce)
     public void onViewClicked() {
         final String s = mPersonalIntroduce.getText().toString();
+        if (s.length() > 30) {
+            ToastUtil.show(R.string.input_text_is_more_rich);
+            return;
+        }
         Apic.submitUserIntroduce(s)
                 .tag(TAG)
                 .callback(new Callback<Resp<Object>>() {
@@ -66,13 +71,32 @@ public class PersonalIntroduceActivity extends BaseActivity {
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
+
             boolean submitEnable = checkSubmitEnable();
             if (mSubmitIntroduce.isEnabled() != submitEnable) {
                 mPersonalIntroduce.setSelection(s.length());
                 mSubmitIntroduce.setEnabled(submitEnable);
             }
+
+            checkInputLengthIsLegal(s);
         }
     };
+
+    private void checkInputLengthIsLegal(Editable s) {
+
+        int enoughInputLength = 30 - s.length();
+        if (enoughInputLength > -1) {
+            mWordsNumber.setText(String.valueOf(enoughInputLength));
+        } else {
+            mWordsNumber.setText(String.valueOf(0));
+        }
+
+        if (s.length() > 30) {
+            mWordsNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.redPrimary));
+        }else {
+            mWordsNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.unluckyText));
+        }
+    }
 
     private boolean checkSubmitEnable() {
         String s = mPersonalIntroduce.getText().toString();

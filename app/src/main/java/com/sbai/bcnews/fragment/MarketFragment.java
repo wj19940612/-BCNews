@@ -43,7 +43,7 @@ import butterknife.ButterKnife;
  */
 public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
-    private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 6000;
+    private static final int REFRESH_MARKET_DATE_TIME_INTERVAL = 5000;
 
     private MarkListAdapter mMarkListAdapter;
 
@@ -53,13 +53,19 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         mTitleBar.setTitle(R.string.market);
         mTitleBar.setBackFeature(false);
         initRecycleView();
-        requestMarketListData();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         stopScheduleJob();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestMarketListData();
+        startScheduleJob(REFRESH_MARKET_DATE_TIME_INTERVAL);
     }
 
     @Override
