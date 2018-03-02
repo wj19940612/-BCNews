@@ -27,6 +27,7 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
+import com.sbai.bcnews.fragment.dialog.OpenNotifyDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
@@ -37,6 +38,7 @@ import com.sbai.bcnews.model.OtherArticle;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.PermissionUtil;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
@@ -439,6 +441,8 @@ public class NewsDetailActivity extends BaseActivity {
         int scrollViewExpandHeight = mScrollView.getChildAt(0).getMeasuredHeight();
         if (scrollAddScreenHeight > scrollViewExpandHeight || Math.abs(scrollAddScreenHeight - scrollViewExpandHeight) < 60) {
             scrollBottomBar(false);
+        }else if(mScrollView.getScrollY()<1000){
+            scrollBottomBar(false);
         } else if (mScrollY != 0 && mScrollY != scrollY) {
             scrollBottomBar(scrollY - mScrollY > 0);
         }
@@ -482,7 +486,7 @@ public class NewsDetailActivity extends BaseActivity {
 
             }
         });
-        valueAnimator.setDuration(500);
+        valueAnimator.setDuration(200);
         mAnimating = true;
         valueAnimator.start();
     }
@@ -504,6 +508,7 @@ public class NewsDetailActivity extends BaseActivity {
                     mNewsDetail = data;
                     mNetNewsDetail = data;
                     updateData(data);
+                    updatePraiseCollect(data);
                     mEmptyView.setVisibility(View.GONE);
                 } else {
                     mNetNewsDetail = data;
@@ -682,6 +687,10 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void requestPraise() {
+        if (!PermissionUtil.isNotificationEnabled(getActivity()) && Preference.get().isFirstPraise()) {
+            new OpenNotifyDialogFragment().show(getSupportFragmentManager());
+            Preference.get().setFirstPraise(false);
+        }
         if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
             int praiseWant = mNetNewsDetail.getPraise() == 0 ? 1 : 0;
             Apic.praiseNews(mNetNewsDetail.getId(), praiseWant).tag(TAG).callback(new Callback<Resp>() {

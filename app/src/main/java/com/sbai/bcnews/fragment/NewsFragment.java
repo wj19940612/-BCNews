@@ -210,7 +210,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             mHomeBanner.setOnViewClickListener(new HomeBanner.OnViewClickListener() {
                 @Override
                 public void onBannerClick(Banner information) {
-                    if (information.getJumpType() == Banner.JUMP_TYPE_RICH_TEXT && !TextUtils.isEmpty(information.getContent())) {
+                    if (information.getJumpType() == Banner.JUMP_TYPE_RICH_TEXT && !TextUtils.isEmpty(information.getJumpContent())) {
                         Launcher.with(getActivity(), WebActivity.class)
                                 .putExtra(WebActivity.EX_HTML, information.getJumpContent())
                                 .execute();
@@ -283,7 +283,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             public void onFailure(ReqError reqError) {
                 super.onFailure(reqError);
                 mEmptyView.setNoNet();
-                mEmptyView.setVisibility(View.VISIBLE);
+                if (mNewsWraps.size() == 0)
+                    mEmptyView.setVisibility(View.VISIBLE);
+                else
+                    mEmptyView.setVisibility(View.GONE);
                 if (refresh)
                     refreshFailure();
             }
@@ -312,8 +315,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             return;
         }
         mEmptyView.setVisibility(View.GONE);
-        NewsSummaryCache.markNewsSummarys(mChannel, data);
         if (refresh) {
+            NewsSummaryCache.markNewsSummarys(mChannel, data);
             mNewsWraps.clear();
         }
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {

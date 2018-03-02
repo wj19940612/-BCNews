@@ -187,6 +187,9 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
     }
 
     private void updateFeedbackList(List<Feedback> data, boolean needScrollToLast) {
+        if (mPage == 0) {
+            mFeedbackAdapter.clear();
+        }
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mLoadMoreEnable = false;
             mSwipeRefreshLayout.setEnabled(false);
@@ -217,6 +220,14 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
                     @Override
                     protected void onRespSuccessData(Object data) {
                         refreshChatList(content, contentType);
+                    }
+
+                    @Override
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
+                        if (contentType == CONTENT_TYPE_TEXT) {
+                            mSend.setEnabled(true);
+                        }
                     }
                 }).fireFreely();
     }
@@ -257,6 +268,7 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
                     listViewScrollBottom();
                 }
                 String content = mCommentContent.getText().toString().trim();
+                mSend.setEnabled(false);
                 requestSendFeedback(content, CONTENT_TYPE_TEXT);
                 break;
         }
@@ -363,6 +375,12 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
 
         public void addFeedbackItem(Feedback feedback) {
             mFeedbackList.add(feedback);
+            notifyDataSetChanged();
+
+        }
+
+        public void clear() {
+            mFeedbackList.clear();
             notifyDataSetChanged();
 
         }
@@ -522,6 +540,8 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
             ImageView mHeadImage;
             @BindView(R.id.timestamp)
             TextView mTimestamp;
+            @BindView(R.id.image)
+            ImageView mImage;
             @BindView(R.id.text)
             TextView mText;
 
@@ -529,7 +549,7 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(Feedback feedback, boolean needTitle, Context context) {
+            private void bindingData(final Feedback feedback, boolean needTitle, final Context context) {
                 if (needTitle) {
                     mTimeLayout.setVisibility(View.VISIBLE);
                     mEndLineTime.setText(DateUtil.getFeedbackFormatTime(feedback.getCreateTime()));
@@ -538,11 +558,29 @@ public class FeedbackActivity extends BaseActivity implements SwipeRefreshLayout
                     mTimeLayout.setVisibility(View.GONE);
                 }
                 mTimestamp.setText(DateUtil.format(feedback.getCreateTime(), FORMAT_HOUR_MINUTE));
-                mText.setText(feedback.getContent());
+                if (feedback.getContentType() == CONTENT_TYPE_TEXT) {
+                    mText.setVisibility(View.VISIBLE);
+                    mImage.setVisibility(View.GONE);
+                    mText.setText(feedback.getContent());
+                } else {
+                    mText.setVisibility(View.GONE);
+                    mImage.setVisibility(View.VISIBLE);
+                    GlideApp.with(context).load(feedback.getContent())
+                            .centerCrop()
+                            .transform(new ThumbTransform(context))
+                            .into(mImage);
+                }
                 GlideApp.with(context).load(feedback.getReplyUserPortrait())
                         .placeholder(R.drawable.ic_feedback_service)
                         .circleCrop()
                         .into(mHeadImage);
+                mImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PreviewDialogFragment.newInstance(feedback.getContent())
+                                .show(((FeedbackActivity) context).getSupportFragmentManager());
+                    }
+                });
             }
         }
     }

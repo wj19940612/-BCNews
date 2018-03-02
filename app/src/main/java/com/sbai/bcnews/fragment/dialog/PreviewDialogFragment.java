@@ -70,7 +70,7 @@ public class PreviewDialogFragment extends DialogFragment {
     }
 
     @OnClick(R.id.imageview)
-    public void onClick(View view){
+    public void onClick(View view) {
         dismiss();
     }
 
