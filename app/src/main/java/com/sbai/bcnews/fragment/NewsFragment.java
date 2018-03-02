@@ -210,7 +210,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             mHomeBanner.setOnViewClickListener(new HomeBanner.OnViewClickListener() {
                 @Override
                 public void onBannerClick(Banner information) {
-                    if (information.getJumpType() == Banner.JUMP_TYPE_RICH_TEXT && !TextUtils.isEmpty(information.getContent())) {
+                    if (information.getJumpType() == Banner.JUMP_TYPE_RICH_TEXT && !TextUtils.isEmpty(information.getJumpContent())) {
                         Launcher.with(getActivity(), WebActivity.class)
                                 .putExtra(WebActivity.EX_HTML, information.getJumpContent())
                                 .execute();

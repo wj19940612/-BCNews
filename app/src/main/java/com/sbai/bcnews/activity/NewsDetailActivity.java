@@ -439,6 +439,8 @@ public class NewsDetailActivity extends BaseActivity {
         int scrollViewExpandHeight = mScrollView.getChildAt(0).getMeasuredHeight();
         if (scrollAddScreenHeight > scrollViewExpandHeight || Math.abs(scrollAddScreenHeight - scrollViewExpandHeight) < 60) {
             scrollBottomBar(false);
+        }else if(mScrollView.getScrollY()<1000){
+            scrollBottomBar(false);
         } else if (mScrollY != 0 && mScrollY != scrollY) {
             scrollBottomBar(scrollY - mScrollY > 0);
         }
@@ -482,7 +484,7 @@ public class NewsDetailActivity extends BaseActivity {
 
             }
         });
-        valueAnimator.setDuration(500);
+        valueAnimator.setDuration(200);
         mAnimating = true;
         valueAnimator.start();
     }
@@ -504,6 +506,7 @@ public class NewsDetailActivity extends BaseActivity {
                     mNewsDetail = data;
                     mNetNewsDetail = data;
                     updateData(data);
+                    updatePraiseCollect(data);
                     mEmptyView.setVisibility(View.GONE);
                 } else {
                     mNetNewsDetail = data;
