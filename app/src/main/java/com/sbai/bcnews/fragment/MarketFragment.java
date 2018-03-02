@@ -100,6 +100,11 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                         super.onFailure(reqError);
                         refreshFailure();
                     }
+
+                    @Override
+                    protected boolean toastError() {
+                        return false;
+                    }
                 })
                 .fire();
     }

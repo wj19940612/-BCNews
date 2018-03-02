@@ -1,11 +1,21 @@
 package com.sbai.bcnews.activity.mine;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.view.SmartDialog;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -83,5 +93,57 @@ public abstract class WeChatActivity extends BaseActivity {
 
     public int getWeChatGender() {
         return mWeChatGender;
+    }
+
+    private void requestUseWeChatInfo() {
+        Apic.reqUseWxInfo().tag(TAG)
+                .callback(new Callback<Resp<UserInfo>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<UserInfo> resp) {
+                        LocalUser.getUser().setUserInfo(resp.getData());
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                    }
+                }).fireFreely();
+    }
+
+    protected void postLogin() {
+        sendLoginSuccessBroadcast();
+        if (isWeChatLogin() && Preference.get().isFirstLogin() && LocalUser.getUser().getUserInfo().isModifyPortrait()) {
+            Preference.get().setFirstLogin(false);
+            SmartDialog.single(getActivity())
+                    .setMessage(getString(R.string.use_wechat_portrait_and_name))
+                    .setPositive(R.string.yes, new SmartDialog.OnClickListener() {
+                        @Override
+                        public void onClick(Dialog dialog) {
+                            dialog.dismiss();
+                            requestUseWeChatInfo();
+                        }
+                    })
+                    .setNegative(R.string.no, new SmartDialog.OnClickListener() {
+                        @Override
+                        public void onClick(Dialog dialog) {
+                            dialog.dismiss();
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    })
+                    .setCancelableOnTouchOutside(false)
+                    .show();
+        } else {
+            setResult(RESULT_OK);
+            finish();
+        }
+
+    }
+
+    protected void sendLoginSuccessBroadcast() {
+        LocalBroadcastManager.getInstance(getActivity())
+                .sendBroadcast(new Intent(ACTION_LOGIN_SUCCESS));
     }
 }

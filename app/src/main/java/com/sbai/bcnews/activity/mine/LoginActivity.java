@@ -1,9 +1,7 @@
 package com.sbai.bcnews.activity.mine;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -18,7 +16,6 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.sbai.bcnews.ExtraKeys;
-import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.http.Apic;
@@ -34,7 +31,6 @@ import com.sbai.bcnews.utils.StrFormatter;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.ValidationWatcher;
-import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.glide.GlideApp;
 
 import butterknife.BindView;
@@ -125,12 +121,6 @@ public class LoginActivity extends WeChatActivity {
 
         setKeyboardHelper();
 
-        int weChatType = getIntent().getIntExtra(ExtraKeys.We_CHAT, 0);
-        String weChatOpenId = getIntent().getStringExtra(ExtraKeys.WE_CHAT_OPENID);
-        if (weChatType == WE_CHAT_BIND && !TextUtils.isEmpty(weChatOpenId)) {
-            setWeChatOpenid(weChatOpenId);
-            updateBindPhoneViews();
-        }
     }
 
     private void initListener() {
@@ -188,10 +178,7 @@ public class LoginActivity extends WeChatActivity {
         }
     }
 
-    private void sendLoginSuccessBroadcast() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .sendBroadcast(new Intent(ACTION_LOGIN_SUCCESS));
-    }
+
 
     private void setKeyboardHelper() {
         mKeyBoardHelper = new KeyBoardHelper(this);
@@ -419,52 +406,6 @@ public class LoginActivity extends WeChatActivity {
         }
     }
 
-    private void postLogin() {
-        sendLoginSuccessBroadcast();
-        if (isWeChatLogin() && Preference.get().isFirstLogin() && LocalUser.getUser().getUserInfo().isModifyPortrait()) {
-            Preference.get().setFirstLogin(false);
-            SmartDialog.single(getActivity())
-                    .setMessage(getString(R.string.use_wechat_portrait_and_name))
-                    .setPositive(R.string.yes, new SmartDialog.OnClickListener() {
-                        @Override
-                        public void onClick(Dialog dialog) {
-                            dialog.dismiss();
-                            requestUseWechatInfo();
-                        }
-                    })
-                    .setNegative(R.string.no, new SmartDialog.OnClickListener() {
-                        @Override
-                        public void onClick(Dialog dialog) {
-                            dialog.dismiss();
-                            setResult(RESULT_OK);
-                            finish();
-                        }
-                    })
-                    .setCancelableOnTouchOutside(false)
-                    .show();
-        } else {
-            setResult(RESULT_OK);
-            finish();
-        }
-
-    }
-
-    private void requestUseWechatInfo() {
-        Apic.reqUseWxInfo().tag(TAG)
-                .callback(new Callback<Resp<UserInfo>>() {
-                    @Override
-                    protected void onRespSuccess(Resp<UserInfo> resp) {
-                        LocalUser.getUser().setUserInfo(resp.getData());
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
-                    }
-                }).fireFreely();
-    }
 
     private void resetLoginButton() {
         if (isBindPhone()) {

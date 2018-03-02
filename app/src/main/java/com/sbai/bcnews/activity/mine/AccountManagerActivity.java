@@ -2,20 +2,17 @@ package com.sbai.bcnews.activity.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
-import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrFormatter;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.IconTextRow;
@@ -99,6 +96,7 @@ public class AccountManagerActivity extends WeChatActivity {
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
                         changeUserWeChatBindStatus(UserInfo.WECHAT_BIND_STATUS_BIND);
+                        postLogin();
                     }
                 })
                 .fire();
@@ -119,30 +117,12 @@ public class AccountManagerActivity extends WeChatActivity {
 
     @Override
     protected void bindSuccess() {
-        Apic.requestWeChatLogin(getWeChatOpenid()).tag(TAG)
-                .callback(new Callback<Resp<UserInfo>>() {
-                    @Override
-                    protected void onRespSuccess(Resp<UserInfo> resp) {
-                        LocalUser.getUser().setUserInfo(resp.getData());
-                        ToastUtil.show(R.string.login_success);
-                        LocalBroadcastManager.getInstance(getActivity())
-                                .sendBroadcast(new Intent(ACTION_LOGIN_SUCCESS));
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-
-                    @Override
-                    protected void onRespFailure(Resp failedResp) {
-                        if (failedResp.getCode() == Resp.CODE_NO_BIND_WE_CHAT) {
-                            Launcher.with(getActivity(), LoginActivity.class)
-                                    .putExtra(ExtraKeys.We_CHAT, 1)
-                                    .putExtra(ExtraKeys.WE_CHAT_OPENID, getWeChatOpenid())
-                                    .executeForResult(REQ_CODE_WE_CHAT_BIND);
-                        } else {
-                            setWeChatOpenid(null);
-                        }
-                    }
-                }).fireFreely();
+        if (isWeChatLogin()) {
+            UserInfo userInfo = LocalUser.getUser().getUserInfo();
+            userInfo.setWxOpenId(getWeChatOpenid());
+            userInfo.setWxName(getWeChatName());
+            bindWeChat(userInfo);
+        }
     }
 
     @Override
