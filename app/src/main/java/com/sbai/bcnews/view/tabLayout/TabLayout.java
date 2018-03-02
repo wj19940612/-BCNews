@@ -1990,6 +1990,7 @@ public class TabLayout extends HorizontalScrollView {
         public void draw(Canvas canvas) {
             super.draw(canvas);
 
+            // To reduce the width of indicator (add by john)
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
             // Thick colored underline below the current selection
             if (mIndicatorLeft >= 0 && mIndicatorRight > mIndicatorLeft) {
