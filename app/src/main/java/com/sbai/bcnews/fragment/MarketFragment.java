@@ -64,8 +64,12 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        boolean userVisibleHint = getUserVisibleHint();
+        if (userVisibleHint) {
+            startScheduleJob(REFRESH_MARKET_DATE_TIME_INTERVAL);
+        }
         requestMarketListData();
-        startScheduleJob(REFRESH_MARKET_DATE_TIME_INTERVAL);
     }
 
     @Override
@@ -101,10 +105,6 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                         refreshFailure();
                     }
 
-                    @Override
-                    protected boolean toastError() {
-                        return false;
-                    }
                 })
                 .fire();
     }

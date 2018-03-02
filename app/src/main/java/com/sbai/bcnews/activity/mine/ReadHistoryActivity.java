@@ -373,6 +373,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
                     }
                 });
 
+
                 mNewsTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
