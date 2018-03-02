@@ -57,8 +57,8 @@ public class MarketDetailActivity extends BaseActivity {
     TextView mVolume;
     @BindView(R.id.highest)
     TextView mHighest;
-    @BindView(R.id.askPrice)
-    TextView mAskPrice;
+    @BindView(R.id.bidPrice1)
+    TextView mBidPrice1;
     @BindView(R.id.marketValue)
     TextView mMarketValue;
     @BindView(R.id.marketDataArea)
@@ -69,8 +69,8 @@ public class MarketDetailActivity extends BaseActivity {
     TabLayout mTabLayout;
     @BindView(R.id.lowestPrice)
     TextView mLowestPrice;
-    @BindView(R.id.bidPrice)
-    TextView mBidPrice;
+    @BindView(R.id.askPrice1)
+    TextView mAskPrice1;
     @BindView(R.id.klinePlane)
     KlineDataPlane mKlinePlane;
     @BindView(R.id.klineChart)
@@ -198,14 +198,14 @@ public class MarketDetailActivity extends BaseActivity {
         mVolume.setText(MarketDataUtils.formatVolume(mMarketData.getLastVolume()));
         mHighest.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getHighestPrice())
                 + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getHighestPrice() * mMarketData.getRate()));
-        mAskPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getAskPrice())
-                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getAskPrice() * mMarketData.getRate()));
+        mBidPrice1.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getBidPrice())
+                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getBidPrice() * mMarketData.getRate()));
 
         mMarketValue.setText(MarketDataUtils.formatMarketValue(mMarketData.getMarketValue()));
         mLowestPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getLowestPrice())
                 + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getLowestPrice() * mMarketData.getRate()));
-        mBidPrice.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getBidPrice())
-                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getBidPrice() * mMarketData.getRate()));
+        mAskPrice1.setText(MarketDataUtils.formatDollarWithSign(mMarketData.getAskPrice())
+                + " " + MarketDataUtils.formatRmbWithSign(mMarketData.getAskPrice() * mMarketData.getRate()));
     }
 
     private void initData(Intent intent) {
