@@ -213,6 +213,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                     if (information.getJumpType() == Banner.JUMP_TYPE_RICH_TEXT && !TextUtils.isEmpty(information.getJumpContent())) {
                         Launcher.with(getActivity(), WebActivity.class)
                                 .putExtra(WebActivity.EX_HTML, information.getJumpContent())
+                                .putExtra(WebActivity.EX_TITLE, information.getTitle())
                                 .execute();
                     } else if (information.getJumpType() == Banner.JUMP_TYPE_HTML) {
                         Launcher.with(getActivity(), WebActivity.class)
