@@ -179,7 +179,6 @@ public class LoginActivity extends WeChatActivity {
     }
 
 
-
     private void setKeyboardHelper() {
         mKeyBoardHelper = new KeyBoardHelper(this);
         mKeyBoardHelper.onCreate();
@@ -323,6 +322,9 @@ public class LoginActivity extends WeChatActivity {
                         if (failedResp.getCode() == Resp.CODE_NO_BIND_WE_CHAT) {
                             updateBindPhoneViews();
                         } else {
+                            if (failedResp.getCode() == Resp.CODE_ACCOUNT_EXCEPTION) {
+                                ToastUtil.show(R.string.this_account_forbid_login);
+                            }
                             setWeChatOpenid(null);
                         }
                     }

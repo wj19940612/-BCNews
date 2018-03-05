@@ -91,6 +91,7 @@ android {
             flavor.manifestPlaceholders = [UMENG_CHANNEL: name]
         }
     }
+
 }
 
 dependencies {
