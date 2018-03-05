@@ -216,4 +216,5 @@
     <string name="feedback_question">反馈问题</string>
     <string name="input_text_is_more_rich">简介太丰富了</string>
     <string name="use_wechat_portrait_and_name">是否使用微信的头像和昵称？</string>
+    <string name="this_account_forbid_login">该账号被禁止登录</string>
 </resources>
