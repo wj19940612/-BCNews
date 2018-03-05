@@ -65,8 +65,8 @@ android {
         }
 
         alpha {
-            versionCode 13
-            versionName "1.0.0303"
+            versionCode 14
+            versionName "1.0.0305"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     UMENG_APP_KEY: "5a94cb3da40fa309710001e0",
@@ -91,6 +91,7 @@ android {
             flavor.manifestPlaceholders = [UMENG_CHANNEL: name]
         }
     }
+
 }
 
 dependencies {
