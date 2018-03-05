@@ -725,11 +725,13 @@ public class NewsDetailActivity extends BaseActivity {
                 protected void onRespSuccess(Resp resp) {
                     if (mNetNewsDetail.getCollect() == 0) {
                         mNetNewsDetail.setCollect(1);
+                        ToastUtil.show(R.string.collect_success);
                         umengEventCount(UmengCountEventId.NEWS04);
                     } else {
                         Intent intent = new Intent();
                         intent.putExtra(ExtraKeys.TAG, mNetNewsDetail.getId());
                         setResult(RESULT_OK, intent);
+                        ToastUtil.show(R.string.cancel_collect_success);
                         mNetNewsDetail.setCollect(0);
                     }
                     updatePraiseCollect(mNetNewsDetail);
@@ -766,7 +768,6 @@ public class NewsDetailActivity extends BaseActivity {
     private void saveDetailCache() {
         if (mNewsDetail != null && mNetNewsDetail != null && mNewsDetail.getUpdateTime() != mNetNewsDetail.getUpdateTime()) {
             mNetNewsDetail.setReadTime(System.currentTimeMillis());
-            NewsCache.insertOrReplaceNews(mNetNewsDetail);
             new CacheThread(mNetNewsDetail).start();
         } else if (mNewsDetail != null) {
             mNewsDetail.setReadHeight(mScrollView.getScrollY());

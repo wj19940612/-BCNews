@@ -101,6 +101,8 @@
     <string name="no_news">暂无资讯，换个频道试试吧</string>
     <string name="no_other_news">暂无相关资讯</string>
     <string name="no_main_news">暂无资讯</string>
+    <string name="collect_success">已收藏</string>
+    <string name="cancel_collect_success">已取消收藏</string>
 
 
     <!--行情-->
