@@ -255,7 +255,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                 mMarketName.setText(marketData.getName().toUpperCase());
                 mNumberCurrency.setText(marketData.getCurrencyMoney());
                 mDealNumber.setText(context.getString(R.string.market_volume,
-                        MarketDataUtils.formatVolume(marketData.getLastVolume())));
+                        " " + MarketDataUtils.formatVolume(marketData.getLastVolume())));
 
                 boolean isRise = marketData.getUpDropSpeed() >= 0;
                 mUsPrice.setSelected(isRise);

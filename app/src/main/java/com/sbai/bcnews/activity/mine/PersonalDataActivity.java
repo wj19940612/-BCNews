@@ -152,8 +152,9 @@ public class PersonalDataActivity extends BaseActivity {
         }
 
         mIntroduce.setText(data.getIntroduction());
-        mBirthday.setSubText(data.getBirthday());
-
+        if (!TextUtils.isEmpty(data.getBirthday())) {
+            mBirthday.setSubText(data.getBirthday());
+        }
         if (!TextUtils.isEmpty(data.getUserProvince()) && !TextUtils.isEmpty(data.getUserCity())) {
             mLocation.setSubText(data.getUserProvince() + " " + data.getUserCity());
         }
