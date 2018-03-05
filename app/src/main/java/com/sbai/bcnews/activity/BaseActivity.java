@@ -16,6 +16,7 @@ import android.widget.AbsListView;
 import android.widget.ScrollView;
 
 import com.sbai.bcnews.Preference;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.utils.Launcher;
@@ -65,9 +66,7 @@ public class BaseActivity extends StatusBarActivity implements
             if (ACTION_TOKEN_EXPIRED.equalsIgnoreCase(intent.getAction())) {
                 LocalUser.getUser().logout();
                 Launcher.with(getActivity(), MainActivity.class).execute();
-
-                //TODO 跳转登陆页
-//                Launcher.with(getActivity(), LoginActivity.class).execute();
+                Launcher.with(getActivity(), LoginActivity.class).execute();
             }
         }
     };
