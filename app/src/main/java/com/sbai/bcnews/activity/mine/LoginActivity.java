@@ -312,9 +312,7 @@ public class LoginActivity extends WeChatActivity {
                     protected void onRespSuccess(Resp<UserInfo> resp) {
                         LocalUser.getUser().setUserInfo(resp.getData());
                         ToastUtil.show(R.string.login_success);
-                        sendLoginSuccessBroadcast();
-                        setResult(RESULT_OK);
-                        finish();
+                        postLogin();
                     }
 
                     @Override
