@@ -298,23 +298,23 @@ public class MarketDetailActivity extends BaseActivity {
                     requestTrendData(null);
                     break;
                 case 1:
-                    showKlineView();
+                    showKlineView(false);
                     requestKlineMarket("5", null);
                     break;
                 case 2:
-                    showKlineView();
+                    showKlineView(false);
                     requestKlineMarket("15", null);
                     break;
                 case 3:
-                    showKlineView();
+                    showKlineView(false);
                     requestKlineMarket("30", null);
                     break;
                 case 4:
-                    showKlineView();
+                    showKlineView(false);
                     requestKlineMarket("60", null);
                     break;
                 case 5:
-                    showKlineView();
+                    showKlineView(true);
                     requestKlineMarket("day", null);
                     break;
 
@@ -332,8 +332,9 @@ public class MarketDetailActivity extends BaseActivity {
         }
     };
 
-    private void showKlineView() {
+    private void showKlineView(boolean dayLine) {
         mKlineChart.setVisibility(View.VISIBLE);
+        mKlineChart.setDayLine(dayLine);
         mTrendChart.setVisibility(View.GONE);
     }
 
