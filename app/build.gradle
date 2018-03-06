@@ -65,8 +65,8 @@ android {
         }
 
         alpha {
-            versionCode 18
-            versionName "1.0.030603"
+            versionCode 19
+            versionName "1.0.030604"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     UMENG_APP_KEY: "5a94cb3da40fa309710001e0",
@@ -74,7 +74,7 @@ android {
             ]
         }
 
-        android {
+        others {
             versionCode 4
             versionName "1.0.4"
         }
