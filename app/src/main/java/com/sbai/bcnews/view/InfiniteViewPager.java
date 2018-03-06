@@ -5,8 +5,11 @@ import android.database.DataSetObserver;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.lang.reflect.Field;
 
 public class InfiniteViewPager extends ViewPager {
 
@@ -30,6 +33,25 @@ public class InfiniteViewPager extends ViewPager {
     @Override
     public void addOnPageChangeListener(OnPageChangeListener listener) {
         super.addOnPageChangeListener(new InnerPageChangeListener(listener));
+    }
+
+    //RecyclerView滚动上去，直至ViewPager看不见，再滚动下来，ViewPager下一次切换没有动画
+    //ViewPager里有一个私有变量mFirstLayout，它是表示是不是第一次显示布局，如果是true，则使用无动画的方式显示当前item，如果是false，则使用动画方式显示当前item。
+    //当ViewPager滚动上去后，因为RecyclerView的回收机制，ViewPager会走onDetachFromWindow，当再次滚动下来时，ViewPager会走onAttachedToWindow，而问题就出在onAttachToWindow。
+    //在onAttachedToWindow中，mFirstLayout被重置为true，所以下一次滚动就没有动画。
+    //这会导致OnPageChangeListener不调用滑动事件
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        try {
+            Field mFirstLayout = ViewPager.class.getDeclaredField("mFirstLayout");
+            mFirstLayout.setAccessible(true);
+            mFirstLayout.set(this, false);
+            getAdapter().notifyDataSetChanged();
+            setCurrentItem(getCurrentItem());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private class InnerPageChangeListener implements OnPageChangeListener {
@@ -60,6 +82,7 @@ public class InfiniteViewPager extends ViewPager {
 
         @Override
         public void onPageScrollStateChanged(int state) {
+
             if (mExternalListener != null) {
                 mExternalListener.onPageScrollStateChanged(state);
             }
