@@ -2,6 +2,8 @@ package com.sbai.bcnews.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,14 +29,6 @@ public class ScreenShotView {
     public static Dialog show(final Context context, final String path, int duration) {
         final View rootView = LayoutInflater.from(context).inflate(R.layout.view_screenn_shot, null);
         final ImageView imageView = (ImageView) rootView.findViewById(R.id.img);
-        //为控件设置属性
-        imageView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                GlideApp.with(context).load(path).into(imageView);
-            }
-        }, 100);
-
         final Dialog dialog = new Dialog(context, R.style.DialogTheme_NoTitle);
         Window dialogWindow = dialog.getWindow();
         dialogWindow.setGravity(Gravity.RIGHT | Gravity.BOTTOM);
@@ -47,6 +41,17 @@ public class ScreenShotView {
         lp.x = (int) Display.dp2Px(12, context.getResources());
         dialogWindow.setAttributes(lp);
         dialog.setCanceledOnTouchOutside(false);
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                rootView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageDrawable(Drawable.createFromPath(path));
+                    }
+                }, 300);
+            }
+        });
         dialog.show();
         rootView.postDelayed(new Runnable() {
             public void run() {
@@ -66,6 +71,8 @@ public class ScreenShotView {
                         .execute();
             }
         });
+        //为控件设置属性
+
         return dialog;
     }
 }

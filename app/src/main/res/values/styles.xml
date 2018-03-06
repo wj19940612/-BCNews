@@ -70,6 +70,9 @@
     <style name="MarketData" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/background</item>
         <item name="android:textSize">12sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">18dp</item>
     </style>
 
     <style name="MarketData.Title">

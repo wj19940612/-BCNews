@@ -128,6 +128,21 @@ public class Apic {
     }
 
     /**
+     * /api/news-quota/variety/list
+     * GET
+     * 行情品种列表
+     *
+     * @return
+     */
+    public static Api requestMarketVarietyList(int page, int size, String exchangeCode) {
+        return Api.get("/api/news-quota/variety/list",new ReqParams()
+                .put("page",page)
+                .put("size",size)
+                .put("exchangeCode",exchangeCode));
+    }
+
+
+    /**
      * /api/news-info/news/praise/{id}
      * <p>资讯点赞 - 齐慕伟</p>
      *
