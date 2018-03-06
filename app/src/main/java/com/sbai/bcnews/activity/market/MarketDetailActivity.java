@@ -347,6 +347,9 @@ public class MarketDetailActivity extends BaseActivity {
                 .callback(new Callback2D<Resp<MarketData>, MarketData>() {
                     @Override
                     protected void onRespSuccessData(MarketData data) {
+                        if (mMarketData != null && !TextUtils.isEmpty(mMarketData.getName())) {
+                            data.setName(mMarketData.getName());
+                        }
                         mMarketData = data;
                         updateMarketView();
                     }

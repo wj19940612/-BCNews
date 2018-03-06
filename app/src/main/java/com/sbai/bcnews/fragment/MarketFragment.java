@@ -84,7 +84,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void requestMarketVarietyData() {
-        Apic.requestMarketVarietyList(0, 200, MarketData.DEFAULT_MARKET_BOURSE_CODE)
+        Apic.requestMarketVarietyList(0, 1000, MarketData.DEFAULT_MARKET_BOURSE_CODE)
                 .tag(TAG)
                 .callback(new Callback<ListResp<Variety>>() {
 
@@ -95,6 +95,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                             for (Variety variety : resp.getListData()) {
                                 mVarietySet.add(variety.getCode());
                             }
+
                         }
                         requestMarketListData();
                     }
@@ -145,7 +146,6 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                                 }
                             });
                         }
-
 
                         mMarkListAdapter.clear();
                         mMarkListAdapter.addAll(data);
