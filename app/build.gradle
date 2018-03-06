@@ -74,9 +74,9 @@ android {
             ]
         }
 
-        others {
-            versionCode 3
-            versionName "1.0.3"
+        android {
+            versionCode 4
+            versionName "1.0.4"
         }
 
     }
