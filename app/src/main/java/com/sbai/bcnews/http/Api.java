@@ -4,7 +4,9 @@ import android.text.TextUtils;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.sbai.bcnews.App;
 import com.sbai.bcnews.BuildConfig;
+import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.bcnews.utils.BuildConfigUtils;
 import com.sbai.httplib.CookieManger;
 import com.sbai.httplib.GsonRequest;
@@ -197,9 +199,9 @@ public class Api extends RequestManager {
         if (!TextUtils.isEmpty(cookies)) {
             headers.put("Cookie", cookies);
         }
-//        headers.put("lemi-version", AppInfo.getVersionName(App.getAppContext()))
-//                .put("lemi-device", AppInfo.getDeviceHardwareId(App.getAppContext()))
-//                .put("lemi-channel", "android:" + AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL"));
+        headers.put("news-version", AppInfo.getVersionName(App.getAppContext()))
+                .put("news-device", AppInfo.getDeviceHardwareId(App.getAppContext()))
+                .put("news-channel", "android:" + AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL"));
     }
 
     private static class RequestFinishedListener implements ReqCallback.onFinishedListener {

@@ -25,6 +25,7 @@ import com.igexin.sdk.message.GTCmdMessage;
 import com.igexin.sdk.message.GTTransmitMessage;
 import com.igexin.sdk.message.SetTagCmdMessage;
 import com.sbai.bcnews.ExtraKeys;
+import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.MainActivity;
 import com.sbai.bcnews.activity.NewsDetailActivity;
@@ -43,6 +44,7 @@ public class PushIntentService extends GTIntentService {
     @Override
     public void onReceiveClientId(Context context, String s) {
         Log.d(TAG, "onReceiveClientId: " + s);
+        Preference.get().setPushClientId(s);
     }
 
     @Override

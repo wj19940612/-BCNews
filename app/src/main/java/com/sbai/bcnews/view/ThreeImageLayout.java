@@ -56,6 +56,9 @@ public class ThreeImageLayout extends LinearLayout {
             setVisibility(GONE);
         } else {
             setVisibility(VISIBLE);
+            for (int i = 0; i < 3; i++) {
+                mImageViewList.get(i).setVisibility(INVISIBLE);
+            }
             int size = content.size();
             int contentLength = size > 3 ? 3 : size;
             for (int i = 0; i < contentLength; i++) {

@@ -14,6 +14,8 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.sbai.bcnews.App;
+import com.sbai.bcnews.R;
+import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.bcnews.utils.FileUtils;
 
 import java.io.BufferedOutputStream;
@@ -120,7 +122,7 @@ public class ImageUtils {
 
     public static void saveImageToGallery(Context context, Bitmap bmp) {
         // 首先保存图片
-        File appDir = new File(getRootPath(), "screenShots");
+        File appDir = new File(getRootPath(), context.getString(R.string.app_name));
         if (!appDir.exists()) {
             appDir.mkdir();
         }

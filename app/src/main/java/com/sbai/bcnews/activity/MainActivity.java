@@ -20,7 +20,6 @@ import com.sbai.bcnews.fragment.HomeNewsFragment;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.MineFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
-import com.sbai.bcnews.fragment.dialog.OpenNotifyDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
@@ -29,7 +28,6 @@ import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
 import com.sbai.bcnews.utils.AppInfo;
-import com.sbai.bcnews.utils.PermissionUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.BottomTabs;
@@ -190,6 +188,7 @@ public class MainActivity extends BaseActivity {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLoginBroadcastReceiver);
     }
+
 
     private static class MainFragmentsAdapter extends FragmentPagerAdapter {
 

@@ -3,6 +3,7 @@ package com.sbai.bcnews.utils.news;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.model.NewsDetail;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,23 +39,13 @@ public class NewsCache {
         if (!TextUtils.isEmpty(news)) {
             Type type = new TypeToken<MaxLinkedHashMap<String, NewsDetail>>() {
             }.getType();
-            sNewsCache = sGson.fromJson(news, type);
+            try {
+                sNewsCache = sGson.fromJson(news, type);
+            }catch (JsonSyntaxException exception){
+                sNewsCache = new MaxLinkedHashMap<String, NewsDetail>();
+            }
         } else {
             sNewsCache = new MaxLinkedHashMap<String, NewsDetail>();
-        }
-    }
-
-    private static boolean isJsonArray(String news) {
-        boolean result = false;
-        try {
-            Object json = new JSONTokener(news).nextValue();
-            if (json instanceof JSONArray) {
-                result = true;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } finally {
-            return result;
         }
     }
 

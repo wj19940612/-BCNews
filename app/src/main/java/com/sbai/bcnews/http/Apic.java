@@ -277,7 +277,8 @@ public class Apic {
     public static Api requestFeedbackList(int page) {
         return Api.get("/api/news-user/feedback/page", new ReqParams()
                 .put("page", page)
-                .put("size", Apic.DEFAULT_PAGE_SIZE));
+                .put("size", Apic.DEFAULT_PAGE_SIZE)
+                .put("deviceId", Preference.get().getPushClientId()));
     }
 
     /**
@@ -286,7 +287,8 @@ public class Apic {
     public static Api requestSendFeedback(String content, int contentType) {
         return Api.post("/api/news-user/feedback/add", new ReqParams()
                 .put("content", content)
-                .put("contentType", contentType));
+                .put("contentType", contentType)
+                .put("deviceId", Preference.get().getPushClientId()));
     }
 
     /**
