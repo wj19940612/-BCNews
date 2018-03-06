@@ -31,6 +31,12 @@ public class Apic {
     }
 
     /**
+     * 首页--banner点击
+     */
+    public static Api requesBannerUpdate(String bannerId) {
+        return Api.post("/api/news-user/banner/click",new ReqParams().put("id",bannerId));
+    }
+    /**
      * 用户--同步阅读记录--薛松
      */
     public static Api uploadReadHistory(String readText, String deviceId) {

@@ -88,6 +88,10 @@ public class HomeBanner extends FrameLayout {
 //        }
 //    }
 
+    public void detachFromWindow() {
+        mViewPager.setHasDestroy(true);
+    }
+
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -111,7 +115,11 @@ public class HomeBanner extends FrameLayout {
 
     public void nextAdvertisement() {
         if (mAdapter != null && mAdapter.getCount() > 1) {
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+            //ViewPager还在窗口执行这个动作
+            if (!mViewPager.isDetachFromWindow()) {
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+
+            }
         }
     }
 
