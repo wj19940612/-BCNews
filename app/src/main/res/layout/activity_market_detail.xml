@@ -41,6 +41,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:maxLines="1"
                 android:textColor="@color/redPrimary"
                 android:textSize="34sp"
                 tools:text="10210.09"/>
@@ -49,6 +51,7 @@
                 android:id="@+id/priceChange"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:layout_weight="1"
                 android:textColor="@color/redPrimary"
                 android:textSize="15sp"
@@ -98,14 +101,14 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
+                <com.sbai.bcnews.view.autofit.AutofitTextView
                     android:id="@+id/volume"
                     style="@style/MarketData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="1215.77"/>
 
-                <TextView
+                <com.sbai.bcnews.view.autofit.AutofitTextView
                     android:id="@+id/highest"
                     style="@style/MarketData"
                     android:layout_width="wrap_content"
@@ -113,7 +116,7 @@
                     android:layout_marginTop="10dp"
                     tools:text="$1215.77  ¥63986.11"/>
 
-                <TextView
+                <com.sbai.bcnews.view.autofit.AutofitTextView
                     android:id="@+id/bidPrice1"
                     style="@style/MarketData"
                     android:layout_width="wrap_content"
@@ -125,6 +128,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -155,14 +159,14 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
+                <com.sbai.bcnews.view.autofit.AutofitTextView
                     android:id="@+id/marketValue"
                     style="@style/MarketData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="1,482,081,753,357"/>
 
-                <TextView
+                <com.sbai.bcnews.view.autofit.AutofitTextView
                     android:id="@+id/lowestPrice"
                     style="@style/MarketData"
                     android:layout_width="wrap_content"
@@ -170,7 +174,7 @@
                     android:layout_marginTop="10dp"
                     tools:text="$8799.54  ¥55217.11"/>
 
-                <TextView
+                <com.sbai.bcnews.view.autofit.AutofitTextView
                     android:id="@+id/askPrice1"
                     style="@style/MarketData"
                     android:layout_width="wrap_content"
@@ -199,9 +203,9 @@
                 app:tabIndicatorColor="@color/assistText"
                 app:tabIndicatorHeight="2dp"
                 app:tabMinWidth="0dp"
-                app:tabPaddingStart="0dp"
-                app:tabPaddingEnd="0dp"
                 app:tabMode="fixed"
+                app:tabPaddingEnd="0dp"
+                app:tabPaddingStart="0dp"
                 app:tabSelectedTextColor="@color/assistText"
                 app:tabTextAppearance="@style/TabLayoutText"/>
 
