@@ -36,6 +36,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<NewsWrap> items;
     private NewsAdapter.OnItemClickListener mOnItemClickListener;
     private boolean mSplitViewVisible;
+    private boolean mHasFoot;
 
     public NewsAdapter(Context context, List<NewsWrap> newsWraps, OnItemClickListener onItemClickListener) {
         mContext = context;
@@ -49,6 +50,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         items = newsWraps;
         mOnItemClickListener = onItemClickListener;
         mSplitViewVisible = splitViewVisible;
+    }
+
+    public void setHasFoot(boolean hasFoot) {
+        mHasFoot = hasFoot;
     }
 
     @Override
@@ -84,11 +89,11 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof NewsAdapter.NoneHolder) {
-            ((NewsAdapter.NoneHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible);
+            ((NewsAdapter.NoneHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot);
         } else if (holder instanceof NewsAdapter.SingleHolder) {
-            ((NewsAdapter.SingleHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible);
+            ((NewsAdapter.SingleHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot);
         } else {
-            ((NewsAdapter.ThreeHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener);
+            ((NewsAdapter.ThreeHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mHasFoot);
         }
     }
 
@@ -109,6 +114,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         RelativeLayout mContentRL;
         @BindView(R.id.line)
         View mLine;
+        @BindView(R.id.footer)
+        View mFooter;
 
         NoneHolder(View view) {
             super(view);
@@ -116,7 +123,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final OnItemClickListener onItemClickListener, boolean splitViewVisible) {
+                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot) {
             if (position == 0 && splitViewVisible) {
                 mSplitView.setVisibility(View.VISIBLE);
             } else {
@@ -144,6 +151,12 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mLine.setVisibility(View.VISIBLE);
             }
+
+            if (mHasFoot && count-1 == position) {
+                mFooter.setVisibility(View.VISIBLE);
+            } else {
+                mFooter.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -166,6 +179,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         RelativeLayout mContentRL;
         @BindView(R.id.line)
         View mLine;
+        @BindView(R.id.footer)
+        View mFooter;
 
         SingleHolder(View view) {
             super(view);
@@ -173,7 +188,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final OnItemClickListener onItemClickListener, boolean splitViewVisible) {
+                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot) {
             if (position == 0 && splitViewVisible) {
                 mSplitView.setVisibility(View.VISIBLE);
             } else {
@@ -208,6 +223,12 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mLine.setVisibility(View.VISIBLE);
             }
+
+            if (mHasFoot && count-1 == position) {
+                mFooter.setVisibility(View.VISIBLE);
+            } else {
+                mFooter.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -232,6 +253,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         RelativeLayout mContentRL;
         @BindView(R.id.line)
         View mLine;
+        @BindView(R.id.footer)
+        View mFooter;
 
         ThreeHolder(View view) {
             super(view);
@@ -239,7 +262,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final NewsAdapter.OnItemClickListener onItemClickListener) {
+                                final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot) {
             mTitle.setText(item.getTitle());
             mSource.setText(item.getSource());
             mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
@@ -288,6 +311,12 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mLine.setVisibility(View.GONE);
             } else {
                 mLine.setVisibility(View.VISIBLE);
+            }
+
+            if (mHasFoot && count-1 == position) {
+                mFooter.setVisibility(View.VISIBLE);
+            } else {
+                mFooter.setVisibility(View.GONE);
             }
         }
     }

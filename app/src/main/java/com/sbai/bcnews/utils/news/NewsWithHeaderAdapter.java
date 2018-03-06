@@ -18,6 +18,12 @@ public class NewsWithHeaderAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mInnerAdapter = adapter;
     }
 
+    public void setHasFoot(boolean mHasFoot) {
+        if (mInnerAdapter != null && mInnerAdapter instanceof NewsAdapter) {
+            ((NewsAdapter) mInnerAdapter).setHasFoot(mHasFoot);
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //第0项是header,header的viewType=0 并且headerCount != 0

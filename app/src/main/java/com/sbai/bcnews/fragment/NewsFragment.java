@@ -220,6 +220,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                                 .putExtra(WebActivity.EX_URL, information.getJumpContent())
                                 .putExtra(WebActivity.EX_TITLE, information.getTitle())
                                 .execute();
+                    }else if(information.getJumpType()==Banner.JUMP_TYPE_NEWS){
+                        Launcher.with(getActivity(), NewsDetailActivity.class)
+                                .putExtra(ExtraKeys.NEWS_ID, information.getJumpContent())
+                                .execute();
                     }
                 }
             });
@@ -312,6 +316,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private void updateData(List<NewsDetail> data, boolean refresh) {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            refreshFoot(data.size());
+            mNewsAdapter.notifyDataSetChanged();
             return;
         }
         if (refresh) {
@@ -326,7 +332,24 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         if (data.size() != 0)
             mPage++;
         mNewsWraps.addAll(NewsWrap.updateImgType(data));
+        refreshFoot(data.size());
         mNewsAdapter.notifyDataSetChanged();
+    }
+
+    private void refreshFoot(int size){
+        if (mNewsWraps.size() >= Apic.DEFAULT_PAGE_SIZE && size < Apic.DEFAULT_PAGE_SIZE) {
+            if(mNewsAdapter instanceof NewsAdapter){
+                ((NewsAdapter)mNewsAdapter).setHasFoot(true);
+            }else if(mNewsAdapter instanceof NewsWithHeaderAdapter){
+                ((NewsWithHeaderAdapter)mNewsAdapter).setHasFoot(true);
+            }
+        }else{
+            if(mNewsAdapter instanceof NewsAdapter){
+                ((NewsAdapter)mNewsAdapter).setHasFoot(false);
+            }else if(mNewsAdapter instanceof NewsWithHeaderAdapter){
+                ((NewsWithHeaderAdapter)mNewsAdapter).setHasFoot(false);
+            }
+        }
     }
 
     private void requestBanners() {

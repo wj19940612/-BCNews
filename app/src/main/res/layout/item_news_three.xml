@@ -105,4 +105,16 @@
         android:layout_height="1dp"
         android:background="@color/background"
         android:layout_below="@+id/contentRL"/>
+
+    <TextView
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/background"
+        android:layout_below="@+id/contentRL"
+        android:gravity="center"
+        android:text="@string/no_more_article"
+        android:textColor="@color/unluckyText"
+        android:textSize="10sp"
+        android:visibility="gone"/>
 </RelativeLayout>
