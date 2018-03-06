@@ -312,10 +312,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private void updateData(List<NewsDetail> data, boolean refresh) {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
-            mEmptyView.setVisibility(View.VISIBLE);
             return;
         }
-        mEmptyView.setVisibility(View.GONE);
         if (refresh) {
             NewsSummaryCache.markNewsSummarys(mChannel, data);
             mNewsWraps.clear();
