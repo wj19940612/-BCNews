@@ -140,7 +140,7 @@ public class RefreshHeaderView extends SwipeRefreshHeaderLayout {
     private void reset() {
         offset = 0;
         ivArrow.setVisibility(VISIBLE);
-        mRefreshCompleteText = "";
+        mRefreshCompleteText = mRefreshCompleteText;
         tvRefresh.setVisibility(INVISIBLE);
     }
 

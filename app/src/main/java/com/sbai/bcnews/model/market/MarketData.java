@@ -53,6 +53,19 @@ public class MarketData implements Parcelable{
     private long upTime;
     private String upTimeFormat;
     private double volume;
+    private int seq;
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public double getAskPrice() {
         return askPrice;

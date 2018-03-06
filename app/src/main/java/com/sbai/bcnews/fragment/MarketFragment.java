@@ -15,9 +15,12 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.market.MarketDetailActivity;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.market.MarketData;
+import com.sbai.bcnews.model.market.Variety;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.Launcher;
@@ -27,6 +30,10 @@ import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.httplib.ReqError;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,11 +54,15 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
     private MarkListAdapter mMarkListAdapter;
 
+    private HashSet<String> mVarietySet;
+    private List<Variety> mVarietyList;
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mTitleBar.setTitle(R.string.market);
         mTitleBar.setBackFeature(false);
+        mVarietySet = new HashSet<>();
         initRecycleView();
     }
 
@@ -69,7 +80,26 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
         if (userVisibleHint) {
             startScheduleJob(REFRESH_MARKET_DATE_TIME_INTERVAL);
         }
-        requestMarketListData();
+        requestMarketVarietyData();
+    }
+
+    private void requestMarketVarietyData() {
+        Apic.requestMarketVarietyList(0, 200, MarketData.DEFAULT_MARKET_BOURSE_CODE)
+                .tag(TAG)
+                .callback(new Callback<ListResp<Variety>>() {
+
+                    @Override
+                    protected void onRespSuccess(ListResp<Variety> resp) {
+                        if (resp != null && resp.getListData() != null) {
+                            mVarietyList = resp.getListData();
+                            for (Variety variety : resp.getListData()) {
+                                mVarietySet.add(variety.getCode());
+                            }
+                        }
+                        requestMarketListData();
+                    }
+                })
+                .fire();
     }
 
     @Override
@@ -89,6 +119,34 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
                     @Override
                     protected void onRespSuccessData(List<MarketData> data) {
                         refreshSuccess();
+                        Iterator<MarketData> iterator = data.iterator();
+
+                        if (!mVarietySet.isEmpty()) {
+                            while (iterator.hasNext()) {
+                                MarketData next = iterator.next();
+                                if (!mVarietySet.contains(next.getCode())) {
+                                    iterator.remove();
+                                }
+                            }
+                            for (MarketData marketData : data) {
+                                for (Variety variety : mVarietyList) {
+                                    if (marketData.getCode().equalsIgnoreCase(variety.getCode())) {
+                                        marketData.setSeq(variety.getSeq());
+                                        marketData.setName(variety.getName());
+                                        break;
+                                    }
+                                }
+                            }
+
+                            Collections.sort(data, new Comparator<MarketData>() {
+                                @Override
+                                public int compare(MarketData o1, MarketData o2) {
+                                    return o1.getSeq() - o2.getSeq();
+                                }
+                            });
+                        }
+
+
                         mMarkListAdapter.clear();
                         mMarkListAdapter.addAll(data);
                     }
@@ -142,7 +200,12 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
 
     @Override
     public void onRefresh() {
-        requestMarketListData();
+//        requestMarketListData();
+        mVarietySet.clear();
+        if (mVarietyList != null) {
+            mVarietyList.clear();
+        }
+        requestMarketVarietyData();
     }
 
     @Override

@@ -60,13 +60,13 @@ android {
 
     productFlavors {
         dev {
-//            minSdkVersion 21
+            minSdkVersion 21
             buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
         }
 
         alpha {
-            versionCode 14
-            versionName "1.0.0305"
+            versionCode 15
+            versionName "1.0.030502"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     UMENG_APP_KEY: "5a94cb3da40fa309710001e0",
@@ -75,7 +75,8 @@ android {
         }
 
         others {
-
+            versionCode 2
+            versionName "1.0.1"
         }
 
     }
