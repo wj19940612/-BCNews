@@ -5,7 +5,6 @@ import android.database.DataSetObserver;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,6 +13,7 @@ import java.lang.reflect.Field;
 public class InfiniteViewPager extends ViewPager {
 
     private InnerAdapter mInnerAdapter;
+    private boolean mHasDetach;
 
     public InfiniteViewPager(Context context) {
         super(context);
@@ -43,15 +43,34 @@ public class InfiniteViewPager extends ViewPager {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        mHasDetach = false;
         try {
             Field mFirstLayout = ViewPager.class.getDeclaredField("mFirstLayout");
             mFirstLayout.setAccessible(true);
             mFirstLayout.set(this, false);
-            getAdapter().notifyDataSetChanged();
-            setCurrentItem(getCurrentItem());
+//            getAdapter().notifyDataSetChanged();
+            //之前的滑动滞留动作，会触发多余的onPageScrollStateChanged
+            if(getCurrentItem() == mInnerAdapter.getCount()-1){
+                setCurrentItem(1);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mHasDetach = true;
+
+    }
+
+    public void setHasDestroy(boolean hasDestroy) {
+        mHasDetach = hasDestroy;
+    }
+
+    public boolean isDetachFromWindow(){
+        return mHasDetach;
     }
 
     private class InnerPageChangeListener implements OnPageChangeListener {
@@ -82,7 +101,6 @@ public class InfiniteViewPager extends ViewPager {
 
         @Override
         public void onPageScrollStateChanged(int state) {
-
             if (mExternalListener != null) {
                 mExternalListener.onPageScrollStateChanged(state);
             }

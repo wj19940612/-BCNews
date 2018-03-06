@@ -16,6 +16,7 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.activity.WebActivity;
+import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
@@ -220,11 +221,12 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                                 .putExtra(WebActivity.EX_URL, information.getJumpContent())
                                 .putExtra(WebActivity.EX_TITLE, information.getTitle())
                                 .execute();
-                    }else if(information.getJumpType()==Banner.JUMP_TYPE_NEWS){
+                    } else if (information.getJumpType() == Banner.JUMP_TYPE_NEWS) {
                         Launcher.with(getActivity(), NewsDetailActivity.class)
                                 .putExtra(ExtraKeys.NEWS_ID, information.getJumpContent())
                                 .execute();
                     }
+                    Apic.requesBannerUpdate(information.getId()).tag(TAG).fireFreely();
                 }
             });
         }
@@ -233,6 +235,9 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mHomeBanner != null) {
+            mHomeBanner.detachFromWindow();
+        }
         mBind.unbind();
     }
 
@@ -336,18 +341,18 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         mNewsAdapter.notifyDataSetChanged();
     }
 
-    private void refreshFoot(int size){
+    private void refreshFoot(int size) {
         if (mNewsWraps.size() >= Apic.DEFAULT_PAGE_SIZE && size < Apic.DEFAULT_PAGE_SIZE) {
-            if(mNewsAdapter instanceof NewsAdapter){
-                ((NewsAdapter)mNewsAdapter).setHasFoot(true);
-            }else if(mNewsAdapter instanceof NewsWithHeaderAdapter){
-                ((NewsWithHeaderAdapter)mNewsAdapter).setHasFoot(true);
+            if (mNewsAdapter instanceof NewsAdapter) {
+                ((NewsAdapter) mNewsAdapter).setHasFoot(true);
+            } else if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
+                ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(true);
             }
-        }else{
-            if(mNewsAdapter instanceof NewsAdapter){
-                ((NewsAdapter)mNewsAdapter).setHasFoot(false);
-            }else if(mNewsAdapter instanceof NewsWithHeaderAdapter){
-                ((NewsWithHeaderAdapter)mNewsAdapter).setHasFoot(false);
+        } else {
+            if (mNewsAdapter instanceof NewsAdapter) {
+                ((NewsAdapter) mNewsAdapter).setHasFoot(false);
+            } else if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
+                ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(false);
             }
         }
     }
