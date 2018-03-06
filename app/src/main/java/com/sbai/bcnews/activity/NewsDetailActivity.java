@@ -441,7 +441,7 @@ public class NewsDetailActivity extends BaseActivity {
         int scrollViewExpandHeight = mScrollView.getChildAt(0).getMeasuredHeight();
         if (scrollAddScreenHeight > scrollViewExpandHeight || Math.abs(scrollAddScreenHeight - scrollViewExpandHeight) < 60) {
             scrollBottomBar(false);
-        }else if(mScrollView.getScrollY()<1000){
+        } else if (mScrollView.getScrollY() < 1000) {
             scrollBottomBar(false);
         } else if (mScrollY != 0 && mScrollY != scrollY) {
             scrollBottomBar(scrollY - mScrollY > 0);
@@ -539,9 +539,12 @@ public class NewsDetailActivity extends BaseActivity {
         mSource.setText(newsDetail.getSource());
         mPubTime.setText(DateUtil.formatNewsStyleTime(newsDetail.getReleaseTime()));
         mReadTime.setText(String.format(getString(R.string.reader_time), newsDetail.getReaderTime()));
-
         mPureHtml = mNewsDetail.getContent();
         loadPage();
+        if (mChannel == null && mTag == null && newsDetail.getChannel().size() > 0) {
+            mChannel = newsDetail.getChannel().get(0);
+            requestOtherArticle();
+        }
     }
 
     private void requestOtherArticle() {

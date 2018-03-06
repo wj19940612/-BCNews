@@ -37,7 +37,10 @@ public class ListResp<T> {
     }
 
     public DataBean<T> getData() {
-        return (DataBean<T>) data.getContent();
+        if (data != null) {
+            return (DataBean<T>) data.getContent();
+        }
+        return null;
     }
 
     public void setData(DataBean<T> data) {
@@ -45,7 +48,10 @@ public class ListResp<T> {
     }
 
     public List<T> getListData() {
-        return (List<T>) data.getContent();
+        if (data != null) {
+            return (List<T>) data.getContent();
+        }
+        return null;
     }
 
     public static class DataBean<T> {
