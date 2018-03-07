@@ -1,11 +1,7 @@
 package com.sbai.bcnews.activity.mine;
 
-import android.annotation.SuppressLint;
-import android.app.AppOpsManager;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -26,10 +22,6 @@ import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.IconTextRow;
 import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.bcnews.view.TitleBar;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
