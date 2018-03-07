@@ -7,7 +7,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField('String', 'HOST', '\"news.ailemi.com\"')
@@ -85,10 +85,12 @@ android {
             ]
         }
 
-        xiaomi {
-            versionCode 7
-            versionName "1.0.7"
-        }
+        xiaomi {}
+        vivo {}
+        c360 {}
+        tencent {}
+        baidu {}
+        others {}
     }
 
     android.applicationVariants.all { variant ->
