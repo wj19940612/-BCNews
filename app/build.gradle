@@ -13,9 +13,9 @@ android {
         buildConfigField('String', 'HOST', '\"news.ailemi.com\"')
 
         manifestPlaceholders = [
-                GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
-                GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
-                GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
+                GETUI_APP_ID    : "U9T9XBDSkQACVb9x8OR3o4",
+                GETUI_APP_SECRET: "1zKndehA2o9aMkZtKewFCA",
+                GETUI_APP_KEY   : "2PxF3MSS0W5xbIEN27TnU1",
                 UMENG_APP_KEY   : "5a7bb8b8f43e481619000049",
                 UMENG_CHANNEL   : "android"
         ]
@@ -63,6 +63,13 @@ android {
             versionName "2.0.6"
             minSdkVersion 21
             buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
+                    GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
+                    GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
+                    UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
+                    UMENG_CHANNEL   : "android"
+            ]
         }
 
         alpha {
@@ -70,8 +77,11 @@ android {
             versionName "1.0.0307"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
-                    UMENG_APP_KEY: "5a94cb3da40fa309710001e0",
-                    UMENG_CHANNEL: "android"
+                    GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
+                    GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
+                    GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
+                    UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
+                    UMENG_CHANNEL   : "android"
             ]
         }
 
@@ -79,7 +89,6 @@ android {
             versionCode 6
             versionName "1.0.6"
         }
-
     }
 
     android.applicationVariants.all { variant ->
