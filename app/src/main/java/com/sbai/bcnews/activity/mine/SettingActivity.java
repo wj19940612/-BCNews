@@ -16,6 +16,7 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.PermissionUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
@@ -91,7 +92,7 @@ public class SettingActivity extends BaseActivity {
             case R.id.aboutBcnews:
                 umengEventCount(UmengCountEventId.SETTING_ABOUT_APP);
                 Launcher.with(getActivity(), WebActivity.class)
-                        .putExtra(WebActivity.EX_URL, Apic.url.WEB_URI_ABOUT_PAGE)
+                        .putExtra(WebActivity.EX_URL, String.format(Apic.url.WEB_URI_ABOUT_PAGE, AppInfo.getVersionName(getActivity())))
                         .putExtra(WebActivity.EX_TITLE, getString(R.string.about_bcnews))
                         .execute();
                 break;
