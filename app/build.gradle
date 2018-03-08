@@ -6,7 +6,7 @@ android {
         applicationId "com.sbai.bcnews"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
+        versionCode 3
         versionName "1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
