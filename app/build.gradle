@@ -61,14 +61,14 @@ android {
     productFlavors {
         dev {
             versionName "2.0.6"
-            minSdkVersion 21
+//            minSdkVersion 21
             buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
                     GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
                     GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
                     UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
-                    UMENG_CHANNEL   : "android"
+                    UMENG_CHANNEL   : "tencent"
             ]
         }
 
@@ -81,16 +81,18 @@ android {
                     GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
                     GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
                     UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
-                    UMENG_CHANNEL   : "android"
+                    UMENG_CHANNEL   : "tencent"
             ]
         }
 
-        xiaomi {}
-        vivo {}
-        c360 {}
+//        xiaomi {}
+//        vivo {}
+//        c360 {}
         tencent {}
-        baidu {}
-        others {}
+//        baidu {}
+//        others {}
+        fenx {}
+        weixin{}
     }
 
     android.applicationVariants.all { variant ->
