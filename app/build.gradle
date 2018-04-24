@@ -6,7 +6,7 @@ android {
         applicationId "com.sbai.bcnews"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 4
+        versionCode 5
         versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -85,14 +85,15 @@ android {
             ]
         }
 
-        xiaomi {}
-        vivo {}
-        c360 {}
-        tencent {}
-        baidu {}
-        others {}
-        fenx {}
-        weixin {}
+//        xiaomi {}
+//        vivo {}
+//        c360 {}
+//        tencent {}
+//        baidu {}
+//        others {}
+//        fenx {}
+//        weixin{}
+//        huawei{}
     }
 
     android.applicationVariants.all { variant ->
