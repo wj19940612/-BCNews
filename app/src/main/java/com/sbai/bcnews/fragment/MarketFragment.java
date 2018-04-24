@@ -211,6 +211,7 @@ public class MarketFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
+        // TODO: 2018/4/24  先注释到
         requestMarketListData();
     }
 

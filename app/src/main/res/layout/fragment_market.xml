@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/bg_F5F5"
     android:orientation="vertical">
 
     <com.sbai.bcnews.view.TitleBar
@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         app:hasBottomSplitLine="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:splitLineColor="@color/background"
+        app:splitLineColor="@color/bg_F5F5"
         app:titleText="@string/market"
-        app:titleTextColor="@color/text"
+        app:titleTextColor="@color/text_222"
         app:titleTextSize="17sp"/>
 
     <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
@@ -41,7 +41,7 @@
             android:id="@id/swipe_target"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background"
+            android:background="@color/bg_F5F5"
             android:clipToPadding="false"/>
 
         <com.zcmrr.swipelayout.foot.LoadMoreFooterView

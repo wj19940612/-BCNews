@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/share"
         android:layout_below="@+id/title"
-        android:background="@color/background"
+        android:background="@color/bg_F5F5"
         android:paddingLeft="13dp"
         android:paddingRight="13dp"
         android:paddingTop="13dp"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/unluckyText"
+                android:textColor="@color/text_999"
                 android:textSize="20sp"
                 tools:text="星期四"/>
 
@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/unluckyText"
+                android:textColor="@color/text_999"
                 android:textSize="12sp"
                 tools:text="2017/12/31 23:52 快报"/>
 
@@ -74,7 +74,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@color/background"/>
+                android:background="@color/bg_F5F5"/>
 
             <ImageView
                 android:id="@+id/downloadImg"
@@ -91,7 +91,7 @@
                 android:layout_marginBottom="12dp"
                 android:layout_marginTop="4dp"
                 android:text="@string/download_app"
-                android:textColor="@color/unluckyText"
+                android:textColor="@color/text_999"
                 android:textSize="12sp"/>
         </LinearLayout>
     </ScrollView>
@@ -100,7 +100,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_above="@+id/share"
-        android:background="@color/background"/>
+        android:background="@color/bg_F5F5"/>
 
     <LinearLayout
         android:id="@+id/share"

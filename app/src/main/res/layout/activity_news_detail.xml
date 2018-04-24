@@ -19,7 +19,7 @@
         app:titleLeftMargin="50dp"
         app:titleRightMargin="50dp"
         app:titleText="@string/news_detail"
-        app:titleTextColor="@color/text"
+        app:titleTextColor="@color/text_222"
         app:titleTextSize="14sp"/>
 
     <View
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/titleBar"
-        android:background="@color/background"/>
+        android:background="@color/bg_F5F5"/>
 
     <com.sbai.bcnews.view.NewsScrollView
         android:id="@+id/scrollView"
@@ -55,7 +55,7 @@
                     android:layout_marginRight="14dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:textColor="@color/text"
+                    android:textColor="@color/text_222"
                     android:textSize="22sp"/>
 
                 <TextView
@@ -67,7 +67,7 @@
                     android:layout_marginTop="10dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="@color/unluckyText"
+                    android:textColor="@color/text_999"
                     android:textSize="12sp"/>
 
                 <TextView
@@ -80,7 +80,7 @@
                     android:layout_toRightOf="@+id/source"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="@color/unluckyText"
+                    android:textColor="@color/text_999"
                     android:textSize="12sp"/>
 
                 <TextView
@@ -98,7 +98,7 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:minWidth="64dp"
-                    android:textColor="@color/unluckyText"
+                    android:textColor="@color/text_999"
                     android:textSize="12sp"/>
 
                 <View
@@ -109,7 +109,7 @@
                     android:layout_marginLeft="14dp"
                     android:layout_marginRight="14dp"
                     android:layout_marginTop="12dp"
-                    android:background="@color/background"/>
+                    android:background="@color/bg_F5F5"/>
             </RelativeLayout>
 
             <WebView
@@ -143,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/praiseIcon"
                     android:layout_centerHorizontal="true"
-                    android:textColor="@color/unluckyText"
+                    android:textColor="@color/text_999"
                     android:textSize="12sp"/>
 
             </RelativeLayout>
@@ -173,7 +173,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="@string/share_to_"
-                    android:textColor="@color/text"
+                    android:textColor="@color/text_222"
                     android:textSize="12sp"/>
 
 
@@ -203,7 +203,7 @@
                 android:layout_height="4dp"
                 android:layout_below="@+id/shareLayout"
                 android:layout_marginTop="20dp"
-                android:background="@color/background"
+                android:background="@color/bg_F5F5"
                 android:visibility="gone"/>
 
             <TextView
@@ -214,7 +214,7 @@
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="12dp"
                 android:text="@string/other_article"
-                android:textColor="@color/assistText"
+                android:textColor="@color/text_4949"
                 android:textSize="16sp"
                 android:visibility="gone"/>
 
@@ -251,7 +251,7 @@
                         android:layout_toLeftOf="@+id/firstImg"
                         android:ellipsize="end"
                         android:maxLines="3"
-                        android:textColor="@color/text"
+                        android:textColor="@color/text_222"
                         android:textSize="16sp"/>
 
                     <TextView
@@ -278,7 +278,7 @@
                         android:layout_toRightOf="@+id/firstOriginal"
                         android:gravity="center"
                         android:text="@string/original"
-                        android:textColor="@color/unluckyText"
+                        android:textColor="@color/text_999"
                         android:textSize="12sp"/>
 
                     <TextView
@@ -290,7 +290,7 @@
                         android:layout_toRightOf="@+id/firstSource"
                         android:gravity="center"
                         android:text="@string/original"
-                        android:textColor="@color/unluckyText"
+                        android:textColor="@color/text_999"
                         android:textSize="12sp"/>
                 </RelativeLayout>
 
@@ -299,7 +299,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@+id/firstContentRL"
-                    android:background="@color/background"/>
+                    android:background="@color/bg_F5F5"/>
 
             </RelativeLayout>
 
@@ -335,7 +335,7 @@
                         android:layout_toLeftOf="@+id/secondImg"
                         android:ellipsize="end"
                         android:maxLines="3"
-                        android:textColor="@color/text"
+                        android:textColor="@color/text_222"
                         android:textSize="16sp"/>
 
                     <TextView
@@ -362,7 +362,7 @@
                         android:layout_toRightOf="@+id/secondOriginal"
                         android:gravity="center"
                         android:text="@string/original"
-                        android:textColor="@color/unluckyText"
+                        android:textColor="@color/text_999"
                         android:textSize="12sp"/>
 
                     <TextView
@@ -374,7 +374,7 @@
                         android:layout_toRightOf="@+id/secondSource"
                         android:gravity="center"
                         android:text="@string/original"
-                        android:textColor="@color/unluckyText"
+                        android:textColor="@color/text_999"
                         android:textSize="12sp"/>
                 </RelativeLayout>
 
@@ -383,7 +383,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@+id/secondContentRL"
-                    android:background="@color/background"/>
+                    android:background="@color/bg_F5F5"/>
 
             </RelativeLayout>
 
@@ -419,7 +419,7 @@
                         android:layout_toLeftOf="@+id/thirdImg"
                         android:ellipsize="end"
                         android:maxLines="3"
-                        android:textColor="@color/text"
+                        android:textColor="@color/text_222"
                         android:textSize="16sp"/>
 
                     <TextView
@@ -446,7 +446,7 @@
                         android:layout_toRightOf="@+id/thirdOriginal"
                         android:gravity="center"
                         android:text="@string/original"
-                        android:textColor="@color/unluckyText"
+                        android:textColor="@color/text_999"
                         android:textSize="12sp"/>
 
                     <TextView
@@ -458,7 +458,7 @@
                         android:layout_toRightOf="@+id/thirdSource"
                         android:gravity="center"
                         android:text="@string/original"
-                        android:textColor="@color/unluckyText"
+                        android:textColor="@color/text_999"
                         android:textSize="12sp"/>
                 </RelativeLayout>
 
@@ -467,7 +467,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@+id/thirdContentRL"
-                    android:background="@color/background"/>
+                    android:background="@color/bg_F5F5"/>
 
             </RelativeLayout>
 
@@ -512,7 +512,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
-            android:background="@color/background"/>
+            android:background="@color/bg_F5F5"/>
 
         <LinearLayout
             android:id="@+id/bottomShareLayout"

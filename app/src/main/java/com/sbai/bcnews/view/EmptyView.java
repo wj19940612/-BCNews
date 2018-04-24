@@ -54,7 +54,7 @@ public class EmptyView extends RelativeLayout {
     private void init() {
         LayoutInflater.from(mContext).inflate(R.layout.view_empty_error, this, true);
         ButterKnife.bind(this);
-        setBackgroundColor(ContextCompat.getColor(mContext, R.color.background));
+        setBackgroundColor(ContextCompat.getColor(mContext, R.color.bg_F5F5));
     }
 
     public void setRefreshButtonClickListener(OnRefreshButtonClickListener onRefreshButtonClickListener) {

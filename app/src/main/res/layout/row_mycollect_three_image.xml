@@ -37,7 +37,7 @@
             android:ellipsize="end"
             android:lineSpacingExtra="3dp"
             android:maxLines="3"
-            android:textColor="@color/text"
+            android:textColor="@color/text_222"
             android:textSize="16sp"
             tools:text="空间大姐夫开大会萨科技当升科技凤凰健康的散户山东矿机防护等级考试"/>
 
@@ -71,7 +71,7 @@
             android:layout_below="@+id/threeImageLayout"
             android:layout_toRightOf="@+id/original"
             android:gravity="center"
-            android:textColor="@color/unluckyText"
+            android:textColor="@color/text_999"
             android:textSize="12sp"
             tools:text="溺水的鱼"/>
     </RelativeLayout>

@@ -584,7 +584,7 @@ public class NewsDetailActivity extends BaseActivity {
         mOtherArticleTip.setVisibility(View.VISIBLE);
         mFirstArticle.setVisibility(View.VISIBLE);
         mFirstTitle.setText(data.get(0).getTitle());
-        mFirstTitle.setTextColor(NewsReadCache.isRead(data.get(0).getId()) ? ContextCompat.getColor(this, R.color.unluckyText) : ContextCompat.getColor(this, R.color.text));
+        mFirstTitle.setTextColor(NewsReadCache.isRead(data.get(0).getId()) ? ContextCompat.getColor(this, R.color.text_999) : ContextCompat.getColor(this, R.color.text_222));
         mFirstOriginal.setVisibility(data.get(0).getOriginal() > 0 ? View.VISIBLE : View.GONE);
         mFirstSource.setText(data.get(0).getSource());
         mFirstSource.setVisibility(TextUtils.isEmpty(data.get(0).getSource()) ? View.GONE : View.VISIBLE);
@@ -611,7 +611,7 @@ public class NewsDetailActivity extends BaseActivity {
         if (data.size() > 1) {
             mSecondArticle.setVisibility(View.VISIBLE);
             mSecondTitle.setText(data.get(1).getTitle());
-            mSecondTitle.setTextColor(NewsReadCache.isRead(data.get(1).getId()) ? ContextCompat.getColor(this, R.color.unluckyText) : ContextCompat.getColor(this, R.color.text));
+            mSecondTitle.setTextColor(NewsReadCache.isRead(data.get(1).getId()) ? ContextCompat.getColor(this, R.color.text_999) : ContextCompat.getColor(this, R.color.text_222));
             mSecondOriginal.setVisibility(data.get(1).getOriginal() > 0 ? View.VISIBLE : View.GONE);
             mSecondSource.setText(data.get(1).getSource());
             mSecondTime.setText(DateUtil.formatNewsStyleTime(data.get(1).getReleaseTime()));
@@ -640,7 +640,7 @@ public class NewsDetailActivity extends BaseActivity {
         if (data.size() > 2) {
             mThirdArticle.setVisibility(View.VISIBLE);
             mThirdTitle.setText(data.get(2).getTitle());
-            mThirdTitle.setTextColor(NewsReadCache.isRead(data.get(2).getId()) ? ContextCompat.getColor(this, R.color.unluckyText) : ContextCompat.getColor(this, R.color.text));
+            mThirdTitle.setTextColor(NewsReadCache.isRead(data.get(2).getId()) ? ContextCompat.getColor(this, R.color.text_999) : ContextCompat.getColor(this, R.color.text_222));
             mThirdOriginal.setVisibility(data.get(2).getOriginal() > 0 ? View.VISIBLE : View.GONE);
             mThirdSource.setText(data.get(2).getSource());
             mThirdTime.setText(DateUtil.formatNewsStyleTime(data.get(2).getReleaseTime()));

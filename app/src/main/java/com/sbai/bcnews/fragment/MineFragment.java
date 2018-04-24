@@ -67,7 +67,13 @@ public class MineFragment extends BaseFragment {
     IconTextRow mFeedBack;
     @BindView(R.id.setting)
     IconTextRow mSetting;
+    @BindView(R.id.message)
+    IconTextRow mMessage;
+    @BindView(R.id.review)
+    IconTextRow mReview;
+
     Unbinder unbinder;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,6 +88,15 @@ public class MineFragment extends BaseFragment {
         super.onResume();
         updateUserLoginStatus();
         refreshUserData();
+        requestNotReadMessageCount();
+        requestWhetherHasNotReedFeedBackMessage();
+        requestWhetherHasAllNotReadMessage();
+    }
+
+    private void requestWhetherHasAllNotReadMessage() {
+        Apic.requestWhetherHasAllNotReadMessage()
+                .tag(TAG)
+                .fire();
     }
 
     @Override
@@ -89,6 +104,8 @@ public class MineFragment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             refreshUserData();
+            requestNotReadMessageCount();
+            requestWhetherHasNotReedFeedBackMessage();
         }
     }
 
@@ -107,6 +124,40 @@ public class MineFragment extends BaseFragment {
                 .fire();
     }
 
+    private void requestNotReadMessageCount() {
+        if (LocalUser.getUser().isLogin())
+            Apic.requestNotReadMessageCount()
+                    .tag(TAG)
+                    .callback(new Callback2D<Resp<Integer>, Integer>() {
+                        @Override
+                        protected void onRespSuccessData(Integer data) {
+                            updateNotReadMessage(data);
+                        }
+                    })
+                    .fire();
+    }
+
+    private void requestWhetherHasNotReedFeedBackMessage() {
+        Apic.requestWhetherHasNotReedFeedBackMessage()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<Integer>, Integer>() {
+                    @Override
+                    protected void onRespSuccessData(Integer data) {
+                        updateNotReadFeedBackMessage(data);
+                    }
+                })
+                .fire();
+    }
+
+    private void updateNotReadFeedBackMessage(int data) {
+        if (data == 0) {
+            mFeedBack.setSubTextVisible(View.GONE);
+        } else {
+            mFeedBack.setSubTextVisible(View.VISIBLE);
+        }
+    }
+
+
     private void updateUserLoginStatus() {
         updateUserHeadPortrait();
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
@@ -114,6 +165,8 @@ public class MineFragment extends BaseFragment {
             mUserName.setText(userInfo.getUserName());
             updateUserCollectNumber(userInfo.getCollectCount());
             updateUserReadHistory(userInfo.getReadCount());
+            // TODO: 2018/4/23 未读消息
+            updateNotReadMessage(20);
         } else {
             mUserName.setText(R.string.click_login);
             updateUserCollectNumber(0);
@@ -123,6 +176,16 @@ public class MineFragment extends BaseFragment {
                 readHistorySize = data.size();
             }
             updateUserReadHistory(readHistorySize);
+            updateNotReadMessage(0);
+        }
+    }
+
+    private void updateNotReadMessage(int count) {
+        mMessage.setSubText(String.valueOf(count));
+        if (count == 0) {
+            mMessage.setSubTextVisible(View.VISIBLE);
+        } else {
+            mMessage.setSubTextVisible(View.GONE);
         }
     }
 
@@ -161,7 +224,8 @@ public class MineFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.headPortrait, R.id.userName, R.id.collect, R.id.history, R.id.contribute, R.id.feedBack, R.id.setting})
+    @OnClick({R.id.headPortrait, R.id.userName, R.id.collect, R.id.history,
+            R.id.contribute, R.id.feedBack, R.id.setting, R.id.message, R.id.review})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.headPortrait:
@@ -196,6 +260,10 @@ public class MineFragment extends BaseFragment {
                 umengEventCount(UmengCountEventId.MINE_SETTING);
                 Launcher.with(getActivity(), SettingActivity.class).execute();
                 break;
+            case R.id.message:
+                break;
+            case R.id.review:
+                break;
         }
     }
 
@@ -225,8 +293,9 @@ public class MineFragment extends BaseFragment {
     }
 
     private void copyWeChatAccount(String data) {
-        ClipboardManager clipboardManager = (android.content.ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText(null, data);
         clipboardManager.setPrimaryClip(clipData);
     }
+
 }

@@ -181,6 +181,9 @@
     <string name="history">历史</string>
     <string name="please_add_us_wechat_account">请添加我们的微信号%1$s\n我们坐下来慢慢详谈</string>
     <string name="copy_us_wechat_account">复制微信号</string>
+    <string name="message">消息</string>
+    <string name="review">评论</string>
+
 
     <string name="receive_new_notification">接收新消息通知</string>
     <string name="personal_data">个人资料</string>
@@ -220,4 +223,10 @@
     <string name="input_text_is_more_rich">简介太丰富了</string>
     <string name="use_wechat_portrait_and_name">是否使用微信的头像和昵称？</string>
     <string name="this_account_forbid_login">该账号被禁止登录</string>
+
+    
+    <string name="all_read">全部已读</string>
+    <string name="not_data">暂无数据</string>
+
+    
 </resources>

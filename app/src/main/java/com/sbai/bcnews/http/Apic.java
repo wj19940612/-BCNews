@@ -18,6 +18,52 @@ public class Apic {
     public static final int DEFAULT_PAGE_SIZE = 20;
 
 
+    /**
+     * /api/news-msg/msg/history
+     * GET
+     * <p>用户--消息列表--薛松</p>
+     *
+     * @param startTime
+     * @return
+     */
+    public static Api requestMessage(Long startTime) {
+        return Api.get("/api/news-msg/msg/history",
+                new ReqParams()
+                        .put("size", DEFAULT_PAGE_SIZE)
+                        .put("createTime", startTime));
+    }
+
+    /**
+     * HTTP
+     * /api/news-msg/msg/count
+     * GET
+     * 用户--未读消息数量--薛松
+     *
+     * @return
+     */
+    public static Api requestNotReadMessageCount() {
+        return Api.get("/api/news-msg/msg/count");
+    }
+
+    /**
+     * /news-user/feedback/new
+     * GET
+     * 用户--是否有新的反馈回复--薛松
+     */
+    public static Api requestWhetherHasNotReedFeedBackMessage() {
+        return Api.get("/news-user/feedback/new");
+    }
+
+    /**
+     * /api/news-msg/msg/new
+     * GET
+     * 用户--是否有新的消息(包括新的反馈)--薛松
+     */
+    public static Api requestWhetherHasAllNotReadMessage() {
+        return Api.get("/api/news-msg/msg/new");
+    }
+
+
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
 

@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/share"
         android:layout_below="@+id/titleBar"
-        android:background="@color/background"
+        android:background="@color/bg_F5F5"
         android:paddingLeft="13dp"
         android:paddingRight="13dp"
         android:paddingTop="13dp"
@@ -73,7 +73,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:textColor="@color/luckyText"
+                        android:textColor="@color/text_666"
                         android:textSize="17sp"
                         tools:text="BTC/USDT"/>
 
@@ -82,7 +82,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:textColor="@color/luckyText"
+                        android:textColor="@color/text_666"
                         android:textSize="12sp"
                         tools:text="gate.io"/>
                 </LinearLayout>
@@ -99,7 +99,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="20dp"
-                android:background="@color/background"/>
+                android:background="@color/bg_F5F5"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -148,7 +148,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_above="@+id/share"
-        android:background="@color/background"/>
+        android:background="@color/bg_F5F5"/>
 
     <LinearLayout
         android:id="@+id/share"

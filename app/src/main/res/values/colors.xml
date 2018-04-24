@@ -11,11 +11,11 @@
     <color name="textAssistPrimary">#476E92</color>
     <color name="disable">#83868A</color>
 
-    <color name="unluckyText">#999</color>
-    <color name="luckyText">#666</color>
-    <color name="text">#222</color>
-    <color name="assistText">#494949</color>
-    <color name="background">#F5F5F5</color>
+    <color name="text_999">#999</color>
+    <color name="text_666">#666</color>
+    <color name="text_222">#222</color>
+    <color name="text_4949">#494949</color>
+    <color name="bg_F5F5">#F5F5F5</color>
     <color name="split">#ddd</color>
 
     <color name="white">#FFF</color>

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/bg_F5F5"
     tools:context="com.sbai.bcnews.activity.mine.SettingActivity">
 
     <com.sbai.bcnews.view.TitleBar
@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/receive_new_notification"
-            android:textColor="@color/text"
+            android:textColor="@color/text_222"
             android:textSize="15sp"/>
 
         <ImageView
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/receiveNotification"
         app:rightIcon="@drawable/ic_common_right_arrow"
         app:rowText="@string/personal_data"
-        app:splitLineColor="@color/background"/>
+        app:splitLineColor="@color/bg_F5F5"/>
 
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/accountManager"
@@ -66,7 +66,7 @@
         app:layout_constraintTop_toBottomOf="@+id/personalData"
         app:rightIcon="@drawable/ic_common_right_arrow"
         app:rowText="@string/account_manager"
-        app:splitLineColor="@color/background"/>
+        app:splitLineColor="@color/bg_F5F5"/>
 
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/aboutBcnews"
@@ -87,7 +87,7 @@
         android:background="@drawable/bg_white"
         android:gravity="center"
         android:text="@string/logout"
-        android:textColor="@color/text"
+        android:textColor="@color/text_222"
         android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@+id/aboutBcnews"/>
 </android.support.constraint.ConstraintLayout>

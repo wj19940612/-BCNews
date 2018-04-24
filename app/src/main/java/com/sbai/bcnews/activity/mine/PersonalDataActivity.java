@@ -217,14 +217,14 @@ public class PersonalDataActivity extends BaseActivity {
 
     private void showTimeSelectWheel() {
         mBirthdayDatePicker = new DatePicker(getActivity(), DateTimePicker.YEAR_MONTH_DAY);
-        mBirthdayDatePicker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.assistText));
+        mBirthdayDatePicker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.text_4949));
         mBirthdayDatePicker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.textColorPrimary));
         mBirthdayDatePicker.setAnimationStyle(R.style.BottomDialogAnimation);
         mBirthdayDatePicker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
         mBirthdayDatePicker.setRangeStart(Calendar.getInstance().get(Calendar.YEAR) - 100, 1, 1);
         mBirthdayDatePicker.setRangeEnd(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH) + 1, Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        mBirthdayDatePicker.setTextColor(ContextCompat.getColor(getActivity(), R.color.text),
-                ContextCompat.getColor(getActivity(), R.color.unluckyText));
+        mBirthdayDatePicker.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_222),
+                ContextCompat.getColor(getActivity(), R.color.text_999));
 
         if (mUserInfo != null) {
             String birthday = mUserInfo.getBirthday();
@@ -256,7 +256,7 @@ public class PersonalDataActivity extends BaseActivity {
 
     private void showSexWheel() {
         mSexPicker = new OptionPicker(this, new String[]{SEX_BOY, SEX_GIRL,});
-        mSexPicker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.assistText));
+        mSexPicker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.text_4949));
         mSexPicker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.textColorPrimary));
         mSexPicker.setAnimationStyle(R.style.BottomDialogAnimation);
         mSexPicker.setOffset(1);
@@ -346,15 +346,15 @@ public class PersonalDataActivity extends BaseActivity {
                 } else {
                     picker.setColumnWeight(2 / 8.0, 3 / 8.0, 3 / 8.0);//省级、地级和县级的比例为2:3:3
                 }
-                picker.setCancelTextColor(ContextCompat.getColor(mActivity, R.color.unluckyText));
+                picker.setCancelTextColor(ContextCompat.getColor(mActivity, R.color.text_999));
                 picker.setSubmitTextColor(ContextCompat.getColor(mActivity, R.color.textColorPrimary));
-                picker.setTopBackgroundColor(ContextCompat.getColor(mActivity, R.color.background));
-                picker.setPressedTextColor(ContextCompat.getColor(mActivity, R.color.unluckyText));
+                picker.setTopBackgroundColor(ContextCompat.getColor(mActivity, R.color.bg_F5F5));
+                picker.setPressedTextColor(ContextCompat.getColor(mActivity, R.color.text_999));
                 picker.setAnimationStyle(R.style.BottomDialogAnimation);
                 picker.setSelectedItem(mSelectedProvince, mSelectedCity, mSelectedCounty);
-                picker.setTextColor(ContextCompat.getColor(mActivity, R.color.text), ContextCompat.getColor(mActivity, R.color.unluckyText));
+                picker.setTextColor(ContextCompat.getColor(mActivity, R.color.text_222), ContextCompat.getColor(mActivity, R.color.text_999));
                 WheelView.LineConfig lineConfig = new WheelView.LineConfig(0);//使用最长的分割线
-                lineConfig.setColor(ContextCompat.getColor(mActivity, R.color.background));
+                lineConfig.setColor(ContextCompat.getColor(mActivity, R.color.bg_F5F5));
                 picker.setLineConfig(lineConfig);
                 picker.setOnAddressPickListener(new AddressPicker.OnAddressPickListener() {
                     @Override

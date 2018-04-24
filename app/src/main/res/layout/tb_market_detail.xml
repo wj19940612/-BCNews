@@ -23,7 +23,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/currencyPair"
-        android:textColor="@color/luckyText"
+        android:textColor="@color/text_666"
         android:textSize="12sp"
         tools:text="gate.io"/>
 </RelativeLayout>

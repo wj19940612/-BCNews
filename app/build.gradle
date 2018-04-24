@@ -92,7 +92,7 @@ android {
         baidu {}
         others {}
         fenx {}
-        weixin{}
+        weixin {}
     }
 
     android.applicationVariants.all { variant ->

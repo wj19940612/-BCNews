@@ -47,7 +47,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/check_new_version"
-                        android:textColor="@color/text"
+                        android:textColor="@color/text_222"
                         android:textSize="17sp"/>
 
                     <TextView
@@ -78,7 +78,7 @@
                     android:layout_gravity="center_horizontal"
                     android:lineSpacingExtra="5dp"
                     android:padding="30dp"
-                    android:textColor="@color/luckyText"
+                    android:textColor="@color/text_666"
                     android:textSize="14sp"/>
             </ScrollView>
 

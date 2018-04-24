@@ -29,6 +29,8 @@ public class BottomTabs extends LinearLayout {
 
     private OnTabClickListener mOnTabClickListener;
 
+    private int mHasReadPointTabPosition;
+
 
     public interface OnTabClickListener {
         void onTabClick(int position);
@@ -51,6 +53,7 @@ public class BottomTabs extends LinearLayout {
         mPaddingTop = typedArray.getDimensionPixelOffset(R.styleable.BottomTabs_drawablePadding, 10);
         mPaddingBottom = typedArray.getDimensionPixelOffset(R.styleable.BottomTabs_drawablePadding, 6);
         mTexts = typedArray.getTextArray(R.styleable.BottomTabs_textArray);
+        mHasReadPointTabPosition = typedArray.getInt(R.styleable.BottomTabs_hasReadPointPosition, -1);
 
         if (isInEditMode()) {
             mIcons = new int[]{R.drawable.tab_news, R.drawable.tab_flash_news, R.drawable.tab_market};
@@ -79,7 +82,11 @@ public class BottomTabs extends LinearLayout {
         for (int i = 0; i < mLength; i++) {
             LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             params.weight = 1;
-            addView(createTab(i), params);
+            if (i == mHasReadPointTabPosition) {
+                addView(createPointTab(i), params);
+            } else {
+                addView(createTab(i), params);
+            }
         }
         selectTab(0);
     }
@@ -106,9 +113,13 @@ public class BottomTabs extends LinearLayout {
         return text;
     }
 
-    public void setPointNum(int index, int num) {
-        BadgeTextView tabTextView = (BadgeTextView) getChildAt(index);
-        tabTextView.setNum(num);
+    public void setRedPointVisable(int pointVisibility) {
+        if (mHasReadPointTabPosition != -1) {
+            if (mHasReadPointTabPosition < getChildCount()) {
+                RedPointTipTextView redPointTipTextView = (RedPointTipTextView) getChildAt(mHasReadPointTabPosition);
+                redPointTipTextView.setRedPointVisibility(pointVisibility);
+            }
+        }
     }
 
     public void setTabVisibility(int index, int visible) {
@@ -117,7 +128,7 @@ public class BottomTabs extends LinearLayout {
     }
 
     private View createPointTab(int i) {
-        BadgeTextView text = new BadgeTextView(getContext());
+        RedPointTipTextView text = new RedPointTipTextView(getContext());
         text.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         text.setTextColor(mTextColor != null ? mTextColor : ColorStateList.valueOf(0));
         text.setText(mTexts[i]);

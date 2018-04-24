@@ -9,7 +9,7 @@
     <item android:state_enabled="false">
         <shape android:shape="rectangle">
             <corners android:radius="100dp"/>
-            <solid android:color="@color/unluckyText"/>
+            <solid android:color="@color/text_999"/>
         </shape>
     </item>
 </selector>

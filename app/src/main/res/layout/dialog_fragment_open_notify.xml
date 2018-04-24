@@ -42,7 +42,7 @@
                 android:minHeight="36dp"
                 android:minWidth="112dp"
                 android:text="@string/have_good_article_how_to_tell_you"
-                android:textColor="@color/luckyText"
+                android:textColor="@color/text_666"
                 android:textSize="16sp"/>
 
             <TextView
