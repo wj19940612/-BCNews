@@ -185,6 +185,8 @@
 
         <activity android:name=".activity.mine.MessageActivity">
         </activity>
+        <activity android:name=".activity.mine.NotificationManageActivity">
+        </activity>
     </application>
 
 </manifest>

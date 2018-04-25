@@ -15,9 +15,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.FeedbackActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
+import com.sbai.bcnews.activity.mine.MessageActivity;
 import com.sbai.bcnews.activity.mine.MyCollectActivity;
 import com.sbai.bcnews.activity.mine.PersonalDataActivity;
 import com.sbai.bcnews.activity.mine.ReadHistoryActivity;
@@ -73,6 +75,8 @@ public class MineFragment extends BaseFragment {
     IconTextRow mReview;
 
     Unbinder unbinder;
+
+    private int mNotReadMessageCount;
 
 
     @Override
@@ -165,8 +169,6 @@ public class MineFragment extends BaseFragment {
             mUserName.setText(userInfo.getUserName());
             updateUserCollectNumber(userInfo.getCollectCount());
             updateUserReadHistory(userInfo.getReadCount());
-            // TODO: 2018/4/23 未读消息
-            updateNotReadMessage(20);
         } else {
             mUserName.setText(R.string.click_login);
             updateUserCollectNumber(0);
@@ -182,6 +184,7 @@ public class MineFragment extends BaseFragment {
 
     private void updateNotReadMessage(int count) {
         mMessage.setSubText(String.valueOf(count));
+        mNotReadMessageCount = count;
         if (count == 0) {
             mMessage.setSubTextVisible(View.VISIBLE);
         } else {
@@ -261,6 +264,7 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), SettingActivity.class).execute();
                 break;
             case R.id.message:
+                Launcher.with(getActivity(), MessageActivity.class).putExtra(ExtraKeys.DATA, mNotReadMessageCount).execute();
                 break;
             case R.id.review:
                 break;

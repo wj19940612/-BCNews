@@ -3,6 +3,8 @@ package com.sbai.bcnews.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.sbai.bcnews.model.system.NotificationStatus;
+
 /**
  * 登录后的用户信息数据
  */
@@ -15,6 +17,7 @@ public class UserInfo implements Parcelable {
 
     public static final int USER_SEX_GIRL = 1;
     public static final int USER_SEX_BOY = 2;
+
 
     /**
      * createTime : 1518141650000
@@ -75,7 +78,34 @@ public class UserInfo implements Parcelable {
     private String wxName;
     private int isModifyPortrait;
 
+    private int discuss;  //是否推送回复
+    private int praise;   //点赞是否推送
+
     public UserInfo() {
+    }
+
+    public boolean isReceiveCommentOnReplyNotification() {
+        return getDiscuss() == NotificationStatus.USER_RECEIVE_COMMENT_ON_REPLY_NOTIFICATION;
+    }
+
+    public boolean isReceivePraiseNotification() {
+        return getPraise() == NotificationStatus.USER_RECEIVE_PRAISE_NOTIFICATION;
+    }
+
+    public int getDiscuss() {
+        return discuss;
+    }
+
+    public void setDiscuss(int discuss) {
+        this.discuss = discuss;
+    }
+
+    public int getPraise() {
+        return praise;
+    }
+
+    public void setPraise(int praise) {
+        this.praise = praise;
     }
 
     public String getWxOpenId() {

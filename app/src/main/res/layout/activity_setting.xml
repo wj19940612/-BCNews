@@ -19,7 +19,7 @@
         app:titleText="@string/setting"/>
 
     <LinearLayout
-        android:id="@+id/receiveNotification"
+        android:id="@+id/nightOrLightModeLL"
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_height"
         android:layout_marginTop="12dp"
@@ -34,27 +34,28 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="@string/receive_new_notification"
+            android:text="@string/night_mode"
             android:textColor="@color/text_222"
             android:textSize="15sp"/>
 
         <ImageView
-            android:id="@+id/notificationSwitch"
+            android:id="@+id/nightOrLightModeSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/btn_switch"/>
     </LinearLayout>
 
+
     <com.sbai.bcnews.view.IconTextRow
-        android:id="@+id/personalData"
+        android:id="@+id/notificationManage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_white"
         app:hasBottomSplitLine="true"
-        app:layout_constraintTop_toBottomOf="@+id/receiveNotification"
+        app:layout_constraintTop_toBottomOf="@+id/nightOrLightModeLL"
         app:rightIcon="@drawable/ic_common_right_arrow"
-        app:rowText="@string/personal_data"
+        app:rowText="@string/notificationManage"
         app:splitLineColor="@color/bg_F5F5"/>
 
     <com.sbai.bcnews.view.IconTextRow
@@ -63,7 +64,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_white"
         app:hasBottomSplitLine="true"
-        app:layout_constraintTop_toBottomOf="@+id/personalData"
+        app:layout_constraintTop_toBottomOf="@+id/notificationManage"
         app:rightIcon="@drawable/ic_common_right_arrow"
         app:rowText="@string/account_manager"
         app:splitLineColor="@color/bg_F5F5"/>
@@ -74,9 +75,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_white"
+        app:hasBottomSplitLine="true"
         app:layout_constraintTop_toBottomOf="@+id/accountManager"
         app:rightIcon="@drawable/ic_common_right_arrow"
-        app:rowText="@string/about_bcnews"/>
+        app:rowText="@string/about_bcnews"
+        app:splitLineColor="@color/bg_F5F5"/>
+
+    <com.sbai.bcnews.view.IconTextRow
+        android:id="@+id/recommendToFriend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white"
+        app:hasBottomSplitLine="true"
+        app:layout_constraintTop_toBottomOf="@+id/aboutBcnews"
+        app:rightIcon="@drawable/ic_common_right_arrow"
+        app:rowText="@string/recommend_to_friend"
+        app:splitLineColor="@color/bg_F5F5"/>
 
 
     <TextView
@@ -89,5 +103,5 @@
         android:text="@string/logout"
         android:textColor="@color/text_222"
         android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@+id/aboutBcnews"/>
+        app:layout_constraintTop_toBottomOf="@+id/recommendToFriend"/>
 </android.support.constraint.ConstraintLayout>

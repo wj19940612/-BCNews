@@ -63,6 +63,41 @@ public class Apic {
         return Api.get("/api/news-msg/msg/new");
     }
 
+    /**
+     * /api/news-user/user/use/push
+     * POST
+     * 推送设置----齐慕伟
+     *
+     * @param notificationType
+     * @param status
+     * @return
+     */
+    public static Api switchNotificationStatus(int notificationType, int status) {
+        return Api.post("/api/news-user/user/use/push", new ReqParams().put("type", notificationType).put("status", status));
+    }
+
+    /**
+     * /api/news-msg/msg/read/all
+     * POST
+     * 用户--全部阅读--薛松
+     *
+     * @return
+     */
+    public static Api postAllMessageRead() {
+        return Api.post("/api/news-msg/msg/read/all");
+    }
+
+    /**
+     * /api/news-msg/msg/read
+     * POST
+     * 用户--阅读消息(读一条)--薛松
+     *
+     * @param id
+     */
+    public static Api readMessage(String id) {
+        return Api.post("/api/news-msg/msg/read", new ReqParams().put("msgId", id));
+    }
+
 
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";

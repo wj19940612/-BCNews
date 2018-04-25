@@ -36,4 +36,6 @@ public interface ExtraKeys {
     String PAGE_INDEX = "page_index";
     String We_CHAT = "we_chat";
     String WE_CHAT_OPENID = "we_chat_open_id";
+
+    String DATA = "data";
 }

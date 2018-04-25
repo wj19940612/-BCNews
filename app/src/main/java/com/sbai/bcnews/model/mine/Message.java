@@ -11,6 +11,8 @@ import com.sbai.bcnews.model.MessageStatus;
  */
 public class Message implements MessageStatus {
 
+    public static final int MESSAGE_IS_READ = 1;
+
     /**
      * createTime : 1521098828000
      * dataId : 234
@@ -27,15 +29,15 @@ public class Message implements MessageStatus {
      */
 
     private long createTime;
-    private int dataId;
-    private String id;
+    private int dataId;      //对象的id:暂时为评论的id
+    private String id;       //该消息的id(阅读的时候使用)
     private String msg;
     private int sourceUserId;
-    private String sourceUserName;
-    private String sourceUserPortrait;
-    private int status;
+    private String sourceUserName;  //给你点赞或者评论的那个人的名字
+    private String sourceUserPortrait; //给你点赞或者评论的那个人的头像
+    private int status;     //状态：0未读,1已读
     private String title;
-    private int type;
+    private int type;       //类型：0 系统 1 评论 2 评论的回复 3 反馈回复 4 评论点赞 5 回复点赞 6 回复的回复
     private long updateTime;
     private int userId;
 

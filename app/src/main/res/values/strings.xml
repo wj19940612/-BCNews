@@ -224,9 +224,16 @@
     <string name="use_wechat_portrait_and_name">是否使用微信的头像和昵称？</string>
     <string name="this_account_forbid_login">该账号被禁止登录</string>
 
-    
+
     <string name="all_read">全部已读</string>
     <string name="not_data">暂无数据</string>
+    <string name="not_message">暂无消息</string>
 
-    
+
+    <string name="night_mode">夜间模式</string>
+    <string name="notificationManage">推送管理</string>
+    <string name="recommend_to_friend">推荐给朋友</string>
+    <string name="comment_on_reply">评论有回复</string>
+    <string name="praise">赞</string>
+
 </resources>
