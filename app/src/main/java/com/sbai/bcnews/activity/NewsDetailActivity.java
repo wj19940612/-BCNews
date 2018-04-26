@@ -45,6 +45,7 @@ import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.NewsScrollView;
+import com.sbai.bcnews.view.NewsShareDialog;
 import com.sbai.bcnews.view.ShareDialog;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
@@ -221,6 +222,14 @@ public class NewsDetailActivity extends BaseActivity {
             @Override
             public void onRefreshClick() {
                 requestDetailData();
+            }
+        });
+
+        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NewsShareDialog.with(getActivity())
+                        .show();
             }
         });
     }

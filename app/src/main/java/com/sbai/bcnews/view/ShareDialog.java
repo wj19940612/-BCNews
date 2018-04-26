@@ -2,6 +2,7 @@ package com.sbai.bcnews.view;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.support.annotation.LayoutRes;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,9 +46,9 @@ public class ShareDialog {
         QQ
     }
 
-    private Activity mActivity;
-    private SmartDialog mSmartDialog;
-    private View mView;
+    protected Activity mActivity;
+    protected SmartDialog mSmartDialog;
+    protected View mView;
 
     private CharSequence mTitle;
     private String mShareTitle;
@@ -65,6 +66,7 @@ public class ShareDialog {
 
         @Override
         public void onClick(View v) {
+
             switch (v.getId()) {
                 case R.id.weChatFriend:
                     if (UMShareAPI.get(mActivity).isInstall(mActivity, SHARE_MEDIA.WEIXIN)) {
@@ -248,16 +250,20 @@ public class ShareDialog {
     };
 
     public static ShareDialog with(Activity activity) {
+        return with(activity, R.layout.dialog_share);
+    }
+
+    public static ShareDialog with(Activity activity, @LayoutRes int resource) {
         ShareDialog shareDialog = new ShareDialog();
         shareDialog.mActivity = activity;
         shareDialog.mSmartDialog = SmartDialog.single(activity);
-        shareDialog.mView = LayoutInflater.from(activity).inflate(R.layout.dialog_share, null);
+        shareDialog.mView = LayoutInflater.from(activity).inflate(resource, null);
         shareDialog.mSmartDialog.setCustomView(shareDialog.mView);
         shareDialog.init();
         return shareDialog;
     }
 
-    private void init() {
+    protected void init() {
         mView.findViewById(R.id.weChatFriend).setOnClickListener(new ShareButtonClickListener());
         mView.findViewById(R.id.weChatFriendCircle).setOnClickListener(new ShareButtonClickListener());
         mView.findViewById(R.id.qq).setOnClickListener(new ShareButtonClickListener());

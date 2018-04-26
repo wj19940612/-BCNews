@@ -94,7 +94,7 @@ public class MarketFragment extends BaseFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return MarketListFragment.newInstance(mContext.getString(R.string.gate_io));
+                    return MarketListFragment.newInstance(mContext.getString(R.string.gate));
                 case 1:
                     return MarketListFragment.newInstance(mContext.getString(R.string.huo_bi));
                 case 2:
@@ -113,7 +113,7 @@ public class MarketFragment extends BaseFragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return mContext.getString(R.string.gate_io);
+                    return mContext.getString(R.string.gate);
                 case 1:
                     return mContext.getString(R.string.huo_bi);
                 case 2:

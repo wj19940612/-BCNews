@@ -18,9 +18,11 @@
         android:maxLines="1"
         app:titleLeftMargin="50dp"
         app:titleRightMargin="50dp"
+        app:rightVisible="true"
+        app:rightTextRightImage="@drawable/ic_more_three_point"
         app:titleText="@string/news_detail"
         app:titleTextColor="@color/text_222"
-        app:titleTextSize="14sp"/>
+        app:titleTextSize="17sp"/>
 
     <View
         android:id="@+id/titleBarLine"

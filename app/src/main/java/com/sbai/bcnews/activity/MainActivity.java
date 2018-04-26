@@ -190,7 +190,6 @@ public class MainActivity extends BaseActivity {
     private static class MainFragmentsAdapter extends FragmentPagerAdapter {
 
         FragmentManager mFragmentManager;
-        private boolean mShowMarketPage;
 
         public MainFragmentsAdapter(FragmentManager fm) {
             super(fm);
