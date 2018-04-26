@@ -28,6 +28,7 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.OpenNotifyDialogFragment;
+import com.sbai.bcnews.fragment.dialog.WhistleBlowingDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
@@ -72,7 +73,7 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_NORMAL;
  * Created by Administrator on 2018\1\25 0025.
  */
 
-public class NewsDetailActivity extends BaseActivity {
+public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDialogFragment.OnWhistleBlowingReasonListener {
 
     public static final int REQUEST_CODE_LOGIN = 12;
     public static final int REQ_CODE_CANCEL_COLLECT = 2265;
@@ -229,6 +230,12 @@ public class NewsDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 NewsShareDialog.with(getActivity())
+                        .setWhistleBlowingClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new WhistleBlowingDialogFragment().show(getSupportFragmentManager());
+                            }
+                        })
                         .show();
             }
         });
@@ -786,6 +793,11 @@ public class NewsDetailActivity extends BaseActivity {
             mNewsDetail.setReadTime(System.currentTimeMillis());
             new CacheThread(mNewsDetail).start();
         }
+    }
+
+    @Override
+    public void onChooseReason(int position, String content) {
+        ToastUtil.show("" + content);
     }
 
     static class CacheThread extends Thread {

@@ -249,4 +249,16 @@
     <string name="copy_link">复制链接</string>
     <string name="whistle_blowing">举报</string>
 
+
+    <string name="please_choose_whistle_blowing">请选择举报理由</string>
+    <string-array name="whistle_blowing_content">
+        <item>广告</item>
+        <item>色情低俗</item>
+        <item>反动</item>
+        <item>谣言</item>
+        <item>欺诈或恶意营销</item>
+        <item>谩骂</item>
+        <item>请选择举报理由</item>
+    </string-array>
+
 </resources>

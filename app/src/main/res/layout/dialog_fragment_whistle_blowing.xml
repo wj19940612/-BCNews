@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_F5F5"
+    android:id="@+id/rootView"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:minHeight="24dp"
+        android:text="@string/please_choose_whistle_blowing"
+        android:textColor="@color/text_999"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/first"
+        style="@style/whistleBlowingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="少时诵诗书所"/>
+
+    <TextView
+        android:id="@+id/second"
+        style="@style/whistleBlowingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="少时诵诗书所"/>
+
+    <TextView
+        android:id="@+id/third"
+        style="@style/whistleBlowingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="少时诵诗书所"/>
+
+    <TextView
+        android:id="@+id/forth"
+        style="@style/whistleBlowingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="少时诵诗书所"/>
+
+    <TextView
+        android:id="@+id/fifth"
+        style="@style/whistleBlowingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="少时诵诗书所"/>
+
+    <TextView
+        android:id="@+id/sixth"
+        style="@style/whistleBlowingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="少时诵诗书所"/>
+
+    <TextView
+        android:id="@+id/cancel"
+        style="@style/whistleBlowingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_222"
+        android:text="@string/cancel"/>
+
+</LinearLayout>

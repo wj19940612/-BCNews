@@ -33,7 +33,8 @@ import com.umeng.socialize.media.UMWeb;
  * }
  * }).show();
  */
-public class ShareDialog {
+public  class ShareDialog {
+
 
     public interface OnShareDialogCallback {
         void onSharePlatformClick(SHARE_PLATFORM platform);
@@ -330,6 +331,7 @@ public class ShareDialog {
         mShareThumbUrl = shareThumbUrl;
         return this;
     }
+
 
     public void show() {
         if (!mHasWeiBo) {
