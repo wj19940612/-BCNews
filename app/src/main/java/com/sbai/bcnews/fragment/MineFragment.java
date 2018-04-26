@@ -23,6 +23,7 @@ import com.sbai.bcnews.activity.mine.MessageActivity;
 import com.sbai.bcnews.activity.mine.MyCollectActivity;
 import com.sbai.bcnews.activity.mine.PersonalDataActivity;
 import com.sbai.bcnews.activity.mine.ReadHistoryActivity;
+import com.sbai.bcnews.activity.mine.ReviewActivity;
 import com.sbai.bcnews.activity.mine.SettingActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
@@ -267,6 +268,7 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), MessageActivity.class).putExtra(ExtraKeys.DATA, mNotReadMessageCount).execute();
                 break;
             case R.id.review:
+                Launcher.with(getActivity(), ReviewActivity.class).execute();
                 break;
         }
     }

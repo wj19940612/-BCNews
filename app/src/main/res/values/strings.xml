@@ -236,4 +236,14 @@
     <string name="comment_on_reply">评论有回复</string>
     <string name="praise">赞</string>
 
+    <string name="reply_mine">回复我的</string>
+    <string name="mine_review">我评论的</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="gate.io">gate.io</string>
+    <string name="huo_bi">火币</string>
+    <string name="bi_an">币安</string>
+
 </resources>

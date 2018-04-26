@@ -187,6 +187,8 @@
         </activity>
         <activity android:name=".activity.mine.NotificationManageActivity">
         </activity>
+        <activity android:name=".activity.mine.ReviewActivity">
+        </activity>
     </application>
 
 </manifest>
