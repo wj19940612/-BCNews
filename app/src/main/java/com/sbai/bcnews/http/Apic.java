@@ -98,6 +98,18 @@ public class Apic {
         return Api.post("/api/news-msg/msg/read", new ReqParams().put("msgId", id));
     }
 
+    /**
+     * /api/news-info/discuss/opinion/{id}
+     * GET
+     * 各方观点----齐慕伟
+     *
+     * @param id
+     * @return
+     */
+    public static Api requestNewsViewpoint(String id) {
+        return Api.get("/api/news-info/discuss/opinion/{id}", new ReqParams().put("id", id));
+    }
+
 
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";

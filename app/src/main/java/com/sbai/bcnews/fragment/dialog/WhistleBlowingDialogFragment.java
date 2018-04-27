@@ -27,6 +27,18 @@ import butterknife.Unbinder;
  */
 public class WhistleBlowingDialogFragment extends BottomDialogFragment implements View.OnClickListener {
 
+    @BindView(R.id.first)
+    TextView mFirst;
+    @BindView(R.id.seventh)
+    TextView mSeventh;
+    @BindView(R.id.eighth)
+    TextView mEighth;
+    @BindView(R.id.ninth)
+    TextView mNinth;
+    @BindView(R.id.tenth)
+    TextView mTenth;
+
+
     public interface OnWhistleBlowingReasonListener {
         void onChooseReason(int position, String content);
     }
@@ -93,7 +105,8 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment implement
 
     }
 
-    @OnClick({R.id.first, R.id.second, R.id.third, R.id.forth, R.id.fifth, R.id.sixth, R.id.cancel})
+    @OnClick({R.id.first, R.id.second, R.id.third, R.id.forth, R.id.fifth, R.id.sixth, R.id.cancel,
+            R.id.seventh, R.id.eighth, R.id.ninth, R.id.tenth})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.first:
@@ -124,6 +137,26 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment implement
             case R.id.sixth:
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(5, mStringArray[5]);
+                }
+                break;
+            case R.id.seventh:
+                if (mOnWhistleBlowingReasonListener != null) {
+                    mOnWhistleBlowingReasonListener.onChooseReason(6, mStringArray[6]);
+                }
+                break;
+            case R.id.eighth:
+                if (mOnWhistleBlowingReasonListener != null) {
+                    mOnWhistleBlowingReasonListener.onChooseReason(7, mStringArray[7]);
+                }
+                break;
+            case R.id.ninth:
+                if (mOnWhistleBlowingReasonListener != null) {
+                    mOnWhistleBlowingReasonListener.onChooseReason(8, mStringArray[8]);
+                }
+                break;
+            case R.id.tenth:
+                if (mOnWhistleBlowingReasonListener != null) {
+                    mOnWhistleBlowingReasonListener.onChooseReason(9, mStringArray[9]);
                 }
                 break;
             case R.id.cancel:

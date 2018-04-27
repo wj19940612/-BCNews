@@ -8,7 +8,7 @@
     <color name="textColorPrimary">#FFB405</color>
     <color name="textColorPrimaryBg">#FFF9E4</color>
     <color name="assistPrimary">#6684A0</color>
-    <color name="textAssistPrimary">#476E92</color>
+    <color name="text_476E92">#476E92</color>
     <color name="disable">#83868A</color>
 
     <color name="text_999">#999</color>
@@ -18,6 +18,7 @@
     <color name="bg_F5F5">#F5F5F5</color>
     <color name="split">#ddd</color>
     <color name="text_8F8E">#8F8E94</color>
+    <color name="text_10">#101010</color>
 
     <color name="white">#FFF</color>
     <color name="collect">#444</color>

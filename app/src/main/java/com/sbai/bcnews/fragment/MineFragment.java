@@ -196,14 +196,14 @@ public class MineFragment extends BaseFragment {
     private void updateUserReadHistory(int readHistory) {
         SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.history),
                 " " + readHistory,
-                ContextCompat.getColor(getActivity(), R.color.textAssistPrimary));
+                ContextCompat.getColor(getActivity(), R.color.text_476E92));
         mHistory.setText(spannableString);
     }
 
     private void updateUserCollectNumber(int collectNumber) {
         SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.collect),
                 " " + collectNumber,
-                ContextCompat.getColor(getActivity(), R.color.textAssistPrimary));
+                ContextCompat.getColor(getActivity(), R.color.text_476E92));
         mCollect.setText(spannableString);
     }
 

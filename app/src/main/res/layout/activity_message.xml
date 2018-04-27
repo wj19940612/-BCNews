@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:rightText="@string/all_read"
-        app:rightTextColor="@color/textAssistPrimary"
+        app:rightTextColor="@color/text_476E92"
         app:titleText="@string/message"/>
 
     <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
