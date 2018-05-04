@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.BottomDialogFragment;
 
@@ -27,6 +28,9 @@ import butterknife.Unbinder;
  */
 public class WhistleBlowingDialogFragment extends BottomDialogFragment implements View.OnClickListener {
 
+    public static final int WHISTLE_BLOWING_TYPE_ARTICLE = 0; //文章
+    public static final int WHISTLE_BLOWING_TYPE_COMMENT = 1; //评论
+
     @BindView(R.id.first)
     TextView mFirst;
     @BindView(R.id.seventh)
@@ -40,7 +44,7 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment implement
 
 
     public interface OnWhistleBlowingReasonListener {
-        void onChooseReason(int position, String content);
+        void onChooseReason(int position, String content, int type,String id);
     }
 
     @BindView(R.id.title)
@@ -64,6 +68,31 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment implement
 
     public OnWhistleBlowingReasonListener mOnWhistleBlowingReasonListener;
 
+    private int mWhistleBlowingType;
+    private String mDataId;
+
+    public WhistleBlowingDialogFragment() {
+
+    }
+
+
+    public static WhistleBlowingDialogFragment newInstance(int type, String id) {
+        Bundle args = new Bundle();
+        args.putInt(ExtraKeys.TAG, type);
+        args.putString(ExtraKeys.DATA, id);
+        WhistleBlowingDialogFragment fragment = new WhistleBlowingDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mWhistleBlowingType = getArguments().getInt(ExtraKeys.TAG);
+            mDataId = getArguments().getString(ExtraKeys.DATA);
+        }
+    }
 
     @Nullable
     @Override
@@ -111,52 +140,52 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment implement
         switch (view.getId()) {
             case R.id.first:
                 if (mOnWhistleBlowingReasonListener != null) {
-                    mOnWhistleBlowingReasonListener.onChooseReason(0, mStringArray[0]);
+                    mOnWhistleBlowingReasonListener.onChooseReason(0, mStringArray[0], mWhistleBlowingType,mDataId);
                 }
                 break;
             case R.id.second:
                 if (mOnWhistleBlowingReasonListener != null) {
-                    mOnWhistleBlowingReasonListener.onChooseReason(1, mStringArray[1]);
+                    mOnWhistleBlowingReasonListener.onChooseReason(1, mStringArray[1], mWhistleBlowingType,mDataId);
                 }
                 break;
             case R.id.third:
                 if (mOnWhistleBlowingReasonListener != null) {
-                    mOnWhistleBlowingReasonListener.onChooseReason(2, mStringArray[2]);
+                    mOnWhistleBlowingReasonListener.onChooseReason(2, mStringArray[2], mWhistleBlowingType,mDataId);
                 }
                 break;
             case R.id.forth:
                 if (mOnWhistleBlowingReasonListener != null) {
-                    mOnWhistleBlowingReasonListener.onChooseReason(3, mStringArray[3]);
+                    mOnWhistleBlowingReasonListener.onChooseReason(3, mStringArray[3], mWhistleBlowingType,mDataId);
                 }
                 break;
             case R.id.fifth:
                 if (mOnWhistleBlowingReasonListener != null) {
-                    mOnWhistleBlowingReasonListener.onChooseReason(4, mStringArray[4]);
+                    mOnWhistleBlowingReasonListener.onChooseReason(4, mStringArray[4], mWhistleBlowingType,mDataId);
                 }
                 break;
             case R.id.sixth:
                 if (mOnWhistleBlowingReasonListener != null) {
-                    mOnWhistleBlowingReasonListener.onChooseReason(5, mStringArray[5]);
+                    mOnWhistleBlowingReasonListener.onChooseReason(5, mStringArray[5], mWhistleBlowingType,mDataId);
                 }
                 break;
             case R.id.seventh:
                 if (mOnWhistleBlowingReasonListener != null) {
-                    mOnWhistleBlowingReasonListener.onChooseReason(6, mStringArray[6]);
+                    mOnWhistleBlowingReasonListener.onChooseReason(6, mStringArray[6], mWhistleBlowingType,mDataId);
                 }
                 break;
             case R.id.eighth:
                 if (mOnWhistleBlowingReasonListener != null) {
-                    mOnWhistleBlowingReasonListener.onChooseReason(7, mStringArray[7]);
+                    mOnWhistleBlowingReasonListener.onChooseReason(7, mStringArray[7], mWhistleBlowingType,mDataId);
                 }
                 break;
             case R.id.ninth:
                 if (mOnWhistleBlowingReasonListener != null) {
-                    mOnWhistleBlowingReasonListener.onChooseReason(8, mStringArray[8]);
+                    mOnWhistleBlowingReasonListener.onChooseReason(8, mStringArray[8], mWhistleBlowingType,mDataId);
                 }
                 break;
             case R.id.tenth:
                 if (mOnWhistleBlowingReasonListener != null) {
-                    mOnWhistleBlowingReasonListener.onChooseReason(9, mStringArray[9]);
+                    mOnWhistleBlowingReasonListener.onChooseReason(9, mStringArray[9], mWhistleBlowingType,mDataId);
                 }
                 break;
             case R.id.cancel:

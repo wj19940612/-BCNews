@@ -96,6 +96,7 @@ public class MineFragment extends BaseFragment {
         requestNotReadMessageCount();
         requestWhetherHasNotReedFeedBackMessage();
         requestWhetherHasAllNotReadMessage();
+
     }
 
     private void requestWhetherHasAllNotReadMessage() {

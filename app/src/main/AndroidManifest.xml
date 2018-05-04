@@ -140,6 +140,19 @@
         <activity
             android:name=".activity.mine.ClipHeadImageActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.MessageActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.NotificationManageActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.mine.ReviewActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.dialog.WriteCommentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/BaseDialog.Bottom"/>
 
         <!-- third page -->
 
@@ -183,11 +196,9 @@
             android:process=":pushservice">
         </service>
 
-        <activity android:name=".activity.mine.MessageActivity">
+        <activity android:name=".activity.NewsViewPointListActivity">
         </activity>
-        <activity android:name=".activity.mine.NotificationManageActivity">
-        </activity>
-        <activity android:name=".activity.mine.ReviewActivity">
+        <activity android:name=".activity.CommentDetailActivity">
         </activity>
     </application>
 

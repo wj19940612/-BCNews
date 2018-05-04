@@ -2,6 +2,7 @@ package com.sbai.bcnews.activity;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -9,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -28,43 +28,36 @@ import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.comment.NewsShareOrCommentBaseActivity;
+import com.sbai.bcnews.activity.dialog.WriteCommentActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.OpenNotifyDialogFragment;
-import com.sbai.bcnews.fragment.dialog.WhistleBlowingDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.OtherArticle;
-import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.model.news.NewsViewpoint;
+import com.sbai.bcnews.model.news.WriteComment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.PermissionUtil;
-import com.sbai.bcnews.utils.TextSizeModel;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.NewsScrollView;
-import com.sbai.bcnews.view.NewsShareDialog;
-import com.sbai.bcnews.view.ShareDialog;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
-import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,9 +70,8 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_NORMAL;
  * Created by Administrator on 2018\1\25 0025.
  */
 
-public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDialogFragment.OnWhistleBlowingReasonListener {
+public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
-    public static final int REQUEST_CODE_LOGIN = 12;
     public static final int REQ_CODE_CANCEL_COLLECT = 2265;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -217,6 +209,8 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
     ConstraintLayout mSecondPoint;
     @BindView(R.id.allComment)
     TextView mAllComment;
+    @BindView(R.id.rootView)
+    RelativeLayout mRootView;
 
 
     private WebViewClient mWebViewClient;
@@ -226,7 +220,6 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
     private AppJs mAppJs;
 
     private String mId;
-    private NewsDetail mNewsDetail;
     private NewsDetail mNetNewsDetail;//保证是网络更新的详情
     private String mChannel;
     private String mTag;
@@ -241,7 +234,35 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
 
     public static final String INFO_HTML_META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\">";
 
-    private int mWebTextSize = TextSizeModel.NORMAL;
+
+    @Override
+    protected int getPageType() {
+        return PAGE_TYPE_NEWS_DETAIL;
+    }
+
+
+    @Override
+    protected void onCollectSuccess(NewsDetail newsDetail) {
+        //收藏页面刷新
+        if (newsDetail.getCollect() == 0) {
+            Intent intent = new Intent();
+            intent.putExtra(ExtraKeys.TAG, newsDetail.getId());
+            setResult(RESULT_OK, intent);
+        }
+        updatePraiseCollect(mNetNewsDetail);
+    }
+
+    @Override
+    protected void onReceiveBroadcast(Context context, Intent intent) {
+        if (!TextUtils.isEmpty(intent.getAction())) {
+            switch (intent.getAction()) {
+                case ACTION_WEB_TEXT_SIZE_HAS_CHANGE:
+                    mWebTextSize = Preference.get().getLocalWebTextSize();
+                    openWebView(mPureHtml);
+                    break;
+            }
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -257,13 +278,28 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
         requestNewsViewpoint();
     }
 
+    @Override
+    public View getContentView() {
+        return mRootView;
+    }
+
+    @Override
+    public void onLoadMore() {
+
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
     private void initData() {
         mId = getIntent().getStringExtra(ExtraKeys.NEWS_ID);
         mChannel = getIntent().getStringExtra(ExtraKeys.CHANNEL);
         mTag = getIntent().getStringExtra(ExtraKeys.TAG);
         mNewsDetail = NewsCache.getCacheForId(mId);
         NewsReadCache.markNewsRead(mId);
-        mWebTextSize = Preference.get().getLocalWebTextSize();
+
     }
 
     private void initView() {
@@ -280,30 +316,33 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
             }
         });
 
+
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showNewsShareAndSettingDialog();
-
             }
         });
-
 
     }
 
     private void requestNewsViewpoint() {
-        Apic.requestNewsViewpoint(mId)
-                .callback(new Callback2D<Resp<NewsViewpoint>, NewsViewpoint>() {
+        // TODO: 2018/5/3 id先写死
+        Apic.requestNewsViewpoint("960799530167795713")
+//        Apic.requestNewsViewpoint(mId)
+                .callback(new Callback<ListResp<NewsViewpoint>>() {
                     @Override
-                    protected void onRespSuccessData(NewsViewpoint data) {
-                        updateNewsViewpoint(data.getData(), data.getTotalComment());
+                    protected void onRespSuccess(ListResp<NewsViewpoint> resp) {
+                        if (resp.getData() != null && resp.getListData() != null) {
+                            updateNewsViewpoint(resp.getListData(), resp.getData().getTotalComment());
+                        }
                     }
                 })
                 .fire();
 
     }
 
-    private void updateNewsViewpoint(List<NewsViewpoint.DataBean> data, int size) {
+    private void updateNewsViewpoint(List<NewsViewpoint> data, int size) {
         if (!data.isEmpty()) {
             mAllPoint.setVisibility(View.VISIBLE);
             mAllComment.setVisibility(View.VISIBLE);
@@ -312,7 +351,7 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
             mAllPoint.setVisibility(View.GONE);
         }
 
-        if (data.size() > 10) {
+        if (size < 10) {
             mAllComment.setText(R.string.all_comment);
         } else {
             mAllComment.setText(getString(R.string.all_point_number, " " + data.size() + " "));
@@ -327,7 +366,7 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
         }
     }
 
-    private void updateViewpoint(ImageView portrait, TextView userName, TextView content, TextView praiseCount, TextView pointTime, TextView reviewCount, NewsViewpoint.DataBean newsViewpoint) {
+    private void updateViewpoint(ImageView portrait, TextView userName, TextView content, TextView praiseCount, TextView pointTime, TextView reviewCount, NewsViewpoint newsViewpoint) {
         GlideApp.with(getActivity())
                 .load(newsViewpoint.getUserPortrait())
                 .circleCrop()
@@ -352,11 +391,17 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
                     mScrollView.smoothScrollTo(0, 0);
                 break;
             case R.id.writeComment:
+                if (mNewsDetail != null) {
+                    Launcher.with(getActivity(), WriteCommentActivity.class)
+                            .putExtra(ExtraKeys.DATA, WriteComment.getWriteComment(mNewsDetail))
+                            .execute();
+                }
                 break;
             case R.id.commentCount:
+
                 break;
             case R.id.collectIcon:
-                collect();
+                collect(mNetNewsDetail);
                 break;
             case R.id.emptyView:
                 break;
@@ -370,7 +415,7 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
                 shareToPlatform(SHARE_MEDIA.WEIXIN_CIRCLE);
                 break;
             case R.id.praiseLayout:
-                requestPraise();
+                requestNewsPraise(mNetNewsDetail);
                 break;
             case R.id.firstArticle:
                 openNewsDetailsPage(0);
@@ -386,11 +431,63 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
             case R.id.secondPoint:
                 break;
             case R.id.allComment:
+                if (mNewsDetail != null) {
+                    Launcher.with(getActivity(), NewsViewPointListActivity.class)
+                            .putExtra(ExtraKeys.DATA, mNewsDetail)
+                            .executeForResult(NewsViewPointListActivity.REQ_CODE_COMMENT);
+                }
                 break;
 
         }
     }
 
+    protected void requestNewsPraise(final NewsDetail newsDetail) {
+        if (!PermissionUtil.isNotificationEnabled(getActivity()) && Preference.get().isFirstPraise()) {
+            new OpenNotifyDialogFragment().show(getSupportFragmentManager());
+            Preference.get().setFirstPraise(false);
+        }
+        if (newsDetail != null && LocalUser.getUser().isLogin()) {
+            int praiseWant = newsDetail.getPraise() == 0 ? 1 : 0;
+            Apic.praiseNews(newsDetail.getId(), praiseWant)
+                    .tag(TAG)
+                    .callback(new Callback<Resp>() {
+                        @Override
+                        protected void onRespSuccess(Resp resp) {
+                            if (newsDetail.getPraise() == 0) {
+                                newsDetail.setPraise(1);
+                                newsDetail.setPraiseCount(newsDetail.getPraiseCount() + 1);
+                                umengEventCount(UmengCountEventId.NEWS04);
+                            } else {
+                                newsDetail.setPraiseCount(newsDetail.getPraiseCount() - 1);
+                                newsDetail.setPraise(0);
+                            }
+                            updatePraiseCollect(newsDetail);
+                            updatePraise(newsDetail);
+                        }
+
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            super.onErrorResponse(volleyError);
+                            ToastUtil.show(R.string.praise_error);
+                        }
+                    }).fireFreely();
+        } else if (newsDetail != null) {
+            Launcher.with(this, LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
+        }
+    }
+
+
+    @Override
+    protected void addTextSize(int textSize) {
+        super.addTextSize(textSize);
+        openWebView(mPureHtml);
+    }
+
+    @Override
+    protected void subTextSize(int textSize) {
+        super.subTextSize(textSize);
+        openWebView(mPureHtml);
+    }
 
     @Override
     protected void onPostResume() {
@@ -398,56 +495,6 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
         updateOtherData(mOtherArticleList);
     }
 
-
-
-    private void showNewsShareAndSettingDialog() {
-        if (mNewsDetail == null) return;
-        String shareThumbUrl = null;
-        if (mNewsDetail.getImgs() != null && !mNewsDetail.getImgs().isEmpty()) {
-            shareThumbUrl = mNewsDetail.getImgs().get(0);
-        }
-
-        NewsShareDialog.with(getActivity())
-                .setTextSize(mWebTextSize)
-                .setOnNewsSettingClickListener(new NewsShareDialog.OnNewsSettingClickListener() {
-                    @Override
-                    public void onWhistleBlowing() {
-                        new WhistleBlowingDialogFragment().show(getSupportFragmentManager());
-                    }
-
-                    @Override
-                    public void subTextSize(int textSize) {
-                        mWebTextSize = textSize;
-                        openWebView(mPureHtml);
-                    }
-
-                    @Override
-                    public void addTextSize(int textSize) {
-                        mWebTextSize = textSize;
-                        openWebView(mPureHtml);
-
-                    }
-
-                    @Override
-                    public void copyLink() {
-
-                    }
-
-                })
-                .setTitleVisible(false)
-                .setShareTitle(mNewsDetail.getTitle())
-                .setShareDescription(getSummaryData())
-
-                .setListener(new ShareDialog.OnShareDialogCallback() {
-                    @Override
-                    public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {
-                        Apic.share(mNewsDetail.getId(), 0).tag(TAG).fireFreely();
-                    }
-                })
-                .setShareUrl(String.format(Apic.url.SHARE_NEWS, mNewsDetail.getId()))
-                .setShareThumbUrl(shareThumbUrl)
-                .show();
-    }
 
     private void openNewsDetailsPage(int position) {
         if (mOtherArticleList != null && position < mOtherArticleList.size()) {
@@ -465,8 +512,8 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
         webSettings.setJavaScriptEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-//        webSettings.setUserAgentString(webSettings.getUserAgentString()
-//                + " ###" + getString(R.string.android_web_agent) + "/1.0");
+        webSettings.setUserAgentString(webSettings.getUserAgentString()
+                + " ###" + getString(R.string.android_web_agent) + "/2.0");
         //mWebView.getSettings().setAppCacheEnabled(true);l
         //webSettings.setAppCachePath(getExternalCacheDir().getPath());
         webSettings.setAllowFileAccess(true);
@@ -594,7 +641,7 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
     }
 
     private String getTextHead() {
-        Log.d(TAG, "getTextHead: "+mWebTextSize);
+        Log.d(TAG, "getTextHead: " + mWebTextSize);
         String textHead = "<head>" +
                 "            <meta charset='utf-8'>\n" +
                 "            <meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1.0001, minimum-scale=1.0001, maximum-scale=1.0001, shrink-to-fit=no'>\n" +
@@ -820,81 +867,57 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
         mOtherArticleTip.setVisibility(View.VISIBLE);
         OtherArticle otherArticle = data.get(0);
         if (otherArticle != null)
-            updateFirstArticle(otherArticle);
+            updateArticle(otherArticle, mFirstArticle, mFirstTitle, mFirstOriginal, mFirstSource, mFirstTime, mFirstImg);
 
         if (data.size() > 1) {
             OtherArticle otherArticle1 = data.get(1);
             if (otherArticle1 != null)
-                updateSecondArticle(otherArticle1);
+                updateArticle(otherArticle1, mSecondArticle, mSecondTitle, mSecondOriginal, mSecondSource, mSecondTime, mSecondImg);
         }
 
         if (data.size() > 2) {
             OtherArticle otherArticle2 = data.get(2);
             if (otherArticle2 != null)
-                updateThirdArticle(otherArticle2);
+                updateArticle(otherArticle2, mThirdArticle, mThirdTitle, mThirdOriginal, mThirdSource, mThirdTime, mThirdImg);
         }
     }
 
-    private void updateFirstArticle(OtherArticle data) {
-        mFirstArticle.setVisibility(View.VISIBLE);
-        mFirstTitle.setText(data.getTitle());
-        mFirstTitle.setSelected(!NewsReadCache.isRead(data.getId()));
-        mFirstOriginal.setVisibility(data.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-        mFirstSource.setText(data.getSource());
-        mFirstSource.setVisibility(TextUtils.isEmpty(data.getSource()) ? View.GONE : View.VISIBLE);
-        mFirstTime.setText(DateUtil.formatNewsStyleTime(data.getReleaseTime()));
+    private void updateArticle(OtherArticle data, RelativeLayout articleRl, TextView articleTitle, TextView articleOriginal, TextView articleSource, TextView articleTime, ImageView articleImg) {
+        articleRl.setVisibility(View.VISIBLE);
+        articleTitle.setText(data.getTitle());
+        articleTitle.setSelected(!NewsReadCache.isRead(data.getId()));
+        articleOriginal.setVisibility(data.getOriginal() > 0 ? View.VISIBLE : View.GONE);
+        articleSource.setText(data.getSource());
+        articleSource.setVisibility(TextUtils.isEmpty(data.getSource()) ? View.GONE : View.VISIBLE);
+        articleTime.setText(DateUtil.formatNewsStyleTime(data.getReleaseTime()));
         if (data.getImgs() != null && data.getImgs().size() > 0) {
-            mFirstImg.setVisibility(View.VISIBLE);
+            articleImg.setVisibility(View.VISIBLE);
             GlideApp.with(getActivity()).load(data.getImgs().get(0))
                     .placeholder(R.drawable.ic_default_news)
                     .centerCrop()
-                    .into(mFirstImg);
+                    .into(articleImg);
         } else {
-            mFirstImg.setVisibility(View.GONE);
+            articleImg.setVisibility(View.GONE);
         }
     }
-
-    private void updateSecondArticle(OtherArticle data) {
-        mSecondArticle.setVisibility(View.VISIBLE);
-        mSecondTitle.setText(data.getTitle());
-        mSecondTitle.setSelected(!NewsReadCache.isRead(data.getId()));
-        mSecondOriginal.setVisibility(data.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-        mSecondSource.setText(data.getSource());
-        mSecondTime.setText(DateUtil.formatNewsStyleTime(data.getReleaseTime()));
-        mSecondSource.setVisibility(TextUtils.isEmpty(data.getSource()) ? View.GONE : View.VISIBLE);
-        if (data.getImgs() != null && data.getImgs().size() > 0) {
-            mSecondImg.setVisibility(View.VISIBLE);
-            GlideApp.with(getActivity()).load(data.getImgs().get(0))
-                    .placeholder(R.drawable.ic_default_news)
-                    .centerCrop()
-                    .into(mSecondImg);
-        } else {
-            mSecondImg.setVisibility(View.GONE);
-        }
-    }
-
-    private void updateThirdArticle(OtherArticle data) {
-        mThirdArticle.setVisibility(View.VISIBLE);
-        mThirdTitle.setText(data.getTitle());
-        mThirdTitle.setSelected(!NewsReadCache.isRead(data.getId()));
-        mThirdOriginal.setVisibility(data.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-        mThirdSource.setText(data.getSource());
-        mThirdTime.setText(DateUtil.formatNewsStyleTime(data.getReleaseTime()));
-        mThirdSource.setVisibility(TextUtils.isEmpty(data.getSource()) ? View.GONE : View.VISIBLE);
-        if (data.getImgs() != null && data.getImgs().size() > 0) {
-            mThirdImg.setVisibility(View.VISIBLE);
-            GlideApp.with(getActivity()).load(data.getImgs().get(0))
-                    .placeholder(R.drawable.ic_default_news)
-                    .centerCrop()
-                    .into(mThirdImg);
-        } else {
-            mThirdImg.setVisibility(View.GONE);
-        }
-    }
-
 
     private void updatePraiseCollect(NewsDetail newsDetail) {
+        updatePraise(newsDetail);
+        updateCollect(newsDetail);
+    }
 
+
+    @Override
+    protected void updateCollect(NewsDetail newsDetail) {
+        super.updateCollect(newsDetail);
+        if (newsDetail.getCollect() > 0) {
+            mCollectIcon.setSelected(true);
+        } else {
+            mCollectIcon.setSelected(false);
+        }
+    }
+
+    protected void updatePraise(NewsDetail newsDetail) {
         int praiseCount = newsDetail.getPraiseCount();
         //如果自己已经点赞过，但是服务器那边点赞数量是0，置成1
         if (newsDetail.getPraise() > 0 && newsDetail.getPraiseCount() == 0)
@@ -909,74 +932,8 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
         } else {
             mPraiseIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.btn_praise_normal));
         }
-        if (newsDetail.getCollect() > 0) {
-            mCollectIcon.setSelected(true);
-        } else {
-            mCollectIcon.setSelected(false);
-        }
     }
 
-    private void requestPraise() {
-        if (!PermissionUtil.isNotificationEnabled(getActivity()) && Preference.get().isFirstPraise()) {
-            new OpenNotifyDialogFragment().show(getSupportFragmentManager());
-            Preference.get().setFirstPraise(false);
-        }
-        if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
-            int praiseWant = mNetNewsDetail.getPraise() == 0 ? 1 : 0;
-            Apic.praiseNews(mNetNewsDetail.getId(), praiseWant).tag(TAG).callback(new Callback<Resp>() {
-                @Override
-                protected void onRespSuccess(Resp resp) {
-                    if (mNetNewsDetail.getPraise() == 0) {
-                        mNetNewsDetail.setPraise(1);
-                        mNetNewsDetail.setPraiseCount(mNetNewsDetail.getPraiseCount() + 1);
-                        umengEventCount(UmengCountEventId.NEWS04);
-                    } else {
-                        mNetNewsDetail.setPraiseCount(mNetNewsDetail.getPraiseCount() - 1);
-                        mNetNewsDetail.setPraise(0);
-                    }
-                    updatePraiseCollect(mNetNewsDetail);
-                }
-
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    super.onErrorResponse(volleyError);
-                    ToastUtil.show(R.string.praise_error);
-                }
-            }).fireFreely();
-        } else if (mNetNewsDetail != null) {
-            Launcher.with(this, LoginActivity.class).executeForResult(REQUEST_CODE_LOGIN);
-        }
-    }
-
-    private void collect() {
-        if (mNetNewsDetail != null && LocalUser.getUser().isLogin()) {
-            Apic.collectOrCancelCollect(mNetNewsDetail.getId(), mNetNewsDetail.getCollect(), ReadHistoryOrMyCollect.MESSAGE_TYPE_COLLECT).tag(TAG).callback(new Callback<Resp>() {
-                @Override
-                protected void onRespSuccess(Resp resp) {
-                    if (mNetNewsDetail.getCollect() == 0) {
-                        mNetNewsDetail.setCollect(1);
-                        ToastUtil.show(R.string.collect_success);
-                        umengEventCount(UmengCountEventId.NEWS04);
-                    } else {
-                        Intent intent = new Intent();
-                        intent.putExtra(ExtraKeys.TAG, mNetNewsDetail.getId());
-                        setResult(RESULT_OK, intent);
-                        ToastUtil.show(R.string.cancel_collect_success);
-                        mNetNewsDetail.setCollect(0);
-                    }
-                    updatePraiseCollect(mNetNewsDetail);
-                }
-
-                @Override
-                public void onFailure(ReqError reqError) {
-                    super.onFailure(reqError);
-                    ToastUtil.show(R.string.collect_fail);
-                }
-            }).fireFreely();
-        } else if (!LocalUser.getUser().isLogin()) {
-            Launcher.with(this, LoginActivity.class).executeForResult(REQUEST_CODE_LOGIN);
-        }
-    }
 
     public void openBigImage(String img) {
         //可能是base64位，过长无法通过Intent传递
@@ -1006,12 +963,6 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
         }
     }
 
-    @Override
-    public void onChooseReason(int position, String content) {
-        // TODO: 2018/4/27 提交理由
-        ToastUtil.show("" + content);
-    }
-
 
     static class CacheThread extends Thread {
         NewsDetail mNewsDetail;
@@ -1025,96 +976,15 @@ public class NewsDetailActivity extends BaseActivity implements WhistleBlowingDi
         }
     }
 
-    private void showShareDialog() {
-        if (mNewsDetail == null) return;
-        String shareThumbUrl = null;
-        if (mNewsDetail.getImgs() != null && !mNewsDetail.getImgs().isEmpty()) {
-            shareThumbUrl = mNewsDetail.getImgs().get(0);
-        }
-        ShareDialog.with(getActivity())
-                .setTitleVisible(false)
-                .setShareTitle(mNewsDetail.getTitle())
-                .setShareDescription(getSummaryData())
-                .setListener(new ShareDialog.OnShareDialogCallback() {
-                    @Override
-                    public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {
-                        Apic.share(mNewsDetail.getId(), 0).tag(TAG).fireFreely();
-                    }
-                })
-                .setShareUrl(String.format(Apic.url.SHARE_NEWS, mNewsDetail.getId()))
-                .setShareThumbUrl(shareThumbUrl)
-                .show();
-
-    }
-
-    private void shareToPlatform(SHARE_MEDIA platform) {
-        umengEventCount(UmengCountEventId.NEWS05);
-        if (mNewsDetail == null) return;
-        UMWeb mWeb = new UMWeb(String.format(Apic.url.SHARE_NEWS, mNewsDetail.getId()));
-        mWeb.setTitle(mNewsDetail.getTitle());
-        mWeb.setDescription(getSummaryData());
-        UMImage thumb;
-        if (mNewsDetail.getImgs() == null || mNewsDetail.getImgs().isEmpty()) {
-            thumb = new UMImage(getActivity(), R.mipmap.ic_launcher);
-        } else {
-            thumb = new UMImage(getActivity(), mNewsDetail.getImgs().get(0));
-        }
-        mWeb.setThumb(thumb);
-        new ShareAction(getActivity())
-                .withMedia(mWeb)
-                .setPlatform(platform)
-                .setCallback(mUMShareListener)
-                .share();
-        Apic.share(mNewsDetail.getId(), 0).tag(TAG).fireFreely();
-
-    }
-
-    private String getSummaryData() {
-        if (TextUtils.isEmpty(mNewsDetail.getSummary())) {
-            String content = new String(mNewsDetail.getContent());
-            String imgTag = "<img\\s[^>]+>";
-            Pattern pattern = Pattern.compile(imgTag);
-            Matcher matcher = pattern.matcher(content);
-            content = matcher.replaceAll("");
-            content = Html.fromHtml(content).toString();
-            if (content.length() > 150) {
-                return content.substring(0, 150);
-            } else {
-                return content;
-            }
-        }
-        return mNewsDetail.getSummary();
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
+        if (requestCode == LoginActivity.REQ_CODE_LOGIN && resultCode == RESULT_OK) {
             requestDetailData();
         }
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
-    private UMShareListener mUMShareListener = new UMShareListener() {
-        @Override
-        public void onStart(SHARE_MEDIA share_media) {
-        }
 
-        @Override
-        public void onResult(SHARE_MEDIA share_media) {
-            ToastUtil.show(R.string.share_succeed);
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            //   ToastUtil.show(R.string.share_failed);
-            ToastUtil.show(throwable.getMessage());
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA share_media) {
-            ToastUtil.show(R.string.share_cancel);
-        }
-    };
 }

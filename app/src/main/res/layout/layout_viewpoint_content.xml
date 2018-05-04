@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="0.5dp"
+    android:background="@drawable/bg_white"
+    android:paddingLeft="@dimen/common_padding"
+    android:paddingRight="@dimen/common_padding"
+    android:paddingBottom="20dp"
+    android:paddingTop="20dp">
+
+
+    <ImageView
+        android:id="@+id/userHeadImage"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/text_222"
+        app:layout_constraintBottom_toBottomOf="@id/userHeadImage"
+        app:layout_constraintStart_toEndOf="@id/userHeadImage"
+        app:layout_constraintTop_toTopOf="@id/userHeadImage"
+        tools:text="111111111"/>
+
+    <TextView
+        android:id="@+id/praiseCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="5dp"
+        android:textColor="@color/text_praise"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/userName"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:drawableRight="@drawable/ic_common_praise_normal"
+        tools:text="5454454545"/>
+
+    <TextView
+        android:id="@+id/pointContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:lineSpacingExtra="3dp"
+        android:textColor="@color/text_4949"
+        android:textSize="16sp"
+        android:layout_marginRight="@dimen/common_padding"
+        app:layout_constraintStart_toStartOf="@id/userName"
+        app:layout_constraintTop_toBottomOf="@id/userName"
+        tools:text="付款了电视剧爱发科来的级都是第三方快乐健康是登录时刻龙卷风抗裂砂浆放大看鹿鼎记"/>
+
+    <TextView
+        android:id="@+id/timeLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:textColor="@color/text_999"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/userName"
+        app:layout_constraintTop_toBottomOf="@id/pointContent"
+        tools:text="12:30"/>
+
+    <TextView
+        android:id="@+id/review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/btn_999_loop"
+        android:paddingBottom="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2dp"
+        android:text="@string/review_TA"
+        android:textColor="@color/text_999"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/timeLine"
+        app:layout_constraintStart_toEndOf="@id/timeLine"/>
+
+    <TextView
+        android:id="@+id/shrink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/spread"
+        android:textColor="@color/text_476E92"
+        android:visibility="gone"
+        app:layout_constraintBaseline_toBaselineOf="@id/timeLine"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.sbai.bcnews.view.news.ViewPointReviewContentView
+        android:id="@+id/reviewContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_f5_round"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="@id/pointContent"
+        app:layout_constraintTop_toBottomOf="@id/timeLine"/>
+
+</android.support.constraint.ConstraintLayout>

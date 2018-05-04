@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="12dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="12dp"
+    tools:context=".activity.dialog.WriteCommentActivity">
+
+
+    <EditText
+        android:id="@+id/commentInput"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/bg_F5F5"
+        android:gravity="start"
+        android:hint="@string/let_us_look_your_comment"
+        android:maxLength="1000"
+        android:padding="10dp"
+        android:textColor="@color/text_4949"
+        android:textColorHint="@color/text_999"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:textColor="@color/text_476E92"
+        android:text="@string/send"
+        android:enabled="false"
+        android:id="@+id/submitComment"
+        android:layout_width="60dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_write_comment_loop"
+        android:gravity="center"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentInput"/>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,12 +1,15 @@
 package com.sbai.bcnews.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by Administrator on 2018\1\26 0026.
  */
 //资讯详情
-public class NewsDetail {
+public class NewsDetail implements Parcelable {
 
     private List<String> channel; //渠道
     private String content;  //h5内容
@@ -216,4 +219,78 @@ public class NewsDetail {
     public void setChannel(List<String> channel) {
         this.channel = channel;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringList(this.channel);
+        dest.writeString(this.content);
+        dest.writeLong(this.createTime);
+        dest.writeString(this.detail);
+        dest.writeString(this.id);
+        dest.writeInt(this.praiseCount);
+        dest.writeInt(this.readerCount);
+        dest.writeLong(this.releaseTime);
+        dest.writeString(this.secondDetail);
+        dest.writeInt(this.secondType);
+        dest.writeString(this.source);
+        dest.writeString(this.summary);
+        dest.writeString(this.title);
+        dest.writeInt(this.type);
+        dest.writeStringList(this.imgs);
+        dest.writeStringList(this.tags);
+        dest.writeInt(this.readerTime);
+        dest.writeInt(this.original);
+        dest.writeInt(this.praise);
+        dest.writeInt(this.collect);
+        dest.writeLong(this.updateTime);
+        dest.writeLong(this.readTime);
+        dest.writeInt(this.readHeight);
+    }
+
+    public NewsDetail() {
+    }
+
+    protected NewsDetail(Parcel in) {
+        this.channel = in.createStringArrayList();
+        this.content = in.readString();
+        this.createTime = in.readLong();
+        this.detail = in.readString();
+        this.id = in.readString();
+        this.praiseCount = in.readInt();
+        this.readerCount = in.readInt();
+        this.releaseTime = in.readLong();
+        this.secondDetail = in.readString();
+        this.secondType = in.readInt();
+        this.source = in.readString();
+        this.summary = in.readString();
+        this.title = in.readString();
+        this.type = in.readInt();
+        this.imgs = in.createStringArrayList();
+        this.tags = in.createStringArrayList();
+        this.readerTime = in.readInt();
+        this.original = in.readInt();
+        this.praise = in.readInt();
+        this.collect = in.readInt();
+        this.updateTime = in.readLong();
+        this.readTime = in.readLong();
+        this.readHeight = in.readInt();
+    }
+
+    public static final Creator<NewsDetail> CREATOR = new Creator<NewsDetail>() {
+        @Override
+        public NewsDetail createFromParcel(Parcel source) {
+            return new NewsDetail(source);
+        }
+
+        @Override
+        public NewsDetail[] newArray(int size) {
+            return new NewsDetail[size];
+        }
+    };
+
 }

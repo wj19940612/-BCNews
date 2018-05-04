@@ -2,6 +2,7 @@ package com.sbai.bcnews.http;
 
 import com.sbai.bcnews.App;
 import com.sbai.bcnews.Preference;
+import com.sbai.bcnews.model.news.WriteComment;
 import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.httplib.ReqParams;
 
@@ -16,7 +17,6 @@ import java.io.File;
 public class Apic {
 
     public static final int DEFAULT_PAGE_SIZE = 20;
-
 
     /**
      * /api/news-msg/msg/history
@@ -108,6 +108,85 @@ public class Apic {
      */
     public static Api requestNewsViewpoint(String id) {
         return Api.get("/api/news-info/discuss/opinion/{id}", new ReqParams().put("id", id));
+    }
+
+    /**
+     * /api/news-info/discuss/comment
+     * POST
+     * 发表评论/回复----齐慕伟
+     *
+     * @param writeComment
+     */
+    public static Api submitComment(WriteComment writeComment) {
+        return Api.post("/api/news-info/discuss/comment", new ReqParams(WriteComment.class, writeComment));
+    }
+
+    /**
+     * /api/news-info/discuss/first/{id}
+     * GET
+     * 全部评论----齐慕伟
+     *
+     * @param id
+     * @param page
+     * @param pageSize
+     */
+    public static Api requestNewsViewpointList(String id, int page, int pageSize) {
+        return Api.get("/api/news-info/discuss/first/{id}", new ReqParams().put("id", id).put("page", page).put("size", pageSize));
+    }
+
+    /**
+     * /api/news-user/report/add.do
+     * POST
+     * 用户--举报--薛松
+     *
+     * @return
+     */
+    public static Api submitWhistleBlowing(String dataId, int type, String reson) {
+        return Api.post("/api/news-user/report/add.do",
+                new ReqParams()
+                        .put("dataId", dataId)
+                        .put("type", type)
+                        .put("reason", reson));
+    }
+
+    /**
+     * /api/news-info/discuss/praise
+     * POST
+     * 点赞----齐慕伟
+     *
+     * @param id
+     * @param dataId
+     * @param userId
+     * @param firstId
+     * @param secondId
+     * @param type
+     */
+    public static Api praiseComment(long id, String dataId, Long userId, Long firstId, Integer secondId, int type) {
+        return Api.post("/api/news-info/discuss/praise",
+                new ReqParams()
+                        .put("id", id)
+                        .put("dataId", dataId)
+                        .put("userId", userId)
+                        .put("firstId", firstId).put("secondId", secondId).put("type", type));
+    }
+
+    /**
+     * /api/news-info/discuss/second/{id}
+     * GET
+     * 评论详情----齐慕伟
+     *
+     * @param newsId
+     * @param page
+     * @param pageSize
+     * @param viewpointId
+     */
+    public static Api requestCommentList(String newsId, int page, int pageSize, long viewpointId) {
+        return Api.post("/api/news-info/discuss/second/{id}",
+                new ReqParams()
+                        .put("dataId", newsId)
+                        .put("page", page)
+                        .put("size", pageSize)
+                        .put("id", viewpointId));
     }
 
 

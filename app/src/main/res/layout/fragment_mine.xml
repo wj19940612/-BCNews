@@ -79,7 +79,6 @@
         android:layout_height="50dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_white"
-        android:visibility="visible"
         app:hasBottomSplitLine="true"
         app:layout_constraintTop_toBottomOf="@+id/headLayout"
         app:leftIcon="@drawable/ic_mine_message"
@@ -99,11 +98,10 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/bg_white"
-        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/message"
         app:leftIcon="@drawable/ic_mine_review"
         app:rightIcon="@drawable/ic_common_right_arrow"
-        app:rowText="@string/review"
+        app:rowText="@string/comment"
         app:rowTextColor="@color/text_222"
         app:rowTextSize="16sp"
         app:rowVerticalPadding="0dp"/>
@@ -158,5 +156,6 @@
         app:rowTextColor="@color/text_222"
         app:rowTextSize="16sp"
         app:rowVerticalPadding="0dp"/>
+
 
 </android.support.constraint.ConstraintLayout>
