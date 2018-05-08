@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -44,33 +43,7 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
         mDataList = dataList == null ? new ArrayList<T>() : dataList;
     }
 
-    public void add(@Nullable T object) {
-        synchronized (mLock) {
-            mDataList.add(object);
-            notifyDataSetChanged();
-        }
-    }
 
-    public void addAll(@NonNull Collection<? extends T> collection) {
-        synchronized (mLock) {
-            mDataList.addAll(collection);
-            notifyDataSetChanged();
-        }
-    }
-
-    public void remove(@Nullable T object) {
-        synchronized (mLock) {
-            mDataList.remove(object);
-            notifyDataSetChanged();
-        }
-    }
-
-    public void clear() {
-        synchronized (mLock) {
-            mDataList.clear();
-            notifyDataSetChanged();
-        }
-    }
 
     public boolean isEmpty() {
         synchronized (mLock) {

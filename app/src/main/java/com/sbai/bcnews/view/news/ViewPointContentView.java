@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -89,7 +88,7 @@ public class ViewPointContentView extends LinearLayout {
 
     private void init() {
         setOrientation(VERTICAL);
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_viewpoint_content, null);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_viewpoint_content, this, false);
         addView(view);
         ButterKnife.bind(this);
     }
@@ -123,11 +122,11 @@ public class ViewPointContentView extends LinearLayout {
 
     private void updatePointContent(NewViewPointAndReview newViewPointAndReview) {
         mPointContent.setText(newViewPointAndReview.getContent());
+
         mPointContent.post(new Runnable() {
             @Override
             public void run() {
                 mContentLines = mPointContent.getLineCount();
-                Log.d(TAG, "updatePointContent: " + mContentLines);
                 if (mContentLines > 5) {
                     mPointContent.setMaxLines(CONTENT_SPREAD_LINE);
                     mPointContent.setEllipsize(TextUtils.TruncateAt.END);
@@ -138,6 +137,7 @@ public class ViewPointContentView extends LinearLayout {
                         mShrink.setText(R.string.all_content);
                     }
                 } else {
+//                    mPointContent.setMaxLines(Integer.MAX_VALUE);
                     mShrink.setVisibility(GONE);
                 }
             }
@@ -147,6 +147,8 @@ public class ViewPointContentView extends LinearLayout {
         mTimeLine.setText(DateUtil.formatNewsStyleTime(newViewPointAndReview.getReplayTime()));
         if (newViewPointAndReview.getVos() != null) {
             mReviewContent.setReviewData(newViewPointAndReview);
+        } else {
+            mReviewContent.setVisibility(GONE);
         }
     }
 

@@ -38,4 +38,5 @@ public interface ExtraKeys {
     String WE_CHAT_OPENID = "we_chat_open_id";
 
     String DATA = "data";
+    String NEWS_DETAIL = "news_detail";
 }

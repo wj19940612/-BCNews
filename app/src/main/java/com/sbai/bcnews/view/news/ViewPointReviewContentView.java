@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -49,13 +48,13 @@ public class ViewPointReviewContentView extends LinearLayout {
         }
         removeAllViews();
 
-        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 0, 0, 10);
+//        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+//        layoutParams.setMargins(0, 0, 0, 10);
         int itemCount = vos.size() > MAX_REVIEW_SIZE ? MAX_REVIEW_SIZE : vos.size();
         for (int i = 0; i < itemCount; i++) {
             TextView text = createText();
             text.setText(getCommentContent(vos.get(i)));
-            addView(text, layoutParams);
+            addView(text);
         }
 
         if (vos.size() > MAX_REVIEW_SIZE) {
@@ -66,9 +65,11 @@ public class ViewPointReviewContentView extends LinearLayout {
             } else {
                 textView.setText(getContext().getString(R.string.look_all_review_count, newViewPointAndReview.getReplayCount()));
             }
-            addView(textView, layoutParams);
+            addView(textView);
         }
-        requestLayout();
+//        requestLayout();
+//        requestFocus();
+//        requestLayout();
     }
 
 

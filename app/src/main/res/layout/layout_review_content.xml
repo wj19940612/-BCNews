@@ -7,13 +7,16 @@
     android:layout_height="wrap_content">
 
     <TextView
+
         android:id="@+id/userName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
         android:textColor="@color/text_476E92"
+        app:layout_constraintEnd_toStartOf="@id/praiseCount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="抗裂砂浆阿里贷款"/>
+        tools:text="抗裂砂浆阿里贷款看的撒娇付款了电视剧对方考虑将对方立刻"/>
 
     <TextView
         android:id="@+id/praiseCount"
@@ -32,6 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text_4949"
-        tools:text="ijkslfjkl"
-        app:layout_constraintTop_toBottomOf="@+id/userName"/>
+        app:layout_constraintTop_toBottomOf="@+id/userName"
+        tools:text="ijkslfjkl"/>
 </android.support.constraint.ConstraintLayout>

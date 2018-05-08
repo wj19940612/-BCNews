@@ -21,6 +21,8 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
+import com.sbai.bcnews.model.news.NewViewPointAndReview;
+import com.sbai.bcnews.model.news.ViewPointComment;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.ClipboardUtils;
 import com.sbai.bcnews.utils.Launcher;
@@ -263,6 +265,67 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
             Launcher.with(this, LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
         }
     }
+
+    public interface PraiseContent {
+
+        String getViewpointId();
+
+        String getNewsDataId();
+
+        Integer getPraisedUserId();
+
+        int getPraiseType();
+    }
+
+    protected void praise(final PraiseContent praiseContent) {
+        Apic.praiseComment(praiseContent.getViewpointId(), praiseContent.getNewsDataId(), praiseContent.getPraisedUserId(), praiseContent.getPraiseType())
+                .tag(TAG)
+                .callback(new Callback<Resp<Object>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<Object> resp) {
+
+                        updateViewpointPraiseStatus(praiseContent);
+                    }
+
+                    @Override
+                    protected void onRespFailure(Resp failedResp) {
+                        super.onRespFailure(failedResp);
+                        if (failedResp.getCode() == Resp.CODE_ALREADY_PRAISE) {
+                            updateViewpointPraiseStatus(praiseContent);
+                        }
+                    }
+                })
+                .fire();
+    }
+
+    protected void updateViewpointPraiseStatus(NewViewPointAndReview newViewPointAndReview) {
+
+    }
+
+    protected void updateViewpointPraiseStatus(ViewPointComment viewPointComment) {
+
+    }
+
+    protected void updateViewpointPraiseStatus(PraiseContent praiseContent) {
+        if (praiseContent instanceof NewViewPointAndReview) {
+            NewViewPointAndReview newViewPointAndReview = (NewViewPointAndReview) praiseContent;
+            if (newViewPointAndReview.getIsPraise() == 0) {
+                newViewPointAndReview.setIsPraise(NewViewPointAndReview.ALREADY_PRAISE);
+                int newPraiseCount = newViewPointAndReview.getPraiseCount() + 1;
+                newViewPointAndReview.setPraiseCount(newPraiseCount);
+            }
+            updateViewpointPraiseStatus(newViewPointAndReview);
+        } else if (praiseContent instanceof ViewPointComment) {
+            ViewPointComment viewPointComment = (ViewPointComment) praiseContent;
+            if (viewPointComment.getIsPraise() == 0) {
+                viewPointComment.setIsPraise(NewViewPointAndReview.ALREADY_PRAISE);
+                int newPraiseCount = viewPointComment.getPraiseCount() + 1;
+                viewPointComment.setPraiseCount(newPraiseCount);
+            }
+            updateViewpointPraiseStatus(viewPointComment);
+        }
+    }
+
 
     protected void onCollectSuccess(NewsDetail newsDetail) {
 

@@ -142,51 +142,61 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment implement
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(0, mStringArray[0], mWhistleBlowingType,mDataId);
                 }
+                dismiss();
                 break;
             case R.id.second:
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(1, mStringArray[1], mWhistleBlowingType,mDataId);
                 }
+                dismiss();
                 break;
             case R.id.third:
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(2, mStringArray[2], mWhistleBlowingType,mDataId);
                 }
+                dismiss();
                 break;
             case R.id.forth:
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(3, mStringArray[3], mWhistleBlowingType,mDataId);
                 }
+                dismiss();
                 break;
             case R.id.fifth:
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(4, mStringArray[4], mWhistleBlowingType,mDataId);
                 }
+                dismiss();
                 break;
             case R.id.sixth:
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(5, mStringArray[5], mWhistleBlowingType,mDataId);
                 }
+                dismiss();
                 break;
             case R.id.seventh:
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(6, mStringArray[6], mWhistleBlowingType,mDataId);
                 }
+                dismiss();
                 break;
             case R.id.eighth:
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(7, mStringArray[7], mWhistleBlowingType,mDataId);
                 }
+                dismiss();
                 break;
             case R.id.ninth:
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(8, mStringArray[8], mWhistleBlowingType,mDataId);
                 }
+                dismiss();
                 break;
             case R.id.tenth:
                 if (mOnWhistleBlowingReasonListener != null) {
                     mOnWhistleBlowingReasonListener.onChooseReason(9, mStringArray[9], mWhistleBlowingType,mDataId);
                 }
+                dismiss();
                 break;
             case R.id.cancel:
                 dismiss();

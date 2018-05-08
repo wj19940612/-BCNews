@@ -1,14 +1,7 @@
 package com.sbai.bcnews.model.news;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Modified by $nishuideyu$ on 2018/4/27
@@ -17,7 +10,7 @@ import java.util.List;
  * </p>
  * APIS:{@link com.songbai.coinpro.http.Api#requestNewsViewpoint()}
  */
-public class NewsViewpoint implements ViewpointType{
+public class NewsViewpoint implements ViewpointType,Parcelable {
 
     public static final int ALREADY_PRAISE = 1;
 
@@ -33,7 +26,7 @@ public class NewsViewpoint implements ViewpointType{
      */
 
     private String content;
-    private long id;
+    private String id;
     private int praiseCount;
     private int replayCount;
     private long replayTime;
@@ -46,10 +39,19 @@ public class NewsViewpoint implements ViewpointType{
      * type : 0
      */
 
-    private long dataId;
+    private String dataId;
     private int isPraise;
     private int type;
 
+
+
+    public String getDataId() {
+        return dataId;
+    }
+
+    public void setDataId(String dataId) {
+        this.dataId = dataId;
+    }
 
     public String getContent() {
         return content;
@@ -59,11 +61,11 @@ public class NewsViewpoint implements ViewpointType{
         this.content = content;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -115,13 +117,7 @@ public class NewsViewpoint implements ViewpointType{
         this.username = username;
     }
 
-    public long getDataId() {
-        return dataId;
-    }
 
-    public void setDataId(long dataId) {
-        this.dataId = dataId;
-    }
 
     public int getIsPraise() {
         return isPraise;
@@ -139,4 +135,52 @@ public class NewsViewpoint implements ViewpointType{
         this.type = type;
     }
 
+    public NewsViewpoint() {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.content);
+        dest.writeString(this.id);
+        dest.writeInt(this.praiseCount);
+        dest.writeInt(this.replayCount);
+        dest.writeLong(this.replayTime);
+        dest.writeInt(this.userId);
+        dest.writeString(this.userPortrait);
+        dest.writeString(this.username);
+        dest.writeString(this.dataId);
+        dest.writeInt(this.isPraise);
+        dest.writeInt(this.type);
+    }
+
+    protected NewsViewpoint(Parcel in) {
+        this.content = in.readString();
+        this.id = in.readString();
+        this.praiseCount = in.readInt();
+        this.replayCount = in.readInt();
+        this.replayTime = in.readLong();
+        this.userId = in.readInt();
+        this.userPortrait = in.readString();
+        this.username = in.readString();
+        this.dataId = in.readString();
+        this.isPraise = in.readInt();
+        this.type = in.readInt();
+    }
+
+    public static final Creator<NewsViewpoint> CREATOR = new Creator<NewsViewpoint>() {
+        @Override
+        public NewsViewpoint createFromParcel(Parcel source) {
+            return new NewsViewpoint(source);
+        }
+
+        @Override
+        public NewsViewpoint[] newArray(int size) {
+            return new NewsViewpoint[size];
+        }
+    };
 }

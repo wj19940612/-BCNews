@@ -14,6 +14,9 @@ public class Resp<T> {
     // 咨询不存在
     public static final int CODE_MSG_NOT_FIND = 1302;
 
+    //已经点过赞了
+    public static final int CODE_ALREADY_PRAISE = 1402;
+
 
     private int code;
     private String msg;

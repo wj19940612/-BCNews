@@ -157,17 +157,15 @@ public class Apic {
      * @param id
      * @param dataId
      * @param userId
-     * @param firstId
-     * @param secondId
      * @param type
      */
-    public static Api praiseComment(long id, String dataId, Long userId, Long firstId, Integer secondId, int type) {
+    public static Api praiseComment(String id, String dataId, Integer userId,  int type) {
         return Api.post("/api/news-info/discuss/praise",
                 new ReqParams()
                         .put("id", id)
                         .put("dataId", dataId)
                         .put("userId", userId)
-                        .put("firstId", firstId).put("secondId", secondId).put("type", type));
+                        .put("type", type));
     }
 
     /**
@@ -180,8 +178,8 @@ public class Apic {
      * @param pageSize
      * @param viewpointId
      */
-    public static Api requestCommentList(String newsId, int page, int pageSize, long viewpointId) {
-        return Api.post("/api/news-info/discuss/second/{id}",
+    public static Api requestCommentList(String newsId, int page, int pageSize, String viewpointId) {
+        return Api.get("/api/news-info/discuss/second/{id}",
                 new ReqParams()
                         .put("dataId", newsId)
                         .put("page", page)

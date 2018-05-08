@@ -54,7 +54,7 @@ public class CommentContentView extends LinearLayout {
         super(context, attrs, defStyleAttr);
 
         setOrientation(VERTICAL);
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_comment_content, null);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_comment_content, this,false);
         addView(view);
         ButterKnife.bind(this);
     }
@@ -123,6 +123,8 @@ public class CommentContentView extends LinearLayout {
                     }
                 }
             });
+        }else {
+            mReviewContent.setVisibility(GONE);
         }
     }
 

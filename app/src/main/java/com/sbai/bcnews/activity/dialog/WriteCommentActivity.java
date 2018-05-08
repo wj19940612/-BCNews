@@ -1,8 +1,10 @@
 package com.sbai.bcnews.activity.dialog;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -10,10 +12,10 @@ import android.widget.TextView;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
-import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.news.WriteComment;
-import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.model.news.WriteCommentResponse;
 import com.sbai.bcnews.utils.ValidationWatcher;
 
 import butterknife.BindView;
@@ -21,6 +23,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class WriteCommentActivity extends DialogBaseActivity {
+
+    public static final int REQ_CODE_WRITE_VIEWPOINT_FOR_NEWS = 7211;//写一级观点  为新闻写观点
+    public static final int REQ_CODE_WRITE_COMMENT_FOR_VIEWPOINT = 7311;//写二级观点  为新闻的观点写评论
+    public static final int REQ_CODE_WRITE_VIEWPOINT_FOR_COMMENT = 7411;//写3级观点  为2及观点写评论
+    public static final int REQ_CODE_WRITE_REPLY_FOR_COMMENT = 7511;//写3级回复  为3及观点写回复
+
 
     @BindView(R.id.commentInput)
     EditText mCommentInput;
@@ -87,12 +95,22 @@ public class WriteCommentActivity extends DialogBaseActivity {
             mWriteComment.setContent(mCommentInput.getText().toString());
             Apic.submitComment(mWriteComment)
                     .tag(TAG)
-                    .callback(new Callback<Resp<Object>>() {
+                    .callback(new Callback2D<Resp<WriteCommentResponse>,WriteCommentResponse>() {
                         @Override
-                        protected void onRespSuccess(Resp<Object> resp) {
-                            ToastUtil.show("" + resp.getMsg());
+                        protected void onRespSuccessData(WriteCommentResponse data) {
+                            Log.d(TAG, "onRespSuccessData: "+data.toString());
+                            Intent intent = new Intent();
+                            intent.putExtra(ExtraKeys.DATA, data);
+                            setResult(RESULT_OK,intent);
+                            finish();
                         }
                     })
+//                    .callback(new Callback<Resp<Object>>() {
+//                        @Override
+//                        protected void onRespSuccess(Resp<Object> resp) {
+//                            Log.d(TAG, "onRespSuccess: "+resp.toString());
+//                        }
+//                    })
                     .fire();
         }
     }

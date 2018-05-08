@@ -252,6 +252,8 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         updatePraiseCollect(mNetNewsDetail);
     }
 
+
+
     @Override
     protected void onReceiveBroadcast(Context context, Intent intent) {
         if (!TextUtils.isEmpty(intent.getAction())) {
@@ -327,9 +329,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void requestNewsViewpoint() {
-        // TODO: 2018/5/3 id先写死
-        Apic.requestNewsViewpoint("960799530167795713")
-//        Apic.requestNewsViewpoint(mId)
+        Apic.requestNewsViewpoint(mId)
                 .callback(new Callback<ListResp<NewsViewpoint>>() {
                     @Override
                     protected void onRespSuccess(ListResp<NewsViewpoint> resp) {
@@ -360,9 +360,10 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         if (data.size() > 0) {
             mFirstPoint.setVisibility(View.VISIBLE);
             updateViewpoint(mFirstPortrait, mFirstName, mFirstContent, mFirstPraiseCount, mFirstPointTime, mFirstReviewCount, data.get(0));
-        } else if (data.size() > 1) {
-            mSecondPoint.setVisibility(View.VISIBLE);
-            updateViewpoint(mSecondPortrait, mSecondName, mSecondContent, mSecondPraiseCount, mSecondPointTime, mSecondReviewCount, data.get(1));
+            if(data.size()>1){
+                mSecondPoint.setVisibility(View.VISIBLE);
+                updateViewpoint(mSecondPortrait, mSecondName, mSecondContent, mSecondPraiseCount, mSecondPointTime, mSecondReviewCount, data.get(1));
+            }
         }
     }
 
@@ -394,7 +395,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                 if (mNewsDetail != null) {
                     Launcher.with(getActivity(), WriteCommentActivity.class)
                             .putExtra(ExtraKeys.DATA, WriteComment.getWriteComment(mNewsDetail))
-                            .execute();
+                            .executeForResult(WriteCommentActivity.REQ_CODE_WRITE_VIEWPOINT_FOR_NEWS);
                 }
                 break;
             case R.id.commentCount:
@@ -461,7 +462,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                                 newsDetail.setPraiseCount(newsDetail.getPraiseCount() - 1);
                                 newsDetail.setPraise(0);
                             }
-                            updatePraiseCollect(newsDetail);
                             updatePraise(newsDetail);
                         }
 
@@ -475,7 +475,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             Launcher.with(this, LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
         }
     }
-
 
     @Override
     protected void addTextSize(int textSize) {
@@ -980,8 +979,16 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == LoginActivity.REQ_CODE_LOGIN && resultCode == RESULT_OK) {
-            requestDetailData();
+
+        if(resultCode==RESULT_OK){
+            switch (requestCode){
+                case LoginActivity.REQ_CODE_LOGIN:
+                    requestDetailData();
+                    break;
+                case WriteCommentActivity.REQ_CODE_WRITE_VIEWPOINT_FOR_NEWS:
+                    ToastUtil.show(R.string.publish_success);
+                    break;
+            }
         }
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }

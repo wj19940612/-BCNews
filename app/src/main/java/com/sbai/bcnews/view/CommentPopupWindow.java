@@ -39,16 +39,19 @@ public class CommentPopupWindow implements View.OnClickListener {
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onCopy();
                 }
+                mPopupWindow.dismiss();
                 break;
             case R.id.review:
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.oReview();
                 }
+                mPopupWindow.dismiss();
                 break;
             case R.id.whistleBlowing:
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onWhistleBlowing();
                 }
+                mPopupWindow.dismiss();
                 break;
         }
     }
@@ -78,7 +81,7 @@ public class CommentPopupWindow implements View.OnClickListener {
             createPopupWindow();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mPopupWindow.showAsDropDown(mAnchor, (Display.getScreenWidth())/5, -mAnchor.getHeight(), Gravity.TOP);
+            mPopupWindow.showAsDropDown(mAnchor, (Display.getScreenWidth())/5, -mAnchor.getMeasuredHeight(), Gravity.TOP);
         }
 
     }

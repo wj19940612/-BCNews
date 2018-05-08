@@ -1,5 +1,7 @@
 package com.sbai.bcnews.model.news;
 
+import com.sbai.bcnews.activity.comment.NewsShareOrCommentBaseActivity;
+
 import java.util.List;
 
 /**
@@ -12,7 +14,7 @@ import java.util.List;
  * Apic.requestCommentList()
  * </p>
  */
-public class ViewPointComment extends NewsViewpoint {
+public class ViewPointComment extends NewsViewpoint implements NewsShareOrCommentBaseActivity.PraiseContent {
 
     /**
      * createTime : 1524801803800
@@ -32,20 +34,53 @@ public class ViewPointComment extends NewsViewpoint {
 
     private long createTime;
     private String firstContent;
-    private long firstId;
+    private String firstId;
     private int module;
     private String newsTitle;
     private String parentContent;
     private int receive;
-    private long replayId;
+    private String replayId;
     private int replayUserId;
+    private String replayUsername;
     private int reportCount;
     private int status;
     private int suggest;
-
-    // TODO: 2018/5/4 自己模拟的数据
-
+    private String secondId;
     private List<ViewPointCommentReview> vos;
+
+    public String getReplayUsername() {
+        return replayUsername;
+    }
+
+    public void setReplayUsername(String replayUsername) {
+        this.replayUsername = replayUsername;
+    }
+
+    public String getFirstId() {
+        return firstId;
+    }
+
+    public void setFirstId(String firstId) {
+        this.firstId = firstId;
+    }
+
+    public String getReplayId() {
+        return replayId;
+    }
+
+    public void setReplayId(String replayId) {
+        this.replayId = replayId;
+    }
+
+
+    public String getSecondId() {
+        return secondId;
+    }
+
+    public void setSecondId(String secondId) {
+        this.secondId = secondId;
+    }
+
 
     public List<ViewPointCommentReview> getVos() {
         return vos;
@@ -69,14 +104,6 @@ public class ViewPointComment extends NewsViewpoint {
 
     public void setFirstContent(String firstContent) {
         this.firstContent = firstContent;
-    }
-
-    public long getFirstId() {
-        return firstId;
-    }
-
-    public void setFirstId(long firstId) {
-        this.firstId = firstId;
     }
 
 
@@ -112,13 +139,7 @@ public class ViewPointComment extends NewsViewpoint {
         this.receive = receive;
     }
 
-    public long getReplayId() {
-        return replayId;
-    }
 
-    public void setReplayId(long replayId) {
-        this.replayId = replayId;
-    }
 
     public int getReplayUserId() {
         return replayUserId;
@@ -150,5 +171,25 @@ public class ViewPointComment extends NewsViewpoint {
 
     public void setSuggest(int suggest) {
         this.suggest = suggest;
+    }
+
+    @Override
+    public String getViewpointId() {
+        return getId();
+    }
+
+    @Override
+    public String getNewsDataId() {
+        return getDataId();
+    }
+
+    @Override
+    public Integer getPraisedUserId() {
+        return getUserId();
+    }
+
+    @Override
+    public int getPraiseType() {
+        return getType();
     }
 }

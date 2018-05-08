@@ -8,4 +8,5 @@ package com.sbai.bcnews.model.news;
  * APIS:{@link com.songbai.coinpro.http.Api#$methodName$}
  */
 public class ViewPointCommentReview extends ViewPointComment {
+
 }

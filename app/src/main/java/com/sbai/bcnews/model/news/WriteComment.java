@@ -13,10 +13,6 @@ import com.sbai.bcnews.model.NewsDetail;
  */
 public class WriteComment implements Parcelable, ViewpointType {
 
-//    public static final int TYE_COMMENT_FIRST = 0;
-//    public static final int TYE_COMMENT_SECOND = 1;
-//    public static final int TYE_COMMENT_THIRD = 2;
-//    public static final int TYE_REVIEW = 3;
 
     //必传
     private String dataId;  //新闻id
@@ -25,12 +21,8 @@ public class WriteComment implements Parcelable, ViewpointType {
     private int module;
 
     private Integer replayUserId; //回复的哪个用户
-    private Long replayId;  //评论/回复哪条id
+    private String replayId;  //评论/回复哪条id
     private Integer status;
-//    private Integer firstId;      //一级评论的id
-//    private Integer secondId;
-//    private String firstContent; //一级评论内容
-//    private String newsTitle;  //新闻标题
 
 
     public static WriteComment getWriteComment(NewsDetail newsDetail) {
@@ -42,15 +34,36 @@ public class WriteComment implements Parcelable, ViewpointType {
     }
 
 
-    public static WriteComment getSecondWriteComment(NewsDetail newsDetail, NewsViewpoint newsViewpoint) {
+    public static WriteComment getSecondWriteComment(NewsViewpoint newsViewpoint) {
         WriteComment writeComment = new WriteComment();
-        writeComment.setDataId(newsDetail.getId());
+        writeComment.setDataId(newsViewpoint.getDataId());
         writeComment.setType(WriteComment.SECOND_COMMENT);
         writeComment.setModule(0);
-        writeComment.setReplayId(newsViewpoint.getDataId());
+        writeComment.setReplayId(newsViewpoint.getId());
         writeComment.setReplayUserId(newsViewpoint.getUserId());
         return writeComment;
     }
+
+    public static WriteComment getThirdWriteComment(ViewPointComment viewPointComment) {
+        WriteComment writeComment = new WriteComment();
+        writeComment.setDataId(viewPointComment.getDataId());
+        writeComment.setType(WriteComment.THIRD_COMMENT);
+        writeComment.setModule(0);
+        writeComment.setReplayId(viewPointComment.getId());
+        writeComment.setReplayUserId(viewPointComment.getUserId());
+        return writeComment;
+    }
+
+    public static WriteComment getThirdReplyComment(ViewPointCommentReview viewPointComment) {
+        WriteComment writeComment = new WriteComment();
+        writeComment.setDataId(viewPointComment.getDataId());
+        writeComment.setType(WriteComment.THIRD_REPLY);
+        writeComment.setModule(0);
+        writeComment.setReplayId(viewPointComment.getId());
+        writeComment.setReplayUserId(viewPointComment.getUserId());
+        return writeComment;
+    }
+
 
     public void setDataId(String dataId) {
         this.dataId = dataId;
@@ -92,11 +105,11 @@ public class WriteComment implements Parcelable, ViewpointType {
         this.replayUserId = replayUserId;
     }
 
-    public Long getReplayId() {
+    public String getReplayId() {
         return replayId;
     }
 
-    public void setReplayId(Long replayId) {
+    public void setReplayId(String replayId) {
         this.replayId = replayId;
     }
 
@@ -133,7 +146,7 @@ public class WriteComment implements Parcelable, ViewpointType {
         this.content = in.readString();
         this.module = in.readInt();
         this.replayUserId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.replayId = (Long) in.readValue(Long.class.getClassLoader());
+        this.replayId = (String) in.readValue(String.class.getClassLoader());
         this.status = (Integer) in.readValue(Integer.class.getClassLoader());
     }
 

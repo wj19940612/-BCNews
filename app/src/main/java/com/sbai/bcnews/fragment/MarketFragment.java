@@ -41,6 +41,16 @@ public class MarketFragment extends BaseFragment {
     Unbinder unbinder;
     private marketListFragmentAdapter mMarketListFragmentAdapter;
 
+
+    public enum BourseName {
+        GATE_IO("gate.io"), HUO_BI("huobi"), BI_AN("bian");
+        private String name;
+
+        BourseName(String name) {
+            this.name = name;
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,11 +104,11 @@ public class MarketFragment extends BaseFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return MarketListFragment.newInstance(mContext.getString(R.string.gate));
+                    return MarketListFragment.newInstance(BourseName.GATE_IO.name);
                 case 1:
-                    return MarketListFragment.newInstance(mContext.getString(R.string.huo_bi));
+                    return MarketListFragment.newInstance(BourseName.HUO_BI.name);
                 case 2:
-                    return MarketListFragment.newInstance(mContext.getString(R.string.bi_an));
+                    return MarketListFragment.newInstance(BourseName.BI_AN.name);
             }
             return null;
         }

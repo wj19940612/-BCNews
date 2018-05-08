@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
+    android:paddingTop="10dp"
     android:orientation="horizontal">
 
     <View

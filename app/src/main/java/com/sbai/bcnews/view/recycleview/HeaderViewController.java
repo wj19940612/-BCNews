@@ -8,10 +8,8 @@ import android.view.View;
  * Description:
  * </p>
  */
-public interface HeaderViewController {
+public interface HeaderViewController extends RecycleViewType{
 
-    int HEADER_VIEW_TYPE = 1;
-    int FOOTER_VIEW_TYPE = 2;
 
     void addHeaderView(View view);
 

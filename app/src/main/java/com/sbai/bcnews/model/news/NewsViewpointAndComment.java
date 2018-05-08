@@ -20,7 +20,7 @@ import java.util.List;
  * </p>
  * APIS:{@link com.songbai.coinpro.http.Api#$methodName$}
  */
-public class NewsViewpointAndComment  {
+public class NewsViewpointAndComment {
 
 
     /**
@@ -32,6 +32,15 @@ public class NewsViewpointAndComment  {
     private PageableBean pageable;
     private List<NewViewPointAndReview> normal;
     private List<NewViewPointAndReview> hot;
+    private int allCount;
+
+    public int getAllCount() {
+        return allCount;
+    }
+
+    public void setAllCount(int allCount) {
+        this.allCount = allCount;
+    }
 
     public PageableBean getPageable() {
         return pageable;

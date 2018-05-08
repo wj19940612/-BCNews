@@ -3,10 +3,10 @@ package com.sbai.bcnews.view.news;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +14,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.news.NewsViewpoint;
 import com.sbai.bcnews.model.news.ViewPointComment;
 import com.sbai.bcnews.model.news.ViewPointCommentReview;
+import com.sbai.bcnews.utils.StrUtil;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class CommentReviewView extends LinearLayout {
         setOrientation(VERTICAL);
     }
 
+
     public void setReviewData(final ViewPointComment viewPointComment) {
         final List<ViewPointCommentReview> vos = viewPointComment.getVos();
         if (vos.isEmpty()) {
@@ -48,22 +50,23 @@ public class CommentReviewView extends LinearLayout {
         } else {
             setVisibility(VISIBLE);
         }
-        removeAllViewsInLayout();
+//        removeAllViewsInLayout();
+        removeAllViews();
 
 
-        final LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 0, 0, 10);
+//        final LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+//        layoutParams.setMargins(0, 0, 0, 10);
         final int itemCount = vos.size() > MAX_REVIEW_SIZE ? MAX_REVIEW_SIZE : vos.size();
         for (int i = 0; i < itemCount; i++) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_review_content, null);
             initContentView(view, vos.get(i), viewPointComment);
-            addView(view, layoutParams);
+            addView(view);
         }
 
         if (vos.size() > MAX_REVIEW_SIZE) {
             final TextView textView = new TextView(getContext());
             textView.setTextColor(ContextCompat.getColor(getContext(), R.color.text_476E92));
-            textView.setText(getContext().getString(R.string.look_all_review_count, viewPointComment.getReplayCount()));
+            textView.setText(getContext().getString(R.string.look_all_review_count, vos.size()));
             textView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -71,18 +74,18 @@ public class CommentReviewView extends LinearLayout {
                     for (int i = 2; i < vos.size(); i++) {
                         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_review_content, null);
                         initContentView(view, vos.get(i), viewPointComment);
-                        addView(view, layoutParams);
+                        addView(view);
                     }
-                    requestLayout();
+//                    requestLayout();
                 }
             });
-            addView(textView, layoutParams);
+            addView(textView);
         }
-        requestLayout();
+//        requestLayout();
     }
 
 
-    private void initContentView(View contentView, final ViewPointCommentReview fatherViewPointComment, final ViewPointComment viewPointComment) {
+    private void initContentView(final View contentView, final ViewPointCommentReview fatherViewPointComment, final ViewPointComment viewPointComment) {
         TextView userName = contentView.findViewById(R.id.userName);
         TextView praiseCount = contentView.findViewById(R.id.praiseCount);
         TextView content = contentView.findViewById(R.id.content);
@@ -95,7 +98,7 @@ public class CommentReviewView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 if (mOnReviewListener != null) {
-                    mOnReviewListener.onClick(v, viewPointComment, fatherViewPointComment);
+                    mOnReviewListener.onClick(contentView, viewPointComment, fatherViewPointComment);
                 }
             }
         });
@@ -121,8 +124,11 @@ public class CommentReviewView extends LinearLayout {
             praiseCount.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_common_praise_normal, 0);
     }
 
-    private CharSequence formatUserNameContent(ViewPointComment viewPointComment) {
-        return viewPointComment.getUsername();
+    private CharSequence formatUserNameContent(ViewPointCommentReview viewPointComment) {
+        if (!TextUtils.isEmpty(viewPointComment.getReplayUsername())) {
+            return StrUtil.mergeTextWithColor(viewPointComment.getUsername(), " 回复 " + getContext().getString(R.string.user_name_, viewPointComment.getUsername()), ContextCompat.getColor(getContext(), R.color.text_4949));
+        }
+        return getContext().getString(R.string.user_name_, viewPointComment.getUsername());
     }
 
     private OnReviewListener mOnReviewListener;
