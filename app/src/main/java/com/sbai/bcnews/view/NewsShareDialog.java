@@ -64,6 +64,7 @@ public class NewsShareDialog extends ShareDialog implements View.OnClickListener
     }
 
     private void updateTextSizeHint() {
+        if (mTextSize == null) return;
         String textModel = mActivity.getString(R.string.web_text_size_model, mStringArray[1]);
 
         switch (mLocalTextSize) {
@@ -98,6 +99,7 @@ public class NewsShareDialog extends ShareDialog implements View.OnClickListener
 
     public NewsShareDialog setTextSize(int textSize) {
         mLocalTextSize = textSize;
+        updateTextSizeHint();
         return this;
     }
 

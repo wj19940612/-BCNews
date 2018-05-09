@@ -249,18 +249,6 @@
 
 
     <string name="please_choose_whistle_blowing">请选择举报理由</string>
-    <string-array name="whistle_blowing_content">
-        <item>广告</item>
-        <item>色情低俗</item>
-        <item>反动</item>
-        <item>谣言</item>
-        <item>欺诈或恶意营销</item>
-        <item>标题夸张/文不对题</item>
-        <item>内容过时</item>
-        <item>内容格式有误</item>
-        <item>错别字</item>
-        <item>抄袭</item>
-    </string-array>
 
     <string name="write_comment">写评论...</string>
     <string name="all_point">各方观点</string>

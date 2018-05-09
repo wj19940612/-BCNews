@@ -68,10 +68,10 @@ public class MarketFragment extends BaseFragment {
     private void initView() {
         mMarketListFragmentAdapter = new marketListFragmentAdapter(getChildFragmentManager(), getActivity());
         mViewPager.setCurrentItem(0, false);
-        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(mMarketListFragmentAdapter);
 
-        initSlidingTabLayout();
+//        initSlidingTabLayout();
     }
 
     private void initSlidingTabLayout() {
@@ -115,21 +115,21 @@ public class MarketFragment extends BaseFragment {
 
         @Override
         public int getCount() {
-            return 3;
+            return 1;
         }
 
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return mContext.getString(R.string.gate);
-                case 1:
-                    return mContext.getString(R.string.huo_bi);
-                case 2:
-                    return mContext.getString(R.string.bi_an);
-            }
-            return super.getPageTitle(position);
-        }
+//        @Nullable
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            switch (position) {
+//                case 0:
+//                    return mContext.getString(R.string.gate);
+//                case 1:
+//                    return mContext.getString(R.string.huo_bi);
+//                case 2:
+//                    return mContext.getString(R.string.bi_an);
+//            }
+//            return super.getPageTitle(position);
+//        }
     }
 }

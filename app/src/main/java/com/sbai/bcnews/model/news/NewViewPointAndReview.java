@@ -18,6 +18,23 @@ import java.util.List;
 public class NewViewPointAndReview extends NewsViewpoint implements NewsShareOrCommentBaseActivity.PraiseContent {
 
 
+    public static NewViewPointAndReview getNewViewPointAndReview(NewsViewpoint newsViewpoint) {
+        NewViewPointAndReview newViewPointAndReview = new NewViewPointAndReview();
+        newViewPointAndReview.setUsername(newsViewpoint.getUsername());
+        newViewPointAndReview.setUserPortrait(newsViewpoint.getUserPortrait());
+        newViewPointAndReview.setUserId(newsViewpoint.getUserId());
+        newViewPointAndReview.setPraiseCount(newsViewpoint.getPraiseCount());
+        newViewPointAndReview.setIsPraise(newsViewpoint.getIsPraise());
+        newViewPointAndReview.setReplayTime(newsViewpoint.getReplayTime());
+        newViewPointAndReview.setVos(new ArrayList<NewsViewpoint>());
+        newViewPointAndReview.setId(newsViewpoint.getId());
+        newViewPointAndReview.setContent(newsViewpoint.getContent());
+        newViewPointAndReview.setDataId(newsViewpoint.getDataId());
+        newViewPointAndReview.setType(newsViewpoint.getType());
+        newViewPointAndReview.setReplayCount(newsViewpoint.getReplayCount());
+        return newViewPointAndReview;
+    }
+
     @Override
     public String getViewpointId() {
         return getId();

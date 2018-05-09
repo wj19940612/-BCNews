@@ -12,7 +12,6 @@ import android.os.Parcelable;
  */
 public class NewsViewpoint implements ViewpointType,Parcelable {
 
-    public static final int ALREADY_PRAISE = 1;
 
     /**
      * content : 发表第二个一级评论-----

@@ -335,7 +335,7 @@ public  class ShareDialog {
 
     public void show() {
         if (!mHasWeiBo) {
-            mView.findViewById(R.id.sinaWeibo).setVisibility(View.INVISIBLE);
+            mView.findViewById(R.id.sinaWeibo).setVisibility(View.GONE);
         }
         TextView title = (TextView) mView.findViewById(R.id.title);
         if (!TextUtils.isEmpty(mTitle)) {

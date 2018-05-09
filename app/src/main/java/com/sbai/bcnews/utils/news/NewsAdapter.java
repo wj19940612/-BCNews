@@ -3,7 +3,6 @@ package com.sbai.bcnews.utils.news;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,7 +133,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
             mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
             mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-            mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
+//            mSource.setVisibility(TextUtils.isEmpty(item.getAuthor()) ? View.GONE : View.VISIBLE);
+            mSource.setVisibility(View.GONE);
 
             mContentRL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -199,7 +199,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
             mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
             mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-            mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
+            //            mSource.setVisibility(TextUtils.isEmpty(item.getAuthor()) ? View.GONE : View.VISIBLE);
+            mSource.setVisibility(View.GONE);
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(0))
@@ -268,7 +269,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
             mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
             mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-            mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
+            //            mSource.setVisibility(TextUtils.isEmpty(item.getAuthor()) ? View.GONE : View.VISIBLE);
+            mSource.setVisibility(View.GONE);
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg1.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(0))

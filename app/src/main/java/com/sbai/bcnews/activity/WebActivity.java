@@ -27,9 +27,11 @@ import android.widget.ProgressBar;
 
 import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.utils.Network;
 import com.sbai.bcnews.view.ShareDialog;
 import com.sbai.bcnews.view.TitleBar;
+import com.sbai.httplib.CookieManger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,6 +100,20 @@ public class WebActivity extends BaseActivity {
         }
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case LoginActivity.REQ_CODE_LOGIN:
+                    // init cookies
+                    syncCookies(mPageUrl);
+                    mWebView.reload();
+                    break;
+            }
+        }
+    }
 
     protected void initData(Intent intent) {
         mTitle = intent.getStringExtra(EX_TITLE);
@@ -196,6 +212,7 @@ public class WebActivity extends BaseActivity {
 
     protected void syncCookies(String pageUrl) {
         String rawCookie = null;
+        rawCookie = CookieManger.getInstance().getRawCookie();
         Log.d(TAG, "syncCookies: " + rawCookie + ", " + pageUrl);
 
         if (!TextUtils.isEmpty(rawCookie) && !TextUtils.isEmpty(pageUrl)) {

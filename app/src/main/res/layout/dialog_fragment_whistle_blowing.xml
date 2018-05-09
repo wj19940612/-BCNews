@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:background="@color/bg_F5F5"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/bg_F5F5"
     android:orientation="vertical">
 
     <TextView
@@ -18,75 +16,13 @@
         android:textColor="@color/text_999"
         android:textSize="12sp"/>
 
-    <TextView
-        android:id="@+id/first"
-        style="@style/whistleBlowingText"
+    <ListView
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="少时诵诗书所"/>
-
-    <TextView
-        android:id="@+id/second"
-        style="@style/whistleBlowingText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="少时诵诗书所"/>
-
-    <TextView
-        android:id="@+id/third"
-        style="@style/whistleBlowingText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="少时诵诗书所"/>
-
-    <TextView
-        android:id="@+id/forth"
-        style="@style/whistleBlowingText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="少时诵诗书所"/>
-
-    <TextView
-        android:id="@+id/fifth"
-        style="@style/whistleBlowingText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="少时诵诗书所"/>
-
-    <TextView
-        android:id="@+id/sixth"
-        style="@style/whistleBlowingText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="少时诵诗书所"/>
-
-    <TextView
-        android:id="@+id/seventh"
-        style="@style/whistleBlowingText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="少时诵诗书所"/>
-
-    <TextView
-        android:id="@+id/eighth"
-        style="@style/whistleBlowingText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="少时诵诗书所"/>
-
-    <TextView
-        android:id="@+id/ninth"
-        style="@style/whistleBlowingText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="少时诵诗书所"/>
-
-    <TextView
-        android:id="@+id/tenth"
-        style="@style/whistleBlowingText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="少时诵诗书所"/>
+        android:orientation="vertical"
+        android:overScrollMode="never"
+        android:scrollbars="none"/>
 
     <TextView
         android:id="@+id/cancel"
@@ -95,5 +31,4 @@
         android:layout_height="wrap_content"
         android:text="@string/cancel"
         android:textColor="@color/text_222"/>
-
 </LinearLayout>

@@ -95,15 +95,9 @@ public class MineFragment extends BaseFragment {
         refreshUserData();
         requestNotReadMessageCount();
         requestWhetherHasNotReedFeedBackMessage();
-        requestWhetherHasAllNotReadMessage();
 
     }
 
-    private void requestWhetherHasAllNotReadMessage() {
-        Apic.requestWhetherHasAllNotReadMessage()
-                .tag(TAG)
-                .fire();
-    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -187,7 +181,7 @@ public class MineFragment extends BaseFragment {
     private void updateNotReadMessage(int count) {
         mMessage.setSubText(String.valueOf(count));
         mNotReadMessageCount = count;
-        if (count == 0) {
+        if (count != 0) {
             mMessage.setSubTextVisible(View.VISIBLE);
         } else {
             mMessage.setSubTextVisible(View.GONE);

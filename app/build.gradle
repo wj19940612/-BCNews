@@ -73,15 +73,15 @@ android {
         }
 
         alpha {
-            versionCode 20
-            versionName "1.0.0307"
+            versionCode 22
+            versionName "1.0.0509"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
                     GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
                     GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
                     UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
-                    UMENG_CHANNEL   : "tencent"
+//                    UMENG_CHANNEL   : "tencent"
             ]
         }
 

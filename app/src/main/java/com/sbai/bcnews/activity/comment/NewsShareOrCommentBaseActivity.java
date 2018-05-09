@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
 import android.text.TextUtils;
 
@@ -338,16 +339,22 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
 
     protected void subTextSize(int textSize) {
         // 缩小webView字体大小
+        Intent intent = new Intent();
+        intent.setAction(ACTION_WEB_TEXT_SIZE_HAS_CHANGE);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
     }
 
     protected void addTextSize(int textSize) {
         // 扩大webView字体大小
+        Intent intent = new Intent();
+        intent.setAction(ACTION_WEB_TEXT_SIZE_HAS_CHANGE);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
     }
 
 
     @Override
-    public void onChooseReason(int position, String content, int type, String id) {
-        submitWhistleBlowing(content, type, id);
+    public void onChooseWhistleBlowingReason(String reason, int type, String id) {
+        submitWhistleBlowing(reason, type, id);
     }
 
     private void submitWhistleBlowing(String content, int type, String id) {

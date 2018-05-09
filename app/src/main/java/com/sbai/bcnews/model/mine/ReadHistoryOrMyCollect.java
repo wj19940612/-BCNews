@@ -66,6 +66,15 @@ public class ReadHistoryOrMyCollect {
     private int userId;
     private List<String> imgs;    //图片集合
     private List<String> channel;
+    private String author;       //作者
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     private int readHeight; //阅读高度,用于用户记忆浏览
 

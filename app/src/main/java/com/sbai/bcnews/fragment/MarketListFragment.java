@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.sbai.bcnews.BuildConfig;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.market.MarketDetailActivity;
@@ -76,7 +77,6 @@ public class MarketListFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTitleBar.setVisibility(View.GONE);
         mVarietySet = new HashSet<>();
         initRecycleView();
     }
@@ -226,7 +226,9 @@ public class MarketListFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
-        requestMarketListData();
+        if (!BuildConfig.DEBUG) {
+            requestMarketListData();
+        }
     }
 
     static class MarkListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

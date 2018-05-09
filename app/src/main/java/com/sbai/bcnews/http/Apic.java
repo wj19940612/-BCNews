@@ -159,7 +159,7 @@ public class Apic {
      * @param userId
      * @param type
      */
-    public static Api praiseComment(String id, String dataId, Integer userId,  int type) {
+    public static Api praiseComment(String id, String dataId, Integer userId, int type) {
         return Api.post("/api/news-info/discuss/praise",
                 new ReqParams()
                         .put("id", id)
@@ -185,6 +185,44 @@ public class Apic {
                         .put("page", page)
                         .put("size", pageSize)
                         .put("id", viewpointId));
+    }
+
+    /**
+     * /api/news-info/discuss/mine/comment
+     * GET
+     * 我评论的----齐慕伟
+     */
+    public static Api requestMineReplyOrCommentViewpointList(int page, int type, int size) {
+        return Api.get("/api/news-info/discuss/mine/comment",
+                new ReqParams()
+                        .put("page", page)
+                        .put("size", size)
+                        .put("type", type));
+    }
+
+    /**
+     * /api/news-user/report/reason/{type}
+     * GET
+     * 用户--举报理由--薛松
+     *
+     * @param whistleBlowingType
+     */
+    public static Api requestWhistleBlowingList(int whistleBlowingType) {
+        return Api.get("/api/news-user/report/reason/{type}", new ReqParams().put("type", whistleBlowingType));
+    }
+
+    /**
+     * /api/news-info/discuss/delete/{id}
+     * POST
+     * 删除评论--薛松
+     *
+     * @param type
+     * @param dataId
+     * @param id
+     * @return
+     */
+    public static Api deleteReview(int type, String dataId, String id) {
+        return Api.get("/api/news-info/discuss/delete/{id}",new ReqParams().put("type",type).put("dataId",dataId).put("id",id));
     }
 
 

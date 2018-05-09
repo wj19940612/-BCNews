@@ -33,6 +33,15 @@ public class NewsDetail implements Parcelable {
     private int collect;          //是否收藏 0-未收藏 1-已收藏
     private long updateTime;      //更新时间
     private long readTime;        //阅读时机
+    private String author;       //作者
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     private int readHeight; //阅读高度,用于用户记忆浏览
 
@@ -220,6 +229,9 @@ public class NewsDetail implements Parcelable {
         this.channel = channel;
     }
 
+    public NewsDetail() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -249,10 +261,8 @@ public class NewsDetail implements Parcelable {
         dest.writeInt(this.collect);
         dest.writeLong(this.updateTime);
         dest.writeLong(this.readTime);
+        dest.writeString(this.author);
         dest.writeInt(this.readHeight);
-    }
-
-    public NewsDetail() {
     }
 
     protected NewsDetail(Parcel in) {
@@ -278,6 +288,7 @@ public class NewsDetail implements Parcelable {
         this.collect = in.readInt();
         this.updateTime = in.readLong();
         this.readTime = in.readLong();
+        this.author = in.readString();
         this.readHeight = in.readInt();
     }
 
@@ -292,5 +303,4 @@ public class NewsDetail implements Parcelable {
             return new NewsDetail[size];
         }
     };
-
 }

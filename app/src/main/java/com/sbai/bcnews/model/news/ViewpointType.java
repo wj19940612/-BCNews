@@ -15,4 +15,6 @@ public interface ViewpointType {
 
     int NEWS_PAGE_SIZE = 50;
     int NEWS_LOAD_MORE_PAGE_SIZE = 30;
+
+     int ALREADY_PRAISE = 1;
 }

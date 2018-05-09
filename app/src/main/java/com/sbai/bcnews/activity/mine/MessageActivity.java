@@ -81,7 +81,6 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
         mMessageAdapter.setOnItemClickListener(new OnItemClickListener<Message>() {
             @Override
             public void onItemClick(Message message, int position) {
-                // TODO: 2018/4/25 点击事件
                 readMessage(message, position);
             }
         });
@@ -101,7 +100,7 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
                 .callback(new Callback<Resp<Object>>() {
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
-                        message.setStatus(0);
+                        message.setStatus(Message.MESSAGE_IS_READ);
                         mMessageAdapter.notifyItemChanged(position, message);
                     }
                 })

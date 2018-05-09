@@ -40,6 +40,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.OtherArticle;
+import com.sbai.bcnews.model.news.NewViewPointAndReview;
 import com.sbai.bcnews.model.news.NewsViewpoint;
 import com.sbai.bcnews.model.news.WriteComment;
 import com.sbai.bcnews.utils.DateUtil;
@@ -253,7 +254,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
 
-
     @Override
     protected void onReceiveBroadcast(Context context, Intent intent) {
         if (!TextUtils.isEmpty(intent.getAction())) {
@@ -342,7 +342,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     }
 
-    private void updateNewsViewpoint(List<NewsViewpoint> data, int size) {
+    private void updateNewsViewpoint(final List<NewsViewpoint> data, int size) {
         if (!data.isEmpty()) {
             mAllPoint.setVisibility(View.VISIBLE);
             mAllComment.setVisibility(View.VISIBLE);
@@ -350,6 +350,8 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             mAllComment.setVisibility(View.GONE);
             mAllPoint.setVisibility(View.GONE);
         }
+
+        mCommentCount.setText(String.valueOf(size));
 
         if (size < 10) {
             mAllComment.setText(R.string.all_comment);
@@ -359,12 +361,34 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
         if (data.size() > 0) {
             mFirstPoint.setVisibility(View.VISIBLE);
-            updateViewpoint(mFirstPortrait, mFirstName, mFirstContent, mFirstPraiseCount, mFirstPointTime, mFirstReviewCount, data.get(0));
-            if(data.size()>1){
+            final NewsViewpoint newsViewpoint = data.get(0);
+            updateViewpoint(mFirstPortrait, mFirstName, mFirstContent, mFirstPraiseCount, mFirstPointTime, mFirstReviewCount, newsViewpoint);
+            mFirstPoint.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openCommentDetailPage(newsViewpoint);
+                }
+            });
+            final NewsViewpoint secondNewsViewpoint = data.get(1);
+            if (data.size() > 1) {
                 mSecondPoint.setVisibility(View.VISIBLE);
-                updateViewpoint(mSecondPortrait, mSecondName, mSecondContent, mSecondPraiseCount, mSecondPointTime, mSecondReviewCount, data.get(1));
+                updateViewpoint(mSecondPortrait, mSecondName, mSecondContent, mSecondPraiseCount, mSecondPointTime, mSecondReviewCount, secondNewsViewpoint);
+                mSecondPoint.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openCommentDetailPage(secondNewsViewpoint);
+                    }
+                });
             }
         }
+    }
+
+    private void openCommentDetailPage(NewsViewpoint newsViewpoint) {
+        if (mNewsDetail != null)
+            Launcher.with(getActivity(), CommentDetailActivity.class)
+                    .putExtra(ExtraKeys.DATA, NewViewPointAndReview.getNewViewPointAndReview(newsViewpoint))
+                    .putExtra(ExtraKeys.NEWS_DETAIL, mNewsDetail)
+                    .execute();
     }
 
     private void updateViewpoint(ImageView portrait, TextView userName, TextView content, TextView praiseCount, TextView pointTime, TextView reviewCount, NewsViewpoint newsViewpoint) {
@@ -492,6 +516,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     protected void onPostResume() {
         super.onPostResume();
         updateOtherData(mOtherArticleList);
+        requestNewsViewpoint();
     }
 
 
@@ -818,7 +843,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private void updateData(NewsDetail newsDetail) {
         mSubtitle.setText(newsDetail.getTitle());
-        mSource.setText(newsDetail.getSource());
+        mSource.setText(newsDetail.getAuthor());
         mPubTime.setText(DateUtil.formatNewsStyleTime(newsDetail.getReleaseTime()));
         mReadTime.setText(String.format(getString(R.string.reader_time), newsDetail.getReaderTime()));
         mPureHtml = mNewsDetail.getContent();
@@ -980,8 +1005,8 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode==RESULT_OK){
-            switch (requestCode){
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
                 case LoginActivity.REQ_CODE_LOGIN:
                     requestDetailData();
                     break;

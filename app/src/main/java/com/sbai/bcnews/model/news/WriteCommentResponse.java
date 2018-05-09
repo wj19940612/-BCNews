@@ -3,6 +3,8 @@ package com.sbai.bcnews.model.news;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.sbai.bcnews.model.mine.ReplyNews;
+
 import java.util.ArrayList;
 
 /**
@@ -97,6 +99,23 @@ public class WriteCommentResponse implements Parcelable {
         viewPointComment.setType(getType());
         viewPointComment.setSecondId(getSecondId());
         return viewPointComment;
+    }
+
+
+    public ReplyNews getReplyComment() {
+        ReplyNews replyNews = new ReplyNews();
+        replyNews.setUserPortrait(getUserPortrait());
+        replyNews.setUserId(getUserId());
+        replyNews.setContent(getContent());
+        replyNews.setDataId(getDataId());
+        replyNews.setFirstId(getFirstId());
+        replyNews.setPraiseCount(getPraiseCount());
+        replyNews.setId(getId());
+        replyNews.setReplayId(getReplayId());
+        replyNews.setReplayUserId(getReplayUserId());
+        replyNews.setRelayUsername(getReplayUsername());
+        replyNews.setReplayTime(getReplayTime());
+        return replyNews;
     }
 
     public String getSecondId() {
@@ -317,4 +336,6 @@ public class WriteCommentResponse implements Parcelable {
             return new WriteCommentResponse[size];
         }
     };
+
+
 }

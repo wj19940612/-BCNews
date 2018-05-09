@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
@@ -21,6 +22,7 @@ import com.sbai.bcnews.fragment.MineFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
@@ -39,6 +41,8 @@ public class MainActivity extends BaseActivity {
     private static final int PAGE_POSITION_MARKET = 2;
     private static final int PAGE_POSITION_MINE = 3;
 
+    private static final int REQUEST_NOT_READ_MSG_TIME = 10 * 1000;
+
     @BindView(R.id.viewPager)
     ScrollableViewPager mViewPager;
     @BindView(R.id.bottomTabs)
@@ -55,6 +59,7 @@ public class MainActivity extends BaseActivity {
 
         initViews();
         requestShowMarketPageSwitch();
+        requestWhetherHasAllNotReadMessage();
     }
 
     private BroadcastReceiver mLoginBroadcastReceiver = new BroadcastReceiver() {
@@ -99,6 +104,40 @@ public class MainActivity extends BaseActivity {
                         })
                         .fireFreely();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startScheduleJob(REQUEST_NOT_READ_MSG_TIME);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopScheduleJob();
+    }
+
+    @Override
+    public void onTimeUp(int count) {
+        super.onTimeUp(count);
+        requestWhetherHasAllNotReadMessage();
+    }
+
+    private void requestWhetherHasAllNotReadMessage() {
+        Apic.requestWhetherHasAllNotReadMessage()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<Integer>, Integer>() {
+                    @Override
+                    protected void onRespSuccessData(Integer data) {
+                        if (data == 1) {
+                            mBottomTabs.setRedPointVisable(View.VISIBLE);
+                        } else {
+                            mBottomTabs.setRedPointVisable(View.GONE);
+                        }
+                    }
+                })
+                .fire();
     }
 
     private void initViews() {

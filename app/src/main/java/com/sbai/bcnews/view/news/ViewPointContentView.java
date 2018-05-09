@@ -33,15 +33,6 @@ public class ViewPointContentView extends LinearLayout {
     private static final int CONTENT_SPREAD_LINE = 5;
     private static final int CONTENT_ALL_CONTENT_LINE = 10;
 
-//    ImageView mUserHeadImage;
-//    TextView mUserName;
-//    TextView mPraiseCount;
-//    TextView mPointContent;
-//    TextView mTimeLine;
-//    TextView mReview;
-//    TextView mShrink;
-//    ReviewContentView mReviewContent;
-
 
     @BindView(R.id.userHeadImage)
     ImageView mUserHeadImage;
@@ -113,10 +104,11 @@ public class ViewPointContentView extends LinearLayout {
 
         boolean isPraise = newViewPointAndReview.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;
         mPraiseCount.setSelected(isPraise);
-        if (isPraise)
+        if (isPraise) {
             mPraiseCount.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_common_praise_selected, 0);
-        else
+        } else {
             mPraiseCount.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_common_praise_normal, 0);
+        }
 
     }
 

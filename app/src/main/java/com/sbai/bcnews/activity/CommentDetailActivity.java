@@ -77,9 +77,6 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
     private NewViewPointAndReview mNewViewPointAndReview;
     private ReviewListAdapter mReviewListAdapter;
 
-
-    private ViewPointComment mViewPointComment;
-    private ViewPointCommentReview mSonViewPointComment;
     private ArrayList<ViewPointComment> mViewPointCommentList;
 
     @Override
@@ -344,6 +341,7 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                     .putExtra(ExtraKeys.TAG, newViewPointAndReview.getUsername())
                     .executeForResult(WriteCommentActivity.REQ_CODE_WRITE_COMMENT_FOR_VIEWPOINT);
     }
+
 
     static class ReviewListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements RecycleViewType {
 

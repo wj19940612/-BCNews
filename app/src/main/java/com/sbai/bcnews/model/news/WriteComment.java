@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.sbai.bcnews.model.NewsDetail;
+import com.sbai.bcnews.model.mine.ReplyNews;
 
 /**
  * Modified by $nishuideyu$ on 2018/5/2
@@ -61,6 +62,16 @@ public class WriteComment implements Parcelable, ViewpointType {
         writeComment.setModule(0);
         writeComment.setReplayId(viewPointComment.getId());
         writeComment.setReplayUserId(viewPointComment.getUserId());
+        return writeComment;
+    }
+
+    public static WriteComment getReplyComment(ReplyNews replyNews) {
+        WriteComment writeComment = new WriteComment();
+        writeComment.setDataId(replyNews.getDataId());
+        writeComment.setType(replyNews.getType());
+        writeComment.setModule(0);
+        writeComment.setReplayId(replyNews.getId());
+        writeComment.setReplayUserId(replyNews.getUserId());
         return writeComment;
     }
 

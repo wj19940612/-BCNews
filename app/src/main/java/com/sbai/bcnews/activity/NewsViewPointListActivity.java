@@ -552,7 +552,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
 
             public void bindDataWithView(NewsDetail newsDetail) {
                 mNewsTitle.setText(newsDetail.getTitle());
-                mSource.setText(newsDetail.getSource());
+                mSource.setText(newsDetail.getAuthor());
                 mTimeLine.setText(DateUtil.formatNewsStyleTime(newsDetail.getReleaseTime()));
             }
         }

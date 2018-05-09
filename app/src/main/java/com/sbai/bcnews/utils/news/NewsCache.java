@@ -9,16 +9,11 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONTokener;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -99,6 +94,7 @@ public class NewsCache {
         readHistoryOrMyCollect.setIsRead(1);
         readHistoryOrMyCollect.setOriginal(newsDetail.getOriginal());
         readHistoryOrMyCollect.setSource(newsDetail.getSource());
+        readHistoryOrMyCollect.setAuthor(newsDetail.getAuthor());
         readHistoryOrMyCollect.setTitle(newsDetail.getTitle());
         readHistoryOrMyCollect.setType(MESSAGE_TYPE_READ_HISTORY);
         readHistoryOrMyCollect.setImgs(newsDetail.getImgs());

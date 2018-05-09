@@ -4,17 +4,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
-import com.sbai.bcnews.fragment.BaseFragment;
+import com.sbai.bcnews.fragment.mine.ReplyMineFragment;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
@@ -26,16 +25,16 @@ public class ReviewActivity extends BaseActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.arrow)
-    ImageView mArrow;
+//    @BindView(R.id.arrow)
+//    ImageView mArrow;
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
-    @BindView(R.id.appBarLayout)
-    AppBarLayout mAppBarLayout;
+//    @BindView(R.id.appBarLayout)
+//    AppBarLayout mAppBarLayout;
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
     @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout mCoordinatorLayout;
+    LinearLayout mCoordinatorLayout;
     private ReviewFragmentAdapter mReviewFragmentAdapter;
 
     @Override
@@ -52,7 +51,7 @@ public class ReviewActivity extends BaseActivity {
         mViewPager.setAdapter(mReviewFragmentAdapter);
 
         initSlidingTabLayout();
-        mAppBarLayout.addOnOffsetChangedListener(sOnOffsetChangedListener);
+//        mAppBarLayout.addOnOffsetChangedListener(sOnOffsetChangedListener);
 
     }
 
@@ -89,9 +88,9 @@ public class ReviewActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new BaseFragment();
+                    return ReplyMineFragment.newInstance(ReplyMineFragment.NEWS_TYPE_REPLY_TO_MINE);
                 case 1:
-                    return new BaseFragment();
+                    return ReplyMineFragment.newInstance(ReplyMineFragment.NEWS_TYPE_MINE_COMMENT);
             }
             return null;
         }
@@ -117,6 +116,6 @@ public class ReviewActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mAppBarLayout.removeOnOffsetChangedListener(sOnOffsetChangedListener);
+//        mAppBarLayout.removeOnOffsetChangedListener(sOnOffsetChangedListener);
     }
 }

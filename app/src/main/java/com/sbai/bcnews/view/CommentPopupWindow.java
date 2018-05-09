@@ -25,10 +25,17 @@ public class CommentPopupWindow implements View.OnClickListener {
     private View mAnchor;
     private View mContentView;
 
+    private boolean mDeleteReview;
+
     private OnItemClickListener mOnItemClickListener;
 
     public CommentPopupWindow setOnItemClickListener(OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
+        return this;
+    }
+
+    public CommentPopupWindow setDeleteReview(boolean deleteReview) {
+        mDeleteReview = deleteReview;
         return this;
     }
 
@@ -71,9 +78,9 @@ public class CommentPopupWindow implements View.OnClickListener {
         return commentPopupWindow;
     }
 
+
     public CommentPopupWindow(Context context) {
         mContext = context;
-
     }
 
     public void showPopupWindow() {
@@ -81,7 +88,7 @@ public class CommentPopupWindow implements View.OnClickListener {
             createPopupWindow();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mPopupWindow.showAsDropDown(mAnchor, (Display.getScreenWidth())/5, -mAnchor.getMeasuredHeight(), Gravity.TOP);
+            mPopupWindow.showAsDropDown(mAnchor, (Display.getScreenWidth()) / 5, -mAnchor.getMeasuredHeight(), Gravity.TOP);
         }
 
     }
@@ -99,6 +106,12 @@ public class CommentPopupWindow implements View.OnClickListener {
         copy.setOnClickListener(this);
         whistleBlowing.setOnClickListener(this);
         review.setOnClickListener(this);
+
+        if(mDeleteReview){
+            review.setText("删除");
+            whistleBlowing.setVisibility(View.GONE);
+        }
+
     }
 
 }
