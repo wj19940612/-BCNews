@@ -29,7 +29,7 @@ import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.utils.Network;
-import com.sbai.bcnews.view.ShareDialog;
+import com.sbai.bcnews.view.share.ShareDialog;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.httplib.CookieManger;
 

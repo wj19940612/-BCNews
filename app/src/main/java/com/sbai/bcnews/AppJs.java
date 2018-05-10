@@ -12,7 +12,7 @@ import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.utils.Launcher;
-import com.sbai.bcnews.view.ShareDialog;
+import com.sbai.bcnews.view.share.ShareDialog;
 
 
 public class AppJs {

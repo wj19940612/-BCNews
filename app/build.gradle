@@ -60,6 +60,7 @@ android {
 
     productFlavors {
         dev {
+            applicationIdSuffix '.dev'
             versionName "2.0.6"
 //            minSdkVersion 21
             buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
@@ -73,8 +74,8 @@ android {
         }
 
         alpha {
-            versionCode 22
-            versionName "1.0.0509"
+            versionCode 23
+            versionName "1.0.051001"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",

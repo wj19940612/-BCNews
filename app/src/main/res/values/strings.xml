@@ -256,6 +256,7 @@
     <string name="all_comment">全部评论</string>
     <string name="praise_count_">%1$d赞</string>
     <string name="review_count">%1$d回复</string>
+    <string name="fast_write_your_comment">快来发表你的评论吧</string>
 
     <string-array name="webTextSize">
         <item>小</item>

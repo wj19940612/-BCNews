@@ -418,12 +418,14 @@ public class DateUtil {
                 }
                 return time + "分钟前";
             }
-            int hour = (int) ((systemTime - createTime) / 1000);
+            int hour = (int) ((systemTime - createTime) / 1000 / 60 / 60);
             return hour + "小时前";
+        } else if (DateUtil.isYesterday(createTime, systemTime)) {
+            return "昨天";
         } else if (DateUtil.isInThisYear(createTime)) {
-            return DateUtil.format(createTime, "MM-dd ");
+            return DateUtil.format(createTime, "MM/dd ");
         } else {
-            return DateUtil.format(createTime, "yyyy-MM-dd ");
+            return DateUtil.format(createTime, "yyyy/MM/dd ");
         }
     }
 

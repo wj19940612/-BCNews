@@ -74,7 +74,9 @@
             android:drawableTop="@drawable/ic_share_qq"
             android:gravity="center"
             android:text="QQ"
-            android:visibility="gone"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:visibility="visible"
             android:textColor="@color/text_222"
             android:textSize="12sp"/>
 

@@ -179,7 +179,10 @@ public class MineFragment extends BaseFragment {
     }
 
     private void updateNotReadMessage(int count) {
-        mMessage.setSubText(String.valueOf(count));
+        if (count < 100)
+            mMessage.setSubText(String.valueOf(count));
+        else
+            mMessage.setSubText("99+");
         mNotReadMessageCount = count;
         if (count != 0) {
             mMessage.setSubTextVisible(View.VISIBLE);

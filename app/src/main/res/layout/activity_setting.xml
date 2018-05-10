@@ -19,6 +19,7 @@
         app:titleText="@string/setting"/>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/nightOrLightModeLL"
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_height"
@@ -82,6 +83,7 @@
         app:splitLineColor="@color/bg_F5F5"/>
 
     <com.sbai.bcnews.view.IconTextRow
+        android:visibility="gone"
         android:id="@+id/recommendToFriend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

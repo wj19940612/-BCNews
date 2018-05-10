@@ -95,7 +95,9 @@ public class WriteCommentActivity extends DialogBaseActivity {
     @OnClick(R.id.submitComment)
     public void onViewClicked() {
         if (mWriteComment != null) {
-            mWriteComment.setContent(mCommentInput.getText().toString());
+            String content = mCommentInput.getText().toString();
+            content=content.replaceAll("\n","");
+            mWriteComment.setContent(content);
             Apic.submitComment(mWriteComment)
                     .tag(TAG)
                     .callback(new Callback2D<Resp<WriteCommentResponse>,WriteCommentResponse>() {

@@ -29,10 +29,12 @@ import com.sbai.bcnews.utils.ClipboardUtils;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
-import com.sbai.bcnews.view.NewsShareDialog;
-import com.sbai.bcnews.view.ShareDialog;
+import com.sbai.bcnews.view.share.NewsShareAndSetDialog;
+import com.sbai.bcnews.view.share.NewsShareDialog;
+import com.sbai.bcnews.view.share.ShareDialog;
 import com.sbai.httplib.ReqError;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
@@ -77,6 +79,12 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
     protected void onDestroy() {
         super.onDestroy();
         unRegistersBroadcastReceiver();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     protected void registersBroadcastReceiver() {
@@ -143,8 +151,28 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
         if (mNewsDetail.getImgs() != null && !mNewsDetail.getImgs().isEmpty()) {
             shareThumbUrl = mNewsDetail.getImgs().get(0);
         }
-        ShareDialog.with(getActivity())
-                .setTitleVisible(false)
+        final String shareUrl = String.format(Apic.url.SHARE_NEWS, mNewsDetail.getId());
+
+//        ShareDialog.with(getActivity())
+//                .setTitleVisible(false)
+//                .setShareTitle(mNewsDetail.getTitle())
+//                .setShareDescription(getSummaryData())
+//                .setListener(new ShareDialog.OnShareDialogCallback() {
+//                    @Override
+//                    public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {
+//                        Apic.share(mNewsDetail.getId(), 0).tag(TAG).fireFreely();
+//                    }
+//                })
+//                .setShareUrl(String.format(Apic.url.SHARE_NEWS, mNewsDetail.getId()))
+//                .setShareThumbUrl(shareThumbUrl)
+//                .show();
+        NewsShareDialog.with(getActivity())
+                .setOnNewsLinkCopyListener(new NewsShareAndSetDialog.OnNewsLinkCopyListener() {
+                    @Override
+                    public void onCopyLink() {
+                        ClipboardUtils.clipboardText(getActivity(), shareUrl, R.string.copy_success);
+                    }
+                }).setTitleVisible(false)
                 .setShareTitle(mNewsDetail.getTitle())
                 .setShareDescription(getSummaryData())
                 .setListener(new ShareDialog.OnShareDialogCallback() {
@@ -153,7 +181,7 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
                         Apic.share(mNewsDetail.getId(), 0).tag(TAG).fireFreely();
                     }
                 })
-                .setShareUrl(String.format(Apic.url.SHARE_NEWS, mNewsDetail.getId()))
+                .setShareUrl(shareUrl)
                 .setShareThumbUrl(shareThumbUrl)
                 .show();
 
@@ -189,9 +217,14 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
 
 
     protected void showNewsShareAndSettingDialog(final String shareUrl, String shareThumbUrl, String shareTitle, String shareDescription, final Object id) {
-        NewsShareDialog.with(getActivity())
+        NewsShareAndSetDialog.with(getActivity())
                 .setTextSize(mWebTextSize)
-                .setOnNewsSettingClickListener(new NewsShareDialog.OnNewsSettingClickListener() {
+                .setOnNewsSettingClickListener(new NewsShareAndSetDialog.OnNewsSettingClickListener() {
+                    @Override
+                    public void onCopyLink() {
+                        ClipboardUtils.clipboardText(getActivity(), shareUrl, R.string.copy_success);
+                    }
+
                     @Override
                     public void onWhistleBlowing() {
                         if (mNewsDetail != null) {
@@ -211,16 +244,11 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
                         NewsShareOrCommentBaseActivity.this.addTextSize(textSize);
                     }
 
-                    @Override
-                    public void copyLink() {
-                        ClipboardUtils.clipboardText(getActivity(), shareUrl, R.string.copy_success);
-                    }
-
                 })
                 .setTitleVisible(false)
                 .setShareTitle(shareTitle)
                 .setShareDescription(shareDescription)
-
+                .hasWeiBo(false)
                 .setListener(new ShareDialog.OnShareDialogCallback() {
                     @Override
                     public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {

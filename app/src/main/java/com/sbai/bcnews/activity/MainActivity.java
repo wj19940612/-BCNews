@@ -131,9 +131,9 @@ public class MainActivity extends BaseActivity {
                     @Override
                     protected void onRespSuccessData(Integer data) {
                         if (data == 1) {
-                            mBottomTabs.setRedPointVisable(View.VISIBLE);
+                            mBottomTabs.setRedPointVisibility(View.VISIBLE);
                         } else {
-                            mBottomTabs.setRedPointVisable(View.GONE);
+                            mBottomTabs.setRedPointVisibility(View.GONE);
                         }
                     }
                 })
@@ -172,6 +172,7 @@ public class MainActivity extends BaseActivity {
                 umengClickStatistics(position);
             }
         });
+
     }
 
     private void refreshPageData(int position) {

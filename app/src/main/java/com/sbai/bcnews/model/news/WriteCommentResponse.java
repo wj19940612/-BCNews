@@ -34,6 +34,8 @@ public class WriteCommentResponse implements Parcelable {
     private String replayUsername;
     private String secondId;
 
+    private String replayContent;
+
 
     public NewsViewpoint getNewsViewpoint() {
         NewsViewpoint newsViewpoint = new NewsViewpoint();
@@ -76,6 +78,7 @@ public class WriteCommentResponse implements Parcelable {
         viewPointComment.setReplayId(getReplayId());
         viewPointComment.setReplayUserId(getReplayUserId());
         viewPointComment.setReplayUsername(getReplayUsername());
+        viewPointComment.setReplayTime(getReplayTime());
         viewPointComment.setType(getType());
         viewPointComment.setId(getId());
         viewPointComment.setSecondId(getSecondId());
@@ -96,6 +99,7 @@ public class WriteCommentResponse implements Parcelable {
         viewPointComment.setReplayId(getReplayId());
         viewPointComment.setReplayUserId(getReplayUserId());
         viewPointComment.setReplayUsername(getReplayUsername());
+        viewPointComment.setReplayTime(getReplayTime());
         viewPointComment.setType(getType());
         viewPointComment.setSecondId(getSecondId());
         return viewPointComment;
@@ -113,9 +117,18 @@ public class WriteCommentResponse implements Parcelable {
         replyNews.setId(getId());
         replyNews.setReplayId(getReplayId());
         replyNews.setReplayUserId(getReplayUserId());
-        replyNews.setRelayUsername(getReplayUsername());
+        replyNews.setReplayUsername(getReplayUsername());
         replyNews.setReplayTime(getReplayTime());
+        replyNews.setReplayContent(getReplayContent());
         return replyNews;
+    }
+
+    public String getReplayContent() {
+        return replayContent;
+    }
+
+    public void setReplayContent(String replayContent) {
+        this.replayContent = replayContent;
     }
 
     public String getSecondId() {
@@ -279,6 +292,7 @@ public class WriteCommentResponse implements Parcelable {
                 '}';
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -336,6 +350,4 @@ public class WriteCommentResponse implements Parcelable {
             return new WriteCommentResponse[size];
         }
     };
-
-
 }

@@ -58,6 +58,17 @@
 
     </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/emptyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fast_write_your_comment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <LinearLayout
         android:id="@+id/collectAndShareLayout"
         android:layout_width="match_parent"
@@ -79,12 +90,12 @@
             android:textColor="@color/text_4949"/>
 
         <TextView
-            android:text="@string/main_body"
             android:id="@+id/mainBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_news_main_body"
             android:drawablePadding="5dp"
+            android:text="@string/main_body"
             android:textColor="@color/text_476E92"
             android:textSize="12sp"/>
 

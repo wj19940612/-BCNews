@@ -1,4 +1,4 @@
-package com.sbai.bcnews.view;
+package com.sbai.bcnews.view.share;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.view.SmartDialog;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;

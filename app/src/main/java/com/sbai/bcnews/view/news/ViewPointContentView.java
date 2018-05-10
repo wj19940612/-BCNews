@@ -51,12 +51,14 @@ public class ViewPointContentView extends LinearLayout {
     @BindView(R.id.reviewContent)
     ViewPointReviewContentView mReviewContent;
 
-    private OnCommentClickListener mOnClickListener;
+    private OnCommentClickListener mOnCommentClickListener;
 
     private NewViewPointAndReview mNewViewPointAndReview;
+    private String mSpread;
+    private String mFullText;
 
     public void setOnCommentClickListener(OnCommentClickListener onClickListener) {
-        mOnClickListener = onClickListener;
+        mOnCommentClickListener = onClickListener;
     }
 
     private int mContentLines;
@@ -82,6 +84,8 @@ public class ViewPointContentView extends LinearLayout {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_viewpoint_content, this, false);
         addView(view);
         ButterKnife.bind(this);
+        mSpread = getContext().getString(R.string.spread);
+        mFullText = getContext().getString(R.string.all_content);
     }
 
 
@@ -123,20 +127,19 @@ public class ViewPointContentView extends LinearLayout {
                     mPointContent.setMaxLines(CONTENT_SPREAD_LINE);
                     mPointContent.setEllipsize(TextUtils.TruncateAt.END);
                     mShrink.setVisibility(VISIBLE);
-                    if (mContentLines >= 10) {
-                        mShrink.setText(R.string.spread);
+                    if (mContentLines < 10) {
+                        mShrink.setText(mSpread);
                     } else {
-                        mShrink.setText(R.string.all_content);
+                        mShrink.setText(mFullText);
                     }
                 } else {
-//                    mPointContent.setMaxLines(Integer.MAX_VALUE);
                     mShrink.setVisibility(GONE);
                 }
             }
         });
 
 
-        mTimeLine.setText(DateUtil.formatNewsStyleTime(newViewPointAndReview.getReplayTime()));
+        mTimeLine.setText(DateUtil.formatDefaultStyleTime(newViewPointAndReview.getReplayTime()));
         if (newViewPointAndReview.getVos() != null) {
             mReviewContent.setReviewData(newViewPointAndReview);
         } else {
@@ -149,17 +152,26 @@ public class ViewPointContentView extends LinearLayout {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.review:
-                if (mOnClickListener != null) {
-                    mOnClickListener.onReview();
+                if (mOnCommentClickListener != null) {
+                    mOnCommentClickListener.onReview();
                 }
                 break;
             case R.id.shrink:
-                mPointContent.setMaxLines(Integer.MAX_VALUE);
-                mShrink.setVisibility(GONE);
+                String pointText = mShrink.getText().toString();
+                if (!TextUtils.isEmpty(pointText)) {
+                    if (pointText.equalsIgnoreCase(mFullText)) {
+                        if (mOnCommentClickListener != null) {
+                            mOnCommentClickListener.onFullText();
+                        }
+                    } else {
+                        mPointContent.setMaxLines(Integer.MAX_VALUE);
+                        mShrink.setVisibility(GONE);
+                    }
+                }
                 break;
             case R.id.praiseCount:
-                if (mOnClickListener != null) {
-                    mOnClickListener.onPraise();
+                if (mOnCommentClickListener != null) {
+                    mOnCommentClickListener.onPraise();
                 }
                 break;
         }
@@ -172,5 +184,13 @@ public class ViewPointContentView extends LinearLayout {
 
         void onPraise();
 
+        void onFullText();
+
     }
+
+//    public enum TextStatus{
+//
+//
+//    }
+
 }

@@ -1,4 +1,4 @@
-package com.sbai.bcnews.view;
+package com.sbai.bcnews.view.share;
 
 import android.app.Activity;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +12,7 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.TextSizeModel;
+import com.sbai.bcnews.view.SmartDialog;
 
 /**
  * Modified by $nishuideyu$ on 2018/4/26
@@ -19,7 +20,7 @@ import com.sbai.bcnews.utils.TextSizeModel;
  * Description: 资讯的带分享的弹窗
  * </p>
  */
-public class NewsShareDialog extends ShareDialog implements View.OnClickListener {
+public class NewsShareAndSetDialog extends ShareDialog implements View.OnClickListener {
     private static final String TAG = "NewsShareDialog";
 
     private TextView mWhistleBlowing;
@@ -28,7 +29,7 @@ public class NewsShareDialog extends ShareDialog implements View.OnClickListener
     private int mLocalTextSize;
     private String[] mStringArray;
 
-    public interface OnNewsSettingClickListener {
+    public interface OnNewsSettingClickListener extends OnNewsLinkCopyListener{
 
         void onWhistleBlowing();
 
@@ -36,13 +37,16 @@ public class NewsShareDialog extends ShareDialog implements View.OnClickListener
 
         void addTextSize(int textSize);
 
-        void copyLink();
     }
 
 
+    public interface OnNewsLinkCopyListener {
+        void onCopyLink();
+    }
+
     private OnNewsSettingClickListener mOnNewsSettingClickListener;
 
-    public NewsShareDialog setOnNewsSettingClickListener(OnNewsSettingClickListener onNewsSettingClickListener) {
+    public NewsShareAndSetDialog setOnNewsSettingClickListener(OnNewsSettingClickListener onNewsSettingClickListener) {
         mOnNewsSettingClickListener = onNewsSettingClickListener;
         return this;
     }
@@ -87,17 +91,17 @@ public class NewsShareDialog extends ShareDialog implements View.OnClickListener
         mTextSize.setText(spannableString);
     }
 
-    public static NewsShareDialog with(Activity activity) {
-        NewsShareDialog shareDialog = new NewsShareDialog();
+    public static NewsShareAndSetDialog with(Activity activity) {
+        NewsShareAndSetDialog shareDialog = new NewsShareAndSetDialog();
         shareDialog.mActivity = activity;
         shareDialog.mSmartDialog = SmartDialog.single(activity);
-        shareDialog.mView = LayoutInflater.from(activity).inflate(R.layout.dialog_news_share, null);
+        shareDialog.mView = LayoutInflater.from(activity).inflate(R.layout.dialog_news_set_share, null);
         shareDialog.mSmartDialog.setCustomView(shareDialog.mView);
         shareDialog.init();
         return shareDialog;
     }
 
-    public NewsShareDialog setTextSize(int textSize) {
+    public NewsShareAndSetDialog setTextSize(int textSize) {
         mLocalTextSize = textSize;
         updateTextSizeHint();
         return this;
@@ -134,14 +138,16 @@ public class NewsShareDialog extends ShareDialog implements View.OnClickListener
                 }
                 break;
             case R.id.nightModelSwitch:
+                if (mSmartDialog != null) mSmartDialog.dismiss();
                 // TODO: 2018/4/26 夜晚模式
                 if (BuildConfig.DEBUG) {
                     mWhistleBlowing.setSelected(true);
                 }
                 break;
             case R.id.copyLink:
+                if (mSmartDialog != null) mSmartDialog.dismiss();
                 if (mOnNewsSettingClickListener != null) {
-                    mOnNewsSettingClickListener.copyLink();
+                    mOnNewsSettingClickListener.onCopyLink();
                 }
                 break;
 

@@ -254,7 +254,7 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
                 mUserName.setText(message.getSourceUserName());
                 mUserBehavior.setText(message.getTitle());
                 mContent.setText(message.getMsg());
-                mTimeLine.setText(DateUtil.formatNewsStyleTime(message.getCreateTime()));
+                mTimeLine.setText(DateUtil.formatDefaultStyleTime(message.getCreateTime()));
 
             }
         }

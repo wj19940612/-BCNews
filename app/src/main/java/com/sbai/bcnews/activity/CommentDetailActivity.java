@@ -19,6 +19,7 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.comment.NewsShareOrCommentBaseActivity;
 import com.sbai.bcnews.activity.dialog.WriteCommentActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.WhistleBlowingDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
@@ -203,6 +204,10 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
 
             @Override
             public void oReview() {
+                if (!LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                    return;
+                }
                 if (newViewPointAndReview != null) {
                     Launcher.with(getActivity(), WriteCommentActivity.class)
                             .putExtra(ExtraKeys.DATA, WriteComment.getSecondWriteComment(newViewPointAndReview))
@@ -336,6 +341,10 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private void writeNewsComment(NewViewPointAndReview newViewPointAndReview) {
         if (mNewsDetail != null)
+            if (!LocalUser.getUser().isLogin()) {
+                Launcher.with(getActivity(), LoginActivity.class).execute();
+                return;
+            }
             Launcher.with(getActivity(), WriteCommentActivity.class)
                     .putExtra(ExtraKeys.DATA, WriteComment.getSecondWriteComment(newViewPointAndReview))
                     .putExtra(ExtraKeys.TAG, newViewPointAndReview.getUsername())
@@ -502,7 +511,7 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                         .circleCrop()
                         .into(mUserHeadImage);
                 mUserName.setText(newViewPointAndReview.getUsername());
-                mTimeLine.setText(DateUtil.formatNewsStyleTime(newViewPointAndReview.getReplayTime()));
+                mTimeLine.setText(DateUtil.formatDefaultStyleTime(newViewPointAndReview.getReplayTime()));
                 mPointContent.setText(newViewPointAndReview.getContent());
                 mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
 

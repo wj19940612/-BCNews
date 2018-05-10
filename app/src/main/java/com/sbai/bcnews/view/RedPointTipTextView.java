@@ -36,7 +36,7 @@ public class RedPointTipTextView extends AppCompatTextView {
         super(context, attrs, defStyleAttr);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RedPointTipTextView);
         mPointVisibility = typedArray.getInt(R.styleable.RedPointTipTextView_redPointTipVisibility, 8);
-        mRedPointRadius = typedArray.getDimensionPixelSize(R.styleable.RedPointTipTextView_redPointRadius, 4);
+        mRedPointRadius = typedArray.getDimensionPixelSize(R.styleable.RedPointTipTextView_redPointRadius, 10);
         mPointHorizontalPadding = typedArray.getDimensionPixelSize(R.styleable.RedPointTipTextView_pointHorizontalPadding, 0);
         mPointVerticalPadding = typedArray.getDimensionPixelSize(R.styleable.RedPointTipTextView_pointVerticalPadding, 0);
         mPointPaint = new Paint();
@@ -51,10 +51,9 @@ public class RedPointTipTextView extends AppCompatTextView {
             mPointPaint.setAntiAlias(true);
             mPointPaint.setDither(true);
             mPointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-            canvas.drawCircle(getWidth() - (mRedPointRadius * 2 + mPointHorizontalPadding),
-                    getPaddingTop() + mRedPointRadius + mPointVerticalPadding,
-                    mRedPointRadius,
-                    mPointPaint);
+            float cx = getWidth() - mRedPointRadius * 2 - mPointHorizontalPadding;
+            float cy = getPaddingTop() + mRedPointRadius * 2 + mPointVerticalPadding;
+            canvas.drawCircle(cx, cy, mRedPointRadius, mPointPaint);
         } else {
             canvas.drawCircle(0, 0, 0, mPointPaint);
         }
@@ -63,5 +62,9 @@ public class RedPointTipTextView extends AppCompatTextView {
     public void setRedPointVisibility(int visibility) {
         mPointVisibility = visibility;
         invalidate();
+    }
+
+    public void setPointHorizontalPadding(int pointHorizontalPadding) {
+        mPointHorizontalPadding = pointHorizontalPadding;
     }
 }

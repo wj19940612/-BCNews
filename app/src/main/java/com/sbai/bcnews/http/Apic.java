@@ -51,7 +51,7 @@ public class Apic {
      * 用户--是否有新的反馈回复--薛松
      */
     public static Api requestWhetherHasNotReedFeedBackMessage() {
-        return Api.get("/news-user/feedback/new");
+        return Api.get("/api/news-user/feedback/new");
     }
 
     /**

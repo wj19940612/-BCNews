@@ -19,10 +19,12 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.comment.NewsShareOrCommentBaseActivity;
 import com.sbai.bcnews.activity.dialog.WriteCommentActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.WhistleBlowingDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.news.NewViewPointAndReview;
 import com.sbai.bcnews.model.news.NewsViewpoint;
@@ -73,6 +75,8 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
     LinearLayout mCollectAndShareLayout;
     @BindView(R.id.rootView)
     ConstraintLayout mRootView;
+    @BindView(R.id.emptyText)
+    TextView mEmptyText;
     private String mId;
     private int mPageSize = 50;
     private ViewpointReviewAdapter mAdapter;
@@ -80,7 +84,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
     private boolean mHasNormalLabel;
     private boolean mHasHotLabel;
     private int mPage = 0;
-    private int mHotSize = 1;
+    private int mHotSize = 0;
 
 
     @Override
@@ -110,6 +114,10 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         ButterKnife.bind(this);
         initData();
         initView();
+        refreshData();
+    }
+
+    private void refreshData() {
         mPageSize = 50;
         mPage = 0;
         requestNewsViewpointList();
@@ -181,10 +189,14 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
             @Override
             public void oReview() {
                 if (mNewsDetail != null)
-                    Launcher.with(getActivity(), WriteCommentActivity.class)
-                            .putExtra(ExtraKeys.DATA, WriteComment.getSecondWriteComment(newViewPointAndReview))
-                            .putExtra(ExtraKeys.TAG, newViewPointAndReview.getUsername())
-                            .executeForResult(WriteCommentActivity.REQ_CODE_WRITE_COMMENT_FOR_VIEWPOINT);
+                    if (!LocalUser.getUser().isLogin()) {
+                        Launcher.with(getActivity(), LoginActivity.class).execute();
+                        return;
+                    }
+                Launcher.with(getActivity(), WriteCommentActivity.class)
+                        .putExtra(ExtraKeys.DATA, WriteComment.getSecondWriteComment(newViewPointAndReview))
+                        .putExtra(ExtraKeys.TAG, newViewPointAndReview.getUsername())
+                        .executeForResult(WriteCommentActivity.REQ_CODE_WRITE_COMMENT_FOR_VIEWPOINT);
             }
 
             @Override
@@ -205,6 +217,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         mNewsDetail = getIntent().getParcelableExtra(ExtraKeys.DATA);
         if (mNewsDetail != null) {
             mId = mNewsDetail.getId();
+            updateCollect(mNewsDetail);
         }
     }
 
@@ -241,6 +254,17 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
     private void updateNewsViewpointList(NewsViewpointAndComment data) {
 
         int dataSize = 0;
+        if (mPage == 0) {
+
+            boolean hasNormalData = data.getNormal() != null && !data.getNormal().isEmpty();
+            boolean hasHotData = data.getHot() != null && !data.getHot().isEmpty();
+
+            if (hasHotData || hasNormalData) {
+                mEmptyText.setVisibility(View.GONE);
+            } else {
+                mEmptyText.setVisibility(View.VISIBLE);
+            }
+        }
 
         mAdapter.setNormalViewpointCount(data.getAllCount());
         List<NewViewPointAndReview> hot = data.getHot();
@@ -298,6 +322,10 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         switch (view.getId()) {
             case R.id.writeComment:
                 if (mNewsDetail != null) {
+                    if (!LocalUser.getUser().isLogin()) {
+                        Launcher.with(getActivity(), LoginActivity.class).execute();
+                        return;
+                    }
                     Launcher.with(getActivity(), WriteCommentActivity.class)
                             .putExtra(ExtraKeys.DATA, WriteComment.getWriteComment(mNewsDetail))
                             .executeForResult(WriteCommentActivity.REQ_CODE_WRITE_VIEWPOINT_FOR_NEWS);
@@ -308,6 +336,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
                     collect(mNewsDetail);
                 break;
             case R.id.bottomShareIcon:
+                showShareDialog();
                 break;
             case R.id.mainBody:
                 finish();
@@ -323,6 +352,9 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         } else {
             mCollectIcon.setSelected(false);
         }
+        Intent intent = new Intent();
+        intent.putExtra(ExtraKeys.TAG, newsDetail.getCollect());
+        setResult(RESULT_OK, intent);
     }
 
     @Override
@@ -331,13 +363,16 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case WriteCommentActivity.REQ_CODE_WRITE_VIEWPOINT_FOR_NEWS:
-                    if (data != null) {
-                        WriteCommentResponse writeCommentResponse = data.getParcelableExtra(ExtraKeys.DATA);
-                        if (writeCommentResponse != null) {
-                            NewViewPointAndReview newViewPointAndReview = writeCommentResponse.getNewViewPointAndReview();
-                            mAdapter.add(mHotSize, newViewPointAndReview);
+                    if (mAdapter.isEmpty()) {
+                        refreshData();
+                    } else {
+                        if (data != null) {
+                            WriteCommentResponse writeCommentResponse = data.getParcelableExtra(ExtraKeys.DATA);
+                            if (writeCommentResponse != null) {
+                                NewViewPointAndReview newViewPointAndReview = writeCommentResponse.getNewViewPointAndReview();
+                                mAdapter.add(mHotSize, newViewPointAndReview);
+                            }
                         }
-
                     }
                     break;
                 case WriteCommentActivity.REQ_CODE_WRITE_COMMENT_FOR_VIEWPOINT:
@@ -521,6 +556,13 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
                     public void onPraise() {
                         if (onViewPointClickListener != null) {
                             onViewPointClickListener.onPraise(newViewPointAndReview, position);
+                        }
+                    }
+
+                    @Override
+                    public void onFullText() {
+                        if (onViewPointClickListener != null) {
+                            onViewPointClickListener.onClick(newViewPointAndReview);
                         }
                     }
                 });

@@ -49,8 +49,8 @@ public class ReplyNews  {
     private String img;
     private int isPraise;
     private int praiseCount;
-    private String relayContent;
-    private String relayUsername;
+    private String replayContent;
+    private String replayUsername;
     private String replayId;
     private long replayTime;
     private int replayUserId;
@@ -61,6 +61,15 @@ public class ReplyNews  {
     private int userId;
     private String userPortrait;
     private String username;
+
+
+    public String getReplayContent() {
+        return replayContent;
+    }
+
+    public void setReplayContent(String replayContent) {
+        this.replayContent = replayContent;
+    }
 
     public String getContent() {
         return content;
@@ -118,20 +127,12 @@ public class ReplyNews  {
         this.praiseCount = praiseCount;
     }
 
-    public String getRelayContent() {
-        return relayContent;
+    public String getReplayUsername() {
+        return replayUsername;
     }
 
-    public void setRelayContent(String relayContent) {
-        this.relayContent = relayContent;
-    }
-
-    public String getRelayUsername() {
-        return relayUsername;
-    }
-
-    public void setRelayUsername(String relayUsername) {
-        this.relayUsername = relayUsername;
+    public void setReplayUsername(String replayUsername) {
+        this.replayUsername = replayUsername;
     }
 
     public String getReplayId() {

@@ -105,7 +105,7 @@ public class CommentContentView extends LinearLayout {
     private void updatePointContent(ViewPointComment viewPointComment) {
         mPointContent.setText(viewPointComment.getContent());
 
-        mTimeLine.setText(DateUtil.formatNewsStyleTime(viewPointComment.getReplayTime()));
+        mTimeLine.setText(DateUtil.formatDefaultStyleTime(viewPointComment.getReplayTime()));
         if (viewPointComment.getVos() != null) {
             mReviewContent.setReviewData(viewPointComment);
             mReviewContent.setOnReviewListener(new CommentReviewView.OnReviewListener() {

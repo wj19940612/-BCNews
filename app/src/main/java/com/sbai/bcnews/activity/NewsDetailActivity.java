@@ -55,7 +55,6 @@ import com.sbai.bcnews.view.NewsScrollView;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.List;
@@ -322,6 +321,9 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mNewsDetail != null) {
+                    mNewsDetail.setReadHeight(mScrollView.getScrollY());
+                }
                 showNewsShareAndSettingDialog();
             }
         });
@@ -351,12 +353,14 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             mAllPoint.setVisibility(View.GONE);
         }
 
-        mCommentCount.setText(String.valueOf(size));
+        if (size != 0) {
+            mCommentCount.setText(String.valueOf(size));
+        }
 
         if (size < 10) {
             mAllComment.setText(R.string.all_comment);
         } else {
-            mAllComment.setText(getString(R.string.all_point_number, " " + data.size() + " "));
+            mAllComment.setText(getString(R.string.all_point_number, " " + size + " "));
         }
 
         if (data.size() > 0) {
@@ -369,8 +373,8 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                     openCommentDetailPage(newsViewpoint);
                 }
             });
-            final NewsViewpoint secondNewsViewpoint = data.get(1);
             if (data.size() > 1) {
+                final NewsViewpoint secondNewsViewpoint = data.get(1);
                 mSecondPoint.setVisibility(View.VISIBLE);
                 updateViewpoint(mSecondPortrait, mSecondName, mSecondContent, mSecondPraiseCount, mSecondPointTime, mSecondReviewCount, secondNewsViewpoint);
                 mSecondPoint.setOnClickListener(new View.OnClickListener() {
@@ -400,7 +404,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         userName.setText(newsViewpoint.getUsername());
         content.setText(newsViewpoint.getContent());
         praiseCount.setText(getString(R.string.praise_count_, newsViewpoint.getPraiseCount()));
-        pointTime.setText(DateUtil.formatNewsStyleTime(newsViewpoint.getReplayTime()));
+        pointTime.setText(DateUtil.formatDefaultStyleTime(newsViewpoint.getReplayTime()));
         reviewCount.setText(getString(R.string.review_count, newsViewpoint.getReplayCount()));
     }
 
@@ -417,14 +421,16 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                 break;
             case R.id.writeComment:
                 if (mNewsDetail != null) {
+                    if (!LocalUser.getUser().isLogin()) {
+                        Launcher.with(getActivity(), LoginActivity.class).execute();
+                        return;
+                    }
                     Launcher.with(getActivity(), WriteCommentActivity.class)
                             .putExtra(ExtraKeys.DATA, WriteComment.getWriteComment(mNewsDetail))
                             .executeForResult(WriteCommentActivity.REQ_CODE_WRITE_VIEWPOINT_FOR_NEWS);
                 }
                 break;
-            case R.id.commentCount:
 
-                break;
             case R.id.collectIcon:
                 collect(mNetNewsDetail);
                 break;
@@ -456,9 +462,16 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             case R.id.secondPoint:
                 break;
             case R.id.allComment:
-                if (mNewsDetail != null) {
+            case R.id.commentCount:
+                NewsDetail newsDetail = null;
+                if (mNetNewsDetail != null) {
+                    newsDetail = mNetNewsDetail;
+                } else {
+                    newsDetail = mNewsDetail;
+                }
+                if (newsDetail != null) {
                     Launcher.with(getActivity(), NewsViewPointListActivity.class)
-                            .putExtra(ExtraKeys.DATA, mNewsDetail)
+                            .putExtra(ExtraKeys.DATA, newsDetail)
                             .executeForResult(NewsViewPointListActivity.REQ_CODE_COMMENT);
                 }
                 break;
@@ -519,6 +532,17 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         requestNewsViewpoint();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        GlideApp.with(getActivity()).pauseRequests();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveDetailCache();
+    }
 
     private void openNewsDetailsPage(int position) {
         if (mOtherArticleList != null && position < mOtherArticleList.size()) {
@@ -912,7 +936,8 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         articleTitle.setSelected(!NewsReadCache.isRead(data.getId()));
         articleOriginal.setVisibility(data.getOriginal() > 0 ? View.VISIBLE : View.GONE);
         articleSource.setText(data.getSource());
-        articleSource.setVisibility(TextUtils.isEmpty(data.getSource()) ? View.GONE : View.VISIBLE);
+//        articleSource.setVisibility(TextUtils.isEmpty(data.getSource()) ? View.GONE : View.VISIBLE);
+        articleSource.setVisibility(View.GONE);
         articleTime.setText(DateUtil.formatNewsStyleTime(data.getReleaseTime()));
         if (data.getImgs() != null && data.getImgs().size() > 0) {
             articleImg.setVisibility(View.VISIBLE);
@@ -970,11 +995,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        saveDetailCache();
-    }
 
     private void saveDetailCache() {
         if (mNewsDetail != null && mNetNewsDetail != null && mNewsDetail.getUpdateTime() != mNetNewsDetail.getUpdateTime()) {
@@ -1013,9 +1033,23 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                 case WriteCommentActivity.REQ_CODE_WRITE_VIEWPOINT_FOR_NEWS:
                     ToastUtil.show(R.string.publish_success);
                     break;
+                case NewsViewPointListActivity.REQ_CODE_COMMENT:
+                    if (data != null) {
+                        int collectStatus = data.getIntExtra(ExtraKeys.TAG, -1);
+                        if (collectStatus != -1) {
+                            if (mNetNewsDetail != null) {
+                                mNetNewsDetail.setCollect(collectStatus);
+                                updateCollect(mNetNewsDetail);
+                            } else if (mNewsDetail != null) {
+                                mNewsDetail.setCollect(collectStatus);
+                                updateCollect(mNewsDetail);
+                            }
+                        }
+                    }
+                    break;
             }
         }
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+
     }
 
 

@@ -18,19 +18,19 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.activity.dialog.WriteCommentActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.WhistleBlowingDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.mine.ReplyNews;
 import com.sbai.bcnews.model.news.NewsViewpoint;
 import com.sbai.bcnews.model.news.ViewpointType;
 import com.sbai.bcnews.model.news.WriteComment;
-import com.sbai.bcnews.model.news.WriteCommentResponse;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.ClipboardUtils;
 import com.sbai.bcnews.utils.DateUtil;
@@ -48,7 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements WhistleBlowingDialogFragment.OnWhistleBlowingReasonListener{
+public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements WhistleBlowingDialogFragment.OnWhistleBlowingReasonListener {
 
     private Unbinder mBind;
 
@@ -59,6 +59,7 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     private int mPage;
     private int mPageSize;
     private ReplyMineAdapter mReplyMineAdapter;
+
 
     public static ReplyMineFragment newInstance(int type) {
         Bundle args = new Bundle();
@@ -160,12 +161,15 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     }
 
     private void writeComment(ReplyNews replyNews) {
+        if (!LocalUser.getUser().isLogin()) {
+            Launcher.with(getActivity(), LoginActivity.class).execute();
+            return;
+        }
         WriteComment replyComment = WriteComment.getReplyComment(replyNews);
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), WriteCommentActivity.class);
-        intent.putExtra(ExtraKeys.DATA, replyComment)
-                .putExtra(ExtraKeys.TAG, replyNews.getUsername());
-        startActivityForResult(intent, WriteCommentActivity.REQ_CODE_WRITE_COMMENT_FOR_MINE_REPLY);
+        Launcher.with(getContext(), WriteCommentActivity.class)
+                .putExtra(ExtraKeys.DATA, replyComment)
+                .putExtra(ExtraKeys.TAG, replyNews.getUsername())
+                .executeForResult(WriteCommentActivity.REQ_CODE_WRITE_COMMENT_FOR_MINE_REPLY);
     }
 
     private void deleteReview(final ReplyNews replyNews) {
@@ -232,6 +236,12 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
                         super.onFailure(reqError);
                         refreshFailure();
                     }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        stopFreshOrLoadAnimation();
+                    }
                 })
                 .fireFreely();
     }
@@ -253,19 +263,7 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == BaseActivity.RESULT_OK) {
-            switch (requestCode) {
-                case WriteCommentActivity.REQ_CODE_WRITE_COMMENT_FOR_MINE_REPLY:
-                    if (data != null) {
-                        WriteCommentResponse writeCommentResponse = data.getParcelableExtra(ExtraKeys.DATA);
-                        if (writeCommentResponse != null) {
-                            ReplyNews replyComment = writeCommentResponse.getReplyComment();
-                            mReplyMineAdapter.add(0, replyComment);
-                        }
-                    }
-                    break;
-            }
-        }
+
     }
 
     @Override
@@ -299,6 +297,7 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
                 })
                 .fire();
     }
+
 
     static class ReplyMineAdapter extends BaseRecycleViewAdapter<ReplyNews, ReplyMineAdapter.ViewHolder> {
 
@@ -403,12 +402,13 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
 //                    mPraiseCount.setEnabled(true);
                     mPraiseCount.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_common_praise_normal, 0);
                 }
+                mPraiseCount.setText(String.valueOf(itemData.getPraiseCount()));
 
                 GlideApp.with(mNewsImage)
                         .load(itemData.getImg())
-                        .placeholder(R.drawable.ic_default_news)
+                        .placeholder(R.drawable.ic_default_image)
                         .into(mNewsImage);
-                mTimeLine.setText(DateUtil.formatNewsStyleTime(itemData.getReplayTime()));
+                mTimeLine.setText(DateUtil.formatDefaultStyleTime(itemData.getReplayTime()));
 
                 if (pageType == NEWS_TYPE_REPLY_TO_MINE) {
                     mReview.setVisibility(View.VISIBLE);
@@ -430,9 +430,9 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
 
             private SpannableString formatReviewContent(int pageType, ReplyNews itemData, Context context) {
                 if (pageType == NEWS_TYPE_REPLY_TO_MINE) {
-                    return StrUtil.mergeTextWithColor("我：", ContextCompat.getColor(context, R.color.textColorPrimary), itemData.getRelayContent());
+                    return StrUtil.mergeTextWithColor("我：", ContextCompat.getColor(context, R.color.textColorPrimary), itemData.getReplayContent());
                 } else if (itemData.getType() != ViewpointType.FIRST_COMMENT) {
-                    return StrUtil.mergeTextWithColor("回复 " + itemData.getRelayUsername() + ": ", ContextCompat.getColor(context, R.color.text_476E92), itemData.getRelayContent());
+                    return StrUtil.mergeTextWithColor("回复 " + itemData.getReplayUsername() + ": ", ContextCompat.getColor(context, R.color.text_476E92), itemData.getReplayContent());
                 }
                 return null;
             }

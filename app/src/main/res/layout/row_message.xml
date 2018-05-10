@@ -69,7 +69,7 @@
             android:paddingTop="5dp"
             android:textColor="@color/text_4949"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/portrait"
             tools:text="溺水的环境阿斯利康积分黑客技术当升科技凤凰科技是大华到付款计划打开就是返回"/>
 

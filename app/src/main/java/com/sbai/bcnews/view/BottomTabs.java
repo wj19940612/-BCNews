@@ -31,6 +31,8 @@ public class BottomTabs extends LinearLayout {
 
     private int mHasReadPointTabPosition;
 
+    private RedPointTipTextView mRedPointTipTextView;
+
 
     public interface OnTabClickListener {
         void onTabClick(int position);
@@ -89,6 +91,16 @@ public class BottomTabs extends LinearLayout {
             }
         }
         selectTab(0);
+
+        //设置红点位置
+        if (mRedPointTipTextView != null)
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    int padding = (int) (mRedPointTipTextView.getMeasuredWidth() *0.4);
+                    setRedPointTextHorizontalPadding(padding);
+                }
+            });
     }
 
     private View createTab(int i) {
@@ -113,14 +125,18 @@ public class BottomTabs extends LinearLayout {
         return text;
     }
 
-    public void setRedPointVisable(int pointVisibility) {
-        if (mHasReadPointTabPosition != -1) {
-            if (mHasReadPointTabPosition < getChildCount()) {
-                RedPointTipTextView redPointTipTextView = (RedPointTipTextView) getChildAt(mHasReadPointTabPosition);
-                redPointTipTextView.setRedPointVisibility(pointVisibility);
-            }
+    public void setRedPointVisibility(int pointVisibility) {
+        if (mRedPointTipTextView != null) {
+            mRedPointTipTextView.setRedPointVisibility(pointVisibility);
         }
     }
+
+    public void setRedPointTextHorizontalPadding(int padding) {
+        if (mRedPointTipTextView != null) {
+            mRedPointTipTextView.setPointHorizontalPadding(padding);
+        }
+    }
+
 
     public void setTabVisibility(int index, int visible) {
         View childAt = getChildAt(index);
@@ -128,16 +144,16 @@ public class BottomTabs extends LinearLayout {
     }
 
     private View createPointTab(int i) {
-        RedPointTipTextView text = new RedPointTipTextView(getContext());
-        text.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-        text.setTextColor(mTextColor != null ? mTextColor : ColorStateList.valueOf(0));
-        text.setText(mTexts[i]);
-        text.setPadding(0, mPaddingTop, 0, mPaddingBottom);
-        text.setCompoundDrawablePadding(mDrawablePadding);
-        text.setCompoundDrawablesWithIntrinsicBounds(0, mIcons[i], 0, 0);
-        text.setGravity(Gravity.CENTER);
-        text.setTag(KEY_POSITION, i);
-        text.setOnClickListener(new OnClickListener() {
+        mRedPointTipTextView = new RedPointTipTextView(getContext());
+        mRedPointTipTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+        mRedPointTipTextView.setTextColor(mTextColor != null ? mTextColor : ColorStateList.valueOf(0));
+        mRedPointTipTextView.setText(mTexts[i]);
+        mRedPointTipTextView.setPadding(0, mPaddingTop, 0, mPaddingBottom);
+        mRedPointTipTextView.setCompoundDrawablePadding(mDrawablePadding);
+        mRedPointTipTextView.setCompoundDrawablesWithIntrinsicBounds(0, mIcons[i], 0, 0);
+        mRedPointTipTextView.setGravity(Gravity.CENTER);
+        mRedPointTipTextView.setTag(KEY_POSITION, i);
+        mRedPointTipTextView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 int pos = (int) view.getTag(KEY_POSITION);
@@ -146,7 +162,7 @@ public class BottomTabs extends LinearLayout {
                 }
             }
         });
-        return text;
+        return mRedPointTipTextView;
     }
 
     public void selectTab(int index) {
