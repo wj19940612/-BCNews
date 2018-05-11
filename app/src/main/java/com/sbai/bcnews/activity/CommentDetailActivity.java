@@ -237,7 +237,7 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                 } else if (newViewPointAndReview != null) {
                     dataId = newViewPointAndReview.getDataId();
                 }
-                WhistleBlowingDialogFragment.newInstance(WhistleBlowingDialogFragment.WHISTLE_BLOWING_TYPE_COMMENT, dataId);
+                WhistleBlowingDialogFragment.newInstance(WhistleBlowingDialogFragment.WHISTLE_BLOWING_TYPE_COMMENT, dataId).show(getSupportFragmentManager());
             }
         }).showPopupWindow();
     }

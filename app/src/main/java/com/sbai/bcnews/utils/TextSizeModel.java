@@ -7,7 +7,7 @@ package com.sbai.bcnews.utils;
  * </p>
  */
 public interface TextSizeModel {
-    int LITTLE = 15;
+//    int LITTLE = 15;
     int NORMAL = 17;
     int BIG = 19;
     int HUGE = 21;

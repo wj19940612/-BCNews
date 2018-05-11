@@ -36,6 +36,7 @@ import com.sbai.bcnews.utils.ClipboardUtils;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.CommentPopupWindow;
 import com.sbai.bcnews.view.recycleview.BaseRecycleViewAdapter;
 import com.sbai.glide.GlideApp;
@@ -50,6 +51,8 @@ import butterknife.Unbinder;
 
 public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements WhistleBlowingDialogFragment.OnWhistleBlowingReasonListener {
 
+//    @BindView(R.id.emptyView)
+//    TextView mEmptyView;
     private Unbinder mBind;
 
     public static final int NEWS_TYPE_REPLY_TO_MINE = 0;
@@ -122,6 +125,12 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
                         .execute();
             }
         });
+
+//        if (mPageType == NEWS_TYPE_REPLY_TO_MINE) {
+//            mEmptyView.setText(R.string.now_not_review);
+//        } else {
+//            mEmptyView.setText(R.string.now_not_review);
+//        }
     }
 
     private void showPopupWindow(View view, final ReplyNews replyNews, final boolean isDeleteReview) {
@@ -249,6 +258,13 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     private void updateReplyList(List<ReplyNews> data) {
         if (mPage == 0) {
             mReplyMineAdapter.clear();
+//            if (data.isEmpty()) {
+//                mEmptyView.setVisibility(View.VISIBLE);
+//                mSwipeToLoadLayout.setVisibility(View.GONE);
+//            } else {
+//                mEmptyView.setVisibility(View.GONE);
+//                mSwipeToLoadLayout.setVisibility(View.VISIBLE);
+//            }
         }
 
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
@@ -292,7 +308,7 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
                 .callback(new Callback<Object>() {
                     @Override
                     protected void onRespSuccess(Object resp) {
-
+                        ToastUtil.show(R.string.publish_success);
                     }
                 })
                 .fire();
@@ -402,7 +418,9 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
 //                    mPraiseCount.setEnabled(true);
                     mPraiseCount.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_common_praise_normal, 0);
                 }
-                mPraiseCount.setText(String.valueOf(itemData.getPraiseCount()));
+                if (itemData.getPraiseCount() != 0) {
+                    mPraiseCount.setText(String.valueOf(itemData.getPraiseCount()));
+                }
 
                 GlideApp.with(mNewsImage)
                         .load(itemData.getImg())

@@ -1,7 +1,5 @@
 package com.sbai.bcnews.model.mine;
 
-import com.sbai.bcnews.model.MessageStatus;
-
 /**
  * Modified by $nishuideyu$ on 2018/4/16
  * <p>
@@ -12,6 +10,15 @@ import com.sbai.bcnews.model.MessageStatus;
 public class Message implements MessageStatus {
 
     public static final int MESSAGE_IS_READ = 1;
+
+    //类型：0 系统 1 评论 2 评论的回复 3 反馈回复 4 评论点赞 5 回复点赞 6 回复的回复
+    public static final int MESSAGE_TYPE_SYSTEM = 0;
+    public static final int MESSAGE_TYPE_COMMENT = 1;
+    public static final int MESSAGE_TYPE_COMMENT_REVIEW = 2;
+    public static final int MESSAGE_TYPE_FEED_BACK_REVIEW = 3;
+    public static final int MESSAGE_TYPE_COMMENT_PRAISE = 4;
+    public static final int MESSAGE_TYPE_REVIEW_PRAISE = 5;
+    public static final int MESSAGE_TYPE_REVIEW_REVIEW = 6;
 
     /**
      * createTime : 1521098828000
@@ -40,6 +47,12 @@ public class Message implements MessageStatus {
     private int type;       //类型：0 系统 1 评论 2 评论的回复 3 反馈回复 4 评论点赞 5 回复点赞 6 回复的回复
     private long updateTime;
     private int userId;
+
+    public boolean isReview() {
+        return getType() == MESSAGE_TYPE_COMMENT ||
+                getType() == MESSAGE_TYPE_COMMENT_REVIEW ||
+                getType() == MESSAGE_TYPE_REVIEW_REVIEW;
+    }
 
     public long getCreateTime() {
         return createTime;

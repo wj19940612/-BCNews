@@ -9,7 +9,7 @@
     android:layout_marginLeft="12dp"
     android:layout_marginRight="12dp"
     android:layout_marginTop="12dp"
-    app:cardBackgroundColor="@color/white"
+    android:background="@drawable/bg_white"
     app:cardCornerRadius="8dp"
     app:cardElevation="3dp"
     app:contentPaddingBottom="20dp"
@@ -25,7 +25,7 @@
             android:id="@+id/notReadHint"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:background="@drawable/bg_red_circle"
+            android:background="@drawable/point_red_circle"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"/>
 

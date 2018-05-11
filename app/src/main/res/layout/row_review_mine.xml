@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/newsImage"
                 android:textColor="@color/text_4949"
                 tools:text="看吉林省会计法律快捷登录"/>

@@ -3,68 +3,93 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
     android:visibility="visible"
     tools:context=".activity.mine.ReviewActivity">
 
+    <!--<android.support.design.widget.CoordinatorLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
     <!--<android.support.design.widget.AppBarLayout-->
-        <!--android:id="@+id/appBarLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@android:color/white">-->
+    <!--android:id="@+id/appBarLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
 
-        <!--<android.support.design.widget.CollapsingToolbarLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
+    <!--<android.support.design.widget.CollapsingToolbarLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
 
-            <com.sbai.bcnews.view.TitleBar
-                android:id="@+id/titleBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:fitsSystemWindows="true"
-                app:backFeature="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:titleText="@string/comment"
-                app:titleTextColor="@color/text_222"/>
+    <com.sbai.bcnews.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:fitsSystemWindows="true"
+        app:backFeature="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="@string/comment"
+        app:titleTextColor="@color/text_222"/>
+    <!--</android.support.design.widget.CollapsingToolbarLayout>-->
 
-        <!--</android.support.design.widget.CollapsingToolbarLayout>-->
+    <!--</android.support.design.widget.AppBarLayout>-->
+    <!--<android.support.design.widget.AppBarLayout-->
+    <!--android:id="@+id/appBarLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"/>-->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="@dimen/common_padding">-->
+    <!--<android.support.design.widget.CollapsingToolbarLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
 
-            <!--<ImageView-->
-                <!--android:id="@+id/arrow"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/ic_tb_back_black"-->
-                <!--android:visibility="gone"/>-->
 
-            <com.sbai.bcnews.view.slidingtab.SlidingTabLayout
-                android:id="@+id/slidingTabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"/>
-        <!--</LinearLayout>-->
+    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+    <!--&lt;!&ndash;android:gravity="center"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:text="哈哈哈哈哈"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:background="@color/google_green"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:minHeight="48dp"/>&ndash;&gt;-->
+
+    <!--</android.support.design.widget.CollapsingToolbarLayout>-->
+
+
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="@dimen/common_padding">-->
+
+
+    <!--<ImageView-->
+    <!--android:id="@+id/arrow"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:src="@drawable/ic_tb_back_black"-->
+    <!--android:visibility="gone"/>-->
+    <!--</RelativeLayout>-->
 
 
     <!--</android.support.design.widget.AppBarLayout>-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+    <com.sbai.bcnews.view.slidingtab.SlidingTabLayout
+        android:id="@+id/slidingTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bg_F5F5"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_height="match_parent"
+        android:background="@color/bg_F5F5"/>
+    <!--</android.support.design.widget.CoordinatorLayout>-->
 
 </LinearLayout>

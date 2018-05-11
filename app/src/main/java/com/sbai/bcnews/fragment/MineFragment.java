@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.model.mine.MsgNumber;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
+import com.sbai.bcnews.model.news.NotReadMessage;
 import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
@@ -89,13 +91,16 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         updateUserLoginStatus();
         refreshUserData();
-        requestNotReadMessageCount();
-        requestWhetherHasNotReedFeedBackMessage();
-
     }
 
 
@@ -104,8 +109,6 @@ public class MineFragment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             refreshUserData();
-            requestNotReadMessageCount();
-            requestWhetherHasNotReedFeedBackMessage();
         }
     }
 
@@ -124,30 +127,11 @@ public class MineFragment extends BaseFragment {
                 .fire();
     }
 
-    private void requestNotReadMessageCount() {
-        if (LocalUser.getUser().isLogin())
-            Apic.requestNotReadMessageCount()
-                    .tag(TAG)
-                    .callback(new Callback2D<Resp<Integer>, Integer>() {
-                        @Override
-                        protected void onRespSuccessData(Integer data) {
-                            updateNotReadMessage(data);
-                        }
-                    })
-                    .fire();
+    public void updateNotReadMessage(NotReadMessage data) {
+        updateNotReadMessage(data.getMsg());
+        updateNotReadFeedBackMessage(data.getFeedBack());
     }
 
-    private void requestWhetherHasNotReedFeedBackMessage() {
-        Apic.requestWhetherHasNotReedFeedBackMessage()
-                .tag(TAG)
-                .callback(new Callback2D<Resp<Integer>, Integer>() {
-                    @Override
-                    protected void onRespSuccessData(Integer data) {
-                        updateNotReadFeedBackMessage(data);
-                    }
-                })
-                .fire();
-    }
 
     private void updateNotReadFeedBackMessage(int data) {
         if (data == 0) {
@@ -236,7 +220,7 @@ public class MineFragment extends BaseFragment {
                 if (LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), PersonalDataActivity.class).execute();
                 } else {
-                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                    login();
                 }
                 break;
             case R.id.collect:
@@ -244,7 +228,7 @@ public class MineFragment extends BaseFragment {
                 if (LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), MyCollectActivity.class).execute();
                 } else {
-                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                    login();
                 }
                 break;
             case R.id.history:
@@ -263,12 +247,24 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), SettingActivity.class).execute();
                 break;
             case R.id.message:
-                Launcher.with(getActivity(), MessageActivity.class).putExtra(ExtraKeys.DATA, mNotReadMessageCount).execute();
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), MessageActivity.class).putExtra(ExtraKeys.DATA, mNotReadMessageCount).execute();
+                }else {
+                    login();
+                }
                 break;
             case R.id.review:
-                Launcher.with(getActivity(), ReviewActivity.class).execute();
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), ReviewActivity.class).execute();
+                } else {
+                    login();
+                }
                 break;
         }
+    }
+
+    private void login() {
+        Launcher.with(getActivity(), LoginActivity.class).execute();
     }
 
     private void requestOperationWeChatAccount() {

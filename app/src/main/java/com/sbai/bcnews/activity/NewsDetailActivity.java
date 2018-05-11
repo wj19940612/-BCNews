@@ -533,10 +533,11 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        GlideApp.with(getActivity()).pauseRequests();
+    protected void onStop() {
+        super.onStop();
+        GlideApp.with(getActivity()).onStop();
     }
+
 
     @Override
     public void onBackPressed() {

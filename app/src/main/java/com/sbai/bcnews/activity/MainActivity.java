@@ -25,6 +25,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.model.news.NotReadMessage;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
 import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.bcnews.utils.UmengCountEventId;
@@ -127,13 +128,17 @@ public class MainActivity extends BaseActivity {
     private void requestWhetherHasAllNotReadMessage() {
         Apic.requestWhetherHasAllNotReadMessage()
                 .tag(TAG)
-                .callback(new Callback2D<Resp<Integer>, Integer>() {
+                .callback(new Callback2D<Resp<NotReadMessage>, NotReadMessage>() {
                     @Override
-                    protected void onRespSuccessData(Integer data) {
-                        if (data == 1) {
+                    protected void onRespSuccessData(NotReadMessage data) {
+                        if (data.hasNewMessage()) {
                             mBottomTabs.setRedPointVisibility(View.VISIBLE);
                         } else {
                             mBottomTabs.setRedPointVisibility(View.GONE);
+                        }
+                        MineFragment fragment = (MineFragment) mMainFragmentsAdapter.getFragment(PAGE_POSITION_MINE);
+                        if (fragment != null) {
+                            fragment.updateNotReadMessage(data);
                         }
                     }
                 })

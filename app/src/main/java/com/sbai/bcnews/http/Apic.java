@@ -33,26 +33,7 @@ public class Apic {
                         .put("createTime", startTime));
     }
 
-    /**
-     * HTTP
-     * /api/news-msg/msg/count
-     * GET
-     * 用户--未读消息数量--薛松
-     *
-     * @return
-     */
-    public static Api requestNotReadMessageCount() {
-        return Api.get("/api/news-msg/msg/count");
-    }
 
-    /**
-     * /news-user/feedback/new
-     * GET
-     * 用户--是否有新的反馈回复--薛松
-     */
-    public static Api requestWhetherHasNotReedFeedBackMessage() {
-        return Api.get("/api/news-user/feedback/new");
-    }
 
     /**
      * /api/news-msg/msg/new

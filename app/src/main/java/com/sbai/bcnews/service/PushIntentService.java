@@ -29,7 +29,7 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.MainActivity;
 import com.sbai.bcnews.activity.NewsDetailActivity;
-import com.sbai.bcnews.model.PushMessage;
+import com.sbai.bcnews.model.push.PushMessage;
 
 
 public class PushIntentService extends GTIntentService {
@@ -155,10 +155,12 @@ public class PushIntentService extends GTIntentService {
         if (data.isNews()) {
             intent = new Intent(context, NewsDetailActivity.class);
             intent.putExtra(ExtraKeys.NEWS_ID, data.getDataId());
-//            intent.putExtra(ExtraKeys.CHANNEL, );
         } else if (data.isNewsFlash()) {
             intent = new Intent(context, MainActivity.class);
             intent.putExtra(ExtraKeys.PAGE_INDEX, MainActivity.PAGE_POSITION_NEWS_FLASH);
+        }
+        switch (data.getType()){
+
         }
         if (intent != null) {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

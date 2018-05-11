@@ -93,7 +93,7 @@
             app:rowTextSize="16sp"
             app:rowVerticalPadding="0dp"
             app:splitLineColor="@color/bg_F5F5"
-            app:subTextBackground="@drawable/bg_red_circle"
+            app:subTextBackground="@drawable/point_red_circle"
             app:subTextColor="@android:color/white"
             app:subTextSize="12sp"
             app:subTextVisible="gone"/>
@@ -143,7 +143,7 @@
             app:rowTextSize="16sp"
             app:rowVerticalPadding="0dp"
             app:splitLineColor="@color/bg_F5F5"
-            app:subTextBackground="@drawable/bg_red_circle"
+            app:subTextLeftDrawable="@drawable/point_red_circle_5"
             app:subTextColor="@android:color/white"
             app:subTextSize="12sp"
             app:subTextVisible="gone"/>

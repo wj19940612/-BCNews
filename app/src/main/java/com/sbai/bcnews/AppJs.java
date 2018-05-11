@@ -200,7 +200,13 @@ public class AppJs {
             case AppPageType.HOME:
                 break;
             case AppPageType.LOGIN:
-                Launcher.with(mContext, LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
+                Activity activity = (Activity) mContext;
+                ((Activity) mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Launcher.with(mContext, LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
+                    }
+                });
                 break;
         }
     }

@@ -391,7 +391,7 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
                 .callback(new Callback<Object>() {
                     @Override
                     protected void onRespSuccess(Object resp) {
-
+                        ToastUtil.show(R.string.publish_success);
                     }
                 })
                 .fire();

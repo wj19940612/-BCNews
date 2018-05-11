@@ -69,20 +69,20 @@ public class NewsShareAndSetDialog extends ShareDialog implements View.OnClickLi
 
     private void updateTextSizeHint() {
         if (mTextSize == null) return;
-        String textModel = mActivity.getString(R.string.web_text_size_model, mStringArray[1]);
+        String textModel = mActivity.getString(R.string.web_text_size_model, mStringArray[0]);
 
         switch (mLocalTextSize) {
-            case TextSizeModel.LITTLE:
+//            case TextSizeModel.LITTLE:
+//                textModel = mActivity.getString(R.string.web_text_size_model, mStringArray[0]);
+//                break;
+            case TextSizeModel.NORMAL:
                 textModel = mActivity.getString(R.string.web_text_size_model, mStringArray[0]);
                 break;
-            case TextSizeModel.NORMAL:
+            case TextSizeModel.BIG:
                 textModel = mActivity.getString(R.string.web_text_size_model, mStringArray[1]);
                 break;
-            case TextSizeModel.BIG:
-                textModel = mActivity.getString(R.string.web_text_size_model, mStringArray[2]);
-                break;
             case TextSizeModel.HUGE:
-                textModel = mActivity.getString(R.string.web_text_size_model, mStringArray[3]);
+                textModel = mActivity.getString(R.string.web_text_size_model, mStringArray[2]);
                 break;
         }
 
@@ -118,7 +118,7 @@ public class NewsShareAndSetDialog extends ShareDialog implements View.OnClickLi
                 mSmartDialog.dismiss();
                 break;
             case R.id.subTextSize:
-                if (mLocalTextSize > TextSizeModel.LITTLE) {
+                if (mLocalTextSize > TextSizeModel.NORMAL) {
                     mLocalTextSize -= TextSizeModel.CHANGE_POINT;
                     Preference.get().setLocalWebTextSize(mLocalTextSize);
                     if (mOnNewsSettingClickListener != null) {

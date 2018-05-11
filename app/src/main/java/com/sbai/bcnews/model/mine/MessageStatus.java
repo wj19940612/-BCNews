@@ -1,4 +1,4 @@
-package com.sbai.bcnews.model;
+package com.sbai.bcnews.model.mine;
 
 /**
  * Modified by $nishuideyu$ on 2018/4/16

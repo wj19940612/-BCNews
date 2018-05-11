@@ -22,6 +22,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.mine.Message;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.adapter.BaseRecycleViewAdapter;
 import com.sbai.bcnews.view.EmptyRecyclerView;
@@ -70,7 +71,7 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
         if (notReadMessageCount == 0) {
             mTitleBar.setRightVisible(false);
             mTitleBar.setRightViewEnable(false);
-        }else {
+        } else {
             mTitleBar.setRightVisible(true);
             mTitleBar.setRightViewEnable(true);
         }
@@ -82,6 +83,10 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
             @Override
             public void onItemClick(Message message, int position) {
                 readMessage(message, position);
+                if (message.isReview())
+                    Launcher.with(getActivity(), ReviewActivity.class).execute();
+                else if (message.getType() == Message.MESSAGE_TYPE_FEED_BACK_REVIEW)
+                    Launcher.with(getActivity(), FeedbackActivity.class).execute();
             }
         });
 

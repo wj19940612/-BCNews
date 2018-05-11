@@ -74,8 +74,8 @@ android {
         }
 
         alpha {
-            versionCode 23
-            versionName "1.0.051001"
+            versionCode 24
+            versionName "1.0.051002"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",

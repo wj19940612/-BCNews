@@ -1,11 +1,11 @@
-package com.sbai.bcnews.model;
+package com.sbai.bcnews.model.push;
 
 /**
  * 个推
  */
 
-public class PushMessage {
-    private int classify;      // 以前用的classify 和type 双重判断  后面用type 作为唯一表示
+public class PushMessage implements PushType{
+    private int classify;
     private long createTime;
     private String dataId;
     private String iconUrl;
@@ -15,11 +15,11 @@ public class PushMessage {
     private String url;
 
     public boolean isNews() {
-        return type == 0;
+        return type == NEWS;
     }
 
     public boolean isNewsFlash() {
-        return type == 1;
+        return type == NEWS_FLASH;
     }
 
     public int getClassify() {
