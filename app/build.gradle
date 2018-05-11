@@ -6,8 +6,8 @@ android {
         applicationId "com.sbai.bcnews"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 4
+        versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField('String', 'HOST', '\"news.ailemi.com\"')
@@ -60,34 +60,39 @@ android {
 
     productFlavors {
         dev {
-            minSdkVersion 21
+            versionName "2.0.6"
+//            minSdkVersion 21
             buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
                     GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
                     GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
                     UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
-                    UMENG_CHANNEL   : "android"
+                    UMENG_CHANNEL   : "tencent"
             ]
         }
 
         alpha {
-            versionCode 19
-            versionName "1.0.030604"
+            versionCode 20
+            versionName "1.0.0307"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
                     GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
                     GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
                     UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
-                    UMENG_CHANNEL   : "android"
+                    UMENG_CHANNEL   : "tencent"
             ]
         }
 
-        others {
-            versionCode 4
-            versionName "1.0.4"
-        }
+        xiaomi {}
+        vivo {}
+        c360 {}
+        tencent {}
+        baidu {}
+        others {}
+        fenx {}
+        weixin{}
     }
 
     android.applicationVariants.all { variant ->

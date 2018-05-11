@@ -70,12 +70,15 @@ public class PersonalDataActivity extends BaseActivity {
     IconTextRow mSex;
     @BindView(R.id.birthday)
     IconTextRow mBirthday;
-    @BindView(R.id.location)
-    IconTextRow mLocation;
+
     @BindView(R.id.personalIntroduce)
     LinearLayout mPersonalIntroduce;
     @BindView(R.id.introduce)
     TextView mIntroduce;
+    @BindView(R.id.location)
+    TextView mLocation;
+    @BindView(R.id.locationLL)
+    LinearLayout mLocationLL;
 
     private UserInfo mUserInfo;
     private OptionPicker mSexPicker;
@@ -119,7 +122,6 @@ public class PersonalDataActivity extends BaseActivity {
 
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
-                        Log.d(TAG, "onRespSuccess: " + resp.toString());
                     }
                 })
                 .fireFreely();
@@ -156,7 +158,7 @@ public class PersonalDataActivity extends BaseActivity {
             mBirthday.setSubText(data.getBirthday());
         }
         if (!TextUtils.isEmpty(data.getUserProvince()) && !TextUtils.isEmpty(data.getUserCity())) {
-            mLocation.setSubText(data.getUserProvince() + " " + data.getUserCity());
+            mLocation.setText(data.getUserProvince() + " " + data.getUserCity());
         }
     }
 
@@ -168,7 +170,7 @@ public class PersonalDataActivity extends BaseActivity {
                 .into(mUserHeadImage);
     }
 
-    @OnClick({R.id.headImageLayout, R.id.nickName, R.id.sex, R.id.birthday, R.id.location, R.id.personalIntroduce})
+    @OnClick({R.id.headImageLayout, R.id.nickName, R.id.sex, R.id.birthday, R.id.locationLL, R.id.personalIntroduce})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.headImageLayout:
@@ -187,7 +189,7 @@ public class PersonalDataActivity extends BaseActivity {
             case R.id.birthday:
                 showTimeSelectWheel();
                 break;
-            case R.id.location:
+            case R.id.locationLL:
                 showLocationWheel();
                 break;
             case R.id.personalIntroduce:
@@ -360,7 +362,7 @@ public class PersonalDataActivity extends BaseActivity {
                         UserInfo userInfo = LocalUser.getUser().getUserInfo();
                         userInfo.setUserProvince(province.getAreaName());
                         userInfo.setUserCity(city.getAreaName());
-                        mLocation.setSubText(province.getAreaName() + " " + city.getAreaName());
+                        mLocation.setText(province.getAreaName() + " " + city.getAreaName());
                     }
                 });
                 picker.show();

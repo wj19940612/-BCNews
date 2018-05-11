@@ -136,7 +136,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
             mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
 
-            mRootView.setOnClickListener(new View.OnClickListener() {
+            mContentRL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
@@ -209,7 +209,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mImg.setVisibility(View.GONE);
             }
-            mRootView.setOnClickListener(new View.OnClickListener() {
+            mContentRL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
@@ -298,7 +298,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mImg3.setVisibility(View.INVISIBLE);
             }
-            mRootView.setOnClickListener(new View.OnClickListener() {
+            mContentRL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {

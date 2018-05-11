@@ -70,10 +70,9 @@ public class MainActivity extends BaseActivity {
     };
 
     private void requestShowMarketPageSwitch() {
-        mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.VISIBLE);
+        mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.GONE);
         Apic.requestOperationSetting(Operation.OPERATION_TYPE_MARKET_PAGE_SWITCH)
                 .tag(TAG)
-
                 .callback(new Callback2D<Resp<Operation>, Operation>() {
                     @Override
                     protected void onRespSuccessData(Operation data) {

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
@@ -82,21 +83,30 @@ public class AccountManagerActivity extends WeChatActivity {
                     unBindWeChat();
                     break;
                 case UserInfo.WECHAT_BIND_STATUS_UNBIND:
-                    bindWeChat(userInfo);
+                    requestWeChatInfo();
                     break;
             }
         }
     }
 
-    private void bindWeChat(UserInfo userInfo) {
-        Apic.requestBindWeChat(userInfo.getWxOpenId(), userInfo.getWxName())
+    private void bindWeChat() {
+        Apic.requestBindWeChat(getWeChatOpenid(), getWeChatName(), getWeChatIconUrl())
                 .tag(TAG)
                 .callback(new Callback<Resp<Object>>() {
 
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
-                        changeUserWeChatBindStatus(UserInfo.WECHAT_BIND_STATUS_BIND);
-                        postLogin();
+                        Apic.requestUserInfo()
+                                .tag(TAG)
+                                .callback(new Callback2D<Resp<UserInfo>, UserInfo>() {
+                                    @Override
+                                    protected void onRespSuccessData(UserInfo data) {
+                                        LocalUser.getUser().setUserInfo(data);
+                                        changeUserWeChatBindStatus(UserInfo.WECHAT_BIND_STATUS_BIND);
+                                        postLogin();
+                                    }
+                                })
+                                .fire();
                     }
                 })
                 .fire();
@@ -118,10 +128,7 @@ public class AccountManagerActivity extends WeChatActivity {
     @Override
     protected void bindSuccess() {
         if (isWeChatLogin()) {
-            UserInfo userInfo = LocalUser.getUser().getUserInfo();
-            userInfo.setWxOpenId(getWeChatOpenid());
-            userInfo.setWxName(getWeChatName());
-            bindWeChat(userInfo);
+            bindWeChat();
         }
     }
 

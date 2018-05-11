@@ -25,7 +25,7 @@ public class Apic {
         String QR_CODE = Api.getFixedHost() + "/qc.png";
 
         //关于我们界面链接
-        String WEB_URI_ABOUT_PAGE = Api.getFixedHost() + "/news/banner/about.html";
+        String WEB_URI_ABOUT_PAGE = Api.getFixedHost() + "/news/banner/about.html?version=%s";
         //用户协议
         String WEB_URI_AGREEMENT = Api.getFixedHost() + "/news/banner/agreement.html?code=1";
     }
@@ -34,8 +34,9 @@ public class Apic {
      * 首页--banner点击
      */
     public static Api requesBannerUpdate(String bannerId) {
-        return Api.post("/api/news-user/banner/click",new ReqParams().put("id",bannerId));
+        return Api.post("/api/news-user/banner/click", new ReqParams().put("id", bannerId));
     }
+
     /**
      * 用户--同步阅读记录--薛松
      */
@@ -141,10 +142,10 @@ public class Apic {
      * @return
      */
     public static Api requestMarketVarietyList(int page, int size, String exchangeCode) {
-        return Api.get("/api/news-quota/variety/list",new ReqParams()
-                .put("page",page)
-                .put("size",size)
-                .put("exchangeCode",exchangeCode));
+        return Api.get("/api/news-quota/variety/list", new ReqParams()
+                .put("page", page)
+                .put("size", size)
+                .put("exchangeCode", exchangeCode));
     }
 
 
@@ -271,10 +272,11 @@ public class Apic {
      *
      * @return
      */
-    public static Api requestBindWeChat(String openId, String name) {
+    public static Api requestBindWeChat(String openId, String name, String iconUrl) {
         return Api.post("/api/news-user/user/bound/{openId}", new ReqParams()
                 .put("openId", openId)
-                .put("name", name));
+                .put("name", name)
+                .put("iconUrl", iconUrl));
     }
 
     /**
