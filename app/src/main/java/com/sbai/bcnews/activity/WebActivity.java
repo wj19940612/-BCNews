@@ -212,7 +212,7 @@ public class WebActivity extends BaseActivity {
 
     protected void syncCookies(String pageUrl) {
         String rawCookie = null;
-        rawCookie = CookieManger.getInstance().getCookies();
+        rawCookie = CookieManger.getInstance().getRawCookie();
         Log.d(TAG, "syncCookies: " + rawCookie + ", " + pageUrl);
 
         if (!TextUtils.isEmpty(rawCookie) && !TextUtils.isEmpty(pageUrl)) {

@@ -61,7 +61,7 @@ public class ViewPointContentView extends LinearLayout {
         mOnCommentClickListener = onClickListener;
     }
 
-    private int mContentLines;
+//    private int mContentLines;
 
     public ViewPointContentView(Context context) {
         super(context);
@@ -116,28 +116,22 @@ public class ViewPointContentView extends LinearLayout {
 
     }
 
-    private void updatePointContent(NewViewPointAndReview newViewPointAndReview) {
+    private void updatePointContent(final NewViewPointAndReview newViewPointAndReview) {
         mPointContent.setText(newViewPointAndReview.getContent());
 
-        mPointContent.post(new Runnable() {
-            @Override
-            public void run() {
-                mContentLines = mPointContent.getLineCount();
-                if (mContentLines > 5) {
-                    mPointContent.setMaxLines(CONTENT_SPREAD_LINE);
-                    mPointContent.setEllipsize(TextUtils.TruncateAt.END);
-                    mShrink.setVisibility(VISIBLE);
-                    if (mContentLines < 10) {
-                        mShrink.setText(mSpread);
-                    } else {
-                        mShrink.setText(mFullText);
-                    }
-                } else {
-                    mShrink.setVisibility(GONE);
+        if (mPointContent.getLineCount() != 0) {
+            handleContent(newViewPointAndReview.getLineCount());
+        }else {
+            mPointContent.post(new Runnable() {
+                @Override
+                public void run() {
+                    int lineCount = mPointContent.getLineCount();
+                    newViewPointAndReview.setLineCount(lineCount);
+                    handleContent(lineCount);
                 }
-            }
-        });
+            });
 
+        }
 
         mTimeLine.setText(DateUtil.formatDefaultStyleTime(newViewPointAndReview.getReplayTime()));
         if (newViewPointAndReview.getVos() != null) {
@@ -145,6 +139,22 @@ public class ViewPointContentView extends LinearLayout {
         } else {
             mReviewContent.setVisibility(GONE);
         }
+    }
+
+    private void handleContent(int lineCount) {
+        if (lineCount > 5) {
+            mPointContent.setMaxLines(CONTENT_SPREAD_LINE);
+            mPointContent.setEllipsize(TextUtils.TruncateAt.END);
+            mShrink.setVisibility(VISIBLE);
+            if (lineCount < 10) {
+                mShrink.setText(mSpread);
+            } else {
+                mShrink.setText(mFullText);
+            }
+        } else {
+            mShrink.setVisibility(GONE);
+        }
+
     }
 
 
@@ -188,9 +198,8 @@ public class ViewPointContentView extends LinearLayout {
 
     }
 
-//    public enum TextStatus{
-//
-//
-//    }
+    public enum TextStatus {
+        NORMAL, SPREAD, FULL_TEXT
+    }
 
 }

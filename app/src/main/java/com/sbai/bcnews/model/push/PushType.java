@@ -9,5 +9,7 @@ package com.sbai.bcnews.model.push;
 public interface PushType {
     int NEWS = 0;
     int NEWS_FLASH = 1;
+    int COMMENT = 2; //评论
+    int PRAISE = 3;
 
 }

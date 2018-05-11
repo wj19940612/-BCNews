@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:visibility="gone"
         app:default_to_loading_more_scrolling_duration="500"
         app:load_more_complete_delay_duration="500"
         app:load_more_final_drag_offset="@dimen/load_more_final_offset_google"
@@ -38,18 +39,27 @@
             android:layout_height="wrap_content"/>
     </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
-    <TextView
-        android:id="@+id/emptyView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:drawablePadding="20dp"
-        android:drawableTop="@drawable/ic_not_comment"
-        android:gravity="center"
-        android:textColor="@color/text_4949"
-        android:textSize="15sp"
-        android:visibility="gone"
-        tools:text="ddd"/>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/emptyView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawablePadding="20dp"
+            android:drawableTop="@drawable/ic_not_comment"
+            android:gravity="center"
+            android:textColor="@color/text_4949"
+            android:textSize="15sp"
+            tools:text="ddd"/>
+
+    </android.support.v4.widget.NestedScrollView>
 
 
 </LinearLayout>

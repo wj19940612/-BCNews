@@ -371,6 +371,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
                             if (writeCommentResponse != null) {
                                 NewViewPointAndReview newViewPointAndReview = writeCommentResponse.getNewViewPointAndReview();
                                 mAdapter.add(mHotSize, newViewPointAndReview);
+                                mEmptyText.setVisibility(View.GONE);
                             }
                         }
                     }

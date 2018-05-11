@@ -10,7 +10,7 @@ import android.os.Parcelable;
  * </p>
  * APIS:{@link com.songbai.coinpro.http.Api#requestNewsViewpoint()}
  */
-public class NewsViewpoint implements ViewpointType,Parcelable {
+public class NewsViewpoint implements ViewpointType, Parcelable {
 
 
     /**
@@ -41,8 +41,6 @@ public class NewsViewpoint implements ViewpointType,Parcelable {
     private String dataId;
     private int isPraise;
     private int type;
-
-
 
     public String getDataId() {
         return dataId;
@@ -115,7 +113,6 @@ public class NewsViewpoint implements ViewpointType,Parcelable {
     public void setUsername(String username) {
         this.username = username;
     }
-
 
 
     public int getIsPraise() {

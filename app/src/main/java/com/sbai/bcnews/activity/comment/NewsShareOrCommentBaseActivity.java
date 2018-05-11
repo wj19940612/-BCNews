@@ -388,10 +388,11 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
     private void submitWhistleBlowing(String content, int type, String id) {
         Apic.submitWhistleBlowing(id, type, content)
                 .tag(TAG)
-                .callback(new Callback<Object>() {
+                .callback(new Callback<Resp<Object>>() {
+
                     @Override
-                    protected void onRespSuccess(Object resp) {
-                        ToastUtil.show(R.string.publish_success);
+                    protected void onRespSuccess(Resp<Object> resp) {
+                        ToastUtil.show(resp.getMsg());
                     }
                 })
                 .fire();

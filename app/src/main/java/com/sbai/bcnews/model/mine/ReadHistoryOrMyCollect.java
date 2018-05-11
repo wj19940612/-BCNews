@@ -47,7 +47,7 @@ public class ReadHistoryOrMyCollect {
 //    private int readerTime;       //需要阅读时间
 //    private boolean isRead;       //阅读状态已读未读
 //    private int original;         //是否原创
-//    private int praise;           //是否点赞 0-未点赞 1-已点赞
+//    private int PRAISE;           //是否点赞 0-未点赞 1-已点赞
 //    private int collect;          //是否收藏 0-未收藏 1-已收藏
 //
 

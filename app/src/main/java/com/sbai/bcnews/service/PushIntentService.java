@@ -29,7 +29,9 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.MainActivity;
 import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.activity.mine.MessageActivity;
 import com.sbai.bcnews.model.push.PushMessage;
+import com.sbai.bcnews.model.push.PushType;
 
 
 public class PushIntentService extends GTIntentService {
@@ -159,8 +161,10 @@ public class PushIntentService extends GTIntentService {
             intent = new Intent(context, MainActivity.class);
             intent.putExtra(ExtraKeys.PAGE_INDEX, MainActivity.PAGE_POSITION_NEWS_FLASH);
         }
-        switch (data.getType()){
-
+        switch (data.getType()) {
+            case PushMessage.COMMENT:
+            case PushType.PRAISE:
+                intent = new Intent(context, MessageActivity.class);
         }
         if (intent != null) {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

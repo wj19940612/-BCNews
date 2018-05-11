@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,8 +52,10 @@ import butterknife.Unbinder;
 
 public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements WhistleBlowingDialogFragment.OnWhistleBlowingReasonListener {
 
-//    @BindView(R.id.emptyView)
-//    TextView mEmptyView;
+    @BindView(R.id.scrollView)
+    NestedScrollView mScrollView;
+    @BindView(R.id.emptyView)
+    TextView mEmptyView;
     private Unbinder mBind;
 
     public static final int NEWS_TYPE_REPLY_TO_MINE = 0;
@@ -126,11 +129,11 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
             }
         });
 
-//        if (mPageType == NEWS_TYPE_REPLY_TO_MINE) {
-//            mEmptyView.setText(R.string.now_not_review);
-//        } else {
-//            mEmptyView.setText(R.string.now_not_review);
-//        }
+        if (mPageType == NEWS_TYPE_REPLY_TO_MINE) {
+            mEmptyView.setText(R.string.now_not_review);
+        } else {
+            mEmptyView.setText(R.string.now_not_comment);
+        }
     }
 
     private void showPopupWindow(View view, final ReplyNews replyNews, final boolean isDeleteReview) {
@@ -258,13 +261,13 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     private void updateReplyList(List<ReplyNews> data) {
         if (mPage == 0) {
             mReplyMineAdapter.clear();
-//            if (data.isEmpty()) {
-//                mEmptyView.setVisibility(View.VISIBLE);
-//                mSwipeToLoadLayout.setVisibility(View.GONE);
-//            } else {
-//                mEmptyView.setVisibility(View.GONE);
-//                mSwipeToLoadLayout.setVisibility(View.VISIBLE);
-//            }
+            if (data.isEmpty()) {
+                mScrollView.setVisibility(View.VISIBLE);
+                mSwipeToLoadLayout.setVisibility(View.GONE);
+            } else {
+                mScrollView.setVisibility(View.GONE);
+                mSwipeToLoadLayout.setVisibility(View.VISIBLE);
+            }
         }
 
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
@@ -302,13 +305,14 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     }
 
     @Override
-    public void onChooseWhistleBlowingReason(String reason, int type, String id) {
+    public void onChooseWhistleBlowingReason(final String reason, int type, String id) {
         Apic.submitWhistleBlowing(id, type, reason)
                 .tag(TAG)
-                .callback(new Callback<Object>() {
+                .callback(new Callback<Resp<Object>>() {
+
                     @Override
-                    protected void onRespSuccess(Object resp) {
-                        ToastUtil.show(R.string.publish_success);
+                    protected void onRespSuccess(Resp<Object> resp) {
+                        ToastUtil.show(resp.getMsg());
                     }
                 })
                 .fire();

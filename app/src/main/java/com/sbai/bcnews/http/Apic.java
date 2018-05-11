@@ -131,7 +131,7 @@ public class Apic {
     }
 
     /**
-     * /api/news-info/discuss/praise
+     * /api/news-info/discuss/PRAISE
      * POST
      * 点赞----齐慕伟
      *
@@ -141,7 +141,7 @@ public class Apic {
      * @param type
      */
     public static Api praiseComment(String id, String dataId, Integer userId, int type) {
-        return Api.post("/api/news-info/discuss/praise",
+        return Api.post("/api/news-info/discuss/PRAISE",
                 new ReqParams()
                         .put("id", id)
                         .put("dataId", dataId)
@@ -339,7 +339,7 @@ public class Apic {
 
 
     /**
-     * /api/news-info/news/praise/{id}
+     * /api/news-info/news/PRAISE/{id}
      * <p>资讯点赞 - 齐慕伟</p>
      *
      * @param newsId 资讯id
@@ -347,7 +347,7 @@ public class Apic {
      * @return
      */
     public static Api praiseNews(String newsId, int type) {
-        return Api.post("/api/news-info/news/praise/{id}",
+        return Api.post("/api/news-info/news/PRAISE/{id}",
                 new ReqParams()
                         .put("id", newsId)
                         .put("type", type));

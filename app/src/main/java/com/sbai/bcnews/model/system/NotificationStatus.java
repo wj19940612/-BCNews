@@ -26,7 +26,7 @@ public class NotificationStatus {
     public static final int NOTIFICATION_TYPE_RECEIVE_PRAISE = 1;
 
     /**
-     * praise : 1
+     * PRAISE : 1
      * discuss : 0
      */
 
