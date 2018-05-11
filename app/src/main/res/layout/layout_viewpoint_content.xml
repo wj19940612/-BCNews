@@ -46,7 +46,7 @@
         tools:drawableRight="@drawable/ic_common_praise_normal"
         tools:text="5454454545"/>
 
-    <TextView
+    <com.sbai.bcnews.view.MeasureTextView
         android:id="@+id/pointContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

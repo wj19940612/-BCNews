@@ -62,20 +62,9 @@ public class NewViewPointAndReview extends NewsViewpoint implements NewsShareOrC
 
     private int tag;
 
-    //需要记录文本的行数，避免每次都去获取
-    private int lineCount;
 
     public int getTag() {
         return tag;
-    }
-
-
-    public int getLineCount() {
-        return lineCount;
-    }
-
-    public void setLineCount(int lineCount) {
-        this.lineCount = lineCount;
     }
 
     public void setTag(int tag) {

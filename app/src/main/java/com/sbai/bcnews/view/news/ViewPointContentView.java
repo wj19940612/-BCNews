@@ -2,8 +2,14 @@ package com.sbai.bcnews.view.news;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.DynamicLayout;
+import android.text.Layout;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +20,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.news.NewViewPointAndReview;
 import com.sbai.bcnews.model.news.NewsViewpoint;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.view.MeasureTextView;
 import com.sbai.glide.GlideApp;
 
 import butterknife.BindView;
@@ -26,7 +33,7 @@ import butterknife.OnClick;
  * Description:
  * </p>
  */
-public class ViewPointContentView extends LinearLayout {
+public class ViewPointContentView extends LinearLayout implements  MeasureTextView.OnLineCountListener {
 
     private static final String TAG = "CommentContentView";
 
@@ -41,7 +48,7 @@ public class ViewPointContentView extends LinearLayout {
     @BindView(R.id.praiseCount)
     TextView mPraiseCount;
     @BindView(R.id.pointContent)
-    TextView mPointContent;
+    MeasureTextView mPointContent;
     @BindView(R.id.timeLine)
     TextView mTimeLine;
     @BindView(R.id.review)
@@ -56,12 +63,11 @@ public class ViewPointContentView extends LinearLayout {
     private NewViewPointAndReview mNewViewPointAndReview;
     private String mSpread;
     private String mFullText;
+    private TextPaint mTextPaint;
 
     public void setOnCommentClickListener(OnCommentClickListener onClickListener) {
         mOnCommentClickListener = onClickListener;
     }
-
-//    private int mContentLines;
 
     public ViewPointContentView(Context context) {
         super(context);
@@ -80,12 +86,15 @@ public class ViewPointContentView extends LinearLayout {
     }
 
     private void init() {
+        mTextPaint = new TextPaint();
         setOrientation(VERTICAL);
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_viewpoint_content, this, false);
         addView(view);
         ButterKnife.bind(this);
         mSpread = getContext().getString(R.string.spread);
         mFullText = getContext().getString(R.string.all_content);
+
+        mPointContent.setOnLineCountListener(this);
     }
 
 
@@ -119,20 +128,6 @@ public class ViewPointContentView extends LinearLayout {
     private void updatePointContent(final NewViewPointAndReview newViewPointAndReview) {
         mPointContent.setText(newViewPointAndReview.getContent());
 
-        if (mPointContent.getLineCount() != 0) {
-            handleContent(newViewPointAndReview.getLineCount());
-        }else {
-            mPointContent.post(new Runnable() {
-                @Override
-                public void run() {
-                    int lineCount = mPointContent.getLineCount();
-                    newViewPointAndReview.setLineCount(lineCount);
-                    handleContent(lineCount);
-                }
-            });
-
-        }
-
         mTimeLine.setText(DateUtil.formatDefaultStyleTime(newViewPointAndReview.getReplayTime()));
         if (newViewPointAndReview.getVos() != null) {
             mReviewContent.setReviewData(newViewPointAndReview);
@@ -141,7 +136,17 @@ public class ViewPointContentView extends LinearLayout {
         }
     }
 
+    private int getLineCount(CharSequence text, TextPaint paint, float size, float width,
+                             DisplayMetrics displayMetrics) {
+        paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, size,
+                displayMetrics));
+        DynamicLayout layout = new DynamicLayout(text, paint, (int) width,
+                Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        return layout.getLineCount();
+    }
+
     private void handleContent(int lineCount) {
+        Log.d(TAG, "handleContent: "+lineCount+"  "+mPointContent.getText().toString());
         if (lineCount > 5) {
             mPointContent.setMaxLines(CONTENT_SPREAD_LINE);
             mPointContent.setEllipsize(TextUtils.TruncateAt.END);
@@ -188,6 +193,12 @@ public class ViewPointContentView extends LinearLayout {
     }
 
 
+    @Override
+    public void onLineCount(int lineCount) {
+        handleContent(lineCount);
+    }
+
+
     public interface OnCommentClickListener {
 
         void onReview();
@@ -197,9 +208,4 @@ public class ViewPointContentView extends LinearLayout {
         void onFullText();
 
     }
-
-    public enum TextStatus {
-        NORMAL, SPREAD, FULL_TEXT
-    }
-
 }
