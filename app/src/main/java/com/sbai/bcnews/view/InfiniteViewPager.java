@@ -44,13 +44,14 @@ public class InfiniteViewPager extends ViewPager {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mHasDetach = false;
+
         try {
             Field mFirstLayout = ViewPager.class.getDeclaredField("mFirstLayout");
             mFirstLayout.setAccessible(true);
             mFirstLayout.set(this, false);
 //            getAdapter().notifyDataSetChanged();
             //之前的滑动滞留动作，会触发多余的onPageScrollStateChanged
-            if(getCurrentItem() == mInnerAdapter.getCount()-1){
+            if (getCurrentItem() == mInnerAdapter.getCount() - 1) {
                 setCurrentItem(1);
             }
         } catch (Exception e) {
@@ -69,7 +70,7 @@ public class InfiniteViewPager extends ViewPager {
         mHasDetach = hasDestroy;
     }
 
-    public boolean isDetachFromWindow(){
+    public boolean isDetachFromWindow() {
         return mHasDetach;
     }
 

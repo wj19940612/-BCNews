@@ -20,6 +20,7 @@ public class PageIndicator extends View {
     private int mInterval;
     private ColorStateList mPoint;
     private ColorStateList mSelectedPoint;
+
     //这里点可以是方形或者是圆形
     private int mPointRadius;
     private int mPointWidth;

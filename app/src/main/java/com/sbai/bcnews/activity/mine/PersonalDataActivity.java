@@ -81,7 +81,7 @@ public class PersonalDataActivity extends BaseActivity {
     private OptionPicker mSexPicker;
 
 
-    private DatePicker mBirthdayDatePicker;
+        private DatePicker mBirthdayDatePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
