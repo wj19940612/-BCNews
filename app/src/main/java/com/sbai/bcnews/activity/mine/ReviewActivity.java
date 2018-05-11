@@ -10,31 +10,34 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.activity.dialog.WriteCommentActivity;
 import com.sbai.bcnews.fragment.mine.ReplyMineFragment;
 import com.sbai.bcnews.utils.Display;
+import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ReviewActivity extends BaseActivity {
 
-//    @BindView(R.id.titleBar)
-//    TitleBar mTitleBar;
-//    @BindView(R.id.arrow)
-//    ImageView mArrow;
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
-//    @BindView(R.id.appBarLayout)
-//    AppBarLayout mAppBarLayout;
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
-//    @BindView(R.id.coordinatorLayout)
-//    LinearLayout mCoordinatorLayout;
+    @BindView(R.id.back)
+    ImageView mBack;
+    @BindView(R.id.appBarLayout)
+    AppBarLayout mAppBarLayout;
+
     private ReviewFragmentAdapter mReviewFragmentAdapter;
 
     @Override
@@ -51,21 +54,21 @@ public class ReviewActivity extends BaseActivity {
         mViewPager.setAdapter(mReviewFragmentAdapter);
         mViewPager.setOffscreenPageLimit(2);
         initSlidingTabLayout();
-//        mAppBarLayout.addOnOffsetChangedListener(sOnOffsetChangedListener);
+        mAppBarLayout.addOnOffsetChangedListener(sOnOffsetChangedListener);
     }
 
     AppBarLayout.OnOffsetChangedListener sOnOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
         @Override
         public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//            if (verticalOffset < -20) {
-//                if (mArrow.getVisibility() == View.GONE) {
-//                    mArrow.setVisibility(View.VISIBLE);
-//                }
-//            } else {
-//                if (mArrow.getVisibility() == View.VISIBLE) {
-//                    mArrow.setVisibility(View.GONE);
-//                }
-//            }
+            if (verticalOffset < -20) {
+                if (mBack.getVisibility() == View.GONE) {
+                    mBack.setVisibility(View.VISIBLE);
+                }
+            } else {
+                if (mBack.getVisibility() == View.VISIBLE) {
+                    mBack.setVisibility(View.GONE);
+                }
+            }
         }
     };
 
@@ -102,10 +105,10 @@ public class ReviewActivity extends BaseActivity {
         }
     }
 
-//    @OnClick(R.id.arrow)
-//    public void onViewClicked() {
-//        onBackPressed();
-//    }
+    @OnClick(R.id.back)
+    public void onViewClicked() {
+        onBackPressed();
+    }
 
     static class ReviewFragmentAdapter extends FragmentPagerAdapter {
 
@@ -154,6 +157,6 @@ public class ReviewActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        mAppBarLayout.removeOnOffsetChangedListener(sOnOffsetChangedListener);
+        mAppBarLayout.removeOnOffsetChangedListener(sOnOffsetChangedListener);
     }
 }
