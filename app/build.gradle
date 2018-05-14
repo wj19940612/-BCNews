@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    def verName = System.getProperties().getProperty("verName")
+    def verCode = System.getProperties().getProperty("verCode")
+
+    def alphaVersionName = verName ? verName : alphaVerName
+    def alphaVersionCode = verCode ? verCode : alphaVerCode
+
+    println alphaVersionName
+    println alphaVersionCode
+
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.sbai.bcnews"
@@ -21,18 +30,14 @@ android {
         ]
     }
 
-    java.util.Properties properties = new Properties();
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
     signingConfigs {
         release {
-            storeFile file(properties.get('keystore_storeFile'))
-            storePassword properties.get('keystore_storePassword')
-            keyAlias properties.get('keystore_keyAlias')
-            keyPassword properties.get('keystore_keyPassword')
+            storeFile file('../bcstore.jks')
+            storePassword bcStorePassword
+            keyAlias bcKeyAlias
+            keyPassword bcKeyPassword
         }
     }
-
 
     buildTypes {
         release {
@@ -44,10 +49,6 @@ android {
             ext.enableCrashlytics = false
             signingConfig signingConfigs.release
         }
-    }
-
-    aaptOptions {
-        cruncherEnabled true // !!set true when package release apk
     }
 
     dexOptions {
@@ -71,10 +72,9 @@ android {
                     UMENG_CHANNEL   : "tencent"
             ]
         }
-
         alpha {
-            versionCode 20
-            versionName "1.0.0307"
+            versionCode Integer.getInteger(alphaVersionCode)
+            versionName alphaVersionName
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
@@ -84,16 +84,15 @@ android {
                     UMENG_CHANNEL   : "tencent"
             ]
         }
-
-//        xiaomi {}
-//        vivo {}
-//        c360 {}
-//        tencent {}
-//        baidu {}
-//        others {}
-//        fenx {}
-//        weixin{}
-        huawei{}
+        xiaomi {}
+        vivo {}
+        c360 {}
+        tencent {}
+        baidu {}
+        others {}
+        fenx {}
+        weixin {}
+        huawei {}
     }
 
     android.applicationVariants.all { variant ->
