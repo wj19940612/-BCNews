@@ -307,6 +307,10 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
     }
 
     protected void praise(final PraiseContent praiseContent) {
+        if (!LocalUser.getUser().isLogin()) {
+            Launcher.with(getActivity(),LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
+            return;
+        }
         Apic.praiseComment(praiseContent.getViewpointId(), praiseContent.getNewsDataId(), praiseContent.getPraisedUserId(), praiseContent.getPraiseType())
                 .tag(TAG)
                 .callback(new Callback<Resp<Object>>() {

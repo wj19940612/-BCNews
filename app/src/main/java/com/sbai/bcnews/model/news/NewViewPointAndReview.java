@@ -62,6 +62,16 @@ public class NewViewPointAndReview extends NewsViewpoint implements NewsShareOrC
 
     private int tag;
 
+    //记录是否展开
+    public boolean isSpread;
+
+    public boolean isSpread() {
+        return isSpread;
+    }
+
+    public void setSpread(boolean spread) {
+        isSpread = spread;
+    }
 
     public int getTag() {
         return tag;

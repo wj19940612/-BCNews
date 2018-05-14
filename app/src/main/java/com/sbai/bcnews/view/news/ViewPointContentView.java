@@ -2,14 +2,10 @@ package com.sbai.bcnews.view.news;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.text.DynamicLayout;
-import android.text.Layout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,7 +29,7 @@ import butterknife.OnClick;
  * Description:
  * </p>
  */
-public class ViewPointContentView extends LinearLayout implements  MeasureTextView.OnLineCountListener {
+public class ViewPointContentView extends LinearLayout implements MeasureTextView.OnLineCountListener {
 
     private static final String TAG = "CommentContentView";
 
@@ -99,6 +95,7 @@ public class ViewPointContentView extends LinearLayout implements  MeasureTextVi
 
 
     public void setViewpointList(NewViewPointAndReview newViewPointAndReview) {
+        mNewViewPointAndReview = newViewPointAndReview;
         GlideApp.with(getContext())
                 .load(newViewPointAndReview.getUserPortrait())
                 .placeholder(R.drawable.ic_default_head_portrait)
@@ -112,7 +109,6 @@ public class ViewPointContentView extends LinearLayout implements  MeasureTextVi
     }
 
     private void updatePointPraise(NewViewPointAndReview newViewPointAndReview) {
-
         mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
 
         boolean isPraise = newViewPointAndReview.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;
@@ -127,6 +123,8 @@ public class ViewPointContentView extends LinearLayout implements  MeasureTextVi
 
     private void updatePointContent(final NewViewPointAndReview newViewPointAndReview) {
         mPointContent.setText(newViewPointAndReview.getContent());
+        mPointContent.setMaxLines(Integer.MAX_VALUE);
+        mPointContent.setHasLineCount(false);
 
         mTimeLine.setText(DateUtil.formatDefaultStyleTime(newViewPointAndReview.getReplayTime()));
         if (newViewPointAndReview.getVos() != null) {
@@ -136,17 +134,10 @@ public class ViewPointContentView extends LinearLayout implements  MeasureTextVi
         }
     }
 
-    private int getLineCount(CharSequence text, TextPaint paint, float size, float width,
-                             DisplayMetrics displayMetrics) {
-        paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, size,
-                displayMetrics));
-        DynamicLayout layout = new DynamicLayout(text, paint, (int) width,
-                Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        return layout.getLineCount();
-    }
 
     private void handleContent(int lineCount) {
-        Log.d(TAG, "handleContent: "+lineCount+"  "+mPointContent.getText().toString());
+        mPointContent.setHasLineCount(true);
+        if (mNewViewPointAndReview != null && mNewViewPointAndReview.isSpread()) return;
         if (lineCount > 5) {
             mPointContent.setMaxLines(CONTENT_SPREAD_LINE);
             mPointContent.setEllipsize(TextUtils.TruncateAt.END);
@@ -179,6 +170,7 @@ public class ViewPointContentView extends LinearLayout implements  MeasureTextVi
                             mOnCommentClickListener.onFullText();
                         }
                     } else {
+                        mNewViewPointAndReview.setSpread(true);
                         mPointContent.setMaxLines(Integer.MAX_VALUE);
                         mShrink.setVisibility(GONE);
                     }
@@ -195,6 +187,7 @@ public class ViewPointContentView extends LinearLayout implements  MeasureTextVi
 
     @Override
     public void onLineCount(int lineCount) {
+        Log.d(TAG, "onLineCount: " + lineCount + "  " + mPointContent.getText().toString());
         handleContent(lineCount);
     }
 

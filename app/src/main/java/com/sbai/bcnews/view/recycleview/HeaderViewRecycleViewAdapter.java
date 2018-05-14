@@ -1,13 +1,9 @@
 package com.sbai.bcnews.view.recycleview;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Modified by $nishuideyu$ on 2018/4/19
@@ -16,9 +12,8 @@ import java.util.List;
  * 暂时只支持添加一个头部和一个尾部
  * </p>
  */
-public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.ViewHolder> extends RecyclerView.Adapter implements HeaderViewController {
+public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.ViewHolder> extends BaseRecycleViewAdapter<T, K> implements HeaderViewController {
 
-    private List<T> mDataList;
 
     private View mHeaderView;
 
@@ -34,46 +29,22 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
 
     public abstract void onBindContentViewHolder(@NonNull K holder, int position);
 
-
-    public HeaderViewRecycleViewAdapter() {
-        this(null);
-    }
-
-    public HeaderViewRecycleViewAdapter(@Nullable List<T> dataList) {
-        mDataList = dataList == null ? new ArrayList<T>() : dataList;
-    }
-
-
-
-    public boolean isEmpty() {
-        synchronized (mLock) {
-            return mDataList.isEmpty();
-        }
-    }
-
-    @NonNull
-    public T getItemData(int position) {
-        return mDataList.get(position);
-    }
-
-
-    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public K onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case HEADER_VIEW_TYPE:
                 if (mHeaderView != null) {
-                    return new HeaderViewViewHolder(mHeaderView);
+                    return (K) new HeaderViewViewHolder(mHeaderView);
                 }
             case FOOTER_VIEW_TYPE:
                 if (mFooterView != null) {
-                    return new FooterViewViewHolder(mFooterView);
+                    return (K) new FooterViewViewHolder(mFooterView);
                 }
             default:
                 return onContentCreateViewHolder(parent, viewType);
-
         }
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
@@ -84,14 +55,14 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
             case FOOTER_VIEW_TYPE:
                 break;
             default:
-                onBindContentViewHolder((K) holder, position);
+                onBindContentViewHolder((K) holder, position - getHeaderViewsCount());
         }
     }
 
 
     @Override
     public int getItemCount() {
-        return mDataList.size() + getFooterViewsCount() + getHeaderViewsCount();
+        return getDataList().size() + getFooterViewsCount() + getHeaderViewsCount();
     }
 
     @Override
@@ -99,10 +70,10 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
         if (getHeaderViewsCount() != 0 && position == 0) {
             return HEADER_VIEW_TYPE;
         }
-        if (getFooterViewsCount() != 0 && position == mDataList.size()) {
+        if (getFooterViewsCount() != 0 && position == getDataList().size()) {
             return FOOTER_VIEW_TYPE;
         }
-        return super.getItemViewType(position);
+        return super.getItemViewType(position - getHeaderViewsCount());
     }
 
 
@@ -156,7 +127,7 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
         return mFooterView != null;
     }
 
-    public static class HeaderViewViewHolder extends RecyclerView.ViewHolder {
+    public class HeaderViewViewHolder extends RecyclerView.ViewHolder {
 
         public HeaderViewViewHolder(View itemView) {
             super(itemView);

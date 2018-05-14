@@ -15,6 +15,12 @@ public class MeasureTextView extends AppCompatTextView {
 
     private static final String TAG = "MeasureTextView";
 
+    private boolean mHasLineCount;
+
+    public void setHasLineCount(boolean hasLineCount) {
+        mHasLineCount = hasLineCount;
+    }
+
     public interface OnLineCountListener {
         void onLineCount(int lineCount);
     }
@@ -40,8 +46,10 @@ public class MeasureTextView extends AppCompatTextView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mOnLineCountListener != null) {
+        //会多次回调
+        if (mOnLineCountListener != null && !mHasLineCount) {
             mOnLineCountListener.onLineCount(getLineCount());
         }
     }
+
 }

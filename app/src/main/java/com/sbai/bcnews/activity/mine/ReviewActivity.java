@@ -52,7 +52,7 @@ public class ReviewActivity extends BaseActivity {
     private void initView() {
         mReviewFragmentAdapter = new ReviewFragmentAdapter(getSupportFragmentManager(), getActivity());
         mViewPager.setAdapter(mReviewFragmentAdapter);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(1);
         initSlidingTabLayout();
         mAppBarLayout.addOnOffsetChangedListener(sOnOffsetChangedListener);
     }

@@ -58,7 +58,7 @@ public class WriteCommentResponse implements Parcelable {
         newViewPointAndReview.setDataId(getDataId());
         newViewPointAndReview.setContent(getContent());
         newViewPointAndReview.setId(getId());
-        newViewPointAndReview.setUserId(newViewPointAndReview.getUserId());
+        newViewPointAndReview.setUserId(getUserId());
         newViewPointAndReview.setVos(new ArrayList<NewsViewpoint>());
         newViewPointAndReview.setReplayTime(System.currentTimeMillis());
         return newViewPointAndReview;

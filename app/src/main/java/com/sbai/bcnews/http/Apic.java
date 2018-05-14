@@ -34,7 +34,6 @@ public class Apic {
     }
 
 
-
     /**
      * /api/news-msg/msg/new
      * GET
@@ -141,7 +140,7 @@ public class Apic {
      * @param type
      */
     public static Api praiseComment(String id, String dataId, Integer userId, int type) {
-        return Api.post("/api/news-info/discuss/PRAISE",
+        return Api.post("/api/news-info/discuss/praise",
                 new ReqParams()
                         .put("id", id)
                         .put("dataId", dataId)
@@ -203,7 +202,19 @@ public class Apic {
      * @return
      */
     public static Api deleteReview(int type, String dataId, String id) {
-        return Api.get("/api/news-info/discuss/delete/{id}",new ReqParams().put("type",type).put("dataId",dataId).put("id",id));
+        return Api.get("/api/news-info/discuss/delete/{id}", new ReqParams().put("type", type).put("dataId", dataId).put("id", id));
+    }
+
+    /**
+     * /api/news-info/discuss/praise/status.do
+     * POST
+     * 是否点赞--薛松
+     *
+     * @param id
+     * @return
+     */
+    public static Api requestViewpointPraiseStatus(String id) {
+        return Api.post("/api/news-info/discuss/praise/status.do", new ReqParams().put("id", id));
     }
 
 
@@ -347,7 +358,7 @@ public class Apic {
      * @return
      */
     public static Api praiseNews(String newsId, int type) {
-        return Api.post("/api/news-info/news/PRAISE/{id}",
+        return Api.post("/api/news-info/news/praise/{id}",
                 new ReqParams()
                         .put("id", newsId)
                         .put("type", type));

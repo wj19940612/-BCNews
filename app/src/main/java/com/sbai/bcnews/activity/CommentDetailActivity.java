@@ -23,7 +23,9 @@ import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.WhistleBlowingDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.ListResp;
+import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.news.NewViewPointAndReview;
@@ -205,7 +207,7 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
             @Override
             public void oReview() {
                 if (!LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                    Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
                     return;
                 }
                 if (newViewPointAndReview != null) {
@@ -250,11 +252,16 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                     .callback(new Callback<ListResp<ViewPointComment>>() {
                         @Override
                         protected void onRespSuccess(ListResp<ViewPointComment> resp) {
-
                             ArrayList<ViewPointComment> listData = resp.getListData();
                             if (listData != null) {
                                 updateReview(listData);
                             }
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                            stopFreshOrLoadAnimation();
                         }
                     })
                     .fire();
@@ -330,8 +337,26 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                             }
                     }
                     break;
+                case LoginActivity.REQ_CODE_LOGIN:
+                    if (mNewViewPointAndReview != null)
+                        requestViewpointPraiseStatus(mNewViewPointAndReview.getId());
+                    break;
             }
         }
+    }
+
+    private void requestViewpointPraiseStatus(String id) {
+        Apic.requestViewpointPraiseStatus(id)
+                .tag(TAG)
+                .callback(new Callback2D<Resp<NewViewPointAndReview>,NewViewPointAndReview>() {
+                    @Override
+                    protected void onRespSuccessData(NewViewPointAndReview data) {
+                        mNewViewPointAndReview.setIsPraise(data.getIsPraise());
+//                        mNewViewPointAndReview.setPraiseCount(data.getPraiseCount());
+                        mReviewListAdapter.notifyDataSetChanged();
+                    }
+                })
+                .fire();
     }
 
     @OnClick(R.id.writeComment)
@@ -342,13 +367,13 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
     private void writeNewsComment(NewViewPointAndReview newViewPointAndReview) {
         if (mNewsDetail != null)
             if (!LocalUser.getUser().isLogin()) {
-                Launcher.with(getActivity(), LoginActivity.class).execute();
+                Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
                 return;
             }
-            Launcher.with(getActivity(), WriteCommentActivity.class)
-                    .putExtra(ExtraKeys.DATA, WriteComment.getSecondWriteComment(newViewPointAndReview))
-                    .putExtra(ExtraKeys.TAG, newViewPointAndReview.getUsername())
-                    .executeForResult(WriteCommentActivity.REQ_CODE_WRITE_COMMENT_FOR_VIEWPOINT);
+        Launcher.with(getActivity(), WriteCommentActivity.class)
+                .putExtra(ExtraKeys.DATA, WriteComment.getSecondWriteComment(newViewPointAndReview))
+                .putExtra(ExtraKeys.TAG, newViewPointAndReview.getUsername())
+                .executeForResult(WriteCommentActivity.REQ_CODE_WRITE_COMMENT_FOR_VIEWPOINT);
     }
 
 

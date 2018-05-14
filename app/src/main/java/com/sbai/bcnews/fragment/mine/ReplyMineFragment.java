@@ -3,6 +3,7 @@ package com.sbai.bcnews.fragment.mine;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -10,10 +11,13 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,11 +39,12 @@ import com.sbai.bcnews.model.news.WriteComment;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.ClipboardUtils;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.CommentPopupWindow;
-import com.sbai.bcnews.view.recycleview.BaseRecycleViewAdapter;
+import com.sbai.bcnews.view.recycleview.HeaderViewRecycleViewAdapter;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
 
@@ -65,6 +70,7 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     private int mPage;
     private int mPageSize;
     private ReplyMineAdapter mReplyMineAdapter;
+    private TextView mFooterView;
 
 
     public static ReplyMineFragment newInstance(int type) {
@@ -100,7 +106,11 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
         requestViewpointList();
     }
 
+
     private void init() {
+
+        initView();
+
         mReplyMineAdapter = new ReplyMineAdapter(getActivity(), mPageType);
         mSwipeTargetView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeTargetView.setAdapter(mReplyMineAdapter);
@@ -129,11 +139,27 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
             }
         });
 
+    }
+
+    private void initView() {
         if (mPageType == NEWS_TYPE_REPLY_TO_MINE) {
             mEmptyView.setText(R.string.now_not_review);
         } else {
             mEmptyView.setText(R.string.now_not_comment);
         }
+
+        createFootView();
+    }
+
+    private void createFootView() {
+        mFooterView = new TextView(getActivity());
+        mFooterView.setText(R.string.there_is_no_more_data);
+        mFooterView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        mFooterView.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_666));
+        mFooterView.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(40,getResources()));
+        layoutParams.gravity = Gravity.CENTER;
+        mFooterView.setLayoutParams(layoutParams);
     }
 
     private void showPopupWindow(View view, final ReplyNews replyNews, final boolean isDeleteReview) {
@@ -234,28 +260,30 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     }
 
     private void requestViewpointList() {
-        Apic.requestMineReplyOrCommentViewpointList(mPage, mPageType, mPageSize)
-                .tag(TAG)
-                .callback(new Callback2D<Resp<List<ReplyNews>>, List<ReplyNews>>() {
-                    @Override
-                    protected void onRespSuccessData(List<ReplyNews> data) {
-                        updateReplyList(data);
-                        refreshSuccess();
-                    }
+        if (isAdded())
+            Apic.requestMineReplyOrCommentViewpointList(mPage, mPageType, mPageSize)
+                    .tag(TAG)
+                    .timeout(5000)
+                    .callback(new Callback2D<Resp<List<ReplyNews>>, List<ReplyNews>>() {
+                        @Override
+                        protected void onRespSuccessData(List<ReplyNews> data) {
+                            updateReplyList(data);
+                            refreshSuccess();
+                        }
 
-                    @Override
-                    public void onFailure(ReqError reqError) {
-                        super.onFailure(reqError);
-                        refreshFailure();
-                    }
+                        @Override
+                        public void onFailure(ReqError reqError) {
+                            super.onFailure(reqError);
+                            refreshFailure();
+                        }
 
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
-                        stopFreshOrLoadAnimation();
-                    }
-                })
-                .fireFreely();
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                            stopFreshOrLoadAnimation();
+                        }
+                    })
+                    .fireFreely();
     }
 
     private void updateReplyList(List<ReplyNews> data) {
@@ -270,13 +298,19 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
             }
         }
 
+        mReplyMineAdapter.addAll(data);
+
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            if (!mReplyMineAdapter.isEmpty()) {
+                if (!mReplyMineAdapter.hasFooterView()) {
+                    mReplyMineAdapter.addFooterView(mFooterView);
+                }
+            }
         } else {
             mPage++;
         }
 
-        mReplyMineAdapter.addAll(data);
     }
 
     @Override
@@ -302,6 +336,7 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
         mPage = 0;
         mPageSize = ViewpointType.NEWS_PAGE_SIZE;
         requestViewpointList();
+        mReplyMineAdapter.removeFooterView();
     }
 
     @Override
@@ -319,7 +354,7 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     }
 
 
-    static class ReplyMineAdapter extends BaseRecycleViewAdapter<ReplyNews, ReplyMineAdapter.ViewHolder> {
+    static class ReplyMineAdapter extends HeaderViewRecycleViewAdapter<ReplyNews, ReplyMineAdapter.ViewHolder> {
 
 
         public interface OnReplyClickListener {
@@ -346,17 +381,17 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
             mOnReplyClickListener = onReplyClickListener;
         }
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onContentCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.row_review_mine, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindContentViewHolder(@NonNull ViewHolder holder, int position) {
             holder.bindDataWithView(getItemData(position), position, mContext, mPageType, mOnReplyClickListener);
         }
-
 
         static class ViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.portrait)

@@ -84,7 +84,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
     private boolean mHasNormalLabel;
     private boolean mHasHotLabel;
     private int mPage = 0;
-    private int mHotSize = 0;
+    private int mHotSize = 1;
 
 
     @Override
@@ -190,7 +190,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
             public void oReview() {
                 if (mNewsDetail != null)
                     if (!LocalUser.getUser().isLogin()) {
-                        Launcher.with(getActivity(), LoginActivity.class).execute();
+                        Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
                         return;
                     }
                 Launcher.with(getActivity(), WriteCommentActivity.class)
@@ -201,16 +201,11 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
 
             @Override
             public void onWhistleBlowing() {
-                WhistleBlowingDialogFragment.newInstance(WhistleBlowingDialogFragment.WHISTLE_BLOWING_TYPE_COMMENT, newViewPointAndReview.getDataId()).show(getSupportFragmentManager());
+                WhistleBlowingDialogFragment.newInstance(WhistleBlowingDialogFragment.WHISTLE_BLOWING_TYPE_COMMENT, newViewPointAndReview.getId()).show(getSupportFragmentManager());
             }
         }).showPopupWindow();
     }
 
-    @Override
-    protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
-        super.onRecycleViewScrolled(recyclerView, dx, dy);
-
-    }
 
     private void initData() {
         mHasNormalLabel = false;
@@ -248,7 +243,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void updateNewsStatus(NewsDetail data) {
-
+        updateCollect(data);
     }
 
     private void updateNewsViewpointList(NewsViewpointAndComment data) {
@@ -283,12 +278,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         List<NewViewPointAndReview> dataNormal = data.getNormal();
         if (dataNormal != null && !dataNormal.isEmpty()) {
             dataSize = dataSize + dataNormal.size();
-            if (!mHasNormalLabel) {
-                NewViewPointAndReview newViewPointAndReview = new NewViewPointAndReview();
-                newViewPointAndReview.setTag(NewViewPointAndReview.TAG_NORMAL);
-                mAdapter.add(newViewPointAndReview);
-                mHasNormalLabel = true;
-            }
+            createNormalLabelData();
             mAdapter.addAll(dataNormal);
         }
 
@@ -298,6 +288,15 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
             mPage++;
         }
 
+    }
+
+    private void createNormalLabelData() {
+        if (!mHasNormalLabel) {
+            NewViewPointAndReview newViewPointAndReview = new NewViewPointAndReview();
+            newViewPointAndReview.setTag(NewViewPointAndReview.TAG_NORMAL);
+            mAdapter.add(newViewPointAndReview);
+            mHasNormalLabel = true;
+        }
     }
 
     @Override
@@ -323,7 +322,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
             case R.id.writeComment:
                 if (mNewsDetail != null) {
                     if (!LocalUser.getUser().isLogin()) {
-                        Launcher.with(getActivity(), LoginActivity.class).execute();
+                        Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
                         return;
                     }
                     Launcher.with(getActivity(), WriteCommentActivity.class)
@@ -367,11 +366,14 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
                         refreshData();
                     } else {
                         if (data != null) {
+                            createNormalLabelData();
                             WriteCommentResponse writeCommentResponse = data.getParcelableExtra(ExtraKeys.DATA);
                             if (writeCommentResponse != null) {
                                 NewViewPointAndReview newViewPointAndReview = writeCommentResponse.getNewViewPointAndReview();
                                 mAdapter.add(mHotSize, newViewPointAndReview);
                                 mEmptyText.setVisibility(View.GONE);
+
+                                mAdapter.setNormalViewpointCount(mAdapter.getNormalViewpointCount() + 1);
                             }
                         }
                     }
@@ -417,6 +419,10 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
                         }
                     }
                     break;
+                case LoginActivity.REQ_CODE_LOGIN:
+                    if (mNewsDetail != null)
+                        requestData(mNewsDetail.getId());
+                    break;
 
             }
         }
@@ -446,6 +452,10 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         public void setNormalViewpointCount(int normalViewpointCount) {
             mNormalViewpointCount = normalViewpointCount;
             notifyDataSetChanged();
+        }
+
+        public int getNormalViewpointCount() {
+            return mNormalViewpointCount;
         }
 
         public void setNewsDetail(NewsDetail newsDetail) {

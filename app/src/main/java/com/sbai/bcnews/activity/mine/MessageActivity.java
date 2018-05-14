@@ -140,6 +140,12 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
                         super.onFailure(reqError);
                         refreshFailure();
                     }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        stopFreshOrLoadAnimation();
+                    }
                 })
                 .fire();
     }

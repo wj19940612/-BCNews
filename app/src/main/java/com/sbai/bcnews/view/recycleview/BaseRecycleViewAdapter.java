@@ -70,7 +70,7 @@ public abstract class BaseRecycleViewAdapter<T, K extends RecyclerView.ViewHolde
 
     public boolean isEmpty() {
         synchronized (mLock) {
-            return mDataList != null && !mDataList.isEmpty();
+            return mDataList == null || mDataList.isEmpty();
         }
     }
 
