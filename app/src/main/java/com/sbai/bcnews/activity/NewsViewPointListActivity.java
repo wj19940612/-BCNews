@@ -201,7 +201,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
 
             @Override
             public void onWhistleBlowing() {
-                WhistleBlowingDialogFragment.newInstance(WhistleBlowingDialogFragment.WHISTLE_BLOWING_TYPE_COMMENT, newViewPointAndReview.getId()).show(getSupportFragmentManager());
+                requestWhistleBlowingReason(WhistleBlowingDialogFragment.WHISTLE_BLOWING_TYPE_COMMENT, newViewPointAndReview.getId());
             }
         }).showPopupWindow();
     }

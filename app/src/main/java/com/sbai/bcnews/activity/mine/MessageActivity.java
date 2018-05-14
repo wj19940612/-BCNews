@@ -2,13 +2,18 @@ package com.sbai.bcnews.activity.mine;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,11 +27,12 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.mine.Message;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.OnItemClickListener;
-import com.sbai.bcnews.utils.adapter.BaseRecycleViewAdapter;
 import com.sbai.bcnews.view.EmptyRecyclerView;
 import com.sbai.bcnews.view.TitleBar;
+import com.sbai.bcnews.view.recycleview.HeaderViewRecycleViewAdapter;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
@@ -56,6 +62,7 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
 
     private long mStartTime;
     private MessageAdapter mMessageAdapter;
+    private TextView mFooterView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +104,18 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
             }
         });
 
+        createFootView();
+    }
+
+    private void createFootView() {
+        mFooterView = new TextView(getActivity());
+        mFooterView.setText(R.string.there_is_no_more_data);
+        mFooterView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        mFooterView.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_666));
+        mFooterView.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(40, getResources()));
+        layoutParams.gravity = Gravity.CENTER;
+        mFooterView.setLayoutParams(layoutParams);
     }
 
     private void readMessage(final Message message, final int position) {
@@ -157,13 +176,20 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
             mMessageAdapter.clear();
         }
 
+        mMessageAdapter.addAll(data);
+
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            if (!mMessageAdapter.isEmpty()) {
+                if (!mMessageAdapter.hasFooterView()) {
+                    mMessageAdapter.addFooterView(mFooterView);
+                }
+            }
         } else {
             mStartTime = data.get(data.size() - 1).getCreateTime();
         }
 
-        mMessageAdapter.addAll(data);
+
         if (mMessageAdapter.isEmpty()) {
             mSwipeTarget.setVisibility(View.GONE);
             mEmptyView.setVisibility(View.VISIBLE);
@@ -186,10 +212,11 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
     @Override
     public void onRefresh() {
         mStartTime = 0;
+        mMessageAdapter.removeFooterView();
         requestMessage();
     }
 
-    static class MessageAdapter extends BaseRecycleViewAdapter<Message, MessageAdapter.ViewHolder> {
+    static class MessageAdapter extends HeaderViewRecycleViewAdapter<Message, MessageAdapter.ViewHolder> {
 
         private OnItemClickListener<Message> mOnItemClickListener;
         private Context mContext;
@@ -207,15 +234,16 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
             mAllMessageIsRead = allMessageIsRead;
         }
 
+        @NonNull
         @Override
-        public ViewHolder onDefaultCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onContentCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.row_message, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindDefaultViewHolder(ViewHolder holder, Message data, int position) {
-            holder.bindDataWithView(data, position, mContext, mOnItemClickListener, mAllMessageIsRead);
+        public void onBindContentViewHolder(@NonNull ViewHolder holder, int position) {
+            holder.bindDataWithView(getItemData(position), position, mContext, mOnItemClickListener, mAllMessageIsRead);
         }
 
 

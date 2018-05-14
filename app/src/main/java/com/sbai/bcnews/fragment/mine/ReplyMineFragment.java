@@ -48,6 +48,7 @@ import com.sbai.bcnews.view.recycleview.HeaderViewRecycleViewAdapter;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -157,7 +158,7 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
         mFooterView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         mFooterView.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_666));
         mFooterView.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(40,getResources()));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(40, getResources()));
         layoutParams.gravity = Gravity.CENTER;
         mFooterView.setLayoutParams(layoutParams);
     }
@@ -190,12 +191,28 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
 
                     @Override
                     public void onWhistleBlowing() {
-                        WhistleBlowingDialogFragment.newInstance(WhistleBlowingDialogFragment.WHISTLE_BLOWING_TYPE_COMMENT, replyNews.getId())
+                        requestWhistleBlowingReason(WhistleBlowingDialogFragment.WHISTLE_BLOWING_TYPE_COMMENT, replyNews.getId());
+
+                    }
+                })
+                .showPopupWindow();
+    }
+
+
+    protected void requestWhistleBlowingReason(final int type, final String id) {
+        Apic.requestWhistleBlowingList(type)
+                .tag(TAG)
+                .callback(new Callback2D<Resp<HashMap<String, String>>, HashMap<String, String>>() {
+                    @Override
+                    protected void onRespSuccessData(HashMap<String, String> data) {
+                        WhistleBlowingDialogFragment.newInstance(type, id, data)
                                 .setOnWhistleBlowingReasonListener(ReplyMineFragment.this)
                                 .show(getChildFragmentManager());
                     }
                 })
-                .showPopupWindow();
+                .fire();
+
+
     }
 
     private void writeComment(ReplyNews replyNews) {
@@ -347,7 +364,7 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
 
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
-                        ToastUtil.show(resp.getMsg());
+                        ToastUtil.show(R.string.whistle_blowing_success);
                     }
                 })
                 .fire();

@@ -40,6 +40,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -228,7 +229,7 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
                     @Override
                     public void onWhistleBlowing() {
                         if (mNewsDetail != null) {
-                            WhistleBlowingDialogFragment.newInstance(WhistleBlowingDialogFragment.WHISTLE_BLOWING_TYPE_ARTICLE, mNewsDetail.getId()).show(getSupportFragmentManager());
+                            requestWhistleBlowingReason(WhistleBlowingDialogFragment.WHISTLE_BLOWING_TYPE_ARTICLE, mNewsDetail.getId());
                         }
                     }
 
@@ -260,6 +261,19 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
                 .show();
     }
 
+    protected void requestWhistleBlowingReason(final int type, final String id) {
+        Apic.requestWhistleBlowingList(type)
+                .tag(TAG)
+                .callback(new Callback2D<Resp<HashMap<String, String>>, HashMap<String, String>>() {
+                    @Override
+                    protected void onRespSuccessData(HashMap<String, String> data) {
+                        WhistleBlowingDialogFragment.newInstance(type, id,data).show(getSupportFragmentManager());
+                    }
+                })
+                .fire();
+
+
+    }
 
     protected void collect() {
         collect(mNewsDetail);
@@ -308,7 +322,7 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
 
     protected void praise(final PraiseContent praiseContent) {
         if (!LocalUser.getUser().isLogin()) {
-            Launcher.with(getActivity(),LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
+            Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
             return;
         }
         Apic.praiseComment(praiseContent.getViewpointId(), praiseContent.getNewsDataId(), praiseContent.getPraisedUserId(), praiseContent.getPraiseType())
@@ -396,7 +410,7 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
 
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
-                        ToastUtil.show(resp.getMsg());
+                        ToastUtil.show(R.string.whistle_blowing_success);
                     }
                 })
                 .fire();

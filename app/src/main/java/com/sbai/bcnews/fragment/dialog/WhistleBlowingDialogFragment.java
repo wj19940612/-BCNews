@@ -15,9 +15,6 @@ import android.widget.TextView;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.BottomDialogFragment;
-import com.sbai.bcnews.http.Apic;
-import com.sbai.bcnews.http.Callback2D;
-import com.sbai.bcnews.http.Resp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +60,7 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment {
 
     private int mWhistleBlowingType;
     private String mDataId;
+    private HashMap<String, String> mWhistleBlowingReason;
 
 
     public WhistleBlowingDialogFragment setOnWhistleBlowingReasonListener(OnWhistleBlowingReasonListener onWhistleBlowingReasonListener) {
@@ -75,10 +73,11 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment {
     }
 
 
-    public static WhistleBlowingDialogFragment newInstance(int type, String id) {
+    public static WhistleBlowingDialogFragment newInstance(int type, String id, HashMap<String, String> hashMap) {
         Bundle args = new Bundle();
         args.putInt(ExtraKeys.TAG, type);
-        args.putString(ExtraKeys.DATA, id);
+        args.putString(ExtraKeys.ID, id);
+        args.putSerializable(ExtraKeys.DATA, hashMap);
         WhistleBlowingDialogFragment fragment = new WhistleBlowingDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -89,7 +88,8 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mWhistleBlowingType = getArguments().getInt(ExtraKeys.TAG);
-            mDataId = getArguments().getString(ExtraKeys.DATA);
+            mDataId = getArguments().getString(ExtraKeys.ID);
+            mWhistleBlowingReason = (HashMap<String, String>) getArguments().getSerializable(ExtraKeys.DATA);
         }
     }
 
@@ -130,25 +130,14 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment {
             }
         });
 
-        requestWhistleBlowingList(mWhistleBlowingType);
-    }
+        for (Map.Entry<String, String> entry : mWhistleBlowingReason.entrySet()) {
+            WhistleBlowingDialogFragment.WhistleBlowingReason whistleBlowingReason = new WhistleBlowingDialogFragment.WhistleBlowingReason();
+            whistleBlowingReason.setKey(entry.getKey());
+            whistleBlowingReason.setValues(entry.getValue());
+            mWhistleBlowingReasonAdapter.add(whistleBlowingReason);
+        }
 
-    private void requestWhistleBlowingList(int whistleBlowingType) {
-        Apic.requestWhistleBlowingList(whistleBlowingType)
-                .tag(TAG)
-                .callback(new Callback2D<Resp<HashMap<String, String>>, HashMap<String, String>>() {
-                    @Override
-                    protected void onRespSuccessData(HashMap<String, String> data) {
-                        for (Map.Entry<String, String> entry : data.entrySet()) {
-                            WhistleBlowingReason whistleBlowingReason = new WhistleBlowingReason();
-                            whistleBlowingReason.setKey(entry.getKey());
-                            whistleBlowingReason.setValues(entry.getValue());
-                            mWhistleBlowingReasonAdapter.add(whistleBlowingReason);
-                        }
-
-                    }
-                })
-                .fire();
+//        requestWhistleBlowingList(mWhistleBlowingType);
     }
 
 
