@@ -107,8 +107,9 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
         notifyDataSetChanged();
     }
 
+
     @Override
-    public int getFooterViewsCount() {
+    protected int getFooterViewsCount() {
         if (mFooterView != null) {
             return 1;
         }

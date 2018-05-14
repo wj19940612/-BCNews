@@ -13,17 +13,12 @@ public interface HeaderViewController extends RecycleViewType{
 
     void addHeaderView(View view);
 
-    int getHeaderViewsCount();
-
-    boolean removeHeaderView();
-
     void addFooterView(View view);
 
-    int getFooterViewsCount();
+    boolean removeHeaderView();
 
     boolean removeFooterView();
 
     boolean hasFooterView();
-
 
 }

@@ -1,5 +1,6 @@
 package com.sbai.bcnews.view.recycleview;
 
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +14,20 @@ import java.util.List;
  * <p>
  * Description:
  * </p>
- * APIS:{@link com.songbai.coinpro.http.Api#$methodName$}
  */
 public abstract class BaseRecycleViewAdapter<T, K extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<K> implements RecycleViewType {
 
     private List<T> mDataList;
 
     private final Object mLock = new Object();
+
+    protected int getHeaderViewsCount() {
+        return 0;
+    }
+
+    protected int getFooterViewsCount() {
+        return 0;
+    }
 
     public List<T> getDataList() {
         return mDataList;
@@ -36,21 +44,22 @@ public abstract class BaseRecycleViewAdapter<T, K extends RecyclerView.ViewHolde
     public void add(@Nullable T object) {
         synchronized (mLock) {
             mDataList.add(object);
-            notifyDataSetChanged();
+            notifyItemInserted(mDataList.size() + getHeaderViewsCount());
         }
     }
 
-    public void add(int position, @Nullable T object) {
+    public void add(@IntRange(from = 0) int position, @Nullable T object) {
         synchronized (mLock) {
             mDataList.add(position, object);
-            notifyDataSetChanged();
+            notifyItemInserted(position + getHeaderViewsCount());
         }
     }
+
 
     public void addAll(@NonNull Collection<? extends T> collection) {
         synchronized (mLock) {
             mDataList.addAll(collection);
-            notifyDataSetChanged();
+            notifyItemRangeInserted(mDataList.size() - collection.size() + getHeaderViewsCount(), collection.size());
         }
     }
 
@@ -58,6 +67,15 @@ public abstract class BaseRecycleViewAdapter<T, K extends RecyclerView.ViewHolde
         synchronized (mLock) {
             mDataList.remove(object);
             notifyDataSetChanged();
+        }
+    }
+
+    public void remove(@IntRange(from = 0) int position) {
+        synchronized (mLock) {
+            mDataList.remove(position);
+            int internalPosition = position + getHeaderViewsCount();
+            notifyItemRemoved(internalPosition);
+            notifyItemRangeChanged(internalPosition, mDataList.size() - internalPosition);
         }
     }
 
@@ -79,7 +97,11 @@ public abstract class BaseRecycleViewAdapter<T, K extends RecyclerView.ViewHolde
         return mDataList.size();
     }
 
+    @NonNull
     public T getItemData(int position) {
-        return mDataList.get(position);
+        if (position >= 0 && position < mDataList.size())
+            return mDataList.get(position);
+        else
+            return null;
     }
 }
