@@ -2,6 +2,7 @@ package com.sbai.bcnews.http;
 
 import com.sbai.bcnews.App;
 import com.sbai.bcnews.Preference;
+import com.sbai.bcnews.model.news.WriteComment;
 import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.httplib.ReqParams;
 
@@ -16,6 +17,205 @@ import java.io.File;
 public class Apic {
 
     public static final int DEFAULT_PAGE_SIZE = 20;
+
+    /**
+     * /api/news-msg/msg/history
+     * GET
+     * <p>用户--消息列表--薛松</p>
+     *
+     * @param startTime
+     * @return
+     */
+    public static Api requestMessage(Long startTime) {
+        return Api.get("/api/news-msg/msg/history",
+                new ReqParams()
+                        .put("size", DEFAULT_PAGE_SIZE)
+                        .put("createTime", startTime));
+    }
+
+
+    /**
+     * /api/news-msg/msg/new
+     * GET
+     * 用户--是否有新的消息(包括新的反馈)--薛松
+     */
+    public static Api requestWhetherHasAllNotReadMessage() {
+        return Api.get("/api/news-msg/msg/new");
+    }
+
+    /**
+     * /api/news-user/user/use/push
+     * POST
+     * 推送设置----齐慕伟
+     *
+     * @param notificationType
+     * @param status
+     * @return
+     */
+    public static Api switchNotificationStatus(int notificationType, int status) {
+        return Api.post("/api/news-user/user/use/push", new ReqParams().put("type", notificationType).put("status", status));
+    }
+
+    /**
+     * /api/news-msg/msg/read/all
+     * POST
+     * 用户--全部阅读--薛松
+     *
+     * @return
+     */
+    public static Api postAllMessageRead() {
+        return Api.post("/api/news-msg/msg/read/all");
+    }
+
+    /**
+     * /api/news-msg/msg/read
+     * POST
+     * 用户--阅读消息(读一条)--薛松
+     *
+     * @param id
+     */
+    public static Api readMessage(String id) {
+        return Api.post("/api/news-msg/msg/read", new ReqParams().put("msgId", id));
+    }
+
+    /**
+     * /api/news-info/discuss/opinion/{id}
+     * GET
+     * 各方观点----齐慕伟
+     *
+     * @param id
+     * @return
+     */
+    public static Api requestNewsViewpoint(String id) {
+        return Api.get("/api/news-info/discuss/opinion/{id}", new ReqParams().put("id", id));
+    }
+
+    /**
+     * /api/news-info/discuss/comment
+     * POST
+     * 发表评论/回复----齐慕伟
+     *
+     * @param writeComment
+     */
+    public static Api submitComment(WriteComment writeComment) {
+        return Api.post("/api/news-info/discuss/comment", new ReqParams(WriteComment.class, writeComment));
+    }
+
+    /**
+     * /api/news-info/discuss/first/{id}
+     * GET
+     * 全部评论----齐慕伟
+     *
+     * @param id
+     * @param page
+     * @param pageSize
+     */
+    public static Api requestNewsViewpointList(String id, int page, int pageSize) {
+        return Api.get("/api/news-info/discuss/first/{id}", new ReqParams().put("id", id).put("page", page).put("size", pageSize));
+    }
+
+    /**
+     * /api/news-user/report/add.do
+     * POST
+     * 用户--举报--薛松
+     *
+     * @return
+     */
+    public static Api submitWhistleBlowing(String dataId, int type, String reson) {
+        return Api.post("/api/news-user/report/add.do",
+                new ReqParams()
+                        .put("dataId", dataId)
+                        .put("type", type)
+                        .put("reason", reson));
+    }
+
+    /**
+     * /api/news-info/discuss/PRAISE
+     * POST
+     * 点赞----齐慕伟
+     *
+     * @param id
+     * @param dataId
+     * @param userId
+     * @param type
+     */
+    public static Api praiseComment(String id, String dataId, Integer userId, int type) {
+        return Api.post("/api/news-info/discuss/praise",
+                new ReqParams()
+                        .put("id", id)
+                        .put("dataId", dataId)
+                        .put("userId", userId)
+                        .put("type", type));
+    }
+
+    /**
+     * /api/news-info/discuss/second/{id}
+     * GET
+     * 评论详情----齐慕伟
+     *
+     * @param newsId
+     * @param page
+     * @param pageSize
+     * @param viewpointId
+     */
+    public static Api requestCommentList(String newsId, int page, int pageSize, String viewpointId) {
+        return Api.get("/api/news-info/discuss/second/{id}",
+                new ReqParams()
+                        .put("dataId", newsId)
+                        .put("page", page)
+                        .put("size", pageSize)
+                        .put("id", viewpointId));
+    }
+
+    /**
+     * /api/news-info/discuss/mine/comment
+     * GET
+     * 我评论的----齐慕伟
+     */
+    public static Api requestMineReplyOrCommentViewpointList(int page, int type, int size) {
+        return Api.get("/api/news-info/discuss/mine/comment",
+                new ReqParams()
+                        .put("page", page)
+                        .put("size", size)
+                        .put("type", type));
+    }
+
+    /**
+     * /api/news-user/report/reason/{type}
+     * GET
+     * 用户--举报理由--薛松
+     *
+     * @param whistleBlowingType
+     */
+    public static Api requestWhistleBlowingList(int whistleBlowingType) {
+        return Api.get("/api/news-user/report/reason/{type}", new ReqParams().put("type", whistleBlowingType));
+    }
+
+    /**
+     * /api/news-info/discuss/delete/{id}
+     * POST
+     * 删除评论--薛松
+     *
+     * @param type
+     * @param dataId
+     * @param id
+     * @return
+     */
+    public static Api deleteReview(int type, String dataId, String id) {
+        return Api.get("/api/news-info/discuss/delete/{id}", new ReqParams().put("type", type).put("dataId", dataId).put("id", id));
+    }
+
+    /**
+     * /api/news-info/discuss/praise/status.do
+     * POST
+     * 是否点赞--薛松
+     *
+     * @param id
+     * @return
+     */
+    public static Api requestViewpointPraiseStatus(String id) {
+        return Api.post("/api/news-info/discuss/praise/status.do", new ReqParams().put("id", id));
+    }
 
 
     public interface url {
@@ -150,7 +350,7 @@ public class Apic {
 
 
     /**
-     * /api/news-info/news/praise/{id}
+     * /api/news-info/news/PRAISE/{id}
      * <p>资讯点赞 - 齐慕伟</p>
      *
      * @param newsId 资讯id

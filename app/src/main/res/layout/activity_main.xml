@@ -18,6 +18,7 @@
 
 
     <com.sbai.bcnews.view.BottomTabs
+        app:hasReadPointPosition="3"
         android:id="@+id/bottomTabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

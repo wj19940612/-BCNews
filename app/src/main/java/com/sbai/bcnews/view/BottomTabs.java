@@ -29,6 +29,10 @@ public class BottomTabs extends LinearLayout {
 
     private OnTabClickListener mOnTabClickListener;
 
+    private int mHasReadPointTabPosition;
+
+    private RedPointTipTextView mRedPointTipTextView;
+
 
     public interface OnTabClickListener {
         void onTabClick(int position);
@@ -51,6 +55,7 @@ public class BottomTabs extends LinearLayout {
         mPaddingTop = typedArray.getDimensionPixelOffset(R.styleable.BottomTabs_drawablePadding, 10);
         mPaddingBottom = typedArray.getDimensionPixelOffset(R.styleable.BottomTabs_drawablePadding, 6);
         mTexts = typedArray.getTextArray(R.styleable.BottomTabs_textArray);
+        mHasReadPointTabPosition = typedArray.getInt(R.styleable.BottomTabs_hasReadPointPosition, -1);
 
         if (isInEditMode()) {
             mIcons = new int[]{R.drawable.tab_news, R.drawable.tab_flash_news, R.drawable.tab_market};
@@ -79,9 +84,23 @@ public class BottomTabs extends LinearLayout {
         for (int i = 0; i < mLength; i++) {
             LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             params.weight = 1;
-            addView(createTab(i), params);
+            if (i == mHasReadPointTabPosition) {
+                addView(createPointTab(i), params);
+            } else {
+                addView(createTab(i), params);
+            }
         }
         selectTab(0);
+
+        //设置红点位置
+        if (mRedPointTipTextView != null)
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    int padding = (int) (mRedPointTipTextView.getMeasuredWidth() *0.4);
+                    setRedPointTextHorizontalPadding(padding);
+                }
+            });
     }
 
     private View createTab(int i) {
@@ -106,10 +125,18 @@ public class BottomTabs extends LinearLayout {
         return text;
     }
 
-    public void setPointNum(int index, int num) {
-        BadgeTextView tabTextView = (BadgeTextView) getChildAt(index);
-        tabTextView.setNum(num);
+    public void setRedPointVisibility(int pointVisibility) {
+        if (mRedPointTipTextView != null) {
+            mRedPointTipTextView.setRedPointVisibility(pointVisibility);
+        }
     }
+
+    public void setRedPointTextHorizontalPadding(int padding) {
+        if (mRedPointTipTextView != null) {
+            mRedPointTipTextView.setPointHorizontalPadding(padding);
+        }
+    }
+
 
     public void setTabVisibility(int index, int visible) {
         View childAt = getChildAt(index);
@@ -117,16 +144,16 @@ public class BottomTabs extends LinearLayout {
     }
 
     private View createPointTab(int i) {
-        BadgeTextView text = new BadgeTextView(getContext());
-        text.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-        text.setTextColor(mTextColor != null ? mTextColor : ColorStateList.valueOf(0));
-        text.setText(mTexts[i]);
-        text.setPadding(0, mPaddingTop, 0, mPaddingBottom);
-        text.setCompoundDrawablePadding(mDrawablePadding);
-        text.setCompoundDrawablesWithIntrinsicBounds(0, mIcons[i], 0, 0);
-        text.setGravity(Gravity.CENTER);
-        text.setTag(KEY_POSITION, i);
-        text.setOnClickListener(new OnClickListener() {
+        mRedPointTipTextView = new RedPointTipTextView(getContext());
+        mRedPointTipTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+        mRedPointTipTextView.setTextColor(mTextColor != null ? mTextColor : ColorStateList.valueOf(0));
+        mRedPointTipTextView.setText(mTexts[i]);
+        mRedPointTipTextView.setPadding(0, mPaddingTop, 0, mPaddingBottom);
+        mRedPointTipTextView.setCompoundDrawablePadding(mDrawablePadding);
+        mRedPointTipTextView.setCompoundDrawablesWithIntrinsicBounds(0, mIcons[i], 0, 0);
+        mRedPointTipTextView.setGravity(Gravity.CENTER);
+        mRedPointTipTextView.setTag(KEY_POSITION, i);
+        mRedPointTipTextView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 int pos = (int) view.getTag(KEY_POSITION);
@@ -135,7 +162,7 @@ public class BottomTabs extends LinearLayout {
                 }
             }
         });
-        return text;
+        return mRedPointTipTextView;
     }
 
     public void selectTab(int index) {

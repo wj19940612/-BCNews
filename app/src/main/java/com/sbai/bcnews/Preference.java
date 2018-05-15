@@ -2,16 +2,8 @@ package com.sbai.bcnews;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.sbai.bcnews.model.LocalUser;
-import com.sbai.bcnews.utils.AppInfo;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.sbai.bcnews.utils.TextSizeModel;
 
 
 public class Preference {
@@ -21,6 +13,7 @@ public class Preference {
 
     //上次打开页面超过当前页面多久提交一次  60*60*1000
     private static final int UPDATE_OPEN_APP_TIME = 60 * 60 * 1000;
+
 
     interface Key {
         String FOREGROUND = "foreground";
@@ -55,6 +48,7 @@ public class Preference {
         String NEWS_CHANNEL = "news_channel";
         String NEWS_PRAISE = "news_praise";
         String FIRST_PRAISE = "first_praise";
+        String WEB_TEXT_SIZE = "text_size";
     }
 
     private static Preference sInstance;
@@ -272,6 +266,16 @@ public class Preference {
     public void setFirstPraise(boolean firstPraise) {
         String key = Key.FIRST_PRAISE;
         apply(key, firstPraise);
+    }
+
+    public int getLocalWebTextSize() {
+        String key = Key.WEB_TEXT_SIZE;
+        return mPrefs.getInt(key, TextSizeModel.NORMAL);
+    }
+
+    public void setLocalWebTextSize( int textSize) {
+        String key = Key.WEB_TEXT_SIZE;
+        apply(key, textSize);
     }
 
 

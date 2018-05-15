@@ -181,6 +181,9 @@
     <string name="history">历史</string>
     <string name="please_add_us_wechat_account">请添加我们的微信号%1$s\n我们坐下来慢慢详谈</string>
     <string name="copy_us_wechat_account">复制微信号</string>
+    <string name="message">消息</string>
+    <string name="comment">评论</string>
+
 
     <string name="receive_new_notification">接收新消息通知</string>
     <string name="personal_data">个人资料</string>
@@ -229,4 +232,66 @@
     <string name="mention_address">提币地址: 已绑定</string>
     <string name="click_modify">点击修改</string>
     <string name="recharge">兑换</string>
+
+    <string name="all_read">全部已读</string>
+    <string name="not_data">暂无数据</string>
+    <string name="not_message">暂无消息</string>
+
+
+    <string name="night_mode">夜间模式</string>
+    <string name="notificationManage">推送管理</string>
+    <string name="recommend_to_friend">推荐给朋友</string>
+    <string name="comment_on_reply">评论有回复</string>
+    <string name="praise">赞</string>
+
+    <string name="reply_mine">回复我的</string>
+    <string name="mine_review">我评论的</string>
+
+
+    <string name="gate">gate.io</string>
+    <string name="huo_bi">火币</string>
+    <string name="bi_an">币安</string>
+
+    <string name="copy_link">复制链接</string>
+    <string name="whistle_blowing">举报</string>
+    <string name="whistle_blowing_success">举报成功</string>
+
+
+    <string name="please_choose_whistle_blowing">请选择举报理由</string>
+
+    <string name="write_comment">写评论...</string>
+    <string name="all_point">各方观点</string>
+    <string name="all_point_number">全部%1$s条评论</string>
+    <string name="all_comment">全部评论</string>
+    <string name="praise_count_">%1$d赞</string>
+    <string name="review_count">%1$d回复</string>
+    <string name="fast_write_your_comment">快来发表你的评论吧</string>
+    <string name="now_not_review">暂无回复</string>
+    <string name="now_not_comment">暂无评论</string>
+
+    <string-array name="webTextSize">
+        <!--<item>小</item>-->
+        <item>中</item>
+        <item>大</item>
+        <item>超大</item>
+    </string-array>
+
+    <string name="web_text_size">字体大小</string>
+    <string name="web_text_size_model">（%1$s）</string>
+    <string name="let_us_look_your_comment">让大家看看你的高见</string>
+    <string name="comment_detail">评论详情</string>
+    <string name="review_TA">回复TA</string>
+    <string name="review_user">回复：%1$s</string>
+    <string name="review">回复</string>
+    <string name="copy">复制</string>
+    <string name="spread">展开</string>
+    <string name="shrink">收缩</string>
+    <string name="all_content">全文</string>
+    <string name="main_body">正文</string>
+    <string name="look_all_review">查看全部回复</string>
+    <string name="look_all_review_count">查看全部%1$d条回复</string>
+    <string name="hot_viewpoint">热门观点</string>
+    <string name="all_viewpoint_count">全部观点（%1$d）</string>
+    <string name="user_name_">%1$s：</string>
+    <string name="publish_success">发布成功</string>
 </resources>

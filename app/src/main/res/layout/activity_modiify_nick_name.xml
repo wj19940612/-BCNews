@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/bg_F5F5"
     tools:context="com.sbai.bcnews.activity.mine.ModifyNickNameActivity">
 
     <com.sbai.bcnews.view.TitleBar
@@ -39,7 +39,7 @@
             android:inputType="text"
             android:maxLength="8"
             android:maxLines="1"
-            android:textColorHint="@color/unluckyText"
+            android:textColorHint="@color/text_999"
             android:textSize="16sp"/>
 
         <android.support.v7.widget.AppCompatImageView

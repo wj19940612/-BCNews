@@ -11,11 +11,9 @@ import android.widget.ListView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -26,9 +24,6 @@ import butterknife.Unbinder;
  */
 
 public abstract class ListViewSwipeLoadFragment extends BaseSwipeLoadFragment<ListView> {
-
-    @BindView(R.id.titleBar)
-    TitleBar mTitleBar;
 
     private Unbinder mBind;
 

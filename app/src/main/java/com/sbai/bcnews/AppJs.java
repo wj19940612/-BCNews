@@ -5,14 +5,20 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 
 import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.activity.WebActivity;
-import com.sbai.bcnews.view.ShareDialog;
+import com.sbai.bcnews.activity.mine.LoginActivity;
+import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.view.share.ShareDialog;
 
 
 public class AppJs {
+
+    private static final String ONLY_WE_CHAT_SHARE = "onlyWeChat";
+
     public final static int NET_NONE = 0;
     public final static int NET_WIFI = 1;
     public final static int NET_2G = 2;
@@ -25,20 +31,30 @@ public class AppJs {
         mContext = context;
     }
 
+
+//    @JavascriptInterface
+//    public void openShareDialog(String title, String description, String shareUrl, String shareThumbnailUrl) {
+//        if (mContext instanceof Activity) {
+//            final Activity activity = (Activity) mContext;
+//            ShareDialog.with(activity)
+//                    .setTitle(mContext.getString(R.string.share_to))
+//                    .setTitleVisible(true)
+//                    .setShareTitle(title)
+//                    .setShareDescription(description)
+//                    .setShareUrl(shareUrl)
+//                    .setShareThumbUrl(shareThumbnailUrl)
+//                    .show();
+//        }
+//    }
+
+    /**
+     * 打开分享弹窗
+     */
     @JavascriptInterface
-    public void openShareDialogWithoutReward(String title, String description, String shareUrl, String shareThumbnailUrl) {
-        if (mContext instanceof Activity) {
-            final Activity activity = (Activity) mContext;
-            ShareDialog.with(activity)
-                    .setTitle(mContext.getString(R.string.share_to))
-                    .setTitleVisible(true)
-                    .setShareTitle(title)
-                    .setShareDescription(description)
-                    .setShareUrl(shareUrl)
-                    .setShareThumbUrl(shareThumbnailUrl)
-                    .show();
-        }
+    public void openShareDialog(final String title, final String description, final String shareUrl, final String shareThumbnailUrl) {
+        openShareDialog(title, description, shareUrl, shareThumbnailUrl, ONLY_WE_CHAT_SHARE);
     }
+
 
     /**
      * @param title
@@ -53,47 +69,33 @@ public class AppJs {
     }
 
     @JavascriptInterface
-    public void openShareDialog(String title, String description, String shareUrl, String shareThumbnailUrl, String shareChannel, String shareTitle) {
+    public void openShareDialog(final String title, final String description, final String shareUrl, final String shareThumbnailUrl, String shareChannel, final String shareTitle) {
         if (mContext instanceof Activity) {
             final Activity activity = (Activity) mContext;
-            ShareDialog.with(activity)
-                    .setTitle(shareTitle)
-                    .setTitleVisible(true)
-                    .setShareTitle(title)
-                    .setShareDescription(description)
-                    .setShareUrl(shareUrl)
-                    .setShareThumbUrl(shareThumbnailUrl)
-                    .setListener(new ShareDialog.OnShareDialogCallback() {
-                        @Override
-                        public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {
-                        }
-                    }).show();
-        }
-    }
-
-    /**
-     * 打开分享弹窗
-     */
-    @JavascriptInterface
-    public void openShareDialog(final String title, final String description, final String shareUrl, final String shareThumbnailUrl) {
-        if (mContext instanceof Activity) {
-            final Activity activity = (Activity) mContext;
+            final boolean onlyWeChatShare = ONLY_WE_CHAT_SHARE.equalsIgnoreCase(shareChannel);
+            final boolean titleVisible = !TextUtils.isEmpty(shareTitle);
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     ShareDialog.with(activity)
-                            .hasWeiBo(false)
-                            .setTitle(title)
-                            .setTitleVisible(false)
+                            .setTitle(shareTitle)
+                            .setTitleVisible(titleVisible)
+                            .hasWeiBo(!onlyWeChatShare)
                             .setShareTitle(title)
                             .setShareDescription(description)
                             .setShareUrl(shareUrl)
                             .setShareThumbUrl(shareThumbnailUrl)
-                            .show();
+                            .setListener(new ShareDialog.OnShareDialogCallback() {
+                                @Override
+                                public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {
+                                }
+                            }).show();
                 }
             });
+
         }
     }
+
 
     /**
      * 截图
@@ -157,8 +159,7 @@ public class AppJs {
     }
 
     @JavascriptInterface
-    public void openImage(final String img){
-//        Log.e("zzz","openImage");
+    public void openImage(final String img) {
         if (mContext instanceof NewsDetailActivity) {
             final NewsDetailActivity activity = (NewsDetailActivity) mContext;
             activity.runOnUiThread(new Runnable() {
@@ -182,4 +183,38 @@ public class AppJs {
             });
         }
     }
+
+    @JavascriptInterface
+    public void openAppPage(String pageType) {
+        openAppPage(pageType, null);
+    }
+
+    @JavascriptInterface
+    public void openAppPage(String pageType, String id) {
+        openAppPage(pageType, id, null);
+    }
+
+    @JavascriptInterface
+    public void openAppPage(String pageType, String id, String data) {
+        switch (pageType) {
+            case AppPageType.HOME:
+                break;
+            case AppPageType.LOGIN:
+                Activity activity = (Activity) mContext;
+                ((Activity) mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Launcher.with(mContext, LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
+                    }
+                });
+                break;
+        }
+    }
+
+
+    public interface AppPageType {
+        String LOGIN = "login";
+        String HOME = "home";
+    }
+
 }

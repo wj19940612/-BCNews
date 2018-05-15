@@ -27,9 +27,11 @@ import android.widget.ProgressBar;
 
 import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.utils.Network;
-import com.sbai.bcnews.view.ShareDialog;
+import com.sbai.bcnews.view.share.ShareDialog;
 import com.sbai.bcnews.view.TitleBar;
+import com.sbai.httplib.CookieManger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,6 +101,25 @@ public class WebActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case LoginActivity.REQ_CODE_LOGIN:
+                    // init cookies
+                    mWebView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            syncCookies(mPageUrl);
+                            mWebView.reload();
+                        }
+                    }, 200);
+                    break;
+            }
+        }
+    }
+
     protected void initData(Intent intent) {
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
@@ -128,7 +149,7 @@ public class WebActivity extends BaseActivity {
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webSettings.setUserAgentString(webSettings.getUserAgentString()
-                + " ###" + getString(R.string.android_web_agent) + "/1.0");
+                + " ###" + getString(R.string.android_web_agent) + "/2.0");
         //mWebView.getSettings().setAppCacheEnabled(true);l
         //webSettings.setAppCachePath(getExternalCacheDir().getPath());
         webSettings.setAllowFileAccess(true);
@@ -196,6 +217,7 @@ public class WebActivity extends BaseActivity {
 
     protected void syncCookies(String pageUrl) {
         String rawCookie = null;
+        rawCookie = CookieManger.getInstance().getRawCookie();
         Log.d(TAG, "syncCookies: " + rawCookie + ", " + pageUrl);
 
         if (!TextUtils.isEmpty(rawCookie) && !TextUtils.isEmpty(pageUrl)) {

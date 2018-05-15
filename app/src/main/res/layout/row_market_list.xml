@@ -12,7 +12,7 @@
         android:id="@+id/split"
         android:layout_width="match_parent"
         android:layout_height="12dp"
-        android:background="@color/background"/>
+        android:background="@color/bg_F5F5"/>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/rootView"
@@ -29,7 +29,7 @@
             android:id="@+id/bourseName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/assistText"
+            android:textColor="@color/text_4949"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="火币pro"/>
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/assistText"
+            android:textColor="@color/text_4949"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/assistText"
+            android:textColor="@color/text_4949"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/marketName"
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:textColor="@color/unluckyText"
+            android:textColor="@color/text_999"
             android:textSize="12sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/marketName"
             app:layout_constraintLeft_toRightOf="@+id/marketName"

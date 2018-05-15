@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/bg_F5F5"
     android:orientation="vertical"
     tools:context="com.sbai.bcnews.activity.RelatedNewsActivity">
 
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         app:backFeature="true"
         app:backText="btc/usdt"
-        app:backTextColor="@color/text"
+        app:backTextColor="@color/text_222"
         app:titleText="@string/related_news"/>
 
     <com.aspsine.swipetoloadlayout.SwipeToLoadLayout

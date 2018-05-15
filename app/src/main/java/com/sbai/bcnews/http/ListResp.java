@@ -1,6 +1,6 @@
 package com.sbai.bcnews.http;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by ${wangJie} on 2018/2/12.
@@ -37,19 +37,16 @@ public class ListResp<T> {
     }
 
     public DataBean<T> getData() {
-        if (data != null) {
-            return (DataBean<T>) data.getContent();
-        }
-        return null;
+        return data;
     }
 
     public void setData(DataBean<T> data) {
         this.data = data;
     }
 
-    public List<T> getListData() {
+    public ArrayList<T> getListData() {
         if (data != null) {
-            return (List<T>) data.getContent();
+            return data.getContent();
         }
         return null;
     }
@@ -66,6 +63,20 @@ public class ListResp<T> {
          * totalPages : 0
          */
 
+        private ArrayList<T> content;
+
+        /**
+         * content : []
+         * first : false
+         * last : true
+         * number : 1
+         * numberOfElements : 0
+         * size : 20
+         * totalElements : 0
+         * totalPages : 0
+         */
+
+        private int totalComment;
         private boolean first;
         private boolean last;
         private int number;
@@ -73,7 +84,14 @@ public class ListResp<T> {
         private int size;
         private int totalElements;
         private int totalPages;
-        private List<T> content;
+
+        public int getTotalComment() {
+            return totalComment;
+        }
+
+        public void setTotalComment(int totalComment) {
+            this.totalComment = totalComment;
+        }
 
         public boolean isFirst() {
             return first;
@@ -131,11 +149,11 @@ public class ListResp<T> {
             this.totalPages = totalPages;
         }
 
-        public List<?> getContent() {
+        public ArrayList<T> getContent() {
             return content;
         }
 
-        public void setContent(List<T> content) {
+        public void setContent(ArrayList<T> content) {
             this.content = content;
         }
     }

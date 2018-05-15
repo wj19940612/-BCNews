@@ -6,7 +6,7 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/bg_F5F5"
     android:orientation="vertical"
     tools:context="com.sbai.bcnews.activity.mine.ReadHistoryActivity">
 
@@ -55,10 +55,10 @@
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_below="@+id/titleBar"
-        android:background="@color/background"
+        android:background="@color/bg_F5F5"
         android:gravity="center_vertical"
         android:paddingLeft="13dp"
-        android:textColor="@color/unluckyText"
+        android:textColor="@color/text_999"
         android:textSize="13sp"
         tools:text="2月"/>
 </RelativeLayout>

@@ -1,122 +1,169 @@
-<android.support.constraint.ConstraintLayout
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_F5F5"
+    android:scrollbars="none"
     tools:context="com.sbai.bcnews.fragment.MineFragment">
 
-    <RelativeLayout
-        android:id="@+id/headLayout"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_mine_head_top"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/headPortrait"
-            android:layout_width="68dp"
-            android:layout_height="68dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="47dp"
-            tools:src="@drawable/ic_default_head_portrait"/>
-
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/headLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/headPortrait"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="17dp"
-            android:textColor="@color/text"
-            android:textSize="20sp"
+            android:background="@drawable/bg_mine_head_top"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headPortrait"
-            tools:text="溺水的鱼"/>
+            app:layout_constraintTop_toTopOf="parent">
 
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/userName"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp"
-            android:gravity="center">
+            <ImageView
+                android:id="@+id/headPortrait"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="47dp"
+                tools:src="@drawable/ic_default_head_portrait"/>
 
             <TextView
-                android:id="@+id/collect"
+                android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/assistText"
-                tools:text="收藏  0"/>
+                android:layout_below="@+id/headPortrait"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="17dp"
+                android:textColor="@color/text_222"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/headPortrait"
+                tools:text="溺水的鱼"/>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="14dp"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="14dp"
-                android:background="@color/unluckyText"/>
 
-            <TextView
-                android:id="@+id/history"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/assistText"
-                tools:text="历史  0"/>
-        </LinearLayout>
-    </RelativeLayout>
+                android:layout_below="@+id/userName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="40dp"
+                android:gravity="center">
 
-    <com.sbai.bcnews.view.IconTextRow
-        android:id="@+id/contribute"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/bg_white"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/headLayout"
-        app:leftIcon="@drawable/ic_mine_contribute"
-        app:rightIcon="@drawable/ic_common_right_arrow"
-        app:rowText="@string/me_want_contribute"
-        app:rowTextColor="@color/text"
-        app:rowTextSize="16sp"
-        app:rowVerticalPadding="0dp"/>
+                <TextView
+                    android:id="@+id/collect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/text_4949"
+                    tools:text="收藏  0"/>
 
-    <com.sbai.bcnews.view.IconTextRow
-        android:id="@+id/feedBack"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/bg_white"
-        android:visibility="visible"
-        app:hasBottomSplitLine="true"
-        app:layout_constraintTop_toBottomOf="@+id/contribute"
-        app:leftIcon="@drawable/ic_mine_feed_back"
-        app:rightIcon="@drawable/ic_common_right_arrow"
-        app:rowText="@string/feed_back"
-        app:rowTextColor="@color/text"
-        app:rowTextSize="16sp"
-        app:rowVerticalPadding="0dp"
-        app:splitLineColor="@color/background"/>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="14dp"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"
+                    android:background="@color/text_999"/>
 
-    <com.sbai.bcnews.view.IconTextRow
-        android:id="@+id/setting"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/bg_white"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/feedBack"
-        app:leftIcon="@drawable/ic_mine_setting"
-        app:rightIcon="@drawable/ic_common_right_arrow"
-        app:rowText="@string/setting"
-        app:rowTextColor="@color/text"
-        app:rowTextSize="16sp"
-        app:rowVerticalPadding="0dp"/>
+                <TextView
+                    android:id="@+id/history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/text_4949"
+                    tools:text="历史  0"/>
+            </LinearLayout>
+        </RelativeLayout>
 
-</android.support.constraint.ConstraintLayout>
+        <com.sbai.bcnews.view.IconTextRow
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_white"
+            app:hasBottomSplitLine="true"
+            app:layout_constraintTop_toBottomOf="@+id/headLayout"
+            app:leftIcon="@drawable/ic_mine_message"
+            app:rightIcon="@drawable/ic_common_right_arrow"
+            app:rowText="@string/message"
+            app:rowTextColor="@color/text_222"
+            app:rowTextSize="16sp"
+            app:rowVerticalPadding="0dp"
+            app:splitLineColor="@color/bg_F5F5"
+            app:subTextBackground="@drawable/point_red_circle"
+            app:subTextColor="@android:color/white"
+            app:subTextSize="12sp"
+            app:subTextVisible="gone"/>
+
+        <com.sbai.bcnews.view.IconTextRow
+            android:id="@+id/review"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_white"
+            app:layout_constraintTop_toBottomOf="@+id/message"
+            app:leftIcon="@drawable/ic_mine_review"
+            app:rightIcon="@drawable/ic_common_right_arrow"
+            app:rowText="@string/comment"
+            app:rowTextColor="@color/text_222"
+            app:rowTextSize="16sp"
+            app:rowVerticalPadding="0dp"/>
+
+
+        <com.sbai.bcnews.view.IconTextRow
+            android:id="@+id/contribute"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_white"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/review"
+            app:leftIcon="@drawable/ic_mine_contribute"
+            app:rightIcon="@drawable/ic_common_right_arrow"
+            app:rowText="@string/me_want_contribute"
+            app:rowTextColor="@color/text_222"
+            app:rowTextSize="16sp"
+            app:rowVerticalPadding="0dp"/>
+
+        <com.sbai.bcnews.view.IconTextRow
+            android:id="@+id/feedBack"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_white"
+            android:visibility="visible"
+            app:hasBottomSplitLine="true"
+            app:layout_constraintTop_toBottomOf="@+id/contribute"
+            app:leftIcon="@drawable/ic_mine_feed_back"
+            app:rightIcon="@drawable/ic_common_right_arrow"
+            app:rowText="@string/feed_back"
+            app:rowTextColor="@color/text_222"
+            app:rowTextSize="16sp"
+            app:rowVerticalPadding="0dp"
+            app:splitLineColor="@color/bg_F5F5"
+            app:subTextLeftDrawable="@drawable/point_red_circle_5"
+            app:subTextColor="@android:color/white"
+            app:subTextSize="12sp"
+            app:subTextVisible="gone"/>
+
+        <com.sbai.bcnews.view.IconTextRow
+            android:id="@+id/setting"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_white"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/feedBack"
+            app:leftIcon="@drawable/ic_mine_setting"
+            app:rightIcon="@drawable/ic_common_right_arrow"
+            app:rowText="@string/setting"
+            app:rowTextColor="@color/text_222"
+            app:rowTextSize="16sp"
+            app:rowVerticalPadding="0dp"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.NestedScrollView>
+

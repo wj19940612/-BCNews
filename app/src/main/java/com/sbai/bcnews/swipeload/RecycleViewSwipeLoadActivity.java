@@ -11,8 +11,6 @@ import com.sbai.bcnews.R;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by ${wangJie} on 2018/1/29.
  * 如果使用包含一个recycleView 的activity 可以继承该类
@@ -35,7 +33,9 @@ public abstract class RecycleViewSwipeLoadActivity extends BaseSwipeLoadActivity
 
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        getSwipeTargetView().addOnScrollListener(mOnScrollListener);
+        if (getSwipeTargetView() != null) {
+            getSwipeTargetView().addOnScrollListener(mOnScrollListener);
+        }
     }
 
     protected void onRecycleViewScrollStateChanged(RecyclerView recyclerView, int newState) {

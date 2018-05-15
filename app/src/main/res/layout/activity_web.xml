@@ -15,7 +15,7 @@
         app:backFeature="true"
         app:hasBottomSplitLine="true"
         app:splitLineColor="@color/split"
-        app:titleTextColor="@color/text"/>
+        app:titleTextColor="@color/text_222"/>
 
     <ProgressBar
         android:id="@+id/progressbar"

@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/please_input_image_auth_code"
-            android:textColor="@color/text"
+            android:textColor="@color/text_222"
             android:textSize="15sp"/>
 
         <LinearLayout
@@ -50,8 +50,8 @@
                 android:hint="@string/image_auth_code"
                 android:maxLength="6"
                 android:maxLines="1"
-                android:textColor="@color/text"
-                android:textColorHint="@color/unluckyText"
+                android:textColor="@color/text_222"
+                android:textColorHint="@color/text_999"
                 android:textSize="14sp"/>
 
             <ImageView

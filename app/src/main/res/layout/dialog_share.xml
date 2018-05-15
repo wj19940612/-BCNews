@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:minHeight="29dp"
-        android:textColor="@color/text"
+        android:textColor="@color/text_222"
         android:textSize="11sp"/>
 
     <View
@@ -27,115 +27,72 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:minHeight="122dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="42dp"
+        android:paddingRight="42dp">
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
 
-        <LinearLayout
+        <TextView
             android:id="@+id/weChatFriend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_white_small_round"
-            android:gravity="center"
-
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="10dp"
-                android:drawableTop="@drawable/ic_share_wechat"
-                android:gravity="center"
-                android:text="@string/wechat_friend"
-                android:textColor="@color/text"
-                android:textSize="12sp"/>
-        </LinearLayout>
-
-        <Space
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <LinearLayout
-            android:id="@+id/weChatFriendCircle"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_white_small_round"
-            android:gravity="center"
-
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="10dp"
-                android:drawableTop="@drawable/ic_share_wechat_circle"
-                android:gravity="center"
-                android:text="@string/wechat_circle"
-                android:textColor="@color/text"
-                android:textSize="12sp"/>
-
-        </LinearLayout>
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <LinearLayout
-            android:id="@+id/qq"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/bg_white_small_round"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="10dp"
-                android:drawableTop="@drawable/ic_share_qq"
-                android:gravity="center"
-                android:text="QQ"
-                android:textColor="@color/text"
-                android:textSize="12sp"/>
-
-        </LinearLayout>
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="0dp"
             android:layout_weight="1"
-            android:visibility="gone"/>
+            android:background="@drawable/bg_white_small_round"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_share_wechat"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/wechat_friend"
+            android:textColor="@color/text_222"
+            android:textSize="12sp"/>
+
+
+        <TextView
+            android:id="@+id/weChatFriendCircle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_white_small_round"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_share_wechat_circle"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/wechat_circle"
+            android:textColor="@color/text_222"
+            android:textSize="12sp"/>
+
+
+        <TextView
+            android:id="@+id/qq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_white_small_round"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_share_qq"
+            android:gravity="center"
+            android:text="QQ"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:visibility="visible"
+            android:textColor="@color/text_222"
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/sinaWeibo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="35dp"
-            android:background="@drawable/bg_white"
+            android:layout_weight="1"
+            android:background="@drawable/bg_white_small_round"
             android:drawablePadding="10dp"
             android:drawableTop="@drawable/ic_share_weibo"
             android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:text="@string/sina_weibo"
-            android:textColor="@color/text"
+            android:textColor="@color/text_222"
             android:textSize="12sp"
             android:visibility="gone"/>
     </LinearLayout>
@@ -151,6 +108,6 @@
         android:gravity="center"
         android:minHeight="50dp"
         android:text="@string/cancel"
-        android:textColor="@color/text"
+        android:textColor="@color/text_222"
         android:textSize="15sp"/>
 </LinearLayout>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/topLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_40_round"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:text="@string/review"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:text="@string/copy"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/whistleBlowing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:text="@string/whistle_blowing"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_bottom"
+        app:layout_constraintEnd_toEndOf="@id/topLL"
+        app:layout_constraintStart_toStartOf="@id/topLL"
+        app:layout_constraintTop_toBottomOf="@id/topLL"/>
+
+</android.support.constraint.ConstraintLayout>

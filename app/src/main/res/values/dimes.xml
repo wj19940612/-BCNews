@@ -5,4 +5,6 @@
 
     <dimen name="default_height">44dp</dimen>
 
+    <dimen name="common_padding">14dp</dimen>
+
 </resources>

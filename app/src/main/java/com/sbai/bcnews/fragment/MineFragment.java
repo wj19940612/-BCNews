@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
@@ -15,12 +16,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.FeedbackActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
+import com.sbai.bcnews.activity.mine.MessageActivity;
 import com.sbai.bcnews.activity.mine.MyCollectActivity;
 import com.sbai.bcnews.activity.mine.PersonalDataActivity;
 import com.sbai.bcnews.activity.mine.ReadHistoryActivity;
+import com.sbai.bcnews.activity.mine.ReviewActivity;
 import com.sbai.bcnews.activity.mine.SettingActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
@@ -29,6 +33,7 @@ import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.model.mine.MsgNumber;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
+import com.sbai.bcnews.model.news.NotReadMessage;
 import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
@@ -67,7 +72,15 @@ public class MineFragment extends BaseFragment {
     IconTextRow mFeedBack;
     @BindView(R.id.setting)
     IconTextRow mSetting;
+    @BindView(R.id.message)
+    IconTextRow mMessage;
+    @BindView(R.id.review)
+    IconTextRow mReview;
+
     Unbinder unbinder;
+
+    private int mNotReadMessageCount;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,11 +91,18 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         updateUserLoginStatus();
         refreshUserData();
     }
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -107,6 +127,21 @@ public class MineFragment extends BaseFragment {
                 .fire();
     }
 
+    public void updateNotReadMessage(NotReadMessage data) {
+        updateNotReadMessage(data.getMsg());
+        updateNotReadFeedBackMessage(data.getFeedBack());
+    }
+
+
+    private void updateNotReadFeedBackMessage(int data) {
+        if (data == 0) {
+            mFeedBack.setSubTextVisible(View.GONE);
+        } else {
+            mFeedBack.setSubTextVisible(View.VISIBLE);
+        }
+    }
+
+
     private void updateUserLoginStatus() {
         updateUserHeadPortrait();
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
@@ -123,20 +158,34 @@ public class MineFragment extends BaseFragment {
                 readHistorySize = data.size();
             }
             updateUserReadHistory(readHistorySize);
+            updateNotReadMessage(0);
+        }
+    }
+
+    private void updateNotReadMessage(int count) {
+        if (count < 100)
+            mMessage.setSubText(String.valueOf(count));
+        else
+            mMessage.setSubText("99+");
+        mNotReadMessageCount = count;
+        if (count != 0) {
+            mMessage.setSubTextVisible(View.VISIBLE);
+        } else {
+            mMessage.setSubTextVisible(View.GONE);
         }
     }
 
     private void updateUserReadHistory(int readHistory) {
         SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.history),
                 " " + readHistory,
-                ContextCompat.getColor(getActivity(), R.color.textAssistPrimary));
+                ContextCompat.getColor(getActivity(), R.color.text_476E92));
         mHistory.setText(spannableString);
     }
 
     private void updateUserCollectNumber(int collectNumber) {
         SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.collect),
                 " " + collectNumber,
-                ContextCompat.getColor(getActivity(), R.color.textAssistPrimary));
+                ContextCompat.getColor(getActivity(), R.color.text_476E92));
         mCollect.setText(spannableString);
     }
 
@@ -161,7 +210,8 @@ public class MineFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.headPortrait, R.id.userName, R.id.collect, R.id.history, R.id.contribute, R.id.feedBack, R.id.setting})
+    @OnClick({R.id.headPortrait, R.id.userName, R.id.collect, R.id.history,
+            R.id.contribute, R.id.feedBack, R.id.setting, R.id.message, R.id.review})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.headPortrait:
@@ -170,7 +220,7 @@ public class MineFragment extends BaseFragment {
                 if (LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), PersonalDataActivity.class).execute();
                 } else {
-                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                    login();
                 }
                 break;
             case R.id.collect:
@@ -178,7 +228,7 @@ public class MineFragment extends BaseFragment {
                 if (LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), MyCollectActivity.class).execute();
                 } else {
-                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                    login();
                 }
                 break;
             case R.id.history:
@@ -196,7 +246,25 @@ public class MineFragment extends BaseFragment {
                 umengEventCount(UmengCountEventId.MINE_SETTING);
                 Launcher.with(getActivity(), SettingActivity.class).execute();
                 break;
+            case R.id.message:
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), MessageActivity.class).putExtra(ExtraKeys.DATA, mNotReadMessageCount).execute();
+                }else {
+                    login();
+                }
+                break;
+            case R.id.review:
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), ReviewActivity.class).execute();
+                } else {
+                    login();
+                }
+                break;
         }
+    }
+
+    private void login() {
+        Launcher.with(getActivity(), LoginActivity.class).execute();
     }
 
     private void requestOperationWeChatAccount() {
@@ -225,8 +293,9 @@ public class MineFragment extends BaseFragment {
     }
 
     private void copyWeChatAccount(String data) {
-        ClipboardManager clipboardManager = (android.content.ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText(null, data);
         clipboardManager.setPrimaryClip(clipData);
     }
+
 }
