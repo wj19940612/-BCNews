@@ -2,7 +2,6 @@ package com.sbai.bcnews.fragment;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,12 +14,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
@@ -82,6 +81,9 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     private boolean mAnimating;
     private int mTitleScrollState;  //0-默认 1-已经滚上去了
 
+    private ImageView mRedPacketImage;
+    private TextView mRedPacketText;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,10 +96,27 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mMyChannels = new ArrayList<>();
+        initTitleBar();
         initTabView();
         initViewPager();
         getChannels();
         mTabLayout.setViewPager(mViewPager);
+        requestRedPacketStatus();
+    }
+
+
+    private void initTitleBar() {
+        View leftView = mTitleBar.getLeftView();
+        mRedPacketImage = leftView.findViewById(R.id.redPacketImage);
+        mRedPacketText = leftView.findViewById(R.id.redPacketText);
+        mTitleBar.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 2018/5/15 打开抢红包弹窗
+            }
+        });
+
+
     }
 
     private void initViewPager() {
@@ -155,6 +174,27 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mPagerAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(0, false);
         mTabLayout.setViewPager(mViewPager);
+    }
+
+    private void requestRedPacketStatus() {
+        Apic.requestRedPacketStatus()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<Object>, Object>() {
+                    @Override
+                    protected void onRespSuccessData(Object data) {
+                        updateRedPacketStatus(0);
+                    }
+                })
+                .fire();
+    }
+
+    private void updateRedPacketStatus(int status) {
+        int red_packet_can_rob = 1;
+        int red_packet_prepareing = 2;
+//        switch (status) {
+//            case red_packet_can_rob:
+//                break;
+//        }
     }
 
     @Override

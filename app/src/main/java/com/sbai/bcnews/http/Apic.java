@@ -217,6 +217,11 @@ public class Apic {
         return Api.post("/api/news-info/discuss/praise/status.do", new ReqParams().put("id", id));
     }
 
+    // TODO: 2018/5/15 请求红包的状态
+    public static Api requestRedPacketStatus() {
+        return Api.get("");
+    }
+
 
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
