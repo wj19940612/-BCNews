@@ -73,7 +73,7 @@ android {
             ]
         }
         alpha {
-            versionCode Integer.getInteger(alphaVersionCode)
+            versionCode alphaVersionCode as Integer
             versionName alphaVersionName
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
