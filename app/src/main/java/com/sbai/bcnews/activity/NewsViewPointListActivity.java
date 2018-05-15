@@ -40,6 +40,7 @@ import com.sbai.bcnews.view.EmptyRecyclerView;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.news.ViewPointContentView;
 import com.sbai.bcnews.view.recycleview.BaseRecycleViewAdapter;
+import com.sbai.glide.GlideApp;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -115,6 +116,12 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         initData();
         initView();
         refreshData();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GlideApp.with(getActivity()).onStop();
     }
 
     private void refreshData() {

@@ -66,7 +66,7 @@ public class CommentReviewView extends LinearLayout {
         if (vos.size() > MAX_REVIEW_SIZE) {
             final TextView textView = new TextView(getContext());
             textView.setTextColor(ContextCompat.getColor(getContext(), R.color.text_476E92));
-            textView.setText(getContext().getString(R.string.look_all_review_count, vos.size()));
+            textView.setText(getContext().getString(R.string.spared_all_review_count, vos.size()));
             textView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -116,6 +116,8 @@ public class CommentReviewView extends LinearLayout {
     private void updatePraiseView(TextView praiseCount, ViewPointComment viewPointComment) {
         if (viewPointComment.getPraiseCount() != 0) {
             praiseCount.setText(String.valueOf(viewPointComment.getPraiseCount()));
+        } else {
+            praiseCount.setText(R.string.praise);
         }
 
         boolean isPraise = viewPointComment.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;

@@ -58,6 +58,11 @@ public abstract class BaseSwipeLoadActivity<T extends View> extends BaseActivity
     }
 
     @Override
+    public boolean isUseDefaultLoadMoreConditions() {
+        return true;
+    }
+
+    @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setup(getSwipeTargetView(), getSwipeToLoadLayout(), getRefreshHeaderView(), getLoadMoreFooterView());

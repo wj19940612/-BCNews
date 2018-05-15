@@ -40,7 +40,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -264,9 +264,9 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
     protected void requestWhistleBlowingReason(final int type, final String id) {
         Apic.requestWhistleBlowingList(type)
                 .tag(TAG)
-                .callback(new Callback2D<Resp<HashMap<String, String>>, HashMap<String, String>>() {
+                .callback(new Callback2D<Resp<LinkedHashMap<String, String>>, LinkedHashMap<String, String>>() {
                     @Override
-                    protected void onRespSuccessData(HashMap<String, String> data) {
+                    protected void onRespSuccessData(LinkedHashMap<String, String> data) {
                         WhistleBlowingDialogFragment.newInstance(type, id,data).show(getSupportFragmentManager());
                     }
                 })

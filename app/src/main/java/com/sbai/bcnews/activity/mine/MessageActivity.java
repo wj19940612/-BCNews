@@ -25,6 +25,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.mine.Message;
+import com.sbai.bcnews.model.news.NotReadMessage;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
@@ -64,24 +65,39 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
     private MessageAdapter mMessageAdapter;
     private TextView mFooterView;
 
+    private int mNotReadMessageCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         ButterKnife.bind(this);
-        int notReadMessageCount = getIntent().getIntExtra(ExtraKeys.DATA, 0);
-        initView(notReadMessageCount);
+        mNotReadMessageCount = getIntent().getIntExtra(ExtraKeys.DATA, 0);
+        initView();
+        requestWhetherHasAllNotReadMessage();
         requestMessage();
     }
 
-    private void initView(int notReadMessageCount) {
-        if (notReadMessageCount == 0) {
-            mTitleBar.setRightVisible(false);
-            mTitleBar.setRightViewEnable(false);
-        } else {
-            mTitleBar.setRightVisible(true);
-            mTitleBar.setRightViewEnable(true);
-        }
+    private void requestWhetherHasAllNotReadMessage() {
+        Apic.requestWhetherHasAllNotReadMessage()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<NotReadMessage>, NotReadMessage>() {
+                    @Override
+                    protected void onRespSuccessData(NotReadMessage data) {
+                        mNotReadMessageCount = data.getMsg();
+                        updateAllReadMessageBtnStatus(mNotReadMessageCount);
+                    }
+                })
+                .fire();
+    }
+
+    @Override
+    public boolean isUseDefaultLoadMoreConditions() {
+        return false;
+    }
+
+    private void initView() {
+        updateAllReadMessageBtnStatus(mNotReadMessageCount);
         mMessageAdapter = new MessageAdapter(getActivity());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeTarget.setAdapter(mMessageAdapter);
@@ -101,10 +117,22 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
             @Override
             public void onClick(View v) {
                 allMessageRead();
+
             }
         });
 
         createFootView();
+    }
+
+    private void updateAllReadMessageBtnStatus(int notReadMessageCount) {
+        if (notReadMessageCount < 0) return;
+        if (notReadMessageCount == 0) {
+            mTitleBar.setRightVisible(false);
+            mTitleBar.setRightViewEnable(false);
+        } else {
+            mTitleBar.setRightVisible(true);
+            mTitleBar.setRightViewEnable(true);
+        }
     }
 
     private void createFootView() {
@@ -126,6 +154,8 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
                     protected void onRespSuccess(Resp<Object> resp) {
                         message.setStatus(Message.MESSAGE_IS_READ);
                         mMessageAdapter.notifyItemChanged(position, message);
+                        mNotReadMessageCount--;
+                        updateAllReadMessageBtnStatus(mNotReadMessageCount);
                     }
                 })
                 .fire();
@@ -139,6 +169,7 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
                     protected void onRespSuccess(Resp<Object> resp) {
                         mMessageAdapter.setAllMessageIsRead(true);
                         mMessageAdapter.notifyDataSetChanged();
+                        updateAllReadMessageBtnStatus(0);
                     }
                 })
                 .fire();
@@ -214,6 +245,14 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
         mStartTime = 0;
         mMessageAdapter.removeFooterView();
         requestMessage();
+    }
+
+    @Override
+    protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onRecycleViewScrolled(recyclerView, dx, dy);
+        if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
+            triggerLoadMore();
+        }
     }
 
     static class MessageAdapter extends HeaderViewRecycleViewAdapter<Message, MessageAdapter.ViewHolder> {

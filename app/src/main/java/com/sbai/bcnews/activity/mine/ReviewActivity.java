@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ReviewActivity extends BaseActivity {
+public class ReviewActivity extends BaseActivity implements ReplyMineFragment.OnRecycleViewScrollListener {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -41,6 +41,22 @@ public class ReviewActivity extends BaseActivity {
     private ReviewFragmentAdapter mReviewFragmentAdapter;
 
     private int mTotalScrollRange;
+
+    private boolean mRecycleViewEnabled;
+    private int mAppBarVerticalOffset;
+
+    @Override
+    public void onScrollRecycleViewTop(boolean scrollRecycleViewTop) {
+        mRecycleViewEnabled = scrollRecycleViewTop;
+        setAppBarEnabled(mAppBarVerticalOffset);
+    }
+
+    private void setAppBarEnabled(int appBarVerticalOffset) {
+        boolean b = mRecycleViewEnabled && appBarVerticalOffset > -1;
+        if (mAppBarLayout.isEnabled() != b) {
+            mAppBarLayout.setEnabled(b);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +94,8 @@ public class ReviewActivity extends BaseActivity {
                     mBack.setVisibility(View.GONE);
                 }
             }
+            mAppBarVerticalOffset = verticalOffset;
+            setAppBarEnabled(mAppBarVerticalOffset);
         }
     };
 
@@ -118,6 +136,7 @@ public class ReviewActivity extends BaseActivity {
     public void onViewClicked() {
         onBackPressed();
     }
+
 
     static class ReviewFragmentAdapter extends FragmentPagerAdapter {
 

@@ -46,4 +46,12 @@ public class NotReadMessage {
     public void setFeedBack(int feedBack) {
         this.feedBack = feedBack;
     }
+
+    @Override
+    public String toString() {
+        return "NotReadMessage{" +
+                "msg=" + msg +
+                ", feedBack=" + feedBack +
+                '}';
+    }
 }

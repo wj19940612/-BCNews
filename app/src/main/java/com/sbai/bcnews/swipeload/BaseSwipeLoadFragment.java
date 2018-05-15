@@ -99,6 +99,10 @@ public abstract class BaseSwipeLoadFragment<T extends View> extends BaseFragment
         refreshComplete(getString(resId));
     }
 
+    @Override
+    public boolean isUseDefaultLoadMoreConditions() {
+        return true;
+    }
 
     @Override
     public void refreshComplete(CharSequence msg) {

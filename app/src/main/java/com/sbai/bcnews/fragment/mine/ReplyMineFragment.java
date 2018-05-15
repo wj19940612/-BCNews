@@ -48,7 +48,7 @@ import com.sbai.bcnews.view.recycleview.HeaderViewRecycleViewAdapter;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -73,6 +73,12 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     private ReplyMineAdapter mReplyMineAdapter;
     private TextView mFooterView;
 
+    public interface OnRecycleViewScrollListener {
+        void onScrollRecycleViewTop(boolean scrollRecycleViewTop);
+    }
+
+    private OnRecycleViewScrollListener mOnRecycleViewScrollListener;
+
 
     public static ReplyMineFragment newInstance(int type) {
         Bundle args = new Bundle();
@@ -80,6 +86,14 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
         ReplyMineFragment fragment = new ReplyMineFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnRecycleViewScrollListener) {
+            mOnRecycleViewScrollListener = (OnRecycleViewScrollListener) context;
+        }
     }
 
     @Override
@@ -202,9 +216,9 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     protected void requestWhistleBlowingReason(final int type, final String id) {
         Apic.requestWhistleBlowingList(type)
                 .tag(TAG)
-                .callback(new Callback2D<Resp<HashMap<String, String>>, HashMap<String, String>>() {
+                .callback(new Callback2D<Resp<LinkedHashMap<String, String>>, LinkedHashMap<String, String>>() {
                     @Override
-                    protected void onRespSuccessData(HashMap<String, String> data) {
+                    protected void onRespSuccessData(LinkedHashMap<String, String> data) {
                         WhistleBlowingDialogFragment.newInstance(type, id, data)
                                 .setOnWhistleBlowingReasonListener(ReplyMineFragment.this)
                                 .show(getChildFragmentManager());
@@ -337,6 +351,20 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
     }
 
     @Override
+    protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onRecycleViewScrolled(recyclerView, dx, dy);
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        boolean isTop = layoutManager.findFirstCompletelyVisibleItemPosition() == 0;
+        if (mOnRecycleViewScrollListener != null) {
+            mOnRecycleViewScrollListener.onScrollRecycleViewTop(isTop);
+        }
+
+        if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
+            triggerLoadMore();
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mBind.unbind();
@@ -354,6 +382,11 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
         mPageSize = ViewpointType.NEWS_PAGE_SIZE;
         requestViewpointList();
         mReplyMineAdapter.removeFooterView();
+    }
+
+    @Override
+    public boolean isUseDefaultLoadMoreConditions() {
+        return false;
     }
 
     @Override
@@ -476,6 +509,8 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
                 }
                 if (itemData.getPraiseCount() != 0) {
                     mPraiseCount.setText(String.valueOf(itemData.getPraiseCount()));
+                } else {
+                    mPraiseCount.setText(R.string.praise);
                 }
 
                 GlideApp.with(mNewsImage)

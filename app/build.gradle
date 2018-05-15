@@ -74,8 +74,8 @@ android {
         }
 
         alpha {
-            versionCode 32
-            versionName "1.0.051501"
+            versionCode 37
+            versionName "1.0.051506"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
@@ -91,7 +91,7 @@ android {
 //        c360 {}
 //        tencent {}
 //        baidu {}
-//        others {}
+        others {}
 //        fenx {}
 //        weixin{}
 //        huawei{}

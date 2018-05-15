@@ -716,16 +716,22 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void initScrollViewLocation() {
-        mTitleHeight = mTitleLayout.getMeasuredHeight();
-        int webViewHeight = mWebView.getHeight();
-        //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
-        if (mNewsDetail != null && mNewsDetail.getReadHeight() > webViewHeight + mTitleHeight) {
-            startScheduleJob(300);
-            return;
-        }
-        if (mNewsDetail != null) {
-            mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
-        }
+//        mTitleHeight = mTitleLayout.getMeasuredHeight();
+//        int webViewHeight = mWebView.getHeight();
+//        //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
+//        if (mNewsDetail != null && mNewsDetail.getReadHeight() > webViewHeight + mTitleHeight) {
+//            startScheduleJob(300);
+//            return;
+//        }
+//        if (mNewsDetail != null) {
+//            mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+//        }
+        mScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+            }
+        });
     }
 
     @Override
@@ -734,13 +740,16 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         mTitleHeight = mTitleLayout.getMeasuredHeight();
         int webViewHeight = mWebView.getHeight();
         //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
-        stopScheduleJob();
+        Log.d(TAG, "onTimeUp: "+count);
         if (mNewsDetail != null) {
             if (mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
                 mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
-            }else {
-                mScrollView.smoothScrollTo(0, webViewHeight);
+                stopScheduleJob();
+            } else  {
+                stopScheduleJob();
+                mScrollView.smoothScrollTo(0, mNetNewsDetail.getReadHeight());
             }
+
         }
     }
 

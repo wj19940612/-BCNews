@@ -44,6 +44,7 @@ import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.news.CommentContentView;
 import com.sbai.bcnews.view.recycleview.RecycleViewType;
 import com.sbai.glide.GlideApp;
+import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -259,6 +260,13 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                             if (listData != null) {
                                 updateReview(listData);
                             }
+                            stopFreshOrLoadAnimation();
+                        }
+
+                        @Override
+                        public void onFailure(ReqError reqError) {
+                            super.onFailure(reqError);
+                            stopFreshOrLoadAnimation();
                         }
 
                         @Override
@@ -301,6 +309,11 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GlideApp.with(getActivity()).onStop();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -543,6 +556,8 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                 mPointContent.setText(newViewPointAndReview.getContent());
                 if (newViewPointAndReview.getPraiseCount() != 0) {
                     mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
+                }else {
+                    mPraiseCount.setText(R.string.praise);
                 }
 
                 boolean isPraise = newViewPointAndReview.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;
