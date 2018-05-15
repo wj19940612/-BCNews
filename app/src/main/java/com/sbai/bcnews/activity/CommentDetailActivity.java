@@ -348,7 +348,7 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
     private void requestViewpointPraiseStatus(String id) {
         Apic.requestViewpointPraiseStatus(id)
                 .tag(TAG)
-                .callback(new Callback2D<Resp<NewViewPointAndReview>,NewViewPointAndReview>() {
+                .callback(new Callback2D<Resp<NewViewPointAndReview>, NewViewPointAndReview>() {
                     @Override
                     protected void onRespSuccessData(NewViewPointAndReview data) {
                         mNewViewPointAndReview.setIsPraise(data.getIsPraise());
@@ -538,7 +538,9 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                 mUserName.setText(newViewPointAndReview.getUsername());
                 mTimeLine.setText(DateUtil.formatDefaultStyleTime(newViewPointAndReview.getReplayTime()));
                 mPointContent.setText(newViewPointAndReview.getContent());
-                mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
+                if (newViewPointAndReview.getPraiseCount() != 0) {
+                    mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
+                }
 
                 boolean isPraise = newViewPointAndReview.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;
                 mPraiseCount.setSelected(isPraise);

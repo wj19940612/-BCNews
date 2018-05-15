@@ -54,7 +54,7 @@ public class CommentContentView extends LinearLayout {
         super(context, attrs, defStyleAttr);
 
         setOrientation(VERTICAL);
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_comment_content, this,false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_comment_content, this, false);
         addView(view);
         ButterKnife.bind(this);
     }
@@ -72,8 +72,9 @@ public class CommentContentView extends LinearLayout {
     }
 
     private void updatePointPraise(final ViewPointComment viewPointComment) {
-
-        mPraiseCount.setText(String.valueOf(viewPointComment.getPraiseCount()));
+        if (viewPointComment.getPraiseCount() != 0) {
+            mPraiseCount.setText(String.valueOf(viewPointComment.getPraiseCount()));
+        }
 
         boolean isPraise = viewPointComment.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;
         mPraiseCount.setSelected(isPraise);
@@ -119,11 +120,11 @@ public class CommentContentView extends LinearLayout {
                 @Override
                 public void onPraise(ViewPointComment viewPointComment, ViewPointCommentReview sonViewPointComment) {
                     if (mOnReviewCallBack != null) {
-                        mOnReviewCallBack.onThirdReviewPraise(0,viewPointComment, sonViewPointComment);
+                        mOnReviewCallBack.onThirdReviewPraise(0, viewPointComment, sonViewPointComment);
                     }
                 }
             });
-        }else {
+        } else {
             mReviewContent.setVisibility(GONE);
         }
     }

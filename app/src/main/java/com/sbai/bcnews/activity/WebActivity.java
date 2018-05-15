@@ -108,8 +108,13 @@ public class WebActivity extends BaseActivity {
             switch (requestCode) {
                 case LoginActivity.REQ_CODE_LOGIN:
                     // init cookies
-                    syncCookies(mPageUrl);
-                    mWebView.reload();
+                    mWebView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            syncCookies(mPageUrl);
+                            mWebView.reload();
+                        }
+                    }, 200);
                     break;
             }
         }

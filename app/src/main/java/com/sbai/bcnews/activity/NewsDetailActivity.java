@@ -452,10 +452,10 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                 openNewsDetailsPage(0);
                 break;
             case R.id.secondArticle:
-                openNewsDetailsPage(2);
+                openNewsDetailsPage(1);
                 break;
             case R.id.thirdArticle:
-                openNewsDetailsPage(3);
+                openNewsDetailsPage(2);
                 break;
             case R.id.firstPoint:
                 break;

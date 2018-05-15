@@ -109,7 +109,8 @@ public class ViewPointContentView extends LinearLayout implements MeasureTextVie
     }
 
     private void updatePointPraise(NewViewPointAndReview newViewPointAndReview) {
-        mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
+        if (newViewPointAndReview.getPraiseCount() != 0)
+            mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
 
         boolean isPraise = newViewPointAndReview.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;
         mPraiseCount.setSelected(isPraise);
