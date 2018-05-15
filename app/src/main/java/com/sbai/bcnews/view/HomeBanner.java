@@ -6,17 +6,14 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.Banner;
-import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.glide.GlideApp;
 
 import java.util.ArrayList;
@@ -24,10 +21,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/**
- * Created by MR.YANG on 2017/2/14.
- */
 
 public class HomeBanner extends FrameLayout {
 
