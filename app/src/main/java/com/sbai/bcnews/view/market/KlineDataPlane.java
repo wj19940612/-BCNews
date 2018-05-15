@@ -39,15 +39,15 @@ public class KlineDataPlane extends LinearLayout {
     private void init() {
         setOrientation(VERTICAL);
 
-        mDate = createTextView(12, R.color.unluckyText);
+        mDate = createTextView(12, R.color.text_999);
         addView(mDate);
 
         LinearLayout pricesArea = new LinearLayout(getContext());
         pricesArea.setOrientation(HORIZONTAL);
-        mOpenPrice = createTextView(12, R.color.assistText);
-        mHighestPrice = createTextView(12, R.color.assistText);
-        mLowestPrice = createTextView(12, R.color.assistText);
-        mClosePrice = createTextView(12, R.color.assistText);
+        mOpenPrice = createTextView(12, R.color.text_4949);
+        mHighestPrice = createTextView(12, R.color.text_4949);
+        mLowestPrice = createTextView(12, R.color.text_4949);
+        mClosePrice = createTextView(12, R.color.text_4949);
 
         LinearLayout.LayoutParams params = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
         params.weight = 1;

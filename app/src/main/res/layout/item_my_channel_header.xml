@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="12dp"
         android:layout_below="@id/viewStubWhite"
-        android:background="@color/background"/>
+        android:background="@color/bg_F5F5"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:layout_marginRight="12dp"
             android:layout_marginTop="10dp"
             android:text="@string/drag_to_select_channel"
-            android:textColor="@color/unluckyText"
+            android:textColor="@color/text_999"
             android:textSize="13sp"/>
 
     </RelativeLayout>

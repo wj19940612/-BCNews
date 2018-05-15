@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/bg_F5F5"
     tools:context="com.sbai.bcnews.activity.mine.PersonalDataActivity">
 
     <com.sbai.bcnews.view.TitleBar
@@ -30,7 +30,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="12dp"
             android:text="@string/head_portrait"
-            android:textColor="@color/text"
+            android:textColor="@color/text_222"
             android:textSize="16sp"/>
 
         <android.support.v7.widget.AppCompatImageView
@@ -56,7 +56,7 @@
             android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="12dp"
-            android:background="@color/background"/>
+            android:background="@color/bg_F5F5"/>
     </RelativeLayout>
 
     <com.sbai.bcnews.view.IconTextRow
@@ -68,7 +68,7 @@
         app:layout_constraintTop_toBottomOf="@+id/headImageLayout"
         app:rightIcon="@drawable/ic_common_right_arrow"
         app:rowText="@string/nick_name"
-        app:subTextColor="@color/unluckyText"/>
+        app:subTextColor="@color/text_999"/>
 
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/sex"
@@ -79,7 +79,7 @@
         app:rightIcon="@drawable/ic_common_right_arrow"
         app:rowText="@string/sex"
         app:subText="@string/please_select"
-        app:subTextColor="@color/unluckyText"/>
+        app:subTextColor="@color/text_999"/>
 
     <com.sbai.bcnews.view.IconTextRow
         android:id="@+id/birthday"
@@ -92,7 +92,7 @@
         app:rightIcon="@drawable/ic_common_right_arrow"
         app:rowText="@string/birthday"
         app:subText="@string/please_select"
-        app:subTextColor="@color/unluckyText"/>
+        app:subTextColor="@color/text_999"/>
 
 
     <LinearLayout
@@ -110,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/location"
-            android:textColor="@color/text"
+            android:textColor="@color/text_222"
             android:textSize="15sp"/>
 
         <TextView
@@ -121,7 +121,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="14dp"
-            android:textColor="@color/unluckyText"
+            android:textColor="@color/text_999"
             android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="right"
@@ -149,7 +149,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/personal_introduce"
-            android:textColor="@color/text"/>
+            android:textColor="@color/text_222"/>
 
         <TextView
             android:id="@+id/introduce"
@@ -161,7 +161,7 @@
             android:ellipsize="end"
             android:gravity="end"
             android:maxLines="1"
-            android:textColor="@color/unluckyText"
+            android:textColor="@color/text_999"
             tools:text="接口升到复健科水电费回家打开是否可见得风湿空间划分空间"/>
 
         <ImageView
@@ -177,7 +177,7 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/locationLL"
         android:layout_marginLeft="12dp"
-        android:background="@color/background"
+        android:background="@color/bg_F5F5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationLL"/>

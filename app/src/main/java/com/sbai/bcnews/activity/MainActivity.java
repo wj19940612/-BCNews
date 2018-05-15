@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.sbai.bcnews.ExtraKeys;
@@ -25,7 +26,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
-import com.sbai.bcnews.model.system.Operation;
+import com.sbai.bcnews.model.news.NotReadMessage;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
 import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.bcnews.utils.UmengCountEventId;
@@ -41,6 +42,8 @@ public class MainActivity extends BaseActivity {
     public static final int PAGE_POSITION_NEWS_FLASH = 1;
     private static final int PAGE_POSITION_MARKET = 2;
     private static final int PAGE_POSITION_MINE = 3;
+
+    private static final int REQUEST_NOT_READ_MSG_TIME = 10 * 1000;
 
     @BindView(R.id.viewPager)
     ScrollableViewPager mViewPager;
@@ -58,6 +61,7 @@ public class MainActivity extends BaseActivity {
 
         initViews();
         requestShowMarketPageSwitch();
+        requestWhetherHasAllNotReadMessage();
     }
 
     private BroadcastReceiver mLoginBroadcastReceiver = new BroadcastReceiver() {
@@ -70,18 +74,19 @@ public class MainActivity extends BaseActivity {
     };
 
     private void requestShowMarketPageSwitch() {
-        mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.GONE);
-        Apic.requestOperationSetting(Operation.OPERATION_TYPE_MARKET_PAGE_SWITCH)
-                .tag(TAG)
-                .callback(new Callback2D<Resp<Operation>, Operation>() {
-                    @Override
-                    protected void onRespSuccessData(Operation data) {
-                        if (Operation.OPERATION_SETTING_OPEN_MARKET_PAGE.equalsIgnoreCase(data.getQuota())) {
-                            mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.VISIBLE);
-                        }
-                    }
-                })
-                .fire();
+        // TODO: 2018/4/24 先注释掉
+//        mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.GONE);
+//        Apic.requestOperationSetting(Operation.OPERATION_TYPE_MARKET_PAGE_SWITCH)
+//                .tag(TAG)
+//                .callback(new Callback2D<Resp<Operation>, Operation>() {
+//                    @Override
+//                    protected void onRespSuccessData(Operation data) {
+//                        if (Operation.OPERATION_SETTING_OPEN_MARKET_PAGE.equalsIgnoreCase(data.getQuota())) {
+//                            mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.VISIBLE);
+//                        }
+//                    }
+//                })
+//                .fire();
     }
 
     private void requestCacheUpload() {
@@ -101,6 +106,45 @@ public class MainActivity extends BaseActivity {
                         })
                         .fireFreely();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startScheduleJob(REQUEST_NOT_READ_MSG_TIME);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopScheduleJob();
+    }
+
+    @Override
+    public void onTimeUp(int count) {
+        super.onTimeUp(count);
+        requestWhetherHasAllNotReadMessage();
+    }
+
+    private void requestWhetherHasAllNotReadMessage() {
+        Apic.requestWhetherHasAllNotReadMessage()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<NotReadMessage>, NotReadMessage>() {
+                    @Override
+                    protected void onRespSuccessData(NotReadMessage data) {
+                        Log.d(TAG, "onRespSuccessData: "+data.toString());
+                        if (data.hasNewMessage()) {
+                            mBottomTabs.setRedPointVisibility(View.VISIBLE);
+                        } else {
+                            mBottomTabs.setRedPointVisibility(View.GONE);
+                        }
+                        MineFragment fragment = (MineFragment) mMainFragmentsAdapter.getFragment(PAGE_POSITION_MINE);
+                        if (fragment != null) {
+                            fragment.updateNotReadMessage(data);
+                        }
+                    }
+                })
+                .fire();
     }
 
     private void initViews() {
@@ -135,6 +179,7 @@ public class MainActivity extends BaseActivity {
                 umengClickStatistics(position);
             }
         });
+
     }
 
     private void refreshPageData(int position) {
@@ -192,7 +237,6 @@ public class MainActivity extends BaseActivity {
     private static class MainFragmentsAdapter extends FragmentPagerAdapter {
 
         FragmentManager mFragmentManager;
-        private boolean mShowMarketPage;
 
         public MainFragmentsAdapter(FragmentManager fm) {
             super(fm);

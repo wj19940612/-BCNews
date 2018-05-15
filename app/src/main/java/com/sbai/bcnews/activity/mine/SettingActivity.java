@@ -18,7 +18,6 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.bcnews.utils.Launcher;
-import com.sbai.bcnews.utils.PermissionUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.IconTextRow;
 import com.sbai.bcnews.view.SmartDialog;
@@ -34,18 +33,21 @@ public class SettingActivity extends BaseActivity {
     private static final String OP_POST_NOTIFICATION = "OP_POST_NOTIFICATION";
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.notificationSwitch)
-    ImageView mNotificationSwitch;
-    @BindView(R.id.receiveNotification)
-    LinearLayout mReceiveNotification;
-    @BindView(R.id.personalData)
-    IconTextRow mPersonalData;
+    @BindView(R.id.nightOrLightModeSwitch)
+    ImageView mNightOrLightModeSwitch;
+    @BindView(R.id.nightOrLightModeLL)
+    LinearLayout mNightOrLightModeLL;
+    @BindView(R.id.notificationManage)
+    IconTextRow mNotificationManage;
     @BindView(R.id.accountManager)
     IconTextRow mAccountManager;
     @BindView(R.id.aboutBcnews)
     IconTextRow mAboutBcnews;
+    @BindView(R.id.recommendToFriend)
+    IconTextRow mRecommendToFriend;
     @BindView(R.id.logout)
     TextView mLogout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +60,6 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mNotificationSwitch.setSelected(PermissionUtil.isNotificationEnabled(this));
         if (LocalUser.getUser().isLogin()) {
             mLogout.setVisibility(View.VISIBLE);
         } else {
@@ -66,41 +67,6 @@ public class SettingActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.notificationSwitch, R.id.personalData, R.id.accountManager, R.id.aboutBcnews, R.id.logout})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.notificationSwitch:
-                Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                startActivity(intent);
-                break;
-            case R.id.personalData:
-                umengEventCount(UmengCountEventId.SETTING_PERSONAL_DATE);
-                if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), PersonalDataActivity.class).execute();
-                } else {
-                    Launcher.with(getActivity(), LoginActivity.class).execute();
-                }
-                break;
-            case R.id.accountManager:
-                umengEventCount(UmengCountEventId.SETTING_ACCOUNT_MANAGER);
-                if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), AccountManagerActivity.class).execute();
-                } else {
-                    Launcher.with(getActivity(), LoginActivity.class).execute();
-                }
-                break;
-            case R.id.aboutBcnews:
-                umengEventCount(UmengCountEventId.SETTING_ABOUT_APP);
-                Launcher.with(getActivity(), WebActivity.class)
-                        .putExtra(WebActivity.EX_URL, String.format(Apic.url.WEB_URI_ABOUT_PAGE, AppInfo.getVersionName(getActivity())))
-                        .putExtra(WebActivity.EX_TITLE, getString(R.string.about_bcnews))
-                        .execute();
-                break;
-            case R.id.logout:
-                logout();
-                break;
-        }
-    }
 
     private void logout() {
         SmartDialog.with(getActivity(), R.string.affirm_logout)
@@ -122,5 +88,41 @@ public class SettingActivity extends BaseActivity {
                 })
                 .show();
 
+    }
+
+    @OnClick({R.id.nightOrLightModeSwitch, R.id.notificationManage, R.id.accountManager, R.id.aboutBcnews, R.id.recommendToFriend, R.id.logout})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.nightOrLightModeSwitch:
+                // TODO: 2018/4/24 夜间模式或者白天模式
+                break;
+            case R.id.notificationManage:
+                Launcher.with(getActivity(), NotificationManageActivity.class).execute();
+                break;
+            case R.id.recommendToFriend:
+                break;
+            case R.id.notificationSwitch:
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                startActivity(intent);
+                break;
+            case R.id.accountManager:
+                umengEventCount(UmengCountEventId.SETTING_ACCOUNT_MANAGER);
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), AccountManagerActivity.class).execute();
+                } else {
+                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                }
+                break;
+            case R.id.aboutBcnews:
+                umengEventCount(UmengCountEventId.SETTING_ABOUT_APP);
+                Launcher.with(getActivity(), WebActivity.class)
+                        .putExtra(WebActivity.EX_URL, String.format(Apic.url.WEB_URI_ABOUT_PAGE, AppInfo.getVersionName(getActivity())))
+                        .putExtra(WebActivity.EX_TITLE, getString(R.string.about_bcnews))
+                        .execute();
+                break;
+            case R.id.logout:
+                logout();
+                break;
+        }
     }
 }

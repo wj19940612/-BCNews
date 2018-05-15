@@ -5,6 +5,6 @@
     android:id="@+id/banner"
     android:layout_width="match_parent"
     android:layout_height="170dp"
-    android:background="@color/background"
+    android:background="@color/bg_F5F5"
     android:paddingBottom="4dp"
     app:isRectIndicator="false"/>

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/bg_F5F5">
 
     <!--Recycler Item触摸涉及镜像动画需要父布局是Frame-->
 
@@ -40,7 +40,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/channel_custom"
-            android:textColor="@color/text"
+            android:textColor="@color/text_222"
             android:textSize="13sp"/>
 
         <ImageView

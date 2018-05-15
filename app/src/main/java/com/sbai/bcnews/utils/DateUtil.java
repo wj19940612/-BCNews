@@ -398,12 +398,12 @@ public class DateUtil {
 
 
     /**
-     * 1 分钟内显示 刚刚
-     * 一小时内显示多少分钟前
-     * 如果是当天  超过一小时 则显示 18：20;
-     * 如果是本年内的其他时期  12/07;
-     * 跨年  2015/12/07
-     * 涉及页面  姐说首页，提问详情，我的收藏，我的问答，消息
+     * 评论时间显示机制：
+     * 1分钟内显示“刚刚”，
+     * 1小时内显示“XX分钟前”，
+     * 大于1小时在当天的显示“XX小时前”，
+     * 昨天的显示“昨天”，
+     * 再往前的显示“xx-xx”，跨年加上年份；
      *
      * @param createTime
      * @return
@@ -418,7 +418,10 @@ public class DateUtil {
                 }
                 return time + "分钟前";
             }
-            return DateUtil.format(createTime, "HH:mm");
+            int hour = (int) ((systemTime - createTime) / 1000 / 60 / 60);
+            return hour + "小时前";
+        } else if (DateUtil.isYesterday(createTime, systemTime)) {
+            return "昨天";
         } else if (DateUtil.isInThisYear(createTime)) {
             return DateUtil.format(createTime, "MM/dd ");
         } else {
@@ -440,9 +443,9 @@ public class DateUtil {
         long systemTime = SysTime.getSysTime().getSystemTimestamp();
         if (DateUtil.isInThisDay(createTime, systemTime))
             return "今天";
-        else if(DateUtil.isYesterday(createTime,systemTime)){
+        else if (DateUtil.isYesterday(createTime, systemTime)) {
             return "昨天";
-        }else if (DateUtil.isInThisYear(createTime)) {
+        } else if (DateUtil.isInThisYear(createTime)) {
             return DateUtil.format(createTime, "MM/dd ");
         } else {
             return DateUtil.format(createTime, "yyyy/MM/dd ");
@@ -800,13 +803,5 @@ public class DateUtil {
         } else {
             return 3;
         }
-    }
-
-    /**
-     * @param time 音乐时长
-     * @return
-     */
-    public static String formatMediaLength(int time) {
-        return DateUtil.format(time * 1000, FORMAT_MINUTE_SECOND);
     }
 }

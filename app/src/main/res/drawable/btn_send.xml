@@ -18,7 +18,7 @@
     <item android:state_enabled="false">
         <shape>
             <corners android:radius="5dp"/>
-            <solid android:color="@color/unluckyText"/>
+            <solid android:color="@color/text_999"/>
         </shape>
     </item>
 

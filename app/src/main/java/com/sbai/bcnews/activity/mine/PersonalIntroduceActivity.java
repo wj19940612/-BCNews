@@ -94,7 +94,7 @@ public class PersonalIntroduceActivity extends BaseActivity {
         if (s.length() > 30) {
             mWordsNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.redPrimary));
         }else {
-            mWordsNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.unluckyText));
+            mWordsNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_999));
         }
     }
 

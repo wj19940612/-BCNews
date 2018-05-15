@@ -10,11 +10,9 @@ import android.view.ViewGroup;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -26,8 +24,6 @@ import butterknife.Unbinder;
 
 public abstract class RecycleViewSwipeLoadFragment extends BaseSwipeLoadFragment<RecyclerView> {
 
-    @BindView(R.id.titleBar)
-    protected TitleBar mTitleBar;
     private Unbinder mBind;
 
     @Nullable

@@ -13,6 +13,7 @@ public class MarketDataUtils {
 
     private static final String SIGN_DOLLAR = "$";
     private static final String SIGN_RMB = "￥";
+    public static final String LINE = "-";
 
     /**
      * 格式化成交量数据，大于等于 10000 的时候显示“XXX.X万” 保留1位小数，小于10000 的时候显示具体成交量，保留1位小数
@@ -101,6 +102,7 @@ public class MarketDataUtils {
      * @return
      */
     public static String formatMarketValue(double marketValue) {
+        if (marketValue == 0) return LINE;
         return FinanceUtil.formatWithThousandsSeparator(marketValue, 0, RoundingMode.DOWN);
     }
 }

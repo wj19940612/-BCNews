@@ -13,6 +13,7 @@
         <attr name="textPaddingBottom" format="dimension"/>
         <attr name="textArray" format="reference"/>
         <attr name="iconArray" format="reference"/>
+        <attr name="hasReadPointPosition" format="integer"/>
     </declare-styleable>
 
     <!-- 带红点的 textview -->
@@ -26,6 +27,18 @@
             <enum name="circular" value="1"/>
         </attr>
         <attr name="radius" format="dimension|reference"/>
+    </declare-styleable>
+
+    <!-- 红点头部 TextView -->
+    <declare-styleable name="RedPointTipTextView">
+        <attr name="redPointTipVisibility">
+            <enum name="visible" value="0"/>
+            <enum name="invisible" value="4"/>
+            <enum name="gone" value="8"/>
+        </attr>
+        <attr name="redPointRadius" format="dimension|reference"/>
+        <attr name="pointVerticalPadding" format="dimension|reference"/>
+        <attr name="pointHorizontalPadding" format="dimension|reference"/>
     </declare-styleable>
 
     <!--每个页面都会添加的 TitleBar-->

@@ -32,7 +32,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="14dp"
             android:text="@string/cooperation_click_copy"
-            android:textColor="@color/unluckyText"
+            android:textColor="@color/text_999"
             android:textSize="12sp"/>
 
     </RelativeLayout>
@@ -46,7 +46,7 @@
         android:background="@drawable/bg_white_round"
         android:drawableLeft="@drawable/ic_share_wechat"
         android:gravity="center"
-        android:textColor="@color/assistText"
+        android:textColor="@color/text_4949"
         android:textSize="14sp"
         app:autoSizeMaxTextSize="14sp"
         tools:text="微信:qkcj2018"/>
@@ -61,7 +61,7 @@
         android:drawableLeft="@drawable/ic_share_qq"
         android:gravity="center"
         android:maxLines="1"
-        android:textColor="@color/assistText"
+        android:textColor="@color/text_4949"
         android:textSize="14sp"
         app:autoSizeMaxTextSize="14sp"
         tools:text="QQ:1957869980"/>
@@ -78,7 +78,7 @@
             android:layout_above="@+id/agree"
             android:layout_marginBottom="12dp"
             android:gravity="center"
-            android:textColor="@color/assistText"
+            android:textColor="@color/text_4949"
             android:textSize="12sp"
             tools:text="v1.0.1"/>
 
@@ -102,7 +102,7 @@
             android:gravity="center"
             android:paddingBottom="12dp"
             android:text="@string/company_info"
-            android:textColor="@color/unluckyText"
+            android:textColor="@color/text_999"
             android:textSize="12sp"/>
 
     </RelativeLayout>

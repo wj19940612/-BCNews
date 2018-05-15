@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:textColor="@color/text"
+                android:textColor="@color/text_222"
                 android:textSize="15sp"
                 tools:text="蓝色"/>
 
@@ -68,7 +68,7 @@
             android:layout_marginBottom="10dp"
             android:gravity="center_vertical"
             android:text="@string/auth_code_login"
-            android:textColor="@color/text"
+            android:textColor="@color/text_222"
             android:textSize="30sp"/>
 
         <LinearLayout
@@ -86,7 +86,7 @@
                 android:paddingBottom="12dp"
                 android:paddingTop="12dp"
                 android:text="+86"
-                android:textColor="@color/unluckyText"
+                android:textColor="@color/text_999"
                 android:textSize="15sp"/>
 
             <EditText
@@ -189,7 +189,7 @@
         android:paddingLeft="23dp"
         android:paddingRight="23dp"
         android:text="@string/wechat_login"
-        android:textColor="@color/text"
+        android:textColor="@color/text_222"
         android:textSize="14sp"
         android:visibility="visible"/>
 
@@ -208,7 +208,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/login_agree"
-            android:textColor="@color/unluckyText"
+            android:textColor="@color/text_999"
             android:textSize="12sp"/>
 
         <TextView

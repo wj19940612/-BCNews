@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="20dp"
-        android:background="@color/background"/>
+        android:background="@color/bg_F5F5"/>
 
     <TextView
         android:id="@+id/tip"
@@ -18,7 +18,7 @@
         android:layout_marginTop="11dp"
         android:paddingBottom="20dp"
         android:text="@string/un_select_channel"
-        android:textColor="@color/unluckyText"
+        android:textColor="@color/text_999"
         android:layout_marginLeft="12dp"
         android:textSize="13sp"/>
 </RelativeLayout>

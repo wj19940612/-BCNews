@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.activity.WebActivity;
-import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
@@ -27,9 +25,7 @@ import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
-import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.news.NewsAdapter;
-import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
 import com.sbai.bcnews.utils.news.NewsWithHeaderAdapter;
 import com.sbai.bcnews.view.EmptyView;
@@ -262,7 +258,9 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     private void loadData(final boolean refresh) {
         String channelParam = Uri.encode(mChannel);
-        Apic.requestNewsListWithChannel(channelParam, mPage).tag(TAG).callback(new Callback2D<Resp<News>, News>() {
+        Apic.requestNewsListWithChannel(channelParam, mPage)
+                .tag(TAG)
+                .callback(new Callback2D<Resp<News>, News>() {
             @Override
             protected void onRespSuccessData(News data) {
                 if (data != null && data.getContent() != null && data.getContent().size() != 0) {

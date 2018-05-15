@@ -14,7 +14,7 @@
         android:foreground="?attr/selectableItemBackground"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:textColor="@color/assistText"
+        android:textColor="@color/text_4949"
         android:textSize="13sp"/>
 
     <ImageView

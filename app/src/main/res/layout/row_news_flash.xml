@@ -33,7 +33,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/unluckyText"
+                android:textColor="@color/text_999"
                 android:textSize="12sp"
                 tools:text="30分钟前"/>
 
@@ -50,7 +50,7 @@
                     android:drawableLeft="@drawable/ic_news_flash_share"
                     android:gravity="center_vertical"
                     android:text="@string/share"
-                    android:textColor="@color/unluckyText"
+                    android:textColor="@color/text_999"
                     android:textSize="12sp"/>
             </LinearLayout>
 
@@ -79,10 +79,10 @@
         android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/background"
+        android:background="@color/bg_F5F5"
         android:gravity="center"
         android:text="@string/no_more_data"
-        android:textColor="@color/unluckyText"
+        android:textColor="@color/text_999"
         android:textSize="10sp"
         android:visibility="visible"/>
 

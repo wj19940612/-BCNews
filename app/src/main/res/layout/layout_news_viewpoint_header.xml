@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    android:paddingBottom="30dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/newsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:lineSpacingExtra="5dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textColor="@color/text_222"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="恢复快到家了副科级大立科技反倒是拉开房\n独守空房恐龙当家六块腹肌"/>
+
+    <TextView
+        android:id="@+id/source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:paddingLeft="12dp"
+        android:textColor="@color/text_999"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@+id/newsTitle"
+        tools:text="中午王"/>
+
+    <TextView
+        android:id="@+id/timeLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:paddingLeft="12dp"
+        android:textColor="@color/text_999"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/source"
+        app:layout_constraintStart_toEndOf="@id/source"
+        tools:text="1分钟前"/>
+</android.support.constraint.ConstraintLayout>

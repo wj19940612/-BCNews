@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/bg_F5F5">
 
     <com.sbai.bcnews.view.TitleBar
         android:id="@+id/titleBar"
@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/layout"
-        android:background="@color/background"/>
+        android:background="@color/bg_F5F5"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
