@@ -14,6 +14,7 @@
     <color name="unluckyText">#999</color>
     <color name="luckyText">#666</color>
     <color name="text">#222</color>
+    <color name="text97">#979797</color>
     <color name="assistText">#494949</color>
     <color name="background">#F5F5F5</color>
     <color name="split">#ddd</color>
@@ -30,5 +31,7 @@
     <color name="marketBgBlack">#1C1F23</color>
 
     <color name="blackPrimary">#222</color>
+
+    <color name="gray">#d9d9d9</color>
 
 </resources>

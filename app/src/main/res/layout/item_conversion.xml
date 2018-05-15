@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="160dp"
+    android:layout_height="173dp"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="13dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="17dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="31dp"
+                android:layout_height="62dp" />
+
+            <com.sbai.bcnews.view.autofit.AutofitTextView
+                android:layout_width="92dp"
+                android:layout_height="62dp"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+</LinearLayout>

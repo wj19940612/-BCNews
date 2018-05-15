@@ -220,4 +220,13 @@
     <string name="input_text_is_more_rich">简介太丰富了</string>
     <string name="use_wechat_portrait_and_name">是否使用微信的头像和昵称？</string>
     <string name="this_account_forbid_login">该账号被禁止登录</string>
+
+    <string name="conversion">兑换</string>
+    <string name="digital_currency">数字货币</string>
+    <string name="ali_pay">支付宝</string>
+    <string name="telephone_charge">话费</string>
+    <string name="conversion_detail">兑换明细</string>
+    <string name="mention_address">提币地址: 已绑定</string>
+    <string name="click_modify">点击修改</string>
+    <string name="recharge">兑换</string>
 </resources>
