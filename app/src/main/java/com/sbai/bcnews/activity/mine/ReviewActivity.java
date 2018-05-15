@@ -40,6 +40,8 @@ public class ReviewActivity extends BaseActivity {
 
     private ReviewFragmentAdapter mReviewFragmentAdapter;
 
+    private int mTotalScrollRange;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +57,19 @@ public class ReviewActivity extends BaseActivity {
         mViewPager.setOffscreenPageLimit(1);
         initSlidingTabLayout();
         mAppBarLayout.addOnOffsetChangedListener(sOnOffsetChangedListener);
+
+        mAppBarLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mTotalScrollRange = (int) (mAppBarLayout.getTotalScrollRange() * 0.8);
+            }
+        });
     }
 
     AppBarLayout.OnOffsetChangedListener sOnOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
         @Override
         public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-            if (verticalOffset < -20) {
+            if (verticalOffset < -mTotalScrollRange) {
                 if (mBack.getVisibility() == View.GONE) {
                     mBack.setVisibility(View.VISIBLE);
                 }
