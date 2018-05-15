@@ -113,6 +113,8 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private void initView() {
         mSwipeToLoadLayout.setRefreshEnabled(false);
+        //进去加载太慢了 先把把上拉禁止了
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
         mViewPointCommentList = new ArrayList<>();
         mReviewListAdapter = new ReviewListAdapter(getActivity(), mViewPointCommentList);
         mReviewListAdapter.setNewViewPointAndReview(mNewViewPointAndReview);
@@ -252,6 +254,7 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                     .callback(new Callback<ListResp<ViewPointComment>>() {
                         @Override
                         protected void onRespSuccess(ListResp<ViewPointComment> resp) {
+                            mSwipeToLoadLayout.setLoadMoreEnabled(true);
                             ArrayList<ViewPointComment> listData = resp.getListData();
                             if (listData != null) {
                                 updateReview(listData);

@@ -538,11 +538,10 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         GlideApp.with(getActivity()).onStop();
     }
 
-
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         saveDetailCache();
+        super.onBackPressed();
     }
 
     private void openNewsDetailsPage(int position) {
@@ -721,7 +720,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         int webViewHeight = mWebView.getHeight();
         //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
         if (mNewsDetail != null && mNewsDetail.getReadHeight() > webViewHeight + mTitleHeight) {
-            startScheduleJob(50);
+            startScheduleJob(300);
             return;
         }
         if (mNewsDetail != null) {
@@ -735,9 +734,13 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         mTitleHeight = mTitleLayout.getMeasuredHeight();
         int webViewHeight = mWebView.getHeight();
         //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
-        if (mNewsDetail != null && mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
-            stopScheduleJob();
-            mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+        stopScheduleJob();
+        if (mNewsDetail != null) {
+            if (mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
+                mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+            }else {
+                mScrollView.smoothScrollTo(0, webViewHeight);
+            }
         }
     }
 
@@ -934,7 +937,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     private void updateArticle(OtherArticle data, RelativeLayout articleRl, TextView articleTitle, TextView articleOriginal, TextView articleSource, TextView articleTime, ImageView articleImg) {
         articleRl.setVisibility(View.VISIBLE);
         articleTitle.setText(data.getTitle());
-        articleTitle.setSelected(!NewsReadCache.isRead(data.getId()));
+        articleTitle.setEnabled(!NewsReadCache.isRead(data.getId()));
         articleOriginal.setVisibility(data.getOriginal() > 0 ? View.VISIBLE : View.GONE);
         articleSource.setText(data.getSource());
 //        articleSource.setVisibility(TextUtils.isEmpty(data.getSource()) ? View.GONE : View.VISIBLE);

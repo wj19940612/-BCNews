@@ -127,6 +127,8 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
     private void initView() {
         mSwipeToLoadLayout.setRefreshEnabled(false);
 
+        //服务器返回太慢了  先禁止上拉加载
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
 
         mAdapter = new ViewpointReviewAdapter(getActivity());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -229,6 +231,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
                     @Override
                     public void onFinish() {
                         super.onFinish();
+                        mSwipeToLoadLayout.setLoadMoreEnabled(true);
                         stopFreshOrLoadAnimation();
                     }
                 })
