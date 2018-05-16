@@ -294,4 +294,22 @@
     <string name="all_viewpoint_count">全部观点（%1$d）</string>
     <string name="user_name_">%1$s：</string>
     <string name="publish_success">发布成功</string>
+
+    <string name="binding_currency_address">绑定提币地址</string>
+    <string name="currency_address">提币地址</string>
+    <string name="immediately_binding">立即绑定</string>
+
+    <string name="binding_ali_pay_account">绑定支付宝账户</string>
+    <string name="please_input_your_ali_pay_account">请输入您的支付宝账户</string>
+    <string name="ali_pay_address">支付宝账户</string>
+    <string name="ali_pay_user_name">账号姓名</string>
+    <string name="please_input_ali_pay_user_name">请输入账号姓名</string>
+
+    <string name="binding_tel">绑定手机号码</string>
+    <string name="tel">手机号码</string>
+    <string name="please_input_your_tel">请输入您的手机号码</string>
+    <string name="tel_user_name">机主姓名</string>
+    <string name="please_input_tel_user_name">请输入账户姓名</string>
+    <string name="please_input_auth_code">请输入验证码</string>
+
 </resources>

@@ -306,6 +306,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
             }
 
             private void bindDataWithView(boolean showFooterView, final NewsFlash newsFlash, final Context context) {
+                String colorValue = "#FF9F00";
                 if (showFooterView) {
                     mSplit.setVisibility(View.GONE);
                     mFooter.setVisibility(View.VISIBLE);
@@ -317,15 +318,15 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 if (newsFlash.isImportant()) {
                     if (TextUtils.isEmpty(newsFlash.getTitle())) {
                         mContent.setText(newsFlash.getContent());
-                        mContent.setTextColor(Color.parseColor("#476E92"));
+                        mContent.setTextColor(Color.parseColor(colorValue));
                     } else {
                         mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
-                                Color.parseColor("#476E92"), Color.parseColor("#476E92")));
+                                Color.parseColor(colorValue), Color.parseColor(colorValue)));
                     }
                 } else {
                     if (TextUtils.isEmpty(newsFlash.getTitle())) {
                         mContent.setText(newsFlash.getContent());
-                        mContent.setTextColor(Color.parseColor("#476E92"));
+                        mContent.setTextColor(Color.parseColor(colorValue));
                     } else {
                         mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
                                 Color.parseColor("#494949"), Color.parseColor("#494949")));
