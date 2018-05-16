@@ -72,8 +72,13 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mWebTextSize = Preference.get().getLocalWebTextSize();
         registersBroadcastReceiver();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWebTextSize = Preference.get().getLocalWebTextSize();
     }
 
     @Override
@@ -267,7 +272,7 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
                 .callback(new Callback2D<Resp<LinkedHashMap<String, String>>, LinkedHashMap<String, String>>() {
                     @Override
                     protected void onRespSuccessData(LinkedHashMap<String, String> data) {
-                        WhistleBlowingDialogFragment.newInstance(type, id,data).show(getSupportFragmentManager());
+                        WhistleBlowingDialogFragment.newInstance(type, id, data).show(getSupportFragmentManager());
                     }
                 })
                 .fire();
