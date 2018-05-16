@@ -28,6 +28,7 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ChannelCacheModel;
+import com.sbai.bcnews.model.SysTime;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
@@ -221,8 +222,25 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
 
         if (isWithinRules) {
             // TODO: 2018/5/16 红包可点击
+        } else {
+            getNexGetRedPacketTime();
+//            new CountDownTimer()
         }
-//        new CountDownTimer()
+    }
+
+    private int getNexGetRedPacketTime() {
+        long systemTimestamp = SysTime.getSysTime().getSystemTimestamp();
+        String time = DateUtil.format(systemTimestamp, DateUtil.FORMAT_MINUTE_SECOND);
+        try {
+            String[] split = time.split(":");
+            if (split.length == 2) {
+                Integer minute = Integer.valueOf(split[0]);
+                
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
     }
 
     @Override

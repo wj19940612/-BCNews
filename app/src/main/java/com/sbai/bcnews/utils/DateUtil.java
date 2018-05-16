@@ -1,7 +1,6 @@
 package com.sbai.bcnews.utils;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.sbai.bcnews.model.SysTime;
 
@@ -293,32 +292,6 @@ public class DateUtil {
 
 
     /**
-     * 判断 time1 是否比 time2 晚了 milliseconds, 即 time1 - time2 <= milliseconds && time1 - time2 >= 0
-     *
-     * @param time1
-     * @param time2
-     * @param milliseconds
-     * @return
-     */
-    public static boolean isLessThanTimeInterval(long time1, long time2, long milliseconds) {
-        long diff = time1 - time2;
-        Log.d("TAG", "isLessThanTimeInterval: " + diff);
-        return diff >= 0 && diff <= milliseconds;
-    }
-
-    /**
-     * @param startTime 最新的时间
-     * @param endTime
-     * @return
-     */
-    public static boolean isTimeBetweenFiveMin(long startTime, long endTime) {
-        int difference = (int) (startTime - endTime) / (60 * 1000);
-        Log.d("dateUtil", "相差数据" + difference + "  开始的时间" + DateUtil.format(startTime) + "  比较时间" + DateUtil.format(endTime));
-
-        return 5 < difference;
-    }
-
-    /**
      * 判断指定时间和当前时间是否小于minute分钟
      *
      * @param txtDate 指定的时间
@@ -463,27 +436,6 @@ public class DateUtil {
         return time >= 600 && time <= 1800;
     }
 
-    /**
-     * 格式化时间  如果是当天 则显示18:20
-     * 如果是昨天 则 昨天 18:20
-     * 其他的   12月12日 12:20
-     * 不是今年  则 15年12月18日 18:20:20
-     *
-     * @param createTime
-     * @return
-     */
-    public static String getBattleFormatTime(long createTime) {
-        long systemTime = SysTime.getSysTime().getSystemTimestamp();
-        if (DateUtil.isToday(createTime, systemTime)) {
-            return DateUtil.format(createTime, "HH:mm:ss");
-        } else if (DateUtil.isYesterday(createTime, systemTime)) {
-            return DateUtil.format(createTime, "昨日" + "HH:mm:ss");
-        } else if (DateUtil.isInThisYear(createTime)) {
-            return DateUtil.format(createTime, "MM/dd HH:mm:ss");
-        } else {
-            return DateUtil.format(createTime, "yy/MM/dd HH:mm:ss");
-        }
-    }
 
 
     /**
@@ -505,17 +457,6 @@ public class DateUtil {
             return YESTERDAY;
         }
         return DateUtil.format(createTime, FORMAT_ONLY_DATE);
-    }
-
-    public static String formatUserFundDetailTime(long time) {
-        long systemTime = SysTime.getSysTime().getSystemTimestamp();
-        if (isToday(time, systemTime)) {
-            return TODAY + " " + DateUtil.format(time, FORMAT_HOUR_MINUTE);
-        }
-        if (isYesterday(time, systemTime)) {
-            return YESTERDAY + " " + DateUtil.format(time, FORMAT_HOUR_MINUTE);
-        }
-        return DateUtil.format(time, FORMAT_DATE_HOUR_MINUTE);
     }
 
     /**
@@ -827,4 +768,5 @@ public class DateUtil {
         }
         return false;
     }
+
 }
