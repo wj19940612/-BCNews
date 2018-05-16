@@ -539,6 +539,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         GlideApp.with(getActivity()).onStop();
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
