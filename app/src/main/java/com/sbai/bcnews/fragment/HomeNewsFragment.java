@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -93,6 +94,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     private int mRedPacketActivityStatus;
 
     private static final int RED_PACKET_STATUS_UPDATE_TIME = 1000;//每隔一秒钟去更新红包的状态
+    private CountDownTimer mCountDownTimer;
 
     @Nullable
     @Override
@@ -223,8 +225,17 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         if (isWithinRules) {
             // TODO: 2018/5/16 红包可点击
         } else {
-            getNexGetRedPacketTime();
-//            new CountDownTimer()
+            mCountDownTimer = new CountDownTimer(getNexGetRedPacketTime(), 500) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
         }
     }
 
@@ -235,7 +246,8 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
             String[] split = time.split(":");
             if (split.length == 2) {
                 Integer minute = Integer.valueOf(split[0]);
-                
+                Integer second = Integer.valueOf(split[1]);
+                return (60 - minute) * 60 + 60 - second;
             }
         } catch (Exception e) {
 
