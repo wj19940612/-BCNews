@@ -29,6 +29,7 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ChannelCacheModel;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
+import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.UmengCountEventId;
@@ -84,6 +85,14 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     private ImageView mRedPacketImage;
     private TextView mRedPacketText;
 
+    private static final int RED_PACKET_ACTIVITY_IS_RUNNING = 1;
+    private static final int RED_PACKET_ACTIVITY_IS_CLOSED = 0;
+
+    private boolean mIsStartCountdownTime;
+    private int mRedPacketActivityStatus;
+
+    private static final int RED_PACKET_STATUS_UPDATE_TIME = 1000;//每隔一秒钟去更新红包的状态
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -101,9 +110,23 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         initViewPager();
         getChannels();
         mTabLayout.setViewPager(mViewPager);
-        requestRedPacketStatus();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getUserVisibleHint()) {
+            requestRedPacketStatus();
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isAdded()) {
+            requestRedPacketStatus();
+        }
+    }
 
     private void initTitleBar() {
         View leftView = mTitleBar.getLeftView();
@@ -115,8 +138,6 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
                 // TODO: 2018/5/15 打开抢红包弹窗
             }
         });
-
-
     }
 
     private void initViewPager() {
@@ -179,22 +200,29 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     private void requestRedPacketStatus() {
         Apic.requestRedPacketStatus()
                 .tag(TAG)
-                .callback(new Callback2D<Resp<Object>, Object>() {
+                .callback(new Callback2D<Resp<Integer>, Integer>() {
                     @Override
-                    protected void onRespSuccessData(Object data) {
-                        updateRedPacketStatus(0);
+                    protected void onRespSuccessData(Integer data) {
+                        mRedPacketActivityStatus = data;
+                        if (mRedPacketActivityStatus == RED_PACKET_ACTIVITY_IS_CLOSED) {
+                            mTitleBar.setLeftViewVisible(false);
+                        } else {
+                            mTitleBar.setLeftViewVisible(true);
+                            startScheduleJob(1000);
+                            updateRedPacketStatus();
+                        }
                     }
                 })
                 .fire();
     }
 
-    private void updateRedPacketStatus(int status) {
-        int red_packet_can_rob = 1;
-        int red_packet_prepareing = 2;
-//        switch (status) {
-//            case red_packet_can_rob:
-//                break;
-//        }
+    private void updateRedPacketStatus() {
+        boolean isWithinRules = DateUtil.timeIsWithinRules(5);
+
+        if (isWithinRules) {
+            // TODO: 2018/5/16 红包可点击
+        }
+//        new CountDownTimer()
     }
 
     @Override

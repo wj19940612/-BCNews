@@ -445,4 +445,11 @@ public class TitleBar extends RelativeLayout {
     public View getLeftView() {
         return mLeftView;
     }
+
+    public void setLeftViewVisible(boolean leftViewVisible) {
+        if (mLeftView != null) {
+            mLeftView.setVisibility(leftViewVisible ? VISIBLE : GONE);
+            mLeftView.setEnabled(leftViewVisible);
+        }
+    }
 }
