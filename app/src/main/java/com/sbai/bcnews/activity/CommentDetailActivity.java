@@ -101,6 +101,12 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
 
         initData();
         initView();
+        refreshData();
+    }
+
+    private void refreshData() {
+        mPage = 0;
+        mPageSize = ViewpointType.NEWS_PAGE_SIZE;
         requestCommentList();
     }
 
@@ -108,8 +114,6 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
         Intent intent = getIntent();
         mNewViewPointAndReview = intent.getParcelableExtra(ExtraKeys.DATA);
         mNewsDetail = intent.getParcelableExtra(ExtraKeys.NEWS_DETAIL);
-        mPage = 0;
-        mPageSize = ViewpointType.NEWS_PAGE_SIZE;
     }
 
     private void initView() {
@@ -281,7 +285,9 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void updateReview(ArrayList<ViewPointComment> listData) {
-
+        if (mPage == 0) {
+            mReviewListAdapter.clear();
+        }
         if (listData.size() < ViewpointType.NEWS_LOAD_MORE_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
@@ -354,8 +360,10 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                     }
                     break;
                 case LoginActivity.REQ_CODE_LOGIN:
-                    if (mNewViewPointAndReview != null)
+                    if (mNewViewPointAndReview != null) {
                         requestViewpointPraiseStatus(mNewViewPointAndReview.getId());
+                        refreshData();
+                    }
                     break;
             }
         }
@@ -414,6 +422,10 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
         private OnCommentCallBack mOnReviewCallBack;
         private NewViewPointAndReview mNewViewPointAndReview;
 
+        public void clear() {
+            mViewPointCommentList.clear();
+            notifyDataSetChanged();
+        }
 
         public void setNewViewPointAndReview(NewViewPointAndReview newViewPointAndReview) {
             mNewViewPointAndReview = newViewPointAndReview;
@@ -556,7 +568,7 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                 mPointContent.setText(newViewPointAndReview.getContent());
                 if (newViewPointAndReview.getPraiseCount() != 0) {
                     mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
-                }else {
+                } else {
                     mPraiseCount.setText(R.string.praise);
                 }
 

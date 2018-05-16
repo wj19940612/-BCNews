@@ -332,6 +332,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private void requestNewsViewpoint() {
         Apic.requestNewsViewpoint(mId)
+                .tag(TAG)
                 .callback(new Callback<ListResp<NewsViewpoint>>() {
                     @Override
                     protected void onRespSuccess(ListResp<NewsViewpoint> resp) {
@@ -539,6 +540,16 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            GlideApp.with(getActivity()).onDestroy();
+        } catch (Exception e) {
+            Log.d(TAG, "onDestroy: " + e.toString());
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         saveDetailCache();
         super.onBackPressed();
@@ -740,12 +751,12 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         mTitleHeight = mTitleLayout.getMeasuredHeight();
         int webViewHeight = mWebView.getHeight();
         //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
-        Log.d(TAG, "onTimeUp: "+count);
+        Log.d(TAG, "onTimeUp: " + count);
         if (mNewsDetail != null) {
             if (mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
                 mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
                 stopScheduleJob();
-            } else  {
+            } else {
                 stopScheduleJob();
                 mScrollView.smoothScrollTo(0, mNetNewsDetail.getReadHeight());
             }

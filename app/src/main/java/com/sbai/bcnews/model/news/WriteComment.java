@@ -68,7 +68,11 @@ public class WriteComment implements Parcelable, ViewpointType {
     public static WriteComment getReplyComment(ReplyNews replyNews) {
         WriteComment writeComment = new WriteComment();
         writeComment.setDataId(replyNews.getDataId());
-        writeComment.setType(replyNews.getType());
+        if (replyNews.getType() < WriteComment.THIRD_REPLY) {
+            writeComment.setType(replyNews.getType() + 1);
+        } else {
+            writeComment.setType(replyNews.getType());
+        }
         writeComment.setModule(0);
         writeComment.setReplayId(replyNews.getId());
         writeComment.setReplayUserId(replyNews.getUserId());

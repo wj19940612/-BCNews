@@ -128,6 +128,8 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         mPageSize = 50;
         mPage = 0;
         requestNewsViewpointList();
+        mHasHotLabel = false;
+        mHasNormalLabel = false;
     }
 
 
@@ -260,7 +262,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
 
         int dataSize = 0;
         if (mPage == 0) {
-
+            mAdapter.clear();
             boolean hasNormalData = data.getNormal() != null && !data.getNormal().isEmpty();
             boolean hasHotData = data.getHot() != null && !data.getHot().isEmpty();
 
@@ -430,8 +432,10 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
                     }
                     break;
                 case LoginActivity.REQ_CODE_LOGIN:
-                    if (mNewsDetail != null)
+                    if (mNewsDetail != null) {
                         requestData(mNewsDetail.getId());
+                        refreshData();
+                    }
                     break;
 
             }

@@ -14,6 +14,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.news.NewsViewpoint;
 import com.sbai.bcnews.model.news.ViewPointComment;
 import com.sbai.bcnews.model.news.ViewPointCommentReview;
+import com.sbai.bcnews.model.news.ViewpointType;
 import com.sbai.bcnews.utils.StrUtil;
 
 import java.util.List;
@@ -129,8 +130,8 @@ public class CommentReviewView extends LinearLayout {
     }
 
     private CharSequence formatUserNameContent(ViewPointCommentReview viewPointComment) {
-        if (!TextUtils.isEmpty(viewPointComment.getReplayUsername())) {
-            return StrUtil.mergeTextWithColor(viewPointComment.getUsername(), " 回复 " + getContext().getString(R.string.user_name_, viewPointComment.getUsername()), ContextCompat.getColor(getContext(), R.color.text_4949));
+        if (!TextUtils.isEmpty(viewPointComment.getReplayUsername()) && viewPointComment.getType() == ViewpointType.THIRD_REPLY) {
+            return StrUtil.mergeTextWithColor(viewPointComment.getUsername(), " 回复 " + getContext().getString(R.string.user_name_, viewPointComment.getReplayUsername()), ContextCompat.getColor(getContext(), R.color.text_4949));
         }
         return getContext().getString(R.string.user_name_, viewPointComment.getUsername());
     }
