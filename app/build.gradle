@@ -1,13 +1,22 @@
 apply plugin: 'com.android.application'
 
 android {
+    def verName = System.getProperties().getProperty("verName")
+    def verCode = System.getProperties().getProperty("verCode")
+
+    def alphaVersionName = verName ? verName : alphaVerName
+    def alphaVersionCode = verCode ? verCode : alphaVerCode
+
+    println alphaVersionName
+    println alphaVersionCode
+
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.sbai.bcnews"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 5
-        versionName "1.1.2"
+        versionCode 6
+        versionName "1.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField('String', 'HOST', '\"news.ailemi.com\"')
@@ -21,18 +30,14 @@ android {
         ]
     }
 
-    java.util.Properties properties = new Properties();
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
     signingConfigs {
         release {
-            storeFile file(properties.get('keystore_storeFile'))
-            storePassword properties.get('keystore_storePassword')
-            keyAlias properties.get('keystore_keyAlias')
-            keyPassword properties.get('keystore_keyPassword')
+            storeFile file('../bcstore.jks')
+            storePassword bcStorePassword
+            keyAlias bcKeyAlias
+            keyPassword bcKeyPassword
         }
     }
-
 
     buildTypes {
         release {
@@ -44,10 +49,6 @@ android {
             ext.enableCrashlytics = false
             signingConfig signingConfigs.release
         }
-    }
-
-    aaptOptions {
-        cruncherEnabled true // !!set true when package release apk
     }
 
     dexOptions {
@@ -69,20 +70,17 @@ android {
                     GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
                     GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
                     UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
-                    UMENG_CHANNEL   : "tencent"
             ]
         }
-
         alpha {
-            versionCode 31
-            versionName "1.0.0515"
+            versionCode alphaVersionCode as Integer
+            versionName alphaVersionName
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
                     GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
                     GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
                     UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
-//                    UMENG_CHANNEL   : "tencent"
             ]
         }
 
@@ -91,7 +89,11 @@ android {
 //        c360 {}
 //        tencent {}
 //        baidu {}
-//        others {}
+        others {
+            versionCode 6
+            versionName "1.2.0"
+
+        }
 //        fenx {}
 //        weixin{}
 //        huawei{}
@@ -99,7 +101,7 @@ android {
 
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "bcnews-${variant.name}-${variant.versionName}.apk"
+            outputFileName = "bcnews-${variant.name}-${variant.versionCode}-${variant.versionName}.apk"
         }
     }
 

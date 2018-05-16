@@ -40,6 +40,7 @@ import com.sbai.bcnews.view.EmptyRecyclerView;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.news.ViewPointContentView;
 import com.sbai.bcnews.view.recycleview.BaseRecycleViewAdapter;
+import com.sbai.glide.GlideApp;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -117,16 +118,26 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         refreshData();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GlideApp.with(getActivity()).onStop();
+    }
+
     private void refreshData() {
         mPageSize = 50;
         mPage = 0;
         requestNewsViewpointList();
+        mHasHotLabel = false;
+        mHasNormalLabel = false;
     }
 
 
     private void initView() {
         mSwipeToLoadLayout.setRefreshEnabled(false);
 
+        //服务器返回太慢了  先禁止上拉加载
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
 
         mAdapter = new ViewpointReviewAdapter(getActivity());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -229,6 +240,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
                     @Override
                     public void onFinish() {
                         super.onFinish();
+                        mSwipeToLoadLayout.setLoadMoreEnabled(true);
                         stopFreshOrLoadAnimation();
                     }
                 })
@@ -250,7 +262,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
 
         int dataSize = 0;
         if (mPage == 0) {
-
+            mAdapter.clear();
             boolean hasNormalData = data.getNormal() != null && !data.getNormal().isEmpty();
             boolean hasHotData = data.getHot() != null && !data.getHot().isEmpty();
 
@@ -420,8 +432,10 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
                     }
                     break;
                 case LoginActivity.REQ_CODE_LOGIN:
-                    if (mNewsDetail != null)
+                    if (mNewsDetail != null) {
                         requestData(mNewsDetail.getId());
+                        refreshData();
+                    }
                     break;
 
             }

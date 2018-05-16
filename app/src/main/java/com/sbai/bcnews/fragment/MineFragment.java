@@ -249,7 +249,7 @@ public class MineFragment extends BaseFragment {
             case R.id.message:
                 if (LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), MessageActivity.class).putExtra(ExtraKeys.DATA, mNotReadMessageCount).execute();
-                }else {
+                } else {
                     login();
                 }
                 break;

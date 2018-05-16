@@ -386,6 +386,9 @@ public class UserInfo implements Parcelable {
                 ", wxOpenId='" + wxOpenId + '\'' +
                 ", wxBound=" + wxBound +
                 ", wxName='" + wxName + '\'' +
+                ", isModifyPortrait=" + isModifyPortrait +
+                ", discuss=" + discuss +
+                ", praise=" + praise +
                 '}';
     }
 

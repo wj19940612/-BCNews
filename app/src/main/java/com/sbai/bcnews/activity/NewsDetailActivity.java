@@ -332,6 +332,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private void requestNewsViewpoint() {
         Apic.requestNewsViewpoint(mId)
+                .tag(TAG)
                 .callback(new Callback<ListResp<NewsViewpoint>>() {
                     @Override
                     protected void onRespSuccess(ListResp<NewsViewpoint> resp) {
@@ -540,9 +541,19 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            GlideApp.with(getActivity()).onDestroy();
+        } catch (Exception e) {
+            Log.d(TAG, "onDestroy: " + e.toString());
+        }
+    }
+
+    @Override
     public void onBackPressed() {
-        super.onBackPressed();
         saveDetailCache();
+        super.onBackPressed();
     }
 
     private void openNewsDetailsPage(int position) {
@@ -717,16 +728,22 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void initScrollViewLocation() {
-        mTitleHeight = mTitleLayout.getMeasuredHeight();
-        int webViewHeight = mWebView.getHeight();
-        //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
-        if (mNewsDetail != null && mNewsDetail.getReadHeight() > webViewHeight + mTitleHeight) {
-            startScheduleJob(50);
-            return;
-        }
-        if (mNewsDetail != null) {
-            mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
-        }
+//        mTitleHeight = mTitleLayout.getMeasuredHeight();
+//        int webViewHeight = mWebView.getHeight();
+//        //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
+//        if (mNewsDetail != null && mNewsDetail.getReadHeight() > webViewHeight + mTitleHeight) {
+//            startScheduleJob(300);
+//            return;
+//        }
+//        if (mNewsDetail != null) {
+//            mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+//        }
+        mScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+            }
+        });
     }
 
     @Override
@@ -735,9 +752,16 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         mTitleHeight = mTitleLayout.getMeasuredHeight();
         int webViewHeight = mWebView.getHeight();
         //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
-        if (mNewsDetail != null && mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
-            stopScheduleJob();
-            mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+        Log.d(TAG, "onTimeUp: " + count);
+        if (mNewsDetail != null) {
+            if (mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
+                mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+                stopScheduleJob();
+            } else {
+                stopScheduleJob();
+                mScrollView.smoothScrollTo(0, mNetNewsDetail.getReadHeight());
+            }
+
         }
     }
 
@@ -934,7 +958,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     private void updateArticle(OtherArticle data, RelativeLayout articleRl, TextView articleTitle, TextView articleOriginal, TextView articleSource, TextView articleTime, ImageView articleImg) {
         articleRl.setVisibility(View.VISIBLE);
         articleTitle.setText(data.getTitle());
-        articleTitle.setSelected(!NewsReadCache.isRead(data.getId()));
+        articleTitle.setEnabled(!NewsReadCache.isRead(data.getId()));
         articleOriginal.setVisibility(data.getOriginal() > 0 ? View.VISIBLE : View.GONE);
         articleSource.setText(data.getSource());
 //        articleSource.setVisibility(TextUtils.isEmpty(data.getSource()) ? View.GONE : View.VISIBLE);

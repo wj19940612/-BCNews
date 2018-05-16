@@ -2,6 +2,7 @@ package com.sbai.bcnews;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
@@ -204,7 +205,9 @@ public class AppJs {
                 ((Activity) mContext).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Launcher.with(mContext, LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
+                        Launcher.with(mContext, LoginActivity.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                .executeForResult(LoginActivity.REQ_CODE_LOGIN);
                     }
                 });
                 break;
