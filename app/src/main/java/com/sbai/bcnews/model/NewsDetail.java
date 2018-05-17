@@ -303,4 +303,34 @@ public class NewsDetail implements Parcelable {
             return new NewsDetail[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "NewsDetail{" +
+                "channel=" + channel +
+                ", content='" + content + '\'' +
+                ", createTime=" + createTime +
+                ", detail='" + detail + '\'' +
+                ", id='" + id + '\'' +
+                ", praiseCount=" + praiseCount +
+                ", readerCount=" + readerCount +
+                ", releaseTime=" + releaseTime +
+                ", secondDetail='" + secondDetail + '\'' +
+                ", secondType=" + secondType +
+                ", source='" + source + '\'' +
+                ", summary='" + summary + '\'' +
+                ", title='" + title + '\'' +
+                ", type=" + type +
+                ", imgs=" + imgs +
+                ", tags=" + tags +
+                ", readerTime=" + readerTime +
+                ", original=" + original +
+                ", praise=" + praise +
+                ", collect=" + collect +
+                ", updateTime=" + updateTime +
+                ", readTime=" + readTime +
+                ", author='" + author + '\'' +
+                ", readHeight=" + readHeight +
+                '}';
+    }
 }

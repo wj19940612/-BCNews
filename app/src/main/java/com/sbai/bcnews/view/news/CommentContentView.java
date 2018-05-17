@@ -74,6 +74,8 @@ public class CommentContentView extends LinearLayout {
     private void updatePointPraise(final ViewPointComment viewPointComment) {
         if (viewPointComment.getPraiseCount() != 0) {
             mPraiseCount.setText(String.valueOf(viewPointComment.getPraiseCount()));
+        } else {
+            mPraiseCount.setText(R.string.praise);
         }
 
         boolean isPraise = viewPointComment.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;

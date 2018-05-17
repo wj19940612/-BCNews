@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,7 +121,7 @@ public class LoginActivity extends WeChatActivity {
         initListener();
 
         setKeyboardHelper();
-
+        Log.d(TAG, "onCreate: ");
     }
 
     private void initListener() {
@@ -164,6 +165,7 @@ public class LoginActivity extends WeChatActivity {
         mAuthCode.removeTextChangedListener(mValidationWatcher);
         mKeyBoardHelper.onDestroy();
         mLoading.clearAnimation();
+        Log.d(TAG, "onDestroy: ");
     }
 
     @Override

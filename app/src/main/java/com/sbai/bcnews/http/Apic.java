@@ -40,7 +40,7 @@ public class Apic {
      * 用户--是否有新的消息(包括新的反馈)--薛松
      */
     public static Api requestWhetherHasAllNotReadMessage() {
-        return Api.get("/api/news-msg/msg/new");
+        return Api.get("/api/news-msg/msg/new",new ReqParams().put("deviceId", Preference.get().getPushClientId()));
     }
 
     /**
