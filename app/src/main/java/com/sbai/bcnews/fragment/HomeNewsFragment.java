@@ -2,11 +2,11 @@ package com.sbai.bcnews.fragment;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,27 +15,31 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ChannelActivity;
+import com.sbai.bcnews.fragment.dialog.StartRobRedPacketDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ChannelCacheModel;
+import com.sbai.bcnews.model.system.RedPacketActivityStatus;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
+import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
+import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
 
 import java.lang.reflect.Method;
@@ -82,6 +86,14 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     private boolean mAnimating;
     private int mTitleScrollState;  //0-默认 1-已经滚上去了
 
+    private ImageView mRedPacketImage;
+    private TextView mRedPacketText;
+
+    private CountDownTimer mCountDownTimer;
+    private long mWaitTime;
+    protected RedPacketActivityStatus mRedPacketActivityStatus;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,10 +106,43 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mMyChannels = new ArrayList<>();
+        initTitleBar();
         initTabView();
         initViewPager();
         getChannels();
         mTabLayout.setViewPager(mViewPager);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getUserVisibleHint()) {
+            requestRedActivityPacketStatus();
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isAdded()) {
+            requestRedActivityPacketStatus();
+        } else {
+            stopScheduleJob();
+            resetCountDownTimer();
+        }
+    }
+
+
+    private void initTitleBar() {
+        View leftView = mTitleBar.getLeftView();
+        mRedPacketImage = leftView.findViewById(R.id.redPacketImage);
+        mRedPacketText = leftView.findViewById(R.id.redPacketText);
+        mTitleBar.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus).show(getChildFragmentManager());
+            }
+        });
     }
 
     private void initViewPager() {
@@ -157,6 +202,102 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mTabLayout.setViewPager(mViewPager);
     }
 
+
+    private void requestRedActivityPacketStatus() {
+        Apic.requestRedPacketStatus()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {
+                    @Override
+                    protected void onRespSuccessData(RedPacketActivityStatus data) {
+                        updateRedPacketActivityStatus(data);
+                    }
+
+//                    @Override
+//                    public void onFailure(ReqError reqError) {
+//                        super.onFailure(reqError);
+//
+//                        // TODO: 2018/5/17 模拟的时间
+//                        mRedPacketActivityStatus = new RedPacketActivityStatus();
+//                        mRedPacketActivityStatus.setActivityIsRunning(true);
+//                        mRedPacketActivityStatus.setTime(System.currentTimeMillis());
+//                        mRedPacketActivityStatus.setRobRedPacketTime(false);
+//                        mRedPacketActivityStatus.setNexChangeTime(System.currentTimeMillis() + 20 * 1000);
+//                        updateRedPacketActivityStatus(mRedPacketActivityStatus);
+//                    }
+                })
+                .fire();
+    }
+
+    private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
+        resetCountDownTimer();
+        if (data.isActivityIsRunning()) {
+            mTitleBar.setLeftViewVisible(true);
+            mWaitTime = getNexGetRedPacketTime(data);
+            if (data.isRobRedPacketTime()) canRobRedPacket();
+            else waitNextRobRedPacketTime();
+        } else {
+            mTitleBar.setLeftViewVisible(false);
+        }
+    }
+
+    protected void canRobRedPacket() {
+        mRedPacketText.setVisibility(View.GONE);
+        mRedPacketImage.setVisibility(View.VISIBLE);
+        GlideApp.with(getActivity())
+                .asGif()
+                .load(R.drawable.rob_red_packet)
+                .into(mRedPacketImage);
+    }
+
+    protected void onCountDownTimeUpdate(long time) {
+        String format = DateUtil.format(time, DateUtil.FORMAT_MINUTE_SECOND);
+        mRedPacketText.setText(format);
+    }
+
+    protected void waitNextRobRedPacketTime() {
+        mRedPacketText.setVisibility(View.VISIBLE);
+        mRedPacketImage.clearAnimation();
+        mRedPacketImage.setImageResource(R.drawable.ic_rob_rad_packet_wait);
+
+        startCountDownTimer();
+    }
+
+    private void startCountDownTimer() {
+        mCountDownTimer = new CountDownTimer(mWaitTime, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                onCountDownTimeUpdate(millisUntilFinished);
+            }
+
+            @Override
+            public void onFinish() {
+                requestRedActivityPacketStatus();
+            }
+        }.start();
+    }
+
+
+    @Override
+    public void onTimeUp(int count) {
+        super.onTimeUp(count);
+        if (count == mWaitTime / 1000) {
+            requestRedActivityPacketStatus();
+            stopScheduleJob();
+        }
+    }
+
+    protected void resetCountDownTimer() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+            mCountDownTimer = null;
+        }
+    }
+
+    private long getNexGetRedPacketTime(RedPacketActivityStatus data) {
+        return data.getNexChangeTime() - data.getTime();
+    }
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -191,7 +332,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         if (Math.abs(dy) < SCROLL_GLIDING) {
             return;
         }
-        scrollTitleBar(dy > 0 ? true : false);
+//        scrollTitleBar(dy > 0 ? true : false);
     }
 
     private void scrollTitleBar(final boolean down) {

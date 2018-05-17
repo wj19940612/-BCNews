@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -109,7 +108,11 @@ public class ViewPointContentView extends LinearLayout implements MeasureTextVie
     }
 
     private void updatePointPraise(NewViewPointAndReview newViewPointAndReview) {
-        mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
+        if (newViewPointAndReview.getPraiseCount() != 0) {
+            mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
+        }else {
+            mPraiseCount.setText(R.string.praise);
+        }
 
         boolean isPraise = newViewPointAndReview.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;
         mPraiseCount.setSelected(isPraise);
@@ -187,7 +190,6 @@ public class ViewPointContentView extends LinearLayout implements MeasureTextVie
 
     @Override
     public void onLineCount(int lineCount) {
-        Log.d(TAG, "onLineCount: " + lineCount + "  " + mPointContent.getText().toString());
         handleContent(lineCount);
     }
 

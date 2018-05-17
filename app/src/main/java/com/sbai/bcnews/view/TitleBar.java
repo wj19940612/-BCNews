@@ -47,7 +47,7 @@ public class TitleBar extends RelativeLayout {
     private ColorStateList mBackTextColor;
 
     private TextView mTitleView;
-    private TextView mLeftView;
+    private TextView mBackView;
     private LinearLayout mRightViewParent;
     private TextView mRightView;
     private View mCustomView;
@@ -62,7 +62,7 @@ public class TitleBar extends RelativeLayout {
     private int mMaxLines;
     private int mTitleLeftMargin;
     private int mTitleRightMargin;
-
+    private View mLeftView;
 
     public TitleBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -72,8 +72,14 @@ public class TitleBar extends RelativeLayout {
 
     private OnBackClickListener mBackClickListener;
 
+    private OnClickListener mLeftClickListener;
+
     public interface OnBackClickListener {
         void onClick();
+    }
+
+    public void setLeftClickListener(OnClickListener leftClickListener) {
+        mLeftClickListener = leftClickListener;
     }
 
     public void setBackClickListener(OnBackClickListener onBackClickListener) {
@@ -111,6 +117,10 @@ public class TitleBar extends RelativeLayout {
         int customViewResId = typedArray.getResourceId(R.styleable.TitleBar_customView, -1);
         if (customViewResId != -1) {
             mCustomView = LayoutInflater.from(getContext()).inflate(customViewResId, null);
+        }
+        int leftViewResId = typedArray.getResourceId(R.styleable.TitleBar_leftView, -1);
+        if (leftViewResId != -1) {
+            mLeftView = LayoutInflater.from(getContext()).inflate(leftViewResId, null);
         }
         mHasBottomSplitLine = typedArray.getBoolean(R.styleable.TitleBar_hasBottomSplitLine, false);
         mSplitLineColor = typedArray.getColorStateList(R.styleable.TitleBar_splitLineColor);
@@ -167,15 +177,29 @@ public class TitleBar extends RelativeLayout {
         // left view
         params = new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        mLeftView = new TextView(getContext());
-        mLeftView.setGravity(Gravity.CENTER);
         if (mLeftViewLeftPadding == -1) {
             mLeftViewLeftPadding = paddingHorizontal;
         }
-        mLeftView.setPadding(mLeftViewLeftPadding, 0, paddingHorizontal, 0);
-        addView(mLeftView, params);
-        if (mBackFeature) {
-            setBackFeature(true);
+        if (mLeftView != null) {
+            mLeftView.setPadding(mLeftViewLeftPadding, 0, paddingHorizontal, 0);
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            addView(mLeftView, params);
+            mLeftView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mLeftClickListener != null) {
+                        mLeftClickListener.onClick(v);
+                    }
+                }
+            });
+        } else {
+            mBackView = new TextView(getContext());
+            mBackView.setGravity(Gravity.CENTER);
+            mBackView.setPadding(mLeftViewLeftPadding, 0, paddingHorizontal, 0);
+            addView(mBackView, params);
+            if (mBackFeature) {
+                setBackFeature(true);
+            }
         }
 
         // right view
@@ -213,20 +237,20 @@ public class TitleBar extends RelativeLayout {
     private void setBackTextColor(ColorStateList backTextColor) {
         mBackTextColor = backTextColor;
         if (mBackTextColor != null) {
-            mLeftView.setTextColor(mBackTextColor);
+            mBackView.setTextColor(mBackTextColor);
         } else {
-            mLeftView.setTextColor(ColorStateList.valueOf(Color.parseColor("#222222")));
+            mBackView.setTextColor(ColorStateList.valueOf(Color.parseColor("#222222")));
         }
     }
 
     public void setBackFeature(boolean backFeature) {
         mBackFeature = backFeature;
-        if(backFeature){
+        if (backFeature) {
             setBackButtonIcon(mBackIcon);
             setBackText(mBackText);
             setBackTextSize(TypedValue.COMPLEX_UNIT_PX, mBackTextSize);
             setBackTextColor(mBackTextColor);
-            mLeftView.setOnClickListener(new OnClickListener() {
+            mBackView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onBackClick(view);
@@ -235,28 +259,28 @@ public class TitleBar extends RelativeLayout {
                     }
                 }
             });
-        }else {
-            mLeftView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        } else {
+            mBackView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             setBackText(mBackText);
             setBackTextSize(TypedValue.COMPLEX_UNIT_PX, mBackTextSize);
             setBackTextColor(mBackTextColor);
-            mLeftView.setOnClickListener(null);
+            mBackView.setOnClickListener(null);
         }
     }
 
     public void setBackTextSize(int unit, float backTextSize) {
-        mLeftView.setTextSize(unit, backTextSize);
-        mBackTextSize = mLeftView.getTextSize();
+        mBackView.setTextSize(unit, backTextSize);
+        mBackTextSize = mBackView.getTextSize();
     }
 
     public void setBackTextSize(float backTextSize) {
-        mLeftView.setTextSize(backTextSize);
-        mBackTextSize = mLeftView.getTextSize();
+        mBackView.setTextSize(backTextSize);
+        mBackTextSize = mBackView.getTextSize();
     }
 
     public void setBackText(CharSequence backText) {
         mBackText = backText;
-        mLeftView.setText(backText);
+        mBackView.setText(backText);
     }
 
     private void onBackClick(View view) {
@@ -268,9 +292,9 @@ public class TitleBar extends RelativeLayout {
 
     public void setBackButtonIcon(Drawable backIcon) {
         if (backIcon != null) {
-            mLeftView.setCompoundDrawablesWithIntrinsicBounds(backIcon, null, null, null);
+            mBackView.setCompoundDrawablesWithIntrinsicBounds(backIcon, null, null, null);
         } else { // default icon
-            mLeftView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tb_back_black, 0, 0, 0);
+            mBackView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tb_back_black, 0, 0, 0);
         }
     }
 
@@ -417,5 +441,16 @@ public class TitleBar extends RelativeLayout {
     public void setHasBottomSplitLine(boolean hasBottomSplitLine) {
         mHasBottomSplitLine = hasBottomSplitLine;
         invalidate();
+    }
+
+    public View getLeftView() {
+        return mLeftView;
+    }
+
+    public void setLeftViewVisible(boolean leftViewVisible) {
+        if (mLeftView != null) {
+            mLeftView.setVisibility(leftViewVisible ? VISIBLE : GONE);
+            mLeftView.setEnabled(leftViewVisible);
+        }
     }
 }

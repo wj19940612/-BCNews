@@ -14,9 +14,8 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.fragment.BottomDialogFragment;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -60,7 +59,7 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment {
 
     private int mWhistleBlowingType;
     private String mDataId;
-    private HashMap<String, String> mWhistleBlowingReason;
+    private LinkedHashMap<String, String> mWhistleBlowingReason;
 
 
     public WhistleBlowingDialogFragment setOnWhistleBlowingReasonListener(OnWhistleBlowingReasonListener onWhistleBlowingReasonListener) {
@@ -73,7 +72,7 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment {
     }
 
 
-    public static WhistleBlowingDialogFragment newInstance(int type, String id, HashMap<String, String> hashMap) {
+    public static WhistleBlowingDialogFragment newInstance(int type, String id, LinkedHashMap<String, String> hashMap) {
         Bundle args = new Bundle();
         args.putInt(ExtraKeys.TAG, type);
         args.putString(ExtraKeys.ID, id);
@@ -89,7 +88,7 @@ public class WhistleBlowingDialogFragment extends BottomDialogFragment {
         if (getArguments() != null) {
             mWhistleBlowingType = getArguments().getInt(ExtraKeys.TAG);
             mDataId = getArguments().getString(ExtraKeys.ID);
-            mWhistleBlowingReason = (HashMap<String, String>) getArguments().getSerializable(ExtraKeys.DATA);
+            mWhistleBlowingReason = (LinkedHashMap<String, String>) getArguments().getSerializable(ExtraKeys.DATA);
         }
     }
 

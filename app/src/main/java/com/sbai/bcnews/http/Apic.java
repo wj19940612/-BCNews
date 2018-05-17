@@ -40,7 +40,7 @@ public class Apic {
      * 用户--是否有新的消息(包括新的反馈)--薛松
      */
     public static Api requestWhetherHasAllNotReadMessage() {
-        return Api.get("/api/news-msg/msg/new");
+        return Api.get("/api/news-msg/msg/new", new ReqParams().put("deviceId", Preference.get().getPushClientId()));
     }
 
     /**
@@ -215,6 +215,16 @@ public class Apic {
      */
     public static Api requestViewpointPraiseStatus(String id) {
         return Api.post("/api/news-info/discuss/praise/status.do", new ReqParams().put("id", id));
+    }
+
+    // TODO: 2018/5/15 请求红包的状态
+    public static Api requestRedPacketStatus() {
+        return Api.get("");
+    }
+
+    // TODO: 2018/5/17 抢红包
+    public static Api robRedPacket() {
+        return Api.post("");
     }
 
 

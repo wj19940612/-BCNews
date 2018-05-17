@@ -14,6 +14,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.news.NewsViewpoint;
 import com.sbai.bcnews.model.news.ViewPointComment;
 import com.sbai.bcnews.model.news.ViewPointCommentReview;
+import com.sbai.bcnews.model.news.ViewpointType;
 import com.sbai.bcnews.utils.StrUtil;
 
 import java.util.List;
@@ -66,7 +67,7 @@ public class CommentReviewView extends LinearLayout {
         if (vos.size() > MAX_REVIEW_SIZE) {
             final TextView textView = new TextView(getContext());
             textView.setTextColor(ContextCompat.getColor(getContext(), R.color.text_476E92));
-            textView.setText(getContext().getString(R.string.look_all_review_count, vos.size()));
+            textView.setText(getContext().getString(R.string.spared_all_review_count, vos.size()));
             textView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -114,7 +115,11 @@ public class CommentReviewView extends LinearLayout {
     }
 
     private void updatePraiseView(TextView praiseCount, ViewPointComment viewPointComment) {
-        praiseCount.setText(String.valueOf(viewPointComment.getPraiseCount()));
+        if (viewPointComment.getPraiseCount() != 0) {
+            praiseCount.setText(String.valueOf(viewPointComment.getPraiseCount()));
+        } else {
+            praiseCount.setText(R.string.praise);
+        }
 
         boolean isPraise = viewPointComment.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;
         praiseCount.setSelected(isPraise);
@@ -125,8 +130,8 @@ public class CommentReviewView extends LinearLayout {
     }
 
     private CharSequence formatUserNameContent(ViewPointCommentReview viewPointComment) {
-        if (!TextUtils.isEmpty(viewPointComment.getReplayUsername())) {
-            return StrUtil.mergeTextWithColor(viewPointComment.getUsername(), " 回复 " + getContext().getString(R.string.user_name_, viewPointComment.getUsername()), ContextCompat.getColor(getContext(), R.color.text_4949));
+        if (!TextUtils.isEmpty(viewPointComment.getReplayUsername()) && viewPointComment.getType() == ViewpointType.THIRD_REPLY) {
+            return StrUtil.mergeTextWithColor(viewPointComment.getUsername(), " 回复 " + getContext().getString(R.string.user_name_, viewPointComment.getReplayUsername()), ContextCompat.getColor(getContext(), R.color.text_4949));
         }
         return getContext().getString(R.string.user_name_, viewPointComment.getUsername());
     }

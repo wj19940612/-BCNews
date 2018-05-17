@@ -44,6 +44,7 @@ import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.news.CommentContentView;
 import com.sbai.bcnews.view.recycleview.RecycleViewType;
 import com.sbai.glide.GlideApp;
+import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -100,6 +101,12 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
 
         initData();
         initView();
+        refreshData();
+    }
+
+    private void refreshData() {
+        mPage = 0;
+        mPageSize = ViewpointType.NEWS_PAGE_SIZE;
         requestCommentList();
     }
 
@@ -107,12 +114,12 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
         Intent intent = getIntent();
         mNewViewPointAndReview = intent.getParcelableExtra(ExtraKeys.DATA);
         mNewsDetail = intent.getParcelableExtra(ExtraKeys.NEWS_DETAIL);
-        mPage = 0;
-        mPageSize = ViewpointType.NEWS_PAGE_SIZE;
     }
 
     private void initView() {
         mSwipeToLoadLayout.setRefreshEnabled(false);
+        //进去加载太慢了 先把把上拉禁止了
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
         mViewPointCommentList = new ArrayList<>();
         mReviewListAdapter = new ReviewListAdapter(getActivity(), mViewPointCommentList);
         mReviewListAdapter.setNewViewPointAndReview(mNewViewPointAndReview);
@@ -252,10 +259,18 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                     .callback(new Callback<ListResp<ViewPointComment>>() {
                         @Override
                         protected void onRespSuccess(ListResp<ViewPointComment> resp) {
+                            mSwipeToLoadLayout.setLoadMoreEnabled(true);
                             ArrayList<ViewPointComment> listData = resp.getListData();
                             if (listData != null) {
                                 updateReview(listData);
                             }
+                            stopFreshOrLoadAnimation();
+                        }
+
+                        @Override
+                        public void onFailure(ReqError reqError) {
+                            super.onFailure(reqError);
+                            stopFreshOrLoadAnimation();
                         }
 
                         @Override
@@ -270,7 +285,9 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void updateReview(ArrayList<ViewPointComment> listData) {
-
+        if (mPage == 0) {
+            mReviewListAdapter.clear();
+        }
         if (listData.size() < ViewpointType.NEWS_LOAD_MORE_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
@@ -298,6 +315,11 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GlideApp.with(getActivity()).onStop();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -338,8 +360,10 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                     }
                     break;
                 case LoginActivity.REQ_CODE_LOGIN:
-                    if (mNewViewPointAndReview != null)
+                    if (mNewViewPointAndReview != null) {
                         requestViewpointPraiseStatus(mNewViewPointAndReview.getId());
+                        refreshData();
+                    }
                     break;
             }
         }
@@ -348,7 +372,7 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
     private void requestViewpointPraiseStatus(String id) {
         Apic.requestViewpointPraiseStatus(id)
                 .tag(TAG)
-                .callback(new Callback2D<Resp<NewViewPointAndReview>,NewViewPointAndReview>() {
+                .callback(new Callback2D<Resp<NewViewPointAndReview>, NewViewPointAndReview>() {
                     @Override
                     protected void onRespSuccessData(NewViewPointAndReview data) {
                         mNewViewPointAndReview.setIsPraise(data.getIsPraise());
@@ -398,6 +422,10 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
         private OnCommentCallBack mOnReviewCallBack;
         private NewViewPointAndReview mNewViewPointAndReview;
 
+        public void clear() {
+            mViewPointCommentList.clear();
+            notifyDataSetChanged();
+        }
 
         public void setNewViewPointAndReview(NewViewPointAndReview newViewPointAndReview) {
             mNewViewPointAndReview = newViewPointAndReview;
@@ -538,7 +566,11 @@ public class CommentDetailActivity extends NewsShareOrCommentBaseActivity {
                 mUserName.setText(newViewPointAndReview.getUsername());
                 mTimeLine.setText(DateUtil.formatDefaultStyleTime(newViewPointAndReview.getReplayTime()));
                 mPointContent.setText(newViewPointAndReview.getContent());
-                mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
+                if (newViewPointAndReview.getPraiseCount() != 0) {
+                    mPraiseCount.setText(String.valueOf(newViewPointAndReview.getPraiseCount()));
+                } else {
+                    mPraiseCount.setText(R.string.praise);
+                }
 
                 boolean isPraise = newViewPointAndReview.getIsPraise() == NewsViewpoint.ALREADY_PRAISE;
                 mPraiseCount.setSelected(isPraise);

@@ -153,7 +153,6 @@
             android:name=".activity.dialog.WriteCommentActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseDialog.Bottom"/>
-
         <activity
             android:name=".activity.NewsViewPointListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -191,7 +190,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
-
         <!-- meta-data -->
         <meta-data
             android:name="UMENG_APPKEY"
@@ -208,6 +206,8 @@
             android:process=":pushservice">
         </service>
 
+        <activity android:name=".activity.mine.HourWelfareActivity">
+        </activity>
     </application>
 
 </manifest>

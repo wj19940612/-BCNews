@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ReviewActivity extends BaseActivity {
+public class ReviewActivity extends BaseActivity implements ReplyMineFragment.OnRecycleViewScrollListener {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -39,6 +39,24 @@ public class ReviewActivity extends BaseActivity {
     AppBarLayout mAppBarLayout;
 
     private ReviewFragmentAdapter mReviewFragmentAdapter;
+
+    private int mTotalScrollRange;
+
+    private boolean mRecycleViewEnabled;
+    private int mAppBarVerticalOffset;
+
+    @Override
+    public void onScrollRecycleViewTop(boolean scrollRecycleViewTop) {
+        mRecycleViewEnabled = scrollRecycleViewTop;
+        setAppBarEnabled(mAppBarVerticalOffset);
+    }
+
+    private void setAppBarEnabled(int appBarVerticalOffset) {
+        boolean b = mRecycleViewEnabled && appBarVerticalOffset > -1;
+        if (mAppBarLayout.isEnabled() != b) {
+            mAppBarLayout.setEnabled(b);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +73,19 @@ public class ReviewActivity extends BaseActivity {
         mViewPager.setOffscreenPageLimit(1);
         initSlidingTabLayout();
         mAppBarLayout.addOnOffsetChangedListener(sOnOffsetChangedListener);
+
+        mAppBarLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mTotalScrollRange = (int) (mAppBarLayout.getTotalScrollRange() * 0.8);
+            }
+        });
     }
 
     AppBarLayout.OnOffsetChangedListener sOnOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
         @Override
         public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-            if (verticalOffset < -20) {
+            if (verticalOffset < -mTotalScrollRange) {
                 if (mBack.getVisibility() == View.GONE) {
                     mBack.setVisibility(View.VISIBLE);
                 }
@@ -69,6 +94,8 @@ public class ReviewActivity extends BaseActivity {
                     mBack.setVisibility(View.GONE);
                 }
             }
+            mAppBarVerticalOffset = verticalOffset;
+            setAppBarEnabled(mAppBarVerticalOffset);
         }
     };
 
@@ -109,6 +136,7 @@ public class ReviewActivity extends BaseActivity {
     public void onViewClicked() {
         onBackPressed();
     }
+
 
     static class ReviewFragmentAdapter extends FragmentPagerAdapter {
 

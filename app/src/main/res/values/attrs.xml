@@ -48,6 +48,7 @@
         <attr name="titleTextColor" format="color"/>
         <attr name="titleTextAlpha" format="float"/>
         <attr name="customView" format="reference"/>
+        <attr name="leftView" format="reference"/>
         <attr name="rightBackground" format="reference"/>
         <attr name="rightText" format="reference|string"/>
         <attr name="rightTextSize" format="dimension"/>

@@ -282,8 +282,19 @@
     <string name="main_body">正文</string>
     <string name="look_all_review">查看全部回复</string>
     <string name="look_all_review_count">查看全部%1$d条回复</string>
+    <string name="spared_all_review_count">展开全部%1$d条回复</string>
     <string name="hot_viewpoint">热门观点</string>
     <string name="all_viewpoint_count">全部观点（%1$d）</string>
     <string name="user_name_">%1$s：</string>
     <string name="publish_success">发布成功</string>
+
+
+    <string name="the_hour_of_welfare">整点福利</string>
+    <string name="rob">抢</string>
+    <string name="already_rob_empty">已抢光</string>
+    <string name="distance_nex_red_packet_time">距离下次抢红包剩余：%1$s</string>
+    <string name="congrats_you_rob_number_red_packet">恭喜您！ 抢到</string>
+    <string name="save_account">\n已存入账户</string>
+    <string name="number_qks">%1$sQKS</string>
+    <string name="total_number_people_rob_red_packet">共%1$d人参与抢红包活动</string>
 </resources>
