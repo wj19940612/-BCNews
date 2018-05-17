@@ -1,4 +1,4 @@
-package com.sbai.bcnews.fragment;
+package com.sbai.bcnews.fragment.dialog;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,13 +13,21 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.http.Api;
+import com.sbai.bcnews.utils.TimerHandler;
+import com.sbai.httplib.ReqIndeterminate;
 
 /**
- * 底部弹窗基础类
+ * Modified by $nishuideyu$ on 2018/5/17
+ * <p>
+ * Description:
+ * </p>
  */
-public class BottomDialogFragment extends DialogFragment {
+public class BaseDialogFragment extends DialogFragment implements ReqIndeterminate, TimerHandler.TimerCallback{
 
     protected String TAG;
+    private TimerHandler mTimerHandler;
 
     @Override
     public void onAttach(Context context) {
@@ -45,6 +53,18 @@ public class BottomDialogFragment extends DialogFragment {
         }
     }
 
+    protected float getWidthRatio() {
+        return 1f;
+    }
+
+    protected int getWindowGravity() {
+        return Gravity.CENTER;
+    }
+
+    protected int getDialogTheme() {
+        return R.style.BaseDialog_Bottom;
+    }
+
     public void show(FragmentManager manager) {
         try {
             this.show(manager, this.getClass().getSimpleName());
@@ -59,15 +79,45 @@ public class BottomDialogFragment extends DialogFragment {
         ft.commitAllowingStateLoss();
     }
 
-    protected float getWidthRatio() {
-        return 1f;
+    @Override
+    public void onTimeUp(int count) {
+
+    }
+    @Override
+    public void onHttpUiShow(String tag) {
+        if (getActivity() != null && getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).onHttpUiShow(tag);
+        }
     }
 
-    protected int getWindowGravity() {
-        return Gravity.BOTTOM;
+    @Override
+    public void onHttpUiDismiss(String tag) {
+        if (getActivity() != null && getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).onHttpUiDismiss(tag);
+        }
     }
 
-    protected int getDialogTheme() {
-        return R.style.BaseDialog_Bottom;
+    protected void startScheduleJob(int millisecond) {
+        stopScheduleJob();
+
+        if (mTimerHandler == null) {
+            mTimerHandler = new TimerHandler(this);
+        }
+
+        mTimerHandler.sendEmptyMessageDelayed(millisecond, 0);
+    }
+
+    protected void stopScheduleJob() {
+        if (mTimerHandler != null) {
+            mTimerHandler.removeCallbacksAndMessages(null);
+            mTimerHandler.resetCount();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        stopScheduleJob();
+        Api.cancel(TAG);
     }
 }

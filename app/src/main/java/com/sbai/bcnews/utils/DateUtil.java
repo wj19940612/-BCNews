@@ -746,27 +746,4 @@ public class DateUtil {
         }
     }
 
-    /**
-     * 每次整点到05分的时间段内
-     *
-     * @return
-     */
-    public static boolean timeIsWithinRules(int minuteLimit) {
-        long systemTimestamp = SysTime.getSysTime().getSystemTimestamp();
-        if (systemTimestamp != 0) {
-            String format = format(systemTimestamp, FORMAT_HOUR_MINUTE);
-            String[] split = format.split(":");
-            if (split.length == 2) {
-                String s = split[1];
-                try {
-                    Integer minute = Integer.valueOf(s);
-                    return 0 <= minute && minute < minuteLimit;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-        }
-        return false;
-    }
-
 }

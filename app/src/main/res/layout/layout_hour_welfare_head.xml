@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_F5F5"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_hour_welfare_head"/>
+
+    <ImageView
+        android:id="@+id/portrait"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="56dp"
+        tools:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:textColor="@color/text_9B9B"
+        android:id="@+id/robRedPacketNumber"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/portrait"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="26dp"
+        android:gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:textSize="20sp"
+        tools:text="恭喜您！抢到234.555qks已存入账户"/>
+
+    <TextView
+        android:textSize="12sp"
+        android:textColor="@color/text_999"
+        tools:text="攻有4000人参与"
+        android:id="@+id/robRedPacketPeopleNumber"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/robRedPacketNumber"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"/>
+</RelativeLayout>

@@ -20,7 +20,6 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.LookBigPictureActivity;
 import com.sbai.bcnews.activity.mine.ClipHeadImageActivity;
-import com.sbai.bcnews.fragment.BottomDialogFragment;
 import com.sbai.bcnews.fragment.ImageSelectActivity;
 import com.sbai.bcnews.utils.FileUtils;
 import com.sbai.bcnews.utils.Launcher;

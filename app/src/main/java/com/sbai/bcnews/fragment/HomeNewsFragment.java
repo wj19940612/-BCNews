@@ -25,11 +25,12 @@ import android.widget.TextView;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ChannelActivity;
+import com.sbai.bcnews.fragment.dialog.StartRobRedPacketDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ChannelCacheModel;
-import com.sbai.bcnews.model.SysTime;
+import com.sbai.bcnews.model.system.RedPacketActivityStatus;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
@@ -38,6 +39,7 @@ import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
+import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
 
 import java.lang.reflect.Method;
@@ -87,14 +89,10 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     private ImageView mRedPacketImage;
     private TextView mRedPacketText;
 
-    private static final int RED_PACKET_ACTIVITY_IS_RUNNING = 1;
-    private static final int RED_PACKET_ACTIVITY_IS_CLOSED = 0;
-
-    private boolean mIsStartCountdownTime;
-    private int mRedPacketActivityStatus;
-
-    private static final int RED_PACKET_STATUS_UPDATE_TIME = 1000;//每隔一秒钟去更新红包的状态
     private CountDownTimer mCountDownTimer;
+    private long mWaitTime;
+    protected RedPacketActivityStatus mRedPacketActivityStatus;
+
 
     @Nullable
     @Override
@@ -119,7 +117,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     public void onResume() {
         super.onResume();
         if (getUserVisibleHint()) {
-            requestRedPacketStatus();
+            requestRedActivityPacketStatus();
         }
     }
 
@@ -127,9 +125,13 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isAdded()) {
-            requestRedPacketStatus();
+            requestRedActivityPacketStatus();
+        } else {
+            stopScheduleJob();
+            resetCountDownTimer();
         }
     }
+
 
     private void initTitleBar() {
         View leftView = mTitleBar.getLeftView();
@@ -138,7 +140,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mTitleBar.setLeftClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2018/5/15 打开抢红包弹窗
+                StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus).show(getChildFragmentManager());
             }
         });
     }
@@ -200,60 +202,101 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mTabLayout.setViewPager(mViewPager);
     }
 
-    private void requestRedPacketStatus() {
+
+    private void requestRedActivityPacketStatus() {
         Apic.requestRedPacketStatus()
                 .tag(TAG)
-                .callback(new Callback2D<Resp<Integer>, Integer>() {
+                .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {
                     @Override
-                    protected void onRespSuccessData(Integer data) {
-                        mRedPacketActivityStatus = data;
-                        if (mRedPacketActivityStatus == RED_PACKET_ACTIVITY_IS_CLOSED) {
-                            mTitleBar.setLeftViewVisible(false);
-                        } else {
-                            mTitleBar.setLeftViewVisible(true);
-                            startScheduleJob(1000);
-                            updateRedPacketStatus();
-                        }
+                    protected void onRespSuccessData(RedPacketActivityStatus data) {
+                        updateRedPacketActivityStatus(data);
                     }
+
+//                    @Override
+//                    public void onFailure(ReqError reqError) {
+//                        super.onFailure(reqError);
+//
+//                        // TODO: 2018/5/17 模拟的时间
+//                        mRedPacketActivityStatus = new RedPacketActivityStatus();
+//                        mRedPacketActivityStatus.setActivityIsRunning(true);
+//                        mRedPacketActivityStatus.setTime(System.currentTimeMillis());
+//                        mRedPacketActivityStatus.setRobRedPacketTime(false);
+//                        mRedPacketActivityStatus.setNexChangeTime(System.currentTimeMillis() + 20 * 1000);
+//                        updateRedPacketActivityStatus(mRedPacketActivityStatus);
+//                    }
                 })
                 .fire();
     }
 
-    private void updateRedPacketStatus() {
-        boolean isWithinRules = DateUtil.timeIsWithinRules(5);
-
-        if (isWithinRules) {
-            // TODO: 2018/5/16 红包可点击
+    private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
+        resetCountDownTimer();
+        if (data.isActivityIsRunning()) {
+            mTitleBar.setLeftViewVisible(true);
+            mWaitTime = getNexGetRedPacketTime(data);
+            if (data.isRobRedPacketTime()) canRobRedPacket();
+            else waitNextRobRedPacketTime();
         } else {
-            mCountDownTimer = new CountDownTimer(getNexGetRedPacketTime(), 500) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
-
-                }
-            }.start();
+            mTitleBar.setLeftViewVisible(false);
         }
     }
 
-    private int getNexGetRedPacketTime() {
-        long systemTimestamp = SysTime.getSysTime().getSystemTimestamp();
-        String time = DateUtil.format(systemTimestamp, DateUtil.FORMAT_MINUTE_SECOND);
-        try {
-            String[] split = time.split(":");
-            if (split.length == 2) {
-                Integer minute = Integer.valueOf(split[0]);
-                Integer second = Integer.valueOf(split[1]);
-                return (60 - minute) * 60 + 60 - second;
+    protected void canRobRedPacket() {
+        mRedPacketText.setVisibility(View.GONE);
+        mRedPacketImage.setVisibility(View.VISIBLE);
+        GlideApp.with(getActivity())
+                .asGif()
+                .load(R.drawable.rob_red_packet)
+                .into(mRedPacketImage);
+    }
+
+    protected void onCountDownTimeUpdate(long time) {
+        String format = DateUtil.format(time, DateUtil.FORMAT_MINUTE_SECOND);
+        mRedPacketText.setText(format);
+    }
+
+    protected void waitNextRobRedPacketTime() {
+        mRedPacketText.setVisibility(View.VISIBLE);
+        mRedPacketImage.clearAnimation();
+        mRedPacketImage.setImageResource(R.drawable.ic_rob_rad_packet_wait);
+
+        startCountDownTimer();
+    }
+
+    private void startCountDownTimer() {
+        mCountDownTimer = new CountDownTimer(mWaitTime, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                onCountDownTimeUpdate(millisUntilFinished);
             }
-        } catch (Exception e) {
 
-        }
-        return 0;
+            @Override
+            public void onFinish() {
+                requestRedActivityPacketStatus();
+            }
+        }.start();
     }
+
+
+    @Override
+    public void onTimeUp(int count) {
+        super.onTimeUp(count);
+        if (count == mWaitTime / 1000) {
+            requestRedActivityPacketStatus();
+            stopScheduleJob();
+        }
+    }
+
+    protected void resetCountDownTimer() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+            mCountDownTimer = null;
+        }
+    }
+
+    private long getNexGetRedPacketTime(RedPacketActivityStatus data) {
+        return data.getNexChangeTime() - data.getTime();
+    }
+
 
     @Override
     public void onDestroyView() {
@@ -289,7 +332,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         if (Math.abs(dy) < SCROLL_GLIDING) {
             return;
         }
-        scrollTitleBar(dy > 0 ? true : false);
+//        scrollTitleBar(dy > 0 ? true : false);
     }
 
     private void scrollTitleBar(final boolean down) {

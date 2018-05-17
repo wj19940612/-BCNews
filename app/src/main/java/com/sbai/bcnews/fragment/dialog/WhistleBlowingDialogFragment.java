@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.fragment.BottomDialogFragment;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
