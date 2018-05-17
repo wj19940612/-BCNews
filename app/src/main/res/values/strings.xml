@@ -313,4 +313,8 @@
     <string name="please_input_tel_user_name">请输入账户姓名</string>
     <string name="please_input_auth_code">请输入验证码</string>
 
+    <string name="conversion_detail_information">兑换明细详情</string>
+    <string name="immediately_conversion">立即兑换</string>
+
+
 </resources>

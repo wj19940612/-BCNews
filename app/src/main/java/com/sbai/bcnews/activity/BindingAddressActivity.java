@@ -25,9 +25,9 @@ import butterknife.OnClick;
 public class BindingAddressActivity extends BaseActivity {
     private static final int REQ_CODE_IMAGE_AUTH_CODE = 889;
 
-    public static final int BINDING_TYPE_DIGITAL = 0;
-    public static final int BINDING_TYPE_ALI_PAY = 1;
-    public static final int BINDING_TYPE_TEL = 2;
+    public static final int CONVERSION_TYPE_DIGITAL = 0;
+    public static final int CONVERSION_TYPE_ALI_PAY = 1;
+    public static final int CONVERSION_TYPE_TEL = 2;
 
 
     @BindView(R.id.titleBar)
@@ -53,7 +53,7 @@ public class BindingAddressActivity extends BaseActivity {
     @BindView(R.id.authCodeLayout)
     LinearLayout mAuthCodeLayout;
 
-    private int mBindingType;
+    private int mAcceptType;
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
 
@@ -66,14 +66,14 @@ public class BindingAddressActivity extends BaseActivity {
     }
 
     private void initData() {
-        mBindingType = getIntent().getIntExtra(ExtraKeys.BINDING_TYPE, BINDING_TYPE_DIGITAL);
+        mAcceptType = getIntent().getIntExtra(ExtraKeys.BINDING_TYPE, CONVERSION_TYPE_DIGITAL);
 
-        switch (mBindingType) {
-            case BINDING_TYPE_DIGITAL:
+        switch (mAcceptType) {
+            case CONVERSION_TYPE_DIGITAL:
                 mTitleBar.setTitle(R.string.binding_currency_address);
                 mBindingName.setText(R.string.currency_address);
                 break;
-            case BINDING_TYPE_ALI_PAY:
+            case CONVERSION_TYPE_ALI_PAY:
                 mTitleBar.setTitle(R.string.binding_ali_pay_account);
                 mBindingName.setText(R.string.ali_pay_address);
                 mBindingAddress.setHint(R.string.please_input_your_ali_pay_account);
@@ -81,7 +81,7 @@ public class BindingAddressActivity extends BaseActivity {
                 mUserName.setText(R.string.ali_pay_user_name);
                 mUserName.setHint(R.string.please_input_ali_pay_user_name);
                 break;
-            case BINDING_TYPE_TEL:
+            case CONVERSION_TYPE_TEL:
                 mTitleBar.setTitle(R.string.binding_tel);
                 mBindingName.setText(R.string.tel);
                 mBindingAddress.setHint(R.string.please_input_your_tel);

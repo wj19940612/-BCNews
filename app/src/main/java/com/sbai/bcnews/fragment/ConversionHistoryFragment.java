@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.ConversionHistory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,6 +27,9 @@ public class ConversionHistoryFragment extends BaseFragment {
     RecyclerView mRecyclerView;
 
     private Unbinder mBind;
+
+    private HistoryAdapter mHistoryAdapter;
+    private List<ConversionHistory> mConversionHistoryList;
 
     @Nullable
     @Override
@@ -43,6 +48,18 @@ public class ConversionHistoryFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initView();
+        loadData();
+    }
+
+    private void initView(){
+        mConversionHistoryList = new ArrayList<>();
+        mHistoryAdapter = new HistoryAdapter(getContext(),mConversionHistoryList);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mHistoryAdapter);
+    }
+
+    private void loadData(){
 
     }
 
