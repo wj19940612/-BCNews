@@ -281,9 +281,10 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
         }
 
         @Override
-        public void onBindContentViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.bindDataWithView(getItemData(position), position, mContext, mOnItemClickListener, mAllMessageIsRead);
+        public void onBindContentViewHolder(@NonNull ViewHolder holder, Message data, int position) {
+            holder.bindDataWithView(data, position, mContext, mOnItemClickListener, mAllMessageIsRead);
         }
+
 
 
         static class ViewHolder extends RecyclerView.ViewHolder {

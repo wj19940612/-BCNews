@@ -27,7 +27,7 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
     @NonNull
     public abstract K onContentCreateViewHolder(@NonNull ViewGroup parent, int viewType);
 
-    public abstract void onBindContentViewHolder(@NonNull K holder, int position);
+    public abstract void onBindContentViewHolder(@NonNull K holder, T data,int position);
 
     @Override
     public K onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -55,7 +55,7 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
             case FOOTER_VIEW_TYPE:
                 break;
             default:
-                onBindContentViewHolder((K) holder, position - getHeaderViewsCount());
+                onBindContentViewHolder((K) holder, getItemData(position - getHeaderViewsCount()),position-getHeaderViewsCount());
         }
     }
 

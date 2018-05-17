@@ -439,9 +439,10 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
         }
 
         @Override
-        public void onBindContentViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.bindDataWithView(getItemData(position), position, mContext, mPageType, mOnReplyClickListener);
+        public void onBindContentViewHolder(@NonNull ViewHolder holder, ReplyNews data, int position) {
+            holder.bindDataWithView(data, position, mContext, mPageType, mOnReplyClickListener);
         }
+
 
         static class ViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.portrait)
