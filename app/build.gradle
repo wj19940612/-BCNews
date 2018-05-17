@@ -89,11 +89,7 @@ android {
 //        c360 {}
 //        tencent {}
 //        baidu {}
-        others {
-            versionCode 6
-            versionName "1.2.0"
-
-        }
+//        others {}
 //        fenx {}
 //        weixin{}
 //        huawei{}

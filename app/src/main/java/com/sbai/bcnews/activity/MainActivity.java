@@ -27,6 +27,7 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.news.NotReadMessage;
+import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
 import com.sbai.bcnews.utils.AppInfo;
 import com.sbai.bcnews.utils.UmengCountEventId;
@@ -74,19 +75,18 @@ public class MainActivity extends BaseActivity {
     };
 
     private void requestShowMarketPageSwitch() {
-        // TODO: 2018/4/24 先注释掉
-//        mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.GONE);
-//        Apic.requestOperationSetting(Operation.OPERATION_TYPE_MARKET_PAGE_SWITCH)
-//                .tag(TAG)
-//                .callback(new Callback2D<Resp<Operation>, Operation>() {
-//                    @Override
-//                    protected void onRespSuccessData(Operation data) {
-//                        if (Operation.OPERATION_SETTING_OPEN_MARKET_PAGE.equalsIgnoreCase(data.getQuota())) {
-//                            mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.VISIBLE);
-//                        }
-//                    }
-//                })
-//                .fire();
+        mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.GONE);
+        Apic.requestOperationSetting(Operation.OPERATION_TYPE_MARKET_PAGE_SWITCH)
+                .tag(TAG)
+                .callback(new Callback2D<Resp<Operation>, Operation>() {
+                    @Override
+                    protected void onRespSuccessData(Operation data) {
+                        if (Operation.OPERATION_SETTING_OPEN_MARKET_PAGE.equalsIgnoreCase(data.getQuota())) {
+                            mBottomTabs.setTabVisibility(PAGE_POSITION_MARKET, View.VISIBLE);
+                        }
+                    }
+                })
+                .fire();
     }
 
     private void requestCacheUpload() {
