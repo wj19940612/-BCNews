@@ -56,7 +56,7 @@ public abstract class BaseRecycleViewAdapter<T, K extends RecyclerView.ViewHolde
     }
 
 
-    public void addAll(@NonNull Collection<? extends T> collection) {
+    public void addAll(@NonNull Collection<T> collection) {
         synchronized (mLock) {
             mDataList.addAll(collection);
             notifyItemRangeInserted(mDataList.size() - collection.size() + getHeaderViewsCount(), collection.size());

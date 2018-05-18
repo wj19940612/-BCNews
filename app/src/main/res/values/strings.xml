@@ -297,4 +297,5 @@
     <string name="save_account">\n已存入账户</string>
     <string name="number_qks">%1$sQKS</string>
     <string name="total_number_people_rob_red_packet">共%1$d人参与抢红包活动</string>
+    <string name="get_rad_packet_number">获得：%1$s</string>
 </resources>

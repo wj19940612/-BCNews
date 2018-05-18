@@ -51,6 +51,7 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
 
     private long mWaitTime;
     private CountDownTimer mCountDownTimer;
+    private boolean mStartRob;
 
     public static StartRobRedPacketDialogFragment newInstance(RedPacketActivityStatus redPacketActivityStatus) {
         Bundle args = new Bundle();
@@ -97,7 +98,7 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
                         mRedPacketActivityStatus = new RedPacketActivityStatus();
                         mRedPacketActivityStatus.setActivityIsRunning(true);
                         mRedPacketActivityStatus.setTime(System.currentTimeMillis());
-                        mRedPacketActivityStatus.setRobRedPacketTime(false);
+                        mRedPacketActivityStatus.setRobRedPacketTime(true);
                         mRedPacketActivityStatus.setNexChangeTime(System.currentTimeMillis() + 20 * 1000);
                         updateRedPacketActivityStatus(mRedPacketActivityStatus);
                     }
@@ -169,13 +170,19 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
         super.onTimeUp(count);
         if (count == mWaitTime / 1000) {
             stopScheduleJob();
-            requestRedPacketStatus();
+            if (!mStartRob)
+                requestRedPacketStatus();
         }
     }
 
     @Override
     protected int getWindowGravity() {
         return Gravity.CENTER;
+    }
+
+    @Override
+    protected int getDialogTheme() {
+        return R.style.BaseDialog;
     }
 
     @Override
@@ -203,6 +210,8 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
             Launcher.with(getContext(), LoginActivity.class).execute();
             return;
         }
+        mStartRob = true;
+        // TODO: 2018/5/17
         Apic.robRedPacket()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<RobRedPacketInfo>, RobRedPacketInfo>() {
@@ -213,7 +222,21 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
                                 .execute();
                         dismiss();
                     }
+
+                    @Override
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
+                        // TODO: 2018/5/17 模拟
+                        RobRedPacketInfo data = new RobRedPacketInfo();
+                        data.setMoney(45545454.666);
+                        data.setTotalPeople(888888888);
+                        Launcher.with(getContext(), HourWelfareActivity.class)
+                                .putExtra(ExtraKeys.DATA, data)
+                                .execute();
+                        dismiss();
+                    }
                 })
                 .fire();
+
     }
 }

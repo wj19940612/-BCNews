@@ -227,6 +227,11 @@ public class Apic {
         return Api.post("");
     }
 
+    // TODO: 2018/5/18 红包列表
+    public static Api requestHourWelfareList(int page, int pageSize) {
+        return Api.get("");
+    }
+
 
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
