@@ -42,4 +42,6 @@ public interface ExtraKeys {
     String ID = "id";
 
     String BINDING_TYPE = "binding_type";
+    String CONVERSION_CONTENT = "conversion_content";
+    String CONVERSION_TYPE = "conversion_type";
 }

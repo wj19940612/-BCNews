@@ -1,6 +1,8 @@
 package com.sbai.bcnews.fragment;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,12 +18,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.ConversionResultActivity;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.view.ScrollableViewPager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ConversionGoodsFragment extends BottomDialogFragment {
     public static final int PAGE_DIGITAL_COIN = 0;
@@ -30,6 +36,8 @@ public class ConversionGoodsFragment extends BottomDialogFragment {
     public static final int PAGE_CONVERSION_DETAIL = 3;
 
     public static final int TAB_COUNT = 4;
+
+    public static final int REQUSET_CODE_CONVERSION = 108;
 
     @BindView(R.id.digitalCurrency)
     TextView mDigitalCurrency;
@@ -104,6 +112,17 @@ public class ConversionGoodsFragment extends BottomDialogFragment {
         setTabClick(mDigitalCurrency);
     }
 
+    private void gotoResultActivity() {
+        Launcher.with(ConversionGoodsFragment.this, ConversionResultActivity.class).excuteForResultFragment(REQUSET_CODE_CONVERSION);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUSET_CODE_CONVERSION && resultCode == RESULT_OK) {
+            mViewPager.setCurrentItem(PAGE_CONVERSION_DETAIL);
+        }
+    }
+
     @OnClick({R.id.conversionDetail, R.id.digitalCurrency, R.id.aliPay, R.id.telephoneCharge})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -124,11 +143,11 @@ public class ConversionGoodsFragment extends BottomDialogFragment {
 
     private void setTabClick(TextView clickView) {
         clickView.setSelected(true);
-        clickView.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+        clickView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         for (int i = 0; i < mTabViews.length; i++) {
             if (mTabViews[i] != clickView) {
                 mTabViews[i].setSelected(false);
-                mTabViews[i].setTextColor(ContextCompat.getColor(getContext(),R.color.text97));
+                mTabViews[i].setTextColor(ContextCompat.getColor(getContext(), R.color.text97));
             }
         }
     }

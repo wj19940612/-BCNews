@@ -12,6 +12,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
@@ -72,6 +73,8 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_NORMAL;
 
 public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
+    public static final int TIME_SECOND = 1000;
+    public static final int TIME_COUNT_GET_RATE = 30;
     public static final int REQ_CODE_CANCEL_COLLECT = 2265;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -277,6 +280,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         requestDetailData();
         requestOtherArticle();
         requestNewsViewpoint();
+        startScheduleJob(TIME_SECOND);
     }
 
     @Override
@@ -749,21 +753,32 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
-        mTitleHeight = mTitleLayout.getMeasuredHeight();
-        int webViewHeight = mWebView.getHeight();
-        //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
-        Log.d(TAG, "onTimeUp: " + count);
-        if (mNewsDetail != null) {
-            if (mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
-                mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
-                stopScheduleJob();
-            } else {
-                stopScheduleJob();
-                mScrollView.smoothScrollTo(0, mNetNewsDetail.getReadHeight());
-            }
-
+        if (count % TIME_COUNT_GET_RATE == 0) {
+            //TODO 调用获取算力接口
         }
+//        mTitleHeight = mTitleLayout.getMeasuredHeight();
+//        int webViewHeight = mWebView.getHeight();
+//        //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
+//        Log.d(TAG, "onTimeUp: " + count);
+//        if (mNewsDetail != null) {
+//            if (mNewsDetail.getReadHeight() <= webViewHeight + mTitleHeight) {
+//                mScrollView.smoothScrollTo(0, mNewsDetail.getReadHeight());
+//                stopScheduleJob();
+//            } else {
+//                stopScheduleJob();
+//                mScrollView.smoothScrollTo(0, mNetNewsDetail.getReadHeight());
+//            }
+//
+//        }
     }
+
+    private void showRateTip() {
+        View view =  LayoutInflater.from(this).inflate(R.layout.toast_get_calculate_rate, null);
+        TextView textView = view.findViewById(R.id.message);
+        String message = "恭喜获得持续阅读奖励+3算力";
+        ToastUtil.show(view,textView, message, mTitleBar.getHeight());
+    }
+
 
     private void initScrollView() {
         mScrollView.setOnScrollListener(new NewsScrollView.OnScrollListener() {
