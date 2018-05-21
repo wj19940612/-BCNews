@@ -323,7 +323,7 @@ public class Apic {
     }
 
     public static Api syncSystemTime() {
-        return Api.get("/user/user/getSystemTime.do");
+        return Api.get("/api/news-user/user/time.do");
     }
 
     /**

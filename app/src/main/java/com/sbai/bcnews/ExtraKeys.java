@@ -40,4 +40,8 @@ public interface ExtraKeys {
     String DATA = "data";
     String NEWS_DETAIL = "news_detail";
     String ID = "id";
+
+    String BINDING_TYPE = "binding_type";
+    String CONVERSION_CONTENT = "conversion_content";
+    String CONVERSION_TYPE = "conversion_type";
 }

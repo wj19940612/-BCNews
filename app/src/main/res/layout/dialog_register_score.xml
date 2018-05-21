@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="375dp"
+        android:layout_height="320dp"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/lookDetailBtn"
+            android:layout_width="375dp"
+            android:layout_height="320dp"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:id="@+id/clearBtn"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="67dp"
+            android:layout_marginTop="94dp"
+            android:src="@drawable/btn_register_score_clear" />
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="173dp"
+    android:gravity="center"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rootView"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="13dp"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/contentLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="17dp"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="31dp"
+                android:layout_height="62dp"
+                android:background="@drawable/bg_conversion_digital_normal" />
+
+            <com.sbai.bcnews.view.autofit.AutofitTextView
+                android:id="@+id/content"
+                android:layout_width="92dp"
+                android:layout_height="62dp"
+                android:background="@drawable/bg_conversion_content_enable"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="0.01 EOS"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="17dp"
+            android:layout_below="@+id/contentLayout"
+            android:layout_marginTop="23dp"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            android:textColor="@color/text97"
+            android:textSize="12sp"
+            android:text="兑换: 1000QKC"/>
+
+        <TextView
+            android:id="@+id/remainingQty"
+            android:layout_width="wrap_content"
+            android:layout_height="17dp"
+            android:layout_below="@+id/introduce"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            android:textColor="@color/text97"
+            android:textSize="10sp"
+            android:text="余量 999999"/>
+
+        <ImageView
+            android:id="@+id/selectBtn"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_below="@+id/contentLayout"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/btn_select_goods"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

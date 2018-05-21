@@ -49,6 +49,7 @@ public class Preference {
         String NEWS_PRAISE = "news_praise";
         String FIRST_PRAISE = "first_praise";
         String WEB_TEXT_SIZE = "text_size";
+        String FRONT_TIME = "front_time";
     }
 
     private static Preference sInstance;
@@ -276,6 +277,16 @@ public class Preference {
     public void setLocalWebTextSize( int textSize) {
         String key = Key.WEB_TEXT_SIZE;
         apply(key, textSize);
+    }
+
+    public int getFrontTime() {
+        String key = Key.FRONT_TIME;
+        return mPrefs.getInt(key, 0);
+    }
+
+    public void setFrontTime( int frontTime) {
+        String key = Key.FRONT_TIME;
+        apply(key, frontTime);
     }
 
 

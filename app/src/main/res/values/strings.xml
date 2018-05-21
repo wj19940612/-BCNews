@@ -224,6 +224,14 @@
     <string name="use_wechat_portrait_and_name">是否使用微信的头像和昵称？</string>
     <string name="this_account_forbid_login">该账号被禁止登录</string>
 
+    <string name="conversion">兑换</string>
+    <string name="digital_currency">数字货币</string>
+    <string name="ali_pay">支付宝</string>
+    <string name="telephone_charge">话费</string>
+    <string name="conversion_detail">兑换明细</string>
+    <string name="mention_address">提币地址: 已绑定</string>
+    <string name="click_modify">点击修改</string>
+    <string name="recharge">兑换</string>
 
     <string name="all_read">全部已读</string>
     <string name="not_data">暂无数据</string>
@@ -311,5 +319,32 @@
     <string name="mining">挖矿中</string>
     <string name="plus_hashrate">+算力</string>
     <string name="now_hashrate">当前算力： %1$s</string>
+    <string name="binding_currency_address">绑定提币地址</string>
+    <string name="currency_address">提币地址</string>
+    <string name="immediately_binding">立即绑定</string>
+
+    <string name="binding_ali_pay_account">绑定支付宝账户</string>
+    <string name="please_input_your_ali_pay_account">请输入您的支付宝账户</string>
+    <string name="ali_pay_address">支付宝账户</string>
+    <string name="ali_pay_user_name">账号姓名</string>
+    <string name="please_input_ali_pay_user_name">请输入账号姓名</string>
+
+    <string name="binding_tel">绑定手机号码</string>
+    <string name="tel">手机号码</string>
+    <string name="please_input_your_tel">请输入您的手机号码</string>
+    <string name="tel_user_name">机主姓名</string>
+    <string name="please_input_tel_user_name">请输入账户姓名</string>
+    <string name="please_input_auth_code">请输入验证码</string>
+
+    <string name="conversion_detail_information">兑换明细详情</string>
+    <string name="immediately_conversion">立即兑换</string>
+
+    <string name="digital_coin_conversion">数字货币兑换</string>
+    <string name="conversion_result_tip">兑换申请已提交，请耐心等待客服审核。</string>
+
+    <string name="if_doubt_ask_service">如有疑问，请联系客服微信:</string>
+    <string name="click_copy">(点击复制)</string>
+    <string name="no_detail">暂无相关明细</string>
+
 
 </resources>

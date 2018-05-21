@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.sbai.bcnews.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:maxLines="1"
+        app:backFeature="true"
+        app:backIcon="@drawable/ic_tb_back_black"
+        app:hasBottomSplitLine="true"
+        app:leftViewLeftPadding="14dp"
+        app:splitLineColor="@color/background"
+        app:titleText="@string/digital_coin_conversion"
+        app:titleTextColor="@color/text_222"
+        app:titleTextSize="17sp" />
+
+    <RelativeLayout
+        android:layout_width="351dp"
+        android:layout_height="108dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_conversion_result">
+
+        <TextView
+            android:id="@+id/conversionContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="18dp"
+            android:textColor="@color/text_f5a"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/resultType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="22dp"
+            android:textColor="@color/text_f5a"
+            android:textSize="14sp"
+            android:text="@string/conversion"/>
+
+        <TextView
+            android:id="@+id/conversionType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="18dp"
+            android:textColor="@color/text_f5a"
+            android:textSize="36sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:textSize="14sp"
+        android:textColor="@color/text_222"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/conversion_result_tip" />
+
+    <TextView
+        android:id="@+id/sureBtn"
+        android:layout_width="140dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="27dp"
+        android:textSize="15sp"
+        android:textColor="@color/text_222"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:background="@drawable/btn_gradient_primary"
+        android:text="@string/confirm" />
+
+    <TextView
+        android:id="@+id/lookDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:textColor="@color/text_999"
+        android:textSize="15sp"
+        android:text="@string/look_detail"/>
+
+
+</LinearLayout>

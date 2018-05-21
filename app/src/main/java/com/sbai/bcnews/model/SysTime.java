@@ -3,6 +3,7 @@ package com.sbai.bcnews.model;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.utils.TimeRecorder;
 
@@ -26,13 +27,14 @@ public class SysTime {
     public void sync() {
         if (Math.abs(TimeRecorder.getElapsedTimeInMinute(RECORD_KEY)) < 10) return;
 
-        //TODO 获取时间
         Apic.syncSystemTime()
                 .timeout(5 * 1000)
-                .callback(new Callback<Resp<Long>>() {
+                .callback(new Callback2D<Resp<Long>, Long>() {
                     @Override
-                    protected void onRespSuccess(Resp<Long> resp) {
-
+                    protected void onRespSuccessData(Long data) {
+                        mSystemTime = data.longValue();
+                        Preference.get().setServerTime(mSystemTime);
+                        TimeRecorder.record(RECORD_KEY);
                     }
                 }).fire();
     }
