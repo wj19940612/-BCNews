@@ -78,6 +78,16 @@
             </LinearLayout>
         </RelativeLayout>
 
+        <TextView
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/headLayout"
+            android:id="@+id/qks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:text="@string/qks"
+            android:textColor="@android:color/holo_red_dark"/>
+
         <com.sbai.bcnews.view.IconTextRow
             android:id="@+id/message"
             android:layout_width="match_parent"
@@ -85,7 +95,7 @@
             android:layout_marginTop="12dp"
             android:background="@drawable/bg_white"
             app:hasBottomSplitLine="true"
-            app:layout_constraintTop_toBottomOf="@+id/headLayout"
+            app:layout_constraintTop_toBottomOf="@+id/qks"
             app:leftIcon="@drawable/ic_mine_message"
             app:rightIcon="@drawable/ic_common_right_arrow"
             app:rowText="@string/message"
@@ -143,8 +153,8 @@
             app:rowTextSize="16sp"
             app:rowVerticalPadding="0dp"
             app:splitLineColor="@color/bg_F5F5"
-            app:subTextLeftDrawable="@drawable/point_red_circle_5"
             app:subTextColor="@android:color/white"
+            app:subTextLeftDrawable="@drawable/point_red_circle_5"
             app:subTextSize="12sp"
             app:subTextVisible="gone"/>
 

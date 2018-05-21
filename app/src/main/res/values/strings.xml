@@ -298,4 +298,13 @@
     <string name="number_qks">%1$sQKS</string>
     <string name="total_number_people_rob_red_packet">共%1$d人参与抢红包活动</string>
     <string name="get_rad_packet_number">获得：%1$s</string>
+
+    <string name="qks">QKS</string>
+    <string name="detail">明细</string>
+    <string name="plus_qks">+%1$s</string>
+    <string name="minus_qks">-%1$s</string>
+    <string name="time">时间</string>
+    <string name="type">类型</string>
+    <string name="money">金额</string>
+
 </resources>

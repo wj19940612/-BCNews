@@ -232,6 +232,10 @@ public class Apic {
         return Api.get("");
     }
 
+    public static Api requestQKCDetailsList(int page) {
+        return Api.get("");
+    }
+
 
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";

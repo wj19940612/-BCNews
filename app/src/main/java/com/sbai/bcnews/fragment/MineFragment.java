@@ -23,6 +23,7 @@ import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.activity.mine.MessageActivity;
 import com.sbai.bcnews.activity.mine.MyCollectActivity;
 import com.sbai.bcnews.activity.mine.PersonalDataActivity;
+import com.sbai.bcnews.activity.mine.QKCActivity;
 import com.sbai.bcnews.activity.mine.ReadHistoryActivity;
 import com.sbai.bcnews.activity.mine.ReviewActivity;
 import com.sbai.bcnews.activity.mine.SettingActivity;
@@ -211,7 +212,7 @@ public class MineFragment extends BaseFragment {
     }
 
     @OnClick({R.id.headPortrait, R.id.userName, R.id.collect, R.id.history,
-            R.id.contribute, R.id.feedBack, R.id.setting, R.id.message, R.id.review})
+            R.id.contribute, R.id.feedBack, R.id.setting, R.id.message, R.id.review,R.id.qks})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.headPortrait:
@@ -259,6 +260,9 @@ public class MineFragment extends BaseFragment {
                 } else {
                     login();
                 }
+                break;
+            case R.id.qks:
+                Launcher.with(getActivity(), QKCActivity.class).execute();
                 break;
         }
     }

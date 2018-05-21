@@ -208,6 +208,10 @@
 
         <activity android:name=".activity.mine.HourWelfareActivity">
         </activity>
+        <activity android:name=".activity.mine.QKCActivity">
+        </activity>
+        <activity android:name=".activity.mine.QKCDetailActivity">
+        </activity>
     </application>
 
 </manifest>
