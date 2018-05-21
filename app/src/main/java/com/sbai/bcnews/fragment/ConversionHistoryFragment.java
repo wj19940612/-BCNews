@@ -11,8 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.model.ConversionHistory;
+import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
+import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
+import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +26,24 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ConversionHistoryFragment extends BaseFragment {
+public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
 
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.swipe_target)
     RecyclerView mRecyclerView;
+    @BindView(R.id.swipe_refresh_header)
+    RefreshHeaderView mSwipeRefreshHeader;
+    @BindView(R.id.swipe_load_more_footer)
+    LoadMoreFooterView mSwipeLoadMoreFooter;
+    @BindView(R.id.swipeToLoadLayout)
+    SwipeToLoadLayout mSwipeToLoadLayout;
+    @BindView(R.id.emptyView)
+    TextView mEmptyView;
 
     private Unbinder mBind;
 
     private HistoryAdapter mHistoryAdapter;
     private List<ConversionHistory> mConversionHistoryList;
+    private int mPage;
 
     @Nullable
     @Override
@@ -49,18 +63,53 @@ public class ConversionHistoryFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-        loadData();
+        loadData(true);
     }
 
-    private void initView(){
+    private void initView() {
         mConversionHistoryList = new ArrayList<>();
-        mHistoryAdapter = new HistoryAdapter(getContext(),mConversionHistoryList);
+        mHistoryAdapter = new HistoryAdapter(getContext(), mConversionHistoryList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mHistoryAdapter);
     }
 
-    private void loadData(){
+    private void loadData(final boolean refresh) {
 
+    }
+
+    @Override
+    public void onLoadMore() {
+        loadData(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        mPage = 0;
+        loadData(true);
+    }
+
+    private void updateData(List<ConversionHistory> data, boolean refresh) {
+        if (refresh) {
+            mConversionHistoryList.clear();
+        }
+        if (data == null || data.size() == 0) {
+            if (refresh) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            }
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            mHistoryAdapter.notifyDataSetChanged();
+            return;
+        }
+        mEmptyView.setVisibility(View.VISIBLE);
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+        } else {
+            mSwipeToLoadLayout.setLoadMoreEnabled(true);
+        }
+        if (data.size() != 0)
+            mPage++;
+        mConversionHistoryList.addAll(data);
+        mHistoryAdapter.notifyDataSetChanged();
     }
 
     public static class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -81,7 +130,7 @@ public class ConversionHistoryFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ((HistoryHolder) holder).bindingData(mContext,mHistoryList.get(position),position,getItemCount());
+            ((HistoryHolder) holder).bindingData(mContext, mHistoryList.get(position), position, getItemCount());
         }
 
         @Override

@@ -1,7 +1,11 @@
 package com.sbai.bcnews.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,6 +15,7 @@ import com.sbai.bcnews.view.TitleBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.sbai.bcnews.activity.BindingAddressActivity.CONVERSION_TYPE_ALI_PAY;
 import static com.sbai.bcnews.activity.BindingAddressActivity.CONVERSION_TYPE_DIGITAL;
@@ -36,8 +41,8 @@ public class ConversionHistoryDetailActivity extends BaseActivity {
     TextView mStatus;
     @BindView(R.id.tips)
     TextView mTips;
-    @BindView(R.id.statement)
-    TextView mStatement;
+    @BindView(R.id.wx)
+    TextView mWx;
     @BindView(R.id.acceptAddressLine)
     View mAcceptAddressLine;
 
@@ -70,5 +75,26 @@ public class ConversionHistoryDetailActivity extends BaseActivity {
 
     private void loadData() {
 
+    }
+
+    @OnClick({R.id.wx})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.wx:
+                copyWxNumber();
+                break;
+        }
+    }
+
+    private void copyWxNumber() {
+        if (TextUtils.isEmpty(mWx.getText())) {
+            return;
+        }
+        // 获取系统剪贴板
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        // 创建一个剪贴数据集，包含一个普通文本数据条目（需要复制的数据）
+        ClipData clipData = ClipData.newPlainText(null, mWx.getText().toString());
+        // 把数据集设置（复制）到剪贴板
+        clipboard.setPrimaryClip(clipData);
     }
 }

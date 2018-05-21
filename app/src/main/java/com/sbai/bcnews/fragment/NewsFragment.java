@@ -1,8 +1,13 @@
 package com.sbai.bcnews.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -22,9 +27,12 @@ import com.sbai.bcnews.model.Banner;
 import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
+import com.sbai.bcnews.service.DownloadService;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.PermissionUtil;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.news.NewsAdapter;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
 import com.sbai.bcnews.utils.news.NewsWithHeaderAdapter;
@@ -98,9 +106,18 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         return newsFragment;
     }
 
+    private BroadcastReceiver mDownloadBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ToastUtil.show(R.string.download_complete);
+        }
+    };
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mDownloadBroadcastReceiver,
+                new IntentFilter(DownloadService.ACTION_DOWNLOAD_COMPLETE));
         if (getArguments() != null) {
             mHasBanner = getArguments().getBoolean(HAS_BANNER);
             mChannel = getArguments().getString(CHANNEL);
@@ -135,6 +152,17 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     public void onPause() {
         super.onPause();
         stopScheduleJob();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            LocalBroadcastManager.getInstance(getActivity())
+                    .unregisterReceiver(mDownloadBroadcastReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -261,45 +289,45 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         Apic.requestNewsListWithChannel(channelParam, mPage)
                 .tag(TAG)
                 .callback(new Callback2D<Resp<News>, News>() {
-            @Override
-            protected void onRespSuccessData(News data) {
-                if (data != null && data.getContent() != null && data.getContent().size() != 0) {
-                    if (mNewsWraps.size() > 0 && data.getContent().get(0).getId().equals(mNewsWraps.get(0).getNewsDetail().getId())) {
-                        refreshComplete(R.string.no_more_new_news);
-                    } else {
-                        refreshSuccess();
+                    @Override
+                    protected void onRespSuccessData(News data) {
+                        if (data != null && data.getContent() != null && data.getContent().size() != 0) {
+                            if (mNewsWraps.size() > 0 && data.getContent().get(0).getId().equals(mNewsWraps.get(0).getNewsDetail().getId())) {
+                                refreshComplete(R.string.no_more_new_news);
+                            } else {
+                                refreshSuccess();
+                            }
+                        } else {
+                            refreshSuccess();
+                        }
+                        if (mNewsWraps.size() == 0 && data.getContent().size() == 0) {
+                            mEmptyView.setNoData(getString(R.string.no_main_news));
+                            mEmptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            mEmptyView.setVisibility(View.GONE);
+                        }
+                        updateData(data.getContent(), refresh);
                     }
-                } else {
-                    refreshSuccess();
-                }
-                if (mNewsWraps.size() == 0 && data.getContent().size() == 0) {
-                    mEmptyView.setNoData(getString(R.string.no_main_news));
-                    mEmptyView.setVisibility(View.VISIBLE);
-                } else {
-                    mEmptyView.setVisibility(View.GONE);
-                }
-                updateData(data.getContent(), refresh);
-            }
 
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                stopFreshOrLoadAnimation();
-            }
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        stopFreshOrLoadAnimation();
+                    }
 
-            @Override
-            public void onFailure(ReqError reqError) {
-                super.onFailure(reqError);
-                mEmptyView.setNoNet();
-                if (mNewsWraps.size() == 0)
-                    mEmptyView.setVisibility(View.VISIBLE);
-                else
-                    mEmptyView.setVisibility(View.GONE);
-                if (refresh)
-                    refreshFailure();
-            }
+                    @Override
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
+                        mEmptyView.setNoNet();
+                        if (mNewsWraps.size() == 0)
+                            mEmptyView.setVisibility(View.VISIBLE);
+                        else
+                            mEmptyView.setVisibility(View.GONE);
+                        if (refresh)
+                            refreshFailure();
+                    }
 
-        }).fireFreely();
+                }).fireFreely();
     }
 
     private void loadCacheData() {
@@ -382,6 +410,21 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         if (mNewsWraps != null && mNewsWraps.size() != 0) {
             mNewsAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void updateApp(String downloadUrl) {
+        if (downloadUrl == null || TextUtils.isEmpty(downloadUrl)) {
+            return;
+        }
+        if (isStoragePermissionGranted()) {
+            Intent intent = new Intent(getActivity(), DownloadService.class);
+            intent.putExtra(DownloadService.KEY_DOWN_LOAD_URL, downloadUrl);
+            getActivity().startService(intent);
+        }
+    }
+
+    private boolean isStoragePermissionGranted() {
+        return PermissionUtil.isStoragePermissionGranted(getActivity(), PermissionUtil.REQ_CODE_ASK_PERMISSION);
     }
 
 }

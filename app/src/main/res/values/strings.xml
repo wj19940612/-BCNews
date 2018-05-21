@@ -320,5 +320,9 @@
     <string name="conversion_result_tip">兑换申请已提交，请耐心等待客服审核。</string>
     <string name="look_detail">查看明细</string>
 
+    <string name="if_doubt_ask_service">如有疑问，请联系客服微信:</string>
+    <string name="click_copy">(点击复制)</string>
+    <string name="no_detail">暂无相关明细</string>
+
 
 </resources>

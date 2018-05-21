@@ -19,10 +19,13 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.model.NewsDetail;
+import com.sbai.bcnews.model.SysTime;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ScreenShotListenManager;
 import com.sbai.bcnews.utils.SecurityUtil;
 import com.sbai.bcnews.utils.TimerHandler;
+import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.RequestProgress;
 import com.sbai.bcnews.view.ScreenShotView;
 import com.sbai.bcnews.view.SmartDialog;
@@ -53,12 +56,19 @@ public class BaseActivity extends StatusBarActivity implements
     public static final int REQ_SUBMIT_QUESTION_LOGIN = 1002;
     public static final int REQ_CODE_COMMENT = 1001;
 
+    public static final int DEFAULT_TIME = 1000;
+    public static final int DEFAULT_COUNT_MAX = 30 * 60;
+
     protected String TAG;
 
     private TimerHandler mTimerHandler;
     private RequestProgress mRequestProgress;
     private ScreenShotListenManager mScreenShotListenManager;
     private List<Dialog> mDialogList;
+
+    private TimerHandler mBaseHandler;
+    private int mBaseTimingCount;
+
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -82,8 +92,7 @@ public class BaseActivity extends StatusBarActivity implements
                 Api.cancel(TAG);
             }
         });
-        //TODO 服务器还没这个接口，经常打印toast
-//        SysTime.getSysTime().sync();
+        SysTime.getSysTime().sync();
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         initScreenShotListener();
     }
@@ -153,6 +162,8 @@ public class BaseActivity extends StatusBarActivity implements
         super.onStart();
         mScreenShotListenManager.startListen();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(ACTION_TOKEN_EXPIRED));
+        getFrontTiming();
+        startFrontTiming();
     }
 
     @Override
@@ -160,6 +171,8 @@ public class BaseActivity extends StatusBarActivity implements
         super.onStop();
         mScreenShotListenManager.stopListen();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+        stopFrontTiming();
+        recordFrontTiming();
     }
 
     @Override
@@ -174,6 +187,7 @@ public class BaseActivity extends StatusBarActivity implements
         mRequestProgress.dismissAll();
 
         stopScheduleJob();
+        stopFrontTiming();
     }
 
     private void dismissScreenDialog() {
@@ -226,6 +240,58 @@ public class BaseActivity extends StatusBarActivity implements
 
     @Override
     public void onTimeUp(int count) {
+    }
+
+    private void startFrontTiming() {
+        if (mBaseTimingCount >= DEFAULT_COUNT_MAX) {
+            return;
+        }
+        startFrontTiming(true);
+    }
+
+    private void startFrontTiming(boolean isStart) {
+        if (!isStart) {
+            return;
+        }
+        stopFrontTiming();
+
+        if (mBaseHandler == null) {
+            mBaseHandler = new TimerHandler(new TimerHandler.TimerCallback() {
+                @Override
+                public void onTimeUp(int count) {
+
+                }
+            });
+            mBaseHandler.sendEmptyMessage(DEFAULT_TIME);
+        }
+    }
+
+    private void stopFrontTiming() {
+        if (mBaseHandler != null) {
+            mBaseHandler.removeCallbacksAndMessages(null);
+            mBaseHandler.resetCount();
+        }
+    }
+
+    private void getFrontTiming(){
+        mBaseTimingCount = Preference.get().getFrontTime();
+    }
+
+    private void recordFrontTiming() {
+        new CacheThread(mBaseTimingCount).run();
+    }
+
+    static class CacheThread extends Thread {
+        //记录前台的时间,单位秒
+        private int mTime;
+
+        public CacheThread(int time) {
+            mTime = time;
+        }
+
+        public void run() {
+            Preference.get().setFrontTime(mTime);
+        }
     }
 
     /**
