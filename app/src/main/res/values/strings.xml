@@ -295,16 +295,21 @@
     <string name="distance_nex_red_packet_time">距离下次抢红包剩余：%1$s</string>
     <string name="congrats_you_rob_number_red_packet">恭喜您！ 抢到</string>
     <string name="save_account">\n已存入账户</string>
-    <string name="number_qks">%1$sQKS</string>
+    <string name="number_qks">%1$sQKC</string>
     <string name="total_number_people_rob_red_packet">共%1$d人参与抢红包活动</string>
     <string name="get_rad_packet_number">获得：%1$s</string>
 
-    <string name="qks">QKS</string>
+    <string name="qkc">QKC</string>
     <string name="detail">明细</string>
+    <string name="look_detail">查看明细</string>
     <string name="plus_qks">+%1$s</string>
     <string name="minus_qks">-%1$s</string>
     <string name="time">时间</string>
     <string name="type">类型</string>
     <string name="money">金额</string>
+    <string name="qkc_number">QKC：%1$s个</string>
+    <string name="mining">挖矿中</string>
+    <string name="plus_hashrate">+算力</string>
+    <string name="now_hashrate">当前算力： %1$s</string>
 
 </resources>

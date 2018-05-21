@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/redPrimary"
+    android:background="@drawable/bg_qkc"
     tools:context=".activity.mine.QKCActivity">
 
     <com.sbai.bcnews.view.TitleBar
@@ -18,16 +18,106 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleText="@string/qks"
+        app:rightTextRightImage="@drawable/ic_query"
+        app:rightVisible="true"
+        app:titleText="@string/qkc"
         app:titleTextColor="@android:color/white"
         app:titleTextSize="17sp"/>
 
+    <RelativeLayout
+        android:id="@+id/qkcDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#40FFFFFF"
+        android:gravity="center_vertical"
+        android:minHeight="25dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/common_padding"
+        android:paddingRight="@dimen/common_padding"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar">
+
+        <TextView
+            android:id="@+id/qkcNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/qkc_number"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@+id/qkcNumber"
+            android:background="@drawable/bg_white_round"
+            android:gravity="center"
+            android:paddingBottom="2dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="2dp"
+            android:text="@string/mining"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/lookDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="12dp"
+            android:drawableRight="@drawable/ic_common_right_arrow"
+            android:text="@string/look_detail"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_exchange"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qkcDetail"/>
+
     <com.sbai.bcnews.view.RandomLocationLayout
-        app:layout_constraintTop_toBottomOf="@+id/titleBar"
         android:id="@+id/randomLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"/>
+        android:layout_marginRight="50dp"
+        app:layout_constraintTop_toBottomOf="@+id/qkcDetail"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="23dp"
+        android:background="@drawable/bg_qkc_now"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="@string/now_hashrate"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/bg_plus_qkc"
+            android:gravity="center"
+            android:text="@string/plus_hashrate"
+            android:textColor="@color/text_7540"/>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

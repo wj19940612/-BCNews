@@ -232,6 +232,7 @@ public class Apic {
         return Api.get("");
     }
 
+    // TODO: 2018/5/21 qkc 详情 
     public static Api requestQKCDetailsList(int page) {
         return Api.get("");
     }
