@@ -346,5 +346,10 @@
     <string name="click_copy">(点击复制)</string>
     <string name="no_detail">暂无相关明细</string>
 
+    <string name="congratulations_login_success">恭喜您登陆成功</string>
+    <string name="congratulations_register_success">恭喜您注册成功</string>
+    <string name="login_award_x">获得登陆奖励+%1$d积分</string>
+    <string name="register_award_x">获得登陆奖励+%1$d算力</string>
+
 
 </resources>

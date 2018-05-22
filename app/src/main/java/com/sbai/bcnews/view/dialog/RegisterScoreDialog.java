@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.view.SmartDialog;
@@ -19,9 +20,12 @@ public class RegisterScoreDialog {
 
     private ImageView mSrcView;
     private ImageView mClearView;
+    private TextView mName;
+    private TextView mScore;
     private OnClickListener mOnClickListener;
 
     private Style mStyle;
+    private int mScoreValue;
 
     public interface OnClickListener {
         void onClearClick();
@@ -50,13 +54,22 @@ public class RegisterScoreDialog {
         return this;
     }
 
+    public RegisterScoreDialog setOnClickListener(int score) {
+        this.mScoreValue = score;
+        return this;
+    }
+
     private void init() {
         mSrcView = mView.findViewById(R.id.lookDetailBtn);
         mClearView = mView.findViewById(R.id.clearBtn);
+        mName = mView.findViewById(R.id.name);
+        mScore = mView.findViewById(R.id.score);
         if (mStyle == Style.LOGIN) {
-            mSrcView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_login_score));
+            mName.setText(mActivity.getString(R.string.congratulations_login_success));
+            mScore.setText(mActivity.getString(R.string.login_award_x,mScoreValue));
         } else {
-            mSrcView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_register_score));
+            mName.setText(mActivity.getString(R.string.congratulations_register_success));
+            mScore.setText(mActivity.getString(R.string.register_award_x,mScoreValue));
         }
         mSrcView.setOnClickListener(new View.OnClickListener() {
             @Override

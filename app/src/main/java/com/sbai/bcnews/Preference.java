@@ -279,14 +279,14 @@ public class Preference {
         apply(key, textSize);
     }
 
-    public int getFrontTime() {
+    public String getOnlineTime() {
         String key = Key.FRONT_TIME;
-        return mPrefs.getInt(key, 0);
+        return mPrefs.getString(key,null);
     }
 
-    public void setFrontTime( int frontTime) {
+    public void setOnlineTime(String onlineTime) {
         String key = Key.FRONT_TIME;
-        apply(key, frontTime);
+        apply(key, onlineTime);
     }
 
 
