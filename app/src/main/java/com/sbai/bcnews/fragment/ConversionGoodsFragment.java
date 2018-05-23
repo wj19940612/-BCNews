@@ -37,7 +37,7 @@ public class ConversionGoodsFragment extends BottomDialogFragment {
 
     public static final int TAB_COUNT = 4;
 
-    public static final int REQUSET_CODE_CONVERSION = 108;
+    public static final int REQUEST_CODE_CONVERSION = 108;
 
     @BindView(R.id.digitalCurrency)
     TextView mDigitalCurrency;
@@ -113,12 +113,12 @@ public class ConversionGoodsFragment extends BottomDialogFragment {
     }
 
     private void gotoResultActivity() {
-        Launcher.with(ConversionGoodsFragment.this, ConversionResultActivity.class).excuteForResultFragment(REQUSET_CODE_CONVERSION);
+        Launcher.with(ConversionGoodsFragment.this, ConversionResultActivity.class).excuteForResultFragment(REQUEST_CODE_CONVERSION);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUSET_CODE_CONVERSION && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_CONVERSION && resultCode == RESULT_OK) {
             mViewPager.setCurrentItem(PAGE_CONVERSION_DETAIL);
         }
     }

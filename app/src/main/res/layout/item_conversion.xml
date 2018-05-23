@@ -23,15 +23,16 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/label"
                 android:layout_width="31dp"
                 android:layout_height="62dp"
-                android:background="@drawable/bg_conversion_digital_normal" />
+                android:background="@drawable/bg_conversion_digital" />
 
             <com.sbai.bcnews.view.autofit.AutofitTextView
                 android:id="@+id/content"
                 android:layout_width="92dp"
                 android:layout_height="62dp"
-                android:background="@drawable/bg_conversion_content_enable"
+                android:background="@drawable/bg_conversion_content"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="0.01 EOS"

@@ -104,6 +104,9 @@ public class App extends Application {
         startActivity(intent);
     }
 
+    /**
+     * 监听app前后台切换
+     */
     private void registerFrontBackCallback() {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override

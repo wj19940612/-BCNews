@@ -81,6 +81,9 @@ public class UserInfo implements Parcelable {
     private int discuss;  //是否推送回复
     private int praise;   //点赞是否推送
 
+    private int addRate; //用户此次增加的算力
+    private int addIntegral;//用户此次增加的积分
+
     public UserInfo() {
     }
 
@@ -353,6 +356,22 @@ public class UserInfo implements Parcelable {
         this.userPass = userPass;
     }
 
+    public int getAddRate() {
+        return addRate;
+    }
+
+    public void setAddRate(int addRate) {
+        this.addRate = addRate;
+    }
+
+    public int getAddIntegral() {
+        return addIntegral;
+    }
+
+    public void setAddIntegral(int addIntegral) {
+        this.addIntegral = addIntegral;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -430,6 +449,8 @@ public class UserInfo implements Parcelable {
         dest.writeInt(this.wxBound);
         dest.writeString(this.wxName);
         dest.writeInt(this.isModifyPortrait);
+        dest.writeInt(this.addRate);
+        dest.writeInt(this.addIntegral);
     }
 
     protected UserInfo(Parcel in) {
@@ -464,6 +485,8 @@ public class UserInfo implements Parcelable {
         this.wxBound = in.readInt();
         this.wxName = in.readString();
         this.isModifyPortrait = in.readInt();
+        this.addRate = in.readInt();
+        this.addIntegral = in.readInt();
     }
 
     public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {

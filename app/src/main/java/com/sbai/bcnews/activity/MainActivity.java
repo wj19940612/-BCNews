@@ -34,9 +34,13 @@ import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.BottomTabs;
 import com.sbai.bcnews.view.ScrollableViewPager;
+import com.sbai.bcnews.view.dialog.RegisterScoreDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.sbai.bcnews.view.dialog.RegisterScoreDialog.Style.LOGIN;
+import static com.sbai.bcnews.view.dialog.RegisterScoreDialog.Style.REGISTER;
 
 public class MainActivity extends BaseActivity {
     public static final int PAGE_POSITION_NEWS = 0;
@@ -63,6 +67,7 @@ public class MainActivity extends BaseActivity {
         initViews();
         requestShowMarketPageSwitch();
         requestWhetherHasAllNotReadMessage();
+        requestFirstIntegral();
     }
 
     private BroadcastReceiver mLoginBroadcastReceiver = new BroadcastReceiver() {
@@ -132,7 +137,7 @@ public class MainActivity extends BaseActivity {
                 .callback(new Callback2D<Resp<NotReadMessage>, NotReadMessage>() {
                     @Override
                     protected void onRespSuccessData(NotReadMessage data) {
-                        Log.d(TAG, "onRespSuccessData: "+data.toString());
+                        Log.d(TAG, "onRespSuccessData: " + data.toString());
                         if (data.hasNewMessage()) {
                             mBottomTabs.setRedPointVisibility(View.VISIBLE);
                         } else {
@@ -145,6 +150,19 @@ public class MainActivity extends BaseActivity {
                     }
                 })
                 .fire();
+    }
+
+    private void requestFirstIntegral() {
+        if (LocalUser.getUser().isLogin()) {
+            Apic.requestFirstIntegral().tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
+                @Override
+                protected void onRespSuccessData(Integer data) {
+                    if (data != null && data != 0) {
+                        RegisterScoreDialog.with(MainActivity.this, LOGIN).setScore(data).show();
+                    }
+                }
+            }).fireFreely();
+        }
     }
 
     private void initViews() {

@@ -19,6 +19,7 @@ import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.model.SysTime;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ScreenShotListenManager;
 import com.sbai.bcnews.utils.SecurityUtil;
@@ -26,12 +27,16 @@ import com.sbai.bcnews.utils.TimerHandler;
 import com.sbai.bcnews.view.RequestProgress;
 import com.sbai.bcnews.view.ScreenShotView;
 import com.sbai.bcnews.view.SmartDialog;
+import com.sbai.bcnews.view.dialog.RegisterScoreDialog;
 import com.sbai.httplib.ReqIndeterminate;
 import com.umeng.analytics.MobclickAgent;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.sbai.bcnews.view.dialog.RegisterScoreDialog.Style.LOGIN;
+import static com.sbai.bcnews.view.dialog.RegisterScoreDialog.Style.REGISTER;
 
 /**
  * Modified by john on 18/01/2018
@@ -82,8 +87,7 @@ public class BaseActivity extends StatusBarActivity implements
                 Api.cancel(TAG);
             }
         });
-        //TODO 服务器还没这个接口，经常打印toast
-//        SysTime.getSysTime().sync();
+        SysTime.getSysTime().sync();
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         initScreenShotListener();
     }
@@ -137,6 +141,7 @@ public class BaseActivity extends StatusBarActivity implements
 
         MobclickAgent.onPageStart(TAG);
         MobclickAgent.onResume(this);
+        showIfFirstDialog();
     }
 
     @Override
@@ -174,6 +179,20 @@ public class BaseActivity extends StatusBarActivity implements
         mRequestProgress.dismissAll();
 
         stopScheduleJob();
+    }
+
+    private void showIfFirstDialog() {
+        if (LocalUser.getUser().isLogin() && LocalUser.getUser().getUserInfo().getAddRate() > 0) {
+            RegisterScoreDialog.with(this, REGISTER).setScore(LocalUser.getUser().getUserInfo().getAddRate()).show();
+            LocalUser.getUser().getUserInfo().setAddRate(0);
+            LocalUser.getUser().getUserInfo().setAddIntegral(0);
+            LocalUser.getUser().saveToPreference();
+        } else if (LocalUser.getUser().isLogin() && LocalUser.getUser().getUserInfo().getAddIntegral() > 0) {
+            RegisterScoreDialog.with(this, LOGIN).setScore(LocalUser.getUser().getUserInfo().getAddIntegral()).show();
+            LocalUser.getUser().getUserInfo().setAddRate(0);
+            LocalUser.getUser().getUserInfo().setAddIntegral(0);
+            LocalUser.getUser().saveToPreference();
+        }
     }
 
     private void dismissScreenDialog() {

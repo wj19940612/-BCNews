@@ -28,7 +28,7 @@ public class LocalUser {
         return new LocalUser();
     }
 
-    private void saveToPreference() {
+    public void saveToPreference() {
         String userJson = new Gson().toJson(this);
         Preference.get().setUserJson(userJson);
     }

@@ -74,7 +74,8 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_NORMAL;
 public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     public static final int TIME_SECOND = 1000;
-    public static final int TIME_COUNT_GET_RATE = 30;
+    public static final int TIME_COUNT_GET_HASH_RATE = 1 * 60;
+    public static final int TIME_COUNT_DELAY = 10;
     public static final int REQ_CODE_CANCEL_COLLECT = 2265;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -237,6 +238,9 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     public static final String INFO_HTML_META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\">";
 
+    private int mScrollIdleTime;
+    private int mReadArticleTime;
+
 
     @Override
     protected int getPageType() {
@@ -280,7 +284,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         requestDetailData();
         requestOtherArticle();
         requestNewsViewpoint();
-        startScheduleJob(TIME_SECOND);
     }
 
     @Override
@@ -535,6 +538,9 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         super.onPostResume();
         updateOtherData(mOtherArticleList);
         requestNewsViewpoint();
+        if (LocalUser.getUser().isLogin()) {
+            startScheduleJob(TIME_SECOND);
+        }
     }
 
     @Override
@@ -753,8 +759,19 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
-        if (count % TIME_COUNT_GET_RATE == 0) {
+        if (!mScrolling && mScrollIdleTime == 0) {
+            mScrollIdleTime = count;
+        } else if (mScrolling) {
+            mScrollIdleTime = 0;
+        }
+        if (mScrollIdleTime != 0 && count - mScrollIdleTime > TIME_COUNT_DELAY) {
+            return;
+        } else {
+            mReadArticleTime++;
+        }
+        if (mReadArticleTime == TIME_COUNT_GET_HASH_RATE) {
             //TODO 调用获取算力接口
+            mReadArticleTime = 0;
         }
 //        mTitleHeight = mTitleLayout.getMeasuredHeight();
 //        int webViewHeight = mWebView.getHeight();
@@ -773,10 +790,10 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void showRateTip() {
-        View view =  LayoutInflater.from(this).inflate(R.layout.toast_get_calculate_rate, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.toast_get_calculate_rate, null);
         TextView textView = view.findViewById(R.id.message);
         String message = "恭喜获得持续阅读奖励+3算力";
-        ToastUtil.show(view,textView, message, mTitleBar.getHeight());
+        ToastUtil.show(view, textView, message, mTitleBar.getHeight());
     }
 
 
@@ -802,6 +819,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             @Override
             public void onScrollState(boolean scrolling) {
                 mScrolling = scrolling;
+                readTimeUpdate(scrolling);
             }
         });
     }
@@ -860,6 +878,10 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         valueAnimator.setDuration(200);
         mAnimating = true;
         valueAnimator.start();
+    }
+
+    private void readTimeUpdate(boolean isScrolling) {
+
     }
 
     private void requestDetailData() {

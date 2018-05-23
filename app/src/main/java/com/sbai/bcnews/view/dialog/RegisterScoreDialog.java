@@ -1,9 +1,6 @@
 package com.sbai.bcnews.view.dialog;
 
 import android.app.Activity;
-import android.content.Context;
-import android.media.Image;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,7 +16,6 @@ public class RegisterScoreDialog {
     private View mView;
 
     private ImageView mSrcView;
-    private ImageView mClearView;
     private TextView mName;
     private TextView mScore;
     private OnClickListener mOnClickListener;
@@ -54,23 +50,15 @@ public class RegisterScoreDialog {
         return this;
     }
 
-    public RegisterScoreDialog setOnClickListener(int score) {
+    public RegisterScoreDialog setScore(int score) {
         this.mScoreValue = score;
         return this;
     }
 
     private void init() {
         mSrcView = mView.findViewById(R.id.lookDetailBtn);
-        mClearView = mView.findViewById(R.id.clearBtn);
         mName = mView.findViewById(R.id.name);
         mScore = mView.findViewById(R.id.score);
-        if (mStyle == Style.LOGIN) {
-            mName.setText(mActivity.getString(R.string.congratulations_login_success));
-            mScore.setText(mActivity.getString(R.string.login_award_x,mScoreValue));
-        } else {
-            mName.setText(mActivity.getString(R.string.congratulations_register_success));
-            mScore.setText(mActivity.getString(R.string.register_award_x,mScoreValue));
-        }
         mSrcView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,17 +67,16 @@ public class RegisterScoreDialog {
                 }
             }
         });
-        mClearView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mOnClickListener != null) {
-                    mOnClickListener.onClearClick();
-                }
-            }
-        });
     }
 
     public void show() {
+        if (mStyle == Style.LOGIN) {
+            mName.setText(mActivity.getString(R.string.congratulations_login_success));
+            mScore.setText(mActivity.getString(R.string.login_award_x, mScoreValue));
+        } else {
+            mName.setText(mActivity.getString(R.string.congratulations_register_success));
+            mScore.setText(mActivity.getString(R.string.register_award_x, mScoreValue));
+        }
         mSmartDialog.setWidthScale(1).show();
     }
 }

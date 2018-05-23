@@ -740,4 +740,29 @@ public class Apic {
         return Api.post("/api/news-user/user/use/wx");
     }
 
+    /**
+     * 每日首次激活APP获取积分
+     * @return
+     */
+    public static Api requestFirstIntegral() {
+        return Api.post("/api/news-user/integral/online.do");
+    }
+
+    /**
+     * 获取兑换商品列表
+     * @param exchangeType 0-数字货币 1-支付宝 2-话费
+     * @return
+     */
+    public static Api requestConversionGoods(int exchangeType) {
+        return Api.get("/api/news-user/product/list.do", new ReqParams().put("exchangeType", exchangeType));
+    }
+
+    /**
+     * 获取我的算力和积分
+     * @return
+     */
+    public static Api requestMyIntegral() {
+        return Api.get("/api/news-user/integral/my.do");
+    }
+
 }

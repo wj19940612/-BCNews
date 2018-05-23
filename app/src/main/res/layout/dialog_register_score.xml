@@ -15,15 +15,6 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_login_score"/>
 
-        <ImageView
-            android:id="@+id/clearBtn"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="67dp"
-            android:layout_marginTop="94dp"
-            android:src="@drawable/btn_register_score_clear" />
-
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"

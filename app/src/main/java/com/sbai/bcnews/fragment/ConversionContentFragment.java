@@ -1,9 +1,11 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +17,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ConversionContent;
+import com.sbai.bcnews.model.HashRateIntegral;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +29,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_ALIPAY;
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_DIGITAL_COIN;
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_TELEPHONE_CHARGE;
 
 public class ConversionContentFragment extends BaseFragment {
 
@@ -37,7 +47,9 @@ public class ConversionContentFragment extends BaseFragment {
     private int mPageType;
 
     private List<ConversionContent> mContentList;
+    private List<ConversionContent> mNetList;
     private ContentAdapter mContentAdapter;
+    private HashRateIntegral mHashRateIntegral;
 
     public static ConversionContentFragment newsInstance(int pageType) {
         Bundle bundle = new Bundle();
@@ -78,7 +90,7 @@ public class ConversionContentFragment extends BaseFragment {
 
     private void initView() {
         mContentList = new ArrayList<>();
-        mContentAdapter = new ContentAdapter(mContentList, getActivity(), new ContentAdapter.OnItemClickListener() {
+        mContentAdapter = new ContentAdapter(mPageType, mContentList, getActivity(), new ContentAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ConversionContent conversionContent) {
 
@@ -89,17 +101,31 @@ public class ConversionContentFragment extends BaseFragment {
     }
 
     private void loadData() {
-        List<ConversionContent> conversionContents = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            ConversionContent conversionContent = new ConversionContent("100 EOS", "兑换: 1000QKC", 999990);
-            conversionContents.add(conversionContent);
-        }
-        updateData(conversionContents);
+        Apic.requestMyIntegral().tag(TAG).callback(new Callback2D<Resp<HashRateIntegral>, HashRateIntegral>() {
+            @Override
+            protected void onRespSuccessData(HashRateIntegral data) {
+                mHashRateIntegral = data;
+                if (mNetList != null) {
+                    updateData(mNetList);
+                }
+            }
+        }).fireFreely();
+
+        Apic.requestConversionGoods(mPageType).tag(TAG).callback(new Callback2D<Resp<List<ConversionContent>>, List<ConversionContent>>() {
+            @Override
+            protected void onRespSuccessData(List<ConversionContent> data) {
+                mNetList = data;
+                if (mHashRateIntegral != null) {
+                    updateData(mNetList);
+                }
+            }
+        }).fireFreely();
     }
 
     private void updateData(List<ConversionContent> conversionContents) {
         mContentList.clear();
         mContentList.addAll(conversionContents);
+        mContentAdapter.setHashRateIntegral(mHashRateIntegral);
         mContentAdapter.notifyDataSetChanged();
     }
 
@@ -112,11 +138,18 @@ public class ConversionContentFragment extends BaseFragment {
         private Context mContext;
         private List<ConversionContent> mContentList;
         private OnItemClickListener mOnItemClickListener;
+        private HashRateIntegral mHashRateIntegral;
+        private int mPageType;
 
-        public ContentAdapter(List contentList, Context context, OnItemClickListener onItemClickListener) {
+        public ContentAdapter(int pageType, List contentList, Context context, OnItemClickListener onItemClickListener) {
             mContentList = contentList;
             mContext = context;
             mOnItemClickListener = onItemClickListener;
+            mPageType = pageType;
+        }
+
+        public void setHashRateIntegral(HashRateIntegral hashRateIntegral) {
+            mHashRateIntegral = hashRateIntegral;
         }
 
         @Override
@@ -127,7 +160,7 @@ public class ConversionContentFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ((ContentHolder) holder).bindingData(mContext, mContentList.get(position), mOnItemClickListener);
+            ((ContentHolder) holder).bindingData(mContext, mContentList.get(position), mOnItemClickListener, mPageType, mHashRateIntegral);
         }
 
         @Override
@@ -154,20 +187,40 @@ public class ConversionContentFragment extends BaseFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, final ConversionContent conversionContent, final OnItemClickListener onItemClickListener) {
-                mIntroduce.setText(conversionContent.getIntroduce());
-                mContent.setText(conversionContent.getContent());
-                mRemainingQty.setText(String.valueOf(conversionContent.getCount()));
+            public void bindingData(Context context, final ConversionContent conversionContent, final OnItemClickListener onItemClickListener, int pageType, HashRateIntegral hashRateIntegral) {
+                Drawable contentDrawable = ContextCompat.getDrawable(context, R.drawable.bg_conversion_content);
+//                Drawable drawable1 = getLabelDrawable(pageType);
+//
+//                if (hashRateIntegral.getRate() >= conversionContent.getPrice()) {
+//
+//                }
+//                mIntroduce.setText(conversionContent.getName());
+//                mContent.setText(conversionContent.getContent());
+//                mRemainingQty.setText(String.valueOf(conversionContent.getCount()));
+//
+//                mRootView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        mSelectBtn.setSelected(!mSelectBtn.isSelected());
+//                        if (onItemClickListener != null) {
+//                            onItemClickListener.onItemClick(conversionContent);
+//                        }
+//                    }
+//                });
+            }
 
-                mRootView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mSelectBtn.setSelected(!mSelectBtn.isSelected());
-                        if (onItemClickListener != null) {
-                            onItemClickListener.onItemClick(conversionContent);
-                        }
-                    }
-                });
+            private Drawable getLabelDrawable(Context context, int pageType) {
+                switch (pageType) {
+                    case PAGE_DIGITAL_COIN:
+                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_digital);
+                    case PAGE_ALIPAY:
+                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_digital);
+                    case PAGE_TELEPHONE_CHARGE:
+                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_digital);
+                    default:
+                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_digital);
+
+                }
             }
         }
     }
