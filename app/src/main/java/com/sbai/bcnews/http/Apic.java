@@ -217,24 +217,67 @@ public class Apic {
         return Api.post("/api/news-info/discuss/praise/status.do", new ReqParams().put("id", id));
     }
 
-    // TODO: 2018/5/15 请求红包的状态
+    /**
+     * /api/news-user/redPacket/status.do
+     * POST
+     * 获取红包的状态--薛松
+     */
+    // TODO: 2018/5/24
     public static Api requestRedPacketStatus() {
-        return Api.get("");
+        return Api.get("/api/news-user/redPacket/status.do");
     }
 
-    // TODO: 2018/5/17 抢红包
+    /**
+     * /api/new-user/redPacket/rob.do
+     * POST
+     * 抢红包--薛松
+     */
+    // TODO: 2018/5/24
     public static Api robRedPacket() {
-        return Api.post("");
+        return Api.post("/api/news-user/redPacket/rob.do");
     }
 
-    // TODO: 2018/5/18 红包列表
+    /**
+     * /api/news-user/redPacket/list.do
+     * GET
+     * 红包列表--薛松
+     */
+    // TODO: 2018/5/24
     public static Api requestHourWelfareList(int page, int pageSize) {
-        return Api.get("");
+        return Api.get("/api/news-user/redPacket/list.do"
+                , new ReqParams()
+                        .put("page", page)
+                        .put("size", pageSize));
     }
 
-    // TODO: 2018/5/21 qkc 详情 
+    /**
+     * /api/news-user/integral/my.do
+     * GET
+     * QKC明细--我的qkc和算力--薛松
+     */
+    public static Api requestIntegral() {
+        return Api.get("/api/news-user/integral/my.do");
+    }
+
+    /**
+     * /api/news-user/log/not/get.do
+     * GET
+     * 未获取矿产--薛松
+     */
+    public static Api requestQKC() {
+        return Api.get("/api/news-user/log/not/get.do");
+    }
+
+    /**
+     * /api/news-user/log/page.do
+     * GET
+     * QKC明细--薛松
+     */
     public static Api requestQKCDetailsList(int page) {
-        return Api.get("");
+        return Api.get("/api/news-user/log/page.do",
+                new ReqParams()
+                        .put("page", page)
+                        .put("size", DEFAULT_PAGE_SIZE));
     }
 
 
