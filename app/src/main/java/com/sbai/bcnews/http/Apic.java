@@ -765,4 +765,8 @@ public class Apic {
         return Api.get("/api/news-user/integral/my.do");
     }
 
+    public static Api requestConversionAddress() {
+        return Api.get("/api/news-user/integral/account.do");
+    }
+
 }

@@ -281,7 +281,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         initView();
         initWebView();
         initScrollView();
-        requestDetailData();
         requestOtherArticle();
         requestNewsViewpoint();
     }
@@ -536,6 +535,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        requestDetailData();
         updateOtherData(mOtherArticleList);
         requestNewsViewpoint();
         if (LocalUser.getUser().isLogin()) {

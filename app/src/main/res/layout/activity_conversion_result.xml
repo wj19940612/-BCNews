@@ -79,7 +79,7 @@
         android:textColor="@color/text_222"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:background="@drawable/btn_gradient_primary"
+        android:background="@drawable/btn_gradient_primary_normal"
         android:text="@string/confirm" />
 
     <TextView

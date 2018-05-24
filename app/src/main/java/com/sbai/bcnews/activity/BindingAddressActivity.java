@@ -22,12 +22,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_ALIPAY;
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_DIGITAL_COIN;
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_TELEPHONE_CHARGE;
+
 public class BindingAddressActivity extends BaseActivity {
     private static final int REQ_CODE_IMAGE_AUTH_CODE = 889;
-
-    public static final int CONVERSION_TYPE_DIGITAL = 0;
-    public static final int CONVERSION_TYPE_ALI_PAY = 1;
-    public static final int CONVERSION_TYPE_TEL = 2;
 
 
     @BindView(R.id.titleBar)
@@ -35,7 +35,7 @@ public class BindingAddressActivity extends BaseActivity {
     @BindView(R.id.bindingAddress)
     EditText mBindingAddress;
     @BindView(R.id.bindingName)
-    EditText mBindingName;
+    TextView mBindingName;
     @BindView(R.id.bindingBtn)
     TextView mBindingBtn;
     @BindView(R.id.userName)
@@ -66,14 +66,14 @@ public class BindingAddressActivity extends BaseActivity {
     }
 
     private void initData() {
-        mAcceptType = getIntent().getIntExtra(ExtraKeys.BINDING_TYPE, CONVERSION_TYPE_DIGITAL);
+        mAcceptType = getIntent().getIntExtra(ExtraKeys.BINDING_TYPE, PAGE_DIGITAL_COIN);
 
         switch (mAcceptType) {
-            case CONVERSION_TYPE_DIGITAL:
+            case PAGE_DIGITAL_COIN:
                 mTitleBar.setTitle(R.string.binding_currency_address);
                 mBindingName.setText(R.string.currency_address);
                 break;
-            case CONVERSION_TYPE_ALI_PAY:
+            case PAGE_ALIPAY:
                 mTitleBar.setTitle(R.string.binding_ali_pay_account);
                 mBindingName.setText(R.string.ali_pay_address);
                 mBindingAddress.setHint(R.string.please_input_your_ali_pay_account);
@@ -81,7 +81,7 @@ public class BindingAddressActivity extends BaseActivity {
                 mUserName.setText(R.string.ali_pay_user_name);
                 mUserName.setHint(R.string.please_input_ali_pay_user_name);
                 break;
-            case CONVERSION_TYPE_TEL:
+            case PAGE_TELEPHONE_CHARGE:
                 mTitleBar.setTitle(R.string.binding_tel);
                 mBindingName.setText(R.string.tel);
                 mBindingAddress.setHint(R.string.please_input_your_tel);

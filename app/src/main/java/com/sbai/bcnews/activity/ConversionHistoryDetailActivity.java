@@ -17,9 +17,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.sbai.bcnews.activity.BindingAddressActivity.CONVERSION_TYPE_ALI_PAY;
-import static com.sbai.bcnews.activity.BindingAddressActivity.CONVERSION_TYPE_DIGITAL;
-import static com.sbai.bcnews.activity.BindingAddressActivity.CONVERSION_TYPE_TEL;
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_ALIPAY;
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_DIGITAL_COIN;
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_TELEPHONE_CHARGE;
 
 
 public class ConversionHistoryDetailActivity extends BaseActivity {
@@ -59,16 +59,16 @@ public class ConversionHistoryDetailActivity extends BaseActivity {
 
 
     private void initData() {
-        mAcceptType = getIntent().getIntExtra(ExtraKeys.BINDING_TYPE, CONVERSION_TYPE_DIGITAL);
+        mAcceptType = getIntent().getIntExtra(ExtraKeys.BINDING_TYPE, PAGE_DIGITAL_COIN);
 
         switch (mAcceptType) {
-            case CONVERSION_TYPE_DIGITAL:
+            case PAGE_DIGITAL_COIN:
                 mAcceptUserName.setVisibility(View.GONE);
                 mAcceptAddressLine.setVisibility(View.GONE);
                 break;
-            case CONVERSION_TYPE_ALI_PAY:
+            case PAGE_ALIPAY:
                 break;
-            case CONVERSION_TYPE_TEL:
+            case PAGE_TELEPHONE_CHARGE:
                 break;
         }
     }

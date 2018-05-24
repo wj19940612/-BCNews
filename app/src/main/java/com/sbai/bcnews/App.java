@@ -68,7 +68,7 @@ public class App extends Application {
         PushManager.getInstance().initialize(this, PushService.class);
 //        //init getui service
         PushManager.getInstance().registerPushIntentService(this, PushIntentService.class);
-        processCaughtException();
+//        processCaughtException();
         registerFrontBackCallback();
     }
 

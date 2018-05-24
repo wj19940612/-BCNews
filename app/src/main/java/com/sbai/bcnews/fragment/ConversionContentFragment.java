@@ -116,7 +116,6 @@ public class ConversionContentFragment extends BaseFragment {
         Apic.requestConversionGoods(mPageType).tag(TAG).callback(new Callback2D<Resp<List<ConversionContent>>, List<ConversionContent>>() {
             @Override
             protected void onRespSuccessData(List<ConversionContent> data) {
-                Log.e("zzz","onRespSuccessData");
                 mNetList = data;
                 if (mHashRateIntegral != null) {
                     updateData(mNetList, mHashRateIntegral);

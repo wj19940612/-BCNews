@@ -354,5 +354,12 @@
     <string name="conversion_price_x">兑换：%1$dQKC</string>
     <string name="conversion_margin_x">余量 %1$d</string>
 
+    <string name="get_coin_address_x">提币地址：%1$s</string>
+    <string name="not_binding">未绑定</string>
+    <string name="have_binding">已绑定</string>
+
+    <string name="click_binding_coin_address">提币地址：点击绑定</string>
+    <string name="ali_pay_address_x">支付宝账号：%1$s</string>
+
 
 </resources>
