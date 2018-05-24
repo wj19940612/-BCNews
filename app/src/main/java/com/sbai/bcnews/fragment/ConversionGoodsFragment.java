@@ -148,6 +148,8 @@ public class ConversionGoodsFragment extends BottomDialogFragment {
             if (mTabViews[i] != clickView) {
                 mTabViews[i].setSelected(false);
                 mTabViews[i].setTextColor(ContextCompat.getColor(getContext(), R.color.text97));
+            } else {
+                mViewPager.setCurrentItem(i, false);
             }
         }
     }

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,10 +91,11 @@ public class ConversionContentFragment extends BaseFragment {
 
     private void initView() {
         mContentList = new ArrayList<>();
-        mContentAdapter = new ContentAdapter(-1,mPageType, mContentList, getActivity(), new ContentAdapter.OnItemClickListener() {
+        mContentAdapter = new ContentAdapter(-1, mPageType, mContentList, getActivity(), new ContentAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(ConversionContent conversionContent) {
-
+            public void onItemClick(int clickPosition) {
+                mContentAdapter.setClickPosition(clickPosition);
+                mContentAdapter.notifyDataSetChanged();
             }
         });
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), SPAN_COUNT));
@@ -106,7 +108,7 @@ public class ConversionContentFragment extends BaseFragment {
             protected void onRespSuccessData(HashRateIntegral data) {
                 mHashRateIntegral = data;
                 if (mNetList != null) {
-                    updateData(mNetList);
+                    updateData(mNetList, mHashRateIntegral);
                 }
             }
         }).fireFreely();
@@ -114,25 +116,26 @@ public class ConversionContentFragment extends BaseFragment {
         Apic.requestConversionGoods(mPageType).tag(TAG).callback(new Callback2D<Resp<List<ConversionContent>>, List<ConversionContent>>() {
             @Override
             protected void onRespSuccessData(List<ConversionContent> data) {
+                Log.e("zzz","onRespSuccessData");
                 mNetList = data;
                 if (mHashRateIntegral != null) {
-                    updateData(mNetList);
+                    updateData(mNetList, mHashRateIntegral);
                 }
             }
         }).fireFreely();
     }
 
-    private void updateData(List<ConversionContent> conversionContents) {
+    private void updateData(List<ConversionContent> conversionContents, HashRateIntegral hashRateIntegral) {
         mContentList.clear();
         mContentList.addAll(conversionContents);
-        mContentAdapter.setHashRateIntegral(mHashRateIntegral);
+        mContentAdapter.setHashRateIntegral(hashRateIntegral);
         mContentAdapter.notifyDataSetChanged();
     }
 
     public static class ContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public interface OnItemClickListener {
-            public void onItemClick(ConversionContent conversionContent);
+            public void onItemClick(int position);
         }
 
         private Context mContext;
@@ -154,6 +157,10 @@ public class ConversionContentFragment extends BaseFragment {
             mHashRateIntegral = hashRateIntegral;
         }
 
+        public void setClickPosition(int position) {
+            mClickPosition = position;
+        }
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_conversion, parent, false);
@@ -162,7 +169,7 @@ public class ConversionContentFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ((ContentHolder) holder).bindingData(mContext, mContentList.get(position), mOnItemClickListener, mPageType, mHashRateIntegral,position,mClickPosition);
+            ((ContentHolder) holder).bindingData(mContext, mContentList.get(position), mOnItemClickListener, mPageType, mHashRateIntegral, position, mClickPosition);
         }
 
         @Override
@@ -191,36 +198,40 @@ public class ConversionContentFragment extends BaseFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, final ConversionContent conversionContent, final OnItemClickListener onItemClickListener, int pageType, HashRateIntegral hashRateIntegral,int position,int clickPosition) {
+            public void bindingData(Context context, final ConversionContent conversionContent, final OnItemClickListener onItemClickListener, int pageType, HashRateIntegral hashRateIntegral, final int position, int clickPosition) {
                 Drawable contentDrawable = getContentDrawable(context, pageType);
                 Drawable labelDrawable = getLabelDrawable(context, pageType);
-
+                mLabel.setBackgroundDrawable(labelDrawable);
+                mContent.setBackgroundDrawable(contentDrawable);
                 if (hashRateIntegral.getIntegral() < conversionContent.getPrice()) {
                     mRootView.setEnabled(false);
                     mLabel.setEnabled(false);
                     mContent.setEnabled(false);
-                    mSelectBtn.setEnabled(false);
+                    mSelectBtn.setVisibility(View.GONE);
                 } else {
-
+                    mSelectBtn.setVisibility(View.VISIBLE);
+                    mRootView.setEnabled(true);
+                    mLabel.setEnabled(true);
+                    mContent.setEnabled(true);
+                    if (position == clickPosition) {
+                        mSelectBtn.setSelected(true);
+                    } else {
+                        mSelectBtn.setSelected(false);
+                    }
                 }
-//                Drawable drawable1 = getLabelDrawable(pageType);
-//
-//                if (hashRateIntegral.getRate() >= conversionContent.getPrice()) {
-//
-//                }
-//                mIntroduce.setText(conversionContent.getName());
-//                mContent.setText(conversionContent.getContent());
-//                mRemainingQty.setText(String.valueOf(conversionContent.getCount()));
-//
-//                mRootView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        mSelectBtn.setSelected(!mSelectBtn.isSelected());
-//                        if (onItemClickListener != null) {
-//                            onItemClickListener.onItemClick(conversionContent);
-//                        }
-//                    }
-//                });
+
+                mContent.setText(conversionContent.getName());
+                mIntroduce.setText(context.getString(R.string.conversion_price_x, conversionContent.getPrice()));
+                mRemainingQty.setText(context.getString(R.string.conversion_margin_x, conversionContent.getMargin()));
+
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(position);
+                        }
+                    }
+                });
             }
 
             private Drawable getContentDrawable(Context context, int pageType) {
@@ -242,9 +253,9 @@ public class ConversionContentFragment extends BaseFragment {
                     case PAGE_DIGITAL_COIN:
                         return ContextCompat.getDrawable(context, R.drawable.bg_conversion_digital);
                     case PAGE_ALIPAY:
-                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_digital);
+                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_ali);
                     case PAGE_TELEPHONE_CHARGE:
-                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_digital);
+                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_telephone);
                     default:
                         return ContextCompat.getDrawable(context, R.drawable.bg_conversion_digital);
 
