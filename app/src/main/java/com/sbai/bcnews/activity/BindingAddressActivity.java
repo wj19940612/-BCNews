@@ -2,6 +2,7 @@ package com.sbai.bcnews.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -13,6 +14,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.ImageAuthCodeActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.UmengCountEventId;
@@ -57,6 +59,9 @@ public class BindingAddressActivity extends BaseActivity {
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
 
+    private String mBindingAddressData;
+    private String mUserNameData;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,27 +72,44 @@ public class BindingAddressActivity extends BaseActivity {
 
     private void initData() {
         mAcceptType = getIntent().getIntExtra(ExtraKeys.BINDING_TYPE, PAGE_DIGITAL_COIN);
+        mBindingAddressData = getIntent().getStringExtra(ExtraKeys.BINDING_ADDRESS);
+        mUserNameData = getIntent().getStringExtra(ExtraKeys.BINDING_USER_NAME);
 
         switch (mAcceptType) {
             case PAGE_DIGITAL_COIN:
                 mTitleBar.setTitle(R.string.binding_currency_address);
                 mBindingName.setText(R.string.currency_address);
+                if (!TextUtils.isEmpty(mBindingAddressData)) {
+                    mBindingAddress.setText(mBindingAddressData);
+                }
                 break;
             case PAGE_ALIPAY:
                 mTitleBar.setTitle(R.string.binding_ali_pay_account);
                 mBindingName.setText(R.string.ali_pay_address);
                 mBindingAddress.setHint(R.string.please_input_your_ali_pay_account);
+                if (!TextUtils.isEmpty(mBindingAddressData)) {
+                    mBindingAddress.setText(mBindingAddressData);
+                }
                 mUserLayout.setVisibility(View.VISIBLE);
                 mUserName.setText(R.string.ali_pay_user_name);
-                mUserName.setHint(R.string.please_input_ali_pay_user_name);
+                mUserNameInput.setHint(R.string.please_input_ali_pay_user_name);
+                if (!TextUtils.isEmpty(mUserNameData)) {
+                    mUserNameInput.setText(mUserNameData);
+                }
                 break;
             case PAGE_TELEPHONE_CHARGE:
                 mTitleBar.setTitle(R.string.binding_tel);
                 mBindingName.setText(R.string.tel);
                 mBindingAddress.setHint(R.string.please_input_your_tel);
+                if (!TextUtils.isEmpty(mBindingAddressData)) {
+                    mBindingAddress.setText(mBindingAddressData);
+                }
                 mUserLayout.setVisibility(View.VISIBLE);
                 mUserName.setText(R.string.tel_user_name);
-                mUserName.setHint(R.string.please_input_tel_user_name);
+                mUserNameInput.setHint(R.string.please_input_tel_user_name);
+                if (!TextUtils.isEmpty(mUserNameData)) {
+                    mUserNameInput.setText(mUserNameData);
+                }
                 mAuthCodeLayout.setVisibility(View.VISIBLE);
                 mAuthCode.setText(R.string.auth_code);
                 mAuthCodeInput.setHint(R.string.please_input_auth_code);
@@ -95,15 +117,47 @@ public class BindingAddressActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.bindingBtn,R.id.getAuthCode})
+    @OnClick({R.id.bindingBtn, R.id.getAuthCode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bindingBtn:
+                submitBindingData();
                 break;
             case R.id.getAuthCode:
                 requestAuthCode();
                 mAuthCode.requestFocus();
                 break;
+        }
+    }
+
+    private void submitBindingData() {
+        if (mAcceptType == PAGE_DIGITAL_COIN) {
+            if (!TextUtils.isEmpty(mBindingAddress.getText().toString())) {
+                Apic.submitCoinAddress(mBindingAddress.getText().toString()).tag(TAG).callback(new Callback<Resp>() {
+                    @Override
+                    protected void onRespSuccess(Resp resp) {
+                        finish();
+                    }
+                }).fireFreely();
+            }
+        } else if (mAcceptType == PAGE_ALIPAY) {
+            if (!TextUtils.isEmpty(mBindingAddress.getText().toString()) && !TextUtils.isEmpty(mUserNameInput.getText().toString())) {
+                Apic.submitAliPayAddress(mBindingAddress.getText().toString(), mUserNameInput.getText().toString()).tag(TAG).callback(new Callback<Resp>() {
+                    @Override
+                    protected void onRespSuccess(Resp resp) {
+                        finish();
+                    }
+                }).fireFreely();
+            }
+        } else {
+            if (!TextUtils.isEmpty(mBindingAddress.getText().toString()) && !TextUtils.isEmpty(mUserNameInput.getText().toString()) && !TextUtils.isEmpty(mAuthCodeInput.getText().toString())) {
+                Apic.submitTelephoneAddress(mBindingAddress.getText().toString(), mUserNameInput.getText().toString(), mAuthCodeInput.getText().toString()).tag(TAG).callback(new Callback<Resp>() {
+                    @Override
+                    protected void onRespSuccess(Resp resp) {
+                        finish();
+                    }
+                }).fireFreely();
+            }
         }
     }
 

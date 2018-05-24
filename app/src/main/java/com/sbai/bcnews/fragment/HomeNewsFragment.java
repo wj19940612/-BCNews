@@ -308,7 +308,8 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toChannel:
-                ConversionGoodsFragment.newInstance().show(getChildFragmentManager());
+//                ConversionGoodsFragment.newInstance().show(getChildFragmentManager());
+                Launcher.with(getActivity(),ConversionGoodsFragment.class).execute();
 //                umengEventCount(UmengCountEventId.NEWS03);
 //                Launcher.with(this, ChannelActivity.class).putExtra(ExtraKeys.CHANNEL, mChannelCacheModel).excuteForResultFragment(REQUEST_CODE_CHANNEL);
                 break;

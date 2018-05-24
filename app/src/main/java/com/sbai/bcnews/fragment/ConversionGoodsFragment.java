@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.activity.BindingAddressActivity;
 import com.sbai.bcnews.activity.ConversionResultActivity;
 import com.sbai.bcnews.fragment.dialog.BottomDialogFragment;
@@ -38,8 +39,9 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
+import static com.umeng.socialize.utils.ContextUtil.getContext;
 
-public class ConversionGoodsFragment extends BottomDialogFragment {
+public class ConversionGoodsFragment extends BaseActivity {
     public static final int PAGE_DIGITAL_COIN = 0;
     public static final int PAGE_ALIPAY = 1;
     public static final int PAGE_TELEPHONE_CHARGE = 2;
@@ -86,24 +88,23 @@ public class ConversionGoodsFragment extends BottomDialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_conversion);
+        ButterKnife.bind(this);
+        initView();
+        initData();
         mCreated = true;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        View view = inflater.inflate(R.layout.fragment_conversion, container, false);
-        mBind = ButterKnife.bind(this, view);
-        return view;
-    }
+//    @Nullable
+//    @Override
+//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        View view = inflater.inflate(R.layout.fragment_conversion, container, false);
+//        mBind = ButterKnife.bind(this, view);
+//        return view;
+//    }
 
     @Override
     public void onStart() {
@@ -115,12 +116,12 @@ public class ConversionGoodsFragment extends BottomDialogFragment {
         super.onStop();
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initView();
-        initData();
-    }
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        initView();
+//        initData();
+//    }
 
     @Override
     public void onResume() {
@@ -128,14 +129,14 @@ public class ConversionGoodsFragment extends BottomDialogFragment {
         loadData();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mBind.unbind();
-    }
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        mBind.unbind();
+//    }
 
     private void initView() {
-        mPagerAdapter = new PagerAdapter(getChildFragmentManager());
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mViewPager.setOffscreenPageLimit(TAB_COUNT - 1);
         mViewPager.setScrollable(false);
         mViewPager.setAdapter(mPagerAdapter);

@@ -742,6 +742,7 @@ public class Apic {
 
     /**
      * 每日首次激活APP获取积分
+     *
      * @return
      */
     public static Api requestFirstIntegral() {
@@ -750,6 +751,7 @@ public class Apic {
 
     /**
      * 获取兑换商品列表
+     *
      * @param exchangeType 0-数字货币 1-支付宝 2-话费
      * @return
      */
@@ -759,14 +761,52 @@ public class Apic {
 
     /**
      * 获取我的算力和积分
+     *
      * @return
      */
     public static Api requestMyIntegral() {
         return Api.get("/api/news-user/integral/my.do");
     }
 
+    /**
+     * 获取用户算力绑定信息
+     *
+     * @return
+     */
     public static Api requestConversionAddress() {
         return Api.get("/api/news-user/integral/account.do");
+    }
+
+    /**
+     * 绑定、修改账户(提币地址)--薛松
+     *
+     * @param extractCoinAddress
+     * @return
+     */
+    public static Api submitCoinAddress(String extractCoinAddress) {
+        return Api.post("/api/news-user/integral/update.do", new ReqParams().put("extractCoinAddress", extractCoinAddress));
+    }
+
+    /**
+     * 绑定、修改账户(支付宝地址)--薛松
+     *
+     * @param aliPay
+     * @param aliPayName
+     * @return
+     */
+    public static Api submitAliPayAddress(String aliPay, String aliPayName) {
+        return Api.post("/api/news-user/integral/update.do", new ReqParams().put("aliPay", aliPay).put("aliPayName", aliPayName));
+    }
+
+    /**
+     * 绑定、修改账户(手机地址)--薛松
+     * @param phone
+     * @param phoneName
+     * @param msgCode
+     * @return
+     */
+    public static Api submitTelephoneAddress(String phone, String phoneName, String msgCode) {
+        return Api.post("/api/news-user/integral/update.do", new ReqParams().put("phone", phone).put("phoneName", phoneName).put("msgCode", msgCode));
     }
 
 }

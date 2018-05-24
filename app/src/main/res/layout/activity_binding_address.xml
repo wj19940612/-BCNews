@@ -49,7 +49,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:hint="18867102890"
+                android:hint="@string/please_input_coin_address"
                 android:textColorHint="@color/text_999"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
@@ -61,7 +61,8 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:background="@color/white"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/userName"
@@ -93,7 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:background="@color/white"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/authCode"

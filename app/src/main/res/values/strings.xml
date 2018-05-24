@@ -361,5 +361,7 @@
     <string name="click_binding_coin_address">提币地址：点击绑定</string>
     <string name="ali_pay_address_x">支付宝账号：%1$s</string>
 
+    <string name="please_input_coin_address">请输入提币地址</string>
+
 
 </resources>

@@ -213,6 +213,11 @@
             android:name=".activity.BindingAddressActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".fragment.ConversionGoodsFragment"
+            android:screenOrientation="portrait"
+            android:theme="@style/BaseDialog.activity"/>
+
     </application>
 
 </manifest>
