@@ -90,7 +90,7 @@ public class ConversionContentFragment extends BaseFragment {
 
     private void initView() {
         mContentList = new ArrayList<>();
-        mContentAdapter = new ContentAdapter(mPageType, mContentList, getActivity(), new ContentAdapter.OnItemClickListener() {
+        mContentAdapter = new ContentAdapter(-1,mPageType, mContentList, getActivity(), new ContentAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ConversionContent conversionContent) {
 
@@ -140,12 +140,14 @@ public class ConversionContentFragment extends BaseFragment {
         private OnItemClickListener mOnItemClickListener;
         private HashRateIntegral mHashRateIntegral;
         private int mPageType;
+        private int mClickPosition;
 
-        public ContentAdapter(int pageType, List contentList, Context context, OnItemClickListener onItemClickListener) {
+        public ContentAdapter(int clickPosition, int pageType, List contentList, Context context, OnItemClickListener onItemClickListener) {
             mContentList = contentList;
             mContext = context;
             mOnItemClickListener = onItemClickListener;
             mPageType = pageType;
+            mClickPosition = clickPosition;
         }
 
         public void setHashRateIntegral(HashRateIntegral hashRateIntegral) {
@@ -160,7 +162,7 @@ public class ConversionContentFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ((ContentHolder) holder).bindingData(mContext, mContentList.get(position), mOnItemClickListener, mPageType, mHashRateIntegral);
+            ((ContentHolder) holder).bindingData(mContext, mContentList.get(position), mOnItemClickListener, mPageType, mHashRateIntegral,position,mClickPosition);
         }
 
         @Override
@@ -181,14 +183,26 @@ public class ConversionContentFragment extends BaseFragment {
             TextView mRemainingQty;
             @BindView(R.id.selectBtn)
             ImageView mSelectBtn;
+            @BindView(R.id.label)
+            ImageView mLabel;
 
             ContentHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, final ConversionContent conversionContent, final OnItemClickListener onItemClickListener, int pageType, HashRateIntegral hashRateIntegral) {
-                Drawable contentDrawable = ContextCompat.getDrawable(context, R.drawable.bg_conversion_content);
+            public void bindingData(Context context, final ConversionContent conversionContent, final OnItemClickListener onItemClickListener, int pageType, HashRateIntegral hashRateIntegral,int position,int clickPosition) {
+                Drawable contentDrawable = getContentDrawable(context, pageType);
+                Drawable labelDrawable = getLabelDrawable(context, pageType);
+
+                if (hashRateIntegral.getIntegral() < conversionContent.getPrice()) {
+                    mRootView.setEnabled(false);
+                    mLabel.setEnabled(false);
+                    mContent.setEnabled(false);
+                    mSelectBtn.setEnabled(false);
+                } else {
+
+                }
 //                Drawable drawable1 = getLabelDrawable(pageType);
 //
 //                if (hashRateIntegral.getRate() >= conversionContent.getPrice()) {
@@ -207,6 +221,20 @@ public class ConversionContentFragment extends BaseFragment {
 //                        }
 //                    }
 //                });
+            }
+
+            private Drawable getContentDrawable(Context context, int pageType) {
+                switch (pageType) {
+                    case PAGE_DIGITAL_COIN:
+                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_content);
+                    case PAGE_ALIPAY:
+                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_ali_content);
+                    case PAGE_TELEPHONE_CHARGE:
+                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_telephone_content);
+                    default:
+                        return ContextCompat.getDrawable(context, R.drawable.bg_conversion_content);
+
+                }
             }
 
             private Drawable getLabelDrawable(Context context, int pageType) {
