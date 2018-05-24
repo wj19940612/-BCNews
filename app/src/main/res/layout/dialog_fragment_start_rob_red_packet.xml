@@ -2,16 +2,16 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center"
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:background="@drawable/bg_rob_red_packet"
         android:minHeight="320dp"
         android:minWidth="260dp">
@@ -40,20 +40,21 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="2dp"
-            android:layout_marginBottom="21dp"
             android:id="@+id/distanceNexRedPacketTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="21dp"
             android:background="@drawable/bg_white_small_round"
-            tools:text="@string/distance_nex_red_packet_time"
+            android:paddingBottom="2dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="4dp"
             android:textColor="@color/text_F5A6"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/distance_nex_red_packet_time"/>
     </android.support.constraint.ConstraintLayout>
 
     <ImageView

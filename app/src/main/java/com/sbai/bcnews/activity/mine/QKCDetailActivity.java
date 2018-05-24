@@ -26,6 +26,7 @@ import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.view.EmptyRecyclerView;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.recycleview.HeaderViewRecycleViewAdapter;
+import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -80,6 +81,12 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
                     @Override
                     protected void onRespSuccessData(QKCDetailWrapper data) {
                         updateQKCList(data);
+                        stopFreshOrLoadAnimation();
+                    }
+
+                    @Override
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
                         stopFreshOrLoadAnimation();
                     }
                 })
@@ -159,7 +166,7 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
                 mRootView.setSelected(plus);
                 mQksNumber.setSelected(plus);
 
-                int number = data.getIntegral();
+                double number = data.getIntegral();
                 String formatNumber;
                 if (number == data.getIntegral()) {
                     formatNumber = String.valueOf(number);

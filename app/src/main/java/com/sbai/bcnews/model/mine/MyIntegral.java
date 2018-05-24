@@ -12,7 +12,7 @@ public class MyIntegral {
      */
 
     private int rate;
-    private int integral;
+    private double integral;
 
     public int getRate() {
         return rate;
@@ -22,11 +22,11 @@ public class MyIntegral {
         this.rate = rate;
     }
 
-    public int getIntegral() {
+    public double getIntegral() {
         return integral;
     }
 
-    public void setIntegral(int integral) {
+    public void setIntegral(double integral) {
         this.integral = integral;
     }
 }

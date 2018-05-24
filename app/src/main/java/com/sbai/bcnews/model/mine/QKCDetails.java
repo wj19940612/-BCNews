@@ -23,7 +23,7 @@ public class QKCDetails {
     private int changeType;
     private long createTime;
     private String id;
-    private int integral;
+    private double integral;
     private int type;
     private String typeStr;
     private long updateTime;
@@ -53,11 +53,11 @@ public class QKCDetails {
         this.id = id;
     }
 
-    public int getIntegral() {
+    public double getIntegral() {
         return integral;
     }
 
-    public void setIntegral(int integral) {
+    public void setIntegral(double integral) {
         this.integral = integral;
     }
 

@@ -20,9 +20,8 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
-import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.mine.RedPacketInfo;
-import com.sbai.bcnews.model.mine.RobRedPacketInfo;
+import com.sbai.bcnews.model.mine.RedPacketListInfo;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.StrUtil;
@@ -34,7 +33,6 @@ import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,7 +53,7 @@ public class HourWelfareActivity extends RecycleViewSwipeLoadActivity {
     @BindView(R.id.rootView)
     RelativeLayout mRootView;
 
-    private RobRedPacketInfo mRobRedPacketInfo;
+    private RedPacketInfo mRedPacketInfo;
     private View mHeadView;
     private HourWelfareAdapter mHourWelfareAdapter;
 
@@ -68,7 +66,7 @@ public class HourWelfareActivity extends RecycleViewSwipeLoadActivity {
         setContentView(R.layout.activity_hour_welfare);
         ButterKnife.bind(this);
         translucentStatusBar();
-        mRobRedPacketInfo = getIntent().getParcelableExtra(ExtraKeys.DATA);
+        mRedPacketInfo = getIntent().getParcelableExtra(ExtraKeys.DATA);
 
         initView();
         requestHourWelfareList();
@@ -85,52 +83,47 @@ public class HourWelfareActivity extends RecycleViewSwipeLoadActivity {
 
     private void initHeadView() {
         mHeadView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_hour_welfare_head, null);
+        RedPacketListInfo redPacketListInfo = new RedPacketListInfo();
+        if (mRedPacketInfo != null) {
+            redPacketListInfo.setIntegral(mRedPacketInfo.getIntegral());
+            redPacketListInfo.setUserName(mRedPacketInfo.getUserName());
+            redPacketListInfo.setUserPortrait(mRedPacketInfo.getUserPortrait());
+        }
+        setHeadView(redPacketListInfo);
+    }
+
+    private void setHeadView(RedPacketListInfo redPacketListInfo) {
         ImageView portrait = mHeadView.findViewById(R.id.portrait);
         TextView robRedPacketNumber = mHeadView.findViewById(R.id.robRedPacketNumber);
         TextView robRedPacketPeopleNumber = mHeadView.findViewById(R.id.robRedPacketPeopleNumber);
-
-        GlideApp.with(getActivity())
-                .load(LocalUser.getUser().getUserInfo().getUserPortrait())
-                .placeholder(R.drawable.ic_default_head_portrait)
-                .circleCrop()
-                .into(portrait);
-        if (mRobRedPacketInfo != null) {
+        if (redPacketListInfo != null) {
+            GlideApp.with(getActivity())
+                    .load(redPacketListInfo.getUserPortrait())
+                    .placeholder(R.drawable.ic_default_head_portrait)
+                    .circleCrop()
+                    .into(portrait);
             SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.congrats_you_rob_number_red_packet),
-                    getString(R.string.number_qks, String.valueOf(mRobRedPacketInfo.getMoney())), ContextCompat.getColor(getActivity(), R.color.text_222), getString(R.string.save_account));
+                    getString(R.string.number_qks, String.valueOf(redPacketListInfo.getIntegral())), ContextCompat.getColor(getActivity(), R.color.text_222), getString(R.string.save_account));
             robRedPacketNumber.setText(spannableString);
 
-            robRedPacketPeopleNumber.setText(getString(R.string.total_number_people_rob_red_packet, mRobRedPacketInfo.getTotalPeople()));
+            robRedPacketPeopleNumber.setText(getString(R.string.total_number_people_rob_red_packet, redPacketListInfo.getTotal()));
         }
     }
 
     private void requestHourWelfareList() {
         Apic.requestHourWelfareList(mPage, mPageSize)
                 .tag(TAG)
-                .callback(new Callback2D<Resp<List<RedPacketInfo>>, List<RedPacketInfo>>() {
+                .callback(new Callback2D<Resp<RedPacketListInfo>, RedPacketListInfo>() {
                     @Override
-                    protected void onRespSuccessData(List<RedPacketInfo> data) {
-                        updateHourWelfareList(data);
+                    protected void onRespSuccessData(RedPacketListInfo data) {
+                        setHeadView(data);
+                        updateHourWelfareList(data.getData());
+                        stopFreshOrLoadAnimation();
                     }
 
                     @Override
                     public void onFailure(ReqError reqError) {
                         super.onFailure(reqError);
-                        // TODO: 2018/5/18 模拟数据
-                        ArrayList<RedPacketInfo> redPacketInfos = new ArrayList<>();
-                        for (int i = 0; i < mPageSize; i++) {
-                            RedPacketInfo redPacketInfo = new RedPacketInfo();
-                            redPacketInfo.setMoney(i);
-                            redPacketInfo.setPortrait("https://t10.baidu.com/it/u=2039509812,1027111384&fm=173&app=25&f=JPEG?w=500&h=330&s=B2377084CA603C86E6AA4A810300B09A");
-                            redPacketInfo.setTime(System.currentTimeMillis());
-                            redPacketInfo.setUserName("第 " + i + " 抢到的人");
-                            redPacketInfos.add(redPacketInfo);
-                        }
-                        updateHourWelfareList(redPacketInfos);
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
                         stopFreshOrLoadAnimation();
                     }
                 })
@@ -159,19 +152,21 @@ public class HourWelfareActivity extends RecycleViewSwipeLoadActivity {
     @Override
     public void onLoadMore() {
         mPageSize = 30;
+        requestHourWelfareList();
     }
 
     @Override
     public void onRefresh() {
         mPage = 0;
         mPageSize = 50;
+        requestHourWelfareList();
     }
 
     static class HourWelfareAdapter extends HeaderViewRecycleViewAdapter<RedPacketInfo, HourWelfareAdapter.ViewHolder> {
 
         private Context mContext;
 
-        public HourWelfareAdapter(Context context) {
+        HourWelfareAdapter(Context context) {
             mContext = context;
         }
 
@@ -211,13 +206,13 @@ public class HourWelfareActivity extends RecycleViewSwipeLoadActivity {
                     mRobRedPacketNumber.setTextColor(ContextCompat.getColor(context, R.color.text_9B9B));
                 }
                 GlideApp.with(context)
-                        .load(data.getPortrait())
+                        .load(data.getUserPortrait())
                         .circleCrop()
                         .placeholder(R.drawable.ic_default_head_portrait)
                         .into(mPortrait);
                 mUserName.setText(data.getUserName());
-                mTimeLine.setText(DateUtil.format(data.getTime(), DateUtil.FORMAT_MINUTE_SECOND));
-                mRobRedPacketNumber.setText(context.getString(R.string.get_rad_packet_number, String.valueOf(data.getMoney())));
+                mTimeLine.setText(DateUtil.format(data.getCreateTime(), DateUtil.FORMAT_MINUTE_SECOND));
+                mRobRedPacketNumber.setText(context.getString(R.string.get_rad_packet_number, String.valueOf(data.getIntegral())));
             }
         }
     }

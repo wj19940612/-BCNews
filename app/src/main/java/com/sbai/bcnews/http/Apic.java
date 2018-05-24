@@ -222,9 +222,17 @@ public class Apic {
      * POST
      * 获取红包的状态--薛松
      */
-    // TODO: 2018/5/24
     public static Api requestRedPacketStatus() {
-        return Api.get("/api/news-user/redPacket/status.do");
+        return Api.post("/api/news-user/redPacket/status.do");
+    }
+
+    /**
+     * api/news-user/redPacket/user/status.do
+     * GET
+     * 用户抢红包的状态--薛松
+     */
+    public static Api requestUserRedPacketStatus() {
+        return Api.get("api/news-user/redPacket/user/status.do");
     }
 
     /**
@@ -232,7 +240,6 @@ public class Apic {
      * POST
      * 抢红包--薛松
      */
-    // TODO: 2018/5/24
     public static Api robRedPacket() {
         return Api.post("/api/news-user/redPacket/rob.do");
     }
@@ -242,7 +249,6 @@ public class Apic {
      * GET
      * 红包列表--薛松
      */
-    // TODO: 2018/5/24
     public static Api requestHourWelfareList(int page, int pageSize) {
         return Api.get("/api/news-user/redPacket/list.do"
                 , new ReqParams()
@@ -266,6 +272,15 @@ public class Apic {
      */
     public static Api requestQKC() {
         return Api.get("/api/news-user/log/not/get.do");
+    }
+
+    /**
+     * /api/news-user/log/get/integral.do
+     * POST
+     * 获取矿产--薛松
+     */
+    public static Api getQKC(String id) {
+        return Api.post("/api/news-user/log/get/integral.do",new ReqParams().put("id",id));
     }
 
     /**

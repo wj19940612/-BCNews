@@ -11,17 +11,18 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.mine.MyIntegral;
 import com.sbai.bcnews.model.mine.QKC;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.Network;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.RandomLocationLayout;
 import com.sbai.bcnews.view.TitleBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class QKCActivity extends BaseActivity {
+public class QKCActivity extends BaseActivity implements RandomLocationLayout.OnCoinClickListener {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -31,6 +32,7 @@ public class QKCActivity extends BaseActivity {
     TextView mQkcNumber;
     @BindView(R.id.rate)
     TextView mRate;
+    private MyIntegral mMyIntegral;
 
 
     @Override
@@ -40,13 +42,7 @@ public class QKCActivity extends BaseActivity {
         ButterKnife.bind(this);
         translucentStatusBar();
         requestNotGet();
-        ArrayList<QKC> qksList = new ArrayList<>();
-        for (int i = 0; i < 24; i++) {
-            QKC qks = new QKC();
-            qks.setIntegral(200 + i);
-            qksList.add(qks);
-        }
-        mRandomLayout.setQksList(qksList);
+        mRandomLayout.setOnCoinClickListerner(this);
     }
 
     private void requestNotGet() {
@@ -55,8 +51,7 @@ public class QKCActivity extends BaseActivity {
                 .callback(new Callback2D<Resp<MyIntegral>, MyIntegral>() {
                     @Override
                     protected void onRespSuccessData(MyIntegral data) {
-                        mQkcNumber.setText(getString(R.string.qkc_number,String.valueOf(data.getIntegral())));
-                        mRate.setText(getString(R.string.now_hashrate,String.valueOf(data.getRate())));
+                        setQKCAndRate(data);
                     }
                 })
                 .fire();
@@ -65,14 +60,52 @@ public class QKCActivity extends BaseActivity {
                 .callback(new Callback2D<Resp<List<QKC>>, List<QKC>>() {
                     @Override
                     protected void onRespSuccessData(List<QKC> data) {
-//                        mRandomLayout.setQksList(data);
+                        mRandomLayout.setQksList(data);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
                     }
                 })
                 .fire();
     }
 
+    private void setQKCAndRate(MyIntegral data) {
+        mMyIntegral = data;
+        mQkcNumber.setText(getString(R.string.qkc_number, String.valueOf(data.getIntegral())));
+        mRate.setText(getString(R.string.now_hashrate, String.valueOf(data.getRate())));
+    }
+
     @OnClick(R.id.qkcDetail)
     public void onViewClicked() {
         Launcher.with(getActivity(), QKCDetailActivity.class).execute();
+    }
+
+    boolean result;
+
+    @Override
+    public boolean onCoinClick(QKC qks) {
+        //有网络时默认领取成功
+        if (Network.isNetworkAvailable()) {
+            result = true;
+        } else {
+            ToastUtil.show(R.string.http_error_network);
+            return false;
+        }
+        // TODO: 2018/5/24 领取qkc
+        Apic.getQKC(qks.getId())
+                .tag(TAG)
+                .callback(new Callback2D<Resp<Object>, Object>() {
+                    @Override
+                    protected void onRespSuccessData(Object data) {
+                    }
+                })
+                .fire();
+        if (result) {
+            mMyIntegral.setIntegral(mMyIntegral.getIntegral() + qks.getIntegral());
+            setQKCAndRate(mMyIntegral);
+        }
+        return result;
     }
 }

@@ -37,6 +37,8 @@ public class RandomLocationLayout extends LinearLayout {
 
     private Random mRandom;
 
+    private OnCoinClickListener mOnCoinClickListerner;
+
     private int mViewMaxWidth;
 
     public RandomLocationLayout(Context context) {
@@ -55,6 +57,14 @@ public class RandomLocationLayout extends LinearLayout {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_random_location_qkc, null);
         ButterKnife.bind(view);
         addView(view);
+        ViewGroup parent = (ViewGroup) getChildAt(0);
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            TextView qkcCoin = (TextView) parent.getChildAt(i);
+            qkcCoin.setText(null);
+            qkcCoin.setEnabled(false);
+            qkcCoin.setVisibility(INVISIBLE);
+            setRandomTranslate(qkcCoin);
+        }
         mRandom = new Random();
     }
 
@@ -126,14 +136,21 @@ public class RandomLocationLayout extends LinearLayout {
                 qkcCoin.setText(getContext().getString(R.string.plus_qks, String.valueOf(qks.getIntegral())));
                 qkcCoin.setEnabled(true);
                 qkcCoin.setOnClickListener(new OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
-                        mQksList.remove(qks);
-                        ((TextView) v).setText(null);
-                        v.setVisibility(INVISIBLE);
-                        receiveCount++;
-                        if (receiveCount >= listSize || receiveCount == maxBrightCount) {
-                            randomDataIndex();
+                        boolean success = false;
+                        if (mOnCoinClickListerner != null) {
+                            success = mOnCoinClickListerner.onCoinClick(qks);
+                        }
+                        if (success) {
+                            mQksList.remove(qks);
+                            ((TextView) v).setText(null);
+                            v.setVisibility(INVISIBLE);
+                            receiveCount++;
+                            if (receiveCount >= listSize || receiveCount == maxBrightCount) {
+                                randomDataIndex();
+                            }
                         }
                     }
                 });
@@ -166,4 +183,16 @@ public class RandomLocationLayout extends LinearLayout {
         return i;
     }
 
+    public interface OnCoinClickListener {
+        /**
+         * 领取QKC回调
+         *
+         * @param qks 当前领取的QKC
+         */
+        boolean onCoinClick(QKC qks);
+    }
+
+    public void setOnCoinClickListerner(OnCoinClickListener onCoinClickListerner) {
+        mOnCoinClickListerner = onCoinClickListerner;
+    }
 }

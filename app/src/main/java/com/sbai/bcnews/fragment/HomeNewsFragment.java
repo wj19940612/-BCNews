@@ -209,31 +209,19 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
                 .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {
                     @Override
                     protected void onRespSuccessData(RedPacketActivityStatus data) {
+                        mRedPacketActivityStatus = data;
                         updateRedPacketActivityStatus(data);
                     }
-
-//                    @Override
-//                    public void onFailure(ReqError reqError) {
-//                        super.onFailure(reqError);
-//
-//                        // TODO: 2018/5/17 模拟的时间
-//                        mRedPacketActivityStatus = new RedPacketActivityStatus();
-//                        mRedPacketActivityStatus.setActivityIsRunning(true);
-//                        mRedPacketActivityStatus.setTime(System.currentTimeMillis());
-//                        mRedPacketActivityStatus.setRobRedPacketTime(false);
-//                        mRedPacketActivityStatus.setNexChangeTime(System.currentTimeMillis() + 20 * 1000);
-//                        updateRedPacketActivityStatus(mRedPacketActivityStatus);
-//                    }
                 })
                 .fire();
     }
 
     private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
         resetCountDownTimer();
-        if (data.isActivityIsRunning()) {
+        if (data.getRedPacketStatus() == 1) {
             mTitleBar.setLeftViewVisible(true);
             mWaitTime = getNexGetRedPacketTime(data);
-            if (data.isRobRedPacketTime()) canRobRedPacket();
+            if (data.getRobStatus() == 1) canRobRedPacket();
             else waitNextRobRedPacketTime();
         } else {
             mTitleBar.setLeftViewVisible(false);
@@ -294,7 +282,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     }
 
     private long getNexGetRedPacketTime(RedPacketActivityStatus data) {
-        return data.getNexChangeTime() - data.getTime();
+        return data.getStartTime() - data.getTime();
     }
 
 
