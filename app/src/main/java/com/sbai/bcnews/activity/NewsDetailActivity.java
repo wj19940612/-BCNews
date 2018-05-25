@@ -12,6 +12,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
@@ -40,6 +41,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.OtherArticle;
+import com.sbai.bcnews.model.mine.QKC;
 import com.sbai.bcnews.model.news.NewViewPointAndReview;
 import com.sbai.bcnews.model.news.NewsViewpoint;
 import com.sbai.bcnews.model.news.WriteComment;
@@ -73,7 +75,8 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_NORMAL;
 public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     public static final int TIME_SECOND = 1000;
-    public static final int TIME_COUNT_GET_HASH_RATE = 1 * 60;
+    public static final int TIME_COUNT_GET_HASH_RATE = 3 * 60;
+    
     public static final int TIME_COUNT_DELAY = 10;
     public static final int REQ_CODE_CANCEL_COLLECT = 2265;
     @BindView(R.id.titleBar)
@@ -769,7 +772,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             mReadArticleTime++;
         }
         if (mReadArticleTime == TIME_COUNT_GET_HASH_RATE) {
-            //TODO 调用获取算力接口
+            readAddQKC();
             mReadArticleTime = 0;
         }
 //        mTitleHeight = mTitleLayout.getMeasuredHeight();
@@ -788,11 +791,17 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 //        }
     }
 
-    private void showRateTip() {
-        String message = "恭喜获得持续阅读奖励+3算力";
-        ToastUtil.show(getActivity(),message,mTitleBar.getHeight());
-    }
+    private void readAddQKC(){
+        Apic.requestHashRate(QKC.TYPE_SHARE).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
 
+            @Override
+            protected void onRespSuccessData(Integer data) {
+                if (data != null && data > 0) {
+                    ToastUtil.show(NewsDetailActivity.this, getString(R.string.get_read_hash_data_x, data), Gravity.CENTER, 0, 0);
+                }
+            }
+        }).fireFreely();
+    }
 
     private void initScrollView() {
         mScrollView.setOnScrollListener(new NewsScrollView.OnScrollListener() {

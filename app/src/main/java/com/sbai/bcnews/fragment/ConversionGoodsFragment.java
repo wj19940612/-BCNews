@@ -35,6 +35,10 @@ import com.sbai.bcnews.model.ConversionContent;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.ScrollableViewPager;
+import com.sbai.bcnews.view.dialog.ConversionGoodsDialog;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,7 +48,7 @@ import butterknife.Unbinder;
 import static android.app.Activity.RESULT_OK;
 import static com.umeng.socialize.utils.ContextUtil.getContext;
 
-public class ConversionGoodsFragment extends BaseActivity {
+public class ConversionGoodsFragment extends BaseActivity implements ConversionContentFragment.SelectListener {
     public static final int PAGE_DIGITAL_COIN = 0;
     public static final int PAGE_ALIPAY = 1;
     public static final int PAGE_TELEPHONE_CHARGE = 2;
@@ -81,6 +85,7 @@ public class ConversionGoodsFragment extends BaseActivity {
 
     private ConversionAddress mConversionAddress;
     private int mPosition;
+    private Map<Integer, Integer> mSelectGoodMap = new HashMap<Integer, Integer>();
 
     public static ConversionGoodsFragment newInstance() {
         ConversionGoodsFragment conversionGoodsFragment = new ConversionGoodsFragment();
@@ -113,7 +118,7 @@ public class ConversionGoodsFragment extends BaseActivity {
     }
 
     private void initView() {
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),this);
         mViewPager.setOffscreenPageLimit(TAB_COUNT - 1);
         mViewPager.setScrollable(false);
         mViewPager.setAdapter(mPagerAdapter);
@@ -161,7 +166,7 @@ public class ConversionGoodsFragment extends BaseActivity {
                         mModifyBtn.setVisibility(View.GONE);
                         mBindingAddress.setVisibility(View.VISIBLE);
                     } else {
-                        mRechargeBtn.setEnabled(true);
+                        updateChargeBtn();
                         mMentionCoinAddress.setVisibility(View.VISIBLE);
                         mModifyBtn.setVisibility(View.VISIBLE);
                         mBindingAddress.setVisibility(View.GONE);
@@ -176,7 +181,7 @@ public class ConversionGoodsFragment extends BaseActivity {
                         mModifyBtn.setVisibility(View.GONE);
                         mBindingAddress.setVisibility(View.VISIBLE);
                     } else {
-                        mRechargeBtn.setEnabled(true);
+                        updateChargeBtn();
                         mMentionCoinAddress.setVisibility(View.VISIBLE);
                         mModifyBtn.setVisibility(View.VISIBLE);
                         mBindingAddress.setVisibility(View.GONE);
@@ -191,7 +196,7 @@ public class ConversionGoodsFragment extends BaseActivity {
                         mModifyBtn.setVisibility(View.GONE);
                         mBindingAddress.setVisibility(View.VISIBLE);
                     } else {
-                        mRechargeBtn.setEnabled(true);
+                        updateChargeBtn();
                         mMentionCoinAddress.setVisibility(View.VISIBLE);
                         mModifyBtn.setVisibility(View.VISIBLE);
                         mBindingAddress.setVisibility(View.GONE);
@@ -205,14 +210,25 @@ public class ConversionGoodsFragment extends BaseActivity {
         }
     }
 
-    private void gotoResultActivity() {
-        Launcher.with(ConversionGoodsFragment.this, ConversionResultActivity.class).excuteForResultFragment(REQUEST_CODE_CONVERSION);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CONVERSION && resultCode == RESULT_OK) {
             mViewPager.setCurrentItem(PAGE_CONVERSION_DETAIL);
+        }
+    }
+
+    @Override
+    public void onSelect(int page, int position) {
+        mSelectGoodMap.put(page, position);
+        updateChargeBtn();
+    }
+
+    private void updateChargeBtn() {
+        Integer clickGoodsPosition = mSelectGoodMap.get(mPosition);
+        if (clickGoodsPosition == null || clickGoodsPosition == -1) {
+            mRechargeBtn.setEnabled(false);
+        } else {
+            mRechargeBtn.setEnabled(true);
         }
     }
 
@@ -238,7 +254,7 @@ public class ConversionGoodsFragment extends BaseActivity {
                 LaunchActivity();
                 break;
             case R.id.rechargeBtn:
-                exchangeGood();
+                showExchangeGoodDialog();
                 break;
         }
     }
@@ -261,11 +277,13 @@ public class ConversionGoodsFragment extends BaseActivity {
         if (mConversionAddress != null) {
             switch (mPosition) {
                 case PAGE_DIGITAL_COIN:
+                    intent.putExtra(ExtraKeys.BINDING_TYPE, PAGE_DIGITAL_COIN);
                     if (!TextUtils.isEmpty(mConversionAddress.getExtractCoinAddress())) {
                         intent.putExtra(ExtraKeys.BINDING_ADDRESS, mConversionAddress.getExtractCoinAddress());
                     }
                     break;
                 case PAGE_ALIPAY:
+                    intent.putExtra(ExtraKeys.BINDING_TYPE, PAGE_ALIPAY);
                     if (!TextUtils.isEmpty(mConversionAddress.getAliPay())) {
                         intent.putExtra(ExtraKeys.BINDING_ADDRESS, mConversionAddress.getAliPay());
                     }
@@ -274,6 +292,7 @@ public class ConversionGoodsFragment extends BaseActivity {
                     }
                     break;
                 case PAGE_TELEPHONE_CHARGE:
+                    intent.putExtra(ExtraKeys.BINDING_TYPE, PAGE_TELEPHONE_CHARGE);
                     if (!TextUtils.isEmpty(mConversionAddress.getPhone())) {
                         intent.putExtra(ExtraKeys.BINDING_ADDRESS, mConversionAddress.getPhone());
                     }
@@ -283,21 +302,26 @@ public class ConversionGoodsFragment extends BaseActivity {
                     break;
             }
         }
-        getContext().startActivity(intent);
+        getActivity().startActivity(intent);
     }
 
-    private void exchangeGood() {
+    private void showExchangeGoodDialog() {
         ConversionContentFragment fragment = (ConversionContentFragment) mPagerAdapter.getFragment(mPosition);
         if (fragment != null) {
-            ConversionContent conversionContent = fragment.getSelectConversionGood();
+            final ConversionContent conversionContent = fragment.getSelectConversionGood();
             if (conversionContent != null) {
-                Apic.exchangeGood(conversionContent.getId()).tag(TAG).callback(new Callback<Resp>() {
+                ConversionGoodsDialog.with(getActivity()).price(conversionContent.getPrice()).name(conversionContent.getName()).setOnSureClickListener(new ConversionGoodsDialog.OnClickListener() {
                     @Override
-                    protected void onRespSuccess(Resp resp) {
-                        ToastUtil.show(R.string.exchange_success);
-                        finish();
+                    public void onClick() {
+                        Apic.exchangeGood(conversionContent.getId()).tag(TAG).callback(new Callback<Resp>() {
+                            @Override
+                            protected void onRespSuccess(Resp resp) {
+                                Launcher.with(ConversionGoodsFragment.this, ConversionResultActivity.class).putExtra(ExtraKeys.CONVERSION_TYPE, mPosition).putExtra(ExtraKeys.CONVERSION_NAME, conversionContent.getName()).putExtra(ExtraKeys.CONVERSION_PRICE, conversionContent.getPrice()).executeForResult(REQUEST_CODE_CONVERSION);
+                            }
+                        }).fireFreely();
                     }
-                }).fireFreely();
+                }).show();
+
                 return;
             }
         }
@@ -307,18 +331,22 @@ public class ConversionGoodsFragment extends BaseActivity {
     public static class PagerAdapter extends FragmentPagerAdapter {
 
         private FragmentManager mFragmentManager;
+        private ConversionContentFragment.SelectListener mSelectListener;
 
-        public PagerAdapter(FragmentManager fragmentManager) {
+        public PagerAdapter(FragmentManager fragmentManager, ConversionContentFragment.SelectListener selectListener) {
             super(fragmentManager);
             mFragmentManager = fragmentManager;
+            mSelectListener = selectListener;
         }
 
         @Override
         public Fragment getItem(int position) {
             if (position == PAGE_CONVERSION_DETAIL) {
-                return ConversionContentFragment.newsInstance(PAGE_DIGITAL_COIN);
+                return new ConversionHistoryFragment();
             } else {
-                return ConversionContentFragment.newsInstance(position);
+                ConversionContentFragment conversionContentFragment = ConversionContentFragment.newsInstance(position);
+                conversionContentFragment.setSelectListener(mSelectListener);
+                return conversionContentFragment;
             }
         }
 

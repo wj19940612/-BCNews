@@ -531,4 +531,16 @@ public class FinanceUtil {
         return number.replace(".00", "");
     }
 
+    /**
+     * 格式化 double 数据，去除末尾的小数后多余的 0
+     *
+     * @param value
+     * @return
+     */
+    public static String trimTrailingZero(double value) {
+        DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance();
+        decimalFormat.applyPattern("#.#");
+        return decimalFormat.format(value);
+    }
+
 }

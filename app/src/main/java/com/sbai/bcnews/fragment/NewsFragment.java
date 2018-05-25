@@ -188,9 +188,20 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         NewsAdapter newsAdapter = new NewsAdapter(getActivity(), mNewsWraps, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
-                Launcher.with(getActivity(), NewsDetailActivity.class)
-                        .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId())
-                        .putExtra(CHANNEL, mChannel).execute();
+                if (newsDetail.getIsAdvert() > 0) {
+                    if (newsDetail.getUrlType() > 0) {
+                        downLoadApp(newsDetail.getAdvertUrl());
+                    } else {
+                        Launcher.with(getActivity(), WebActivity.class)
+                                .putExtra(WebActivity.EX_URL, newsDetail.getAdvertUrl())
+                                .execute();
+                    }
+
+                } else {
+                    Launcher.with(getActivity(), NewsDetailActivity.class)
+                            .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId())
+                            .putExtra(CHANNEL, mChannel).execute();
+                }
             }
         });
         if (mHasBanner) {
@@ -412,7 +423,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
     }
 
-    private void updateApp(String downloadUrl) {
+    private void downLoadApp(String downloadUrl) {
         if (downloadUrl == null || TextUtils.isEmpty(downloadUrl)) {
             return;
         }

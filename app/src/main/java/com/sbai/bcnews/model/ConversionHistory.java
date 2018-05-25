@@ -24,11 +24,11 @@ public class ConversionHistory implements Parcelable{
     private String id;
     private String pId;
     private String pName;
-    private int price;
+    private double price;
     private int status;
     private long updateTime;
     private int userId;
-    private int type;
+    private int type;  //0-数字货币,1-支付宝,2-话费
     private String remark;
     private String accountPhone;//手机号
     private String accountPhoneName;//机主姓名
@@ -82,14 +82,6 @@ public class ConversionHistory implements Parcelable{
         this.pName = pName;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -120,6 +112,14 @@ public class ConversionHistory implements Parcelable{
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getRemark() {
@@ -167,7 +167,7 @@ public class ConversionHistory implements Parcelable{
         dest.writeString(this.id);
         dest.writeString(this.pId);
         dest.writeString(this.pName);
-        dest.writeInt(this.price);
+        dest.writeDouble(this.price);
         dest.writeInt(this.status);
         dest.writeLong(this.updateTime);
         dest.writeInt(this.userId);
@@ -188,7 +188,7 @@ public class ConversionHistory implements Parcelable{
         this.id = in.readString();
         this.pId = in.readString();
         this.pName = in.readString();
-        this.price = in.readInt();
+        this.price = in.readDouble();
         this.status = in.readInt();
         this.updateTime = in.readLong();
         this.userId = in.readInt();

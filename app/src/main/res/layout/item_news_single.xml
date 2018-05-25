@@ -39,7 +39,8 @@
             android:ellipsize="end"
             android:maxLines="3"
             android:textColor="@color/text_222"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:text="这么自信打个包"/>
 
         <TextView
             android:id="@+id/original"
@@ -61,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/title"
             android:layout_marginTop="22dp"
+            android:layout_marginRight="8dp"
             android:layout_toRightOf="@+id/original"
             android:gravity="center"
             android:text="@string/original"
@@ -72,7 +74,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/title"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="22dp"
             android:layout_toRightOf="@+id/source"
             android:gravity="center"

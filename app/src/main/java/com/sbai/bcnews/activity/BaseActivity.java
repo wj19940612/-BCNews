@@ -58,7 +58,7 @@ public class BaseActivity extends StatusBarActivity implements
     public static final int REQ_SUBMIT_QUESTION_LOGIN = 1002;
     public static final int REQ_CODE_COMMENT = 1001;
 
-    protected String TAG;
+    public String TAG;
 
     private TimerHandler mTimerHandler;
     private RequestProgress mRequestProgress;

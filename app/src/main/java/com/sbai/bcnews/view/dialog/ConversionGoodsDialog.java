@@ -18,6 +18,9 @@ public class ConversionGoodsDialog {
     private TextView mConversionBtn;
     private OnClickListener mOnClickListener;
 
+    private int mPrice;
+    private String mName;
+
     public interface OnClickListener {
         void onClick();
     }
@@ -40,13 +43,30 @@ public class ConversionGoodsDialog {
             @Override
             public void onClick(View view) {
                 if (mOnClickListener != null) {
+                    mSmartDialog.dismiss();
                     mOnClickListener.onClick();
                 }
             }
         });
     }
 
-    public void show(){
+    public ConversionGoodsDialog setOnSureClickListener(OnClickListener onSureClickListener) {
+        this.mOnClickListener = onSureClickListener;
+        return this;
+    }
+
+    public ConversionGoodsDialog price(int price) {
+        mPrice = price;
+        return this;
+    }
+
+    public ConversionGoodsDialog name(String name) {
+        mName = name;
+        return this;
+    }
+
+    public void show() {
+        mContent.setText(mActivity.getString(R.string.sure_exchange_x, mPrice, mName));
         mSmartDialog.setWidthScale(1).show();
     }
 }
