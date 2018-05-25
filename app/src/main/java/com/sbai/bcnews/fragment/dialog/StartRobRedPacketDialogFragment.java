@@ -82,9 +82,6 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         requestRedPacketStatus();
-        if (mRedPacketActivityStatus != null && mRedPacketActivityStatus.getRobStatus() == 1) {
-            requestUserRedPacketStatus();
-        }
     }
 
     private void requestRedPacketStatus() {
@@ -94,6 +91,9 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
                     @Override
                     protected void onRespSuccessData(RedPacketActivityStatus data) {
                         updateRedPacketActivityStatus(data);
+                        if (mRedPacketActivityStatus != null && mRedPacketActivityStatus.getRobStatus() == 1) {
+                            requestUserRedPacketStatus();
+                        }
                     }
                 })
                 .fire();

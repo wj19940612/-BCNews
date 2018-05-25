@@ -37,7 +37,7 @@ public class RandomLocationLayout extends LinearLayout {
 
     private Random mRandom;
 
-    private OnCoinClickListener mOnCoinClickListerner;
+    private OnCoinClickListener mOnCoinClickListener;
 
     private int mViewMaxWidth;
 
@@ -57,6 +57,11 @@ public class RandomLocationLayout extends LinearLayout {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_random_location_qkc, null);
         ButterKnife.bind(view);
         addView(view);
+        resetView();
+        mRandom = new Random();
+    }
+
+    private void resetView() {
         ViewGroup parent = (ViewGroup) getChildAt(0);
         for (int i = 0; i < parent.getChildCount(); i++) {
             TextView qkcCoin = (TextView) parent.getChildAt(i);
@@ -65,9 +70,7 @@ public class RandomLocationLayout extends LinearLayout {
             qkcCoin.setVisibility(INVISIBLE);
             setRandomTranslate(qkcCoin);
         }
-        mRandom = new Random();
     }
-
 
     private void init() {
 
@@ -109,7 +112,6 @@ public class RandomLocationLayout extends LinearLayout {
         setCoinStyle(stopSize);
     }
 
-
     public void setQksList(List<QKC> qksList) {
         mQksList = qksList;
         randomDataIndex();
@@ -119,14 +121,8 @@ public class RandomLocationLayout extends LinearLayout {
 
     private void setCoinStyle(int stopSize) {
         //0-5   6-9    10-~
+        resetView();
         ViewGroup parent = (ViewGroup) getChildAt(0);
-        for (int i = 0; i < parent.getChildCount(); i++) {
-            TextView qkcCoin = (TextView) parent.getChildAt(i);
-            qkcCoin.setText(null);
-            qkcCoin.setEnabled(false);
-            qkcCoin.setVisibility(INVISIBLE);
-            setRandomTranslate(qkcCoin);
-        }
         final int listSize = randomIndex.size();
         for (int i = 0; i < listSize; i++) {
             TextView qkcCoin = (TextView) parent.getChildAt(randomIndex.get(i));
@@ -139,18 +135,11 @@ public class RandomLocationLayout extends LinearLayout {
 
                     @Override
                     public void onClick(View v) {
-                        boolean success = false;
-                        if (mOnCoinClickListerner != null) {
-                            success = mOnCoinClickListerner.onCoinClick(qks);
+                        if (mOnCoinClickListener != null) {
+                            mOnCoinClickListener.onCoinClick(v, qks);
                         }
-                        if (success) {
-                            mQksList.remove(qks);
-                            ((TextView) v).setText(null);
-                            v.setVisibility(INVISIBLE);
-                            receiveCount++;
-                            if (receiveCount >= listSize || receiveCount == maxBrightCount) {
-                                randomDataIndex();
-                            }
+                        if (receiveCount >= listSize || receiveCount == maxBrightCount) {
+                            randomDataIndex();
                         }
                     }
                 });
@@ -160,8 +149,20 @@ public class RandomLocationLayout extends LinearLayout {
         }
     }
 
-    private void setRandomTranslate(View view) {
+    /**
+     * 领取成功后调用该方法移除对应的按钮
+     *
+     * @param v   被点击的按钮
+     * @param qks QKS数据
+     */
+    public void removeCoin(View v, QKC qks) {
+        mQksList.remove(qks);
+        ((TextView) v).setText(null);
+        v.setVisibility(INVISIBLE);
+        receiveCount++;
+    }
 
+    private void setRandomTranslate(View view) {
     }
 
 
@@ -187,12 +188,13 @@ public class RandomLocationLayout extends LinearLayout {
         /**
          * 领取QKC回调
          *
-         * @param qks 当前领取的QKC
+         * @param v   当前领取的view
+         * @param qks QKC
          */
-        boolean onCoinClick(QKC qks);
+        void onCoinClick(View v, QKC qks);
     }
 
-    public void setOnCoinClickListerner(OnCoinClickListener onCoinClickListerner) {
-        mOnCoinClickListerner = onCoinClickListerner;
+    public void setOnCoinClickListener(OnCoinClickListener onCoinClickListener) {
+        mOnCoinClickListener = onCoinClickListener;
     }
 }

@@ -1,11 +1,13 @@
 package com.sbai.bcnews.activity.mine;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.mine.MyIntegral;
@@ -42,7 +44,7 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
         ButterKnife.bind(this);
         translucentStatusBar();
         requestNotGet();
-        mRandomLayout.setOnCoinClickListerner(this);
+        mRandomLayout.setOnCoinClickListener(this);
     }
 
     private void requestNotGet() {
@@ -82,30 +84,23 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
         Launcher.with(getActivity(), QKCDetailActivity.class).execute();
     }
 
-    boolean result;
-
     @Override
-    public boolean onCoinClick(QKC qks) {
+    public void onCoinClick(final View v, final QKC qks) {
         //有网络时默认领取成功
         if (Network.isNetworkAvailable()) {
-            result = true;
-        } else {
-            ToastUtil.show(R.string.http_error_network);
-            return false;
-        }
-        // TODO: 2018/5/24 领取qkc
-        Apic.getQKC(qks.getId())
-                .tag(TAG)
-                .callback(new Callback2D<Resp<Object>, Object>() {
-                    @Override
-                    protected void onRespSuccessData(Object data) {
-                    }
-                })
-                .fire();
-        if (result) {
+            Apic.getQKC(qks.getId())
+                    .tag(TAG)
+                    .callback(new Callback<Resp<Object>>() {
+                        @Override
+                        protected void onRespSuccess(Resp<Object> resp) {
+                        }
+                    })
+                    .fire();
+            mRandomLayout.removeCoin(v, qks);
             mMyIntegral.setIntegral(mMyIntegral.getIntegral() + qks.getIntegral());
             setQKCAndRate(mMyIntegral);
+        } else {
+            ToastUtil.show(R.string.http_error_network);
         }
-        return result;
     }
 }

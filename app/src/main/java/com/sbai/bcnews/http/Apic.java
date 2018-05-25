@@ -232,7 +232,7 @@ public class Apic {
      * 用户抢红包的状态--薛松
      */
     public static Api requestUserRedPacketStatus() {
-        return Api.get("api/news-user/redPacket/user/status.do");
+        return Api.get("/api/news-user/redPacket/user/status.do");
     }
 
     /**

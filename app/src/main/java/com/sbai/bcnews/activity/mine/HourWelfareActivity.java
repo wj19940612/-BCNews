@@ -151,7 +151,6 @@ public class HourWelfareActivity extends RecycleViewSwipeLoadActivity {
 
     @Override
     public void onLoadMore() {
-        mPageSize = 30;
         requestHourWelfareList();
     }
 

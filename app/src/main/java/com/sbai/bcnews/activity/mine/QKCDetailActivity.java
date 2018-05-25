@@ -16,9 +16,8 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
-import com.sbai.bcnews.http.Callback2D;
-import com.sbai.bcnews.http.Resp;
-import com.sbai.bcnews.model.mine.QKCDetailWrapper;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.model.mine.QKCDetails;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
@@ -30,7 +29,7 @@ import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,10 +76,11 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
     private void requestQksDetailsList() {
         Apic.requestQKCDetailsList(mPage)
                 .tag(TAG)
-                .callback(new Callback2D<Resp<QKCDetailWrapper>, QKCDetailWrapper>() {
+                .callback(new Callback<ListResp<QKCDetails>>() {
+
                     @Override
-                    protected void onRespSuccessData(QKCDetailWrapper data) {
-                        updateQKCList(data);
+                    protected void onRespSuccess(ListResp<QKCDetails> resp) {
+                        updateQKCList(resp.getListData());
                         stopFreshOrLoadAnimation();
                     }
 
@@ -93,11 +93,10 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
                 .fire();
     }
 
-    private void updateQKCList(QKCDetailWrapper qkcDetailWrapper) {
+    private void updateQKCList(ArrayList<QKCDetails> data) {
         if (mPage == 0) {
             mQKCDetailAdapter.clear();
         }
-        List<QKCDetails> data = qkcDetailWrapper.getContent();
 
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
