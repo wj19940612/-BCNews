@@ -9,13 +9,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.ConversionHistoryDetailActivity;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ConversionHistory;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
+import com.sbai.bcnews.utils.Launcher;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -26,7 +31,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_ALIPAY;
+import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_DIGITAL_COIN;
+
 public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
+
+    public static final int STATUS_REVIEWING = 0;
+    public static final int STATUS_EXCHANGED = 1;
+    public static final int STATUS_EXCHANGE_FAIL = 2;
+
 
     @BindView(R.id.swipe_target)
     RecyclerView mRecyclerView;
@@ -68,12 +81,28 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
 
     private void initView() {
         mConversionHistoryList = new ArrayList<>();
-        mHistoryAdapter = new HistoryAdapter(getContext(), mConversionHistoryList);
+        mHistoryAdapter = new HistoryAdapter(getContext(), mConversionHistoryList, new HistoryAdapter.OnClickListener() {
+            @Override
+            public void onclick(ConversionHistory conversionHistory) {
+                Launcher.with(getActivity(), ConversionHistoryDetailActivity.class).execute();
+            }
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mHistoryAdapter);
     }
 
     private void loadData(final boolean refresh) {
+        if (refresh) {
+            mPage = 0;
+        } else {
+            mPage++;
+        }
+        Apic.requestExchangeHistory(mPage).tag(TAG).callback(new Callback2D<Resp<List<ConversionHistory>>, List<ConversionHistory>>() {
+            @Override
+            protected void onRespSuccessData(List<ConversionHistory> data) {
+                updateData(data, refresh);
+            }
+        }).fireFreely();
 
     }
 
@@ -84,7 +113,6 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
 
     @Override
     public void onRefresh() {
-        mPage = 0;
         loadData(true);
     }
 
@@ -116,10 +144,16 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
 
         private List<ConversionHistory> mHistoryList;
         private Context mContext;
+        private OnClickListener mOnClickListener;
 
-        public HistoryAdapter(Context context, List<ConversionHistory> historyList) {
+        public interface OnClickListener{
+            public void onclick(ConversionHistory conversionHistory);
+        }
+
+        public HistoryAdapter(Context context, List<ConversionHistory> historyList,OnClickListener onClickListener) {
             mHistoryList = historyList;
             mContext = context;
+            mOnClickListener = onClickListener;
         }
 
         @Override
@@ -130,7 +164,7 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ((HistoryHolder) holder).bindingData(mContext, mHistoryList.get(position), position, getItemCount());
+            ((HistoryHolder) holder).bindingData(mContext, mHistoryList.get(position), position, getItemCount(),mOnClickListener);
         }
 
         @Override
@@ -145,18 +179,44 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
             TextView mStatus;
             @BindView(R.id.split)
             View mSplit;
+            @BindView(R.id.rootView)
+            RelativeLayout mRootView;
 
             HistoryHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, ConversionHistory conversionHistory, int position, int count) {
+            public void bindingData(Context context, final ConversionHistory conversionHistory, int position, int count, final OnClickListener onClickListener) {
                 if (position == count - 1) {
                     mSplit.setVisibility(View.GONE);
                 } else {
                     mSplit.setVisibility(View.VISIBLE);
                 }
+                if (conversionHistory.getType() == PAGE_DIGITAL_COIN) {
+                    mDetail.setText(context.getString(R.string.coin_x, conversionHistory.getPName()));
+                } else if (conversionHistory.getType() == PAGE_ALIPAY) {
+                    mDetail.setText(context.getString(R.string.ali_pay_x, conversionHistory.getPName()));
+                } else {
+                    mDetail.setText(context.getString(R.string.telephone_fee_x, conversionHistory.getPName()));
+                }
+
+                if(conversionHistory.getStatus() == STATUS_REVIEWING){
+                    mStatus.setText(R.string.status_reviewing);
+                }else if(conversionHistory.getStatus() == STATUS_EXCHANGED){
+                    mStatus.setText(R.string.status_have_exchange);
+                }else{
+                    mStatus.setText(R.string.status_exchange_fail);
+                }
+
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(onClickListener != null){
+                            onClickListener.onclick(conversionHistory);
+                        }
+                    }
+                });
             }
         }
     }

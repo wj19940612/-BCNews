@@ -27,10 +27,13 @@ import com.sbai.bcnews.activity.BindingAddressActivity;
 import com.sbai.bcnews.activity.ConversionResultActivity;
 import com.sbai.bcnews.fragment.dialog.BottomDialogFragment;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ConversionAddress;
+import com.sbai.bcnews.model.ConversionContent;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.ScrollableViewPager;
 
 import butterknife.BindView;
@@ -72,15 +75,12 @@ public class ConversionGoodsFragment extends BaseActivity {
     @BindView(R.id.bottomLayout)
     LinearLayout mBottomLayout;
 
-    private Unbinder mBind;
-
     private PagerAdapter mPagerAdapter;
 
     private TextView[] mTabViews;
 
     private ConversionAddress mConversionAddress;
     private int mPosition;
-    private boolean mCreated;
 
     public static ConversionGoodsFragment newInstance() {
         ConversionGoodsFragment conversionGoodsFragment = new ConversionGoodsFragment();
@@ -94,17 +94,7 @@ public class ConversionGoodsFragment extends BaseActivity {
         ButterKnife.bind(this);
         initView();
         initData();
-        mCreated = true;
     }
-
-//    @Nullable
-//    @Override
-//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        View view = inflater.inflate(R.layout.fragment_conversion, container, false);
-//        mBind = ButterKnife.bind(this, view);
-//        return view;
-//    }
 
     @Override
     public void onStart() {
@@ -116,24 +106,11 @@ public class ConversionGoodsFragment extends BaseActivity {
         super.onStop();
     }
 
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        initView();
-//        initData();
-//    }
-
     @Override
     public void onResume() {
         super.onResume();
         loadData();
     }
-
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        mBind.unbind();
-//    }
 
     private void initView() {
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
@@ -239,7 +216,7 @@ public class ConversionGoodsFragment extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.conversionDetail, R.id.digitalCurrency, R.id.aliPay, R.id.telephoneCharge, R.id.modifyBtn, R.id.bindingAddress})
+    @OnClick({R.id.conversionDetail, R.id.digitalCurrency, R.id.aliPay, R.id.telephoneCharge, R.id.modifyBtn, R.id.bindingAddress, R.id.rechargeBtn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.digitalCurrency:
@@ -255,10 +232,13 @@ public class ConversionGoodsFragment extends BaseActivity {
                 setTabClick(mConversionDetail);
                 break;
             case R.id.modifyBtn:
-                Launcher.with(getActivity(), BindingAddressActivity.class).putExtra(ExtraKeys.BINDING_TYPE, mPosition).execute();
+                LaunchActivity();
                 break;
             case R.id.bindingAddress:
-                Launcher.with(getActivity(), BindingAddressActivity.class).putExtra(ExtraKeys.BINDING_TYPE, mPosition).execute();
+                LaunchActivity();
+                break;
+            case R.id.rechargeBtn:
+                exchangeGood();
                 break;
         }
     }
@@ -274,6 +254,54 @@ public class ConversionGoodsFragment extends BaseActivity {
                 mViewPager.setCurrentItem(i, false);
             }
         }
+    }
+
+    private void LaunchActivity() {
+        Intent intent = new Intent(this, BindingAddressActivity.class);
+        if (mConversionAddress != null) {
+            switch (mPosition) {
+                case PAGE_DIGITAL_COIN:
+                    if (!TextUtils.isEmpty(mConversionAddress.getExtractCoinAddress())) {
+                        intent.putExtra(ExtraKeys.BINDING_ADDRESS, mConversionAddress.getExtractCoinAddress());
+                    }
+                    break;
+                case PAGE_ALIPAY:
+                    if (!TextUtils.isEmpty(mConversionAddress.getAliPay())) {
+                        intent.putExtra(ExtraKeys.BINDING_ADDRESS, mConversionAddress.getAliPay());
+                    }
+                    if (!TextUtils.isEmpty(mConversionAddress.getAliPayName())) {
+                        intent.putExtra(ExtraKeys.BINDING_USER_NAME, mConversionAddress.getAliPayName());
+                    }
+                    break;
+                case PAGE_TELEPHONE_CHARGE:
+                    if (!TextUtils.isEmpty(mConversionAddress.getPhone())) {
+                        intent.putExtra(ExtraKeys.BINDING_ADDRESS, mConversionAddress.getPhone());
+                    }
+                    if (!TextUtils.isEmpty(mConversionAddress.getPhoneName())) {
+                        intent.putExtra(ExtraKeys.BINDING_USER_NAME, mConversionAddress.getPhoneName());
+                    }
+                    break;
+            }
+        }
+        getContext().startActivity(intent);
+    }
+
+    private void exchangeGood() {
+        ConversionContentFragment fragment = (ConversionContentFragment) mPagerAdapter.getFragment(mPosition);
+        if (fragment != null) {
+            ConversionContent conversionContent = fragment.getSelectConversionGood();
+            if (conversionContent != null) {
+                Apic.exchangeGood(conversionContent.getId()).tag(TAG).callback(new Callback<Resp>() {
+                    @Override
+                    protected void onRespSuccess(Resp resp) {
+                        ToastUtil.show(R.string.exchange_success);
+                        finish();
+                    }
+                }).fireFreely();
+                return;
+            }
+        }
+        ToastUtil.show(R.string.please_select_exchange_good);
     }
 
     public static class PagerAdapter extends FragmentPagerAdapter {
