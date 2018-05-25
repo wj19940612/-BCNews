@@ -20,7 +20,8 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
-import com.sbai.bcnews.model.mine.RobRedPacketInfo;
+import com.sbai.bcnews.model.mine.RedPacketInfo;
+import com.sbai.bcnews.model.mine.UserRedPacketStatus;
 import com.sbai.bcnews.model.system.RedPacketActivityStatus;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
@@ -90,34 +91,47 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
                     @Override
                     protected void onRespSuccessData(RedPacketActivityStatus data) {
                         updateRedPacketActivityStatus(data);
-                    }
-
-                    @Override
-                    public void onFailure(ReqError reqError) {
-                        super.onFailure(reqError);
-                        mRedPacketActivityStatus = new RedPacketActivityStatus();
-                        mRedPacketActivityStatus.setActivityIsRunning(true);
-                        mRedPacketActivityStatus.setTime(System.currentTimeMillis());
-                        mRedPacketActivityStatus.setRobRedPacketTime(true);
-                        mRedPacketActivityStatus.setNexChangeTime(System.currentTimeMillis() + 20 * 1000);
-                        updateRedPacketActivityStatus(mRedPacketActivityStatus);
+                        if (mRedPacketActivityStatus != null && mRedPacketActivityStatus.getRobStatus() == 1) {
+                            requestUserRedPacketStatus();
+                        }
                     }
                 })
                 .fire();
 
     }
 
+    private void requestUserRedPacketStatus() {
+        Apic.requestUserRedPacketStatus()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<UserRedPacketStatus>, UserRedPacketStatus>() {
+                    @Override
+                    protected void onRespSuccessData(UserRedPacketStatus data) {
+                        if (data.getIsRob() == 1) {
+                            Launcher.with(getContext(), HourWelfareActivity.class)
+                                    .execute();
+                            dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
+                    }
+                })
+                .fire();
+    }
+
     private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
         mRedPacketActivityStatus = data;
-        if (mRedPacketActivityStatus.isActivityIsRunning()) {
-            updateRobText(mRedPacketActivityStatus.isRobRedPacketTime());
+        if (mRedPacketActivityStatus.getRedPacketStatus() == 1) {
+            updateRobText(mRedPacketActivityStatus.getRobStatus() == 1);
             updateRobStatus(mRedPacketActivityStatus);
         }
     }
 
     private void updateRobStatus(RedPacketActivityStatus redPacketActivityStatus) {
         mWaitTime = getNexGetRedPacketTime(redPacketActivityStatus);
-        if (redPacketActivityStatus.isRobRedPacketTime()) {
+        if (redPacketActivityStatus.getRobStatus() == 1) {
             mDistanceNexRedPacketTime.setVisibility(View.GONE);
             resetCountDownTimer();
             startScheduleJob(1000);
@@ -161,7 +175,7 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
     }
 
     private long getNexGetRedPacketTime(RedPacketActivityStatus data) {
-        return data.getNexChangeTime() - data.getTime();
+        return data.getStartTime() - data.getTime();
     }
 
 
@@ -214,9 +228,9 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
         // TODO: 2018/5/17
         Apic.robRedPacket()
                 .tag(TAG)
-                .callback(new Callback2D<Resp<RobRedPacketInfo>, RobRedPacketInfo>() {
+                .callback(new Callback2D<Resp<RedPacketInfo>, RedPacketInfo>() {
                     @Override
-                    protected void onRespSuccessData(RobRedPacketInfo data) {
+                    protected void onRespSuccessData(RedPacketInfo data) {
                         Launcher.with(getContext(), HourWelfareActivity.class)
                                 .putExtra(ExtraKeys.DATA, data)
                                 .execute();
@@ -226,14 +240,6 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
                     @Override
                     public void onFailure(ReqError reqError) {
                         super.onFailure(reqError);
-                        // TODO: 2018/5/17 模拟
-                        RobRedPacketInfo data = new RobRedPacketInfo();
-                        data.setMoney(45545454.666);
-                        data.setTotalPeople(888888888);
-                        Launcher.with(getContext(), HourWelfareActivity.class)
-                                .putExtra(ExtraKeys.DATA, data)
-                                .execute();
-                        dismiss();
                     }
                 })
                 .fire();

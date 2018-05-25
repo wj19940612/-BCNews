@@ -10,33 +10,88 @@ import android.os.Parcelable;
  * </p>
  * APIS:{@link com.songbai.coinpro.http.Api#$methodName$}
  */
-public class RedPacketActivityStatus implements Parcelable{
-
-    private static final int RED_PACKET_ACTIVITY_IS_RUNNING = 1;
-    private static final int RED_PACKET_ACTIVITY_IS_CLOSED = 0;
-
-    private boolean activityIsRunning;
-
-    private boolean isRobRedPacketTime;
-
+public class RedPacketActivityStatus implements Parcelable {
+    /**
+     * currentEndTime : 1527139200939
+     * currentStartTime : 1527138000939
+     * nextEndTime : 1527096000939
+     * redPacketStatus : 1
+     * robStatus : 0
+     * nextStartTime : 1527094800939
+     * startTime : 1527141600939
+     * time : 1527140023939
+     * endTime : 1527142800939
+     */
+    private long currentEndTime;
+    private long currentStartTime;
+    private long nextEndTime;
+    /**
+     * 是否开启红包活动：0关闭,1开启
+     */
+    private int redPacketStatus;
+    /**
+     * 红包是否可抢:0不可抢,1可抢
+     */
+    private int robStatus;
+    private long nextStartTime;
+    private long startTime;
     private long time;
+    private long endTime;
 
-    private long nexChangeTime;
-
-    public boolean isRobRedPacketTime() {
-        return isRobRedPacketTime;
+    public long getCurrentEndTime() {
+        return currentEndTime;
     }
 
-    public void setRobRedPacketTime(boolean robRedPacketTime) {
-        isRobRedPacketTime = robRedPacketTime;
+    public void setCurrentEndTime(long currentEndTime) {
+        this.currentEndTime = currentEndTime;
     }
 
-    public boolean isActivityIsRunning() {
-        return activityIsRunning;
+    public long getCurrentStartTime() {
+        return currentStartTime;
     }
 
-    public void setActivityIsRunning(boolean activityIsRunning) {
-        this.activityIsRunning = activityIsRunning;
+    public void setCurrentStartTime(long currentStartTime) {
+        this.currentStartTime = currentStartTime;
+    }
+
+    public long getNextEndTime() {
+        return nextEndTime;
+    }
+
+    public void setNextEndTime(long nextEndTime) {
+        this.nextEndTime = nextEndTime;
+    }
+
+    public int getRedPacketStatus() {
+        return redPacketStatus;
+    }
+
+    public void setRedPacketStatus(int redPacketStatus) {
+        this.redPacketStatus = redPacketStatus;
+    }
+
+    public int getRobStatus() {
+        return robStatus;
+    }
+
+    public void setRobStatus(int robStatus) {
+        this.robStatus = robStatus;
+    }
+
+    public long getNextStartTime() {
+        return nextStartTime;
+    }
+
+    public void setNextStartTime(long nextStartTime) {
+        this.nextStartTime = nextStartTime;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 
     public long getTime() {
@@ -47,12 +102,12 @@ public class RedPacketActivityStatus implements Parcelable{
         this.time = time;
     }
 
-    public long getNexChangeTime() {
-        return nexChangeTime;
+    public long getEndTime() {
+        return endTime;
     }
 
-    public void setNexChangeTime(long nexChangeTime) {
-        this.nexChangeTime = nexChangeTime;
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
     }
 
     @Override
@@ -62,23 +117,33 @@ public class RedPacketActivityStatus implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeByte(this.activityIsRunning ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isRobRedPacketTime ? (byte) 1 : (byte) 0);
+        dest.writeLong(this.currentEndTime);
+        dest.writeLong(this.currentStartTime);
+        dest.writeLong(this.nextEndTime);
+        dest.writeInt(this.redPacketStatus);
+        dest.writeInt(this.robStatus);
+        dest.writeLong(this.nextStartTime);
+        dest.writeLong(this.startTime);
         dest.writeLong(this.time);
-        dest.writeLong(this.nexChangeTime);
+        dest.writeLong(this.endTime);
     }
 
     public RedPacketActivityStatus() {
     }
 
     protected RedPacketActivityStatus(Parcel in) {
-        this.activityIsRunning = in.readByte() != 0;
-        this.isRobRedPacketTime = in.readByte() != 0;
+        this.currentEndTime = in.readLong();
+        this.currentStartTime = in.readLong();
+        this.nextEndTime = in.readLong();
+        this.redPacketStatus = in.readInt();
+        this.robStatus = in.readInt();
+        this.nextStartTime = in.readLong();
+        this.startTime = in.readLong();
         this.time = in.readLong();
-        this.nexChangeTime = in.readLong();
+        this.endTime = in.readLong();
     }
 
-    public static final Creator<RedPacketActivityStatus> CREATOR = new Creator<RedPacketActivityStatus>() {
+    public static final Parcelable.Creator<RedPacketActivityStatus> CREATOR = new Parcelable.Creator<RedPacketActivityStatus>() {
         @Override
         public RedPacketActivityStatus createFromParcel(Parcel source) {
             return new RedPacketActivityStatus(source);

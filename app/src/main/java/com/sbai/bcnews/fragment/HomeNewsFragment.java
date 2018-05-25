@@ -25,11 +25,13 @@ import android.widget.TextView;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ChannelActivity;
+import com.sbai.bcnews.activity.mine.HourWelfareActivity;
 import com.sbai.bcnews.fragment.dialog.StartRobRedPacketDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ChannelCacheModel;
+import com.sbai.bcnews.model.mine.UserRedPacketStatus;
 import com.sbai.bcnews.model.system.RedPacketActivityStatus;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
@@ -140,9 +142,34 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mTitleBar.setLeftClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus).show(getChildFragmentManager());
+                if (mRedPacketActivityStatus != null && mRedPacketActivityStatus.getRobStatus() == 1) {
+                    requestUserRedPacketStatus();
+                }
             }
         });
+    }
+
+    private void requestUserRedPacketStatus() {
+        Apic.requestUserRedPacketStatus()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<UserRedPacketStatus>, UserRedPacketStatus>() {
+                    @Override
+                    protected void onRespSuccessData(UserRedPacketStatus data) {
+                        if (data.getIsRob() == 1) {
+                            Launcher.with(getContext(), HourWelfareActivity.class)
+                                    .execute();
+                        } else {
+                            StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus).show(getChildFragmentManager());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
+                        StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus).show(getChildFragmentManager());
+                    }
+                })
+                .fire();
     }
 
     private void initViewPager() {
@@ -209,31 +236,19 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
                 .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {
                     @Override
                     protected void onRespSuccessData(RedPacketActivityStatus data) {
+                        mRedPacketActivityStatus = data;
                         updateRedPacketActivityStatus(data);
                     }
-
-//                    @Override
-//                    public void onFailure(ReqError reqError) {
-//                        super.onFailure(reqError);
-//
-//                        // TODO: 2018/5/17 模拟的时间
-//                        mRedPacketActivityStatus = new RedPacketActivityStatus();
-//                        mRedPacketActivityStatus.setActivityIsRunning(true);
-//                        mRedPacketActivityStatus.setTime(System.currentTimeMillis());
-//                        mRedPacketActivityStatus.setRobRedPacketTime(false);
-//                        mRedPacketActivityStatus.setNexChangeTime(System.currentTimeMillis() + 20 * 1000);
-//                        updateRedPacketActivityStatus(mRedPacketActivityStatus);
-//                    }
                 })
                 .fire();
     }
 
     private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
         resetCountDownTimer();
-        if (data.isActivityIsRunning()) {
+        if (data.getRedPacketStatus() == 1) {
             mTitleBar.setLeftViewVisible(true);
             mWaitTime = getNexGetRedPacketTime(data);
-            if (data.isRobRedPacketTime()) canRobRedPacket();
+            if (data.getRobStatus() == 1) canRobRedPacket();
             else waitNextRobRedPacketTime();
         } else {
             mTitleBar.setLeftViewVisible(false);
@@ -294,7 +309,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     }
 
     private long getNexGetRedPacketTime(RedPacketActivityStatus data) {
-        return data.getNexChangeTime() - data.getTime();
+        return data.getStartTime() - data.getTime();
     }
 
 
