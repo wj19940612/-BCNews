@@ -48,6 +48,8 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
     RelativeLayout mRootView;
+    @BindView(R.id.emptyView)
+    TextView mEmptyView;
     private QKCDetailAdapter mQKCDetailAdapter;
 
     private int mPage;
@@ -67,6 +69,7 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
         mQKCDetailAdapter = new QKCDetailAdapter(getActivity());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeTarget.setAdapter(mQKCDetailAdapter);
+
 
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_qkc_detail_head, null);
         headView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -96,6 +99,14 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
     private void updateQKCList(ArrayList<QKCDetails> data) {
         if (mPage == 0) {
             mQKCDetailAdapter.clear();
+
+            if (data.isEmpty()) {
+                mSwipeToLoadLayout.setVisibility(View.GONE);
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mSwipeToLoadLayout.setVisibility(View.VISIBLE);
+                mEmptyView.setVisibility(View.GONE);
+            }
         }
 
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {

@@ -346,7 +346,7 @@
 
     <string name="if_doubt_ask_service">如有疑问，请联系客服微信:</string>
     <string name="click_copy">(点击复制)</string>
-    <string name="no_detail">暂无相关明细</string>
+    <string name="no_detail">暂无明细</string>
 
     <string name="congratulations_login_success">恭喜您登陆成功</string>
     <string name="congratulations_register_success">恭喜您注册成功</string>
