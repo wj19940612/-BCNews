@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
@@ -55,11 +56,11 @@ public class RandomLocationLayout extends LinearLayout {
 
         init();
 
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_random_location_qkc, null);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_random_location_qkc, this, false);
         ButterKnife.bind(view);
         addView(view);
-        resetView();
         mRandom = new Random();
+        resetView();
     }
 
     private void resetView() {
@@ -121,6 +122,9 @@ public class RandomLocationLayout extends LinearLayout {
     private int receiveCount;
 
     private void setCoinStyle(int stopSize) {
+        removeAllViews();
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_random_location_qkc, this, false);
+        addView(view);
         //0-5   6-9    10-~
         resetView();
         ViewGroup parent = (ViewGroup) getChildAt(0);
@@ -165,6 +169,11 @@ public class RandomLocationLayout extends LinearLayout {
     }
 
     private void setRandomTranslate(View view) {
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        layoutParams.leftMargin += getMarginLeft();
+        layoutParams.topMargin += getMarginTop();
+        layoutParams.bottomMargin += getMarginBottom();
+        view.setLayoutParams(layoutParams);
     }
 
 
@@ -174,14 +183,14 @@ public class RandomLocationLayout extends LinearLayout {
         return i;
     }
 
-    private int getMarginLeft(int rang) {
-        int i = (int) Display.dp2Px(mRandom.nextInt(rang), getResources());
+    private int getMarginLeft() {
+        int i = (int) Display.dp2Px(mRandom.nextInt(10), getResources());
         Log.d(TAG, "getMarginLeft: " + i);
         return i;
     }
 
     private int getMarginBottom() {
-        int i = (int) Display.dp2Px(mRandom.nextInt(50), getResources());
+        int i = (int) Display.dp2Px(mRandom.nextInt(10), getResources());
         Log.d(TAG, "getMarginBottom: " + i);
         return i;
     }
