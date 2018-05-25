@@ -25,11 +25,13 @@ import android.widget.TextView;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.HourWelfareActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.StartRobRedPacketDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ChannelCacheModel;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.mine.UserRedPacketStatus;
 import com.sbai.bcnews.model.system.RedPacketActivityStatus;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
@@ -140,8 +142,10 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mTitleBar.setLeftClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mRedPacketActivityStatus != null && mRedPacketActivityStatus.getRobStatus() == 1) {
+                if (mRedPacketActivityStatus != null && mRedPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB) {
                     requestUserRedPacketStatus();
+                }else {
+                    StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus).show(getChildFragmentManager());
                 }
             }
         });
@@ -153,7 +157,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
                 .callback(new Callback2D<Resp<UserRedPacketStatus>, UserRedPacketStatus>() {
                     @Override
                     protected void onRespSuccessData(UserRedPacketStatus data) {
-                        if (data.getIsRob() == 1) {
+                        if (data.getIsRob() == UserRedPacketStatus.ROBED) {
                             Launcher.with(getContext(), HourWelfareActivity.class)
                                     .execute();
                         } else {
@@ -229,6 +233,10 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
 
 
     private void requestRedActivityPacketStatus() {
+        if (!LocalUser.getUser().isLogin()) {
+            Launcher.with(getContext(), LoginActivity.class).execute();
+            return;
+        }
         Apic.requestRedPacketStatus()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {
@@ -243,10 +251,10 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
 
     private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
         resetCountDownTimer();
-        if (data.getRedPacketStatus() == 1) {
+        if (data.getRedPacketStatus() == RedPacketActivityStatus.REDPACKET_STATE_ON) {
             mTitleBar.setLeftViewVisible(true);
             mWaitTime = getNexGetRedPacketTime(data);
-            if (data.getRobStatus() == 1) canRobRedPacket();
+            if (data.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB) canRobRedPacket();
             else waitNextRobRedPacketTime();
         } else {
             mTitleBar.setLeftViewVisible(false);

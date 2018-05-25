@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sbai.bcnews.BuildConfig;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.FeedbackActivity;
@@ -32,6 +33,7 @@ import com.sbai.bcnews.model.mine.MsgNumber;
 import com.sbai.bcnews.model.mine.MyIntegral;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.model.news.NotReadMessage;
+import com.sbai.bcnews.model.system.MintTabStatus;
 import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.utils.ClipboardUtils;
 import com.sbai.bcnews.utils.FinanceUtil;
@@ -94,12 +96,47 @@ public class MineFragment extends BaseFragment {
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
         updateUserLoginStatus();
         refreshUserData();
+        requestQKCAndInviteHasGiftTabVisible();
+    }
+
+    /**
+     * 控制qkc和邀请有礼显示的接口
+     */
+    private void requestQKCAndInviteHasGiftTabVisible() {
+        // TODO: 2018/5/25 目前服务端是返回的0 开发环境就让显示  测试环境的话 看服务端配置
+        if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")) {
+            mInvite.setVisibility(View.VISIBLE);
+            mQkc.setVisibility(View.VISIBLE);
+        }else {
+            Apic.requestQKCAndInviteHasGiftTabVisible()
+                    .tag(TAG)
+                    .callback(new Callback2D<Resp<MintTabStatus>, MintTabStatus>() {
+                        @Override
+                        protected void onRespSuccessData(MintTabStatus data) {
+                            updateTabStatus(data);
+                        }
+                    })
+                    .fire();
+        }
+    }
+
+    private void updateTabStatus(MintTabStatus data) {
+        if (data.getPromoterShow() == MintTabStatus.MINE_INVITE_HAS_GIFT_TAB_SHOW) {
+            mInvite.setVisibility(View.VISIBLE);
+        } else {
+            mInvite.setVisibility(View.GONE);
+        }
+
+        if (data.getIntegralShow() == MintTabStatus.MINE_QKC_TAB_SHOW) {
+            mQkc.setVisibility(View.VISIBLE);
+        } else {
+            mQkc.setVisibility(View.GONE);
+        }
     }
 
 
@@ -313,7 +350,7 @@ public class MineFragment extends BaseFragment {
                     @Override
                     public void onClick(Dialog dialog) {
                         dialog.dismiss();
-                        ClipboardUtils.clipboardText(getActivity(),data,R.string.copy_success);
+                        ClipboardUtils.clipboardText(getActivity(), data, R.string.copy_success);
                     }
                 })
                 .show();

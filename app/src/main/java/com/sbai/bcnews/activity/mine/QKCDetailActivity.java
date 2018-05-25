@@ -21,6 +21,7 @@ import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.model.mine.QKCDetails;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.view.EmptyRecyclerView;
 import com.sbai.bcnews.view.TitleBar;
@@ -48,6 +49,8 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
     RelativeLayout mRootView;
+    @BindView(R.id.emptyView)
+    TextView mEmptyView;
     private QKCDetailAdapter mQKCDetailAdapter;
 
     private int mPage;
@@ -68,8 +71,7 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeTarget.setAdapter(mQKCDetailAdapter);
 
-        View headView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_qkc_detail_head, null);
-        headView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        View headView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_qkc_detail_head, mSwipeTarget, false);
         mQKCDetailAdapter.addHeaderView(headView);
     }
 
@@ -80,8 +82,8 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
 
                     @Override
                     protected void onRespSuccess(ListResp<QKCDetails> resp) {
-                        updateQKCList(resp.getListData());
                         stopFreshOrLoadAnimation();
+                        updateQKCList(resp.getListData());
                     }
 
                     @Override
@@ -96,8 +98,15 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
     private void updateQKCList(ArrayList<QKCDetails> data) {
         if (mPage == 0) {
             mQKCDetailAdapter.clear();
-        }
 
+            if (data.isEmpty()) {
+                mSwipeToLoadLayout.setVisibility(View.GONE);
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mSwipeToLoadLayout.setVisibility(View.VISIBLE);
+                mEmptyView.setVisibility(View.GONE);
+            }
+        }
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
@@ -120,6 +129,7 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
     @Override
     public void onRefresh() {
         mPage = 0;
+        mSwipeToLoadLayout.setLoadMoreEnabled(true);
         requestQksDetailsList();
     }
 
@@ -145,6 +155,8 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
 
 
         static class ViewHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.divider)
+            View mDivider;
             @BindView(R.id.time)
             TextView mTime;
             @BindView(R.id.name)
@@ -160,18 +172,12 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
             }
 
             public void bindDataWithView(QKCDetails data, Context context, int position) {
+                mDivider.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
                 mName.setText(data.getTypeStr());
                 boolean plus = data.getChangeType() == 0;
                 mRootView.setSelected(plus);
                 mQksNumber.setSelected(plus);
-
-                double number = data.getIntegral();
-                String formatNumber;
-                if (number == data.getIntegral()) {
-                    formatNumber = String.valueOf(number);
-                } else {
-                    formatNumber = String.valueOf(data.getIntegral());
-                }
+                String formatNumber = FinanceUtil.formatWithScaleRemoveTailZero(data.getIntegral());
 
                 if (plus) {
                     mQksNumber.setText(context.getString(R.string.plus_qks, formatNumber));

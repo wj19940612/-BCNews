@@ -8,8 +8,6 @@ import com.sbai.httplib.ReqParams;
 
 import java.io.File;
 
-import cn.qqtheme.framework.picker.AddressPicker;
-
 /**
  * Modified by john on 23/01/2018
  * <p>
@@ -282,7 +280,7 @@ public class Apic {
      * 获取矿产--薛松
      */
     public static Api getQKC(String id) {
-        return Api.post("/api/news-user/log/get/integral.do",new ReqParams().put("id",id));
+        return Api.post("/api/news-user/log/get/integral.do", new ReqParams().put("id", id));
     }
 
     /**
@@ -295,6 +293,15 @@ public class Apic {
                 new ReqParams()
                         .put("page", page)
                         .put("size", DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * /api/news-user/user/show.do
+     * POST
+     * 邀请有礼、积分开关--薛松
+     */
+    public static Api requestQKCAndInviteHasGiftTabVisible() {
+        return Api.get("/api/news-user/user/show.do");
     }
 
 
