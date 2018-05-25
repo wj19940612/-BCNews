@@ -75,7 +75,8 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_NORMAL;
 public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     public static final int TIME_SECOND = 1000;
-    public static final int TIME_COUNT_GET_HASH_RATE = 1 * 60;
+    public static final int TIME_COUNT_GET_HASH_RATE = 3 * 60;
+    
     public static final int TIME_COUNT_DELAY = 10;
     public static final int REQ_CODE_CANCEL_COLLECT = 2265;
     @BindView(R.id.titleBar)
