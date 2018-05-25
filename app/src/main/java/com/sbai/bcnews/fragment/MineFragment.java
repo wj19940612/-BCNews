@@ -6,7 +6,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
@@ -33,9 +32,11 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.model.mine.MsgNumber;
+import com.sbai.bcnews.model.mine.MyIntegral;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.model.news.NotReadMessage;
 import com.sbai.bcnews.model.system.Operation;
+import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.ToastUtil;
@@ -79,6 +80,10 @@ public class MineFragment extends BaseFragment {
     IconTextRow mReview;
 
     Unbinder unbinder;
+    @BindView(R.id.qkc)
+    IconTextRow mQkc;
+    @BindView(R.id.invite)
+    IconTextRow mInvite;
 
     private int mNotReadMessageCount;
 
@@ -91,11 +96,7 @@ public class MineFragment extends BaseFragment {
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
-    }
 
     @Override
     public void onResume() {
@@ -126,6 +127,23 @@ public class MineFragment extends BaseFragment {
                     }
                 })
                 .fire();
+        requestQKCNumber();
+    }
+
+    private void requestQKCNumber() {
+        Apic.requestIntegral()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<MyIntegral>, MyIntegral>() {
+                    @Override
+                    protected void onRespSuccessData(MyIntegral data) {
+                        updateQKCNumber(data.getIntegral());
+                    }
+                })
+                .fire();
+    }
+
+    private void updateQKCNumber(double integral) {
+        mQkc.setSubText(FinanceUtil.formatWithScaleRemoveTailZero(integral));
     }
 
     public void updateNotReadMessage(NotReadMessage data) {
@@ -160,6 +178,7 @@ public class MineFragment extends BaseFragment {
             }
             updateUserReadHistory(readHistorySize);
             updateNotReadMessage(0);
+            updateQKCNumber(0);
         }
     }
 
@@ -212,7 +231,8 @@ public class MineFragment extends BaseFragment {
     }
 
     @OnClick({R.id.headPortrait, R.id.userName, R.id.collect, R.id.history,
-            R.id.contribute, R.id.feedBack, R.id.setting, R.id.message, R.id.review,R.id.qks})
+            R.id.contribute, R.id.feedBack, R.id.setting, R.id.message,
+            R.id.review, R.id.qkc, R.id.invite})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.headPortrait:
@@ -261,8 +281,15 @@ public class MineFragment extends BaseFragment {
                     login();
                 }
                 break;
-            case R.id.qks:
-                Launcher.with(getActivity(), QKCActivity.class).execute();
+            case R.id.qkc:
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), QKCActivity.class).execute();
+                } else {
+                    login();
+                }
+                break;
+            case R.id.invite:
+
                 break;
         }
     }

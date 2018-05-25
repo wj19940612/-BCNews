@@ -78,15 +78,34 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <TextView
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/headLayout"
-            android:id="@+id/qks"
+        <com.sbai.bcnews.view.IconTextRow
+            android:id="@+id/qkc"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:text="@string/qkc"
-            android:textColor="@android:color/holo_red_dark"/>
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_white"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/headLayout"
+            app:leftIcon="@drawable/ic_qkc_mine"
+            app:rightIcon="@drawable/ic_common_right_arrow"
+            app:rowText="@string/qkc"
+            app:rowTextColor="@color/text_222"
+            app:rowTextSize="16sp"
+            app:rowVerticalPadding="0dp"/>
+
+        <com.sbai.bcnews.view.IconTextRow
+            android:id="@+id/invite"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_white"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/qkc"
+            app:leftIcon="@drawable/ic_star_mine_invite_has_gift"
+            app:rightIcon="@drawable/ic_common_right_arrow"
+            app:rowText="@string/invite_has_gift"
+            app:rowTextColor="@color/text_222"
+            app:rowTextSize="16sp"
+            app:rowVerticalPadding="0dp"/>
 
         <com.sbai.bcnews.view.IconTextRow
             android:id="@+id/message"
@@ -95,7 +114,7 @@
             android:layout_marginTop="12dp"
             android:background="@drawable/bg_white"
             app:hasBottomSplitLine="true"
-            app:layout_constraintTop_toBottomOf="@+id/qks"
+            app:layout_constraintTop_toBottomOf="@+id/invite"
             app:leftIcon="@drawable/ic_mine_message"
             app:rightIcon="@drawable/ic_common_right_arrow"
             app:rowText="@string/message"

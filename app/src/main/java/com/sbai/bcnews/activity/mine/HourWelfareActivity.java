@@ -24,6 +24,7 @@ import com.sbai.bcnews.model.mine.RedPacketInfo;
 import com.sbai.bcnews.model.mine.RedPacketListInfo;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.view.EmptyRecyclerView;
 import com.sbai.bcnews.view.TitleBar;
@@ -103,7 +104,7 @@ public class HourWelfareActivity extends RecycleViewSwipeLoadActivity {
                     .circleCrop()
                     .into(portrait);
             SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.congrats_you_rob_number_red_packet),
-                    getString(R.string.number_qks, String.valueOf(redPacketListInfo.getIntegral())), ContextCompat.getColor(getActivity(), R.color.text_222), getString(R.string.save_account));
+                    getString(R.string.number_qks, FinanceUtil.formatWithScaleRemoveTailZero(redPacketListInfo.getIntegral())), ContextCompat.getColor(getActivity(), R.color.text_222), getString(R.string.save_account));
             robRedPacketNumber.setText(spannableString);
 
             robRedPacketPeopleNumber.setText(getString(R.string.total_number_people_rob_red_packet, redPacketListInfo.getTotal()));
@@ -211,7 +212,7 @@ public class HourWelfareActivity extends RecycleViewSwipeLoadActivity {
                         .into(mPortrait);
                 mUserName.setText(data.getUserName());
                 mTimeLine.setText(DateUtil.format(data.getCreateTime(), DateUtil.FORMAT_MINUTE_SECOND));
-                mRobRedPacketNumber.setText(context.getString(R.string.get_rad_packet_number, String.valueOf(data.getIntegral())));
+                mRobRedPacketNumber.setText(context.getString(R.string.get_rad_packet_number,FinanceUtil.formatWithScaleRemoveTailZero(data.getIntegral())));
             }
         }
     }

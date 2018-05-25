@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.activity.ChannelActivity;
 import com.sbai.bcnews.activity.mine.HourWelfareActivity;
 import com.sbai.bcnews.fragment.dialog.StartRobRedPacketDialogFragment;
 import com.sbai.bcnews.http.Apic;
@@ -37,7 +36,6 @@ import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
-import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
