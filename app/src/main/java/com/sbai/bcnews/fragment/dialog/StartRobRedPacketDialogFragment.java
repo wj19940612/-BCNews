@@ -113,7 +113,7 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
                                     .execute();
                             dismiss();
                         } else {
-                            mHaveRedPacket = data.getRedPacket() != UserRedPacketStatus.HAVE_REDPACKET;
+                            mHaveRedPacket = data.getRedPacket() == UserRedPacketStatus.HAVE_REDPACKET;
                             updateRobText(mHaveRedPacket);
                             updateRobStatus(mRedPacketActivityStatus);
                         }
