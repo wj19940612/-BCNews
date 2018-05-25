@@ -53,6 +53,7 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
     private long mWaitTime;
     private CountDownTimer mCountDownTimer;
     private boolean mStartRob;
+    private boolean mHaveRedPacket;
 
     public static StartRobRedPacketDialogFragment newInstance(RedPacketActivityStatus redPacketActivityStatus) {
         Bundle args = new Bundle();
@@ -85,13 +86,15 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
     }
 
     private void requestRedPacketStatus() {
+        mHaveRedPacket = true;
         Apic.requestRedPacketStatus()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {
                     @Override
                     protected void onRespSuccessData(RedPacketActivityStatus data) {
                         updateRedPacketActivityStatus(data);
-                        if (mRedPacketActivityStatus != null && mRedPacketActivityStatus.getRobStatus() == 1) {
+                        if (mRedPacketActivityStatus != null
+                                && mRedPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB) {
                             requestUserRedPacketStatus();
                         }
                     }
@@ -106,10 +109,14 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
                 .callback(new Callback2D<Resp<UserRedPacketStatus>, UserRedPacketStatus>() {
                     @Override
                     protected void onRespSuccessData(UserRedPacketStatus data) {
-                        if (data.getIsRob() == 1) {
+                        if (data.getIsRob() == UserRedPacketStatus.ROBED) {
                             Launcher.with(getContext(), HourWelfareActivity.class)
                                     .execute();
                             dismiss();
+                        } else {
+                            mHaveRedPacket = data.getRedPacket() != UserRedPacketStatus.HAVE_REDPACKET;
+                            updateRobText(mHaveRedPacket);
+                            updateRobStatus(mRedPacketActivityStatus);
                         }
                     }
 
@@ -123,19 +130,19 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
 
     private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
         mRedPacketActivityStatus = data;
-        if (mRedPacketActivityStatus.getRedPacketStatus() == 1) {
-            updateRobText(mRedPacketActivityStatus.getRobStatus() == 1);
+        if (mRedPacketActivityStatus.getRedPacketStatus() == RedPacketActivityStatus.REDPACKET_STATE_ON) {
+            updateRobText(mRedPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB);
             updateRobStatus(mRedPacketActivityStatus);
         }
     }
 
     private void updateRobStatus(RedPacketActivityStatus redPacketActivityStatus) {
         mWaitTime = getNexGetRedPacketTime(redPacketActivityStatus);
-        if (redPacketActivityStatus.getRobStatus() == 1) {
+        if (redPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB && mHaveRedPacket) {
             mDistanceNexRedPacketTime.setVisibility(View.GONE);
             resetCountDownTimer();
             startScheduleJob(1000);
-        } else {
+        } else if (mWaitTime > 0) {
             mDistanceNexRedPacketTime.setVisibility(View.VISIBLE);
             startCountDownTimer();
         }
@@ -177,7 +184,6 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
     private long getNexGetRedPacketTime(RedPacketActivityStatus data) {
         return data.getStartTime() - data.getTime();
     }
-
 
     @Override
     public void onTimeUp(int count) {
@@ -225,7 +231,6 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
             return;
         }
         mStartRob = true;
-        // TODO: 2018/5/17
         Apic.robRedPacket()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<RedPacketInfo>, RedPacketInfo>() {
