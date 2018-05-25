@@ -19,6 +19,8 @@
         android:id="@+id/portrait"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,14 +29,15 @@
     <TextView
         android:id="@+id/userName"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="21dp"
         android:layout_marginLeft="10dp"
+        android:includeFontPadding="false"
+        android:maxLines="1"
         android:textColor="@color/text_222"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@id/portrait"
-        app:layout_constraintHorizontal_weight="1"
-        android:maxLines="1"
         app:layout_constraintEnd_toStartOf="@id/robRedPacketNumber"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/portrait"
         app:layout_constraintTop_toTopOf="@+id/portrait"
         tools:text="溺水的鱼大大级考大萨达所大萨达所ddd多撒"/>
 

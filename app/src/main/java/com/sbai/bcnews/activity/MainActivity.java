@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.sbai.bcnews.ExtraKeys;
@@ -40,7 +39,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.sbai.bcnews.view.dialog.RegisterScoreDialog.Style.LOGIN;
-import static com.sbai.bcnews.view.dialog.RegisterScoreDialog.Style.REGISTER;
 
 public class MainActivity extends BaseActivity {
     public static final int PAGE_POSITION_NEWS = 0;
@@ -137,7 +135,6 @@ public class MainActivity extends BaseActivity {
                 .callback(new Callback2D<Resp<NotReadMessage>, NotReadMessage>() {
                     @Override
                     protected void onRespSuccessData(NotReadMessage data) {
-                        Log.d(TAG, "onRespSuccessData: " + data.toString());
                         if (data.hasNewMessage()) {
                             mBottomTabs.setRedPointVisibility(View.VISIBLE);
                         } else {

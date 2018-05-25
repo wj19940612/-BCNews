@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
-import com.sbai.bcnews.http.Callback2D;
-import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.model.mine.QKCDetails;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
@@ -25,10 +25,11 @@ import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.view.EmptyRecyclerView;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.recycleview.HeaderViewRecycleViewAdapter;
+import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,22 +69,31 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
         mSwipeTarget.setAdapter(mQKCDetailAdapter);
 
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_qkc_detail_head, null);
+        headView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         mQKCDetailAdapter.addHeaderView(headView);
     }
 
     private void requestQksDetailsList() {
         Apic.requestQKCDetailsList(mPage)
                 .tag(TAG)
-                .callback(new Callback2D<Resp<List<QKCDetails>>, List<QKCDetails>>() {
+                .callback(new Callback<ListResp<QKCDetails>>() {
+
                     @Override
-                    protected void onRespSuccessData(List<QKCDetails> data) {
-                        updateQKCList(data);
+                    protected void onRespSuccess(ListResp<QKCDetails> resp) {
+                        updateQKCList(resp.getListData());
+                        stopFreshOrLoadAnimation();
+                    }
+
+                    @Override
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
+                        stopFreshOrLoadAnimation();
                     }
                 })
                 .fire();
     }
 
-    private void updateQKCList(List<QKCDetails> data) {
+    private void updateQKCList(ArrayList<QKCDetails> data) {
         if (mPage == 0) {
             mQKCDetailAdapter.clear();
         }
@@ -109,7 +119,7 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
 
     @Override
     public void onRefresh() {
-        mPage=0;
+        mPage = 0;
         requestQksDetailsList();
     }
 
@@ -117,7 +127,7 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
 
         private Context mContext;
 
-        public QKCDetailAdapter(Context context) {
+        QKCDetailAdapter(Context context) {
             mContext = context;
         }
 
@@ -150,17 +160,17 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
             }
 
             public void bindDataWithView(QKCDetails data, Context context, int position) {
-
-                boolean plus = data.getDirection() == QKCDetails.DIRECTION_PLUS;
-                mRootView.setPressed(plus);
+                mName.setText(data.getTypeStr());
+                boolean plus = data.getChangeType() == 0;
+                mRootView.setSelected(plus);
                 mQksNumber.setSelected(plus);
 
-                int number = (int) data.getNumber();
+                double number = data.getIntegral();
                 String formatNumber;
-                if (number == data.getNumber()) {
+                if (number == data.getIntegral()) {
                     formatNumber = String.valueOf(number);
                 } else {
-                    formatNumber = String.valueOf(data.getNumber());
+                    formatNumber = String.valueOf(data.getIntegral());
                 }
 
                 if (plus) {
@@ -168,8 +178,8 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
                 } else {
                     mQksNumber.setText(context.getString(R.string.minus_qks, formatNumber));
                 }
-                String format = DateUtil.format(data.getTime(), DateUtil.FORMAT_SPECIAL_SLASH_NO_HOUR);
-                String hour = DateUtil.format(data.getTime(), DateUtil.FORMAT_HOUR_MINUTE);
+                String format = DateUtil.format(data.getCreateTime(), DateUtil.FORMAT_SPECIAL_SLASH_NO_HOUR);
+                String hour = DateUtil.format(data.getCreateTime(), DateUtil.FORMAT_HOUR_MINUTE);
                 SpannableString spannableString = StrUtil.mergeTextWithRatio(format, "\n" + hour, 0.95f);
                 mTime.setText(spannableString);
             }

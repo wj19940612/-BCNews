@@ -9,43 +9,87 @@ package com.sbai.bcnews.model.mine;
  */
 public class QKCDetails {
 
-    public static final int DIRECTION_PLUS = 0;
-    public static final int DIRECTION_MINUS = 1;
+    /**
+     * changeType : 1
+     * createTime : 1527039927000
+     * id : 3
+     * integral : 1
+     * type : 2
+     * typeStr : 分成收益
+     * updateTime : 1527039927000
+     * userId : 1665
+     */
 
-    private long time;
-    private String type;
-    private int direction;
-    private double number;
+    private int changeType;
+    private long createTime;
+    private String id;
+    private double integral;
+    private int type;
+    private String typeStr;
+    private long updateTime;
+    private int userId;
 
-    public double getNumber() {
-        return number;
+    public int getChangeType() {
+        return changeType;
     }
 
-    public void setNumber(double number) {
-        this.number = number;
+    public void setChangeType(int changeType) {
+        this.changeType = changeType;
     }
 
-    public long getTime() {
-        return time;
+    public long getCreateTime() {
+        return createTime;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
     }
 
-    public String getType() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public double getIntegral() {
+        return integral;
+    }
+
+    public void setIntegral(double integral) {
+        this.integral = integral;
+    }
+
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 
-    public int getDirection() {
-        return direction;
+    public String getTypeStr() {
+        return typeStr;
     }
 
-    public void setDirection(int direction) {
-        this.direction = direction;
+    public void setTypeStr(String typeStr) {
+        this.typeStr = typeStr;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

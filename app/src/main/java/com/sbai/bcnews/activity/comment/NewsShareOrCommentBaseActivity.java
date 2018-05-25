@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
 import android.text.TextUtils;
+import android.view.Gravity;
 
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
@@ -21,6 +22,7 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
+import com.sbai.bcnews.model.mine.MyIntegral;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.model.news.NewViewPointAndReview;
 import com.sbai.bcnews.model.news.ViewPointComment;
@@ -411,11 +413,15 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
     private void submitWhistleBlowing(String content, int type, String id) {
         Apic.submitWhistleBlowing(id, type, content)
                 .tag(TAG)
-                .callback(new Callback<Resp<Object>>() {
-
+                .callback(new Callback<Resp<MyIntegral>>() {
                     @Override
-                    protected void onRespSuccess(Resp<Object> resp) {
-                        ToastUtil.show(R.string.whistle_blowing_success);
+                    protected void onRespSuccess(Resp<MyIntegral> resp) {
+                        if (resp.getData() != null && resp.getData().getIntegral() != 0) {
+                            String message = getString(R.string.whistle_blowing_success_add_qkc, resp.getData().getRate());
+                            ToastUtil.show(getActivity(), message, Gravity.CENTER, 0, 0);
+                        } else {
+                            ToastUtil.show(R.string.whistle_blowing_success);
+                        }
                     }
                 })
                 .fire();

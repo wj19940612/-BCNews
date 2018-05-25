@@ -255,6 +255,7 @@
     <string name="copy_link">复制链接</string>
     <string name="whistle_blowing">举报</string>
     <string name="whistle_blowing_success">举报成功</string>
+    <string name="whistle_blowing_success_add_qkc">举报成功，奖励+%1$d算力</string>
 
 
     <string name="please_choose_whistle_blowing">请选择举报理由</string>
@@ -322,6 +323,7 @@
     <string name="binding_currency_address">绑定提币地址</string>
     <string name="currency_address">提币地址</string>
     <string name="immediately_binding">立即绑定</string>
+    <string name="invite_has_gift">邀请有礼</string>
 
     <string name="binding_ali_pay_account">绑定支付宝账户</string>
     <string name="please_input_your_ali_pay_account">请输入您的支付宝账户</string>
