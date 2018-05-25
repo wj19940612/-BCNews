@@ -29,4 +29,12 @@ public class MyIntegral {
     public void setIntegral(double integral) {
         this.integral = integral;
     }
+
+    @Override
+    public String toString() {
+        return "MyIntegral{" +
+                "rate=" + rate +
+                ", integral=" + integral +
+                '}';
+    }
 }

@@ -12,7 +12,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
@@ -790,10 +789,8 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void showRateTip() {
-        View view = LayoutInflater.from(this).inflate(R.layout.toast_get_calculate_rate, null);
-        TextView textView = view.findViewById(R.id.message);
         String message = "恭喜获得持续阅读奖励+3算力";
-        ToastUtil.show(view, textView, message, mTitleBar.getHeight());
+        ToastUtil.show(getActivity(),message,mTitleBar.getHeight());
     }
 
 
