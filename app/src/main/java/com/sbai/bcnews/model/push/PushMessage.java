@@ -18,6 +18,14 @@ public class PushMessage implements PushType{
         return type == NEWS;
     }
 
+    public boolean isLoginReward(){
+        return type == LOGIN_REWARD;
+    }
+
+    public boolean isTimeReward(){
+        return type == TIME_REWARD;
+    }
+
     public boolean isNewsFlash() {
         return type == NEWS_FLASH;
     }

@@ -2,10 +2,12 @@ package com.sbai.bcnews.activity.mine;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.fragment.dialog.PromoteHashRateWayDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
@@ -35,6 +37,12 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
     TextView mQkcNumber;
     @BindView(R.id.rate)
     TextView mRate;
+    @BindView(R.id.hashrate)
+    TextView mHashrate;
+    @BindView(R.id.lookDetail)
+    TextView mLookDetail;
+    @BindView(R.id.qkcDetail)
+    RelativeLayout mQkcDetail;
     private MyIntegral mMyIntegral;
 
 
@@ -44,8 +52,19 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
         setContentView(R.layout.activity_qkc);
         ButterKnife.bind(this);
         translucentStatusBar();
+        initView();
         requestNotGet();
         mRandomLayout.setOnCoinClickListener(this);
+    }
+
+    private void initView() {
+        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 2018/5/25 打开h5承接页 
+
+            }
+        });
     }
 
     private void requestNotGet() {
@@ -80,10 +99,6 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
         mRate.setText(getString(R.string.now_hashrate, String.valueOf(data.getRate())));
     }
 
-    @OnClick(R.id.qkcDetail)
-    public void onViewClicked() {
-        Launcher.with(getActivity(), QKCDetailActivity.class).execute();
-    }
 
     @Override
     public void onCoinClick(final View v, final QKC qks) {
@@ -102,6 +117,18 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
             setQKCAndRate(mMyIntegral);
         } else {
             ToastUtil.show(R.string.http_error_network);
+        }
+    }
+
+    @OnClick({R.id.lookDetail, R.id.hashrate})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.lookDetail:
+                Launcher.with(getActivity(), QKCDetailActivity.class).execute();
+                break;
+            case R.id.hashrate:
+                new PromoteHashRateWayDialogFragment().show(getSupportFragmentManager());
+                break;
         }
     }
 }

@@ -23,6 +23,7 @@
         app:titleTextSize="17sp"/>
 
     <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:visibility="visible"
         android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,19 +56,19 @@
 
     </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
-    <!--<TextView-->
-    <!--android:visibility="gone"-->
-    <!--android:layout_centerInParent="true"-->
-    <!--android:id="@+id/emptyView"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:layout_marginTop="180dp"-->
-    <!--android:drawablePadding="20dp"-->
-    <!--android:drawableTop="@drawable/ic_common_not_data"-->
-    <!--android:gravity="center"-->
-    <!--android:text="@string/not_data"-->
-    <!--android:textColor="@color/text_4949"-->
-    <!--android:textSize="16sp"/>-->
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="180dp"
+        android:drawablePadding="20dp"
+        android:drawableTop="@drawable/bg_detail_empty"
+        android:gravity="center"
+        android:text="@string/no_detail"
+        android:textColor="@color/text_4949"
+        android:textSize="16sp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

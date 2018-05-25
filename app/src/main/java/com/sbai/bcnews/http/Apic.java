@@ -280,7 +280,7 @@ public class Apic {
      * 获取矿产--薛松
      */
     public static Api getQKC(String id) {
-        return Api.post("/api/news-user/log/get/integral.do",new ReqParams().put("id",id));
+        return Api.post("/api/news-user/log/get/integral.do", new ReqParams().put("id", id));
     }
 
     /**
@@ -293,6 +293,15 @@ public class Apic {
                 new ReqParams()
                         .put("page", page)
                         .put("size", DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * /api/news-user/user/show.do
+     * POST
+     * 邀请有礼、积分开关--薛松
+     */
+    public static Api requestQKCAndInviteHasGiftTabVisible() {
+        return Api.get("/api/news-user/user/show.do");
     }
 
 
@@ -858,6 +867,7 @@ public class Apic {
 
     /**
      * 绑定、修改账户(手机地址)--薛松
+     *
      * @param phone
      * @param phoneName
      * @param msgCode
@@ -865,6 +875,36 @@ public class Apic {
      */
     public static Api submitTelephoneAddress(String phone, String phoneName, String msgCode) {
         return Api.post("/api/news-user/integral/update.do", new ReqParams().put("phone", phone).put("phoneName", phoneName).put("msgCode", msgCode));
+    }
+
+    /**
+     * 兑换物品
+     *
+     * @param pId
+     * @return
+     */
+    public static Api exchangeGood(String pId) {
+        return Api.post("/api/news-user/integral/exchange.do", new ReqParams().put("pId", pId));
+    }
+
+    /**
+     * 获取兑换历史
+     *
+     * @param page
+     * @return
+     */
+    public static Api requestExchangeHistory(int page) {
+        return Api.get("/api/news-user/product/exchange/list.do", new ReqParams().put("page", page).put("size", DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * 获取算力
+     *
+     * @param type 通过类型
+     * @return
+     */
+    public static Api requestHashRate(int type) {
+        return Api.post("/api/news-user/rate/add.do", new ReqParams().put("rateType", type));
     }
 
 }

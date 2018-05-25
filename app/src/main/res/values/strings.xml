@@ -346,7 +346,7 @@
 
     <string name="if_doubt_ask_service">如有疑问，请联系客服微信:</string>
     <string name="click_copy">(点击复制)</string>
-    <string name="no_detail">暂无相关明细</string>
+    <string name="no_detail">暂无明细</string>
 
     <string name="congratulations_login_success">恭喜您登陆成功</string>
     <string name="congratulations_register_success">恭喜您注册成功</string>
@@ -364,6 +364,44 @@
     <string name="ali_pay_address_x">支付宝账号：%1$s</string>
 
     <string name="please_input_coin_address">请输入提币地址</string>
+
+    <string name="how_promote_hash_rate">如何提升算力？</string>
+    <string name="promote_hash_rate_way">1、目前用户可以通过日常使用APP（包括但不限于每日登录、阅读资讯、分享资讯、发表评论、举报、在线等）获得相应算力。
+        \n2、后续会推出更多算力获取的任务，敬请期待！</string>
+
+    <string name="exchange_success">兑换成功</string>
+    <string name="please_select_exchange_good">请选择兑换物品</string>
+
+    <string name="coin_x">数字货币-%1$s</string>
+    <string name="ali_pay_x">支付宝-%1$s</string>
+    <string name="telephone_fee_x">话费-%1$s</string>
+
+    <string name="status_reviewing">审核中</string>
+    <string name="status_have_exchange">已兑换</string>
+    <string name="status_exchange_fail">兑换失败</string>
+
+    <string name="exchange_time_x">兑换时间：%1$s</string>
+    <string name="exchange_type_ali_pay">兑换类型：支付宝兑换</string>
+    <string name="exchange_name_x">兑换数量：%1$s</string>
+    <string name="pay_price_x">支付数量：%1$dQKC</string>
+    <string name="ali_pay_name_x">支付宝账号：%1$s</string>
+    <string name="ali_pay_user_name_x">账号姓名：%1$s</string>
+
+    <string-array name="order_status">
+        <item>@string/order_status_reviewing</item>
+        <item>@string/order_status_have_exchange</item>
+        <item>@string/order_status_exchange_fail</item>
+    </string-array>
+    <string name="order_status_reviewing">订单状态：审核中</string>
+    <string name="order_status_have_exchange">订单状态：已兑换</string>
+    <string name="order_status_exchange_fail">订单状态：兑换失败</string>
+
+    <string name="exchange_type_digital_coin">兑换类型：数字货币兑换</string>
+
+    <string name="exchange_type_telephone_fee">兑换类型：话费兑换</string>
+
+    <string name="telephone_x">手机号：%1$s</string>
+    <string name="telephone_user_name_x">机主姓名：%1$s</string>
 
 
 </resources>

@@ -46,4 +46,6 @@ public interface ExtraKeys {
     String CONVERSION_TYPE = "conversion_type";
     String BINDING_ADDRESS = "binding_address";
     String BINDING_USER_NAME = "binding_user_name";
+
+    String CONVERSION_HISTORY = "conversion_history";
 }

@@ -49,6 +49,8 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
     RelativeLayout mRootView;
+    @BindView(R.id.emptyView)
+    TextView mEmptyView;
     private QKCDetailAdapter mQKCDetailAdapter;
 
     private int mPage;
@@ -81,7 +83,7 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
                     @Override
                     protected void onRespSuccess(ListResp<QKCDetails> resp) {
                         stopFreshOrLoadAnimation();
-                        updateQKCList(resp);
+                        updateQKCList(resp.getListData());
                     }
 
                     @Override
@@ -93,18 +95,25 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
                 .fire();
     }
 
-    private void updateQKCList(ListResp<QKCDetails> resp) {
+    private void updateQKCList(ArrayList<QKCDetails> data) {
         if (mPage == 0) {
             mQKCDetailAdapter.clear();
+
+            if (data.isEmpty()) {
+                mSwipeToLoadLayout.setVisibility(View.GONE);
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mSwipeToLoadLayout.setVisibility(View.VISIBLE);
+                mEmptyView.setVisibility(View.GONE);
+            }
         }
-        ArrayList<QKCDetails> listData = resp.getListData();
-        if (listData.size() < Apic.DEFAULT_PAGE_SIZE || resp.getData().getTotalPages() == mPage) {
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
             mPage++;
         }
 
-        mQKCDetailAdapter.addAll(listData);
+        mQKCDetailAdapter.addAll(data);
     }
 
     @Override

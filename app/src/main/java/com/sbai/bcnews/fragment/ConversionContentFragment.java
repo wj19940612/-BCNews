@@ -131,6 +131,13 @@ public class ConversionContentFragment extends BaseFragment {
         mContentAdapter.notifyDataSetChanged();
     }
 
+    public ConversionContent getSelectConversionGood() {
+        if (mContentAdapter.getClickPosition() != -1) {
+            return mContentList.get(mContentAdapter.getClickPosition());
+        }
+        return null;
+    }
+
     public static class ContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public interface OnItemClickListener {
@@ -158,6 +165,10 @@ public class ConversionContentFragment extends BaseFragment {
 
         public void setClickPosition(int position) {
             mClickPosition = position;
+        }
+
+        public int getClickPosition() {
+            return mClickPosition;
         }
 
         @Override
