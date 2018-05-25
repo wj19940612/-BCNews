@@ -160,6 +160,10 @@ public class PushIntentService extends GTIntentService {
         } else if (data.isNewsFlash()) {
             intent = new Intent(context, MainActivity.class);
             intent.putExtra(ExtraKeys.PAGE_INDEX, MainActivity.PAGE_POSITION_NEWS_FLASH);
+        } else if (data.isLoginReward()) {
+            intent = new Intent(context, MainActivity.class);
+        } else if (data.isTimeReward()) {
+            intent = new Intent(context, MainActivity.class);
         }
         switch (data.getType()) {
             case PushMessage.COMMENT:

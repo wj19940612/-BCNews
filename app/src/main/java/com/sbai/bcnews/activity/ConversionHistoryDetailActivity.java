@@ -11,6 +11,12 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.ConversionHistory;
+import com.sbai.bcnews.model.system.Operation;
+import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.view.TitleBar;
 
 import butterknife.BindView;
@@ -47,6 +53,7 @@ public class ConversionHistoryDetailActivity extends BaseActivity {
     View mAcceptAddressLine;
 
     private int mAcceptType;
+    private ConversionHistory mConversionHistory;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,21 +67,97 @@ public class ConversionHistoryDetailActivity extends BaseActivity {
 
     private void initData() {
         mAcceptType = getIntent().getIntExtra(ExtraKeys.BINDING_TYPE, PAGE_DIGITAL_COIN);
+        mConversionHistory = getIntent().getParcelableExtra(ExtraKeys.CONVERSION_HISTORY);
 
+        if (mConversionHistory == null) {
+            return;
+        }
         switch (mAcceptType) {
             case PAGE_DIGITAL_COIN:
-                mAcceptUserName.setVisibility(View.GONE);
-                mAcceptAddressLine.setVisibility(View.GONE);
+                displayCoinHistory();
                 break;
             case PAGE_ALIPAY:
+                displayAliPayHistory();
                 break;
             case PAGE_TELEPHONE_CHARGE:
+                displayTelePhoneFeeHistory();
                 break;
         }
     }
 
-    private void loadData() {
+    private void displayCoinHistory() {
+        mAcceptUserName.setVisibility(View.GONE);
+        mAcceptAddressLine.setVisibility(View.GONE);
 
+        mConversionTime.setText(getString(R.string.exchange_time_x, DateUtil.format(mConversionHistory.getCreateTime(), DateUtil.FORMAT_SPECIAL_SLASH)));
+        mConversionType.setText(R.string.exchange_type_digital_coin);
+        mConversionCount.setText(getString(R.string.exchange_name_x, mConversionHistory.getPName()));
+        mPayCount.setText(getString(R.string.pay_price_x, mConversionHistory.getPrice()));
+        mAcceptAddress.setText(getString(R.string.get_coin_address_x, mConversionHistory.getExtractCoinAddress()));
+        String[] status = getResources().getStringArray(R.array.order_status);
+        mStatus.setText(status[mConversionHistory.getStatus()]);
+        if (TextUtils.isEmpty(mConversionHistory.getRemark())) {
+            mTips.setVisibility(View.GONE);
+        } else {
+            mTips.setVisibility(View.VISIBLE);
+            mTips.setText(mConversionHistory.getRemark());
+        }
+    }
+
+    private void displayAliPayHistory() {
+        mConversionTime.setText(getString(R.string.exchange_time_x, DateUtil.format(mConversionHistory.getCreateTime(), DateUtil.FORMAT_SPECIAL_SLASH)));
+        mConversionType.setText(R.string.exchange_type_ali_pay);
+        mConversionCount.setText(getString(R.string.exchange_name_x, mConversionHistory.getPName()));
+        mPayCount.setText(getString(R.string.pay_price_x, mConversionHistory.getPrice()));
+        mAcceptAddress.setText(getString(R.string.ali_pay_name_x, mConversionHistory.getAccountAliPay()));
+        mAcceptUserName.setText(getString(R.string.ali_pay_user_name_x, mConversionHistory.getAccountAliPayName()));
+        String[] status = getResources().getStringArray(R.array.order_status);
+        mStatus.setText(status[mConversionHistory.getStatus()]);
+        if (TextUtils.isEmpty(mConversionHistory.getRemark())) {
+            mTips.setVisibility(View.GONE);
+        } else {
+            mTips.setVisibility(View.VISIBLE);
+            mTips.setText(mConversionHistory.getRemark());
+        }
+    }
+
+    private void displayTelePhoneFeeHistory() {
+        mConversionTime.setText(getString(R.string.exchange_time_x, DateUtil.format(mConversionHistory.getCreateTime(), DateUtil.FORMAT_SPECIAL_SLASH)));
+        mConversionType.setText(R.string.exchange_type_telephone_fee);
+        mConversionCount.setText(getString(R.string.exchange_name_x, mConversionHistory.getPName()));
+        mPayCount.setText(getString(R.string.pay_price_x, mConversionHistory.getPrice()));
+        mAcceptAddress.setText(getString(R.string.telephone_x, mConversionHistory.getAccountAliPay()));
+        mAcceptUserName.setText(getString(R.string.telephone_user_name_x, mConversionHistory.getAccountAliPayName()));
+        String[] status = getResources().getStringArray(R.array.order_status);
+        mStatus.setText(status[mConversionHistory.getStatus()]);
+        if (TextUtils.isEmpty(mConversionHistory.getRemark())) {
+            mTips.setVisibility(View.GONE);
+        } else {
+            mTips.setVisibility(View.VISIBLE);
+            mTips.setText(mConversionHistory.getRemark());
+        }
+    }
+
+    private void loadData() {
+        requestOperationWeChatAccount();
+    }
+
+    private void requestOperationWeChatAccount() {
+        Apic.requestOperationSetting(Operation.OPERATION_TYPE_WE_CHAT)
+                .tag(TAG)
+                .callback(new Callback2D<Resp<Operation>, Operation>() {
+                    @Override
+                    protected void onRespSuccessData(Operation data) {
+                        showWx(data.getSYS_OPERATE_WX());
+                    }
+                })
+                .fire();
+    }
+
+    private void showWx(String sys_operate_wx) {
+        if (!TextUtils.isEmpty(sys_operate_wx)) {
+            mWx.setText(sys_operate_wx);
+        }
     }
 
     @OnClick({R.id.wx})
