@@ -5,7 +5,6 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,7 @@ import butterknife.Unbinder;
  * Description: 抢红包弹窗
  * </p>
  */
-public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
+public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
 
     @BindView(R.id.rob)
     TextView mRob;
@@ -189,15 +188,6 @@ public class StartRobRedPacketDialogFragment extends BottomDialogFragment {
         }
     }
 
-    @Override
-    protected int getWindowGravity() {
-        return Gravity.CENTER;
-    }
-
-    @Override
-    protected int getDialogTheme() {
-        return R.style.BaseDialog;
-    }
 
     @Override
     public void onDestroyView() {

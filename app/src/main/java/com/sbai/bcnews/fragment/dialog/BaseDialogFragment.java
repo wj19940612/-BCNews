@@ -62,7 +62,7 @@ public class BaseDialogFragment extends DialogFragment implements ReqIndetermina
     }
 
     protected int getDialogTheme() {
-        return R.style.BaseDialog_Bottom;
+        return R.style.BaseDialog;
     }
 
     public void show(FragmentManager manager) {

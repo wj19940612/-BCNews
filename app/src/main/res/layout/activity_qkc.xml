@@ -114,10 +114,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="17dp"
-            android:text="@string/now_hashrate"
+            tools:text="klsjflkjdl"
             android:textColor="@android:color/white"/>
 
         <TextView
+            android:id="@+id/hashrate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

@@ -88,6 +88,7 @@
             app:layout_constraintTop_toBottomOf="@+id/headLayout"
             app:leftIcon="@drawable/ic_qkc_mine"
             app:rightIcon="@drawable/ic_common_right_arrow"
+            app:hasBottomSplitLine="true"
             app:rowText="@string/qkc"
             app:rowTextColor="@color/text_222"
             app:rowTextSize="16sp"
