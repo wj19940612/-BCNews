@@ -2,9 +2,6 @@ package com.sbai.bcnews.fragment;
 
 
 import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -36,10 +33,10 @@ import com.sbai.bcnews.model.mine.MyIntegral;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.model.news.NotReadMessage;
 import com.sbai.bcnews.model.system.Operation;
+import com.sbai.bcnews.utils.ClipboardUtils;
 import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
-import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.IconTextRow;
@@ -289,7 +286,7 @@ public class MineFragment extends BaseFragment {
                 }
                 break;
             case R.id.invite:
-
+                // TODO: 2018/5/25 邀请有礼
                 break;
         }
     }
@@ -316,17 +313,9 @@ public class MineFragment extends BaseFragment {
                     @Override
                     public void onClick(Dialog dialog) {
                         dialog.dismiss();
-                        copyWeChatAccount(data);
-                        ToastUtil.show(R.string.copy_success);
+                        ClipboardUtils.clipboardText(getActivity(),data,R.string.copy_success);
                     }
                 })
                 .show();
     }
-
-    private void copyWeChatAccount(String data) {
-        ClipboardManager clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText(null, data);
-        clipboardManager.setPrimaryClip(clipData);
-    }
-
 }

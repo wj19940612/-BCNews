@@ -255,6 +255,7 @@
     <string name="copy_link">复制链接</string>
     <string name="whistle_blowing">举报</string>
     <string name="whistle_blowing_success">举报成功</string>
+    <string name="whistle_blowing_success_add_qkc">举报成功，奖励+%1$d算力</string>
 
 
     <string name="please_choose_whistle_blowing">请选择举报理由</string>
