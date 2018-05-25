@@ -13,10 +13,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ConversionHistoryDetailActivity;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ConversionHistory;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
@@ -84,7 +87,7 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
         mHistoryAdapter = new HistoryAdapter(getContext(), mConversionHistoryList, new HistoryAdapter.OnClickListener() {
             @Override
             public void onclick(ConversionHistory conversionHistory) {
-                Launcher.with(getActivity(), ConversionHistoryDetailActivity.class).execute();
+                Launcher.with(getActivity(), ConversionHistoryDetailActivity.class).putExtra(ExtraKeys.CONVERSION_HISTORY,conversionHistory).execute();
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -97,10 +100,10 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
         } else {
             mPage++;
         }
-        Apic.requestExchangeHistory(mPage).tag(TAG).callback(new Callback2D<Resp<List<ConversionHistory>>, List<ConversionHistory>>() {
+        Apic.requestExchangeHistory(mPage).tag(TAG).callback(new Callback<ListResp<ConversionHistory>>() {
             @Override
-            protected void onRespSuccessData(List<ConversionHistory> data) {
-                updateData(data, refresh);
+            protected void onRespSuccess(ListResp<ConversionHistory> resp) {
+                updateData(resp.getListData(), refresh);
             }
         }).fireFreely();
 
@@ -128,7 +131,7 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
             mHistoryAdapter.notifyDataSetChanged();
             return;
         }
-        mEmptyView.setVisibility(View.VISIBLE);
+        mEmptyView.setVisibility(View.GONE);
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {

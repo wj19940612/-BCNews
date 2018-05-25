@@ -42,10 +42,12 @@ public interface ExtraKeys {
     String ID = "id";
 
     String BINDING_TYPE = "binding_type";
-    String CONVERSION_CONTENT = "conversion_content";
-    String CONVERSION_TYPE = "conversion_type";
     String BINDING_ADDRESS = "binding_address";
     String BINDING_USER_NAME = "binding_user_name";
+
+    String CONVERSION_NAME = "conversion_name";
+    String CONVERSION_PRICE = "conversion_price";
+    String CONVERSION_TYPE = "conversion_type";
 
     String CONVERSION_HISTORY = "conversion_history";
 }

@@ -35,6 +35,13 @@ public class NewsDetail implements Parcelable {
     private long readTime;        //阅读时机
     private String author;       //作者
 
+    private String advertCopyWriter;//广告文案
+    private String advertName;//广告名
+    private String advertUrl; //广告链接
+    private int isAdvert;//是否广告 0不是 1是
+    private int urlType; //0-h5 1-下载
+
+
     public String getAuthor() {
         return author;
     }
@@ -229,8 +236,49 @@ public class NewsDetail implements Parcelable {
         this.channel = channel;
     }
 
+    public String getAdvertCopyWriter() {
+        return advertCopyWriter;
+    }
+
+    public void setAdvertCopyWriter(String advertCopyWriter) {
+        this.advertCopyWriter = advertCopyWriter;
+    }
+
+    public String getAdvertName() {
+        return advertName;
+    }
+
+    public void setAdvertName(String advertName) {
+        this.advertName = advertName;
+    }
+
+    public String getAdvertUrl() {
+        return advertUrl;
+    }
+
+    public void setAdvertUrl(String advertUrl) {
+        this.advertUrl = advertUrl;
+    }
+
+    public int getIsAdvert() {
+        return isAdvert;
+    }
+
+    public void setIsAdvert(int isAdvert) {
+        this.isAdvert = isAdvert;
+    }
+
+    public int getUrlType() {
+        return urlType;
+    }
+
+    public void setUrlType(int urlType) {
+        this.urlType = urlType;
+    }
+
     public NewsDetail() {
     }
+
 
     @Override
     public int describeContents() {
@@ -262,6 +310,11 @@ public class NewsDetail implements Parcelable {
         dest.writeLong(this.updateTime);
         dest.writeLong(this.readTime);
         dest.writeString(this.author);
+        dest.writeString(this.advertCopyWriter);
+        dest.writeString(this.advertName);
+        dest.writeString(this.advertUrl);
+        dest.writeInt(this.isAdvert);
+        dest.writeInt(this.urlType);
         dest.writeInt(this.readHeight);
     }
 
@@ -289,6 +342,11 @@ public class NewsDetail implements Parcelable {
         this.updateTime = in.readLong();
         this.readTime = in.readLong();
         this.author = in.readString();
+        this.advertCopyWriter = in.readString();
+        this.advertName = in.readString();
+        this.advertUrl = in.readString();
+        this.isAdvert = in.readInt();
+        this.urlType = in.readInt();
         this.readHeight = in.readInt();
     }
 
@@ -303,34 +361,4 @@ public class NewsDetail implements Parcelable {
             return new NewsDetail[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "NewsDetail{" +
-                "channel=" + channel +
-                ", content='" + content + '\'' +
-                ", createTime=" + createTime +
-                ", detail='" + detail + '\'' +
-                ", id='" + id + '\'' +
-                ", praiseCount=" + praiseCount +
-                ", readerCount=" + readerCount +
-                ", releaseTime=" + releaseTime +
-                ", secondDetail='" + secondDetail + '\'' +
-                ", secondType=" + secondType +
-                ", source='" + source + '\'' +
-                ", summary='" + summary + '\'' +
-                ", title='" + title + '\'' +
-                ", type=" + type +
-                ", imgs=" + imgs +
-                ", tags=" + tags +
-                ", readerTime=" + readerTime +
-                ", original=" + original +
-                ", praise=" + praise +
-                ", collect=" + collect +
-                ", updateTime=" + updateTime +
-                ", readTime=" + readTime +
-                ", author='" + author + '\'' +
-                ", readHeight=" + readHeight +
-                '}';
-    }
 }

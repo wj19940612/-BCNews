@@ -23,6 +23,7 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ConversionContent;
 import com.sbai.bcnews.model.HashRateIntegral;
+import com.sbai.bcnews.utils.FinanceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,7 @@ public class ConversionContentFragment extends BaseFragment {
     private List<ConversionContent> mNetList;
     private ContentAdapter mContentAdapter;
     private HashRateIntegral mHashRateIntegral;
+    private SelectListener mSelectListener;
 
     public static ConversionContentFragment newsInstance(int pageType) {
         Bundle bundle = new Bundle();
@@ -58,6 +60,14 @@ public class ConversionContentFragment extends BaseFragment {
         ConversionContentFragment conversionContentFragment = new ConversionContentFragment();
         conversionContentFragment.setArguments(bundle);
         return conversionContentFragment;
+    }
+
+    public interface SelectListener {
+        public void onSelect(int page, int position);
+    }
+
+    public void setSelectListener(SelectListener selectListener) {
+        mSelectListener = selectListener;
     }
 
     @Override
@@ -96,6 +106,9 @@ public class ConversionContentFragment extends BaseFragment {
             public void onItemClick(int clickPosition) {
                 mContentAdapter.setClickPosition(clickPosition);
                 mContentAdapter.notifyDataSetChanged();
+                if (mSelectListener != null) {
+                    mSelectListener.onSelect(mPageType, clickPosition);
+                }
             }
         });
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), SPAN_COUNT));
@@ -208,7 +221,7 @@ public class ConversionContentFragment extends BaseFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, final ConversionContent conversionContent, final OnItemClickListener onItemClickListener, int pageType, HashRateIntegral hashRateIntegral, final int position, int clickPosition) {
+            public void bindingData(Context context, final ConversionContent conversionContent, final OnItemClickListener onItemClickListener, int pageType, HashRateIntegral hashRateIntegral, final int position, final int clickPosition) {
                 Drawable contentDrawable = getContentDrawable(context, pageType);
                 Drawable labelDrawable = getLabelDrawable(context, pageType);
                 mLabel.setBackgroundDrawable(labelDrawable);
@@ -231,14 +244,18 @@ public class ConversionContentFragment extends BaseFragment {
                 }
 
                 mContent.setText(conversionContent.getName());
-                mIntroduce.setText(context.getString(R.string.conversion_price_x, conversionContent.getPrice()));
+                mIntroduce.setText(context.getString(R.string.conversion_price_x, FinanceUtil.trimTrailingZero(conversionContent.getPrice())));
                 mRemainingQty.setText(context.getString(R.string.conversion_margin_x, conversionContent.getMargin()));
 
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        int callBackPosition = -1;
+                        if (position != clickPosition) {
+                            callBackPosition = position;
+                        }
                         if (onItemClickListener != null) {
-                            onItemClickListener.onItemClick(position);
+                            onItemClickListener.onItemClick(callBackPosition);
                         }
                     }
                 });

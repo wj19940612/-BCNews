@@ -10,6 +10,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.mine.QKC;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.SmartDialog;
 import com.umeng.socialize.ShareAction;
@@ -34,7 +40,7 @@ import com.umeng.socialize.media.UMWeb;
  * }
  * }).show();
  */
-public  class ShareDialog {
+public class ShareDialog {
 
 
     public interface OnShareDialogCallback {
@@ -236,7 +242,7 @@ public  class ShareDialog {
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-            ToastUtil.show(R.string.share_succeed);
+            shareQKCAdd();
         }
 
         @Override
@@ -250,6 +256,34 @@ public  class ShareDialog {
             ToastUtil.show(R.string.share_cancel);
         }
     };
+
+    private void shareQKCAdd() {
+        if (mActivity != null) {
+            String tag = null;
+            if (mActivity instanceof BaseActivity) {
+                tag = ((BaseActivity) mActivity).TAG;
+            }
+            final String finalTag = tag;
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Apic.requestHashRate(QKC.TYPE_SHARE).tag(finalTag).callback(new Callback2D<Resp<Integer>, Integer>() {
+
+                        @Override
+                        protected void onRespSuccessData(Integer data) {
+                            if (data != null && data > 0 && mActivity != null) {
+                                ToastUtil.show(mActivity, mActivity.getString(R.string.share_success_add_hash_rate_x, data), Gravity.CENTER, 0, 0);
+                            } else {
+                                ToastUtil.show(R.string.share_succeed);
+                            }
+                        }
+                    }).fireFreely();
+                }
+            });
+        } else {
+            ToastUtil.show(R.string.share_succeed);
+        }
+    }
 
     public static ShareDialog with(Activity activity) {
         return with(activity, R.layout.dialog_share);

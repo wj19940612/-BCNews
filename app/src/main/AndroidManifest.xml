@@ -222,6 +222,10 @@
             android:name=".activity.ConversionHistoryDetailActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.ConversionResultActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

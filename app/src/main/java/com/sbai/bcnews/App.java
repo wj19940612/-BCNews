@@ -2,18 +2,27 @@ package com.sbai.bcnews;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.Gravity;
 
 import com.igexin.sdk.PushManager;
 import com.sbai.bcnews.activity.CrashInfoActivity;
 import com.sbai.bcnews.activity.MainActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Api;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.OnlineTime;
 import com.sbai.bcnews.model.SysTime;
+import com.sbai.bcnews.model.mine.QKC;
 import com.sbai.bcnews.service.PushIntentService;
 import com.sbai.bcnews.service.PushService;
 import com.sbai.bcnews.utils.BuildConfigUtils;
@@ -30,21 +39,20 @@ import com.umeng.socialize.UMShareAPI;
  * <p>
  * Description:
  */
-public class App extends Application {
+public class App extends Application implements TimerHandler.TimerCallback {
 
     private static Context sContext;
 
     public static final String TAG = "Application";
 
     public static final int DEFAULT_TIME = 1000;
-    //    public static final int DEFAULT_COUNT_MAX = 30 * 60;
-    public static final int DEFAULT_COUNT_MAX = 30;
+    public static final int DEFAULT_COUNT_MAX = 30 * 60;
+//    public static final int DEFAULT_COUNT_MAX = 20;
 
     //app连续停留前台的时间
     private TimerHandler mBaseHandler;
     //    private int mBaseTimingCount;
     private OnlineTime mOnlineTime;
-    private boolean TimingStarted;
     private int mFinalCount;  //activity在前台的数量
 
 
@@ -66,8 +74,18 @@ public class App extends Application {
 //        //init getui service
         PushManager.getInstance().registerPushIntentService(this, PushIntentService.class);
         processCaughtException();
+        registerLoginBroadcast();
         registerFrontBackCallback();
     }
+
+    private BroadcastReceiver mLoginBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase(LoginActivity.ACTION_LOGIN_SUCCESS)) {
+                startTiming();
+            }
+        }
+    };
 
 
     private void processCaughtException() {
@@ -82,6 +100,14 @@ public class App extends Application {
                 System.exit(1);
             }
         });
+    }
+
+    private void registerLoginBroadcast() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LoginActivity.ACTION_LOGIN_SUCCESS);
+        LocalBroadcastManager.getInstance(getAppContext())
+                .registerReceiver(mLoginBroadcastReceiver, intentFilter);
+
     }
 
     private void openCrashInfoPage(Throwable e) {
@@ -113,11 +139,11 @@ public class App extends Application {
 
             @Override
             public void onActivityStarted(Activity activity) {
-                Log.d(TAG, " onStart");
-//                if (mFinalCount == 0) {
-//                    Log.d(TAG, "onStart result");
-                startTiming();
-//                }
+                Log.d(TAG, " onStart " + activity);
+                if (mFinalCount == 0) {
+                    Log.d(TAG, "onStart result");
+                    startTiming();
+                }
                 mFinalCount++;
 
             }
@@ -134,7 +160,7 @@ public class App extends Application {
 
             @Override
             public void onActivityStopped(Activity activity) {
-                Log.d(TAG, " onStop");
+                Log.d(TAG, " onStop " + activity + " mFinalCount:" + mFinalCount);
                 mFinalCount--;
                 if (mFinalCount == 0) {
                     Log.d(TAG, "onStop result");
@@ -156,10 +182,10 @@ public class App extends Application {
     }
 
     private void startTiming() {
-        if (LocalUser.getUser().isLogin() && !TimingStarted) {
+        if (LocalUser.getUser().isLogin()) {
             Log.d(TAG, "startTiming");
             mOnlineTime = HashRateTimeCahche.getOnlineTime(LocalUser.getUser().getUserInfo().getId());
-            if (mOnlineTime != null && mOnlineTime.getOnlineTime() < DEFAULT_COUNT_MAX) {
+            if (mOnlineTime != null) {
                 //跨天了,重置
                 if (!DateUtil.isInThisDay(mOnlineTime.getDay(), SysTime.getSysTime().getSystemTimestamp())) {
                     mOnlineTime.setOnlineTime(0);
@@ -170,8 +196,9 @@ public class App extends Application {
                     mOnlineTime.setOnlineTime(0);
                     mOnlineTime.setUserId(LocalUser.getUser().getUserInfo().getId());
                 }
-                startFrontTiming();
-                TimingStarted = true;
+                if (mOnlineTime.getOnlineTime() < DEFAULT_COUNT_MAX) {
+                    startFrontTiming();
+                }
             }
         }
     }
@@ -180,36 +207,46 @@ public class App extends Application {
         stopFrontTiming();
 
         if (mBaseHandler == null) {
-            mBaseHandler = new TimerHandler(new TimerHandler.TimerCallback() {
-                @Override
-                public void onTimeUp(int count) {
-                    if (LocalUser.getUser().isLogin()) {
-                        mOnlineTime.setOnlineTime(mOnlineTime.getOnlineTime() + DEFAULT_TIME / 1000);
-                        if (!DateUtil.isInThisDay(mOnlineTime.getDay(), SysTime.getSysTime().getSystemTimestamp())) {
-                            mOnlineTime.setDay(SysTime.getSysTime().getSystemTimestamp());
-                        }
-                        Log.d(TAG, getClass().getName() + " time:" + mOnlineTime.getOnlineTime());
-                        if (mOnlineTime.getOnlineTime() == DEFAULT_COUNT_MAX) {
-                            ToastUtil.show("结束了");
-                            stopFrontTiming();
-                        }
-                    }
-                }
-            });
+            mBaseHandler = new TimerHandler(this);
         }
         mBaseHandler.sendEmptyMessage(DEFAULT_TIME);
     }
 
-    private void endTiming() {
-        if (TimingStarted) {
-            Log.d(TAG, "endTiming");
-            stopFrontTiming();
-            recordFrontTiming();
-            TimingStarted = false;
+    @Override
+    public void onTimeUp(int count) {
+        if (LocalUser.getUser().isLogin()) {
+            mOnlineTime.setOnlineTime(mOnlineTime.getOnlineTime() + DEFAULT_TIME / 1000);
+            if (!DateUtil.isInThisDay(mOnlineTime.getDay(), SysTime.getSysTime().getSystemTimestamp())) {
+                mOnlineTime.setDay(SysTime.getSysTime().getSystemTimestamp());
+            }
+            Log.d(TAG, getClass().getName() + " time:" + mOnlineTime.getOnlineTime());
+            if (mOnlineTime.getOnlineTime() == DEFAULT_COUNT_MAX) {
+                stopFrontTiming();
+                onlineAddQKC();
+            }
         }
     }
 
+    private void onlineAddQKC() {
+        Apic.requestHashRate(QKC.TYPE_SHARE).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
+
+            @Override
+            protected void onRespSuccessData(Integer data) {
+                if (data != null && data > 0) {
+                    ToastUtil.show(getAppContext(), getAppContext().getString(R.string.get_online_hash_data_x, data), Gravity.CENTER, 0, 0);
+                }
+            }
+        }).fireFreely();
+    }
+
+    private void endTiming() {
+        Log.d(TAG, "endTiming");
+        stopFrontTiming();
+        recordFrontTiming();
+    }
+
     private void stopFrontTiming() {
+        Log.d(TAG, "stopFrontTiming");
         if (mBaseHandler != null) {
             mBaseHandler.removeCallbacksAndMessages(null);
             mBaseHandler.resetCount();

@@ -1,6 +1,7 @@
 package com.sbai.bcnews.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,16 +49,16 @@ public class ToastUtil {
         show(activity,message,Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, yOffset);
     }
 
-    public static void show(Activity activity, CharSequence message, int gravity, int xOffset, int yOffset) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.toast_get_calculate_rate, null);
+    public static void show(Context context, CharSequence message, int gravity, int xOffset, int yOffset) {
+        View view = LayoutInflater.from(context).inflate(R.layout.toast_get_calculate_rate, null);
         TextView textView = view.findViewById(R.id.message);
         textView.setText(message);
-        show(activity, view, gravity, xOffset, yOffset);
+        show(context, view, gravity, xOffset, yOffset);
     }
 
-    public static void show(Activity activity, View view, int gravity, int xOffset, int yOffset) {
+    public static void show(Context context, View view, int gravity, int xOffset, int yOffset) {
         if (sViewToast == null) {
-            sViewToast = new Toast(activity);
+            sViewToast = new Toast(context);
         }
         sViewToast.setDuration(Toast.LENGTH_SHORT);
         sViewToast.setView(view);

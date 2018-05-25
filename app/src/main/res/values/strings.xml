@@ -342,6 +342,8 @@
     <string name="immediately_conversion">立即兑换</string>
 
     <string name="digital_coin_conversion">数字货币兑换</string>
+    <string name="ali_pay_conversion">支付宝兑换</string>
+    <string name="telephone_fee_conversion">话费兑换</string>
     <string name="conversion_result_tip">兑换申请已提交，请耐心等待客服审核。</string>
 
     <string name="if_doubt_ask_service">如有疑问，请联系客服微信:</string>
@@ -353,7 +355,7 @@
     <string name="login_award_x">获得登陆奖励+%1$d积分</string>
     <string name="register_award_x">获得登陆奖励+%1$d算力</string>
 
-    <string name="conversion_price_x">兑换：%1$dQKC</string>
+    <string name="conversion_price_x">兑换：%1$sQKC</string>
     <string name="conversion_margin_x">余量 %1$d</string>
 
     <string name="get_coin_address_x">提币地址：%1$s</string>
@@ -379,7 +381,7 @@
     <string name="exchange_time_x">兑换时间：%1$s</string>
     <string name="exchange_type_ali_pay">兑换类型：支付宝兑换</string>
     <string name="exchange_name_x">兑换数量：%1$s</string>
-    <string name="pay_price_x">支付数量：%1$dQKC</string>
+    <string name="pay_price_x">支付数量：%1$sQKC</string>
     <string name="ali_pay_name_x">支付宝账号：%1$s</string>
     <string name="ali_pay_user_name_x">账号姓名：%1$s</string>
 
@@ -398,6 +400,15 @@
 
     <string name="telephone_x">手机号：%1$s</string>
     <string name="telephone_user_name_x">机主姓名：%1$s</string>
+    <string name="share_success_add_hash_rate_x">分享成功，奖励+%1$d算力</string>
+    <string name="get_online_hash_data_x">恭喜获得在线奖励+%1$d算力</string>
+    <string name="get_read_hash_data_x">恭喜获得持续阅读奖励+%1$d算力</string>
+
+    <string name="sure_exchange_x">确认使用%1$dQKC兑换%2$s</string>
+    <string name="qkc_x">%1$sQKC</string>
+    <string name="advert">广告</string>
+
+    <string name="wx_has_copy">微信号已复制</string>
 
 
 </resources>
