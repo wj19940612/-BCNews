@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.mine.QKC;
 import com.sbai.bcnews.utils.Display;
+import com.sbai.bcnews.utils.FinanceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,7 +130,7 @@ public class RandomLocationLayout extends LinearLayout {
             final QKC qks = mQksList.get(i);
             if (i < Math.min(maxBrightCount, stopSize)) {
                 qkcCoin.setVisibility(VISIBLE);
-                qkcCoin.setText(getContext().getString(R.string.plus_qks, String.valueOf(qks.getIntegral())));
+                qkcCoin.setText(getContext().getString(R.string.plus_qks, FinanceUtil.formatWithScaleRemoveTailZero(qks.getIntegral())));
                 qkcCoin.setEnabled(true);
                 qkcCoin.setOnClickListener(new OnClickListener() {
 
@@ -145,6 +146,7 @@ public class RandomLocationLayout extends LinearLayout {
                 });
             } else if (i < stopSize) {
                 qkcCoin.setVisibility(VISIBLE);
+                qkcCoin.setText(getContext().getString(R.string.plus_qks, FinanceUtil.formatWithScaleRemoveTailZero(qks.getIntegral())));
             }
         }
     }

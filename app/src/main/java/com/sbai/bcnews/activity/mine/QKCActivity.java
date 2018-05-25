@@ -12,6 +12,7 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.mine.MyIntegral;
 import com.sbai.bcnews.model.mine.QKC;
+import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.Network;
 import com.sbai.bcnews.utils.ToastUtil;
@@ -75,7 +76,7 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
 
     private void setQKCAndRate(MyIntegral data) {
         mMyIntegral = data;
-        mQkcNumber.setText(getString(R.string.qkc_number, String.valueOf(data.getIntegral())));
+        mQkcNumber.setText(getString(R.string.qkc_number, FinanceUtil.formatWithScaleRemoveTailZero(data.getIntegral())));
         mRate.setText(getString(R.string.now_hashrate, String.valueOf(data.getRate())));
     }
 

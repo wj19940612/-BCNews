@@ -24,20 +24,20 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.activity.ChannelActivity;
 import com.sbai.bcnews.activity.mine.HourWelfareActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.StartRobRedPacketDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ChannelCacheModel;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.mine.UserRedPacketStatus;
 import com.sbai.bcnews.model.system.RedPacketActivityStatus;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
-import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
@@ -231,6 +231,10 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
 
 
     private void requestRedActivityPacketStatus() {
+        if (!LocalUser.getUser().isLogin()) {
+            Launcher.with(getContext(), LoginActivity.class).execute();
+            return;
+        }
         Apic.requestRedPacketStatus()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {
