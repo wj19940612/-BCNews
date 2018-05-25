@@ -215,7 +215,6 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
             return;
         }
         mStartRob = true;
-        // TODO: 2018/5/17
         Apic.robRedPacket()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<RedPacketInfo>, RedPacketInfo>() {

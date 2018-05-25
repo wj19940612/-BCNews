@@ -61,7 +61,7 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
             @Override
             public void onClick(View v) {
                 // TODO: 2018/5/25 打开h5承接页 
-                
+
             }
         });
     }

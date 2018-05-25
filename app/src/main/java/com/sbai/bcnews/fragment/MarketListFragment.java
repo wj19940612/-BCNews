@@ -215,7 +215,6 @@ public class MarketListFragment extends RecycleViewSwipeLoadFragment {
 
     @Override
     public void onRefresh() {
-        requestMarketListData();
         mVarietySet.clear();
         if (mVarietyList != null) {
             mVarietyList.clear();
