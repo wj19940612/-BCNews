@@ -1,6 +1,5 @@
 package com.sbai.bcnews.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -8,7 +7,6 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.fragment.ConversionGoodsFragment;
 import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.view.TitleBar;
 
@@ -16,9 +14,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_ALIPAY;
-import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_DIGITAL_COIN;
-import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_TELEPHONE_CHARGE;
+import static com.sbai.bcnews.fragment.ConversionGoodsActivity.PAGE_ALIPAY;
+import static com.sbai.bcnews.fragment.ConversionGoodsActivity.PAGE_DIGITAL_COIN;
+import static com.sbai.bcnews.fragment.ConversionGoodsActivity.PAGE_TELEPHONE_CHARGE;
 
 public class ConversionResultActivity extends BaseActivity {
     @BindView(R.id.titleBar)

@@ -18,9 +18,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ConversionHistoryDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
-import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.ListResp;
-import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ConversionHistory;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Launcher;
@@ -34,8 +32,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_ALIPAY;
-import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_DIGITAL_COIN;
+import static com.sbai.bcnews.fragment.ConversionGoodsActivity.PAGE_ALIPAY;
+import static com.sbai.bcnews.fragment.ConversionGoodsActivity.PAGE_DIGITAL_COIN;
 
 public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
 

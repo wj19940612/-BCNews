@@ -32,6 +32,9 @@ public class Apic {
 
         //邀请有礼
         String MINE_INVITE_HAS_GIFT = Api.getFixedHost() + "/news/appinvite/inviteindex.html";
+        //qkc介绍页
+        String QKC_INTRODUCE_PAGE_URL = Api.getFixedHost() + "/news/appinvite/mentoring.html";
+
     }
 
     /**

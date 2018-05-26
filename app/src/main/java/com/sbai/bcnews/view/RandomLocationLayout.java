@@ -2,7 +2,6 @@ package com.sbai.bcnews.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +41,8 @@ public class RandomLocationLayout extends LinearLayout {
     private OnCoinClickListener mOnCoinClickListener;
 
     private int mViewMaxWidth;
+
+    private int receiveCount;
 
     public RandomLocationLayout(Context context) {
         this(context, null);
@@ -89,7 +90,7 @@ public class RandomLocationLayout extends LinearLayout {
     /**
      * 1、将10个子view进行随机排序
      * 2、取出前几个高亮显示（1-5个）
-     * 3、领取一个之后 移除数据 变灰，多屏情况下领取5个在次调用此方法重新设置ui和数据
+     * 3、领取一个之后 移除数据 变灰，多屏情况下领取10个在次调用此方法重新设置ui和数据
      */
     private void randomDataIndex() {
         receiveCount = 0;
@@ -99,7 +100,6 @@ public class RandomLocationLayout extends LinearLayout {
         if (stopSize > mQksList.size()) {
             stopSize = mQksList.size();
         }
-        Log.d(TAG, "listsize" + mQksList.size());
         ViewGroup parent = (ViewGroup) getChildAt(0);
         while (index < stopSize) {
             Integer e = mRandom.nextInt(parent.getChildCount());
@@ -108,9 +108,7 @@ public class RandomLocationLayout extends LinearLayout {
                 index++;
             }
         }
-        for (Integer result : randomIndex) {
-            Log.d(TAG, "randomDataIndex: " + result);
-        }
+
         setCoinStyle(stopSize);
     }
 
@@ -118,8 +116,6 @@ public class RandomLocationLayout extends LinearLayout {
         mQksList = qksList;
         randomDataIndex();
     }
-
-    private int receiveCount;
 
     private void setCoinStyle(int stopSize) {
         removeAllViews();
@@ -132,25 +128,22 @@ public class RandomLocationLayout extends LinearLayout {
         for (int i = 0; i < listSize; i++) {
             TextView qkcCoin = (TextView) parent.getChildAt(randomIndex.get(i));
             final QKC qks = mQksList.get(i);
-            if (i < Math.min(maxBrightCount, stopSize)) {
-                qkcCoin.setVisibility(VISIBLE);
-                qkcCoin.setText(getContext().getString(R.string.plus_qks, FinanceUtil.formatWithScaleRemoveTailZero(qks.getIntegral())));
-                qkcCoin.setEnabled(true);
-                qkcCoin.setOnClickListener(new OnClickListener() {
+            qkcCoin.setVisibility(VISIBLE);
+            qkcCoin.setText(getContext().getString(R.string.plus_qks, FinanceUtil.formatWithScaleRemoveTailZero(qks.getIntegral())));
+            qkcCoin.setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        if (mOnCoinClickListener != null) {
-                            mOnCoinClickListener.onCoinClick(v, qks);
-                        }
-                        if (receiveCount >= listSize || receiveCount == maxBrightCount) {
-                            randomDataIndex();
-                        }
+                @Override
+                public void onClick(View v) {
+                    if (mOnCoinClickListener != null) {
+                        mOnCoinClickListener.onCoinClick(v, qks);
                     }
-                });
-            } else if (i < stopSize) {
-                qkcCoin.setVisibility(VISIBLE);
-                qkcCoin.setText(getContext().getString(R.string.plus_qks, FinanceUtil.formatWithScaleRemoveTailZero(qks.getIntegral())));
+
+                }
+            });
+            if (i < Math.min(maxBrightCount, stopSize)) {
+                qkcCoin.setEnabled(true);
+            } else {
+                qkcCoin.setEnabled(false);
             }
         }
     }
@@ -166,6 +159,25 @@ public class RandomLocationLayout extends LinearLayout {
         ((TextView) v).setText(null);
         v.setVisibility(INVISIBLE);
         receiveCount++;
+
+        resetViewEnable();
+
+    }
+
+    private void resetViewEnable() {
+        if (receiveCount == maxBrightCount && receiveCount < randomIndex.size()) {
+            ViewGroup parent = (ViewGroup) getChildAt(0);
+            final int listSize = randomIndex.size();
+
+            for (int i = 0; i < listSize; i++) {
+                TextView childAt = (TextView) parent.getChildAt(i);
+                if (!childAt.isEnabled()) {
+                    childAt.setEnabled(true);
+                }
+            }
+        } else if (receiveCount >= randomIndex.size()) {
+            randomDataIndex();
+        }
     }
 
     private void setRandomTranslate(View view) {
@@ -179,19 +191,16 @@ public class RandomLocationLayout extends LinearLayout {
 
     private int getMarginTop() {
         int i = (int) Display.dp2Px(mRandom.nextInt(10), getResources());
-        Log.d(TAG, "getMarginTop: " + i);
         return i;
     }
 
     private int getMarginLeft() {
         int i = (int) Display.dp2Px(mRandom.nextInt(10), getResources());
-        Log.d(TAG, "getMarginLeft: " + i);
         return i;
     }
 
     private int getMarginBottom() {
         int i = (int) Display.dp2Px(mRandom.nextInt(10), getResources());
-        Log.d(TAG, "getMarginBottom: " + i);
         return i;
     }
 

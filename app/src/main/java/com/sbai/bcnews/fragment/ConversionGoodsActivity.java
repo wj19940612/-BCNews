@@ -1,12 +1,7 @@
 package com.sbai.bcnews.fragment;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,9 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,7 +18,6 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.activity.BindingAddressActivity;
 import com.sbai.bcnews.activity.ConversionResultActivity;
-import com.sbai.bcnews.fragment.dialog.BottomDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
@@ -43,12 +35,10 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
-import static android.app.Activity.RESULT_OK;
 import static com.umeng.socialize.utils.ContextUtil.getContext;
 
-public class ConversionGoodsFragment extends BaseActivity implements ConversionContentFragment.SelectListener {
+public class ConversionGoodsActivity extends BaseActivity implements ConversionContentFragment.SelectListener {
     public static final int PAGE_DIGITAL_COIN = 0;
     public static final int PAGE_ALIPAY = 1;
     public static final int PAGE_TELEPHONE_CHARGE = 2;
@@ -87,15 +77,11 @@ public class ConversionGoodsFragment extends BaseActivity implements ConversionC
     private int mPosition;
     private Map<Integer, Integer> mSelectGoodMap = new HashMap<Integer, Integer>();
 
-    public static ConversionGoodsFragment newInstance() {
-        ConversionGoodsFragment conversionGoodsFragment = new ConversionGoodsFragment();
-        return conversionGoodsFragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_conversion);
+        setContentView(R.layout.activity_conversion);
         ButterKnife.bind(this);
         initView();
         initData();
@@ -316,7 +302,7 @@ public class ConversionGoodsFragment extends BaseActivity implements ConversionC
                         Apic.exchangeGood(conversionContent.getId()).tag(TAG).callback(new Callback<Resp>() {
                             @Override
                             protected void onRespSuccess(Resp resp) {
-                                Launcher.with(ConversionGoodsFragment.this, ConversionResultActivity.class).putExtra(ExtraKeys.CONVERSION_TYPE, mPosition).putExtra(ExtraKeys.CONVERSION_NAME, conversionContent.getName()).putExtra(ExtraKeys.CONVERSION_PRICE, conversionContent.getPrice()).executeForResult(REQUEST_CODE_CONVERSION);
+                                Launcher.with(ConversionGoodsActivity.this, ConversionResultActivity.class).putExtra(ExtraKeys.CONVERSION_TYPE, mPosition).putExtra(ExtraKeys.CONVERSION_NAME, conversionContent.getName()).putExtra(ExtraKeys.CONVERSION_PRICE, conversionContent.getPrice()).executeForResult(REQUEST_CODE_CONVERSION);
                             }
                         }).fireFreely();
                     }

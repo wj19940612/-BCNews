@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.sbai.bcnews.utils.TimerHandler;
@@ -29,6 +30,11 @@ public class DialogBaseActivity extends AppCompatActivity implements TimerHandle
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.width = (int) (dm.widthPixels * getWidthRatio());
+
+        Window window = getWindow();
+        if (getWindowGravity() != -1) {
+            window.setGravity(getWindowGravity());
+        }
     }
 
     protected void umengEventCount(String eventKey) {
@@ -37,6 +43,10 @@ public class DialogBaseActivity extends AppCompatActivity implements TimerHandle
 
     protected float getWidthRatio() {
         return 0.75f;
+    }
+
+    protected int getWindowGravity() {
+        return -1;
     }
 
     protected FragmentActivity getActivity() {

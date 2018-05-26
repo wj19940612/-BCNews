@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.activity.WebActivity;
+import com.sbai.bcnews.fragment.ConversionGoodsActivity;
 import com.sbai.bcnews.fragment.dialog.PromoteHashRateWayDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
@@ -61,8 +63,9 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2018/5/25 打开h5承接页 
-
+                Launcher.with(getActivity(), WebActivity.class)
+                        .putExtra(WebActivity.EX_URL, Apic.url.QKC_INTRODUCE_PAGE_URL)
+                        .execute();
             }
         });
     }
@@ -91,6 +94,15 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
                     }
                 })
                 .fire();
+
+//        ArrayList<QKC> qkcArrayList = new ArrayList<>();
+//        for (int i = 0; i < 100; i++) {
+//            QKC qkc = new QKC();
+//            qkc.setIntegral(i);
+//            qkc.setId(String.valueOf(i));
+//            qkcArrayList.add(qkc);
+//        }
+//        mRandomLayout.setQksList(qkcArrayList);
     }
 
     private void setQKCAndRate(MyIntegral data) {
@@ -109,18 +121,19 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
                     .callback(new Callback<Resp<Object>>() {
                         @Override
                         protected void onRespSuccess(Resp<Object> resp) {
+                            mRandomLayout.removeCoin(v, qks);
+                            mMyIntegral.setIntegral(mMyIntegral.getIntegral() + qks.getIntegral());
+                            setQKCAndRate(mMyIntegral);
                         }
                     })
                     .fire();
-            mRandomLayout.removeCoin(v, qks);
-            mMyIntegral.setIntegral(mMyIntegral.getIntegral() + qks.getIntegral());
-            setQKCAndRate(mMyIntegral);
+
         } else {
             ToastUtil.show(R.string.http_error_network);
         }
     }
 
-    @OnClick({R.id.lookDetail, R.id.hashrate})
+    @OnClick({R.id.lookDetail, R.id.hashrate, R.id.exchange})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.lookDetail:
@@ -128,6 +141,9 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
                 break;
             case R.id.hashrate:
                 new PromoteHashRateWayDialogFragment().show(getSupportFragmentManager());
+                break;
+            case R.id.exchange:
+                Launcher.with(getActivity(),ConversionGoodsActivity.class).execute();
                 break;
         }
     }

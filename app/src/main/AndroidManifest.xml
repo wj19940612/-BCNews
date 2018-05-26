@@ -214,7 +214,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".fragment.ConversionGoodsFragment"
+            android:name=".fragment.ConversionGoodsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseDialog.activity"/>
 

@@ -25,9 +25,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_ALIPAY;
-import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_DIGITAL_COIN;
-import static com.sbai.bcnews.fragment.ConversionGoodsFragment.PAGE_TELEPHONE_CHARGE;
+import static com.sbai.bcnews.fragment.ConversionGoodsActivity.PAGE_ALIPAY;
+import static com.sbai.bcnews.fragment.ConversionGoodsActivity.PAGE_DIGITAL_COIN;
+import static com.sbai.bcnews.fragment.ConversionGoodsActivity.PAGE_TELEPHONE_CHARGE;
 
 
 public class ConversionHistoryDetailActivity extends BaseActivity {
