@@ -59,6 +59,12 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
         mRandomLayout.setOnCoinClickListener(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestQKCNumber();
+    }
+
     private void initView() {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +77,21 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
     }
 
     private void requestNotGet() {
+        requestQKCNumber();
+
+        requestCanGetQkcList();
+
+//        ArrayList<QKC> qkcArrayList = new ArrayList<>();
+//        for (int i = 0; i < 100; i++) {
+//            QKC qkc = new QKC();
+//            qkc.setIntegral(i);
+//            qkc.setId(String.valueOf(i));
+//            qkcArrayList.add(qkc);
+//        }
+//        mRandomLayout.setQksList(qkcArrayList);
+    }
+
+    private void requestQKCNumber() {
         Apic.requestIntegral()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<MyIntegral>, MyIntegral>() {
@@ -80,6 +101,9 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
                     }
                 })
                 .fire();
+    }
+
+    private void requestCanGetQkcList() {
         Apic.requestQKC()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<List<QKC>>, List<QKC>>() {
@@ -94,15 +118,6 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
                     }
                 })
                 .fire();
-
-//        ArrayList<QKC> qkcArrayList = new ArrayList<>();
-//        for (int i = 0; i < 100; i++) {
-//            QKC qkc = new QKC();
-//            qkc.setIntegral(i);
-//            qkc.setId(String.valueOf(i));
-//            qkcArrayList.add(qkc);
-//        }
-//        mRandomLayout.setQksList(qkcArrayList);
     }
 
     private void setQKCAndRate(MyIntegral data) {
@@ -143,7 +158,7 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
                 new PromoteHashRateWayDialogFragment().show(getSupportFragmentManager());
                 break;
             case R.id.exchange:
-                Launcher.with(getActivity(),ConversionGoodsActivity.class).execute();
+                Launcher.with(getActivity(), ConversionGoodsActivity.class).executeForResult(ConversionGoodsActivity.REQ_CODE_EXCHANGE_QKC);
                 break;
         }
     }

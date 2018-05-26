@@ -21,7 +21,7 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ConversionContent;
-import com.sbai.bcnews.model.HashRateIntegral;
+import com.sbai.bcnews.model.mine.MyIntegral;
 import com.sbai.bcnews.utils.FinanceUtil;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class ConversionContentFragment extends BaseFragment {
     private List<ConversionContent> mContentList;
     private List<ConversionContent> mNetList;
     private ContentAdapter mContentAdapter;
-    private HashRateIntegral mHashRateIntegral;
+    private MyIntegral mHashRateIntegral;
     private SelectListener mSelectListener;
 
     public static ConversionContentFragment newsInstance(int pageType) {
@@ -115,9 +115,9 @@ public class ConversionContentFragment extends BaseFragment {
     }
 
     private void loadData() {
-        Apic.requestMyIntegral().tag(TAG).callback(new Callback2D<Resp<HashRateIntegral>, HashRateIntegral>() {
+        Apic.requestMyIntegral().tag(TAG).callback(new Callback2D<Resp<MyIntegral>, MyIntegral>() {
             @Override
-            protected void onRespSuccessData(HashRateIntegral data) {
+            protected void onRespSuccessData(MyIntegral data) {
                 mHashRateIntegral = data;
                 if (mNetList != null) {
                     updateData(mNetList, mHashRateIntegral);
@@ -136,7 +136,7 @@ public class ConversionContentFragment extends BaseFragment {
         }).fireFreely();
     }
 
-    private void updateData(List<ConversionContent> conversionContents, HashRateIntegral hashRateIntegral) {
+    private void updateData(List<ConversionContent> conversionContents, MyIntegral hashRateIntegral) {
         mContentList.clear();
         mContentList.addAll(conversionContents);
         mContentAdapter.setHashRateIntegral(hashRateIntegral);
@@ -159,7 +159,7 @@ public class ConversionContentFragment extends BaseFragment {
         private Context mContext;
         private List<ConversionContent> mContentList;
         private OnItemClickListener mOnItemClickListener;
-        private HashRateIntegral mHashRateIntegral;
+        private MyIntegral mHashRateIntegral;
         private int mPageType;
         private int mClickPosition;
 
@@ -171,7 +171,7 @@ public class ConversionContentFragment extends BaseFragment {
             mClickPosition = clickPosition;
         }
 
-        public void setHashRateIntegral(HashRateIntegral hashRateIntegral) {
+        public void setHashRateIntegral(MyIntegral hashRateIntegral) {
             mHashRateIntegral = hashRateIntegral;
         }
 
@@ -220,7 +220,7 @@ public class ConversionContentFragment extends BaseFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, final ConversionContent conversionContent, final OnItemClickListener onItemClickListener, int pageType, HashRateIntegral hashRateIntegral, final int position, final int clickPosition) {
+            public void bindingData(Context context, final ConversionContent conversionContent, final OnItemClickListener onItemClickListener, int pageType, MyIntegral hashRateIntegral, final int position, final int clickPosition) {
                 Drawable contentDrawable = getContentDrawable(context, pageType);
                 Drawable labelDrawable = getLabelDrawable(context, pageType);
                 mLabel.setBackgroundDrawable(labelDrawable);

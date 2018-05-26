@@ -48,6 +48,8 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
 
     public static final int REQUEST_CODE_CONVERSION = 108;
 
+    public static final int REQ_CODE_EXCHANGE_QKC = 4005;
+
     @BindView(R.id.digitalCurrency)
     TextView mDigitalCurrency;
     @BindView(R.id.aliPay)
@@ -68,6 +70,12 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
     TextView mBindingAddress;
     @BindView(R.id.bottomLayout)
     LinearLayout mBottomLayout;
+    @BindView(R.id.conversion)
+    TextView mConversion;
+    @BindView(R.id.btnLayout)
+    LinearLayout mBtnLayout;
+    @BindView(R.id.emptyView)
+    View mEmptyView;
 
     private PagerAdapter mPagerAdapter;
 
@@ -104,7 +112,8 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
     }
 
     private void initView() {
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),this);
+
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), this);
         mViewPager.setOffscreenPageLimit(TAB_COUNT - 1);
         mViewPager.setScrollable(false);
         mViewPager.setAdapter(mPagerAdapter);
@@ -218,7 +227,8 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
         }
     }
 
-    @OnClick({R.id.conversionDetail, R.id.digitalCurrency, R.id.aliPay, R.id.telephoneCharge, R.id.modifyBtn, R.id.bindingAddress, R.id.rechargeBtn})
+    @OnClick({R.id.conversionDetail, R.id.digitalCurrency, R.id.aliPay, R.id.telephoneCharge,
+            R.id.modifyBtn, R.id.bindingAddress, R.id.rechargeBtn, R.id.emptyView})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.digitalCurrency:
@@ -241,6 +251,9 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
                 break;
             case R.id.rechargeBtn:
                 showExchangeGoodDialog();
+                break;
+            case R.id.emptyView:
+                finish();
                 break;
         }
     }
@@ -313,6 +326,7 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
         }
         ToastUtil.show(R.string.please_select_exchange_good);
     }
+
 
     public static class PagerAdapter extends FragmentPagerAdapter {
 
