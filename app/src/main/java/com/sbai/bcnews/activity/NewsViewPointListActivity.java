@@ -234,6 +234,8 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
                     protected void onRespSuccessData(NewsViewpointAndComment data) {
                         if (data != null) {
                             updateNewsViewpointList(data);
+                        }else {
+                            mEmptyText.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -266,7 +268,8 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
             boolean hasNormalData = data.getNormal() != null && !data.getNormal().isEmpty();
             boolean hasHotData = data.getHot() != null && !data.getHot().isEmpty();
 
-            if (hasHotData || hasNormalData) {
+//            if (hasHotData || hasNormalData) {
+            if (data.getAllCount()==0) {
                 mEmptyText.setVisibility(View.GONE);
             } else {
                 mEmptyText.setVisibility(View.VISIBLE);

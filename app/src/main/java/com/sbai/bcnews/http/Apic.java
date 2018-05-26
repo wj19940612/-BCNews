@@ -18,292 +18,6 @@ public class Apic {
 
     public static final int DEFAULT_PAGE_SIZE = 20;
 
-    /**
-     * /api/news-msg/msg/history
-     * GET
-     * <p>用户--消息列表--薛松</p>
-     *
-     * @param startTime
-     * @return
-     */
-    public static Api requestMessage(Long startTime) {
-        return Api.get("/api/news-msg/msg/history",
-                new ReqParams()
-                        .put("size", DEFAULT_PAGE_SIZE)
-                        .put("createTime", startTime));
-    }
-
-
-    /**
-     * /api/news-msg/msg/new
-     * GET
-     * 用户--是否有新的消息(包括新的反馈)--薛松
-     */
-    public static Api requestWhetherHasAllNotReadMessage() {
-        return Api.get("/api/news-msg/msg/new", new ReqParams().put("deviceId", Preference.get().getPushClientId()));
-    }
-
-    /**
-     * /api/news-user/user/use/push
-     * POST
-     * 推送设置----齐慕伟
-     *
-     * @param notificationType
-     * @param status
-     * @return
-     */
-    public static Api switchNotificationStatus(int notificationType, int status) {
-        return Api.post("/api/news-user/user/use/push", new ReqParams().put("type", notificationType).put("status", status));
-    }
-
-    /**
-     * /api/news-msg/msg/read/all
-     * POST
-     * 用户--全部阅读--薛松
-     *
-     * @return
-     */
-    public static Api postAllMessageRead() {
-        return Api.post("/api/news-msg/msg/read/all");
-    }
-
-    /**
-     * /api/news-msg/msg/read
-     * POST
-     * 用户--阅读消息(读一条)--薛松
-     *
-     * @param id
-     */
-    public static Api readMessage(String id) {
-        return Api.post("/api/news-msg/msg/read", new ReqParams().put("msgId", id));
-    }
-
-    /**
-     * /api/news-info/discuss/opinion/{id}
-     * GET
-     * 各方观点----齐慕伟
-     *
-     * @param id
-     * @return
-     */
-    public static Api requestNewsViewpoint(String id) {
-        return Api.get("/api/news-info/discuss/opinion/{id}", new ReqParams().put("id", id));
-    }
-
-    /**
-     * /api/news-info/discuss/comment
-     * POST
-     * 发表评论/回复----齐慕伟
-     *
-     * @param writeComment
-     */
-    public static Api submitComment(WriteComment writeComment) {
-        return Api.post("/api/news-info/discuss/comment", new ReqParams(WriteComment.class, writeComment));
-    }
-
-    /**
-     * /api/news-info/discuss/first/{id}
-     * GET
-     * 全部评论----齐慕伟
-     *
-     * @param id
-     * @param page
-     * @param pageSize
-     */
-    public static Api requestNewsViewpointList(String id, int page, int pageSize) {
-        return Api.get("/api/news-info/discuss/first/{id}", new ReqParams().put("id", id).put("page", page).put("size", pageSize));
-    }
-
-    /**
-     * /api/news-user/report/add.do
-     * POST
-     * 用户--举报--薛松
-     *
-     * @return
-     */
-    public static Api submitWhistleBlowing(String dataId, int type, String reson) {
-        return Api.post("/api/news-user/report/add.do",
-                new ReqParams()
-                        .put("dataId", dataId)
-                        .put("type", type)
-                        .put("reason", reson));
-    }
-
-    /**
-     * /api/news-info/discuss/PRAISE
-     * POST
-     * 点赞----齐慕伟
-     *
-     * @param id
-     * @param dataId
-     * @param userId
-     * @param type
-     */
-    public static Api praiseComment(String id, String dataId, Integer userId, int type) {
-        return Api.post("/api/news-info/discuss/praise",
-                new ReqParams()
-                        .put("id", id)
-                        .put("dataId", dataId)
-                        .put("userId", userId)
-                        .put("type", type));
-    }
-
-    /**
-     * /api/news-info/discuss/second/{id}
-     * GET
-     * 评论详情----齐慕伟
-     *
-     * @param newsId
-     * @param page
-     * @param pageSize
-     * @param viewpointId
-     */
-    public static Api requestCommentList(String newsId, int page, int pageSize, String viewpointId) {
-        return Api.get("/api/news-info/discuss/second/{id}",
-                new ReqParams()
-                        .put("dataId", newsId)
-                        .put("page", page)
-                        .put("size", pageSize)
-                        .put("id", viewpointId));
-    }
-
-    /**
-     * /api/news-info/discuss/mine/comment
-     * GET
-     * 我评论的----齐慕伟
-     */
-    public static Api requestMineReplyOrCommentViewpointList(int page, int type, int size) {
-        return Api.get("/api/news-info/discuss/mine/comment",
-                new ReqParams()
-                        .put("page", page)
-                        .put("size", size)
-                        .put("type", type));
-    }
-
-    /**
-     * /api/news-user/report/reason/{type}
-     * GET
-     * 用户--举报理由--薛松
-     *
-     * @param whistleBlowingType
-     */
-    public static Api requestWhistleBlowingList(int whistleBlowingType) {
-        return Api.get("/api/news-user/report/reason/{type}", new ReqParams().put("type", whistleBlowingType));
-    }
-
-    /**
-     * /api/news-info/discuss/delete/{id}
-     * POST
-     * 删除评论--薛松
-     *
-     * @param type
-     * @param dataId
-     * @param id
-     * @return
-     */
-    public static Api deleteReview(int type, String dataId, String id) {
-        return Api.get("/api/news-info/discuss/delete/{id}", new ReqParams().put("type", type).put("dataId", dataId).put("id", id));
-    }
-
-    /**
-     * /api/news-info/discuss/praise/status.do
-     * POST
-     * 是否点赞--薛松
-     *
-     * @param id
-     * @return
-     */
-    public static Api requestViewpointPraiseStatus(String id) {
-        return Api.post("/api/news-info/discuss/praise/status.do", new ReqParams().put("id", id));
-    }
-
-    /**
-     * /api/news-user/redPacket/status.do
-     * POST
-     * 获取红包的状态--薛松
-     */
-    public static Api requestRedPacketStatus() {
-        return Api.post("/api/news-user/redPacket/status.do");
-    }
-
-    /**
-     * api/news-user/redPacket/user/status.do
-     * GET
-     * 用户抢红包的状态--薛松
-     */
-    public static Api requestUserRedPacketStatus() {
-        return Api.get("/api/news-user/redPacket/user/status.do");
-    }
-
-    /**
-     * /api/new-user/redPacket/rob.do
-     * POST
-     * 抢红包--薛松
-     */
-    public static Api robRedPacket() {
-        return Api.post("/api/news-user/redPacket/rob.do");
-    }
-
-    /**
-     * /api/news-user/redPacket/list.do
-     * GET
-     * 红包列表--薛松
-     */
-    public static Api requestHourWelfareList(int page, int pageSize) {
-        return Api.get("/api/news-user/redPacket/list.do"
-                , new ReqParams()
-                        .put("page", page)
-                        .put("size", pageSize));
-    }
-
-    /**
-     * /api/news-user/integral/my.do
-     * GET
-     * QKC明细--我的qkc和算力--薛松
-     */
-    public static Api requestIntegral() {
-        return Api.get("/api/news-user/integral/my.do");
-    }
-
-    /**
-     * /api/news-user/log/not/get.do
-     * GET
-     * 未获取矿产--薛松
-     */
-    public static Api requestQKC() {
-        return Api.get("/api/news-user/log/not/get.do");
-    }
-
-    /**
-     * /api/news-user/log/get/integral.do
-     * POST
-     * 获取矿产--薛松
-     */
-    public static Api getQKC(String id) {
-        return Api.post("/api/news-user/log/get/integral.do", new ReqParams().put("id", id));
-    }
-
-    /**
-     * /api/news-user/log/page.do
-     * GET
-     * QKC明细--薛松
-     */
-    public static Api requestQKCDetailsList(int page) {
-        return Api.get("/api/news-user/log/page.do",
-                new ReqParams()
-                        .put("page", page)
-                        .put("size", DEFAULT_PAGE_SIZE));
-    }
-
-    /**
-     * /api/news-user/user/show.do
-     * POST
-     * 邀请有礼、积分开关--薛松
-     */
-    public static Api requestQKCAndInviteHasGiftTabVisible() {
-        return Api.get("/api/news-user/user/show.do");
-    }
-
 
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
@@ -315,6 +29,9 @@ public class Apic {
         String WEB_URI_ABOUT_PAGE = Api.getFixedHost() + "/news/banner/about.html?version=%s";
         //用户协议
         String WEB_URI_AGREEMENT = Api.getFixedHost() + "/news/banner/agreement.html?code=1";
+
+        //邀请有礼
+        String MINE_INVITE_HAS_GIFT = Api.getFixedHost() + "/news/appinvite/inviteindex.html";
     }
 
     /**
@@ -905,6 +622,292 @@ public class Apic {
      */
     public static Api requestHashRate(int type) {
         return Api.post("/api/news-user/rate/add.do", new ReqParams().put("rateType", type));
+    }
+
+    /**
+     * /api/news-msg/msg/history
+     * GET
+     * <p>用户--消息列表--薛松</p>
+     *
+     * @param startTime
+     * @return
+     */
+    public static Api requestMessage(Long startTime) {
+        return Api.get("/api/news-msg/msg/history",
+                new ReqParams()
+                        .put("size", DEFAULT_PAGE_SIZE)
+                        .put("createTime", startTime));
+    }
+
+
+    /**
+     * /api/news-msg/msg/new
+     * GET
+     * 用户--是否有新的消息(包括新的反馈)--薛松
+     */
+    public static Api requestWhetherHasAllNotReadMessage() {
+        return Api.get("/api/news-msg/msg/new", new ReqParams().put("deviceId", Preference.get().getPushClientId()));
+    }
+
+    /**
+     * /api/news-user/user/use/push
+     * POST
+     * 推送设置----齐慕伟
+     *
+     * @param notificationType
+     * @param status
+     * @return
+     */
+    public static Api switchNotificationStatus(int notificationType, int status) {
+        return Api.post("/api/news-user/user/use/push", new ReqParams().put("type", notificationType).put("status", status));
+    }
+
+    /**
+     * /api/news-msg/msg/read/all
+     * POST
+     * 用户--全部阅读--薛松
+     *
+     * @return
+     */
+    public static Api postAllMessageRead() {
+        return Api.post("/api/news-msg/msg/read/all");
+    }
+
+    /**
+     * /api/news-msg/msg/read
+     * POST
+     * 用户--阅读消息(读一条)--薛松
+     *
+     * @param id
+     */
+    public static Api readMessage(String id) {
+        return Api.post("/api/news-msg/msg/read", new ReqParams().put("msgId", id));
+    }
+
+    /**
+     * /api/news-info/discuss/opinion/{id}
+     * GET
+     * 各方观点----齐慕伟
+     *
+     * @param id
+     * @return
+     */
+    public static Api requestNewsViewpoint(String id) {
+        return Api.get("/api/news-info/discuss/opinion/{id}", new ReqParams().put("id", id));
+    }
+
+    /**
+     * /api/news-info/discuss/comment
+     * POST
+     * 发表评论/回复----齐慕伟
+     *
+     * @param writeComment
+     */
+    public static Api submitComment(WriteComment writeComment) {
+        return Api.post("/api/news-info/discuss/comment", new ReqParams(WriteComment.class, writeComment));
+    }
+
+    /**
+     * /api/news-info/discuss/first/{id}
+     * GET
+     * 全部评论----齐慕伟
+     *
+     * @param id
+     * @param page
+     * @param pageSize
+     */
+    public static Api requestNewsViewpointList(String id, int page, int pageSize) {
+        return Api.get("/api/news-info/discuss/first/{id}", new ReqParams().put("id", id).put("page", page).put("size", pageSize));
+    }
+
+    /**
+     * /api/news-user/report/add.do
+     * POST
+     * 用户--举报--薛松
+     *
+     * @return
+     */
+    public static Api submitWhistleBlowing(String dataId, int type, String reson) {
+        return Api.post("/api/news-user/report/add.do",
+                new ReqParams()
+                        .put("dataId", dataId)
+                        .put("type", type)
+                        .put("reason", reson));
+    }
+
+    /**
+     * /api/news-info/discuss/PRAISE
+     * POST
+     * 点赞----齐慕伟
+     *
+     * @param id
+     * @param dataId
+     * @param userId
+     * @param type
+     */
+    public static Api praiseComment(String id, String dataId, Integer userId, int type) {
+        return Api.post("/api/news-info/discuss/praise",
+                new ReqParams()
+                        .put("id", id)
+                        .put("dataId", dataId)
+                        .put("userId", userId)
+                        .put("type", type));
+    }
+
+    /**
+     * /api/news-info/discuss/second/{id}
+     * GET
+     * 评论详情----齐慕伟
+     *
+     * @param newsId
+     * @param page
+     * @param pageSize
+     * @param viewpointId
+     */
+    public static Api requestCommentList(String newsId, int page, int pageSize, String viewpointId) {
+        return Api.get("/api/news-info/discuss/second/{id}",
+                new ReqParams()
+                        .put("dataId", newsId)
+                        .put("page", page)
+                        .put("size", pageSize)
+                        .put("id", viewpointId));
+    }
+
+    /**
+     * /api/news-info/discuss/mine/comment
+     * GET
+     * 我评论的----齐慕伟
+     */
+    public static Api requestMineReplyOrCommentViewpointList(int page, int type, int size) {
+        return Api.get("/api/news-info/discuss/mine/comment",
+                new ReqParams()
+                        .put("page", page)
+                        .put("size", size)
+                        .put("type", type));
+    }
+
+    /**
+     * /api/news-user/report/reason/{type}
+     * GET
+     * 用户--举报理由--薛松
+     *
+     * @param whistleBlowingType
+     */
+    public static Api requestWhistleBlowingList(int whistleBlowingType) {
+        return Api.get("/api/news-user/report/reason/{type}", new ReqParams().put("type", whistleBlowingType));
+    }
+
+    /**
+     * /api/news-info/discuss/delete/{id}
+     * POST
+     * 删除评论--薛松
+     *
+     * @param type
+     * @param dataId
+     * @param id
+     * @return
+     */
+    public static Api deleteReview(int type, String dataId, String id) {
+        return Api.get("/api/news-info/discuss/delete/{id}", new ReqParams().put("type", type).put("dataId", dataId).put("id", id));
+    }
+
+    /**
+     * /api/news-info/discuss/praise/status.do
+     * POST
+     * 是否点赞--薛松
+     *
+     * @param id
+     * @return
+     */
+    public static Api requestViewpointPraiseStatus(String id) {
+        return Api.post("/api/news-info/discuss/praise/status.do", new ReqParams().put("id", id));
+    }
+
+    /**
+     * /api/news-user/redPacket/status.do
+     * POST
+     * 获取红包的状态--薛松
+     */
+    public static Api requestRedPacketStatus() {
+        return Api.post("/api/news-user/redPacket/status.do");
+    }
+
+    /**
+     * api/news-user/redPacket/user/status.do
+     * GET
+     * 用户抢红包的状态--薛松
+     */
+    public static Api requestUserRedPacketStatus() {
+        return Api.get("/api/news-user/redPacket/user/status.do");
+    }
+
+    /**
+     * /api/new-user/redPacket/rob.do
+     * POST
+     * 抢红包--薛松
+     */
+    public static Api robRedPacket() {
+        return Api.post("/api/news-user/redPacket/rob.do");
+    }
+
+    /**
+     * /api/news-user/redPacket/list.do
+     * GET
+     * 红包列表--薛松
+     */
+    public static Api requestHourWelfareList(int page, int pageSize) {
+        return Api.get("/api/news-user/redPacket/list.do"
+                , new ReqParams()
+                        .put("page", page)
+                        .put("size", pageSize));
+    }
+
+    /**
+     * /api/news-user/integral/my.do
+     * GET
+     * QKC明细--我的qkc和算力--薛松
+     */
+    public static Api requestIntegral() {
+        return Api.get("/api/news-user/integral/my.do");
+    }
+
+    /**
+     * /api/news-user/log/not/get.do
+     * GET
+     * 未获取矿产--薛松
+     */
+    public static Api requestQKC() {
+        return Api.get("/api/news-user/log/not/get.do");
+    }
+
+    /**
+     * /api/news-user/log/get/integral.do
+     * POST
+     * 获取矿产--薛松
+     */
+    public static Api getQKC(String id) {
+        return Api.post("/api/news-user/log/get/integral.do", new ReqParams().put("id", id));
+    }
+
+    /**
+     * /api/news-user/log/page.do
+     * GET
+     * QKC明细--薛松
+     */
+    public static Api requestQKCDetailsList(int page) {
+        return Api.get("/api/news-user/log/page.do",
+                new ReqParams()
+                        .put("page", page)
+                        .put("size", DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * /api/news-user/user/show.do
+     * POST
+     * 邀请有礼、积分开关--薛松
+     */
+    public static Api requestQKCAndInviteHasGiftTabVisible() {
+        return Api.get("/api/news-user/user/show.do");
     }
 
 }

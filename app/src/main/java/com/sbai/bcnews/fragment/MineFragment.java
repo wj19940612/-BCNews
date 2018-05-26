@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.sbai.bcnews.BuildConfig;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.activity.mine.FeedbackActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.activity.mine.MessageActivity;
@@ -112,7 +113,7 @@ public class MineFragment extends BaseFragment {
         if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")) {
             mInvite.setVisibility(View.VISIBLE);
             mQkc.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             Apic.requestQKCAndInviteHasGiftTabVisible()
                     .tag(TAG)
                     .callback(new Callback2D<Resp<MintTabStatus>, MintTabStatus>() {
@@ -323,7 +324,13 @@ public class MineFragment extends BaseFragment {
                 }
                 break;
             case R.id.invite:
-                // TODO: 2018/5/25 邀请有礼
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), WebActivity.class)
+                            .putExtra(WebActivity.EX_URL, Apic.url.MINE_INVITE_HAS_GIFT)
+                            .execute();
+                } else {
+                    login();
+                }
                 break;
         }
     }
