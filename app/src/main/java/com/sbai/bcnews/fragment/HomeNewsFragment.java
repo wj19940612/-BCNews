@@ -142,9 +142,13 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mTitleBar.setLeftClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!LocalUser.getUser().isLogin()) {
+                    Launcher.with(getContext(), LoginActivity.class).execute();
+                    return;
+                }
                 if (mRedPacketActivityStatus != null && mRedPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB) {
                     requestUserRedPacketStatus();
-                }else {
+                } else {
                     StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus).show(getChildFragmentManager());
                 }
             }
@@ -233,10 +237,6 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
 
 
     private void requestRedActivityPacketStatus() {
-        if (!LocalUser.getUser().isLogin()) {
-            Launcher.with(getContext(), LoginActivity.class).execute();
-            return;
-        }
         Apic.requestRedPacketStatus()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {

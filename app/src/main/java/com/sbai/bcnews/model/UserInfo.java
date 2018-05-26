@@ -408,6 +408,8 @@ public class UserInfo implements Parcelable {
                 ", isModifyPortrait=" + isModifyPortrait +
                 ", discuss=" + discuss +
                 ", praise=" + praise +
+                ", addRate=" + addRate +
+                ", addIntegral=" + addIntegral +
                 '}';
     }
 
