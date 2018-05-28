@@ -68,7 +68,7 @@
             android:layout_height="44dp"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/userName"
@@ -107,7 +107,7 @@
             android:layout_height="44dp"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/authCode"

@@ -353,7 +353,7 @@
     <string name="congratulations_login_success">恭喜您登陆成功</string>
     <string name="congratulations_register_success">恭喜您注册成功</string>
     <string name="login_award_x">获得登陆奖励+%1$d积分</string>
-    <string name="register_award_x">获得登陆奖励+%1$d算力</string>
+    <string name="register_award_x">获得注册奖励+%1$d算力</string>
 
     <string name="conversion_price_x">兑换：%1$sQKC</string>
     <string name="conversion_margin_x">余量 %1$d</string>
