@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.ChannelActivity;
 import com.sbai.bcnews.activity.mine.HourWelfareActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.StartRobRedPacketDialogFragment;
@@ -38,6 +39,7 @@ import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
@@ -329,10 +331,8 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toChannel:
-                // TODO: 2018/5/26 z这里是兑换的代码  后续需要处理 @建峰 
-//                ConversionGoodsFragment.newInstance().show(getChildFragmentManager());
-//                umengEventCount(UmengCountEventId.NEWS03);
-//                Launcher.with(this, ChannelActivity.class).putExtra(ExtraKeys.CHANNEL, mChannelCacheModel).excuteForResultFragment(REQUEST_CODE_CHANNEL);
+                umengEventCount(UmengCountEventId.NEWS03);
+                Launcher.with(this, ChannelActivity.class).putExtra(ExtraKeys.CHANNEL, mChannelCacheModel).excuteForResultFragment(REQUEST_CODE_CHANNEL);
                 break;
         }
     }

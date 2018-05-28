@@ -160,6 +160,7 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
                         mMentionCoinAddress.setVisibility(View.GONE);
                         mModifyBtn.setVisibility(View.GONE);
                         mBindingAddress.setVisibility(View.VISIBLE);
+                        mBindingAddress.setText(R.string.click_binding_coin_address);
                     } else {
                         updateChargeBtn();
                         mMentionCoinAddress.setVisibility(View.VISIBLE);
@@ -175,6 +176,7 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
                         mMentionCoinAddress.setVisibility(View.GONE);
                         mModifyBtn.setVisibility(View.GONE);
                         mBindingAddress.setVisibility(View.VISIBLE);
+                        mBindingAddress.setText(R.string.click_binding_ali_pay_address);
                     } else {
                         updateChargeBtn();
                         mMentionCoinAddress.setVisibility(View.VISIBLE);
@@ -190,12 +192,13 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
                         mMentionCoinAddress.setVisibility(View.GONE);
                         mModifyBtn.setVisibility(View.GONE);
                         mBindingAddress.setVisibility(View.VISIBLE);
+                        mBindingAddress.setText(R.string.click_binding_phone_address);
                     } else {
                         updateChargeBtn();
                         mMentionCoinAddress.setVisibility(View.VISIBLE);
                         mModifyBtn.setVisibility(View.VISIBLE);
                         mBindingAddress.setVisibility(View.GONE);
-                        mMentionCoinAddress.setText(getString(R.string.ali_pay_address_x, mConversionAddress.getPhone()));
+                        mMentionCoinAddress.setText(getString(R.string.telephone_x, mConversionAddress.getPhone()));
                     }
                     break;
                 case PAGE_CONVERSION_DETAIL:
@@ -219,11 +222,31 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
     }
 
     private void updateChargeBtn() {
+        if (mConversionAddress == null) {
+            mRechargeBtn.setEnabled(false);
+            return;
+        }
         Integer clickGoodsPosition = mSelectGoodMap.get(mPosition);
         if (clickGoodsPosition == null || clickGoodsPosition == -1) {
             mRechargeBtn.setEnabled(false);
         } else {
-            mRechargeBtn.setEnabled(true);
+            String bindingContent = null;
+            switch (mPosition) {
+                case PAGE_DIGITAL_COIN:
+                    bindingContent = mConversionAddress.getExtractCoinAddress();
+                    break;
+                case PAGE_ALIPAY:
+                    bindingContent = mConversionAddress.getAliPay();
+                    break;
+                case PAGE_TELEPHONE_CHARGE:
+                    bindingContent = mConversionAddress.getPhone();
+                    break;
+            }
+            if (TextUtils.isEmpty(bindingContent)) {
+                mRechargeBtn.setEnabled(false);
+            } else {
+                mRechargeBtn.setEnabled(true);
+            }
         }
     }
 

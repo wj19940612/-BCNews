@@ -33,11 +33,10 @@
 
             <TextView
                 android:id="@+id/bindingName"
-                android:layout_width="wrap_content"
+                android:layout_width="81dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
-                android:paddingRight="31dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:text="@string/currency_address"
                 android:textColor="@color/text_222"
                 android:textSize="15sp" />
@@ -56,21 +55,27 @@
 
         </LinearLayout>
 
+        <View
+            android:id="@+id/addressLine"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/background"
+            android:visibility="gone"/>
+
         <LinearLayout
             android:id="@+id/userLayout"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/userName"
-                android:layout_width="wrap_content"
+                android:layout_width="81dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
-                android:paddingRight="31dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:text="@string/currency_address"
                 android:textColor="@color/text_222"
                 android:textSize="15sp" />
@@ -89,22 +94,28 @@
 
         </LinearLayout>
 
+        <View
+            android:id="@+id/nameLine"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/background"
+            android:visibility="gone"/>
+
         <LinearLayout
             android:id="@+id/authCodeLayout"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/authCode"
-                android:layout_width="wrap_content"
+                android:layout_width="81dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
-                android:paddingRight="31dp"
-                android:gravity="center"
-                android:text="@string/currency_address"
+                android:gravity="center_vertical"
+                android:text="@string/conversion_detail"
                 android:textColor="@color/text_222"
                 android:textSize="15sp" />
 

@@ -52,6 +52,10 @@ public class BindingAddressActivity extends BaseActivity {
     TextView mGetAuthCode;
     @BindView(R.id.authCodeLayout)
     LinearLayout mAuthCodeLayout;
+    @BindView(R.id.addressLine)
+    View mAddressLine;
+    @BindView(R.id.nameLine)
+    View mNameLine;
 
     private int mAcceptType;
     private boolean mFreezeObtainAuthCode;
@@ -82,6 +86,7 @@ public class BindingAddressActivity extends BaseActivity {
                 }
                 break;
             case PAGE_ALIPAY:
+                mAddressLine.setVisibility(View.VISIBLE);
                 mTitleBar.setTitle(R.string.binding_ali_pay_account);
                 mBindingName.setText(R.string.ali_pay_address);
                 mBindingAddress.setHint(R.string.please_input_your_ali_pay_account);
@@ -96,6 +101,8 @@ public class BindingAddressActivity extends BaseActivity {
                 }
                 break;
             case PAGE_TELEPHONE_CHARGE:
+                mAddressLine.setVisibility(View.VISIBLE);
+                mNameLine.setVisibility(View.VISIBLE);
                 mTitleBar.setTitle(R.string.binding_tel);
                 mBindingName.setText(R.string.tel);
                 mBindingAddress.setHint(R.string.please_input_your_tel);
