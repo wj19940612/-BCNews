@@ -363,6 +363,8 @@
     <string name="have_binding">已绑定</string>
 
     <string name="click_binding_coin_address">提币地址：点击绑定</string>
+    <string name="click_binding_ali_pay_address">支付宝账号：点击绑定</string>
+    <string name="click_binding_phone_address">手机号码：点击绑定</string>
     <string name="ali_pay_address_x">支付宝账号：%1$s</string>
 
     <string name="please_input_coin_address">请输入提币地址</string>
@@ -402,7 +404,7 @@
 
     <string name="exchange_type_telephone_fee">兑换类型：话费兑换</string>
 
-    <string name="telephone_x">手机号：%1$s</string>
+    <string name="telephone_x">手机号码：%1$s</string>
     <string name="telephone_user_name_x">机主姓名：%1$s</string>
     <string name="share_success_add_hash_rate_x">分享成功，奖励+%1$d算力</string>
     <string name="get_online_hash_data_x">恭喜获得在线奖励+%1$d算力</string>

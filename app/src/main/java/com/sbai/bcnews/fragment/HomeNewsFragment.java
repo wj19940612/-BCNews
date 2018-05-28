@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.ChannelActivity;
 import com.sbai.bcnews.activity.mine.HourWelfareActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.StartRobRedPacketDialogFragment;
@@ -329,10 +330,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toChannel:
-                // TODO: 2018/5/26 z这里是兑换的代码  后续需要处理 @建峰 
-//                ConversionGoodsFragment.newInstance().show(getChildFragmentManager());
-//                umengEventCount(UmengCountEventId.NEWS03);
-//                Launcher.with(this, ChannelActivity.class).putExtra(ExtraKeys.CHANNEL, mChannelCacheModel).excuteForResultFragment(REQUEST_CODE_CHANNEL);
+                Launcher.with(this, ChannelActivity.class).putExtra(ExtraKeys.CHANNEL, mChannelCacheModel).excuteForResultFragment(REQUEST_CODE_CHANNEL);
                 break;
         }
     }
