@@ -270,9 +270,9 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
 
 //            if (hasHotData || hasNormalData) {
             if (data.getAllCount()==0) {
-                mEmptyText.setVisibility(View.GONE);
-            } else {
                 mEmptyText.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyText.setVisibility(View.GONE);
             }
         }
 
