@@ -397,7 +397,7 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
                 .callback(new Callback<Resp<MyIntegral>>() {
                     @Override
                     protected void onRespSuccess(Resp<MyIntegral> resp) {
-                        if (resp.getData() != null && resp.getData().getIntegral() != 0) {
+                        if (resp.getData() != null && resp.getData().getRate() != 0) {
                             String message = getString(R.string.whistle_blowing_success_add_qkc, resp.getData().getRate());
                             ToastUtil.show(getActivity(), message, Gravity.CENTER, 0, 0);
                         } else {
