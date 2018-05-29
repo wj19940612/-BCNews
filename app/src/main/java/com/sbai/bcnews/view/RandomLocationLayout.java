@@ -30,7 +30,7 @@ public class RandomLocationLayout extends LinearLayout {
 
     private static final String TAG = "RandomLocationLayout";
 
-    private final int maxBrightCount = 5;
+    private final int maxBrightCount = 10;
 
     private List<QKC> mQksList;
 
@@ -40,9 +40,10 @@ public class RandomLocationLayout extends LinearLayout {
 
     private OnCoinClickListener mOnCoinClickListener;
 
-    private int mViewMaxWidth;
 
     private int receiveCount;
+    private int mDefaultRandomMargin = 10;
+    private int mViewWidth;
 
     public RandomLocationLayout(Context context) {
         this(context, null);
@@ -69,22 +70,16 @@ public class RandomLocationLayout extends LinearLayout {
         for (int i = 0; i < parent.getChildCount(); i++) {
             TextView qkcCoin = (TextView) parent.getChildAt(i);
             qkcCoin.setText(null);
-            qkcCoin.setEnabled(false);
+            qkcCoin.setEnabled(true);
             qkcCoin.setVisibility(INVISIBLE);
-            setRandomTranslate(qkcCoin);
+            setRandomTranslate(qkcCoin, i);
         }
     }
 
     private void init() {
-
         randomIndex = new ArrayList<>();
-
-        post(new Runnable() {
-            @Override
-            public void run() {
-                mViewMaxWidth = (getMeasuredWidth() - getPaddingLeft() - getPaddingRight()) / 3;
-            }
-        });
+        mViewWidth = (int) (Display.getScreenWidth() - Display.dp2Px(50, getResources()) * 2);
+        mDefaultRandomMargin = (int) (mViewWidth * 0.013);
     }
 
     /**
@@ -121,7 +116,6 @@ public class RandomLocationLayout extends LinearLayout {
         removeAllViews();
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_random_location_qkc, this, false);
         addView(view);
-        //0-5   6-9    10-~
         resetView();
         ViewGroup parent = (ViewGroup) getChildAt(0);
         final int listSize = randomIndex.size();
@@ -140,11 +134,6 @@ public class RandomLocationLayout extends LinearLayout {
 
                 }
             });
-            if (i < Math.min(maxBrightCount, stopSize)) {
-                qkcCoin.setEnabled(true);
-            } else {
-                qkcCoin.setEnabled(false);
-            }
         }
     }
 
@@ -159,49 +148,57 @@ public class RandomLocationLayout extends LinearLayout {
         ((TextView) v).setText(null);
         v.setVisibility(INVISIBLE);
         receiveCount++;
-
-        resetViewEnable();
-
-    }
-
-    private void resetViewEnable() {
-        if (receiveCount == maxBrightCount && receiveCount < randomIndex.size()) {
-            ViewGroup parent = (ViewGroup) getChildAt(0);
-            final int listSize = randomIndex.size();
-
-            for (int i = 0; i < listSize; i++) {
-                TextView childAt = (TextView) parent.getChildAt(i);
-                if (!childAt.isEnabled()) {
-                    childAt.setEnabled(true);
-                }
-            }
-        } else if (receiveCount >= randomIndex.size()) {
+        if (receiveCount >= randomIndex.size() || receiveCount == maxBrightCount) {
             randomDataIndex();
         }
     }
 
-    private void setRandomTranslate(View view) {
+    private void setRandomTranslate(View view, int i) {
+        int marginLeft = 0;
+        int marginRight = 0;
+        int marginTop = 0;
+        int marginBottom = 0;
+        if (i == 0) {
+            marginLeft = mDefaultRandomMargin * 5;
+        } else if (i == 1) {
+            marginRight = mDefaultRandomMargin * 4;
+        } else if (i == 5) {
+            marginRight = mDefaultRandomMargin * 6;
+        } else if (i == 10) {
+            marginTop = mDefaultRandomMargin * 2;
+        }
+
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-        layoutParams.leftMargin += getMarginLeft();
-        layoutParams.topMargin += getMarginTop();
-        layoutParams.bottomMargin += getMarginBottom();
+        layoutParams.leftMargin += getMarginLeft(marginLeft);
+        layoutParams.topMargin += getMarginTop(marginTop);
+        layoutParams.bottomMargin += getMarginBottom(marginBottom);
+        layoutParams.rightMargin += getMarginRight(marginRight);
         view.setLayoutParams(layoutParams);
     }
 
 
-    private int getMarginTop() {
-        int i = (int) Display.dp2Px(mRandom.nextInt(10), getResources());
-        return i;
+    private int getMarginTop(int randomMarginTop) {
+        if (randomMarginTop == 0) randomMarginTop = mDefaultRandomMargin;
+        int i = (int) Display.dp2Px(randomMarginTop, getResources());
+        return mRandom.nextInt(i);
     }
 
-    private int getMarginLeft() {
-        int i = (int) Display.dp2Px(mRandom.nextInt(10), getResources());
-        return i;
+    private int getMarginLeft(int randomMarginLeft) {
+        if (randomMarginLeft == 0) randomMarginLeft = mDefaultRandomMargin;
+        int i = (int) Display.dp2Px(randomMarginLeft, getResources());
+        return 20 - mRandom.nextInt(i);
     }
 
-    private int getMarginBottom() {
-        int i = (int) Display.dp2Px(mRandom.nextInt(10), getResources());
-        return i;
+    private int getMarginBottom(int randomMarginBottom) {
+        if (randomMarginBottom == 0) randomMarginBottom = mDefaultRandomMargin;
+        int i = (int) Display.dp2Px(randomMarginBottom, getResources());
+        return mRandom.nextInt(i);
+    }
+
+    public int getMarginRight(int randomMarginRight) {
+        if (randomMarginRight == 0) randomMarginRight = 1;
+        int i = (int) Display.dp2Px(randomMarginRight, getResources());
+        return mRandom.nextInt(i);
     }
 
     public interface OnCoinClickListener {

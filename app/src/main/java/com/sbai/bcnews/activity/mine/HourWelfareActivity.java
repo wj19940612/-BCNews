@@ -211,7 +211,7 @@ public class HourWelfareActivity extends RecycleViewSwipeLoadActivity {
                         .placeholder(R.drawable.ic_default_head_portrait)
                         .into(mPortrait);
                 mUserName.setText(data.getUserName());
-                mTimeLine.setText(DateUtil.format(data.getCreateTime(), DateUtil.FORMAT_MINUTE_SECOND));
+                mTimeLine.setText(DateUtil.format(data.getCreateTime(), DateUtil.FORMAT_HOUR_MINUTE_SECOND));
                 mRobRedPacketNumber.setText(context.getString(R.string.get_rad_packet_number,FinanceUtil.formatWithScaleRemoveTailZero(data.getIntegral())));
             }
         }

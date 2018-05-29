@@ -22,8 +22,8 @@ public class RedPacketActivityStatus implements Parcelable {
      * time : 1527140023939
      * endTime : 1527142800939
      */
-    public static final int REDPACKET_STATE_ON = 1;
-    public static final int REDPACKET_CANROB = 1;
+    public static final int RED_PACKET_ACTIVITY_IS_OPEN = 1;
+    public static final int RED_PACKET_CAN_ROB = 1;
     private long currentEndTime;
     private long currentStartTime;
     private long nextEndTime;

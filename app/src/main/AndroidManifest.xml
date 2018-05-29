@@ -165,6 +165,7 @@
             android:windowSoftInputMode="adjustResize"/>
 
         <activity
+            android:launchMode="singleTop"
             android:name=".activity.mine.HourWelfareActivity"
             android:screenOrientation="portrait"/>
         <activity

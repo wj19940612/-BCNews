@@ -213,7 +213,7 @@ public class MineFragment extends BaseFragment {
             }
             updateUserReadHistory(readHistorySize);
             updateNotReadMessage(0);
-            updateQKCNumber(0);
+            mQkc.setSubText("");
         }
     }
 
