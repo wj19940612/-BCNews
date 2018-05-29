@@ -1,9 +1,11 @@
 package com.sbai.bcnews.fragment.dialog;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +55,8 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
     private CountDownTimer mCountDownTimer;
     private boolean mStartRob;
     private boolean mHaveRedPacket;
+    private boolean isDismiss = false;
+
 
     public static StartRobRedPacketDialogFragment newInstance(RedPacketActivityStatus redPacketActivityStatus) {
         Bundle args = new Bundle();
@@ -81,7 +85,18 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (mRedPacketActivityStatus != null) {
+            updateRedPacketActivityStatus(mRedPacketActivityStatus);
+        }
         requestRedPacketStatus();
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        stopScheduleJob();
+        resetCountDownTimer();
+        isDismiss = true;
     }
 
     private void requestRedPacketStatus() {
@@ -92,8 +107,7 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
                     @Override
                     protected void onRespSuccessData(RedPacketActivityStatus data) {
                         updateRedPacketActivityStatus(data);
-                        if (mRedPacketActivityStatus != null
-                                && mRedPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB) {
+                        if (mRedPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.RED_PACKET_CAN_ROB) {
                             requestUserRedPacketStatus();
                         }
                     }
@@ -119,25 +133,21 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
                         }
                     }
 
-                    @Override
-                    public void onFailure(ReqError reqError) {
-                        super.onFailure(reqError);
-                    }
                 })
                 .fire();
     }
 
     private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
         mRedPacketActivityStatus = data;
-        if (mRedPacketActivityStatus.getRedPacketStatus() == RedPacketActivityStatus.REDPACKET_STATE_ON) {
-            updateRobText(mRedPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB);
+        if (mRedPacketActivityStatus.getRedPacketStatus() == RedPacketActivityStatus.RED_PACKET_ACTIVITY_IS_OPEN) {
+            updateRobText(mRedPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.RED_PACKET_CAN_ROB);
             updateRobStatus(mRedPacketActivityStatus);
         }
     }
 
     private void updateRobStatus(RedPacketActivityStatus redPacketActivityStatus) {
         mWaitTime = getNexGetRedPacketTime(redPacketActivityStatus);
-        if (redPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB && mHaveRedPacket) {
+        if (redPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.RED_PACKET_CAN_ROB && mHaveRedPacket) {
             mDistanceNexRedPacketTime.setVisibility(View.GONE);
             resetCountDownTimer();
             startScheduleJob(1000);
@@ -151,6 +161,7 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
         mCountDownTimer = new CountDownTimer(mWaitTime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                if (isDismiss) return;
                 String format = DateUtil.format(millisUntilFinished, DateUtil.FORMAT_MINUTE_SECOND);
                 mDistanceNexRedPacketTime.setText(getString(R.string.distance_nex_red_packet_time, " " + format));
             }
@@ -164,6 +175,7 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
 
     private void resetCountDownTimer() {
         if (mCountDownTimer != null) {
+            Log.d(TAG, "resetCountDownTimer: ");
             mCountDownTimer.cancel();
             mCountDownTimer = null;
         }

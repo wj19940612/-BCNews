@@ -23,6 +23,7 @@ import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.RandomLocationLayout;
 import com.sbai.bcnews.view.TitleBar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -79,16 +80,16 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
     private void requestNotGet() {
         requestQKCNumber();
 
-        requestCanGetQkcList();
-
-//        ArrayList<QKC> qkcArrayList = new ArrayList<>();
-//        for (int i = 0; i < 100; i++) {
-//            QKC qkc = new QKC();
-//            qkc.setIntegral(i);
-//            qkc.setId(String.valueOf(i));
-//            qkcArrayList.add(qkc);
-//        }
-//        mRandomLayout.setQksList(qkcArrayList);
+//        requestCanGetQkcList();
+        // TODO: 2018/5/28 monishuju
+        ArrayList<QKC> qkcArrayList = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            QKC qkc = new QKC();
+            qkc.setIntegral(i * 100);
+            qkc.setId(String.valueOf(i));
+            qkcArrayList.add(qkc);
+        }
+        mRandomLayout.setQksList(qkcArrayList);
     }
 
     private void requestQKCNumber() {
@@ -136,12 +137,14 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
                     .callback(new Callback<Resp<Object>>() {
                         @Override
                         protected void onRespSuccess(Resp<Object> resp) {
-                            mRandomLayout.removeCoin(v, qks);
-                            mMyIntegral.setIntegral(mMyIntegral.getIntegral() + qks.getIntegral());
-                            setQKCAndRate(mMyIntegral);
+
                         }
                     })
                     .fire();
+            // TODO: 2018/5/29 测试用 后期放回去
+            mRandomLayout.removeCoin(v, qks);
+            mMyIntegral.setIntegral(mMyIntegral.getIntegral() + qks.getIntegral());
+            setQKCAndRate(mMyIntegral);
 
         } else {
             ToastUtil.show(R.string.http_error_network);

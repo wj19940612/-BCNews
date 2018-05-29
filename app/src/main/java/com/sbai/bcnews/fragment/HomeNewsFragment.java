@@ -148,11 +148,23 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
                     Launcher.with(getContext(), LoginActivity.class).execute();
                     return;
                 }
-                if (mRedPacketActivityStatus != null && mRedPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB) {
-                    requestUserRedPacketStatus();
-                } else {
-                    StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus).show(getChildFragmentManager());
-                }
+
+                Apic.requestRedPacketStatus()
+                        .tag(TAG)
+                        .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {
+                            @Override
+                            protected void onRespSuccessData(RedPacketActivityStatus data) {
+                                mRedPacketActivityStatus = data;
+                                updateRedPacketActivityStatus(data);
+
+                                if (mRedPacketActivityStatus != null &&
+                                        mRedPacketActivityStatus.getRedPacketStatus() == RedPacketActivityStatus.RED_PACKET_CAN_ROB) {
+                                    requestUserRedPacketStatus();
+                                }
+                            }
+                        })
+                        .fire();
+
             }
         });
     }
@@ -253,10 +265,11 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
 
     private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
         resetCountDownTimer();
-        if (data.getRedPacketStatus() == RedPacketActivityStatus.REDPACKET_STATE_ON) {
+        if (data.getRedPacketStatus() == RedPacketActivityStatus.RED_PACKET_ACTIVITY_IS_OPEN) {
             mTitleBar.setLeftViewVisible(true);
             mWaitTime = getNexGetRedPacketTime(data);
-            if (data.getRobStatus() == RedPacketActivityStatus.REDPACKET_CANROB) canRobRedPacket();
+            if (data.getRobStatus() == RedPacketActivityStatus.RED_PACKET_CAN_ROB)
+                canRobRedPacket();
             else waitNextRobRedPacketTime();
         } else {
             mTitleBar.setLeftViewVisible(false);
