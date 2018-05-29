@@ -416,6 +416,8 @@
 
     <string name="wx_has_copy">微信号已复制</string>
     <string name="binding_success">绑定成功</string>
+    <string name="conversion_tips_reviewing">请耐心等待客服审核，审核时间3~5个工作日</string>
+    <string name="conversion_tips_success">已成功转账，请注意查收。</string>
 
 
 </resources>
