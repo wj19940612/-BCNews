@@ -46,7 +46,7 @@ public class App extends Application implements TimerHandler.TimerCallback {
     public static final String TAG = "Application";
 
     public static final int DEFAULT_TIME = 1000;
-    public static final int DEFAULT_COUNT_MAX = 30 * 60;
+    public static final int DEFAULT_COUNT_MAX = 5 * 60;
 //    public static final int DEFAULT_COUNT_MAX = 20;
 
     //app连续停留前台的时间
@@ -233,7 +233,7 @@ public class App extends Application implements TimerHandler.TimerCallback {
             @Override
             protected void onRespSuccessData(Integer data) {
                 if (data != null && data > 0) {
-                    ToastUtil.show(getAppContext(), getAppContext().getString(R.string.get_online_hash_data_x, data), Gravity.CENTER, 0, 0);
+                    ToastUtil.show(getAppContext().getString(R.string.get_online_hash_data_x, data));
                 }
             }
         }).fireFreely();

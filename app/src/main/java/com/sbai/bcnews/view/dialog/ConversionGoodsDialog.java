@@ -1,11 +1,13 @@
 package com.sbai.bcnews.view.dialog;
 
 import android.app.Activity;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.view.SmartDialog;
 
 public class ConversionGoodsDialog {
@@ -16,9 +18,10 @@ public class ConversionGoodsDialog {
 
     private TextView mContent;
     private TextView mConversionBtn;
+    private AppCompatImageView mCloseBtn;
     private OnClickListener mOnClickListener;
 
-    private int mPrice;
+    private double mPrice;
     private String mName;
 
     public interface OnClickListener {
@@ -38,6 +41,7 @@ public class ConversionGoodsDialog {
     private void init() {
         mContent = mView.findViewById(R.id.content);
         mConversionBtn = mView.findViewById(R.id.conversionBtn);
+        mCloseBtn = mView.findViewById(R.id.dialogDelete);
 
         mConversionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +52,13 @@ public class ConversionGoodsDialog {
                 }
             }
         });
+
+        mCloseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSmartDialog.dismiss();
+            }
+        });
     }
 
     public ConversionGoodsDialog setOnSureClickListener(OnClickListener onSureClickListener) {
@@ -55,7 +66,7 @@ public class ConversionGoodsDialog {
         return this;
     }
 
-    public ConversionGoodsDialog price(int price) {
+    public ConversionGoodsDialog price(double price) {
         mPrice = price;
         return this;
     }
@@ -66,7 +77,7 @@ public class ConversionGoodsDialog {
     }
 
     public void show() {
-        mContent.setText(mActivity.getString(R.string.sure_exchange_x, mPrice, mName));
+        mContent.setText(mActivity.getString(R.string.sure_exchange_x, FinanceUtil.trimTrailingZero(mPrice), mName));
         mSmartDialog.setWidthScale(1).show();
     }
 }

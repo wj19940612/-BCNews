@@ -18,6 +18,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.model.NewsFlash;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.IntegralUtils;
 import com.sbai.bcnews.utils.ShareUtils;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.ToastUtil;
@@ -180,7 +181,7 @@ public class ShareNewsFlashActivity extends BaseActivity {
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-            ToastUtil.show(R.string.share_succeed);
+            IntegralUtils.shareIntegral(ShareNewsFlashActivity.this);
         }
 
         @Override

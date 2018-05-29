@@ -410,11 +410,12 @@
     <string name="get_online_hash_data_x">恭喜获得在线奖励+%1$d算力</string>
     <string name="get_read_hash_data_x">恭喜获得持续阅读奖励+%1$d算力</string>
 
-    <string name="sure_exchange_x">确认使用%1$dQKC兑换%2$s</string>
+    <string name="sure_exchange_x">确认使用%1$sQKC兑换%2$s</string>
     <string name="qkc_x">%1$sQKC</string>
     <string name="advert">广告</string>
 
     <string name="wx_has_copy">微信号已复制</string>
+    <string name="binding_success">绑定成功</string>
 
 
 </resources>

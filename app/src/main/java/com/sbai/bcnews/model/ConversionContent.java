@@ -19,7 +19,7 @@ public class ConversionContent {
     private String id;
     private int margin; //余量
     private String name;//名字
-    private int price;  //价格
+    private double price;  //价格
     private int priceType;//价格类型--现在不需要用
     private int sort;//排序
     private int status;//状态:0停用,1启用
@@ -58,11 +58,11 @@ public class ConversionContent {
         this.name = name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

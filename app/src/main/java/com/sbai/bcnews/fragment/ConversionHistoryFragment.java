@@ -103,6 +103,12 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
             protected void onRespSuccess(ListResp<ConversionHistory> resp) {
                 updateData(resp.getListData(), refresh);
             }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                stopFreshOrLoadAnimation();
+            }
         }).fireFreely();
 
     }
