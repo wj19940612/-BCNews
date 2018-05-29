@@ -8,6 +8,7 @@ import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.mine.QKC;
 
 /**
@@ -16,9 +17,14 @@ import com.sbai.bcnews.model.mine.QKC;
 public class IntegralUtils {
     /**
      * 传入activity，需要确保BaseActivity在退出后取消回调，例如Api.cancel断开回调，防止内存泄露
+     *
      * @param activity
      */
     public static void shareIntegral(final Activity activity) {
+        if (!LocalUser.getUser().isLogin()) {
+            ToastUtil.show(R.string.share_succeed);
+            return;
+        }
         if (activity != null) {
             String tag = null;
             if (activity instanceof BaseActivity) {
