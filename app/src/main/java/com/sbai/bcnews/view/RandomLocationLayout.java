@@ -159,7 +159,7 @@ public class RandomLocationLayout extends LinearLayout {
         int marginTop = 0;
         int marginBottom = 0;
         if (i == 0) {
-            marginLeft = mDefaultRandomMargin * 5;
+            marginLeft = mDefaultRandomMargin * 3;
         } else if (i == 1) {
             marginRight = mDefaultRandomMargin * 4;
         } else if (i == 5) {
@@ -186,7 +186,7 @@ public class RandomLocationLayout extends LinearLayout {
     private int getMarginLeft(int randomMarginLeft) {
         if (randomMarginLeft == 0) randomMarginLeft = mDefaultRandomMargin;
         int i = (int) Display.dp2Px(randomMarginLeft, getResources());
-        return 20 - mRandom.nextInt(i);
+        return  mRandom.nextInt(i);
     }
 
     private int getMarginBottom(int randomMarginBottom) {

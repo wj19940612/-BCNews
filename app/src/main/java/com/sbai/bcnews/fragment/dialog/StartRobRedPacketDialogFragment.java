@@ -127,6 +127,7 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
                                     .execute();
                             dismiss();
                         } else {
+                            if(isDismiss) return;
                             mHaveRedPacket = data.getRedPacket() == UserRedPacketStatus.HAVE_REDPACKET;
                             updateRobText(mHaveRedPacket);
                             updateRobStatus(mRedPacketActivityStatus);
@@ -138,6 +139,7 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
     }
 
     private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
+        if (isDismiss) return;
         mRedPacketActivityStatus = data;
         if (mRedPacketActivityStatus.getRedPacketStatus() == RedPacketActivityStatus.RED_PACKET_ACTIVITY_IS_OPEN) {
             updateRobText(mRedPacketActivityStatus.getRobStatus() == RedPacketActivityStatus.RED_PACKET_CAN_ROB);
@@ -175,7 +177,6 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
 
     private void resetCountDownTimer() {
         if (mCountDownTimer != null) {
-            Log.d(TAG, "resetCountDownTimer: ");
             mCountDownTimer.cancel();
             mCountDownTimer = null;
         }
