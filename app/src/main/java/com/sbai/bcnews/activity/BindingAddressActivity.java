@@ -2,6 +2,9 @@ package com.sbai.bcnews.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -17,6 +20,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.bcnews.view.TitleBar;
 
 import butterknife.BindView;
@@ -67,16 +71,106 @@ public class BindingAddressActivity extends BaseActivity {
 
     private boolean mIsModify;
 
+    private ValidationWatcher mUserNameWatcher = new ValidationWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (mAcceptType == PAGE_ALIPAY) {
+                boolean submitBtnEnabled = checkAliEnabled();
+                if (mBindingBtn.isEnabled() != submitBtnEnabled) {
+                    mBindingBtn.setEnabled(submitBtnEnabled);
+                }
+            } else if (mAcceptType == PAGE_TELEPHONE_CHARGE) {
+                boolean enable = checkSignInButtonEnable();
+                if (enable != mBindingBtn.isEnabled()) {
+                    mBindingBtn.setEnabled(enable);
+                }
+            }
+        }
+    };
+
+    private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (mAcceptType == PAGE_DIGITAL_COIN) {
+                boolean enabled = checkCoinEnabled();
+                if (enabled != mBindingBtn.isEnabled()) {
+                    mBindingBtn.setEnabled(enabled);
+                }
+            } else if (mAcceptType == PAGE_ALIPAY) {
+                mUserNameWatcher.afterTextChanged(s);
+            } else {
+                mValidationWatcher.afterTextChanged(s);
+                mUserNameWatcher.afterTextChanged(s);
+
+                if (getPhoneNumber().length() == 11) {
+                    mUserName.clearFocus();
+                    mAuthCode.requestFocus();
+                }
+
+                boolean authCodeEnable = checkObtainAuthCodeEnable();
+                if (mGetAuthCode.isEnabled() != authCodeEnable) {
+                    mGetAuthCode.setEnabled(authCodeEnable);
+                }
+            }
+
+        }
+    };
+
+    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            boolean enable = checkSignInButtonEnable();
+            if (enable != mBindingBtn.isEnabled()) {
+                mBindingBtn.setEnabled(enable);
+            }
+        }
+    };
+
+    private boolean checkSignInButtonEnable() {
+        String phone = getPhoneNumber();
+        String phoneName = mUserNameInput.getText().toString();
+        String authCode = mAuthCodeInput.getText().toString().trim();
+
+        if (TextUtils.isEmpty(phone) || phone.length() < 11) {
+            return false;
+        }
+
+        if (TextUtils.isEmpty(phoneName)) {
+            return false;
+        }
+
+        if ((TextUtils.isEmpty(authCode) || authCode.length() < 4)) {
+            return false;
+        }
+        return true;
+
+    }
+
+    private boolean checkObtainAuthCodeEnable() {
+        String phone = getPhoneNumber();
+        return (!TextUtils.isEmpty(phone) && phone.length() > 10 && !mFreezeObtainAuthCode);
+    }
+
+    private boolean checkCoinEnabled() {
+        return (!TextUtils.isEmpty(mBindingAddress.getText().toString()));
+    }
+
+    private boolean checkAliEnabled() {
+        return (!TextUtils.isEmpty(mBindingAddress.getText().toString()) && !TextUtils.isEmpty(mUserNameInput.getText().toString()));
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_binding_address);
         ButterKnife.bind(this);
+        mAcceptType = getIntent().getIntExtra(ExtraKeys.BINDING_TYPE, PAGE_DIGITAL_COIN);
+        initView();
         initData();
     }
 
     private void initData() {
-        mAcceptType = getIntent().getIntExtra(ExtraKeys.BINDING_TYPE, PAGE_DIGITAL_COIN);
         mBindingAddressData = getIntent().getStringExtra(ExtraKeys.BINDING_ADDRESS);
         mUserNameData = getIntent().getStringExtra(ExtraKeys.BINDING_USER_NAME);
 
@@ -113,6 +207,9 @@ public class BindingAddressActivity extends BaseActivity {
                 mTitleBar.setTitle(R.string.binding_tel);
                 mBindingName.setText(R.string.tel);
                 mBindingAddress.setHint(R.string.please_input_your_tel);
+                mBindingAddress.setInputType(InputType.TYPE_CLASS_NUMBER);
+                InputFilter[] filters = {new InputFilter.LengthFilter(11)};
+                mBindingAddress.setFilters(filters);
                 if (!TextUtils.isEmpty(mBindingAddressData)) {
                     mBindingAddress.setText(mBindingAddressData);
                     mBindingAddress.setSelection(mBindingAddressData.length());
@@ -131,6 +228,12 @@ public class BindingAddressActivity extends BaseActivity {
         }
     }
 
+    private void initView() {
+        mBindingAddress.addTextChangedListener(mPhoneValidationWatcher);
+        mUserNameInput.addTextChangedListener(mUserNameWatcher);
+        mAuthCodeInput.addTextChangedListener(mValidationWatcher);
+    }
+
     @OnClick({R.id.bindingBtn, R.id.getAuthCode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -142,6 +245,14 @@ public class BindingAddressActivity extends BaseActivity {
                 mAuthCode.requestFocus();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBindingAddress.removeTextChangedListener(mPhoneValidationWatcher);
+        mAuthCodeInput.removeTextChangedListener(mValidationWatcher);
+        mUserNameInput.removeTextChangedListener(mUserNameWatcher);
     }
 
     private void submitBindingData() {

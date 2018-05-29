@@ -15,6 +15,7 @@ import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.model.market.MarketData;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.IntegralUtils;
 import com.sbai.bcnews.utils.ShareUtils;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.image.ImageUtils;
@@ -132,7 +133,7 @@ public class ShareMarketActivity extends BaseActivity {
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-            ToastUtil.show(R.string.share_succeed);
+            IntegralUtils.shareIntegral(ShareMarketActivity.this);
         }
 
         @Override
