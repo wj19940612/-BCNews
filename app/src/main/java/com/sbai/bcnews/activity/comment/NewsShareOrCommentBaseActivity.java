@@ -28,6 +28,7 @@ import com.sbai.bcnews.model.news.NewViewPointAndReview;
 import com.sbai.bcnews.model.news.ViewPointComment;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.ClipboardUtils;
+import com.sbai.bcnews.utils.IntegralUtils;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
@@ -116,7 +117,7 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-            ToastUtil.show(R.string.share_succeed);
+            IntegralUtils.shareIntegral(NewsShareOrCommentBaseActivity.this);
         }
 
         @Override

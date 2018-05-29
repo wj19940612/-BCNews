@@ -95,6 +95,11 @@ public class ConversionContentFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         loadData();
     }
 

@@ -16,6 +16,7 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.TitleBar;
 
 import butterknife.BindView;
@@ -64,6 +65,8 @@ public class BindingAddressActivity extends BaseActivity {
     private String mBindingAddressData;
     private String mUserNameData;
 
+    private boolean mIsModify;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,8 @@ public class BindingAddressActivity extends BaseActivity {
                 mBindingName.setText(R.string.currency_address);
                 if (!TextUtils.isEmpty(mBindingAddressData)) {
                     mBindingAddress.setText(mBindingAddressData);
+                    mBindingAddress.setSelection(mBindingAddressData.length());
+                    mIsModify = true;
                 }
                 break;
             case PAGE_ALIPAY:
@@ -92,6 +97,8 @@ public class BindingAddressActivity extends BaseActivity {
                 mBindingAddress.setHint(R.string.please_input_your_ali_pay_account);
                 if (!TextUtils.isEmpty(mBindingAddressData)) {
                     mBindingAddress.setText(mBindingAddressData);
+                    mBindingAddress.setSelection(mBindingAddressData.length());
+                    mIsModify = true;
                 }
                 mUserLayout.setVisibility(View.VISIBLE);
                 mUserName.setText(R.string.ali_pay_user_name);
@@ -108,6 +115,8 @@ public class BindingAddressActivity extends BaseActivity {
                 mBindingAddress.setHint(R.string.please_input_your_tel);
                 if (!TextUtils.isEmpty(mBindingAddressData)) {
                     mBindingAddress.setText(mBindingAddressData);
+                    mBindingAddress.setSelection(mBindingAddressData.length());
+                    mIsModify = true;
                 }
                 mUserLayout.setVisibility(View.VISIBLE);
                 mUserName.setText(R.string.tel_user_name);
@@ -142,6 +151,7 @@ public class BindingAddressActivity extends BaseActivity {
                     @Override
                     protected void onRespSuccess(Resp resp) {
                         finish();
+                        showToast();
                     }
                 }).fireFreely();
             }
@@ -151,6 +161,7 @@ public class BindingAddressActivity extends BaseActivity {
                     @Override
                     protected void onRespSuccess(Resp resp) {
                         finish();
+                        showToast();
                     }
                 }).fireFreely();
             }
@@ -160,9 +171,18 @@ public class BindingAddressActivity extends BaseActivity {
                     @Override
                     protected void onRespSuccess(Resp resp) {
                         finish();
+                        showToast();
                     }
                 }).fireFreely();
             }
+        }
+    }
+
+    private void showToast() {
+        if (mIsModify) {
+            ToastUtil.show(R.string.modify_success);
+        } else {
+            ToastUtil.show(R.string.binding_success);
         }
     }
 

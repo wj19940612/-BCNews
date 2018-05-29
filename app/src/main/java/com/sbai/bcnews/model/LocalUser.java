@@ -58,6 +58,7 @@ public class LocalUser {
 
     public void logout() {
         mUserInfo = null;
+        Preference.get().setReadTime(0);
         saveToPreference();
     }
 

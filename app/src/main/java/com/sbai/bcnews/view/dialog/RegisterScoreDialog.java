@@ -1,15 +1,23 @@
 package com.sbai.bcnews.view.dialog;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.utils.TimerHandler;
 import com.sbai.bcnews.view.SmartDialog;
 
-public class RegisterScoreDialog {
+public class RegisterScoreDialog implements TimerHandler.TimerCallback{
+
+    public static final int DISMISS_TIME_COUNT = 2;
+    public static final int HANDLER_TIME = 1000;
+
+    private TimerHandler mTimerHandler;
 
     private Activity mActivity;
     private SmartDialog mSmartDialog;
@@ -23,8 +31,31 @@ public class RegisterScoreDialog {
     private Style mStyle;
     private int mScoreValue;
 
+    @Override
+    public void onTimeUp(int count) {
+        if(count >= DISMISS_TIME_COUNT){
+            mSmartDialog.dismiss();
+            stopScheduleJob();
+        }
+    }
+
+    private void startTimeHandler(int millisecond){
+        stopScheduleJob();
+
+        if (mTimerHandler == null) {
+            mTimerHandler = new TimerHandler(this);
+        }
+        mTimerHandler.sendEmptyMessageDelayed(millisecond, millisecond);
+    }
+
+    private void stopScheduleJob(){
+        if (mTimerHandler != null) {
+            mTimerHandler.removeCallbacksAndMessages(null);
+            mTimerHandler.resetCount();
+        }
+    }
+
     public interface OnClickListener {
-        void onClearClick();
 
         void onClick();
     }
@@ -77,6 +108,13 @@ public class RegisterScoreDialog {
             mName.setText(mActivity.getString(R.string.congratulations_register_success));
             mScore.setText(mActivity.getString(R.string.register_award_x, mScoreValue));
         }
+        mSmartDialog.setOnDismissListener(new SmartDialog.OnDismissListener() {
+            @Override
+            public void onDismiss(Dialog dialog) {
+                stopScheduleJob();
+            }
+        });
         mSmartDialog.setWidthScale(1).show();
+        startTimeHandler(HANDLER_TIME);
     }
 }

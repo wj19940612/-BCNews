@@ -50,6 +50,7 @@ public class Preference {
         String FIRST_PRAISE = "first_praise";
         String WEB_TEXT_SIZE = "text_size";
         String FRONT_TIME = "front_time";
+        String READ_TIME = "read_time";
     }
 
     private static Preference sInstance;
@@ -287,6 +288,16 @@ public class Preference {
     public void setOnlineTime(String onlineTime) {
         String key = Key.FRONT_TIME;
         apply(key, onlineTime);
+    }
+
+    public int getLastReadTime() {
+        String key = Key.READ_TIME;
+        return mPrefs.getInt(key, TextSizeModel.NORMAL);
+    }
+
+    public void setReadTime( int readTime) {
+        String key = Key.READ_TIME;
+        apply(key, readTime);
     }
 
 

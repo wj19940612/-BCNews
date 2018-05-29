@@ -86,7 +86,12 @@ public class SmartDialog {
         List<SmartDialog> dialogList = mListMap.get(key);
         SmartDialog dialog;
         if (dialogList != null && dialogList.size() > 0) {
-            dialog = dialogList.get(0);
+            //下层的activity被意外回收，这里仍然占有引用，activity不为空，但可能已销毁
+            if (dialogList.get(0).mActivity != null && !dialogList.get(0).mActivity.isFinishing()) {
+                dialog = dialogList.get(0);
+            } else {
+                dialog = with(activity, msg);
+            }
         } else {
             dialog = with(activity, msg);
         }

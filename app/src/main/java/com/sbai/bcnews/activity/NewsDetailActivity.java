@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -75,8 +76,8 @@ import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_STATE_NORMAL;
 public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     public static final int TIME_SECOND = 1000;
-    public static final int TIME_COUNT_GET_HASH_RATE = 3 * 60;
-    public static final int TIME_COUNT_DELAY = 10;
+    public static final int TIME_COUNT_GET_HASH_RATE = 30;
+    public static final int TIME_COUNT_DELAY = 45;
     public static final int REQ_CODE_CANCEL_COLLECT = 2265;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -545,9 +546,16 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        getLastReadTime();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         GlideApp.with(getActivity()).onStop();
+        saveReadTime();
     }
 
 
@@ -565,6 +573,20 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     public void onBackPressed() {
         saveDetailCache();
         super.onBackPressed();
+    }
+
+    private void getLastReadTime() {
+        mReadArticleTime = Preference.get().getLastReadTime();
+        if (mReadArticleTime >= TIME_COUNT_GET_HASH_RATE) {
+            mReadArticleTime = 0;
+        }
+    }
+
+    private void saveReadTime() {
+        if (mReadArticleTime >= TIME_COUNT_GET_HASH_RATE) {
+            mReadArticleTime = 0;
+        }
+        Preference.get().setReadTime(mReadArticleTime);
     }
 
     private void openNewsDetailsPage(int position) {
@@ -739,7 +761,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void initScrollViewLocation() {
-//        mTitleHeight = mTitleLayout.getMeasuredHeight();
+        mTitleHeight = mTitleLayout.getMeasuredHeight();
 //        int webViewHeight = mWebView.getHeight();
 //        //webView内资源异步加载，此时高度可能还未显示完全，需等资源完全显示或高度足够显示才可
 //        if (mNewsDetail != null && mNewsDetail.getReadHeight() > webViewHeight + mTitleHeight) {
@@ -765,7 +787,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         } else if (mScrolling) {
             mScrollIdleTime = 0;
         }
-        if (mScrollIdleTime != 0 && count - mScrollIdleTime > TIME_COUNT_DELAY) {
+        if (mScrollIdleTime != 0 && count - mScrollIdleTime >= TIME_COUNT_DELAY) {
             return;
         } else {
             mReadArticleTime++;
@@ -790,13 +812,13 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 //        }
     }
 
-    private void readAddQKC(){
+    private void readAddQKC() {
         Apic.requestHashRate(QKC.TYPE_SHARE).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
 
             @Override
             protected void onRespSuccessData(Integer data) {
                 if (data != null && data > 0) {
-                    ToastUtil.show(NewsDetailActivity.this, getString(R.string.get_read_hash_data_x, data), Gravity.CENTER, 0, 0);
+                    ToastUtil.show(NewsDetailActivity.this, getString(R.string.get_read_hash_data_x, data), Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, mTitleLayout.getMeasuredHeight());
                 }
             }
         }).fireFreely();

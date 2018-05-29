@@ -77,6 +77,11 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         loadData(true);
     }
 
@@ -102,6 +107,12 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
             @Override
             protected void onRespSuccess(ListResp<ConversionHistory> resp) {
                 updateData(resp.getListData(), refresh);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                stopFreshOrLoadAnimation();
             }
         }).fireFreely();
 

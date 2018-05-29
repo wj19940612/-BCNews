@@ -28,7 +28,8 @@
         <TextView
             android:id="@+id/conversionTime"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:minHeight="44dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="12dp"
@@ -43,7 +44,8 @@
         <TextView
             android:id="@+id/conversionType"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:minHeight="44dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="12dp"
@@ -61,7 +63,8 @@
         <TextView
             android:id="@+id/conversionCount"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:minHeight="44dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="12dp"
@@ -76,7 +79,8 @@
         <TextView
             android:id="@+id/payCount"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:minHeight="44dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="12dp"
@@ -94,7 +98,8 @@
         <TextView
             android:id="@+id/acceptAddress"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:minHeight="44dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="12dp"
@@ -110,7 +115,8 @@
         <TextView
             android:id="@+id/acceptUserName"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:minHeight="44dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="12dp"
@@ -118,6 +124,12 @@
             android:textSize="15sp" />
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/acceptLayoutLine"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/background" />
 
     <TextView
         android:id="@+id/status"

@@ -18,6 +18,10 @@ public class ConversionHistory implements Parcelable{
      * userId : 1665
      */
 
+    public static final int STATUS_REVIEWING = 0;
+    public static final int STATUS_HAS_CONVERSION = 1;
+    public static final int STATUS_FAILED = 2;
+
     private String accountAliPay;
     private String accountAliPayName;
     private long createTime;

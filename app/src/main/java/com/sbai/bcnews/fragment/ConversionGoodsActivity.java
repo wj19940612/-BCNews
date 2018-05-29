@@ -211,7 +211,7 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CONVERSION && resultCode == RESULT_OK) {
-            mViewPager.setCurrentItem(PAGE_CONVERSION_DETAIL);
+            setTabClick(mConversionDetail);
         }
     }
 
