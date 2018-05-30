@@ -51,6 +51,10 @@ public class ListResp<T> {
         return null;
     }
 
+    public boolean isTokenExpired() {
+        return code == 503;
+    }
+
     public static class DataBean<T> {
         /**
          * content : []
