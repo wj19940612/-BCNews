@@ -158,7 +158,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
                                 updateRedPacketActivityStatus(data);
 
                                 if (mRedPacketActivityStatus != null &&
-                                        mRedPacketActivityStatus.getRedPacketStatus() == RedPacketActivityStatus.RED_PACKET_CAN_ROB) {
+                                        mRedPacketActivityStatus.getRedPacketStatus() == RedPacketActivityStatus.RED_PACKET_ACTIVITY_IS_OPEN) {
                                     requestUserRedPacketStatus();
                                 }
                             }
@@ -175,7 +175,9 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
                 .callback(new Callback2D<Resp<UserRedPacketStatus>, UserRedPacketStatus>() {
                     @Override
                     protected void onRespSuccessData(UserRedPacketStatus data) {
-                        if (data.getIsRob() == UserRedPacketStatus.ROBED) {
+                        if (data.getIsRob() == UserRedPacketStatus.ROBED
+                                && mRedPacketActivityStatus != null
+                                && mRedPacketActivityStatus.redPacketCanRob()) {
                             Launcher.with(getContext(), HourWelfareActivity.class)
                                     .execute();
                         } else {
