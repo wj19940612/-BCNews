@@ -34,6 +34,7 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.PermissionUtil;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.news.NewsAdapter;
+import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.utils.news.NewsSummaryCache;
 import com.sbai.bcnews.utils.news.NewsWithHeaderAdapter;
 import com.sbai.bcnews.view.EmptyView;
@@ -196,7 +197,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                                 .putExtra(WebActivity.EX_URL, newsDetail.getAdvertUrl())
                                 .execute();
                     }
-
+                    NewsReadCache.markNewsRead(newsDetail.getId());
                 } else {
                     Launcher.with(getActivity(), NewsDetailActivity.class)
                             .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId())

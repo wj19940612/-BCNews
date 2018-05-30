@@ -42,6 +42,8 @@ public class ConversionContentFragment extends BaseFragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
+    @BindView(R.id.emptyView)
+    TextView mEmptyView;
 
     private Unbinder mBind;
 
@@ -142,6 +144,13 @@ public class ConversionContentFragment extends BaseFragment {
     }
 
     private void updateData(List<ConversionContent> conversionContents, MyIntegral hashRateIntegral) {
+        if (conversionContents != null && conversionContents.size() > 0) {
+            mEmptyView.setVisibility(View.GONE);
+        } else {
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
+        mNetList = null;
+        mHashRateIntegral = null;
         mContentList.clear();
         mContentList.addAll(conversionContents);
         mContentAdapter.setHashRateIntegral(hashRateIntegral);

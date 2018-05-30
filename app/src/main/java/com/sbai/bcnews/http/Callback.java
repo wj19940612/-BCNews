@@ -36,6 +36,8 @@ public abstract class Callback<T> extends ReqCallback<T> {
             processRespResult(t);
         } else if (t instanceof String) {
             processStringResult(t);
+        } else if (t instanceof ListResp) {
+            processListRespResult(t);
         } else {
             onReceiveResponse(t);
         }
@@ -46,7 +48,7 @@ public abstract class Callback<T> extends ReqCallback<T> {
             try {
                 Resp resp = new Gson().fromJson((String) t, Resp.class);
                 if (resp.isTokenExpired()) {
-                    processTokenExpiredError(resp);
+                    processTokenExpiredError(resp.getMsg());
                 }
             } catch (JsonSyntaxException e) {
                 onReceiveResponse(t);
@@ -59,14 +61,23 @@ public abstract class Callback<T> extends ReqCallback<T> {
     private void processRespResult(T t) {
         Resp resp = (Resp) t;
         if (resp.isTokenExpired()) {
-            processTokenExpiredError(resp);
+            processTokenExpiredError(resp.getMsg());
         } else {
             onReceiveResponse(t);
         }
     }
 
-    private void processTokenExpiredError(Resp resp) {
-        sendTokenExpiredBroadcast(resp.getMsg());
+    private void processListRespResult(T t) {
+        ListResp listResp = (ListResp) t;
+        if (listResp.isTokenExpired()) {
+            processTokenExpiredError(listResp.getMsg());
+        } else {
+            onReceiveResponse(t);
+        }
+    }
+
+    private void processTokenExpiredError(String respMsg) {
+        sendTokenExpiredBroadcast(respMsg);
         onFailure(null);
     }
 

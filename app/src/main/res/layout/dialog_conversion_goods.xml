@@ -29,9 +29,11 @@
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="14dp"
                 android:layout_marginRight="14dp"
+                android:gravity="center"
                 android:paddingBottom="20dp"
                 android:textColor="@color/text_666"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:text="确认使用222QKC兑换2223333444"/>
 
 
             <TextView

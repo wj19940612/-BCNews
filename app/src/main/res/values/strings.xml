@@ -229,6 +229,7 @@
     <string name="ali_pay">支付宝</string>
     <string name="telephone_charge">话费</string>
     <string name="conversion_detail">兑换明细</string>
+    <string name="no_conversion_goods">暂无可兑换商品</string>
     <string name="mention_address">提币地址: 已绑定</string>
     <string name="click_modify">点击修改</string>
     <string name="recharge">兑换</string>
@@ -322,6 +323,9 @@
     <string name="now_hashrate">当前算力： %1$s</string>
     <string name="binding_currency_address">绑定提币地址</string>
     <string name="currency_address">提币地址</string>
+    <string name="currency_address_start">提币地址：</string>
+    <string name="ali_pay_account_start">支付宝账号：</string>
+    <string name="telephone_num_start">手机号码：</string>
     <string name="immediately_binding">立即绑定</string>
     <string name="invite_has_gift">邀请有礼</string>
 

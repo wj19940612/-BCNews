@@ -192,6 +192,8 @@
             android:name=".activity.ConversionResultActivity"
             android:screenOrientation="portrait"/>
 
+        <service android:name=".service.DownloadService"/>
+
         <!-- third page -->
 
         <activity
