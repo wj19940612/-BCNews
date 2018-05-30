@@ -28,6 +28,8 @@ public class PromoteHashRateWayDialogFragment extends BaseDialogFragment {
     @BindView(R.id.title)
     TextView mTitle;
     Unbinder unbinder;
+    @BindView(R.id.content)
+    TextView mContent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +38,7 @@ public class PromoteHashRateWayDialogFragment extends BaseDialogFragment {
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
+
 
     @Override
     public void onDestroyView() {
@@ -50,6 +53,6 @@ public class PromoteHashRateWayDialogFragment extends BaseDialogFragment {
 
     @Override
     protected float getWidthRatio() {
-        return 0.8f ;
+        return 0.8f;
     }
 }

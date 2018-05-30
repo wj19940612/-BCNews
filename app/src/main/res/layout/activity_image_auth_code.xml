@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:digits="0123456789qwertyuioplkjhgfdsazxcvbnm"
+                android:digits="0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM"
                 android:hint="@string/image_auth_code"
                 android:maxLength="6"
                 android:maxLines="1"
