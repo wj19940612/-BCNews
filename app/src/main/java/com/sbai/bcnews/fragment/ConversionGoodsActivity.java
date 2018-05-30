@@ -327,6 +327,12 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
         getActivity().startActivity(intent);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_from_bottom,R.anim.slide_out_to_bottom);
+    }
+
     private void showExchangeGoodDialog() {
         ConversionContentFragment fragment = (ConversionContentFragment) mPagerAdapter.getFragment(mPosition);
         if (fragment != null) {

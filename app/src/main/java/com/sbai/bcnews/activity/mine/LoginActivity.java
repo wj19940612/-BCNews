@@ -313,7 +313,7 @@ public class LoginActivity extends WeChatActivity {
                     @Override
                     protected void onRespSuccess(Resp<UserInfo> resp) {
                         LocalUser.getUser().setUserInfo(resp.getData());
-                        ToastUtil.show(R.string.login_success);
+//                        ToastUtil.show(R.string.login_success);
                         postLogin();
                     }
 
@@ -385,7 +385,7 @@ public class LoginActivity extends WeChatActivity {
                         @Override
                         protected void onRespSuccess(Resp<UserInfo> resp) {
                             LocalUser.getUser().setUserInfo(resp.getData(), phoneNumber);
-                            ToastUtil.show(R.string.login_success);
+//                            ToastUtil.show(R.string.login_success);
                             postLogin();
                         }
                     }).fire();
@@ -401,7 +401,7 @@ public class LoginActivity extends WeChatActivity {
                         @Override
                         protected void onRespSuccess(Resp<UserInfo> resp) {
                             LocalUser.getUser().setUserInfo(resp.getData(), phoneNumber);
-                            ToastUtil.show(R.string.login_success);
+//                            ToastUtil.show(R.string.login_success);
                             postLogin();
                         }
                     }).fire();
