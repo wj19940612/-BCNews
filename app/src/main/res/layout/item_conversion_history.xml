@@ -7,12 +7,12 @@
 
     <TextView
         android:id="@+id/detail"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="75dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:textColor="@color/text_222"
         android:textSize="16sp"
         android:maxLines="1"

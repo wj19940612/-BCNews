@@ -55,6 +55,8 @@ public class ConversionHistoryDetailActivity extends BaseActivity {
     View mAcceptAddressLine;
     @BindView(R.id.acceptLayoutLine)
     View mAcceptLayoutLine;
+    @BindView(R.id.bindingName)
+    TextView mBindingName;
 
     private int mAcceptType;
     private ConversionHistory mConversionHistory;
@@ -98,7 +100,8 @@ public class ConversionHistoryDetailActivity extends BaseActivity {
         mConversionType.setText(R.string.exchange_type_digital_coin);
         mConversionCount.setText(getString(R.string.exchange_name_x, mConversionHistory.getPName()));
         mPayCount.setText(getString(R.string.pay_price_x, FinanceUtil.trimTrailingZero(mConversionHistory.getPrice())));
-        mAcceptAddress.setText(getString(R.string.get_coin_address_x, mConversionHistory.getExtractCoinAddress()));
+        mBindingName.setText(R.string.currency_address_start);
+        mAcceptAddress.setText(mConversionHistory.getExtractCoinAddress());
         String[] status = getResources().getStringArray(R.array.order_status);
         mStatus.setText(status[mConversionHistory.getStatus()]);
         setTips();
@@ -111,7 +114,8 @@ public class ConversionHistoryDetailActivity extends BaseActivity {
         mConversionType.setText(R.string.exchange_type_ali_pay);
         mConversionCount.setText(getString(R.string.exchange_name_x, mConversionHistory.getPName()));
         mPayCount.setText(getString(R.string.pay_price_x, FinanceUtil.trimTrailingZero(mConversionHistory.getPrice())));
-        mAcceptAddress.setText(getString(R.string.ali_pay_name_x, mConversionHistory.getAccountAliPay()));
+        mBindingName.setText(R.string.ali_pay_account_start);
+        mAcceptAddress.setText(mConversionHistory.getAccountAliPay());
         mAcceptUserName.setText(getString(R.string.ali_pay_user_name_x, mConversionHistory.getAccountAliPayName()));
         String[] status = getResources().getStringArray(R.array.order_status);
         mStatus.setText(status[mConversionHistory.getStatus()]);
@@ -125,20 +129,21 @@ public class ConversionHistoryDetailActivity extends BaseActivity {
         mConversionType.setText(R.string.exchange_type_telephone_fee);
         mConversionCount.setText(getString(R.string.exchange_name_x, mConversionHistory.getPName()));
         mPayCount.setText(getString(R.string.pay_price_x, FinanceUtil.trimTrailingZero(mConversionHistory.getPrice())));
-        mAcceptAddress.setText(getString(R.string.telephone_x, mConversionHistory.getAccountAliPay()));
+        mBindingName.setText(R.string.telephone_num_start);
+        mAcceptAddress.setText(mConversionHistory.getAccountAliPay());
         mAcceptUserName.setText(getString(R.string.telephone_user_name_x, mConversionHistory.getAccountAliPayName()));
         String[] status = getResources().getStringArray(R.array.order_status);
         mStatus.setText(status[mConversionHistory.getStatus()]);
         setTips();
     }
 
-    private void setTips(){
+    private void setTips() {
         if (!TextUtils.isEmpty(mConversionHistory.getRemark())) {
             mTips.setVisibility(View.VISIBLE);
             mTips.setText(mConversionHistory.getRemark());
-        } else if(mConversionHistory.getStatus() ==ConversionHistory.STATUS_REVIEWING){
+        } else if (mConversionHistory.getStatus() == ConversionHistory.STATUS_REVIEWING) {
             mTips.setText(R.string.conversion_tips_reviewing);
-        }else if(mConversionHistory.getStatus() == ConversionHistory.STATUS_HAS_CONVERSION){
+        } else if (mConversionHistory.getStatus() == ConversionHistory.STATUS_HAS_CONVERSION) {
             mTips.setText(R.string.conversion_tips_success);
         }
 

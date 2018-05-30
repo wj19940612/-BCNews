@@ -10,4 +10,19 @@
         android:background="@color/background"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"/>
+
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_centerInParent="true"
+        android:drawableTop="@drawable/bg_conversion_empty"
+        android:drawablePadding="13dp"
+        android:text="@string/no_conversion_goods"
+        android:textSize="14sp"
+        android:textColor="@color/text_d8"
+        android:gravity="center"
+        android:background="@color/white"
+        android:visibility="visible"/>
+
 </RelativeLayout>

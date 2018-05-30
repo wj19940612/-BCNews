@@ -118,11 +118,14 @@
 
             <TextView
                 android:id="@+id/mentionCoinAddress"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="22dp"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="20dp"
-                android:gravity="center"
+                android:layout_marginRight="122dp"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:text="@string/mention_address"
                 android:textColor="@color/text"
                 android:textSize="16sp"/>

@@ -1,5 +1,6 @@
 package com.sbai.bcnews.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -181,6 +182,8 @@ public class BindingAddressActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(mBindingAddressData)) {
                     mBindingAddress.setText(mBindingAddressData);
                     mBindingAddress.setSelection(mBindingAddressData.length());
+                    InputFilter[] filters = {new InputFilter.LengthFilter(200)};
+                    mBindingAddress.setFilters(filters);
                     mIsModify = true;
                 }
                 break;
@@ -342,6 +345,15 @@ public class BindingAddressActivity extends BaseActivity {
             stopScheduleJob();
         } else {
             mGetAuthCode.setText(getString(R.string._seconds, mCounter));
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_CODE_IMAGE_AUTH_CODE && resultCode == RESULT_OK) { // 发送图片验证码去 获取验证码 成功
+            postAuthCodeRequested();
         }
     }
 }
