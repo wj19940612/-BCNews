@@ -374,8 +374,8 @@
     <string name="please_input_coin_address">请输入提币地址</string>
 
     <string name="how_promote_hash_rate">如何提升算力？</string>
-    <string name="promote_hash_rate_way">1、目前用户可以通过日常使用APP（包括但不限于每日登录、阅读资讯、分享资讯、发表评论、举报、在线等）获得相应算力。
-        \n2、后续会推出更多算力获取的任务，敬请期待！</string>
+    <string name="promote_hash_rate_way">1、目前用户可以通过日常使用APP(包括但不限于每日登录、阅读资讯、分享资讯、发表评论、举报、在线等)获得相应算力。
+        \n2、后续会推出更多算力获取的任务,敬请期待！</string>
 
     <string name="exchange_success">兑换成功</string>
     <string name="please_select_exchange_good">请选择兑换物品</string>

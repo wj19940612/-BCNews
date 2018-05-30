@@ -41,8 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/firstQKCIc"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="90dp"
         tools:text="+4444"/>
 
     <TextView
@@ -96,7 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/sixthQKCIc"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="20dp"
         tools:text="+999"/>
 
     <TextView
@@ -106,7 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/fifthQKCIc"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         tools:text="+1000"/>
 
 

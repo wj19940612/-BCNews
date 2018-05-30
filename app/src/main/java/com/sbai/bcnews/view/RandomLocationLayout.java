@@ -164,6 +164,8 @@ public class RandomLocationLayout extends LinearLayout {
             marginRight = mDefaultRandomMargin * 4;
         } else if (i == 5) {
             marginLeft = mDefaultRandomMargin * 6;
+        } else if (i == 7) {
+            marginLeft = mDefaultRandomMargin * 5;
         } else if (i == 10) {
             marginTop = mDefaultRandomMargin * 2;
         }
@@ -176,9 +178,12 @@ public class RandomLocationLayout extends LinearLayout {
         if (i == 0) {
             marginLeft = 40 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 4));
         } else if (i == 4) {
-            marginTop = 40 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 3));
+            marginTop = 20 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 5));
+            marginRight = mRandom.nextInt(dp2px(mDefaultRandomMargin * 3));
+        } else if (i == 8) {
+            marginLeft = 10 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 3));
         } else if (i == 9) {
-            marginTop = 10 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 5));
+            marginTop = 10 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 4));
         }
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
