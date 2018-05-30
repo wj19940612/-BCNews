@@ -83,7 +83,9 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
                     @Override
                     protected void onRespSuccess(ListResp<QKCDetails> resp) {
                         stopFreshOrLoadAnimation();
-                        updateQKCList(resp.getListData());
+                        if (resp.getListData() != null) {
+                            updateQKCList(resp.getListData());
+                        }
                     }
 
                     @Override
