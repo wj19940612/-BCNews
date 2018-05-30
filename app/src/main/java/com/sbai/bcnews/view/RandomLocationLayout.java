@@ -178,7 +178,7 @@ public class RandomLocationLayout extends LinearLayout {
         if (i == 0) {
             marginLeft = 40 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 4));
         } else if (i == 4) {
-            marginTop = 20 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 5));
+            marginTop = 20 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 4));
             marginRight = mRandom.nextInt(dp2px(mDefaultRandomMargin * 3));
         } else if (i == 8) {
             marginLeft = 10 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 3));
