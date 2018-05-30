@@ -48,16 +48,18 @@
             android:textSize="14sp"
             android:text="@string/conversion"/>
 
-        <TextView
+        <com.sbai.bcnews.view.autofit.AutofitTextView
             android:id="@+id/conversionName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="280dp"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="18dp"
+            android:maxLines="1"
             android:textColor="@color/text_f5a"
-            android:textSize="36sp" />
+            android:textSize="36sp"
+            android:gravity="center_vertical|right"/>
 
     </RelativeLayout>
 
