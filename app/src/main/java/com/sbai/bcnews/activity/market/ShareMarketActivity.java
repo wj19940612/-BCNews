@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
@@ -64,6 +65,8 @@ public class ShareMarketActivity extends BaseActivity {
 
         GlideApp.with(getActivity())
                 .load(Apic.url.QR_CODE)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(mQrCode);
 
         GlideApp.with(getActivity())

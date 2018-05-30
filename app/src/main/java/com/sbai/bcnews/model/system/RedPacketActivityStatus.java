@@ -40,6 +40,10 @@ public class RedPacketActivityStatus implements Parcelable {
     private long time;
     private long endTime;
 
+    public boolean redPacketCanRob() {
+        return getCurrentStartTime() <= getTime() && getCurrentEndTime() >= getTime();
+    }
+
     public long getCurrentEndTime() {
         return currentEndTime;
     }

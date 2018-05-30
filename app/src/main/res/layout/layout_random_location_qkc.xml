@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/sixthQKCIc"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="42dp"
         tools:text="+999"/>
 
     <TextView

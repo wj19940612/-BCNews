@@ -159,46 +159,56 @@ public class RandomLocationLayout extends LinearLayout {
         int marginTop = 0;
         int marginBottom = 0;
         if (i == 0) {
-            marginLeft = mDefaultRandomMargin * 5;
+            marginLeft = mDefaultRandomMargin * 3;
         } else if (i == 1) {
             marginRight = mDefaultRandomMargin * 4;
         } else if (i == 5) {
-            marginRight = mDefaultRandomMargin * 6;
+            marginLeft = mDefaultRandomMargin * 6;
         } else if (i == 10) {
             marginTop = mDefaultRandomMargin * 2;
         }
 
+        marginLeft = getMarginLeft(marginLeft);
+        marginTop = getMarginTop(marginTop);
+        marginBottom = getMarginBottom(marginBottom);
+        marginRight = getMarginRight(marginRight);
+
+        if (i == 0) {
+            marginLeft = 40 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 4));
+        } else if (i == 4) {
+            marginTop = 40 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 3));
+        } else if (i == 9) {
+            marginTop = 10 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 5));
+        }
+
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-        layoutParams.leftMargin += getMarginLeft(marginLeft);
-        layoutParams.topMargin += getMarginTop(marginTop);
-        layoutParams.bottomMargin += getMarginBottom(marginBottom);
-        layoutParams.rightMargin += getMarginRight(marginRight);
+        layoutParams.leftMargin += marginLeft;
+        layoutParams.topMargin += marginTop;
+        layoutParams.bottomMargin += marginBottom;
+        layoutParams.rightMargin += marginRight;
         view.setLayoutParams(layoutParams);
     }
 
 
     private int getMarginTop(int randomMarginTop) {
         if (randomMarginTop == 0) randomMarginTop = mDefaultRandomMargin;
-        int i = (int) Display.dp2Px(randomMarginTop, getResources());
-        return mRandom.nextInt(i);
+        int randomValues = mRandom.nextInt(dp2px(randomMarginTop));
+        return randomValues;
     }
 
     private int getMarginLeft(int randomMarginLeft) {
         if (randomMarginLeft == 0) randomMarginLeft = mDefaultRandomMargin;
-        int i = (int) Display.dp2Px(randomMarginLeft, getResources());
-        return 20 - mRandom.nextInt(i);
+        return mRandom.nextInt(dp2px(randomMarginLeft));
     }
 
     private int getMarginBottom(int randomMarginBottom) {
         if (randomMarginBottom == 0) randomMarginBottom = mDefaultRandomMargin;
-        int i = (int) Display.dp2Px(randomMarginBottom, getResources());
-        return mRandom.nextInt(i);
+        return mRandom.nextInt(dp2px(randomMarginBottom));
     }
 
     public int getMarginRight(int randomMarginRight) {
         if (randomMarginRight == 0) randomMarginRight = 1;
-        int i = (int) Display.dp2Px(randomMarginRight, getResources());
-        return mRandom.nextInt(i);
+        return mRandom.nextInt(dp2px(randomMarginRight));
     }
 
     public interface OnCoinClickListener {
@@ -209,6 +219,10 @@ public class RandomLocationLayout extends LinearLayout {
          * @param qks QKC
          */
         void onCoinClick(View v, QKC qks);
+    }
+
+    private int dp2px(int values) {
+        return (int) Display.dp2Px(values, getResources());
     }
 
     public void setOnCoinClickListener(OnCoinClickListener onCoinClickListener) {
