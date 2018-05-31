@@ -119,9 +119,22 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     }
 
     @Override
+    protected boolean ifRegisterNetWorkReceiver() {
+        return true;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (getUserVisibleHint()) {
+            requestRedActivityPacketStatus();
+        }
+    }
+
+    @Override
+    protected void onNetWorkAvailable() {
+        super.onNetWorkAvailable();
+        if (isAdded() && getUserVisibleHint()) {
             requestRedActivityPacketStatus();
         }
     }
@@ -136,7 +149,6 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
             resetCountDownTimer();
         }
     }
-
 
     private void initTitleBar() {
         View leftView = mTitleBar.getLeftView();
