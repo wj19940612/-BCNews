@@ -112,8 +112,12 @@ public class ConversionContentFragment extends BaseFragment {
             public void onItemClick(int clickPosition) {
                 mContentAdapter.setClickPosition(clickPosition);
                 mContentAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onSelect(int position) {
                 if (mSelectListener != null) {
-                    mSelectListener.onSelect(mPageType, clickPosition);
+                    mSelectListener.onSelect(mPageType, position);
                 }
             }
         });
@@ -168,6 +172,8 @@ public class ConversionContentFragment extends BaseFragment {
 
         public interface OnItemClickListener {
             public void onItemClick(int position);
+
+            public void onSelect(int position);
         }
 
         private Context mContext;
@@ -251,6 +257,9 @@ public class ConversionContentFragment extends BaseFragment {
                     mContent.setEnabled(true);
                     if (position == clickPosition) {
                         mSelectBtn.setSelected(true);
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onSelect(position);
+                        }
                     } else {
                         mSelectBtn.setSelected(false);
                     }
@@ -269,6 +278,7 @@ public class ConversionContentFragment extends BaseFragment {
                         }
                         if (onItemClickListener != null) {
                             onItemClickListener.onItemClick(callBackPosition);
+                            onItemClickListener.onSelect(callBackPosition);
                         }
                     }
                 });

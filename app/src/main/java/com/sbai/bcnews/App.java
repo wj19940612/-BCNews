@@ -228,7 +228,7 @@ public class App extends Application implements TimerHandler.TimerCallback {
     }
 
     private void onlineAddQKC() {
-        Apic.requestHashRate(QKC.TYPE_SHARE).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
+        Apic.requestHashRate(QKC.TYPE_ONLINE).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
 
             @Override
             protected void onRespSuccessData(Integer data) {

@@ -813,7 +813,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void readAddQKC() {
-        Apic.requestHashRate(QKC.TYPE_SHARE).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
+        Apic.requestHashRate(QKC.TYPE_READ_ARTICLE).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
 
             @Override
             protected void onRespSuccessData(Integer data) {

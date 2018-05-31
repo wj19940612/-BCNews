@@ -98,6 +98,7 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
     @Override
     public void onStart() {
         super.onStart();
+        resetRechargeBtn();
     }
 
     @Override
@@ -138,6 +139,10 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
     private void initData() {
         mTabViews = new TextView[]{mDigitalCurrency, mAliPay, mTelephoneCharge, mConversionDetail};
         setTabClick(mDigitalCurrency);
+    }
+
+    private void resetRechargeBtn(){
+        mSelectGoodMap.clear();
     }
 
     private void loadData() {
