@@ -79,15 +79,15 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
     private void requestNotGet() {
         requestQKCNumber();
         requestCanGetQkcList();
-
 //        ArrayList<QKC> qkcs = new ArrayList<>();
 //        for (int i = 0; i < 50; i++) {
 //            QKC qkc = new QKC();
-//            qkc.setIntegral(i*100);
+//            qkc.setIntegral(i*10+0.25);
 //            qkc.setId(String.valueOf(i));
 //            qkcs.add(qkc);
 //        }
 //        mRandomLayout.setQksList(qkcs);
+
     }
 
     private void requestQKCNumber() {

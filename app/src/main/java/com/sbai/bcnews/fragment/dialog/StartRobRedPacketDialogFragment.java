@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ import com.sbai.bcnews.model.mine.UserRedPacketStatus;
 import com.sbai.bcnews.model.system.RedPacketActivityStatus;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
-import com.sbai.httplib.ReqError;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +55,16 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
     private boolean mHaveRedPacket;
     private boolean isDismiss = false;
 
+    private OnDialogDismissListener mOnDialogDismissListener;
+
+    public interface OnDialogDismissListener {
+        void onDismiss();
+    }
+
+    public StartRobRedPacketDialogFragment setOnDialogDismissListener(OnDialogDismissListener onDialogDismissListener) {
+        mOnDialogDismissListener = onDialogDismissListener;
+        return this;
+    }
 
     public static StartRobRedPacketDialogFragment newInstance(RedPacketActivityStatus redPacketActivityStatus) {
         Bundle args = new Bundle();
@@ -97,6 +105,9 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
         stopScheduleJob();
         resetCountDownTimer();
         isDismiss = true;
+        if (mOnDialogDismissListener != null) {
+            mOnDialogDismissListener.onDismiss();
+        }
     }
 
     private void requestRedPacketStatus() {
@@ -127,7 +138,7 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
                                     .execute();
                             dismiss();
                         } else {
-                            if(isDismiss) return;
+                            if (isDismiss) return;
                             mHaveRedPacket = data.getRedPacket() == UserRedPacketStatus.HAVE_REDPACKET;
                             updateRobText(mHaveRedPacket);
                             updateRobStatus(mRedPacketActivityStatus);
@@ -243,11 +254,6 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
                                 .putExtra(ExtraKeys.DATA, data)
                                 .execute();
                         dismiss();
-                    }
-
-                    @Override
-                    public void onFailure(ReqError reqError) {
-                        super.onFailure(reqError);
                     }
                 })
                 .fire();

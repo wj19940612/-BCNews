@@ -97,6 +97,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     private long mWaitTime;
     protected RedPacketActivityStatus mRedPacketActivityStatus;
 
+    private boolean mRoRedPacketDialogIsShow;
 
     @Nullable
     @Override
@@ -160,6 +161,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
                                 if (mRedPacketActivityStatus != null &&
                                         mRedPacketActivityStatus.getRedPacketStatus() == RedPacketActivityStatus.RED_PACKET_ACTIVITY_IS_OPEN) {
                                     requestUserRedPacketStatus();
+
                                 }
                             }
                         })
@@ -181,17 +183,30 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
                             Launcher.with(getContext(), HourWelfareActivity.class)
                                     .execute();
                         } else {
-                            StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus).show(getChildFragmentManager());
+                            showRobRedPacketDialog();
                         }
                     }
 
                     @Override
                     public void onFailure(ReqError reqError) {
                         super.onFailure(reqError);
-                        StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus).show(getChildFragmentManager());
+                        showRobRedPacketDialog();
                     }
                 })
                 .fire();
+    }
+
+    private void showRobRedPacketDialog() {
+        if (mRoRedPacketDialogIsShow) return;
+        StartRobRedPacketDialogFragment.newInstance(mRedPacketActivityStatus)
+                .setOnDialogDismissListener(new StartRobRedPacketDialogFragment.OnDialogDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        mRoRedPacketDialogIsShow = false;
+                    }
+                })
+                .show(getChildFragmentManager());
+        mRoRedPacketDialogIsShow = true;
     }
 
     private void initViewPager() {
