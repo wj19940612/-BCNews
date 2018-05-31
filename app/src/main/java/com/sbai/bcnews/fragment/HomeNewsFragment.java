@@ -294,6 +294,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
 
     private void updateRedPacketActivityStatus(RedPacketActivityStatus data) {
         resetCountDownTimer();
+        if (mTitleBar == null) return;
         if (data.getRedPacketStatus() == RedPacketActivityStatus.RED_PACKET_ACTIVITY_IS_OPEN) {
             mTitleBar.setLeftViewVisible(true);
             mWaitTime = getNexGetRedPacketTime(data);
