@@ -130,8 +130,8 @@ public class ConversionHistoryDetailActivity extends BaseActivity {
         mConversionCount.setText(getString(R.string.exchange_name_x, mConversionHistory.getPName()));
         mPayCount.setText(getString(R.string.pay_price_x, FinanceUtil.trimTrailingZero(mConversionHistory.getPrice())));
         mBindingName.setText(R.string.telephone_num_start);
-        mAcceptAddress.setText(mConversionHistory.getAccountAliPay());
-        mAcceptUserName.setText(getString(R.string.telephone_user_name_x, mConversionHistory.getAccountAliPayName()));
+        mAcceptAddress.setText(mConversionHistory.getAccountPhone());
+        mAcceptUserName.setText(getString(R.string.telephone_user_name_x, mConversionHistory.getAccountPhoneName()));
         String[] status = getResources().getStringArray(R.array.order_status);
         mStatus.setText(status[mConversionHistory.getStatus()]);
         setTips();

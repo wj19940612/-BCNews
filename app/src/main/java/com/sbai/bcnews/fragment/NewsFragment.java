@@ -190,11 +190,11 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             @Override
             public void onItemClick(NewsDetail newsDetail) {
                 if (newsDetail.getIsAdvert() > 0) {
-                    if (newsDetail.getUrlType() > 0) {
-                        downLoadApp(newsDetail.getAdvertUrl());
-                    } else {
+                    if (newsDetail.getUrlType() > 0 && !TextUtils.isEmpty(newsDetail.getAndroidUrl())) {
+                        downLoadApp(newsDetail.getAndroidUrl());
+                    } else if (!TextUtils.isEmpty(newsDetail.getAndroidUrl())) {
                         Launcher.with(getActivity(), WebActivity.class)
-                                .putExtra(WebActivity.EX_URL, newsDetail.getAdvertUrl())
+                                .putExtra(WebActivity.EX_URL, newsDetail.getAndroidUrl())
                                 .execute();
                     }
                     NewsReadCache.markNewsRead(newsDetail.getId());
