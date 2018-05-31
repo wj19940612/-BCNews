@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="0.5dp"
-    android:background="@color/bg_F5F5">
+    android:background="@color/bg_F5F5"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/adsorb_text"
@@ -19,7 +20,6 @@
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
         tools:text="2月"/>
 
     <RelativeLayout
@@ -34,10 +34,10 @@
         app:layout_constraintTop_toBottomOf="@+id/adsorb_text">
 
         <TextView
-            android:layout_alignParentLeft="true"
             android:id="@+id/newsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_marginBottom="22dp"
             android:layout_toLeftOf="@+id/cover"
             android:ellipsize="end"
@@ -76,4 +76,4 @@
             android:textSize="12sp"
             tools:text="溺水的鱼"/>
     </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
