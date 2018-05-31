@@ -37,7 +37,7 @@ public class NewsDetail implements Parcelable {
 
     private String advertCopyWriter;//广告文案
     private String advertName;//广告名
-    private String advertUrl; //广告链接
+    private String androidUrl; //广告链接
     private int isAdvert;//是否广告 0不是 1是
     private int urlType; //0-h5 1-下载
 
@@ -252,12 +252,12 @@ public class NewsDetail implements Parcelable {
         this.advertName = advertName;
     }
 
-    public String getAdvertUrl() {
-        return advertUrl;
+    public String getAndroidUrl() {
+        return androidUrl;
     }
 
-    public void setAdvertUrl(String advertUrl) {
-        this.advertUrl = advertUrl;
+    public void setAndroidUrl(String androidUrl) {
+        this.androidUrl = androidUrl;
     }
 
     public int getIsAdvert() {
@@ -312,7 +312,7 @@ public class NewsDetail implements Parcelable {
         dest.writeString(this.author);
         dest.writeString(this.advertCopyWriter);
         dest.writeString(this.advertName);
-        dest.writeString(this.advertUrl);
+        dest.writeString(this.androidUrl);
         dest.writeInt(this.isAdvert);
         dest.writeInt(this.urlType);
         dest.writeInt(this.readHeight);
@@ -344,7 +344,7 @@ public class NewsDetail implements Parcelable {
         this.author = in.readString();
         this.advertCopyWriter = in.readString();
         this.advertName = in.readString();
-        this.advertUrl = in.readString();
+        this.androidUrl = in.readString();
         this.isAdvert = in.readInt();
         this.urlType = in.readInt();
         this.readHeight = in.readInt();
