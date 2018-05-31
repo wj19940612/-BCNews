@@ -146,8 +146,6 @@ public class ConversionHistoryFragment extends RecycleViewSwipeLoadFragment {
         } else {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);
         }
-        if (data.size() != 0)
-            mPage++;
         mConversionHistoryList.addAll(data);
         mHistoryAdapter.notifyDataSetChanged();
     }
