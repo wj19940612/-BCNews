@@ -86,6 +86,7 @@ public class AppJs {
                             .setShareDescription(description)
                             .setShareUrl(shareUrl)
                             .setShareThumbUrl(shareThumbnailUrl)
+                            .setShowShareAddHashRateToast(false)
                             .setListener(new ShareDialog.OnShareDialogCallback() {
                                 @Override
                                 public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {

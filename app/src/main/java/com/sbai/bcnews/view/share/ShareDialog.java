@@ -4,19 +4,12 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.annotation.LayoutRes;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.activity.BaseActivity;
-import com.sbai.bcnews.http.Apic;
-import com.sbai.bcnews.http.Callback;
-import com.sbai.bcnews.http.Callback2D;
-import com.sbai.bcnews.http.Resp;
-import com.sbai.bcnews.model.mine.QKC;
 import com.sbai.bcnews.utils.IntegralUtils;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.SmartDialog;
@@ -69,6 +62,7 @@ public class ShareDialog {
     private boolean mHasTitle = true;
     private boolean mShareImageOnly;
     private Bitmap mBitmap;
+    private boolean mShowShareAddHashRateToast = true; //分享增加算力toast提示
 
     private OnShareDialogCallback mListener;
 
@@ -244,6 +238,7 @@ public class ShareDialog {
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
+            if (!mShowShareAddHashRateToast) return;
             IntegralUtils.shareIntegral(mActivity);
         }
 
@@ -341,6 +336,10 @@ public class ShareDialog {
         return this;
     }
 
+    public ShareDialog setShowShareAddHashRateToast(boolean showShareAddHashRateToast) {
+        mShowShareAddHashRateToast = showShareAddHashRateToast;
+        return this;
+    }
 
     public void show() {
         if (!mHasWeiBo) {

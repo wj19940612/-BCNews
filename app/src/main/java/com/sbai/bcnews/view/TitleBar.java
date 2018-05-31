@@ -182,7 +182,7 @@ public class TitleBar extends RelativeLayout {
         }
         if (mLeftView != null) {
             mLeftView.setPadding(mLeftViewLeftPadding, 0, paddingHorizontal, 0);
-            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            params.addRule(RelativeLayout.CENTER_VERTICAL | RelativeLayout.ALIGN_LEFT);
             addView(mLeftView, params);
             mLeftView.setOnClickListener(new OnClickListener() {
                 @Override
