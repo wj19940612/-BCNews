@@ -163,7 +163,7 @@ public class RandomLocationLayout extends LinearLayout {
         } else if (i == 1) {
             marginRight = mDefaultRandomMargin * 4;
         } else if (i == 5) {
-            marginLeft = mDefaultRandomMargin * 6;
+            marginLeft = mDefaultRandomMargin * 5;
         } else if (i == 7) {
             marginLeft = mDefaultRandomMargin * 5;
         } else if (i == 10) {
@@ -179,7 +179,7 @@ public class RandomLocationLayout extends LinearLayout {
             marginLeft = 40 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 4));
         } else if (i == 4) {
             marginTop = 20 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 4));
-            marginRight = mRandom.nextInt(dp2px(mDefaultRandomMargin * 3));
+            marginRight = mRandom.nextInt(dp2px(mDefaultRandomMargin * 2));
         } else if (i == 8) {
             marginLeft = 10 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 3));
         } else if (i == 9) {

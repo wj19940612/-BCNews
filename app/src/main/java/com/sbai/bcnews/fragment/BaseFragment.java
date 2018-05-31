@@ -11,6 +11,7 @@ import android.widget.ScrollView;
 
 import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.http.Api;
+import com.sbai.bcnews.utils.Network;
 import com.sbai.bcnews.utils.TimerHandler;
 import com.sbai.httplib.ReqIndeterminate;
 import com.umeng.analytics.MobclickAgent;
@@ -21,22 +22,33 @@ public class BaseFragment extends Fragment implements ReqIndeterminate, TimerHan
 
     protected String TAG;
 
+    protected NetworkReceiver mNetworkReceiver;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MobclickAgent.openActivityDurationTrack(false);
+        if (ifRegisterNetWorkReceiver()) {
+            mNetworkReceiver = new NetworkReceiver();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(TAG);
+        if (ifRegisterNetWorkReceiver() && mNetworkReceiver != null) {
+            Network.unregisterNetworkChangeReceiver(getActivity(), mNetworkReceiver);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(TAG);
+        if (ifRegisterNetWorkReceiver() && mNetworkReceiver != null) {
+            Network.registerNetworkChangeReceiver(getActivity(), mNetworkReceiver);
+        }
     }
 
     @Override
@@ -55,6 +67,18 @@ public class BaseFragment extends Fragment implements ReqIndeterminate, TimerHan
         super.onDestroyView();
         stopScheduleJob();
         Api.cancel(TAG);
+    }
+
+    protected void onNetworkChanged(int availableNetworkType) {
+
+    }
+
+    protected void onNetWorkAvailable() {
+
+    }
+
+    protected boolean ifRegisterNetWorkReceiver() {
+        return false;
     }
 
     private void scrollToTop(View view) {
@@ -133,5 +157,16 @@ public class BaseFragment extends Fragment implements ReqIndeterminate, TimerHan
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    private class NetworkReceiver extends Network.NetworkChangeReceiver {
+
+        @Override
+        protected void onNetworkChanged(int availableNetworkType) {
+            if (availableNetworkType > Network.NET_NONE) {
+                onNetWorkAvailable();
+            }
+            BaseFragment.this.onNetworkChanged(availableNetworkType);
+        }
     }
 }
