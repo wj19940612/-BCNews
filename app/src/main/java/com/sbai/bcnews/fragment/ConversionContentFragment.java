@@ -105,6 +105,14 @@ public class ConversionContentFragment extends BaseFragment {
         loadData();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isAdded()) {
+            loadData();
+        }
+    }
+
     private void initView() {
         mContentList = new ArrayList<>();
         mContentAdapter = new ContentAdapter(-1, mPageType, mContentList, getActivity(), new ContentAdapter.OnItemClickListener() {
