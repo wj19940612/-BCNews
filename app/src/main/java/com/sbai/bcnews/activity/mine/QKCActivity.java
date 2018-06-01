@@ -158,6 +158,7 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
                 break;
             case R.id.exchange:
                 Launcher.with(getActivity(), ConversionGoodsActivity.class).executeForResult(ConversionGoodsActivity.REQ_CODE_EXCHANGE_QKC);
+                overridePendingTransition(R.anim.slide_in_from_bottom, 0);
                 break;
         }
     }
