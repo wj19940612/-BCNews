@@ -39,6 +39,7 @@ public class ConversionContentFragment extends BaseFragment {
 
     public static final String PAGE_TYPE = "page_type";
     public static final int SPAN_COUNT = 2;
+    public static final int DEFAULT_SELECT = -1;
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -103,6 +104,14 @@ public class ConversionContentFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         loadData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isAdded()) {
+            loadData();
+        }
     }
 
     private void initView() {
@@ -255,7 +264,7 @@ public class ConversionContentFragment extends BaseFragment {
                     mRootView.setEnabled(true);
                     mLabel.setEnabled(true);
                     mContent.setEnabled(true);
-                    if (position == clickPosition) {
+                    if (position == clickPosition || (clickPosition == DEFAULT_SELECT && position == 0)) {
                         mSelectBtn.setSelected(true);
                         if (onItemClickListener != null) {
                             onItemClickListener.onSelect(position);
@@ -272,7 +281,7 @@ public class ConversionContentFragment extends BaseFragment {
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int callBackPosition = -1;
+                        int callBackPosition = DEFAULT_SELECT;
                         if (position != clickPosition) {
                             callBackPosition = position;
                         }
