@@ -32,6 +32,7 @@ public class HashRateTimeCahche {
         }
         mOnlineTimeCache.setUserId(userId);
         mOnlineTimeCache.setDay(SysTime.getSysTime().getSystemTimestamp());
+        mOnlineTimeCache.setOnlineTime(0);
         return mOnlineTimeCache;
     }
 
