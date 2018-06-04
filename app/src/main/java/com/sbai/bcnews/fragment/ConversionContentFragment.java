@@ -119,12 +119,12 @@ public class ConversionContentFragment extends BaseFragment {
         mContentAdapter = new ContentAdapter(-1, mPageType, mContentList, getActivity(), new ContentAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int clickPosition) {
-                mContentAdapter.setClickPosition(clickPosition);
                 mContentAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onSelect(int position) {
+                mContentAdapter.setClickPosition(position);
                 if (mSelectListener != null) {
                     mSelectListener.onSelect(mPageType, position);
                 }
