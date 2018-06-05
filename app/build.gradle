@@ -15,7 +15,7 @@ android {
         applicationId "com.sbai.bcnews"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 7
+        versionCode 9
         versionName "1.2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -60,39 +60,39 @@ android {
     flavorDimensions("app")
 
     productFlavors {
-        dev {
-//            applicationIdSuffix '.dev'
-            versionName "2.0.6"
-//            minSdkVersion 21
-            buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
-            manifestPlaceholders = [
-                    GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
-                    GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
-                    GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
-                    UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
-            ]
-        }
-        alpha {
-            versionCode alphaVersionCode as Integer
-            versionName alphaVersionName
-            buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
-            manifestPlaceholders = [
-                    GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
-                    GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
-                    GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
-                    UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
-            ]
-        }
+//        dev {
+////            applicationIdSuffix '.dev'
+//            versionName "2.0.6"
+////            minSdkVersion 21
+//            buildConfigField('String', 'HOST', '\"news.esongbai.abc\"')
+//            manifestPlaceholders = [
+//                    GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
+//                    GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
+//                    GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
+//                    UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
+//            ]
+//        }
+//        alpha {
+//            versionCode alphaVersionCode as Integer
+//            versionName alphaVersionName
+//            buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
+//            manifestPlaceholders = [
+//                    GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",
+//                    GETUI_APP_SECRET: "GvyAXgwAvH9GqVGmDqjoy7",
+//                    GETUI_APP_KEY   : "f9U7iwV9os7UTJWoz8K5p1",
+//                    UMENG_APP_KEY   : "5a94cb3da40fa309710001e0",
+//            ]
+//        }
 
-//        xiaomi {}
-//        vivo {}
-//        c360 {}
-//        tencent {}
-//        baidu {}
+        xiaomi {}
+        vivo {}
+        c360 {}
+        tencent {}
+        baidu {}
         others {}
-//        fenx {}
-//        weixin{}
-//        huawei{}
+        fenx {}
+        weixin{}
+        huawei{}
     }
 
     android.applicationVariants.all { variant ->

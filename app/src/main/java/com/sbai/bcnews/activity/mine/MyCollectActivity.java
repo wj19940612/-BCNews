@@ -27,6 +27,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.OnItemLongClickListener;
 import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.bcnews.view.ThreeImageLayout;
@@ -96,6 +97,16 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 return false;
             }
         });
+
+        mMyCollectAdapter.setOnItemClickListener(new OnItemClickListener<ReadHistoryOrMyCollect>() {
+            @Override
+            public void onItemClick(ReadHistoryOrMyCollect item, int position) {
+                Launcher.with(getActivity(), NewsDetailActivity.class)
+                        .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
+                        .putExtra(ExtraKeys.CHANNEL, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
+                        .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
+            }
+        });
     }
 
     private void cancelCollect(final int position, final ReadHistoryOrMyCollect readHistoryOrMyCollect) {
@@ -160,7 +171,6 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
     }
 
 
-
     @Override
     public View getContentView() {
         return mRootView;
@@ -208,6 +218,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         private ArrayList<ReadHistoryOrMyCollect> mReadHistoryOrMyCollectList;
         private Context mContext;
         private OnItemLongClickListener<ReadHistoryOrMyCollect> mOnItemLongClickListener;
+        private OnItemClickListener<ReadHistoryOrMyCollect> mOnItemClickListener;
 
         public MyCollectAdapter(Context context, ArrayList<ReadHistoryOrMyCollect> readHistoryOrMyCollectList) {
             mReadHistoryOrMyCollectList = readHistoryOrMyCollectList;
@@ -233,6 +244,10 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
             mOnItemLongClickListener = onItemLongClickListener;
         }
 
+        public void setOnItemClickListener(OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener) {
+            mOnItemClickListener = onItemClickListener;
+        }
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             switch (viewType) {
@@ -250,10 +265,10 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof NoneOrSingleImageViewHolder) {
                 NoneOrSingleImageViewHolder noneOrSingleImageViewHolder = (NoneOrSingleImageViewHolder) holder;
-                noneOrSingleImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemLongClickListener);
+                noneOrSingleImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemLongClickListener, mOnItemClickListener);
             } else if (holder instanceof ThreeImageViewHolder) {
                 ThreeImageViewHolder threeImageViewHolder = (ThreeImageViewHolder) holder;
-                threeImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemLongClickListener);
+                threeImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemLongClickListener, mOnItemClickListener);
             }
         }
 
@@ -298,7 +313,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(final ReadHistoryOrMyCollect item, final int position, final Context context, final OnItemLongClickListener<ReadHistoryOrMyCollect> onItemLongClickListener) {
+            public void bindDataWithView(final ReadHistoryOrMyCollect item, final int position, final Context context, final OnItemLongClickListener<ReadHistoryOrMyCollect> onItemLongClickListener, final OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener) {
 
                 if (position == 0) {
                     mSplit.setVisibility(View.VISIBLE);
@@ -309,10 +324,9 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 mMain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Launcher.with(context, NewsDetailActivity.class)
-                                .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
-                                .putExtra(ExtraKeys.TAG, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
-                                .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(item, position);
+                        }
                     }
                 });
 
@@ -362,7 +376,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(final ReadHistoryOrMyCollect item, final int position, final Context context, final OnItemLongClickListener<ReadHistoryOrMyCollect> onItemLongClickListener) {
+            public void bindDataWithView(final ReadHistoryOrMyCollect item, final int position, final Context context, final OnItemLongClickListener<ReadHistoryOrMyCollect> onItemLongClickListener, final OnItemClickListener<ReadHistoryOrMyCollect> onItemClickListener) {
                 if (position == 0) {
                     mFirstSplit.setVisibility(View.VISIBLE);
                 } else {
@@ -372,10 +386,9 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 mMain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Launcher.with(context, NewsDetailActivity.class)
-                                .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
-                                .putExtra(ExtraKeys.TAG, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
-                                .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(item, position);
+                        }
                     }
                 });
 
