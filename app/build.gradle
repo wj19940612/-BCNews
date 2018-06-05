@@ -15,8 +15,8 @@ android {
         applicationId "com.sbai.bcnews"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 6
-        versionName "1.2.0"
+        versionCode 7
+        versionName "1.2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField('String', 'HOST', '\"news.ailemi.com\"')
@@ -89,7 +89,7 @@ android {
 //        c360 {}
 //        tencent {}
 //        baidu {}
-//        others {}
+        others {}
 //        fenx {}
 //        weixin{}
 //        huawei{}
