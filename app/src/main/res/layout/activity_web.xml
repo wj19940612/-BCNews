@@ -8,6 +8,9 @@
     tools:contextRef=".activity.WebActivity">
 
     <com.sbai.bcnews.view.TitleBar
+        app:titleLeftMargin="50dp"
+        app:titleRightMargin="50dp"
+        android:maxLines="1"
         android:background="@android:color/white"
         android:id="@+id/titleBar"
         android:layout_width="match_parent"

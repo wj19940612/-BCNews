@@ -141,7 +141,7 @@ public class ReadHistoryActivity extends RecycleViewSwipeLoadActivity {
             public void onItemClick(ReadHistoryOrMyCollect item, int position) {
                 Launcher.with(getActivity(), NewsDetailActivity.class)
                         .putExtra(ExtraKeys.NEWS_ID, item.getDataId())
-                        .putExtra(ExtraKeys.TAG, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
+                        .putExtra(ExtraKeys.CHANNEL, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
                         .execute();
             }
         });
