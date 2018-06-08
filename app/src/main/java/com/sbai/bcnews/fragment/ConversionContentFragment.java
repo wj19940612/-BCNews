@@ -68,8 +68,12 @@ public class ConversionContentFragment extends BaseFragment {
         public void onSelect(int page, int position);
     }
 
-    public void setSelectListener(SelectListener selectListener) {
-        mSelectListener = selectListener;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof SelectListener){
+            mSelectListener = (SelectListener) context;
+        }
     }
 
     @Override

@@ -423,5 +423,9 @@
     <string name="conversion_tips_reviewing">请耐心等待客服审核，审核时间3~5个工作日</string>
     <string name="conversion_tips_success">已成功转账，请注意查收。</string>
 
+    <string name="you_have_not_attention_author">你还没有关注作者哦</string>
+    <string name="recommend_attention">推荐关注</string>
+    <string name="recommend_attention_tip">添加关注后，刷新页面有惊喜哟</string>
+
 
 </resources>
