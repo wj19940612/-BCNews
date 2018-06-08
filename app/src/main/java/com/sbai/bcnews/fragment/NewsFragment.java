@@ -213,23 +213,23 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNewsAdapter);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (mOnScrollListener != null) {
-                    mOnScrollListener.onScroll(dy);
-                }
-            }
-        });
-        mSwipeRefreshHeader.setStartRefreshListener(new RefreshHeaderView.OnStartRefreshListener() {
-            @Override
-            public void onStartRefresh() {
-                if (mOnScrollListener != null) {
-                    mOnScrollListener.onScroll(-SCROLL_GLIDING);
-                }
-            }
-        });
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if (mOnScrollListener != null) {
+//                    mOnScrollListener.onScroll(dy);
+//                }
+//            }
+//        });
+//        mSwipeRefreshHeader.setStartRefreshListener(new RefreshHeaderView.OnStartRefreshListener() {
+//            @Override
+//            public void onStartRefresh() {
+//                if (mOnScrollListener != null) {
+//                    mOnScrollListener.onScroll(-SCROLL_GLIDING);
+//                }
+//            }
+//        });
         mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
             @Override
             public void onRefreshClick() {

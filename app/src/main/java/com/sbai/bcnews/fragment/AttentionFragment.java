@@ -1,6 +1,7 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,12 +18,20 @@ import android.widget.TextView;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsAuthor;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
+import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsAdapter;
+import com.sbai.bcnews.utils.news.NewsWithHeaderAdapter;
+import com.sbai.glide.GlideApp;
+import com.sbai.httplib.ReqError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +44,8 @@ import static com.sbai.bcnews.ExtraKeys.CHANNEL;
 
 public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
+    public static final int HEADER_HEIGHT = 60;
+
     @BindView(R.id.emptyView)
     LinearLayout mEmptyView;
     @BindView(R.id.emptyRecyclerView)
@@ -45,11 +56,24 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     private List<NewsAuthor> mNewsAuthorList;
 
     private List<NewsWrap> mNewsWraps;
+    private NewsWithHeaderAdapter mNewsAdapter;
 
+    private RelativeLayout mHeaderView;
+    private String mChannel;
+    private int mPage;
+
+    public interface OnItemClickListener{
+        public void onItemClick();
+
+        public void onAttention(boolean isAttention);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mChannel = getArguments().getString(CHANNEL);
+        }
     }
 
     @Nullable
@@ -64,11 +88,15 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+        loadData(true);
+        requestMyAttention();
+        loadEmptyData();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        refreshReadStatus();
     }
 
     @Override
@@ -78,30 +106,14 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
     @Override
     public void onLoadMore() {
-
+        loadData(false);
     }
 
     @Override
     public void onRefresh() {
-
-    }
-
-    private void initView() {
-        mNewsAuthorList = new ArrayList<>();
-        mEmptyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.HORIZONTAL, false));
-        mRecommendAdapter = new RecommendAdapter(mNewsAuthorList, getActivity());
-        mEmptyRecyclerView.setAdapter(mRecommendAdapter);
-
-        mNewsWraps = new ArrayList<>();
-
-        NewsAdapter newsAdapter = new NewsAdapter(getActivity(), mNewsWraps, new NewsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(NewsDetail newsDetail) {
-                Launcher.with(getActivity(), NewsDetailActivity.class)
-                        .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId());
-//                        .putExtra(CHANNEL, mChannel).execute();
-            }
-        });
+        mPage = 0;
+        loadData(true);
+        requestMyAttention();
     }
 
     @Override
@@ -110,14 +122,181 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         mBind.unbind();
     }
 
+    private void initView() {
+        mNewsAuthorList = new ArrayList<>();
+        mEmptyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.HORIZONTAL, false));
+        mRecommendAdapter = new RecommendAdapter(mNewsAuthorList, getActivity(), new OnItemClickListener() {
+            @Override
+            public void onItemClick() {
+
+            }
+
+            @Override
+            public void onAttention(boolean isAttention) {
+
+            }
+        });
+        mEmptyRecyclerView.setAdapter(mRecommendAdapter);
+
+        mNewsWraps = new ArrayList<>();
+
+        NewsAdapter newsAdapter = new NewsAdapter(getActivity(), mNewsWraps, new NewsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(NewsDetail newsDetail) {
+                Launcher.with(getActivity(), NewsDetailActivity.class)
+                        .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId())
+                        .putExtra(ExtraKeys.CHANNEL, (newsDetail.getChannel() == null || newsDetail.getChannel().isEmpty()) ? null : newsDetail.getChannel().get(0))
+                        .execute();
+            }
+        });
+
+        mNewsAdapter = new NewsWithHeaderAdapter(newsAdapter);
+        initHeadView();
+    }
+
+    private void initHeadView() {
+        mHeaderView = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.view_my_attention, null);
+        mHeaderView.setLayoutParams(new RecyclerView.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(HEADER_HEIGHT, getResources())));
+        mHeaderView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    private void loadData(final boolean refresh) {
+        String channelParam = Uri.encode(mChannel);
+        Apic.requestNewsListWithChannel(channelParam, mPage)
+                .tag(TAG)
+                .callback(new Callback2D<Resp<News>, News>() {
+                    @Override
+                    protected void onRespSuccessData(News data) {
+                        if (mNewsWraps.size() == 0 && data.getContent().size() == 0) {
+                            setEmptyView(true);
+                        } else {
+                            setEmptyView(false);
+                        }
+                        updateData(data.getContent(), refresh);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        stopFreshOrLoadAnimation();
+                    }
+
+                    @Override
+                    public void onFailure(ReqError reqError) {
+                        super.onFailure(reqError);
+                        if (mNewsWraps.size() == 0) {
+                            setEmptyView(true);
+                        } else {
+                            setEmptyView(false);
+                        }
+                        if (refresh) {
+                            refreshFailure();
+                        }
+                    }
+
+                }).fireFreely();
+    }
+
+    private void updateData(List<NewsDetail> data, boolean refresh) {
+        if (refresh) {
+            mNewsWraps.clear();
+        }
+        if (data == null || data.size() == 0) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            refreshFoot(data.size());
+            mNewsAdapter.notifyDataSetChanged();
+            return;
+        }
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+        } else {
+            mSwipeToLoadLayout.setLoadMoreEnabled(true);
+        }
+        if (data.size() != 0)
+            mPage++;
+        mNewsWraps.addAll(NewsWrap.updateImgType(data));
+        refreshFoot(data.size());
+        mNewsAdapter.notifyDataSetChanged();
+    }
+
+    private void refreshFoot(int size) {
+        if (mNewsWraps.size() >= Apic.DEFAULT_PAGE_SIZE && size < Apic.DEFAULT_PAGE_SIZE) {
+            if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
+                ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(true);
+            }
+        } else {
+            if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
+                ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(false);
+            }
+        }
+    }
+
+    private void requestMyAttention() {
+
+    }
+
+    private void loadMyAttentionData(List<NewsAuthor> newsAuthorList) {
+        ImageView[] imageViews = new ImageView[4];
+        imageViews[0] = mHeaderView.findViewById(R.id.head1);
+        imageViews[1] = mHeaderView.findViewById(R.id.head2);
+        imageViews[2] = mHeaderView.findViewById(R.id.head3);
+        imageViews[3] = mHeaderView.findViewById(R.id.head4);
+
+        int displaySize = newsAuthorList.size() > 0 ? newsAuthorList.size() : 0;
+        for (int i = 0; i < 4; i++) {
+            if(i<displaySize){
+                imageViews[i].setVisibility(View.VISIBLE);
+                GlideApp.with(getActivity())
+                        .load("")
+                        .placeholder(R.drawable.ic_default_head_portrait)
+                        .circleCrop()
+                        .into(imageViews[i]);
+            }else{
+                imageViews[i].setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void loadEmptyData(){
+
+    }
+
+    private void updateEmptyView(List<NewsAuthor> newsAuthorList){
+        mNewsAuthorList.clear();
+        mNewsAuthorList.addAll(newsAuthorList);
+        mRecommendAdapter.notifyDataSetChanged();
+    }
+
+    private void setEmptyView(boolean showEmptyView){
+        if(showEmptyView){
+            mEmptyView.setVisibility(View.VISIBLE);
+        }else{
+            mEmptyView.setVisibility(View.GONE);
+        }
+    }
+
+    private void refreshReadStatus() {
+        if (mNewsWraps != null && mNewsWraps.size() != 0) {
+            mNewsAdapter.notifyDataSetChanged();
+        }
+    }
+
     static class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<NewsAuthor> mNewsAuthors;
         private Context mContext;
+        private OnItemClickListener mOnItemClickListener;
 
-        public RecommendAdapter(List<NewsAuthor> newsAuthors, Context context) {
+        public RecommendAdapter(List<NewsAuthor> newsAuthors, Context context,OnItemClickListener onItemClickListener) {
             mNewsAuthors = newsAuthors;
             mContext = context;
+            mOnItemClickListener = onItemClickListener;
         }
 
         @NonNull
