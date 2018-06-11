@@ -140,6 +140,9 @@
             <enum name="gone" value="8"/>
         </attr>
         <attr name="rowText" format="reference|string"/>
+        <attr name="rowTextLeftDrawable" format="reference"/>
+        <attr name="rowTextRightDrawable" format="reference"/>
+        <attr name="rowTextDrawablePadding" format="reference|dimension"/>
         <attr name="rowTextSize" format="dimension"/>
         <attr name="rowTextColor" format="color"/>
         <attr name="rowSubText" format="reference|string"/>
@@ -151,6 +154,13 @@
         <attr name="hasBottomSplitLine"/>
         <attr name="splitLineColor"/>
         <attr name="splitLineLeftPadding" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="HasLabelLayout">
+        <attr name="labelDrawable" format="reference"/>
+        <attr name="labelWidth" format="reference|dimension"/>
+        <attr name="labelHeight" format="reference|dimension"/>
+        <attr name="android:src"/>
     </declare-styleable>
 
 </resources>

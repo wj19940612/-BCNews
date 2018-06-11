@@ -114,18 +114,18 @@
             android:textSize="15sp"/>
 
         <TextView
-            android:singleLine="true"
             android:id="@+id/location"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="14dp"
-            android:textColor="@color/text_999"
             android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="right"
-            android:text="@string/please_select"/>
+            android:singleLine="true"
+            android:text="@string/please_select"
+            android:textColor="@color/text_999"/>
 
         <ImageView
             android:id="@+id/locationIv"
@@ -181,5 +181,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationLL"/>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/connectServiceHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="20dp"
+        android:lineSpacingExtra="5dp"
+        android:textColor="@color/text97"
+        app:layout_constraintTop_toBottomOf="@+id/personalIntroduce"
+        tools:text="@string/connect_service_hint"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -21,12 +21,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+            <com.sbai.bcnews.view.HasLabelLayout
                 android:id="@+id/headPortrait"
                 android:layout_width="68dp"
                 android:layout_height="68dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="47dp"
+                app:labelDrawable="@drawable/ic_label_v"
                 tools:src="@drawable/ic_default_head_portrait"/>
 
             <TextView
@@ -85,10 +86,10 @@
             android:layout_marginTop="12dp"
             android:background="@drawable/bg_white"
             android:visibility="gone"
+            app:hasBottomSplitLine="true"
             app:layout_constraintTop_toBottomOf="@+id/headLayout"
             app:leftIcon="@drawable/ic_qkc_mine"
             app:rightIcon="@drawable/ic_common_right_arrow"
-            app:hasBottomSplitLine="true"
             app:rowText="@string/qkc"
             app:rowTextColor="@color/text_222"
             app:rowTextSize="16sp"
@@ -128,6 +129,7 @@
             app:subTextSize="12sp"
             app:subTextVisible="gone"/>
 
+
         <com.sbai.bcnews.view.IconTextRow
             android:id="@+id/review"
             android:layout_width="match_parent"
@@ -150,9 +152,10 @@
             android:background="@drawable/bg_white"
             android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@+id/review"
-            app:leftIcon="@drawable/ic_mine_contribute"
+            app:leftIcon="@drawable/ic_mine_author_workbench"
             app:rightIcon="@drawable/ic_common_right_arrow"
-            app:rowText="@string/me_want_contribute"
+            app:rowTextDrawablePadding="14dp"
+            app:rowText="@string/author_workbench"
             app:rowTextColor="@color/text_222"
             app:rowTextSize="16sp"
             app:rowVerticalPadding="0dp"/>
@@ -191,7 +194,6 @@
             app:rowTextColor="@color/text_222"
             app:rowTextSize="16sp"
             app:rowVerticalPadding="0dp"/>
-
 
     </android.support.constraint.ConstraintLayout>
 

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.sbai.bcnews.utils.Display;
+import com.sbai.bcnews.utils.glide.GlideRoundTransform;
 import com.sbai.glide.GlideApp;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class ThreeImageLayout extends LinearLayout {
     public ThreeImageLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        int defaultHeight = (int) Display.dp2Px(80, getResources());
+        int defaultHeight = (int) Display.dp2Px(70, getResources());
         int defaultMargin = (int) Display.dp2Px(4, getResources());
 
         mImageViewList = new ArrayList<>();
@@ -67,6 +68,7 @@ public class ThreeImageLayout extends LinearLayout {
                 imageView.setVisibility(VISIBLE);
                 GlideApp.with(getContext())
                         .load(imagePath)
+                        .transform(new GlideRoundTransform(getContext()))
                         .into(imageView);
             }
         }

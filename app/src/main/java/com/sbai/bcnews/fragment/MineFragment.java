@@ -2,13 +2,15 @@ package com.sbai.bcnews.fragment;
 
 
 import android.app.Dialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ import com.sbai.bcnews.BuildConfig;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.WebActivity;
+import com.sbai.bcnews.activity.mine.AuthorWorkbenchActivity;
 import com.sbai.bcnews.activity.mine.FeedbackActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.activity.mine.MessageActivity;
@@ -42,9 +45,9 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
+import com.sbai.bcnews.view.HasLabelLayout;
 import com.sbai.bcnews.view.IconTextRow;
 import com.sbai.bcnews.view.SmartDialog;
-import com.sbai.glide.GlideApp;
 
 import java.util.List;
 
@@ -59,7 +62,7 @@ import butterknife.Unbinder;
 public class MineFragment extends BaseFragment {
 
     @BindView(R.id.headPortrait)
-    ImageView mHeadPortrait;
+    HasLabelLayout mHeadPortrait;
     @BindView(R.id.userName)
     TextView mUserName;
     @BindView(R.id.collect)
@@ -203,6 +206,22 @@ public class MineFragment extends BaseFragment {
             mUserName.setText(userInfo.getUserName());
             updateUserCollectNumber(userInfo.getCollectCount());
             updateUserReadHistory(userInfo.getReadCount());
+            if (userInfo.isAuthorIsCheck()) {
+                mContribute.setText(R.string.author_workbench);
+                mHeadPortrait.setLabelImageViewVisible(true);
+
+                boolean isOfficialAuthor = userInfo.getAuthorType() == UserInfo.AUTHOR_STATUS_OFFICIAL;
+                mHeadPortrait.setLabelSelected(isOfficialAuthor);
+            } else {
+                mHeadPortrait.setLabelImageViewVisible(false);
+                String s = getString(R.string.author_workbench) + "                    ";
+                SpannableString spannableString = new SpannableString(s);
+                Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.ic_mine_author_not_check);
+                drawable.setBounds(0, 0, 135, 60);
+                ImageSpan imageSpan = new ImageSpan(drawable);
+                spannableString.setSpan(imageSpan, 9, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                mContribute.setText(spannableString);
+            }
         } else {
             mUserName.setText(R.string.click_login);
             updateUserCollectNumber(0);
@@ -214,6 +233,8 @@ public class MineFragment extends BaseFragment {
             updateUserReadHistory(readHistorySize);
             updateNotReadMessage(0);
             mQkc.setSubText("");
+            mContribute.setText(R.string.author_workbench);
+            mHeadPortrait.setLabelImageViewVisible(false);
         }
     }
 
@@ -246,16 +267,9 @@ public class MineFragment extends BaseFragment {
 
     private void updateUserHeadPortrait() {
         if (LocalUser.getUser().isLogin()) {
-            GlideApp.with(getActivity())
-                    .load(LocalUser.getUser().getUserInfo().getUserPortrait())
-                    .placeholder(R.drawable.ic_default_head_portrait)
-                    .circleCrop()
-                    .into(mHeadPortrait);
+            mHeadPortrait.setImageSrc(LocalUser.getUser().getUserInfo().getUserPortrait());
         } else {
-            GlideApp.with(getActivity())
-                    .load(R.drawable.ic_default_head_portrait)
-                    .circleCrop()
-                    .into(mHeadPortrait);
+            mHeadPortrait.setImageSrc(R.drawable.ic_default_head_portrait);
         }
     }
 
@@ -292,8 +306,17 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), ReadHistoryActivity.class).execute();
                 break;
             case R.id.contribute:
-                requestOperationWeChatAccount();
-                umengEventCount(UmengCountEventId.MINE_CONTRIBUTE);
+                if (!LocalUser.getUser().isLogin()) {
+                    login();
+                } else {
+//                    if (LocalUser.getUser().getUserInfo().isAuthorIsCheck()) {
+                        // TODO: 2018/6/7 打开作者详情页
+                        Launcher.with(getActivity(), AuthorWorkbenchActivity.class).execute();
+//                    } else {
+//                        requestOperationWeChatAccount();
+//                    }
+//                    umengEventCount(UmengCountEventId.MINE_CONTRIBUTE);
+                }
                 break;
             case R.id.feedBack:
                 Launcher.with(getActivity(), FeedbackActivity.class).execute();

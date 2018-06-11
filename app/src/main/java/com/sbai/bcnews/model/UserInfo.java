@@ -10,6 +10,8 @@ import com.sbai.bcnews.model.system.NotificationStatus;
  */
 public class UserInfo implements Parcelable {
 
+    public static final int AUTHOR_STATUS_SPECIAL = 1; //专栏作家
+    public static final int AUTHOR_STATUS_OFFICIAL = 2; //官方认证
 
     public static final int WECHAT_BIND_STATUS_NOT_BIND = 0;
     public static final int WECHAT_BIND_STATUS_BIND = 1;
@@ -83,6 +85,28 @@ public class UserInfo implements Parcelable {
 
     private int addRate; //用户此次增加的算力
     private int addIntegral;//用户此次增加的积分
+
+
+
+    // TODO: 2018/6/7
+    private boolean authorIsCheck;
+    public int authorType;
+
+    public int getAuthorType() {
+        return authorType;
+    }
+
+    public void setAuthorType(int authorType) {
+        this.authorType = authorType;
+    }
+
+    public boolean isAuthorIsCheck() {
+        return authorIsCheck;
+    }
+
+    public void setAuthorIsCheck(boolean authorIsCheck) {
+        this.authorIsCheck = authorIsCheck;
+    }
 
     public UserInfo() {
     }

@@ -173,7 +173,7 @@
     <string name="preview">预览</string>
     <string name="all_image">所有图片</string>
 
-    <string name="me_want_contribute">我要投稿</string>
+    <string name="author_workbench">作者工作台</string>
     <string name="feed_back">意见反馈</string>
     <string name="setting">设置</string>
     <string name="click_login">点击登录</string>
@@ -423,5 +423,16 @@
     <string name="conversion_tips_reviewing">请耐心等待客服审核，审核时间3~5个工作日</string>
     <string name="conversion_tips_success">已成功转账，请注意查收。</string>
 
+    <string name="connect_service_hint">认证用户无法修改资料，如需修改，请联系平台客服\n客服邮箱:%1$s\n客服微信:%1$s</string>
 
+    <string name="workbench">工作台</string>
+    <string name="modify_info">编辑资料</string>
+    <string name="read">阅读</string>
+    <string name="yesterday">昨日</string>
+    <string name="total">累计</string>
+    <string name="praise_">点赞</string>
+    <string name="fans">粉丝</string>
+    <string name="my_article_number">我的文章（%1$d）</string>
+    <string name="read_number">%1$d人阅读</string>
+    <string name="review_number">%1$d评论</string>
 </resources>

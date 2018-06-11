@@ -2,6 +2,7 @@ package com.sbai.bcnews.view.recycleview;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,14 +24,14 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
 
     private final Object mLock = new Object();
 
-
     @NonNull
     public abstract K onContentCreateViewHolder(@NonNull ViewGroup parent, int viewType);
 
-    public abstract void onBindContentViewHolder(@NonNull K holder, T data,int position);
+    public abstract void onBindContentViewHolder(@NonNull K holder, T data, int position);
 
     @Override
     public K onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d("wangjie", "onCreateViewHolder: " + viewType);
         switch (viewType) {
             case HEADER_VIEW_TYPE:
                 if (mHeaderView != null) {
@@ -55,7 +56,8 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
             case FOOTER_VIEW_TYPE:
                 break;
             default:
-                onBindContentViewHolder((K) holder, getItemData(position - getHeaderViewsCount()),position-getHeaderViewsCount());
+                T itemData = getItemData(position - getHeaderViewsCount());
+                onBindContentViewHolder((K) holder, itemData, position - getHeaderViewsCount());
         }
     }
 
@@ -73,9 +75,12 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
         if (getFooterViewsCount() != 0 && position == getDataList().size()) {
             return FOOTER_VIEW_TYPE;
         }
-        return super.getItemViewType(position - getHeaderViewsCount());
+        return getContentItemViewType(position - getHeaderViewsCount());
     }
 
+    public int getContentItemViewType(int position) {
+        return 0;
+    }
 
     @Override
     public void addHeaderView(View view) {
