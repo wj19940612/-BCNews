@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/rootView"
+        android:layout_width="152dp"
+        android:layout_height="192dp"
+        android:background="@drawable/bg_recommend_author">
+
+        <ImageView
+            android:id="@+id/head"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="46dp" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/head"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="9dp"
+            android:textColor="@color/text_4a"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/attentionBtn"
+            android:layout_width="50dp"
+            android:layout_height="16dp"
+            android:layout_below="@+id/name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_attention_author"
+            android:gravity="center"
+            android:text="已关注"
+            android:textColor="@color/colorPrimary"
+            android:textSize="11sp" />
+    </RelativeLayout>
+</RelativeLayout>

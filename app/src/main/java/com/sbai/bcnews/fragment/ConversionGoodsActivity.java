@@ -379,7 +379,6 @@ public class ConversionGoodsActivity extends BaseActivity implements ConversionC
                 return new ConversionHistoryFragment();
             } else {
                 ConversionContentFragment conversionContentFragment = ConversionContentFragment.newsInstance(position);
-                conversionContentFragment.setSelectListener(mSelectListener);
                 return conversionContentFragment;
             }
         }

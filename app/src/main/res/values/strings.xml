@@ -435,4 +435,10 @@
     <string name="my_article_number">我的文章（%1$d）</string>
     <string name="read_number">%1$d人阅读</string>
     <string name="review_number">%1$d评论</string>
+
+    <string name="you_have_not_attention_author">你还没有关注作者哦</string>
+    <string name="recommend_attention">推荐关注</string>
+    <string name="recommend_attention_tip">添加关注后，刷新页面有惊喜哟</string>
+    <string name="my_attention">我的关注</string>
+
 </resources>
