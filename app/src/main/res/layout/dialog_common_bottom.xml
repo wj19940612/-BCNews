@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_F5F5"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/bg_white"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/sure_not_attention_person"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="17sp"/>
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/firstBtn"
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/bg_white"
+        android:gravity="center"
+        android:text="@string/ok"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="17sp"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/secondBtn"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/bg_white"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/take_phone_cancel"
+        android:textColor="@color/text_4949"
+        android:textSize="17sp"/>
+
+</LinearLayout>

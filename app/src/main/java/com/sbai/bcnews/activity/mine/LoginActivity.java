@@ -32,6 +32,7 @@ import com.sbai.bcnews.utils.StrFormatter;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.ValidationWatcher;
+import com.sbai.bcnews.view.PasswordEditText;
 import com.sbai.glide.GlideApp;
 
 import butterknife.BindView;
@@ -69,7 +70,7 @@ public class LoginActivity extends WeChatActivity {
     LinearLayout mAuthCodeArea;
 
     @BindView(R.id.weChatLogin)
-    TextView mWeChatLogin;
+    ImageView mWeChatLogin;
     @BindView(R.id.closePage)
     ImageView mClosePage;
     @BindView(R.id.weChatAvatar)
@@ -84,6 +85,14 @@ public class LoginActivity extends WeChatActivity {
     TextView mAgree;
     @BindView(R.id.agreeWrapper)
     LinearLayout mAgreeWrapper;
+    @BindView(R.id.registerBtn)
+    TextView mRegisterBtn;
+    @BindView(R.id.password)
+    PasswordEditText mPassword;
+    @BindView(R.id.passLogin)
+    TextView mPassLogin;
+    @BindView(R.id.forgetPass)
+    TextView mForgetPass;
     private KeyBoardHelper mKeyBoardHelper;
 
     private int mCounter;
@@ -207,15 +216,23 @@ public class LoginActivity extends WeChatActivity {
 
             mPhoneNumberClear.setVisibility(checkClearBtnVisible() ? View.VISIBLE : View.INVISIBLE);
 
-            if (getPhoneNumber().length() == 11) {
-                mPhoneNumber.clearFocus();
-                mAuthCode.requestFocus();
-                mPhoneNumberClear.setVisibility(View.INVISIBLE);
-            }
+            if (isAuthCodeLogin()) {
+                if (getPhoneNumber().length() == 11) {
+                    mPhoneNumber.clearFocus();
+                    mAuthCode.requestFocus();
+                    mPhoneNumberClear.setVisibility(View.INVISIBLE);
+                }
 
-            boolean authCodeEnable = checkObtainAuthCodeEnable();
-            if (mGetAuthCode.isEnabled() != authCodeEnable) {
-                mGetAuthCode.setEnabled(authCodeEnable);
+                boolean authCodeEnable = checkObtainAuthCodeEnable();
+                if (mGetAuthCode.isEnabled() != authCodeEnable) {
+                    mGetAuthCode.setEnabled(authCodeEnable);
+                }
+            } else {
+                if (getPhoneNumber().length() == 11) {
+                    mPhoneNumber.clearFocus();
+                    mAuthCode.requestFocus();
+                    mPhoneNumberClear.setVisibility(View.INVISIBLE);
+                }
             }
 
         }
@@ -234,15 +251,18 @@ public class LoginActivity extends WeChatActivity {
     private boolean checkSignInButtonEnable() {
         String phone = getPhoneNumber();
         String authCode = mAuthCode.getText().toString().trim();
+        String password = mPassword.getPassword();
+
 
         if (TextUtils.isEmpty(phone) || phone.length() < 11) {
             return false;
         }
 
-        if ((TextUtils.isEmpty(authCode) || authCode.length() < 4)) {
+        if (isAuthCodeLogin() && (TextUtils.isEmpty(authCode) || authCode.length() < 4)) {
             return false;
         }
-        return true;
+
+        return !(!isAuthCodeLogin() && (TextUtils.isEmpty(password) || password.length() < 6));
 
     }
 
@@ -270,7 +290,7 @@ public class LoginActivity extends WeChatActivity {
         return mPhoneNumber.getText().toString().trim().replaceAll(" ", "");
     }
 
-    @OnClick({R.id.closePage, R.id.phoneNumberClear, R.id.getAuthCode, R.id.login, R.id.rootView, R.id.weChatLogin, R.id.agree})
+    @OnClick({R.id.closePage, R.id.phoneNumberClear, R.id.getAuthCode, R.id.login, R.id.rootView, R.id.weChatLogin, R.id.agree, R.id.passLogin})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.closePage:
@@ -297,6 +317,9 @@ public class LoginActivity extends WeChatActivity {
                 Launcher.with(getActivity(), WebActivity.class)
                         .putExtra(WebActivity.EX_URL, Apic.url.WEB_URI_AGREEMENT)
                         .execute();
+            case R.id.passLogin:
+                switchLoginMode();
+                break;
             default:
                 break;
         }
@@ -337,6 +360,17 @@ public class LoginActivity extends WeChatActivity {
     }
 
     private void updateBindPhoneViews() {
+        mPageTitle.setText(R.string.password_login);
+        mAuthCodeArea.setVisibility(View.GONE);
+        mPassword.setVisibility(View.VISIBLE);
+        mPassLogin.setText(R.string.tel_auth_code_login);
+        mAuthCode.setText("");
+        if (!isAuthCodeLogin()) { // 当前是密码登录 -> 验证码登录
+            mAuthCodeArea.setVisibility(View.VISIBLE);
+            mPassword.setVisibility(View.GONE);
+            mPassLogin.setText(R.string.tel_pass_login);
+            mPassword.setPassword("");
+        }
         stopScheduleJob();
         mFreezeObtainAuthCode = false;
 
@@ -373,38 +407,57 @@ public class LoginActivity extends WeChatActivity {
         mLogin.setText(R.string.login_ing);
         mLoading.setVisibility(View.VISIBLE);
         mLoading.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading));
-        if (isWeChatLogin()) {
-            Apic.requestAuthCodeLogin(phoneNumber, authCode, getWeChatOpenid(), getWeChatName(), getWeChatIconUrl(), getWeChatGender()).tag(TAG)
-                    .callback(new Callback<Resp<UserInfo>>() {
-                        @Override
-                        public void onFinish() {
-                            super.onFinish();
-                            resetLoginButton();
-                        }
+        if (isAuthCodeLogin()) {
+            if (isWeChatLogin()) {
+                Apic.requestAuthCodeLogin(phoneNumber, authCode, getWeChatOpenid(), getWeChatName(), getWeChatIconUrl(), getWeChatGender()).tag(TAG)
+                        .callback(new Callback<Resp<UserInfo>>() {
+                            @Override
+                            public void onFinish() {
+                                super.onFinish();
+                                resetLoginButton();
+                            }
 
-                        @Override
-                        protected void onRespSuccess(Resp<UserInfo> resp) {
-                            LocalUser.getUser().setUserInfo(resp.getData(), phoneNumber);
+                            @Override
+                            protected void onRespSuccess(Resp<UserInfo> resp) {
+                                LocalUser.getUser().setUserInfo(resp.getData(), phoneNumber);
 //                            ToastUtil.show(R.string.login_success);
-                            postLogin();
-                        }
-                    }).fire();
+                                postLogin();
+                            }
+                        }).fire();
+            } else {
+                Apic.requestAuthCodeLogin(phoneNumber, authCode).tag(TAG)
+                        .callback(new Callback<Resp<UserInfo>>() {
+                            @Override
+                            public void onFinish() {
+                                super.onFinish();
+                                resetLoginButton();
+                            }
+
+                            @Override
+                            protected void onRespSuccess(Resp<UserInfo> resp) {
+                                LocalUser.getUser().setUserInfo(resp.getData(), phoneNumber);
+//                            ToastUtil.show(R.string.login_success);
+                                postLogin();
+                            }
+                        }).fire();
+            }
         } else {
-            Apic.requestAuthCodeLogin(phoneNumber, authCode).tag(TAG)
-                    .callback(new Callback<Resp<UserInfo>>() {
-                        @Override
-                        public void onFinish() {
-                            super.onFinish();
-                            resetLoginButton();
-                        }
-
-                        @Override
-                        protected void onRespSuccess(Resp<UserInfo> resp) {
-                            LocalUser.getUser().setUserInfo(resp.getData(), phoneNumber);
+            //TODO 密码登陆的接口
+//            Apic.login(phoneNumber, password).setTag(TAG)
+//                    .setCallback(new Callback<Resp<UserInfo>>() {
+//                        @Override
+//                        public void onFinish() {
+//                            super.onFinish();
+//                            resetLoginButton();
+//                        }
+//
+//                        @Override
+//                        protected void onRespSuccess(Resp<UserInfo> resp) {
+//                            LocalUser.getUser().setUserInfo(resp.getData(), phoneNumber);
 //                            ToastUtil.show(R.string.login_success);
-                            postLogin();
-                        }
-                    }).fire();
+//                            postLogin();
+//                        }
+//                    }).fire();
         }
     }
 
@@ -465,5 +518,42 @@ public class LoginActivity extends WeChatActivity {
         } else {
             mGetAuthCode.setText(getString(R.string._seconds, mCounter));
         }
+    }
+
+    private void switchLoginMode() {
+        if (isAuthCodeLogin()) { // 当前是验证码登录 -> 密码登录
+            mPageTitle.setText(R.string.password_login);
+            mAuthCodeArea.setVisibility(View.GONE);
+            mPassword.setVisibility(View.VISIBLE);
+            mPassLogin.setText(R.string.tel_auth_code_login);
+            mAuthCode.setText("");
+            if (getPhoneNumber().length() == 11) {
+                mPhoneNumber.clearFocus();
+                mPassword.requestFocus();
+            } else {
+                mPhoneNumber.requestFocus();
+            }
+        } else {
+            mPageTitle.setText(R.string.auth_code_login);
+            mPassLogin.setText(R.string.tel_pass_login);
+            mAuthCodeArea.setVisibility(View.VISIBLE);
+            mPassword.setVisibility(View.GONE);
+            mGetAuthCode.setEnabled(checkObtainAuthCodeEnable());
+            mPassword.setPassword("");
+
+            if (getPhoneNumber().length() == 11) {
+                mPhoneNumber.clearFocus();
+                mAuthCode.requestFocus();
+            } else {
+                mPhoneNumber.requestFocus();
+            }
+        }
+    }
+
+    private boolean isAuthCodeLogin() {
+        String pageTitle = mPageTitle.getText().toString();
+        String authCodeLoginTitle = getString(R.string.auth_code_login);
+        String bindPhone = getString(R.string.bind_phone);
+        return !TextUtils.isEmpty(pageTitle) && (pageTitle.equals(authCodeLoginTitle) || pageTitle.equals(bindPhone));
     }
 }
