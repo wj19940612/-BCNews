@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -231,9 +232,15 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mTabLayout.setDistributeEvenly(false);
         mTabLayout.setDividerColors(ContextCompat.getColor(getActivity(), android.R.color.transparent));
         mTabLayout.setCustomTabView(R.layout.view_home_tab, R.id.tab);
-        mTabLayout.setSelectedIndicatorPadding(Display.dp2Px(15, getResources()));
-        mTabLayout.setSelectedIndicatorColors(Color.BLACK);
-        mTabLayout.setSelectedIndicatorThickness(4);
+        mTabLayout.setSelectBoldNeed(true);
+        mTabLayout.setSelectedIndicatorWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12,
+                getResources().getDisplayMetrics()));
+        mTabLayout.setSelectedIndicatorMarginBottom((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
+                getResources().getDisplayMetrics()));
+        mTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+        int indicatorHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3,
+                getResources().getDisplayMetrics());
+        mTabLayout.setSelectedIndicatorThickness(indicatorHeight);
         mTabLayout.setHasBottomBorder(false);
         mTabLayout.setSlidingSwitch(false);
     }

@@ -40,6 +40,9 @@ public class PasswordEditText extends LinearLayout {
     private ImageView mClearPassword;
 
     private CharSequence mTextHint;
+    private int mHintColor;
+    private int mTextColor;
+    private float mTextSize;
     private boolean mHasBottomSplitLine;
     private ColorStateList mSplitLineColor;
 
@@ -64,6 +67,9 @@ public class PasswordEditText extends LinearLayout {
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.PasswordEditText);
 
         mTextHint = typedArray.getText(R.styleable.PasswordEditText_textHint);
+        mHintColor = typedArray.getColor(R.styleable.PasswordEditText_hintColor,ContextCompat.getColor(getContext(),R.color.text_cb));
+        mTextColor = typedArray.getColor(R.styleable.PasswordEditText_editColor,ContextCompat.getColor(getContext(),R.color.text_222));
+        mTextSize = typedArray.getDimensionPixelOffset(R.styleable.PasswordEditText_editSize,15);
         mHasBottomSplitLine = typedArray.getBoolean(R.styleable.PasswordEditText_hasBottomSplitLine, false);
         mSplitLineColor = typedArray.getColorStateList(R.styleable.PasswordEditText_splitLineColor);
         mMaxCharNum = typedArray.getInt(R.styleable.PasswordEditText_maxCharNum, Integer.MAX_VALUE);
@@ -86,7 +92,10 @@ public class PasswordEditText extends LinearLayout {
 
         setOrientation(HORIZONTAL);
         mPassword = initPasswordEditText();
+        setTextSize(mTextSize);
+        setTextColor(mTextColor);
         setHint(mTextHint);
+        setHintColor(mHintColor);
 
         mClearPassword = new ImageView(getContext());
         mClearPassword.setImageResource(R.drawable.btn_pass_clear);
@@ -135,6 +144,18 @@ public class PasswordEditText extends LinearLayout {
 
     public void setHint(CharSequence hint) {
         mPassword.setHint(hint);
+    }
+
+    private void setHintColor(int color){
+        mPassword.setHintTextColor(color);
+    }
+
+    private void setTextSize(float textSize){
+        mPassword.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+    }
+
+    private void setTextColor(int color){
+        mPassword.setTextColor(color);
     }
 
     public void setHint(int hintRes) {

@@ -20,8 +20,9 @@
         android:layout_marginBottom="12dp"
         android:layout_marginRight="12dp"
         app:indicatorsInterval="4dp"
+        app:selectWidth="13dp"
         app:infinite="true"
         app:point="#66FFFFFF"
-        app:pointRadius="3dp"
+        app:pointRadius="1.5dp"
         app:selectedPoint="#d8d8d8"/>
 </RelativeLayout>

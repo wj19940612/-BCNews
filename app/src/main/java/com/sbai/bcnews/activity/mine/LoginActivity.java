@@ -18,6 +18,9 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.InputPhoneActivity;
+import com.sbai.bcnews.activity.ModifyPassActivity;
+import com.sbai.bcnews.activity.RegisterActivity;
 import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
@@ -116,6 +119,7 @@ public class LoginActivity extends WeChatActivity {
         }
         mPhoneNumber.addTextChangedListener(mPhoneValidationWatcher);
         mAuthCode.addTextChangedListener(mValidationWatcher);
+        mPassword.addTextChangedListener(mValidationWatcher);
         mRootView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -159,6 +163,21 @@ public class LoginActivity extends WeChatActivity {
                 }
             }
         });
+        mPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPhoneNumberClear.setVisibility(View.INVISIBLE);
+                mPassword.requestFocus();
+            }
+        });
+        mPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mPhoneNumberClear.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -172,6 +191,7 @@ public class LoginActivity extends WeChatActivity {
         super.onDestroy();
         mPhoneNumber.removeTextChangedListener(mPhoneValidationWatcher);
         mAuthCode.removeTextChangedListener(mValidationWatcher);
+        mPassword.removeTextChangedListener(mValidationWatcher);
         mKeyBoardHelper.onDestroy();
         mLoading.clearAnimation();
         Log.d(TAG, "onDestroy: ");
@@ -290,7 +310,7 @@ public class LoginActivity extends WeChatActivity {
         return mPhoneNumber.getText().toString().trim().replaceAll(" ", "");
     }
 
-    @OnClick({R.id.closePage, R.id.phoneNumberClear, R.id.getAuthCode, R.id.login, R.id.rootView, R.id.weChatLogin, R.id.agree, R.id.passLogin})
+    @OnClick({R.id.closePage, R.id.phoneNumberClear, R.id.getAuthCode, R.id.login, R.id.rootView, R.id.weChatLogin, R.id.agree, R.id.passLogin, R.id.registerBtn,R.id.forgetPass})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.closePage:
@@ -305,7 +325,6 @@ public class LoginActivity extends WeChatActivity {
                 mPhoneNumberClear.setVisibility(View.INVISIBLE);
                 mAuthCode.requestFocus();
                 break;
-
             case R.id.login:
                 login();
                 break;
@@ -319,6 +338,12 @@ public class LoginActivity extends WeChatActivity {
                         .execute();
             case R.id.passLogin:
                 switchLoginMode();
+                break;
+            case R.id.registerBtn:
+                Launcher.with(getActivity(), RegisterActivity.class).executeForResult(REQ_CODE_REGISTER);
+                break;
+            case R.id.forgetPass:
+                Launcher.with(getActivity(), InputPhoneActivity.class).execute();
                 break;
             default:
                 break;

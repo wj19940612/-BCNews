@@ -93,6 +93,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     private boolean mSlidingSwitch = true;
 
+    private boolean mSelectBoldNeed;
+
     public SlidingTabLayout(Context context) {
         this(context, null);
     }
@@ -159,12 +161,41 @@ public class SlidingTabLayout extends HorizontalScrollView {
     }
 
     /**
+     * Sets the width to be used for controlling the selected tab width.
+     *
+     * @param width
+     * @author Zhang
+     */
+    public void setSelectedIndicatorWidth(float width) {
+        mTabStrip.setSelectedIndicatorWidth(width);
+    }
+
+    /**
+     * Sets the height marginBottom to be used for controlling the selected tab width.
+     *
+     * @param marginBottom
+     * @author Zhang
+     */
+    public void setSelectedIndicatorMarginBottom(float marginBottom) {
+        mTabStrip.setSelectedIndicatorMarginBottom(marginBottom);
+    }
+
+    /**
+     * Sets select item text bold
+     *
+     * @param selectBoldNeed
+     */
+    public void setSelectBoldNeed(boolean selectBoldNeed) {
+        mSelectBoldNeed = selectBoldNeed;
+    }
+
+    /**
      * 设置 indicator 的厚度
      *
      * @param height
      * @author hcc
      */
-    public void setSelectedIndicatorThickness(int height) {
+    public void setSelectedIndicatorThickness(float height) {
         mTabStrip.setSelectedIndicatorThickness(height);
     }
 
@@ -427,9 +458,15 @@ public class SlidingTabLayout extends HorizontalScrollView {
         for (int i = 0; i < mTabStrip.getChildCount(); i++) {
             View view = mTabStrip.getChildAt(i);
             view.setSelected(false);
+            if (view instanceof TextView) {
+                ((TextView) view).setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            }
         }
         if (position < mTabStrip.getChildCount()) {
             mTabStrip.getChildAt(position).setSelected(true);
+            if (mSelectBoldNeed && mTabStrip.getChildAt(position) instanceof TextView) {
+                ((TextView) mTabStrip.getChildAt(position)).setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            }
         }
     }
 

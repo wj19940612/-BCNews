@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <com.sbai.bcnews.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/modify_pass"
+        app:titleTextColor="@color/text_222"
+        app:titleTextSize="17sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_title_shadow"
+        android:orientation="vertical"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp">
+
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:layout_marginBottom="23dp"
+            android:gravity="center_vertical"
+            android:text="@string/modify_pass"
+            android:textColor="@color/text_222"
+            android:textSize="30sp"/>
+
+        <com.sbai.bcnews.view.PasswordEditText
+            android:id="@+id/oldPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:visibility="visible"
+            app:maxCharNum="18"
+            app:textHint="@string/login_pass"
+            app:hintColor="@color/text_cb"
+            app:editColor="@color/text_222"
+            app:editSize="15sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/split"/>
+
+        <com.sbai.bcnews.view.PasswordEditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:visibility="visible"
+            app:maxCharNum="18"
+            app:textHint="@string/login_pass"
+            app:hintColor="@color/text_cb"
+            app:editColor="@color/text_222"
+            app:editSize="15sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/split"/>
+
+        <TextView
+            android:id="@+id/complete"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="31dp"
+            android:background="@drawable/btn_yellow_small_rounded"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="@string/ok"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+</LinearLayout>

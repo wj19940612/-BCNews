@@ -82,7 +82,7 @@
             android:id="@+id/pageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="22dp"
             android:gravity="center_vertical"
             android:text="@string/auth_code_login"
             android:textColor="@color/text_222"
@@ -116,12 +116,16 @@
 
             <EditText
                 android:id="@+id/phoneNumber"
-                style="@style/SignEditText.PhoneNum"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:hint="@string/phone_number"/>
+                android:hint="@string/phone_number"
+                android:background="@null"
+                android:textColorHint="@color/text_cb"
+                android:textSize="15sp"
+                android:maxLength="13"
+                android:textColor="@color/text_222"/>
 
             <ImageView
                 android:id="@+id/phoneNumberClear"
@@ -149,13 +153,16 @@
 
             <EditText
                 android:id="@+id/authCode"
-                style="@style/SignEditText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:hint="@string/auth_code"
+                android:background="@null"
                 android:inputType="number"
-                android:maxLength="10"/>
+                android:maxLength="10"
+                android:textColorHint="@color/text_cb"
+                android:textSize="15sp"
+                android:textColor="@color/text_222"/>
 
             <TextView
                 android:id="@+id/getAuthCode"
@@ -175,7 +182,10 @@
             android:minHeight="50dp"
             android:visibility="gone"
             app:maxCharNum="18"
-            app:textHint="@string/input_pass" />
+            app:textHint="@string/input_pass"
+            app:hintColor="@color/text_cb"
+            app:editColor="@color/text_222"
+            app:editSize="15sp"/>
 
         <View
             android:layout_width="match_parent"

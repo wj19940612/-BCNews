@@ -35,6 +35,7 @@ public class PageIndicator extends View {
     private int mDefaultRadius;
     private int mDefaultInterval;
     private boolean mInfinite;
+    private int mSelectWidth;
 
     public PageIndicator(Context context) {
         super(context);
@@ -81,6 +82,7 @@ public class PageIndicator extends View {
 
         mCount = typedArray.getInt(R.styleable.PageIndicator_indicators, 1);
         mInterval = typedArray.getDimensionPixelSize(R.styleable.PageIndicator_indicatorsInterval, mDefaultInterval);
+        mSelectWidth = typedArray.getDimensionPixelSize(R.styleable.PageIndicator_selectWidth, 13);
         mPointRadius = typedArray.getDimensionPixelSize(R.styleable.PageIndicator_pointRadius, mPointRadius);
         mPointWidth = typedArray.getDimensionPixelSize(R.styleable.PageIndicator_pointWidth, mPointWidth);
         mPointHeight = typedArray.getDimensionPixelSize(R.styleable.PageIndicator_pointHeight, mPointHeight);
@@ -109,7 +111,7 @@ public class PageIndicator extends View {
             width = measureDimension(widthMeasureSpec, mPointWidth * mCount + (mCount - 1) * mInterval);
             height = measureDimension(heightMeasureSpec, mPointHeight);
         } else {
-            width = measureDimension(widthMeasureSpec, mPointRadius * 2 * mCount + (mCount - 1) * mInterval);
+            width = measureDimension(widthMeasureSpec, mPointRadius * 2 * (mCount - 1) + mSelectWidth + (mCount - 1) * mInterval);
             height = measureDimension(heightMeasureSpec, mPointRadius * 2);
         }
 
@@ -148,21 +150,31 @@ public class PageIndicator extends View {
                 right = left + mPointWidth;
                 bottom = top + mPointHeight;
             } else {
-                right = left + mPointRadius * 2;
+                if(i == mCurrentIndex){
+                    right = left + mSelectWidth;
+                }else{
+                    right = left + mPointRadius * 2;
+                }
                 bottom = top + mPointRadius * 2;
             }
 
-            if (i == mCurrentIndex) {
-                sPaint.setColor(mSelectedPoint.getColorForState(getDrawableState(), 0));
-            } else {
-                sPaint.setColor(mPoint.getColorForState(getDrawableState(), 0));
-            }
+            sPaint.setColor(mSelectedPoint.getColorForState(getDrawableState(), 0));
+
+//            if (i == mCurrentIndex) {
+//                sPaint.setColor(mSelectedPoint.getColorForState(getDrawableState(), 0));
+//            } else {
+//                sPaint.setColor(mPoint.getColorForState(getDrawableState(), 0));
+//            }
 
             sRect.set(left, top, right, bottom);
             if (mIsRect) {
                 canvas.drawRect(sRect, sPaint);
             } else {
-                canvas.drawOval(sRect, sPaint);
+                if(i == mCurrentIndex){
+                    canvas.drawRoundRect(sRect,mPointRadius,mPointRadius,sPaint);
+                }else {
+                    canvas.drawOval(sRect, sPaint);
+                }
             }
             left = right + mInterval;
         }

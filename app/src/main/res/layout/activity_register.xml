@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <com.sbai.bcnews.view.TitleBar
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleTextSize="17sp"
+        app:titleText="@string/register"
         app:titleTextColor="@color/text_222"
-        app:titleText="@string/register" />
+        app:titleTextSize="17sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="35dp"
-        android:paddingRight="35dp"
         android:background="@drawable/bg_title_shadow"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textColor="@color/text_222"
+            android:layout_marginTop="45dp"
             android:text="@string/now_register"
-            android:layout_marginTop="45dp"/>
+            android:textColor="@color/text_222"
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,15 +47,15 @@
                 android:paddingTop="12dp"
                 android:text="+86"
                 android:textColor="@color/text_999"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="12dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="14dp"
                 android:layout_gravity="center_vertical"
-                android:background="@color/background"/>
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/text_d9" />
 
             <EditText
                 android:id="@+id/phoneNumber"
@@ -63,7 +64,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:hint="@string/phone_number"/>
+                android:hint="@string/phone_number"
+                android:maxLength="13"
+                android:textColorHint="@color/text_cb" />
 
             <ImageView
                 android:id="@+id/phoneNumberClear"
@@ -72,14 +75,14 @@
                 android:layout_marginTop="5dp"
                 android:paddingLeft="10dp"
                 android:src="@drawable/ic_data_clear"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.3dp"
             android:layout_marginTop="3dp"
-            android:background="@color/split"/>
+            android:background="@color/split" />
 
         <LinearLayout
             android:id="@+id/authCodeArea"
@@ -96,9 +99,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:hint="@string/input_auth_code"
-                android:textSize="15sp"
                 android:inputType="number"
-                android:maxLength="10"/>
+                android:maxLength="10"
+                android:textColorHint="@color/text_cb"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/getAuthCode"
@@ -108,36 +112,79 @@
                 android:enabled="false"
                 android:gravity="center"
                 android:text="@string/get_auth_code"
-                android:textColor="@color/primary_or_unlucky_text_color"/>
+                android:textColor="@color/primary_or_unlucky_text_color" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.3dp"
-            android:background="@color/split"/>
+            android:background="@color/split" />
+
+        <com.sbai.bcnews.view.PasswordEditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="10"
+            android:minHeight="50dp"
+            app:textHint="@string/login_pass"
+            app:maxCharNum="18"
+            app:hintColor="@color/text_cb"
+            app:editColor="@color/text_222"
+            app:editSize="15sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:background="@color/split" />
 
         <LinearLayout
-            android:id="@+id/loginPassArea"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:minHeight="50dp"
-            android:visibility="visible">
+            android:id="@+id/agreeWrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <com.sbai.bcnews.view.PasswordEditText
-                android:id="@+id/pass"
-                style="@style/SignEditText"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:hint="@string/input_auth_code"
-                android:textSize="15sp"
-                android:inputType="number"
-                android:maxLength="10"/>
+            <ImageView
+                android:id="@+id/agreeBtn"
+                android:layout_width="24dp"
+                android:layout_height="34dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/btn_agree" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/agree_tip"
+                android:textColor="@color/text_999"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/agree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/bcnews_agreement"
+                android:textColor="#476192"
+                android:textSize="12sp" />
         </LinearLayout>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/register"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="27dp"
+            android:background="@drawable/btn_yellow_small_rounded"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="@string/ok"
+            android:textColor="@android:color/white" />
 
+    </LinearLayout>
 
 
 </LinearLayout>
