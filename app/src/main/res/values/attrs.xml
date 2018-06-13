@@ -88,11 +88,15 @@
         <attr name="pointHeight" format="dimension"/>
         <attr name="infinite" format="boolean"/>
         <attr name="isRect" format="boolean"/>
+        <attr name="selectWidth" format="dimension"/>
     </declare-styleable>
 
     <!--密码输入控件-->
     <declare-styleable name="PasswordEditText">
         <attr name="textHint" format="reference|string"/>
+        <attr name="hintColor" format="color"/>
+        <attr name="editSize" format="dimension"/>
+        <attr name="editColor" format="color"/>
         <attr name="hasBottomSplitLine"/>
         <attr name="splitLineColor"/>
         <attr name="maxCharNum" format="integer"/>

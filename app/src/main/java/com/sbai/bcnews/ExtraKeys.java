@@ -50,4 +50,6 @@ public interface ExtraKeys {
     String CONVERSION_TYPE = "conversion_type";
 
     String CONVERSION_HISTORY = "conversion_history";
+    String TITLE = "title";
+    String HAS_LOGIN_PSD = "has_login_psd";
 }

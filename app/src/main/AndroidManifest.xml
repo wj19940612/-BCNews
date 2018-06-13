@@ -187,6 +187,22 @@
             android:name=".activity.ConversionResultActivity"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".activity.ShareCandyActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activity.InputPhoneActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activity.AuthCodeActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activity.ModifyPassActivity"
+            android:screenOrientation="portrait"/>
+
         <service android:name=".service.DownloadService"/>
 
         <!-- third page -->

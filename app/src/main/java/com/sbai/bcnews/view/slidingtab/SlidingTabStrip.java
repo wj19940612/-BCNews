@@ -20,6 +20,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -42,7 +44,7 @@ class SlidingTabStrip extends LinearLayout {
     private final Paint mBottomBorderPaint;
     private boolean mHasBottomBorder;
 
-    private int mSelectedIndicatorThickness;
+    private float mSelectedIndicatorThickness;
     private final Paint mSelectedIndicatorPaint;
 
     private final int mDefaultBottomBorderColor;
@@ -54,6 +56,10 @@ class SlidingTabStrip extends LinearLayout {
     private float mSelectionOffset;
 
     private float mSelectedIndicatorPadding;
+    private float mSelectedIndicatorWidth;
+    private float mSelectedIndicatorMarginBottom;
+
+    private RectF mRect;
 
     private SlidingTabLayout.TabColorizer mCustomTabColorizer;
     private final SimpleTabColorizer mDefaultTabColorizer;
@@ -71,6 +77,8 @@ class SlidingTabStrip extends LinearLayout {
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(android.R.attr.colorForeground, outValue, true);
         final int themeForegroundColor = outValue.data;
+
+        mRect = new RectF();
 
         mDefaultBottomBorderColor = setColorAlpha(themeForegroundColor,
                 DEFAULT_BOTTOM_BORDER_COLOR_ALPHA);
@@ -125,7 +133,17 @@ class SlidingTabStrip extends LinearLayout {
         invalidate();
     }
 
-    void setSelectedIndicatorThickness(int height) {
+    void setSelectedIndicatorWidth(float width) {
+        mSelectedIndicatorWidth = width;
+        invalidate();
+    }
+
+    void setSelectedIndicatorMarginBottom(float marginBottom) {
+        mSelectedIndicatorMarginBottom = marginBottom;
+        invalidate();
+    }
+
+    void setSelectedIndicatorThickness(float height) {
         mSelectedIndicatorThickness = height;
         invalidate();
     }
@@ -167,8 +185,14 @@ class SlidingTabStrip extends LinearLayout {
 
             mSelectedIndicatorPaint.setColor(color);
 
-            canvas.drawRect(left + mSelectedIndicatorPadding, height - mSelectedIndicatorThickness, right - mSelectedIndicatorPadding,
-                    height, mSelectedIndicatorPaint);
+            if (mSelectedIndicatorWidth != 0) {
+                mRect.set((right - left) / 2 + left - mSelectedIndicatorWidth / 2, height - mSelectedIndicatorThickness - mSelectedIndicatorMarginBottom, (right - left) / 2 + left + mSelectedIndicatorWidth / 2,
+                        height - mSelectedIndicatorMarginBottom);
+                canvas.drawRoundRect(mRect, mSelectedIndicatorThickness / 2, mSelectedIndicatorThickness / 2, mSelectedIndicatorPaint);
+            } else {
+                canvas.drawRect(left + mSelectedIndicatorPadding, height - mSelectedIndicatorThickness, right - mSelectedIndicatorPadding,
+                        height, mSelectedIndicatorPaint);
+            }
         }
 
         // Thin underline along the entire bottom edge

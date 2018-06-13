@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
+    android:orientation="vertical">
+
+    <com.sbai.bcnews.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/forget_pass_1"
+        app:titleTextColor="@color/text_222"
+        app:titleTextSize="17sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_title_shadow"
+        android:orientation="vertical"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp">
+
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:layout_marginBottom="23dp"
+            android:gravity="center_vertical"
+            android:text="@string/forget_pass"
+            android:textColor="@color/text_222"
+            android:textSize="30sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="50dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp"
+                android:text="+86"
+                android:textColor="@color/text_999"
+                android:textSize="15sp"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="12dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="14dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/background"/>
+
+            <EditText
+                android:id="@+id/phoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:hint="@string/input_tel"
+                android:background="@null"
+                android:textColorHint="@color/text_cb"
+                android:textSize="15sp"
+                android:maxLength="13"
+                android:textColor="@color/text_222"/>
+
+            <ImageView
+                android:id="@+id/phoneNumberClear"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="10dp"
+                android:src="@drawable/ic_data_clear"
+                android:visibility="invisible"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/split"/>
+
+        <TextView
+            android:id="@+id/next"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="31dp"
+            android:background="@drawable/btn_yellow_small_rounded"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="@string/next"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.AttentionFragment;
+import com.sbai.bcnews.fragment.CommonBottomDialogFragment;
 import com.sbai.bcnews.model.NewsAuthor;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.view.EmptyView;
@@ -29,7 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyAttentionActivity extends RecycleViewSwipeLoadActivity {
+public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements CommonBottomDialogFragment.OnClickListener{
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -87,6 +88,16 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity {
         });
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeTarget.setAdapter(mAttentionAdapter);
+    }
+
+    @Override
+    public void onFirstClick() {
+
+    }
+
+    @Override
+    public void onSecondClick() {
+
     }
 
     static class AttentionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

@@ -94,6 +94,19 @@
         app:rowText="@string/recommend_to_friend"
         app:splitLineColor="@color/bg_F5F5"/>
 
+    <com.sbai.bcnews.view.IconTextRow
+        android:visibility="gone"
+        android:id="@+id/modifyPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_white"
+        app:hasBottomSplitLine="true"
+        app:layout_constraintTop_toBottomOf="@+id/recommendToFriend"
+        app:rightIcon="@drawable/ic_common_right_arrow"
+        app:rowText="@string/modify_pass"
+        app:splitLineColor="@color/bg_F5F5"/>
+
 
     <TextView
         android:id="@+id/logout"
@@ -105,5 +118,5 @@
         android:text="@string/logout"
         android:textColor="@color/text_222"
         android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@+id/recommendToFriend"/>
+        app:layout_constraintTop_toBottomOf="@+id/modifyPass"/>
 </android.support.constraint.ConstraintLayout>

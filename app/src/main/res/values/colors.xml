@@ -16,12 +16,15 @@
     <color name="text">#222</color>
     <color name="text97">#979797</color>
     <color name="text_d8">#d8d8d8</color>
+    <color name="text_d9">#d9d9d9</color>
     <color name="assistText">#494949</color>
     <color name="background">#F5F5F5</color>
     <color name="text_999">#999</color>
     <color name="text_666">#666</color>
     <color name="text_222">#222</color>
+    <color name="text_cd">#cdcdcd</color>
     <color name="text_9b">#9b9b9b</color>
+    <color name="text_cb">#cbcbcb</color>
     <color name="text_4a">#4a4a4a</color>
     <color name="text_4949">#494949</color>
     <color name="text_8b">#8B572A</color>
@@ -42,6 +45,8 @@
     <color name="white">#FFF</color>
     <color name="collect">#444</color>
     <color name="progressText">#CCC</color>
+
+    <color name="bg_cb">#CBCBCB</color>
 
     <color name="greenPrimary">#39AE13</color>
     <color name="redPrimary">#F62048</color>
