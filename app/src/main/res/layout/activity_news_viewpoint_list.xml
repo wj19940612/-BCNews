@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:rightTextRightImage="@drawable/ic_more_three_point"
-        app:rightVisible="true"
+        app:rightVisible="false"
         app:titleText="@string/comment"
         app:titleTextSize="17sp"/>
 

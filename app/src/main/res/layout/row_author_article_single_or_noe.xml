@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white"
+    android:id="@+id/rootView"
+    android:paddingBottom="20dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="20dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="3dp"
+        android:maxLines="2"
+        android:textColor="@color/text_222"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/image"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="溺水的鱼 阿斯加德好几款撒旦画啥的季后赛抠脚大萨达所大萨达撒大萨达撒大汉"/>
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="114dp"
+        android:layout_height="70dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:src="@drawable/ic_default_image"/>
+
+    <TextView
+        android:id="@+id/timeLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/text_999"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:text="2018/08/05"/>
+
+    <TextView
+        android:id="@+id/readNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/text_999"
+        android:textSize="11sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/timeLine"
+        app:layout_constraintStart_toEndOf="@id/timeLine"
+        tools:text="20阅读"/>
+
+    <TextView
+        android:id="@+id/reviewNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/text_999"
+        android:textSize="11sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/timeLine"
+        app:layout_constraintStart_toEndOf="@id/readNumber"
+        tools:text="20阅读"/>
+
+
+</android.support.constraint.ConstraintLayout>

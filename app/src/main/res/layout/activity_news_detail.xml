@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rootView"
     android:background="@color/white">
 
     <com.sbai.bcnews.view.TitleBar
@@ -58,60 +58,85 @@
                     android:layout_marginLeft="14dp"
                     android:layout_marginRight="14dp"
                     android:textColor="@color/text_222"
-                    android:textSize="22sp"/>
+                    android:textSize="22sp"
+                    tools:text="dsddsadsdddds"/>
 
-                <TextView
-                    android:id="@+id/source"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/subtitle"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginTop="10dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@color/text_999"
-                    android:textSize="12sp"/>
-
-                <TextView
-                    android:id="@+id/pubTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/subtitle"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@+id/source"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@color/text_999"
-                    android:textSize="12sp"/>
-
-                <TextView
-                    android:id="@+id/readTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/subtitle"
-                    android:layout_marginRight="14dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_read_time"
-                    android:drawableLeft="@drawable/ic_read_time"
-                    android:drawablePadding="1dp"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:minWidth="64dp"
-                    android:textColor="@color/text_999"
-                    android:textSize="12sp"/>
-
-                <View
-                    android:id="@+id/titleLine"
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/authorInfo"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@+id/readTime"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginRight="14dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@color/bg_F5F5"/>
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/subtitle"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp">
+
+                    <com.sbai.bcnews.view.HasLabelLayout
+                        android:id="@+id/hasLabelLayout"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:labelDrawable="@drawable/ic_label_v"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:background="@color/redPrimary"/>
+
+
+                    <TextView
+                        android:id="@+id/source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/text_999"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toEndOf="@id/hasLabelLayout"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="溺水的鱼 "/>
+
+                    <TextView
+                        android:id="@+id/pubTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/text_999"
+                        android:textSize="11sp"
+                        app:layout_constraintStart_toStartOf="@id/source"
+                        app:layout_constraintTop_toBottomOf="@id/source"
+                        tools:text="2018/08/12"/>
+
+                    <ImageView
+                        android:id="@+id/authorAttention"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:layout_marginTop="12dp"
+                        android:src="@drawable/ic_author_attention"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/articleIntroduce"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="11dp"
+                        android:background="@drawable/bg_f5_round"
+                        android:drawableLeft="@drawable/ic_logo_left_ear"
+                        android:minHeight="50dp"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="11dp"
+                        android:drawablePadding="5dp"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_4a"
+                        android:paddingRight="11dp"
+                        android:paddingTop="16dp"
+                        tools:text="你谁的技术接口都是控件"
+                        app:layout_constraintTop_toBottomOf="@+id/hasLabelLayout"/>
+
+                </android.support.constraint.ConstraintLayout>
+
             </RelativeLayout>
 
             <WebView

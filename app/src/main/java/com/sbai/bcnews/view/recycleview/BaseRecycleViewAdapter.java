@@ -98,10 +98,9 @@ public abstract class BaseRecycleViewAdapter<T, K extends RecyclerView.ViewHolde
     }
 
     @NonNull
-    public T getItemData(int position) {
+    protected T getItemData(int position) {
         if (position >= 0 && position < mDataList.size())
             return mDataList.get(position);
-        else
-            return null;
+        return null;
     }
 }

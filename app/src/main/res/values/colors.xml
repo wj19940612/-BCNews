@@ -41,6 +41,7 @@
     <color name="text_9B9B">#9B9B9B</color>
     <color name="text_7540">#7540A6</color>
     <color name="text_7E89">#7E89CE</color>
+    <color name="text_FFC10C">#FFC10C</color>
 
     <color name="white">#FFF</color>
     <color name="collect">#444</color>
@@ -57,6 +58,7 @@
 
     <color name="blackPrimary">#222</color>
     <color name="text_D002">#D0021B</color>
+    <color name="bg_F0F0">#F0F0F0</color>
 
     <color name="gray">#d9d9d9</color>
 

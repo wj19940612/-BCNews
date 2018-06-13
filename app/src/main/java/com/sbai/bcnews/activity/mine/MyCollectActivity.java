@@ -350,6 +350,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                     mCover.setVisibility(View.VISIBLE);
                     GlideApp.with(context)
                             .load(itemImgs.get(0))
+                            .circleCrop()
                             .into(mCover);
                 } else {
                     mCover.setVisibility(View.GONE);

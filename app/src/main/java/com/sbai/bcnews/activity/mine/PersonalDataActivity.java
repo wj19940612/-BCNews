@@ -79,12 +79,16 @@ public class PersonalDataActivity extends BaseActivity {
     TextView mLocation;
     @BindView(R.id.locationLL)
     LinearLayout mLocationLL;
+    @BindView(R.id.locationHint)
+    TextView mLocationHint;
+    @BindView(R.id.connectServiceHint)
+    TextView mConnectServiceHint;
 
     private UserInfo mUserInfo;
     private OptionPicker mSexPicker;
 
 
-        private DatePicker mBirthdayDatePicker;
+    private DatePicker mBirthdayDatePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +97,14 @@ public class PersonalDataActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mUserInfo = LocalUser.getUser().getUserInfo();
+        if (mUserInfo != null)
+            updateUserInfo(mUserInfo);
         requestUserInfo();
+        requestService();
+    }
+
+    private void requestService() {
+        // TODO: 2018/6/7 请求客服的邮箱和联系方式
     }
 
     @Override
@@ -159,6 +170,19 @@ public class PersonalDataActivity extends BaseActivity {
         }
         if (!TextUtils.isEmpty(data.getUserProvince()) && !TextUtils.isEmpty(data.getUserCity())) {
             mLocation.setText(data.getUserProvince() + " " + data.getUserCity());
+        }
+        updateUserInfoModifyEnable(!data.isAuthorIsCheck());
+    }
+
+    private void updateUserInfoModifyEnable(boolean viewEnable) {
+        mHeadImageLayout.setEnabled(viewEnable);
+        mNickName.setEnabled(viewEnable);
+        mSex.setEnabled(viewEnable);
+        mBirthday.setEnabled(viewEnable);
+        mLocationLL.setEnabled(viewEnable);
+        mPersonalIntroduce.setEnabled(viewEnable);
+        if (!viewEnable) {
+            mConnectServiceHint.setVisibility(View.VISIBLE);
         }
     }
 

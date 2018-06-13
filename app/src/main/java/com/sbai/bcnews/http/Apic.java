@@ -19,6 +19,16 @@ public class Apic {
     public static final int DEFAULT_PAGE_SIZE = 20;
 
 
+    // TODO: 2018/6/11 请求作者文章
+    public static Api requestAuthorArticle(int page) {
+        return Api.get("");
+    }
+
+    public static Api requestAuthorInfo() {
+        return Api.get("");
+    }
+
+
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
 

@@ -33,6 +33,9 @@ public class IconTextRow extends LinearLayout {
     private CharSequence mText;
     private float mTextSize;
     private ColorStateList mTextColor;
+    private Drawable mTextLeftDrawable;
+    private Drawable mTextRightDrawable;
+    private int mTextDrawablePadding;
 
     private CharSequence mRowSubText;
     private float mRowSubTextSize;
@@ -85,6 +88,9 @@ public class IconTextRow extends LinearLayout {
         mText = typedArray.getText(R.styleable.IconTextRow_rowText);
         mTextSize = typedArray.getDimension(R.styleable.IconTextRow_rowTextSize, defaultFontSize);
         mTextColor = typedArray.getColorStateList(R.styleable.IconTextRow_rowTextColor);
+        mTextLeftDrawable = typedArray.getDrawable(R.styleable.IconTextRow_rowTextLeftDrawable);
+        mTextRightDrawable = typedArray.getDrawable(R.styleable.IconTextRow_rowTextRightDrawable);
+        mTextDrawablePadding = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_rowTextDrawablePadding, defaultPadding);
         mRowSubText = typedArray.getText(R.styleable.IconTextRow_rowSubText);
         mRowSubTextSize = typedArray.getDimension(R.styleable.IconTextRow_rowSubTextSize, defaultFontSize);
         mRowSubTextColor = typedArray.getColorStateList(R.styleable.IconTextRow_rowSubTextColor);
@@ -145,9 +151,9 @@ public class IconTextRow extends LinearLayout {
         }
 
         if (mText == null) mText = "";
-        if(mSubTextSingleLine){
+        if (mSubTextSingleLine) {
             params = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
-        }else{
+        } else {
             params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         }
         params.weight = 1;
@@ -156,6 +162,12 @@ public class IconTextRow extends LinearLayout {
         mTextView.setText(mText);
         mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         mTextView.setTextColor(mTextColor != null ? mTextColor : ColorStateList.valueOf(Color.BLACK));
+
+        if (mTextRightDrawable != null || mTextLeftDrawable != null) {
+            mTextView.setCompoundDrawablePadding(mTextDrawablePadding);
+            mTextView.setCompoundDrawablesWithIntrinsicBounds(mTextLeftDrawable, null, mTextRightDrawable, null);
+        }
+
         mRowSubTextView = new TextView(getContext());
         mRowSubTextView.setText(mRowSubText);
         mRowSubTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mRowSubTextSize);
@@ -174,7 +186,6 @@ public class IconTextRow extends LinearLayout {
         }
 
 
-
         mSubTextView = new TextView(getContext());
         mSubTextView.setText(mSubText);
         mSubTextView.setGravity(Gravity.CENTER);
@@ -185,10 +196,10 @@ public class IconTextRow extends LinearLayout {
             params = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
             params.setMargins(mSubTextLeftMargin, 0, mSubTextRightMargin, 0);
             params.weight = 2f;
-            mSubTextView.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
+            mSubTextView.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
             mSubTextView.setSingleLine(mSubTextSingleLine);
             mSubTextView.setEllipsize(TextUtils.TruncateAt.END);
-        }else{
+        } else {
             params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             params.setMargins(mSubTextLeftMargin, 0, mSubTextRightMargin, 0);
         }
@@ -220,7 +231,7 @@ public class IconTextRow extends LinearLayout {
         mSubTextView.setBackgroundResource(resId);
     }
 
-    public void setText(String text) {
+    public void setText(CharSequence text) {
         mTextView.setText(text);
     }
 
@@ -262,5 +273,15 @@ public class IconTextRow extends LinearLayout {
 
     public void setSubTextSize(float size) {
         mSubTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, Display.sp2Px(size, getResources()));
+    }
+
+    public void setTextLeftDrawable(Drawable textLeftDrawable) {
+        mTextLeftDrawable = textLeftDrawable;
+        setTextDrawable();
+    }
+
+
+    public void setTextDrawable() {
+        mTextView.setCompoundDrawablesWithIntrinsicBounds(mTextLeftDrawable, null, mTextRightDrawable, null);
     }
 }
