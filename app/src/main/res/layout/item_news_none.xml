@@ -33,18 +33,14 @@
             android:textSize="15sp"
             android:textStyle="bold"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/original"
-            android:layout_width="44dp"
-            android:layout_height="16dp"
+            android:layout_width="24dp"
+            android:layout_height="13dp"
             android:layout_below="@+id/title"
-            android:layout_marginRight="18dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="23dp"
             android:background="@drawable/bg_original"
-            android:gravity="center"
-            android:text="@string/original"
-            android:textColor="@color/textColorPrimary"
-            android:textSize="12sp"
             android:visibility="gone"/>
 
         <TextView
@@ -58,7 +54,7 @@
             android:gravity="center"
             android:text="@string/original"
             android:textColor="@color/text_999"
-            android:textSize="12sp"/>
+            android:textSize="11sp"/>
 
         <TextView
             android:id="@+id/time"
@@ -70,7 +66,7 @@
             android:gravity="center"
             android:text="@string/original"
             android:textColor="@color/text_999"
-            android:textSize="12sp"/>
+            android:textSize="11sp"/>
     </RelativeLayout>
 
     <View

@@ -14,6 +14,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.glide.GlideRoundTransform;
 import com.sbai.glide.GlideApp;
 
 import java.util.List;
@@ -104,7 +105,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.title)
         TextView mTitle;
         @BindView(R.id.original)
-        TextView mOriginal;
+        ImageView mOriginal;
         @BindView(R.id.source)
         TextView mSource;
         @BindView(R.id.time)
@@ -128,16 +129,16 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
-            if(item.getIsAdvert() > 0){
+            if (item.getIsAdvert() > 0) {
                 mTitle.setText(item.getAdvertCopyWriter());
                 mSource.setText(item.getAdvertName());
                 mSource.setVisibility(View.VISIBLE);
-                mTime.setText(R.string.advert);
-            }else{
+                mTime.setText(context.getString(R.string.point_x, context.getString(R.string.advert)));
+            } else {
                 mTitle.setText(item.getTitle());
+                mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
+                mSource.setVisibility(View.VISIBLE);
                 mSource.setText(item.getSource());
-                mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-                mSource.setVisibility(View.GONE);
             }
             mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
             mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
@@ -159,7 +160,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mLine.setVisibility(View.VISIBLE);
             }
 
-            if (mHasFoot && count-1 == position) {
+            if (mHasFoot && count - 1 == position) {
                 mFooter.setVisibility(View.VISIBLE);
             } else {
                 mFooter.setVisibility(View.GONE);
@@ -177,7 +178,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.title)
         TextView mTitle;
         @BindView(R.id.original)
-        TextView mOriginal;
+        ImageView mOriginal;
         @BindView(R.id.source)
         TextView mSource;
         @BindView(R.id.time)
@@ -201,16 +202,16 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
-            if(item.getIsAdvert() > 0){
+            if (item.getIsAdvert() > 0) {
                 mTitle.setText(item.getAdvertCopyWriter());
                 mSource.setText(item.getAdvertName());
                 mSource.setVisibility(View.VISIBLE);
-                mTime.setText(R.string.advert);
-            }else{
+                mTime.setText(context.getString(R.string.point_x, context.getString(R.string.advert)));
+            } else {
                 mTitle.setText(item.getTitle());
+                mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
+                mSource.setVisibility(View.VISIBLE);
                 mSource.setText(item.getSource());
-                mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-                mSource.setVisibility(View.GONE);
             }
             mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
             mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
@@ -219,6 +220,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(0))
+                        .transform(new GlideRoundTransform(context))
                         .placeholder(R.drawable.ic_default_news)
                         .centerCrop()
                         .into(mImg);
@@ -240,7 +242,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mLine.setVisibility(View.VISIBLE);
             }
 
-            if (mHasFoot && count-1 == position) {
+            if (mHasFoot && count - 1 == position) {
                 mFooter.setVisibility(View.VISIBLE);
             } else {
                 mFooter.setVisibility(View.GONE);
@@ -260,7 +262,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.img3)
         ImageView mImg3;
         @BindView(R.id.original)
-        TextView mOriginal;
+        ImageView mOriginal;
         @BindView(R.id.source)
         TextView mSource;
         @BindView(R.id.time)
@@ -279,16 +281,16 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
                                 final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot) {
-            if(item.getIsAdvert() > 0){
+            if (item.getIsAdvert() > 0) {
                 mTitle.setText(item.getAdvertCopyWriter());
                 mSource.setText(item.getAdvertName());
                 mSource.setVisibility(View.VISIBLE);
-                mTime.setText(R.string.advert);
-            }else{
+                mTime.setText(context.getString(R.string.point_x, context.getString(R.string.advert)));
+            } else {
                 mTitle.setText(item.getTitle());
+                mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
+                mSource.setVisibility(View.VISIBLE);
                 mSource.setText(item.getSource());
-                mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
-                mSource.setVisibility(View.GONE);
             }
             mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
             mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
@@ -296,6 +298,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg1.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(0))
+                        .transform(new GlideRoundTransform(context))
                         .placeholder(R.drawable.ic_default_news)
                         .centerCrop()
                         .into(mImg1);
@@ -306,6 +309,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (item.getImgs() != null && item.getImgs().size() > 1) {
                 mImg2.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(1))
+                        .transform(new GlideRoundTransform(context))
                         .placeholder(R.drawable.ic_default_news)
                         .centerCrop()
                         .into(mImg2);
@@ -316,6 +320,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (item.getImgs() != null && item.getImgs().size() > 2) {
                 mImg3.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(2))
+                        .transform(new GlideRoundTransform(context))
                         .placeholder(R.drawable.ic_default_news)
                         .centerCrop()
                         .into(mImg3);
@@ -337,7 +342,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mLine.setVisibility(View.VISIBLE);
             }
 
-            if (mHasFoot && count-1 == position) {
+            if (mHasFoot && count - 1 == position) {
                 mFooter.setVisibility(View.VISIBLE);
             } else {
                 mFooter.setVisibility(View.GONE);

@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sbai.bcnews.view.HomeBanner
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/banner"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
-    android:background="@color/bg_F5F5"
-    android:paddingBottom="4dp"
-    app:isRectIndicator="false"/>
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.sbai.bcnews.view.HomeBanner
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@color/bg_F5F5"
+        android:paddingBottom="4dp"
+        app:isRectIndicator="false" />
+
+    <ImageView
+        android:id="@+id/qkcBtn"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:src="@drawable/ic_goto_qkc"
+        android:background="@color/white"/>
+
+
+</LinearLayout>

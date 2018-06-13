@@ -62,7 +62,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by Administrator on 2018\2\5 0005.
  */
 
-public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScrollListener {
+public class HomeNewsFragment extends BaseFragment {
 
     public static final int REQUEST_CODE_CHANNEL = 886;
 
@@ -223,7 +223,7 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
     }
 
     private void initViewPager() {
-        mPagerAdapter = new PagerAdapter(getChildFragmentManager(), getActivity(), mMyChannels, this);
+        mPagerAdapter = new PagerAdapter(getChildFragmentManager(), getActivity(), mMyChannels);
         mViewPager.setCurrentItem(0, false);
         mViewPager.setAdapter(mPagerAdapter);
     }
@@ -280,9 +280,10 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         mViewPager.setOffscreenPageLimit(myChannelEntities.size() - 1);
         mMyChannels.clear();
         mMyChannels.addAll(myChannelEntities);
+        mTabLayout.setViewPager(mViewPager);
         mPagerAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(0, false);
-        mTabLayout.setViewPager(mViewPager);
+        mTabLayout.selectItem(0);
     }
 
 
@@ -400,56 +401,6 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         }
     }
 
-    @Override
-    public void onScroll(int dy) {
-        if (Math.abs(dy) < SCROLL_GLIDING) {
-            return;
-        }
-//        scrollTitleBar(dy > 0 ? true : false);
-    }
-
-    private void scrollTitleBar(final boolean down) {
-        if (mAnimating || (mTitleScrollState == SCROLL_STATE_GONE && down) || (mTitleScrollState == SCROLL_STATE_NORMAL && !down)) {
-            return;
-        }
-        int titleHeight = mTitleBar.getHeight();
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(down ? 0 : -titleHeight, down ? -titleHeight : 0);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int y = (int) animation.getAnimatedValue();
-                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mTitleBar.getLayoutParams();
-                lp.setMargins(0, y, 0, 0);
-                mTitleBar.setLayoutParams(lp);
-            }
-        });
-        valueAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mAnimating = false;
-                mTitleScrollState = down ? SCROLL_STATE_GONE : SCROLL_STATE_NORMAL;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        valueAnimator.setDuration(300);
-        mAnimating = true;
-        valueAnimator.start();
-    }
-
     //外部调用  双击滑到顶部刷新
     public void triggerRefresh() {
         RecycleViewSwipeLoadFragment recycleViewSwipeLoadFragment = (RecycleViewSwipeLoadFragment) mPagerAdapter.getFragment(mViewPager.getCurrentItem());
@@ -462,14 +413,12 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
         private Context mContext;
         private FragmentManager mFragmentManager;
         private List<String> mMyChannelEntities;
-        private NewsFragment.OnScrollListener mOnScrollListener;
 
-        public PagerAdapter(FragmentManager fm, Context context, List<String> myChannelEntities, NewsFragment.OnScrollListener onScrollListener) {
+        public PagerAdapter(FragmentManager fm, Context context, List<String> myChannelEntities) {
             super(fm);
             mContext = context;
             mFragmentManager = fm;
             mMyChannelEntities = myChannelEntities;
-            mOnScrollListener = onScrollListener;
         }
 
         public void setMyChannelEntities(List<String> myChannelEntities) {
@@ -506,11 +455,9 @@ public class HomeNewsFragment extends BaseFragment implements NewsFragment.OnScr
             String title = mMyChannelEntities.get(position);
             if (position == 0) {
                 NewsFragment newsFragment = NewsFragment.newsInstance(true, title);
-                newsFragment.setOnScrollListener(mOnScrollListener);
                 return newsFragment;
             }
             NewsFragment newsFragment = NewsFragment.newsInstance(false, title);
-            newsFragment.setOnScrollListener(mOnScrollListener);
             return newsFragment;
         }
 

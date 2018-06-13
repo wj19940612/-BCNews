@@ -14,16 +14,20 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.activity.WebActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
+import com.sbai.bcnews.activity.mine.QKCActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.Banner;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
@@ -83,20 +87,12 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private List<NewsWrap> mNewsWraps;
 
     private HomeBanner mHomeBanner;
+    private LinearLayout mHeader;
 
     private int mPage;
     private boolean mHasBanner;
-    private OnScrollListener mOnScrollListener;
     private String mChannel;
     private boolean mIsVisible;
-
-    public interface OnScrollListener {
-        void onScroll(int dy);
-    }
-
-    public void setOnScrollListener(OnScrollListener onScrollListener) {
-        mOnScrollListener = onScrollListener;
-    }
 
     public static NewsFragment newsInstance(boolean hasBanner, String channel) {
         NewsFragment newsFragment = new NewsFragment();
@@ -241,9 +237,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 
     private void initBannerView() {
         if (mHasBanner) {
-            mHomeBanner = (HomeBanner) LayoutInflater.from(getActivity()).inflate(R.layout.item_banner, null);
-            mHomeBanner.setLayoutParams(new RecyclerView.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(BANNER_HEIGHT, getResources())));
+            mHeader = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_banner, null);
+            mHomeBanner = mHeader.findViewById(R.id.banner);
+//            mHomeBanner.setLayoutParams(new RecyclerView.LayoutParams(
+//                    ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(BANNER_HEIGHT, getResources())));
             mHomeBanner.setOnViewClickListener(new HomeBanner.OnViewClickListener() {
                 @Override
                 public void onBannerClick(Banner information) {
@@ -263,6 +260,17 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                                 .execute();
                     }
                     Apic.requesBannerUpdate(information.getId()).tag(TAG).fireFreely();
+                }
+            });
+
+            mHeader.findViewById(R.id.qkcBtn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (LocalUser.getUser().isLogin()) {
+                        Launcher.with(getActivity(), QKCActivity.class).execute();
+                    } else {
+                        Launcher.with(getActivity(), LoginActivity.class).execute();
+                    }
                 }
             });
         }
@@ -408,7 +416,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                         }
                     } else if (mHomeBanner != null) {
                         if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
-                            ((NewsWithHeaderAdapter) mNewsAdapter).addHeaderView(mHomeBanner);
+                            ((NewsWithHeaderAdapter) mNewsAdapter).addHeaderView(mHeader);
                             mHomeBanner.setHomeAdvertisement(data);
                             mNewsAdapter.notifyDataSetChanged();
                         }
