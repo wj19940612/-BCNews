@@ -2,7 +2,6 @@ package com.sbai.bcnews.view.recycleview;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,9 +28,10 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
 
     public abstract void onBindContentViewHolder(@NonNull K holder, T data, int position);
 
+    @SuppressWarnings("unchecked")
     @Override
-    public K onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d("wangjie", "onCreateViewHolder: " + viewType);
+    @NonNull
+    public K onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case HEADER_VIEW_TYPE:
                 if (mHeaderView != null) {

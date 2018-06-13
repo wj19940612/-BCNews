@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +29,7 @@ import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.author.AuthorActivity;
 import com.sbai.bcnews.activity.comment.NewsShareOrCommentBaseActivity;
 import com.sbai.bcnews.activity.dialog.WriteCommentActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
@@ -42,6 +42,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.OtherArticle;
+import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.model.mine.QKC;
 import com.sbai.bcnews.model.news.NewViewPointAndReview;
 import com.sbai.bcnews.model.news.NewsViewpoint;
@@ -54,6 +55,7 @@ import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.view.EmptyView;
+import com.sbai.bcnews.view.HasLabelLayout;
 import com.sbai.bcnews.view.NewsScrollView;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
@@ -89,10 +91,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     TextView mSource;
     @BindView(R.id.pubTime)
     TextView mPubTime;
-    @BindView(R.id.readTime)
-    TextView mReadTime;
-    @BindView(R.id.titleLine)
-    View mTitleLine;
     @BindView(R.id.titleLayout)
     RelativeLayout mTitleLayout;
     @BindView(R.id.webView)
@@ -217,6 +215,14 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     TextView mAllComment;
     @BindView(R.id.rootView)
     RelativeLayout mRootView;
+    @BindView(R.id.hasLabelLayout)
+    HasLabelLayout mHasLabelLayout;
+    @BindView(R.id.authorAttention)
+    ImageView mAuthorAttention;
+    @BindView(R.id.articleIntroduce)
+    TextView mArticleIntroduce;
+    @BindView(R.id.authorInfo)
+    ConstraintLayout mAuthorInfo;
 
 
     private WebViewClient mWebViewClient;
@@ -242,6 +248,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private int mScrollIdleTime;
     private int mReadArticleTime;
+    private Author mAuthor;
 
 
     @Override
@@ -421,7 +428,8 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     @OnClick({R.id.titleBar, R.id.writeComment, R.id.commentCount, R.id.collectIcon,
             R.id.bottomShareIcon, R.id.wxShare, R.id.circleShare, R.id.praiseLayout,
             R.id.firstArticle, R.id.secondArticle, R.id.thirdArticle,
-            R.id.firstPoint, R.id.secondPoint, R.id.allComment})
+            R.id.firstPoint, R.id.secondPoint, R.id.allComment,
+            R.id.authorAttention, R.id.authorInfo})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.titleBar:
@@ -484,8 +492,21 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                             .executeForResult(NewsViewPointListActivity.REQ_CODE_COMMENT);
                 }
                 break;
+            case R.id.authorAttention:
+                if (LocalUser.getUser().isLogin())
+                    attentionAuthor();
+                else
+                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                break;
+            case R.id.authorInfo:
+                Launcher.with(getActivity(), AuthorActivity.class).execute();
+                break;
 
         }
+    }
+
+    private void attentionAuthor() {
+
     }
 
     protected void requestNewsPraise(final NewsDetail newsDetail) {
@@ -543,7 +564,9 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         if (LocalUser.getUser().isLogin()) {
             startScheduleJob(TIME_SECOND);
         }
+        requestAuthorInfo();
     }
+
 
     @Override
     protected void onStart() {
@@ -958,7 +981,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         mSubtitle.setText(newsDetail.getTitle());
         mSource.setText(newsDetail.getAuthor());
         mPubTime.setText(DateUtil.formatNewsStyleTime(newsDetail.getReleaseTime()));
-        mReadTime.setText(String.format(getString(R.string.reader_time), newsDetail.getReaderTime()));
+//        mReadTime.setText(String.format(getString(R.string.reader_time), newsDetail.getReaderTime()));
         mPureHtml = mNewsDetail.getContent();
         loadPage();
         if (mChannel == null && mTag == null && newsDetail.getChannel().size() > 0) {
@@ -1037,6 +1060,24 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         } else {
             articleImg.setVisibility(View.GONE);
         }
+    }
+
+    private void requestAuthorInfo() {
+        // TODO: 2018/6/11 请求作者信息
+        Apic.requestAuthorInfo()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<Author>, Author>() {
+                    @Override
+                    protected void onRespSuccessData(Author data) {
+                        updateAuthorInfo(data);
+                    }
+                })
+                .fire();
+    }
+
+    private void updateAuthorInfo(Author author) {
+        mAuthor = author;
+
     }
 
     private void updatePraiseCollect(NewsDetail newsDetail) {

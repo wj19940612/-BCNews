@@ -8,7 +8,7 @@ package com.sbai.bcnews.view.recycleview;
  * APIS:{@link com.songbai.coinpro.http.Api#$methodName$}
  */
 public interface RecycleViewType {
-    int HEADER_VIEW_TYPE = 1;
-    int FOOTER_VIEW_TYPE = 2;
-    int EMPTY_VIEW_TYPE = 3;
+    int HEADER_VIEW_TYPE = 11;
+    int FOOTER_VIEW_TYPE = 22;
+    int EMPTY_VIEW_TYPE = 33;
 }

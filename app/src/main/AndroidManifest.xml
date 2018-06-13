@@ -230,7 +230,9 @@
             android:label="PushService"
             android:process=":pushservice"/>
 
-        <activity android:name=".activity.mine.AuthorWorkbenchActivity">
+        <activity android:name=".activity.author.AuthorWorkbenchActivity">
+        </activity>
+        <activity android:name=".activity.author.AuthorActivity">
         </activity>
     </application>
 

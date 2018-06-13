@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".activity.mine.AuthorWorkbenchActivity">
+    tools:context=".activity.author.AuthorWorkbenchActivity">
 
     <com.sbai.bcnews.view.TitleBar
         android:id="@+id/titleBar"

@@ -32,11 +32,11 @@ import butterknife.ButterKnife;
  */
 public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArticle, RecyclerView.ViewHolder> {
 
-    private static final int ITEM_TYPE_NONE_OR_SINGLE = 0;
-    private static final int ITEM_TYPE_THREE_IMAGE = 1;
+    private static final int ITEM_TYPE_NONE_OR_SINGLE = 1;
+    private static final int ITEM_TYPE_THREE_IMAGE = 2;
 
     private static final int PAGE_TYPE_AUTHOR_WORKBENCH = 0; //工作台
-    private static final int PAGE_TYPE_AUTHOR_INFO = 1;
+    public static final int PAGE_TYPE_AUTHOR_INFO = 1;
 
     private int pageType;
 
@@ -133,7 +133,7 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
             mReadNumber.setText(context.getString(R.string.read_number, data.getReaderCount()));
             mReviewNumber.setText(context.getString(R.string.review_number, data.getReviewCount()));
             List<String> imgs = data.getImgs();
-            if (imgs != null && imgs.get(0) != null) {
+            if (imgs != null && !imgs.isEmpty()) {
                 mImage.setVisibility(View.VISIBLE);
                 GlideApp.with(context)
                         .load(imgs.get(0))

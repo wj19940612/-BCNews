@@ -20,6 +20,8 @@ public class Message implements MessageStatus {
     public static final int MESSAGE_TYPE_REVIEW_PRAISE = 5;
     public static final int MESSAGE_TYPE_REVIEW_REVIEW = 6;
 
+    public static final int MESSAGE_TYPE_ARTICLE = 7; //对文章的点赞和评论
+
     /**
      * createTime : 1521098828000
      * dataId : 234

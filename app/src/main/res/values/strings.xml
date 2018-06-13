@@ -433,8 +433,14 @@
     <string name="praise_">点赞</string>
     <string name="fans">粉丝</string>
     <string name="my_article_number">我的文章（%1$d）</string>
+    <string name="his_article_number">TA的文章（%1$d）</string>
     <string name="read_number">%1$d人阅读</string>
     <string name="review_number">%1$d评论</string>
+    <string name="news_publish_time_and_red_number">$1$s . %1$d人阅读</string>
+    <string name="official_author">官方媒体认证</string>
+    <string name="special_author">专栏作家认证</string>
+    <string name="author_check_introduce">认证简介：%1$s</string>
+
 
     <string name="you_have_not_attention_author">你还没有关注作者哦</string>
     <string name="recommend_attention">推荐关注</string>

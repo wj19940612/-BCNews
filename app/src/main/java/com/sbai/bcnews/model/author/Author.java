@@ -20,6 +20,24 @@ public class Author {
 
     private int yesterdayFansNumber;
     private int totalFansNumber;
+    private int authorType;
+    private String introduce;
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
+    public int getAuthorType() {
+        return authorType;
+    }
+
+    public void setAuthorType(int authorType) {
+        this.authorType = authorType;
+    }
 
     public String getUserPortrait() {
         return userPortrait;

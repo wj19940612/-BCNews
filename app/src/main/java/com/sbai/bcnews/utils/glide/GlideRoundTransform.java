@@ -1,7 +1,6 @@
 package com.sbai.bcnews.utils.glide;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -11,6 +10,7 @@ import android.support.annotation.NonNull;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.sbai.bcnews.utils.Display;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -21,27 +21,27 @@ import java.security.MessageDigest;
  * Description:
  * </p>
  */
-public  class GlideRoundTransform extends BitmapTransformation {
+public class GlideRoundTransform extends BitmapTransformation {
 
     private static final String ID = "com.bumptech.glide.transformations.FillSpace";
 
-    private static float radius = 0f;
+    private float radius = 0f;
 
     public GlideRoundTransform(Context context) {
         this(context, 4);
     }
 
     public GlideRoundTransform(Context context, int radius) {
-        radius = (int) (Resources.getSystem().getDisplayMetrics().density * radius);
+        this.radius = (int) Display.dp2Px(radius, context.getResources());
     }
 
     @Override
     protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
-        return null;
+        return roundCrop(pool, toTransform);
     }
 
 
-    private static Bitmap roundCrop(BitmapPool pool, Bitmap source) {
+    private Bitmap roundCrop(BitmapPool pool, Bitmap source) {
         if (source == null) return null;
 
         Bitmap result = pool.get(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);

@@ -1,10 +1,9 @@
-package com.sbai.bcnews.activity.mine;
+package com.sbai.bcnews.activity.author;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.mine.PersonalDataActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
@@ -181,14 +181,12 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
 
     private void setYesterdayData(TextView textView, int data) {
         String formatNumber = NumberUtils.formatNumber(data);
-        Log.d(TAG, "setYesterdayData: "+data);
         SpannableString spannableString = StrUtil.mergeTextWithRatio(formatNumber, " " + getString(R.string.yesterday), 0.55f);
         textView.setText(spannableString);
     }
 
     private void setTotalData(TextView textView, int data) {
         String formatNumber = NumberUtils.formatNumber(data);
-
         SpannableString spannableString = StrUtil.mergeTextWithRatio(formatNumber, " " + getString(R.string.total), 0.55f);
         textView.setText(spannableString);
     }

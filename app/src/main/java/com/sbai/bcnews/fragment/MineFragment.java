@@ -18,7 +18,7 @@ import com.sbai.bcnews.BuildConfig;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.WebActivity;
-import com.sbai.bcnews.activity.mine.AuthorWorkbenchActivity;
+import com.sbai.bcnews.activity.author.AuthorWorkbenchActivity;
 import com.sbai.bcnews.activity.mine.FeedbackActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.activity.mine.MessageActivity;
@@ -309,13 +309,12 @@ public class MineFragment extends BaseFragment {
                 if (!LocalUser.getUser().isLogin()) {
                     login();
                 } else {
-//                    if (LocalUser.getUser().getUserInfo().isAuthorIsCheck()) {
-                        // TODO: 2018/6/7 打开作者详情页
+                    if (LocalUser.getUser().getUserInfo().isAuthorIsCheck()) {
                         Launcher.with(getActivity(), AuthorWorkbenchActivity.class).execute();
-//                    } else {
-//                        requestOperationWeChatAccount();
-//                    }
-//                    umengEventCount(UmengCountEventId.MINE_CONTRIBUTE);
+                    } else {
+                        requestOperationWeChatAccount();
+                    }
+                    umengEventCount(UmengCountEventId.MINE_CONTRIBUTE);
                 }
                 break;
             case R.id.feedBack:

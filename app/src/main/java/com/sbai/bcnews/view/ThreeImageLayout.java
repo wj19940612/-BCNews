@@ -36,9 +36,10 @@ public class ThreeImageLayout extends LinearLayout {
         int defaultMargin = (int) Display.dp2Px(4, getResources());
 
         mImageViewList = new ArrayList<>();
-        LayoutParams layoutParams = new LayoutParams(0, defaultHeight);
-        layoutParams.weight = 1;
+
         for (int i = 0; i < 3; i++) {
+            LayoutParams layoutParams = new LayoutParams(0, defaultHeight);
+            layoutParams.weight = 1;
             ImageView imageView = new ImageView(getContext());
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             if (i == 1) {

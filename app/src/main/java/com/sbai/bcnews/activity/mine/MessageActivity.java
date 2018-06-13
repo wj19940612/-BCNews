@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
@@ -110,6 +111,10 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
                     Launcher.with(getActivity(), ReviewActivity.class).execute();
                 else if (message.getType() == Message.MESSAGE_TYPE_FEED_BACK_REVIEW)
                     Launcher.with(getActivity(), FeedbackActivity.class).execute();
+                else if(message.getType()==Message.MESSAGE_TYPE_ARTICLE){
+                    // TODO: 2018/6/13 需要补充全
+                    Launcher.with(getActivity(), NewsDetailActivity.class).execute();
+                }
             }
         });
 
