@@ -17,7 +17,6 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
-import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.model.author.AuthorArticle;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
@@ -255,20 +254,21 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
     private void updateAuthorInfo(Author author) {
         mHasLabelLayout.setImageSrc(author.getUserPortrait());
-        boolean isOfficialAuthor = author.getAuthorType() == UserInfo.AUTHOR_STATUS_OFFICIAL;
+
+        boolean isOfficialAuthor = author.getAuthorType() == Author.AUTHOR_STATUS_OFFICIAL;
         mHasLabelLayout.setLabelSelected(isOfficialAuthor);
         if (isOfficialAuthor) {
             mAuthorIdentity.setText(R.string.official_author);
         } else {
             mAuthorIdentity.setText(R.string.special_author);
         }
+        mTitleBarHasLabelLayout.setLabelSelected(isOfficialAuthor);
 
         mAuthorName.setText(author.getUserName());
         mAuthorIntroduce.setText(getString(R.string.author_check_introduce, author.getIntroduce()));
 
         initAuthorAttentionNumber(author);
 
-        mTitleBarHasLabelLayout.setLabelSelected(isOfficialAuthor);
         mTitleBarHasLabelLayout.setImageSrc(author.getUserPortrait());
         mTitleBarAuthorName.setText(author.getUserName());
     }

@@ -28,6 +28,11 @@ public class Apic {
         return Api.get("");
     }
 
+    // TODO: 2018/6/14 关注作者
+    public static Api attentionAuthor(String id) {
+        return Api.post("");
+    }
+
 
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";

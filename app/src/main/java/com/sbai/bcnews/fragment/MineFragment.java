@@ -33,6 +33,7 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
+import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.model.mine.MsgNumber;
 import com.sbai.bcnews.model.mine.MyIntegral;
 import com.sbai.bcnews.model.mine.ReadHistoryOrMyCollect;
@@ -208,10 +209,15 @@ public class MineFragment extends BaseFragment {
             updateUserReadHistory(userInfo.getReadCount());
             if (userInfo.isAuthorIsCheck()) {
                 mContribute.setText(R.string.author_workbench);
-                mHeadPortrait.setLabelImageViewVisible(true);
 
-                boolean isOfficialAuthor = userInfo.getAuthorType() == UserInfo.AUTHOR_STATUS_OFFICIAL;
-                mHeadPortrait.setLabelSelected(isOfficialAuthor);
+                boolean isAuthor = userInfo.getAuthorType() != Author.AUTHOR_STATUS_ORDINARY;
+                mHeadPortrait.setLabelImageViewVisible(isAuthor);
+                if (isAuthor) {
+                    boolean isOfficialAuthor = userInfo.getAuthorType() == Author.AUTHOR_STATUS_OFFICIAL;
+                    mHeadPortrait.setLabelSelected(isOfficialAuthor);
+                }
+
+
             } else {
                 mHeadPortrait.setLabelImageViewVisible(false);
                 String s = getString(R.string.author_workbench) + "                    ";

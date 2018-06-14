@@ -273,12 +273,6 @@ public class ShareDialog {
         mView.findViewById(R.id.weChatFriendCircle).setOnClickListener(new ShareButtonClickListener());
         mView.findViewById(R.id.qq).setOnClickListener(new ShareButtonClickListener());
         mView.findViewById(R.id.sinaWeibo).setOnClickListener(new ShareButtonClickListener());
-        mView.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSmartDialog.dismiss();
-            }
-        });
     }
 
     public ShareDialog setListener(OnShareDialogCallback listener) {
@@ -346,13 +340,16 @@ public class ShareDialog {
             mView.findViewById(R.id.sinaWeibo).setVisibility(View.GONE);
         }
         TextView title = (TextView) mView.findViewById(R.id.title);
+        View titleSplit = mView.findViewById(R.id.titleSplit);
         if (!TextUtils.isEmpty(mTitle)) {
             title.setText(mTitle);
         }
         if (mHasTitle) {
             title.setVisibility(View.VISIBLE);
+            titleSplit.setVisibility(View.VISIBLE);
         } else {
             title.setVisibility(View.GONE);
+            titleSplit.setVisibility(View.GONE);
         }
 
         mSmartDialog.setWidthScale(1)
