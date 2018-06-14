@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.utils.DateUtil;
@@ -129,42 +130,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
-            if (item.getIsAdvert() > 0) {
-                mTitle.setText(item.getAdvertCopyWriter());
-                mSource.setText(item.getAdvertName());
-                mSource.setVisibility(View.VISIBLE);
-                mTime.setText(context.getString(R.string.point_x, context.getString(R.string.advert)));
-            } else {
-                mTitle.setText(item.getTitle());
-                mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
-                mSource.setVisibility(View.VISIBLE);
-                mSource.setText(item.getSource());
-            }
-            mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
-            mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-//            mSource.setVisibility(TextUtils.isEmpty(item.getAuthor()) ? View.GONE : View.VISIBLE);
 
-            mContentRL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemClickListener != null) {
-                        mTitle.setTextColor(ContextCompat.getColor(context, R.color.text_999));
-                        onItemClickListener.onItemClick(item);
-                    }
-                }
-            });
-
-            if (count - 1 == position) {
-                mLine.setVisibility(View.GONE);
-            } else {
-                mLine.setVisibility(View.VISIBLE);
-            }
-
-            if (mHasFoot && count - 1 == position) {
-                mFooter.setVisibility(View.VISIBLE);
-            } else {
-                mFooter.setVisibility(View.GONE);
-            }
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter);
         }
     }
 
@@ -202,20 +169,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
-            if (item.getIsAdvert() > 0) {
-                mTitle.setText(item.getAdvertCopyWriter());
-                mSource.setText(item.getAdvertName());
-                mSource.setVisibility(View.VISIBLE);
-                mTime.setText(context.getString(R.string.point_x, context.getString(R.string.advert)));
-            } else {
-                mTitle.setText(item.getTitle());
-                mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
-                mSource.setVisibility(View.VISIBLE);
-                mSource.setText(item.getSource());
-            }
-            mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
-            mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-            //            mSource.setVisibility(TextUtils.isEmpty(item.getAuthor()) ? View.GONE : View.VISIBLE);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter);
 
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg.setVisibility(View.VISIBLE);
@@ -226,26 +180,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .into(mImg);
             } else {
                 mImg.setVisibility(View.GONE);
-            }
-            mContentRL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemClickListener != null) {
-                        mTitle.setTextColor(ContextCompat.getColor(context, R.color.text_999));
-                        onItemClickListener.onItemClick(item);
-                    }
-                }
-            });
-            if (count - 1 == position) {
-                mLine.setVisibility(View.GONE);
-            } else {
-                mLine.setVisibility(View.VISIBLE);
-            }
-
-            if (mHasFoot && count - 1 == position) {
-                mFooter.setVisibility(View.VISIBLE);
-            } else {
-                mFooter.setVisibility(View.GONE);
             }
         }
     }
@@ -281,20 +215,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
                                 final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot) {
-            if (item.getIsAdvert() > 0) {
-                mTitle.setText(item.getAdvertCopyWriter());
-                mSource.setText(item.getAdvertName());
-                mSource.setVisibility(View.VISIBLE);
-                mTime.setText(context.getString(R.string.point_x, context.getString(R.string.advert)));
-            } else {
-                mTitle.setText(item.getTitle());
-                mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
-                mSource.setVisibility(View.VISIBLE);
-                mSource.setText(item.getSource());
-            }
-            mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
-            mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-            //            mSource.setVisibility(TextUtils.isEmpty(item.getAuthor()) ? View.GONE : View.VISIBLE);
+
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter);
+
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg1.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(0))
@@ -327,26 +250,48 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mImg3.setVisibility(View.INVISIBLE);
             }
-            mContentRL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemClickListener != null) {
-                        mTitle.setTextColor(ContextCompat.getColor(context, R.color.text_999));
-                        onItemClickListener.onItemClick(item);
-                    }
-                }
-            });
-            if (count - 1 == position) {
-                mLine.setVisibility(View.GONE);
-            } else {
-                mLine.setVisibility(View.VISIBLE);
-            }
+        }
+    }
 
-            if (mHasFoot && count - 1 == position) {
-                mFooter.setVisibility(View.VISIBLE);
-            } else {
-                mFooter.setVisibility(View.GONE);
+    /**
+     * 显示三种Type都需要显示的View的内容
+     */
+    public static void setBasicView(final Context context, final NewsDetail item, int position, int count,
+                                    final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, final TextView mTitle, TextView mSource, TextView mTime, ImageView mOriginal, RelativeLayout mContentRL, View mLine, View mFooter) {
+        if (item.getIsAdvert() > 0) {
+            mTitle.setText(item.getAdvertCopyWriter());
+            mSource.setText(item.getAdvertName());
+            mSource.setVisibility(View.VISIBLE);
+            mTime.setText(context.getString(R.string.point_x, context.getString(R.string.advert)));
+        } else {
+            mTitle.setText(item.getTitle());
+            mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
+            mSource.setVisibility(View.VISIBLE);
+            mSource.setText(item.getSource());
+        }
+        mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
+        mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
+
+        mContentRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    mTitle.setTextColor(ContextCompat.getColor(context, R.color.text_999));
+                    onItemClickListener.onItemClick(item);
+                }
             }
+        });
+
+        if (count - 1 == position) {
+            mLine.setVisibility(View.GONE);
+        } else {
+            mLine.setVisibility(View.VISIBLE);
+        }
+
+        if (mHasFoot && count - 1 == position && count > Apic.DEFAULT_PAGE_SIZE) {
+            mFooter.setVisibility(View.VISIBLE);
+        } else {
+            mFooter.setVisibility(View.GONE);
         }
     }
 }
