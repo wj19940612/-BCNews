@@ -51,7 +51,6 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
     LinearLayout mRootView;
 
 
-
     HasLabelLayout mHasLabelLayout;
     TextView mNickName;
     TextView mModifyInfo;
@@ -155,8 +154,14 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
         mTotalFansNumber = mHeadView.findViewById(R.id.totalFansNumber);
         mMyArticleTotal = mHeadView.findViewById(R.id.myArticleTotal);
 
-        boolean isOfficialAuthor = LocalUser.getUser().getUserInfo().getAuthorType() == UserInfo.AUTHOR_STATUS_OFFICIAL;
-        mHasLabelLayout.setLabelSelected(isOfficialAuthor);
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        boolean isAuthor = userInfo.getAuthorType() != Author.AUTHOR_STATUS_ORDINARY;
+        mHasLabelLayout.setLabelImageViewVisible(isAuthor);
+        if (isAuthor) {
+            boolean isOfficialAuthor = userInfo.getAuthorType() == Author.AUTHOR_STATUS_OFFICIAL;
+            mHasLabelLayout.setLabelSelected(isOfficialAuthor);
+        }
+
 
         mModifyInfo.setOnClickListener(new View.OnClickListener() {
             @Override

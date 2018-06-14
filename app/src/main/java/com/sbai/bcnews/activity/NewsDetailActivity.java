@@ -499,13 +499,24 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                     Launcher.with(getActivity(), LoginActivity.class).execute();
                 break;
             case R.id.authorInfo:
-                Launcher.with(getActivity(), AuthorActivity.class).execute();
+                if (mAuthor != null && mAuthor.getAuthorType() != Author.AUTHOR_STATUS_ORDINARY)
+                    Launcher.with(getActivity(), AuthorActivity.class).execute();
                 break;
 
         }
     }
 
     private void attentionAuthor() {
+        if (mAuthor != null)
+            Apic.attentionAuthor(mAuthor.getId())
+                    .tag(TAG)
+                    .callback(new Callback<Resp<Object>>() {
+                        @Override
+                        protected void onRespSuccess(Resp<Object> resp) {
+                            // TODO: 2018/6/14 关注作者
+                        }
+                    })
+                    .fire();
 
     }
 
@@ -980,7 +991,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     private void updateData(NewsDetail newsDetail) {
         mSubtitle.setText(newsDetail.getTitle());
         mSource.setText(newsDetail.getAuthor());
-        mPubTime.setText(DateUtil.formatNewsStyleTime(newsDetail.getReleaseTime()));
+        updateReadNumber(newsDetail);
 //        mReadTime.setText(String.format(getString(R.string.reader_time), newsDetail.getReaderTime()));
         mPureHtml = mNewsDetail.getContent();
         loadPage();
@@ -988,6 +999,14 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             mChannel = newsDetail.getChannel().get(0);
             requestOtherArticle();
         }
+    }
+
+    private void updateReadNumber(NewsDetail newsDetail) {
+        int readNumber = 0;
+        if (mAuthor != null) {
+            readNumber = mAuthor.getTotalRedNumber();
+        }
+        mPubTime.setText(getString(R.string.news_publish_time_and_red_number, DateUtil.formatNewsStyleTime(newsDetail.getReleaseTime()), readNumber));
     }
 
     private void requestOtherArticle() {
@@ -1077,6 +1096,18 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private void updateAuthorInfo(Author author) {
         mAuthor = author;
+        boolean isAuthor = author.getAuthorType() != Author.AUTHOR_STATUS_ORDINARY;
+        mHasLabelLayout.setLabelImageViewVisible(isAuthor);
+        if (isAuthor) {
+            boolean isOfficialAuthor = author.getAuthorType() == Author.AUTHOR_STATUS_OFFICIAL;
+            mHasLabelLayout.setLabelSelected(isOfficialAuthor);
+        }
+
+        if (mNetNewsDetail != null) {
+            updateReadNumber(mNetNewsDetail);
+        } else if (mNewsDetail != null) {
+            updateReadNumber(mNewsDetail);
+        }
 
     }
 
@@ -1137,7 +1168,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         }
     }
 
-
     static class CacheThread extends Thread {
         NewsDetail mNewsDetail;
 
@@ -1149,7 +1179,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             NewsCache.insertOrReplaceNews(mNewsDetail);
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1179,8 +1208,5 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                     break;
             }
         }
-
     }
-
-
 }

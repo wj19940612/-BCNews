@@ -9,8 +9,13 @@ package com.sbai.bcnews.model.author;
  */
 public class Author {
 
+    public static final int AUTHOR_STATUS_ORDINARY = 0; //普通人
+    public static final int AUTHOR_STATUS_SPECIAL = 1; //专栏作家
+    public static final int AUTHOR_STATUS_OFFICIAL = 2; //官方认证
+
     private String userPortrait;
     private String userName;
+    private String id;
 
     private int yesterdayRedNumber;
     private int totalRedNumber;
@@ -22,6 +27,14 @@ public class Author {
     private int totalFansNumber;
     private int authorType;
     private String introduce;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getIntroduce() {
         return introduce;

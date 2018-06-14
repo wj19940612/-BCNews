@@ -10,10 +10,6 @@ import com.sbai.bcnews.model.system.NotificationStatus;
  */
 public class UserInfo implements Parcelable {
 
-    public static final int AUTHOR_STATUS_ORDINARY = 0; //普通人
-    public static final int AUTHOR_STATUS_SPECIAL = 1; //专栏作家
-    public static final int AUTHOR_STATUS_OFFICIAL = 2; //官方认证
-
     public static final int WECHAT_BIND_STATUS_NOT_BIND = 0;
     public static final int WECHAT_BIND_STATUS_BIND = 1;
     public static final int WECHAT_BIND_STATUS_UNBIND = 2;
