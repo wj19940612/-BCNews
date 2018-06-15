@@ -285,8 +285,8 @@ public class HomeNewsFragment extends BaseFragment {
         mMyChannels.addAll(myChannelEntities);
         mTabLayout.setViewPager(mViewPager);
         mPagerAdapter.notifyDataSetChanged();
-        mViewPager.setCurrentItem(0, false);
-        mTabLayout.selectItem(0);
+        mViewPager.setCurrentItem(1, false);
+        mTabLayout.selectItem(1);
     }
 
 

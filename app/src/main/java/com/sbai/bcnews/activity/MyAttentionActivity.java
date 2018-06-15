@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.AttentionFragment;
 import com.sbai.bcnews.fragment.CommonBottomDialogFragment;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.model.Candy;
 import com.sbai.bcnews.model.NewsAuthor;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.view.EmptyView;
@@ -30,7 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements CommonBottomDialogFragment.OnClickListener{
+public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements CommonBottomDialogFragment.OnClickListener {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -49,6 +52,10 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
 
     private AttentionAdapter mAttentionAdapter;
     private List<NewsAuthor> mNewsAuthorList;
+    private NewsAuthor mAttentionAuthor;
+    private int mAttentionPosition;
+
+    private int mPage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,12 +72,13 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
 
     @Override
     public void onLoadMore() {
-
+        loadData(false);
     }
 
     @Override
     public void onRefresh() {
-
+        mPage = 0;
+        loadData(true);
     }
 
     private void initView() {
@@ -82,22 +90,66 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
             }
 
             @Override
-            public void onAttention(boolean isAttention) {
-
+            public void onAttention(NewsAuthor newsAuthor, boolean isAttention, int position) {
+                if (isAttention) {
+                    mAttentionPosition = position;
+                    mAttentionAuthor = newsAuthor;
+                    CommonBottomDialogFragment.newInstance("确定不再关注此人").show(getSupportFragmentManager());
+                }
             }
         });
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeTarget.setAdapter(mAttentionAdapter);
     }
 
+
+    private void loadData(final boolean refresh) {
+        mNewsAuthorList.add(new NewsAuthor(true));
+        mAttentionAdapter.notifyDataSetChanged();
+    }
+
+    private void updateData(List<NewsAuthor> data, boolean refresh) {
+        if (refresh) {
+            mNewsAuthorList.clear();
+        }
+        if (data == null && data.size() == 0) {
+            if (mNewsAuthorList.size() > 0) {
+                mEmptyView.setVisibility(View.GONE);
+            } else {
+                mEmptyView.setVisibility(View.VISIBLE);
+            }
+            mAttentionAdapter.notifyDataSetChanged();
+            return;
+        }
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+        } else {
+            mSwipeToLoadLayout.setLoadMoreEnabled(true);
+        }
+        if (data.size() != 0)
+            mPage++;
+        mNewsAuthorList.addAll(data);
+        mAttentionAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onFirstClick() {
-
+        mAttentionAuthor.setAttention(false);
+        mAttentionAdapter.notifyItemChanged(mAttentionPosition);
     }
 
     @Override
     public void onSecondClick() {
 
+    }
+
+    private void setNoAttentionBtn(TextView attentionBtn, boolean hasAttention) {
+        attentionBtn.setSelected(hasAttention);
+        if (hasAttention) {
+            attentionBtn.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_d9));
+        } else {
+            attentionBtn.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+        }
     }
 
     static class AttentionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -121,7 +173,7 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ((ViewHolder) holder).bindingData();
+            ((ViewHolder) holder).bindingData(mContext,mNewsAuthorList.get(position), position, mOnItemClickListener);
         }
 
         @Override
@@ -144,8 +196,27 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(){
+            private void bindingData(Context context,final NewsAuthor newsAuthor, final int position, final AttentionFragment.OnItemClickListener onItemClickListener) {
+                setNoAttentionBtn(mAttentionBtn,newsAuthor.isAttention(),context);
+                mAttentionBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onAttention(newsAuthor, mAttentionBtn.isSelected(), position);
+                        }
+                    }
+                });
+            }
 
+            private void setNoAttentionBtn(TextView attentionBtn, boolean hasAttention,Context context) {
+                attentionBtn.setSelected(hasAttention);
+                if (hasAttention) {
+                    attentionBtn.setTextColor(ContextCompat.getColor(context, R.color.text_d9));
+                    attentionBtn.setText(R.string.has_attention);
+                } else {
+                    attentionBtn.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+                    attentionBtn.setText(R.string.attention);
+                }
             }
         }
     }

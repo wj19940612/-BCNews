@@ -74,7 +74,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     public interface OnItemClickListener {
         public void onItemClick();
 
-        public void onAttention(boolean isAttention);
+        public void onAttention(NewsAuthor newsAuthor,boolean isAttention,int position);
     }
 
     public static AttentionFragment newsIntance(String channel) {
@@ -150,8 +150,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
             }
 
             @Override
-            public void onAttention(boolean isAttention) {
-
+            public void onAttention(NewsAuthor newsAuthor,boolean isAttention,int position) {
             }
         });
         mEmptyRecyclerView.setAdapter(mRecommendAdapter);

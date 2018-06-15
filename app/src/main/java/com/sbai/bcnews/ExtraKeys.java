@@ -51,5 +51,6 @@ public interface ExtraKeys {
 
     String CONVERSION_HISTORY = "conversion_history";
     String TITLE = "title";
+    String POSITION = "position";
     String HAS_LOGIN_PSD = "has_login_psd";
 }
