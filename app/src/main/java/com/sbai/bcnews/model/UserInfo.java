@@ -17,6 +17,9 @@ public class UserInfo implements Parcelable {
     public static final int USER_SEX_GIRL = 1;
     public static final int USER_SEX_BOY = 2;
 
+    public static final int HAVE_PASSWORD = 1;
+    public static final int NO_PASSWORD = 1;
+
 
     /**
      * createTime : 1518141650000
@@ -51,6 +54,7 @@ public class UserInfo implements Parcelable {
     private String city;
     private String userAddress;
     private String introduction;
+    private int isPassword;   //是否设置过密码 0-未设置 1-已设置
     /**
      * age : 25
      * birthday : 93.12.12
@@ -392,6 +396,14 @@ public class UserInfo implements Parcelable {
         this.addIntegral = addIntegral;
     }
 
+    public int getIsPassword() {
+        return isPassword;
+    }
+
+    public void setIsPassword(int isPassword) {
+        this.isPassword = isPassword;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -473,6 +485,7 @@ public class UserInfo implements Parcelable {
         dest.writeInt(this.isModifyPortrait);
         dest.writeInt(this.addRate);
         dest.writeInt(this.addIntegral);
+        dest.writeInt(this.isPassword);
     }
 
     protected UserInfo(Parcel in) {
@@ -509,6 +522,7 @@ public class UserInfo implements Parcelable {
         this.isModifyPortrait = in.readInt();
         this.addRate = in.readInt();
         this.addIntegral = in.readInt();
+        this.isPassword = in.readInt();
     }
 
     public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {

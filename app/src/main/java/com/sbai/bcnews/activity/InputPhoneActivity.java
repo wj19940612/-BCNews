@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +33,11 @@ public class InputPhoneActivity extends BaseActivity {
     private static final int REQ_CODE_IMAGE_AUTH_CODE = 889;
 
     public static final int PAGE_TYPE_FORGET_PSD = 108;
+    public static final int TYPE_HAS_ACCOUNT = 1;
+    public static final int TYPE_NO_ACCOUNT = 0;
+
+    private static final int REQ_CODE_SUB_OPERATION = 999;
+
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -45,6 +51,8 @@ public class InputPhoneActivity extends BaseActivity {
     TextView mNext;
     @BindView(R.id.rootView)
     LinearLayout mRootView;
+    @BindView(R.id.loading)
+    ImageView mLoading;
 
     private int mCounter;
     private boolean mFreezeObtainAuthCode;
@@ -127,11 +135,36 @@ public class InputPhoneActivity extends BaseActivity {
     }
 
     private void checkPhoneAndNext() {
-        //TODO 注册的时候需要先验证手机号
-        Launcher.with(this, AuthCodeActivity.class).putExtra(ExtraKeys.PHONE, getPhoneNumber()).execute();
+        final String phone = getPhoneNumber();
+        mLoading.setVisibility(View.VISIBLE);
+        mLoading.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading));
+        Apic.checkPhone(phone, TYPE_HAS_ACCOUNT).tag(TAG).callback(new Callback<Resp>() {
+            @Override
+            protected void onRespSuccess(Resp resp) {
+                Launcher.with(InputPhoneActivity.this, AuthCodeActivity.class).putExtra(ExtraKeys.PHONE, phone).executeForResult(REQ_CODE_SUB_OPERATION);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                resetButton();
+            }
+        }).fire();
     }
 
-//    private void postAuthCodeRequested() {
+    private void resetButton() {
+        mLoading.setVisibility(View.GONE);
+        mLoading.clearAnimation();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPhoneNumber.removeTextChangedListener(mPhoneValidationWatcher);
+        mLoading.clearAnimation();
+    }
+
+    //    private void postAuthCodeRequested() {
 //        mFreezeObtainAuthCode = true;
 //        startScheduleJob(1000);
 //        mCounter = 60;
@@ -146,11 +179,11 @@ public class InputPhoneActivity extends BaseActivity {
 //        }
 //    }
 //
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == REQ_CODE_IMAGE_AUTH_CODE && resultCode == RESULT_OK) { // 发送图片验证码去 获取验证码 成功
-//            postAuthCodeRequested();
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_SUB_OPERATION && resultCode == RESULT_OK) { // 修改密码成功
+            finish();
+        }
+    }
 }

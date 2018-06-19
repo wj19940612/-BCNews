@@ -928,4 +928,71 @@ public class Apic {
         return Api.get("/api/news-user/user/show.do");
     }
 
+    /**
+     * 注册
+     *
+     * @return
+     */
+    public static Api register(String phone, String code, String password) {
+        return Api.post("/api/news-user/login/password/register.do", new ReqParams()
+                .put("phone", phone)
+                .put("code", code)
+                .put("password", password)
+                .put("deviceId", Preference.get().getPushClientId())
+                .put("platform", 0)
+                .put("source", AppInfo.getMetaData(App.getAppContext(), "UMENG_CHANNEL")));
+    }
+
+    /**
+     * 密码登陆
+     *
+     * @param phone
+     * @param password
+     * @return
+     */
+    public static Api passLogin(String phone, String password) {
+        return Api.post("/api/news-user/login/password/login.do", new ReqParams().put("phone", phone).put("password", password));
+    }
+
+    /**
+     * 忘记密码-设置密码
+     *
+     * @return
+     */
+    public static Api forgetPass(String phone, String code, String password) {
+        return Api.post("/api/news-user/user/forget.do", new ReqParams().put("phone", phone).put("code", code).put("password", password));
+    }
+
+    /**
+     * 检测手机号状态 - 是否注册过等 type 0-注册 1-登陆
+     *
+     * @return
+     */
+    public static Api checkPhone(String phone,int type) {
+        return Api.post("/api/news-user/login/check.do", new ReqParams().put("phone", phone).put("type", type));
+    }
+
+    /**
+     * 设置密码
+     * @return
+     */
+    public static Api setPassword(String password){
+        return Api.post("/api/news-user/user/set/password.do",new ReqParams().put("password",password));
+    }
+
+    /**
+     * 修改密码
+     * @return
+     */
+    public static Api modifyPassword(String oldPassword,String newPassword){
+        return Api.post("/api/news-user/user/modify/password.do",new ReqParams().put("oldPassword",oldPassword).put("newPassword",newPassword));
+    }
+
+    /**
+     * 获取糖果列表
+     */
+    public static Api requestCandyList(int page){
+        return Api.get("/api/news-user/sweet/page.do",new ReqParams().put("page",page).put("size",DEFAULT_PAGE_SIZE));
+    }
+
 }
