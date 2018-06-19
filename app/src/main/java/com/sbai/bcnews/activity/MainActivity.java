@@ -14,12 +14,14 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.sbai.bcnews.ExtraKeys;
+import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.HomeNewsFragment;
 import com.sbai.bcnews.fragment.MarketFragment;
 import com.sbai.bcnews.fragment.MineFragment;
 import com.sbai.bcnews.fragment.NewsFlashFragment;
+import com.sbai.bcnews.fragment.dialog.StartDialogFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
@@ -109,6 +111,28 @@ public class MainActivity extends BaseActivity {
                         })
                         .fireFreely();
         }
+    }
+
+    private void requestStartActivities() {
+        if (!Preference.get().canShowStartPage()) {
+            return;
+        }
+        Preference.get().setTodayFirstOpenAppTime(System.currentTimeMillis());
+        String sceneType = "1";//定时弹窗
+        if (Preference.get().isFirstOpenApp()) {
+            Preference.get().setNoFirstOpenApp();
+            sceneType = "0,1";
+        }
+        //TODO 请求启动弹窗内容
+//        Apic.getPop(sceneType).tag(TAG)
+//                .callback(new Callback2D<Resp<RespWrapper<Pop>>, RespWrapper<Pop>>() {
+//                    @Override
+//                    protected void onRespSuccessData(RespWrapper<Pop> data) {
+//                        if (data.getData() != null && !data.getData().isEmpty()) {
+//                            StartDialogFragment.newInstance(data.getData()).show(getSupportFragmentManager());
+//                        }
+//                    }
+//                }).fireFreely();
     }
 
     @Override

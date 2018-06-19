@@ -62,7 +62,7 @@ public class HomeBanner extends FrameLayout {
         typedArray.recycle();
     }
 
-    private void init() {
+    protected void init() {
         //需要方形的indicator
         if (mIsRectIndicator) {
             LayoutInflater.from(getContext()).inflate(R.layout.new_home_banner, this, true);
@@ -96,6 +96,8 @@ public class HomeBanner extends FrameLayout {
             if (mPageIndicator != null) {
                 mPageIndicator.move(position);
             }
+
+            onPageSwitched(position);
         }
 
         @Override
@@ -105,6 +107,10 @@ public class HomeBanner extends FrameLayout {
             }
         }
     };
+
+    protected void onPageSwitched(int position){
+
+    }
 
     public void nextAdvertisement() {
         if (mAdapter != null && mAdapter.getCount() > 1) {
@@ -155,6 +161,34 @@ public class HomeBanner extends FrameLayout {
         }
     }
 
+    public void setHomeAdvertisement(List<Banner> informationList,int ImageStyle) {
+        if (informationList.size() == 0) {
+            setVisibility(View.GONE);
+            return;
+        } else {
+            setVisibility(View.VISIBLE);
+        }
+        filterEmptyInformation(informationList);
+
+        if (!informationList.isEmpty()) {
+            int size = informationList.size();
+            if (size < 2) {
+                mPageIndicator.setVisibility(INVISIBLE);
+            } else {
+                mPageIndicator.setVisibility(VISIBLE);
+            }
+            mPageIndicator.setCount(size);
+
+            if (mAdapter == null) {
+                mAdapter = new AdvertisementAdapter(getContext(), informationList, mOnViewClickListener,ImageStyle);
+                mViewPager.addOnPageChangeListener(mOnPageChangeListener);
+                mViewPager.setAdapter(mAdapter);
+            } else {
+                mAdapter.setNewAdvertisements(informationList);
+            }
+        }
+    }
+
     private void filterEmptyInformation(List<Banner> informationList) {
         List<Banner> removeList = new ArrayList<>();
         for (int i = 0; i < informationList.size(); i++) {
@@ -168,16 +202,27 @@ public class HomeBanner extends FrameLayout {
         }
     }
 
-    private static class AdvertisementAdapter extends PagerAdapter {
+    public static class AdvertisementAdapter extends PagerAdapter {
+
+        public static final int IMAGE_CENTER_INSIDE = 0;
+        public static final int IMAGE_CENTER_CROP = 1;
 
         private List<Banner> mList;
         private Context mContext;
         private OnViewClickListener mListener;
+        private int mImageStyle ;
 
         public AdvertisementAdapter(Context context, List<Banner> informationList, OnViewClickListener listener) {
             mContext = context;
             mList = informationList;
             mListener = listener;
+        }
+
+        public AdvertisementAdapter(Context context, List<Banner> informationList, OnViewClickListener listener,int imageStyle) {
+            mContext = context;
+            mList = informationList;
+            mListener = listener;
+            mImageStyle = imageStyle;
         }
 
         public void setNewAdvertisements(List<Banner> informationList) {
@@ -208,7 +253,13 @@ public class HomeBanner extends FrameLayout {
 
             container.addView(imageView);
             if (!TextUtils.isEmpty(information.getCover())) {
-                GlideApp.with(mContext).load(information.getCover()).centerCrop().into(imageView);
+                if(mImageStyle == IMAGE_CENTER_INSIDE){
+                    GlideApp.with(mContext).load(information.getCover())
+                            .centerInside().into(imageView);
+                }else{
+                    GlideApp.with(mContext).load(information.getCover())
+                            .centerCrop().into(imageView);
+                }
             }
             imageView.setOnClickListener(new OnClickListener() {
                 @Override

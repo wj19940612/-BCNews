@@ -123,7 +123,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (holder instanceof MyViewHolder) {
             MyViewHolder myHolder = (MyViewHolder) holder;
             myHolder.mChannel.setText(mMyChannelItems.get(position - COUNT_PRE_MY_HEADER));
-            if (position == COUNT_PRE_MY_HEADER) {
+            if (position == COUNT_PRE_MY_HEADER|| position == COUNT_PRE_OTHER_HEADER) {//0,1 item都不进行处理
                 myHolder.mDelete.setVisibility(View.INVISIBLE);
             } else {
                 myHolder.mDelete.setVisibility(View.VISIBLE);
@@ -151,7 +151,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void onClick(final View v) {
                 int position = myHolder.getAdapterPosition();
-                if (position != COUNT_PRE_MY_HEADER) {
+                if (position != COUNT_PRE_MY_HEADER && position != COUNT_PRE_OTHER_HEADER) {
                     moveMyToOther(myHolder);
                 }
             }
@@ -161,7 +161,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public boolean onLongClick(final View v) {
                 int position = myHolder.getAdapterPosition();
-                if (position != COUNT_PRE_MY_HEADER) {
+                if (position != COUNT_PRE_MY_HEADER && position != COUNT_PRE_OTHER_HEADER) {
                     mItemTouchHelper.startDrag(myHolder);
                 }
                 return true;

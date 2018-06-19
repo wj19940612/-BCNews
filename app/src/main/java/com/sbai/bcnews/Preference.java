@@ -3,6 +3,7 @@ package com.sbai.bcnews;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.TextSizeModel;
 
 
@@ -51,6 +52,8 @@ public class Preference {
         String WEB_TEXT_SIZE = "text_size";
         String FRONT_TIME = "front_time";
         String READ_TIME = "read_time";
+        String TODAY_FIRST_OPEN_APP = "first_open_app";
+
     }
 
     private static Preference sInstance;
@@ -298,6 +301,25 @@ public class Preference {
     public void setReadTime( int readTime) {
         String key = Key.READ_TIME;
         apply(key, readTime);
+    }
+
+    public boolean canShowStartPage() {
+        long firstOpenTime = mPrefs.getLong(Key.TODAY_FIRST_OPEN_APP, 0);
+        long systemTime = System.currentTimeMillis();
+        return firstOpenTime == 0 || !DateUtil.isToday(firstOpenTime, systemTime);
+    }
+
+    public void setTodayFirstOpenAppTime(long time) {
+        apply(Key.TODAY_FIRST_OPEN_APP, time);
+    }
+
+    public boolean isFirstOpenApp() {
+        String key = Key.FIRST_OPEN_APP;
+        return mPrefs.getBoolean(key, true);
+    }
+
+    public void setNoFirstOpenApp() {
+        apply(Key.FIRST_OPEN_APP, false);
     }
 
 

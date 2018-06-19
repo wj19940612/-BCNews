@@ -91,11 +91,13 @@ public class CommonBottomDialogFragment extends BottomDialogFragment {
             case R.id.firstBtn:
                 if(mOnClickListener!=null){
                     mOnClickListener.onFirstClick();
+                    dismiss();
                 }
                 break;
             case R.id.secondBtn:
                 if(mOnClickListener!=null){
                     mOnClickListener.onSecondClick();
+                    dismiss();
                 }
                 break;
         }

@@ -57,6 +57,7 @@ import butterknife.Unbinder;
 import static com.sbai.bcnews.ExtraKeys.CHANNEL;
 import static com.sbai.bcnews.ExtraKeys.HAS_BANNER;
 import static com.sbai.bcnews.fragment.HomeNewsFragment.SCROLL_GLIDING;
+import static com.sbai.bcnews.view.HomeBanner.AdvertisementAdapter.IMAGE_CENTER_CROP;
 
 /**
  * Modified by john on 24/01/2018
@@ -204,28 +205,13 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         if (mHasBanner) {
             NewsWithHeaderAdapter newsWithHeaderAdapter = new NewsWithHeaderAdapter(newsAdapter);
             mNewsAdapter = newsWithHeaderAdapter;
+            ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(true);
         } else {
             mNewsAdapter = newsAdapter;
+            ((NewsAdapter) mNewsAdapter).setHasFoot(true);
         }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNewsAdapter);
-//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                if (mOnScrollListener != null) {
-//                    mOnScrollListener.onScroll(dy);
-//                }
-//            }
-//        });
-//        mSwipeRefreshHeader.setStartRefreshListener(new RefreshHeaderView.OnStartRefreshListener() {
-//            @Override
-//            public void onStartRefresh() {
-//                if (mOnScrollListener != null) {
-//                    mOnScrollListener.onScroll(-SCROLL_GLIDING);
-//                }
-//            }
-//        });
         mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
             @Override
             public void onRefreshClick() {
@@ -367,7 +353,6 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private void updateData(List<NewsDetail> data, boolean refresh) {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
-            refreshFoot(data.size());
             mNewsAdapter.notifyDataSetChanged();
             return;
         }
@@ -383,24 +368,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         if (data.size() != 0)
             mPage++;
         mNewsWraps.addAll(NewsWrap.updateImgType(data));
-        refreshFoot(data.size());
         mNewsAdapter.notifyDataSetChanged();
-    }
-
-    private void refreshFoot(int size) {
-        if (mNewsWraps.size() >= Apic.DEFAULT_PAGE_SIZE && size < Apic.DEFAULT_PAGE_SIZE) {
-            if (mNewsAdapter instanceof NewsAdapter) {
-                ((NewsAdapter) mNewsAdapter).setHasFoot(true);
-            } else if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
-                ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(true);
-            }
-        } else {
-            if (mNewsAdapter instanceof NewsAdapter) {
-                ((NewsAdapter) mNewsAdapter).setHasFoot(false);
-            } else if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
-                ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(false);
-            }
-        }
     }
 
     private void requestBanners() {
@@ -411,13 +379,13 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
 //                    data = getTestBanner();
                     if (data == null || data.size() == 0) {
                         if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
-                            ((NewsWithHeaderAdapter) mNewsAdapter).addHeaderView(null);
+                            ((NewsWithHeaderAdapter) mNewsAdapter).setHeaderView(null);
                             mNewsAdapter.notifyDataSetChanged();
                         }
                     } else if (mHomeBanner != null) {
                         if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
-                            ((NewsWithHeaderAdapter) mNewsAdapter).addHeaderView(mHeader);
-                            mHomeBanner.setHomeAdvertisement(data);
+                            ((NewsWithHeaderAdapter) mNewsAdapter).setHeaderView(mHeader);
+                            mHomeBanner.setHomeAdvertisement(data,IMAGE_CENTER_CROP);
                             mNewsAdapter.notifyDataSetChanged();
                         }
                     }

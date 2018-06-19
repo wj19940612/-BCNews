@@ -5,17 +5,15 @@
     android:background="@color/bg_F5F5"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:adjustViewBounds="true"
-        android:background="@drawable/bg_white"
-        android:clickable="true"
+        android:layout_height="wrap_content"
         android:gravity="center"
+        android:minHeight="24dp"
         android:text="@string/sure_not_attention_person"
-        android:textColor="@color/textColorPrimary"
-        android:textSize="17sp"/>
+        android:textColor="@color/text_999"
+        android:textSize="12sp"/>
 
 
     <android.support.v7.widget.AppCompatTextView

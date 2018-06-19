@@ -64,8 +64,12 @@ public class NewsWithHeaderAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
 
-    public void addHeaderView(View view) {
+    public void setHeaderView(View view) {
         mHeaderView = view;
+    }
+
+    public View getHeaderView(){
+        return mHeaderView;
     }
 
 

@@ -237,7 +237,7 @@ public class HomeNewsFragment extends BaseFragment {
                 getResources().getDisplayMetrics()));
         mTabLayout.setSelectedIndicatorMarginBottom((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
                 getResources().getDisplayMetrics()));
-        mTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+        mTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         int indicatorHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3,
                 getResources().getDisplayMetrics());
         mTabLayout.setSelectedIndicatorThickness(indicatorHeight);
@@ -252,6 +252,9 @@ public class HomeNewsFragment extends BaseFragment {
             @Override
             protected void onRespSuccessData(List<String> data) {
                 ChannelCacheModel contrastedChannelCacheModel = ChannelCache.contrastChannel(channelCacheModel, data);
+                if (!contrastedChannelCacheModel.getMyChannelEntities().contains(getString(R.string.attention))) {
+                    contrastedChannelCacheModel.getMyChannelEntities().add(0, getString(R.string.attention));
+                }
                 ChannelCache.modifyChannel(contrastedChannelCacheModel.getMyChannelEntities(), contrastedChannelCacheModel.getOtherChannelEntities());
                 updateChannel(contrastedChannelCacheModel, true);
             }
@@ -282,8 +285,8 @@ public class HomeNewsFragment extends BaseFragment {
         mMyChannels.addAll(myChannelEntities);
         mTabLayout.setViewPager(mViewPager);
         mPagerAdapter.notifyDataSetChanged();
-        mViewPager.setCurrentItem(0, false);
-        mTabLayout.selectItem(0);
+        mViewPager.setCurrentItem(1, false);
+        mTabLayout.selectItem(1);
     }
 
 
@@ -454,8 +457,14 @@ public class HomeNewsFragment extends BaseFragment {
         public Fragment getItem(int position) {
             String title = mMyChannelEntities.get(position);
             if (position == 0) {
+                AttentionFragment attentionFragment = AttentionFragment.newsIntance(title);
+                return attentionFragment;
+            } else if (position == 1) {
                 NewsFragment newsFragment = NewsFragment.newsInstance(true, title);
                 return newsFragment;
+            }else if(title.equals(mContext.getString(R.string.candy))){
+                CandyListFragment candyListFragment = new CandyListFragment();
+                return candyListFragment;
             }
             NewsFragment newsFragment = NewsFragment.newsInstance(false, title);
             return newsFragment;

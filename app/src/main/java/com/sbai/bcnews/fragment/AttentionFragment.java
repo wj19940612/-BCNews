@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
@@ -32,6 +33,8 @@ import com.sbai.bcnews.utils.news.NewsAdapter;
 import com.sbai.bcnews.utils.news.NewsWithHeaderAdapter;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
+import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
+import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +48,15 @@ import static com.sbai.bcnews.ExtraKeys.CHANNEL;
 public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
     public static final int HEADER_HEIGHT = 60;
+    @BindView(R.id.swipe_refresh_header)
+    RefreshHeaderView mSwipeRefreshHeader;
+    @BindView(R.id.swipe_target)
+    RecyclerView mSwipeTarget;
+    @BindView(R.id.swipe_load_more_footer)
+    LoadMoreFooterView mSwipeLoadMoreFooter;
+    @BindView(R.id.swipeToLoadLayout)
+    SwipeToLoadLayout mSwipeToLoadLayout;
 
-    @BindView(R.id.emptyView)
-    LinearLayout mEmptyView;
-    @BindView(R.id.emptyRecyclerView)
-    RecyclerView mEmptyRecyclerView;
     private Unbinder mBind;
 
     private RecommendAdapter mRecommendAdapter;
@@ -58,14 +65,24 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     private List<NewsWrap> mNewsWraps;
     private NewsWithHeaderAdapter mNewsAdapter;
 
+    private LinearLayout mEmptyView;
+    private RecyclerView mEmptyRecyclerView;
     private RelativeLayout mHeaderView;
     private String mChannel;
     private int mPage;
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         public void onItemClick();
 
-        public void onAttention(boolean isAttention);
+        public void onAttention(NewsAuthor newsAuthor,boolean isAttention,int position);
+    }
+
+    public static AttentionFragment newsIntance(String channel) {
+        AttentionFragment attentionFragment = new AttentionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(CHANNEL, channel);
+        attentionFragment.setArguments(bundle);
+        return attentionFragment;
     }
 
     @Override
@@ -87,6 +104,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initEmptyView();
         initView();
         loadData(true);
         requestMyAttention();
@@ -132,8 +150,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
             }
 
             @Override
-            public void onAttention(boolean isAttention) {
-
+            public void onAttention(NewsAuthor newsAuthor,boolean isAttention,int position) {
             }
         });
         mEmptyRecyclerView.setAdapter(mRecommendAdapter);
@@ -151,7 +168,15 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         });
 
         mNewsAdapter = new NewsWithHeaderAdapter(newsAdapter);
+        mNewsAdapter.setHasFoot(true);
+        mSwipeTarget.setLayoutManager(new LinearLayoutManager(getContext()));
+        mSwipeTarget.setAdapter(mNewsAdapter);
         initHeadView();
+    }
+
+    private void initEmptyView() {
+        mEmptyView = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.view_empty_candy, null);
+        mEmptyRecyclerView = mEmptyView.findViewById(R.id.emptyRecyclerView);
     }
 
     private void initHeadView() {
@@ -203,13 +228,21 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                 }).fireFreely();
     }
 
+    private void setEmptyView(boolean isEmpty) {
+        if (isEmpty) {
+            mNewsAdapter.setHeaderView(mEmptyView);
+            mNewsAdapter.notifyDataSetChanged();
+        } else {
+            mNewsAdapter.setHeaderView(null);
+        }
+    }
+
     private void updateData(List<NewsDetail> data, boolean refresh) {
         if (refresh) {
             mNewsWraps.clear();
         }
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
-            refreshFoot(data.size());
             mNewsAdapter.notifyDataSetChanged();
             return;
         }
@@ -221,20 +254,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         if (data.size() != 0)
             mPage++;
         mNewsWraps.addAll(NewsWrap.updateImgType(data));
-        refreshFoot(data.size());
         mNewsAdapter.notifyDataSetChanged();
-    }
-
-    private void refreshFoot(int size) {
-        if (mNewsWraps.size() >= Apic.DEFAULT_PAGE_SIZE && size < Apic.DEFAULT_PAGE_SIZE) {
-            if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
-                ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(true);
-            }
-        } else {
-            if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
-                ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(false);
-            }
-        }
     }
 
     private void requestMyAttention() {
@@ -242,43 +262,48 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void loadMyAttentionData(List<NewsAuthor> newsAuthorList) {
-        ImageView[] imageViews = new ImageView[4];
-        imageViews[0] = mHeaderView.findViewById(R.id.head1);
-        imageViews[1] = mHeaderView.findViewById(R.id.head2);
-        imageViews[2] = mHeaderView.findViewById(R.id.head3);
-        imageViews[3] = mHeaderView.findViewById(R.id.head4);
+        if (newsAuthorList != null && newsAuthorList.size() > 0) {
+            ImageView[] imageViews = new ImageView[4];
+            imageViews[0] = mHeaderView.findViewById(R.id.head1);
+            imageViews[1] = mHeaderView.findViewById(R.id.head2);
+            imageViews[2] = mHeaderView.findViewById(R.id.head3);
+            imageViews[3] = mHeaderView.findViewById(R.id.head4);
 
-        int displaySize = newsAuthorList.size() > 0 ? newsAuthorList.size() : 0;
-        for (int i = 0; i < 4; i++) {
-            if(i<displaySize){
-                imageViews[i].setVisibility(View.VISIBLE);
-                GlideApp.with(getActivity())
-                        .load("")
-                        .placeholder(R.drawable.ic_default_head_portrait)
-                        .circleCrop()
-                        .into(imageViews[i]);
-            }else{
-                imageViews[i].setVisibility(View.GONE);
+            int displaySize = newsAuthorList.size() > 0 ? newsAuthorList.size() : 0;
+            for (int i = 0; i < 4; i++) {
+                if (i < displaySize) {
+                    imageViews[i].setVisibility(View.VISIBLE);
+                    GlideApp.with(getActivity())
+                            .load("")
+                            .placeholder(R.drawable.ic_default_head_portrait)
+                            .circleCrop()
+                            .into(imageViews[i]);
+                } else {
+                    imageViews[i].setVisibility(View.GONE);
+                }
+            }
+            if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
+                if (mNewsAdapter.getHeaderView() == null || mNewsAdapter.getHeaderView() != mEmptyView) {
+                    mNewsAdapter.setHeaderView(mHeaderView);
+                    mNewsAdapter.notifyDataSetChanged();
+                }
+            }
+        } else {
+            if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
+                mNewsAdapter.setHeaderView(null);
+                mNewsAdapter.notifyDataSetChanged();
             }
         }
     }
 
-    private void loadEmptyData(){
+    private void loadEmptyData() {
 
     }
 
-    private void updateEmptyView(List<NewsAuthor> newsAuthorList){
+    private void updateEmptyView(List<NewsAuthor> newsAuthorList) {
         mNewsAuthorList.clear();
         mNewsAuthorList.addAll(newsAuthorList);
         mRecommendAdapter.notifyDataSetChanged();
-    }
-
-    private void setEmptyView(boolean showEmptyView){
-        if(showEmptyView){
-            mEmptyView.setVisibility(View.VISIBLE);
-        }else{
-            mEmptyView.setVisibility(View.GONE);
-        }
     }
 
     private void refreshReadStatus() {
@@ -293,7 +318,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         private Context mContext;
         private OnItemClickListener mOnItemClickListener;
 
-        public RecommendAdapter(List<NewsAuthor> newsAuthors, Context context,OnItemClickListener onItemClickListener) {
+        public RecommendAdapter(List<NewsAuthor> newsAuthors, Context context, OnItemClickListener onItemClickListener) {
             mNewsAuthors = newsAuthors;
             mContext = context;
             mOnItemClickListener = onItemClickListener;

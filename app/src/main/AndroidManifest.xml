@@ -203,6 +203,10 @@
             android:name=".activity.ModifyPassActivity"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".activity.MyAttentionActivity"
+            android:screenOrientation="portrait"/>
+
         <service android:name=".service.DownloadService"/>
 
         <!-- third page -->
