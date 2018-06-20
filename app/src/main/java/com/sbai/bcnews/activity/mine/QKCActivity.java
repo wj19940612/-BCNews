@@ -2,7 +2,7 @@ package com.sbai.bcnews.activity.mine;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
@@ -31,20 +31,21 @@ import butterknife.OnClick;
 
 public class QKCActivity extends BaseActivity implements RandomLocationLayout.OnCoinClickListener {
 
+
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.randomLayout)
-    RandomLocationLayout mRandomLayout;
+    @BindView(R.id.mining)
+    TextView mMining;
     @BindView(R.id.qkcNumber)
     TextView mQkcNumber;
     @BindView(R.id.rate)
     TextView mRate;
-    @BindView(R.id.hashrate)
-    TextView mHashrate;
-    @BindView(R.id.lookDetail)
-    TextView mLookDetail;
-    @BindView(R.id.qkcDetail)
-    RelativeLayout mQkcDetail;
+    @BindView(R.id.howPlusHashRate)
+    TextView mHowPlusHashRate;
+    @BindView(R.id.randomLayout)
+    RandomLocationLayout mRandomLayout;
+    @BindView(R.id.exchange)
+    ImageView mExchange;
     private MyIntegral mMyIntegral;
 
 
@@ -79,15 +80,6 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
     private void requestNotGet() {
         requestQKCNumber();
         requestCanGetQkcList();
-//        ArrayList<QKC> qkcs = new ArrayList<>();
-//        for (int i = 0; i < 50; i++) {
-//            QKC qkc = new QKC();
-//            qkc.setIntegral(i*10+0.25);
-//            qkc.setId(String.valueOf(i));
-//            qkcs.add(qkc);
-//        }
-//        mRandomLayout.setQksList(qkcs);
-
     }
 
     private void requestQKCNumber() {
@@ -117,6 +109,13 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
                     }
                 })
                 .fire();
+//        ArrayList<QKC> qkcs = new ArrayList<>();
+//        for (int i = 0; i < 21; i++) {
+//            QKC qkc = new QKC();
+//            qkc.setIntegral(i);
+//            qkcs.add(qkc);
+//        }
+//        mRandomLayout.setQksList(qkcs);
     }
 
     private void setQKCAndRate(MyIntegral data) {
@@ -145,15 +144,16 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
         } else {
             ToastUtil.show(R.string.http_error_network);
         }
+
     }
 
-    @OnClick({R.id.lookDetail, R.id.hashrate, R.id.exchange})
+    @OnClick({R.id.qkcNumber, R.id.howPlusHashRate, R.id.exchange})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.lookDetail:
+            case R.id.qkcNumber:
                 Launcher.with(getActivity(), QKCDetailActivity.class).execute();
                 break;
-            case R.id.hashrate:
+            case R.id.howPlusHashRate:
                 new PromoteHashRateWayDialogFragment().show(getSupportFragmentManager());
                 break;
             case R.id.exchange:

@@ -207,16 +207,11 @@ public class MineFragment extends BaseFragment {
             mUserName.setText(userInfo.getUserName());
             updateUserCollectNumber(userInfo.getCollectCount());
             updateUserReadHistory(userInfo.getReadCount());
-            if (userInfo.isAuthorIsCheck()) {
+            if (userInfo.isAuthor()) {
                 mContribute.setText(R.string.author_workbench);
-
-                boolean isAuthor = userInfo.getAuthorType() != Author.AUTHOR_STATUS_ORDINARY;
-                mHeadPortrait.setLabelImageViewVisible(isAuthor);
-                if (isAuthor) {
-                    boolean isOfficialAuthor = userInfo.getAuthorType() == Author.AUTHOR_STATUS_OFFICIAL;
-                    mHeadPortrait.setLabelSelected(isOfficialAuthor);
-                }
-
+                mHeadPortrait.setLabelImageViewVisible(true);
+                boolean isOfficialAuthor = userInfo.getAuthorType() == Author.AUTHOR_STATUS_OFFICIAL;
+                mHeadPortrait.setLabelSelected(isOfficialAuthor);
 
             } else {
                 mHeadPortrait.setLabelImageViewVisible(false);
@@ -315,7 +310,7 @@ public class MineFragment extends BaseFragment {
                 if (!LocalUser.getUser().isLogin()) {
                     login();
                 } else {
-                    if (LocalUser.getUser().getUserInfo().isAuthorIsCheck()) {
+                    if (LocalUser.getUser().getUserInfo().isAuthor()) {
                         Launcher.with(getActivity(), AuthorWorkbenchActivity.class).execute();
                     } else {
                         requestOperationWeChatAccount();

@@ -248,7 +248,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private int mScrollIdleTime;
     private int mReadArticleTime;
-    private Author mAuthor;
 
 
     @Override
@@ -480,12 +479,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                 break;
             case R.id.allComment:
             case R.id.commentCount:
-                NewsDetail newsDetail = null;
-                if (mNetNewsDetail != null) {
-                    newsDetail = mNetNewsDetail;
-                } else {
-                    newsDetail = mNewsDetail;
-                }
+                NewsDetail newsDetail = getNewsDetail();
                 if (newsDetail != null) {
                     Launcher.with(getActivity(), NewsViewPointListActivity.class)
                             .putExtra(ExtraKeys.DATA, newsDetail)
@@ -499,25 +493,35 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                     Launcher.with(getActivity(), LoginActivity.class).execute();
                 break;
             case R.id.authorInfo:
-                if (mAuthor != null && mAuthor.getAuthorType() != Author.AUTHOR_STATUS_ORDINARY)
-                    Launcher.with(getActivity(), AuthorActivity.class).execute();
+                NewsDetail newsDetail1 = getNewsDetail();
+                if (newsDetail1 != null && newsDetail1.getRankType() != Author.AUTHOR_STATUS_ORDINARY)
+                    Launcher.with(getActivity(), AuthorActivity.class)
+                            .putExtra(ExtraKeys.ID,newsDetail1.getAuthorId())
+                            .execute();
                 break;
 
         }
     }
 
+
+    private NewsDetail getNewsDetail() {
+        return mNetNewsDetail != null ? mNetNewsDetail : mNewsDetail;
+    }
+
     private void attentionAuthor() {
-        if (mAuthor != null)
-            Apic.attentionAuthor(mAuthor.getId())
+        final NewsDetail newsDetail = getNewsDetail();
+        if (newsDetail != null) {
+            final int attentionType = newsDetail.getIsConcern() == Author.AUTHOR_STATUS_SPECIAL ? Author.AUTHOR_IS_NOT_ATTENTION : Author.AUTHOR_IS_ALREADY_ATTENTION;
+            Apic.attentionAuthor(newsDetail.getAuthorId(), attentionType)
                     .tag(TAG)
                     .callback(new Callback<Resp<Object>>() {
                         @Override
                         protected void onRespSuccess(Resp<Object> resp) {
-                            // TODO: 2018/6/14 关注作者
+                            newsDetail.setIsConcern(attentionType);
                         }
                     })
                     .fire();
-
+        }
     }
 
     protected void requestNewsPraise(final NewsDetail newsDetail) {
@@ -575,7 +579,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         if (LocalUser.getUser().isLogin()) {
             startScheduleJob(TIME_SECOND);
         }
-        requestAuthorInfo();
     }
 
 
@@ -968,6 +971,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                     mNetNewsDetail = data;
                     updatePraiseCollect(data);
                 }
+                updateAuthorInfo(data);
             }
 
             @Override
@@ -1003,9 +1007,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private void updateReadNumber(NewsDetail newsDetail) {
         int readNumber = 0;
-        if (mAuthor != null) {
-            readNumber = mAuthor.getTotalRedNumber();
-        }
+        readNumber = newsDetail.getReaderCount();
         mPubTime.setText(getString(R.string.news_publish_time_and_red_number, DateUtil.formatNewsStyleTime(newsDetail.getReleaseTime()), readNumber));
     }
 
@@ -1081,34 +1083,18 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         }
     }
 
-    private void requestAuthorInfo() {
-        // TODO: 2018/6/11 请求作者信息
-        Apic.requestAuthorInfo()
-                .tag(TAG)
-                .callback(new Callback2D<Resp<Author>, Author>() {
-                    @Override
-                    protected void onRespSuccessData(Author data) {
-                        updateAuthorInfo(data);
-                    }
-                })
-                .fire();
-    }
 
-    private void updateAuthorInfo(Author author) {
-        mAuthor = author;
-        boolean isAuthor = author.getAuthorType() != Author.AUTHOR_STATUS_ORDINARY;
+    private void updateAuthorInfo(NewsDetail data) {
+        boolean isAuthor = data.getRankType() != Author.AUTHOR_STATUS_ORDINARY;
         mHasLabelLayout.setLabelImageViewVisible(isAuthor);
+        mHasLabelLayout.setImageSrc(data.getUserPortrait());
         if (isAuthor) {
-            boolean isOfficialAuthor = author.getAuthorType() == Author.AUTHOR_STATUS_OFFICIAL;
+            boolean isOfficialAuthor = data.getRankType() == Author.AUTHOR_STATUS_OFFICIAL;
             mHasLabelLayout.setLabelSelected(isOfficialAuthor);
         }
-
-        if (mNetNewsDetail != null) {
-            updateReadNumber(mNetNewsDetail);
-        } else if (mNewsDetail != null) {
-            updateReadNumber(mNewsDetail);
-        }
-
+        updateReadNumber(data);
+        mArticleIntroduce.setText(data.getSummary());
+        mAuthorAttention.setSelected(data.getIsConcern()==Author.AUTHOR_IS_ALREADY_ATTENTION);
     }
 
     private void updatePraiseCollect(NewsDetail newsDetail) {

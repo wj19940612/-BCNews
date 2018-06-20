@@ -23,8 +23,8 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.News;
-import com.sbai.bcnews.model.NewsAuthor;
 import com.sbai.bcnews.model.NewsDetail;
+import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Display;
@@ -60,7 +60,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     private Unbinder mBind;
 
     private RecommendAdapter mRecommendAdapter;
-    private List<NewsAuthor> mNewsAuthorList;
+    private List<Author> mNewsAuthorList;
 
     private List<NewsWrap> mNewsWraps;
     private NewsWithHeaderAdapter mNewsAdapter;
@@ -74,7 +74,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     public interface OnItemClickListener {
         public void onItemClick();
 
-        public void onAttention(NewsAuthor newsAuthor,boolean isAttention,int position);
+        public void onAttention(Author newsAuthor,boolean isAttention,int position);
     }
 
     public static AttentionFragment newsIntance(String channel) {
@@ -150,7 +150,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
             }
 
             @Override
-            public void onAttention(NewsAuthor newsAuthor,boolean isAttention,int position) {
+            public void onAttention(Author newsAuthor,boolean isAttention,int position) {
             }
         });
         mEmptyRecyclerView.setAdapter(mRecommendAdapter);
@@ -262,7 +262,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 //        })
     }
 
-    private void loadMyAttentionData(List<NewsAuthor> newsAuthorList) {
+    private void loadMyAttentionData(List<Author> newsAuthorList) {
         if (newsAuthorList != null && newsAuthorList.size() > 0) {
             ImageView[] imageViews = new ImageView[4];
             imageViews[0] = mHeaderView.findViewById(R.id.head1);
@@ -301,7 +301,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
     }
 
-    private void updateEmptyView(List<NewsAuthor> newsAuthorList) {
+    private void updateEmptyView(List<Author> newsAuthorList) {
         mNewsAuthorList.clear();
         mNewsAuthorList.addAll(newsAuthorList);
         mRecommendAdapter.notifyDataSetChanged();
@@ -315,11 +315,11 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
     static class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        private List<NewsAuthor> mNewsAuthors;
+        private List<Author> mNewsAuthors;
         private Context mContext;
         private OnItemClickListener mOnItemClickListener;
 
-        public RecommendAdapter(List<NewsAuthor> newsAuthors, Context context, OnItemClickListener onItemClickListener) {
+        public RecommendAdapter(List<Author> newsAuthors, Context context, OnItemClickListener onItemClickListener) {
             mNewsAuthors = newsAuthors;
             mContext = context;
             mOnItemClickListener = onItemClickListener;
@@ -358,7 +358,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(NewsAuthor newsAuthor, Context context) {
+            private void bindingData(Author newsAuthor, Context context) {
 
             }
         }

@@ -25,70 +25,80 @@
         app:titleTextColor="@android:color/white"
         app:titleTextSize="17sp"/>
 
-    <RelativeLayout
-        android:id="@+id/qkcDetail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#40FFFFFF"
-        android:minHeight="25dp"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/common_padding"
-        android:paddingRight="@dimen/common_padding"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleBar">
 
-        <TextView
-            android:id="@+id/qkcNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
-            tools:text="@string/qkc_number"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/qkcNumber"
-            android:background="@drawable/bg_white_round"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:paddingBottom="2dp"
-            android:paddingLeft="7dp"
-            android:paddingRight="7dp"
-            android:paddingTop="2dp"
-            android:text="@string/mining"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"/>
-
-        <TextView
-            android:id="@+id/lookDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:drawableRight="@drawable/ic_common_right_arrow"
-            android:text="@string/look_detail"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"/>
-
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/exchange"
+    <TextView
+        android:id="@+id/mining"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/ic_exchange"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qkcDetail"/>
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="19dp"
+        android:layout_marginTop="23dp"
+        android:layout_toRightOf="@+id/qkcNumber"
+        android:background="@drawable/bg_white_round"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingBottom="2dp"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:paddingTop="2dp"
+        android:text="@string/mining"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="@string/mine_qkc"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/mining"
+        app:layout_constraintLeft_toRightOf="@+id/mining"/>
+
+    <TextView
+        android:id="@+id/qkcNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="6dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/ic_common_right_arrow"
+        android:textColor="@android:color/white"
+        android:textSize="28sp"
+        app:layout_constraintLeft_toLeftOf="@+id/mining"
+        app:layout_constraintTop_toBottomOf="@+id/mining"
+        tools:text="8222.55"/>
+
+
+    <TextView
+        android:id="@+id/rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:layout_constraintLeft_toLeftOf="@+id/qkcNumber"
+        app:layout_constraintTop_toBottomOf="@+id/qkcNumber"
+        tools:text="@string/now_hashrate"/>
+
+
+    <TextView
+        android:id="@+id/howPlusHashRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/how_plus_hash_rate"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        app:layout_constraintLeft_toLeftOf="@+id/qkcNumber"
+        app:layout_constraintTop_toBottomOf="@+id/rate"/>
 
     <com.sbai.bcnews.view.RandomLocationLayout
         android:id="@+id/randomLayout"
@@ -96,39 +106,18 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="25dp"
-        app:layout_constraintTop_toBottomOf="@+id/qkcDetail"/>
+        android:minHeight="250dp"
+        app:layout_constraintTop_toBottomOf="@+id/howPlusHashRate"/>
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/exchange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="23dp"
-        android:background="@drawable/bg_qkc_now"
-        android:gravity="center_vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="23dp"
+        android:src="@drawable/ic_exchange"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar"/>
 
-        <TextView
-            android:id="@+id/rate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="17dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            tools:text="@string/now_hashrate"/>
-
-        <TextView
-            android:id="@+id/hashrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:background="@drawable/bg_plus_qkc"
-            android:gravity="center"
-            android:text="@string/plus_hashrate"
-            android:textColor="@color/text_7540"/>
-    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

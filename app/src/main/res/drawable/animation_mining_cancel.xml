@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="true">
+    <item
+        android:drawable="@drawable/ic_mining_cancel_1"
+        android:duration="@android:integer/config_shortAnimTime"/>
+
+    <item
+        android:drawable="@drawable/ic_mining_cancel_2"
+        android:duration="@android:integer/config_shortAnimTime"/>
+
+    <item
+        android:drawable="@drawable/ic_mining_cancel_3"
+        android:duration="@android:integer/config_shortAnimTime"/>
+
+    <item
+        android:drawable="@drawable/ic_mining_cancel_4"
+        android:duration="@android:integer/config_shortAnimTime"/>
+
+    <item
+        android:drawable="@drawable/ic_mining_cancel_5"
+        android:duration="@android:integer/config_shortAnimTime"/>
+
+    <item
+        android:drawable="@drawable/ic_mining_cancel_6"
+        android:duration="@android:integer/config_shortAnimTime"/>
+
+    <item
+        android:drawable="@drawable/ic_mining_cancel_7"
+        android:duration="@android:integer/config_shortAnimTime"/>
+
+    <item
+        android:drawable="@drawable/ic_mining_cancel_8"
+        android:duration="@android:integer/config_shortAnimTime"/>
+
+    <item
+        android:drawable="@drawable/ic_mining_cancel_9"
+        android:duration="@android:integer/config_shortAnimTime"/>
+
+</animation-list>

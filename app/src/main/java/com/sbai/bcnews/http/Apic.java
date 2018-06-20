@@ -19,18 +19,72 @@ public class Apic {
     public static final int DEFAULT_PAGE_SIZE = 20;
 
 
-    // TODO: 2018/6/11 请求作者文章
-    public static Api requestAuthorArticle(int page) {
-        return Api.get("");
+    /**
+     * /api/news-user/page/bitcoin.do
+     * GET
+     * 用户查询作者文章--薛松
+     *
+     * @param page
+     * @param authorId
+     * @return
+     */
+    public static Api requestAuthorArticle(int page, int authorId) {
+        return Api.get("/api/news-user/page/bitcoin.do",
+                new ReqParams()
+                        .put("page", page)
+                        .put("authorId", authorId)
+                        .put("size", DEFAULT_PAGE_SIZE));
     }
 
-    public static Api requestAuthorInfo() {
-        return Api.get("");
+    /**
+     * /api/news-user/author/workbench.do
+     * GET
+     * 作者工作台--薛松
+     *
+     * @return
+     */
+    public static Api requestWorkbenchAuthorInfo() {
+        return Api.get("/api/news-user/author/workbench.do");
     }
 
-    // TODO: 2018/6/14 关注作者
-    public static Api attentionAuthor(String id) {
-        return Api.post("");
+    /**
+     * /api/news-user/author/detail.do
+     * GET
+     * 作者详情--薛松
+     *
+     * @return
+     */
+    public static Api requestAuthorInfo(int authorId) {
+        return Api.get("/api/news-user/author/detail.do", new ReqParams().put("authorId", authorId));
+    }
+
+    /**
+     * HTTP
+     * /api/news-user/author/bitcoin.do
+     * GET
+     * 作者的文章--薛松
+     *
+     * @return
+     */
+    public static Api requestAuthorWorkbenchArticle(int page) {
+        return Api.get("/api/news-user/author/bitcoin.do", new ReqParams().put("page", page).put("size", DEFAULT_PAGE_SIZE));
+    }
+
+
+    /**
+     * /api/news-user/author/concern.do
+     * POST
+     * 关注、取消关注作者--薛松
+     *
+     * @param authorId
+     * @param type     1关注,0取消关注
+     * @return
+     */
+    public static Api attentionAuthor(int authorId, int type) {
+        return Api.post("/api/news-user/author/concern.do",
+                new ReqParams()
+                        .put("authorId", authorId)
+                        .put("type", type));
     }
 
 
