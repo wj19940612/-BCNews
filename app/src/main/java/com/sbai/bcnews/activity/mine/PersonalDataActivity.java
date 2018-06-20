@@ -171,7 +171,7 @@ public class PersonalDataActivity extends BaseActivity {
         if (!TextUtils.isEmpty(data.getUserProvince()) && !TextUtils.isEmpty(data.getUserCity())) {
             mLocation.setText(data.getUserProvince() + " " + data.getUserCity());
         }
-        updateUserInfoModifyEnable(!data.isAuthorIsCheck());
+        updateUserInfoModifyEnable(!data.isAuthor());
     }
 
     private void updateUserInfoModifyEnable(boolean viewEnable) {

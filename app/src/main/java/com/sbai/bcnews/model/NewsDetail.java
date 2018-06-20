@@ -33,7 +33,6 @@ public class NewsDetail implements Parcelable {
     private int collect;          //是否收藏 0-未收藏 1-已收藏
     private long updateTime;      //更新时间
     private long readTime;        //阅读时机
-    private String author;       //作者
 
     private String advertCopyWriter;//广告文案
     private String advertName;//广告名
@@ -41,6 +40,53 @@ public class NewsDetail implements Parcelable {
     private int isAdvert;//是否广告 0不是 1是
     private int urlType; //0-h5 1-下载
 
+    private String author;       //作者
+    private int rankType;
+    private int rankTypeStr;
+    private int isConcern;      //是否关注:0未关注,1关注
+    private int userPortrait;
+    private int authorId;
+
+
+    public int getRankType() {
+        return rankType;
+    }
+
+    public void setRankType(int rankType) {
+        this.rankType = rankType;
+    }
+
+    public int getRankTypeStr() {
+        return rankTypeStr;
+    }
+
+    public void setRankTypeStr(int rankTypeStr) {
+        this.rankTypeStr = rankTypeStr;
+    }
+
+    public int getIsConcern() {
+        return isConcern;
+    }
+
+    public void setIsConcern(int isConcern) {
+        this.isConcern = isConcern;
+    }
+
+    public int getUserPortrait() {
+        return userPortrait;
+    }
+
+    public void setUserPortrait(int userPortrait) {
+        this.userPortrait = userPortrait;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
 
     public String getAuthor() {
         return author;

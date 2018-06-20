@@ -13,7 +13,9 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.PersonalDataActivity;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
@@ -29,7 +31,6 @@ import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -79,35 +80,25 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
     }
 
     private void requestAuthorInfo() {
-
-        // TODO: 2018/6/11 monis hujku
-        Author author = new Author();
-        author.setTotalFansNumber(55);
-        author.setTotalPraiseNumber(98888888);
-        author.setTotalRedNumber(88);
-        author.setUserName("溺水的鱼");
-        author.setYesterdayFansNumber(555);
-        author.setYesterdayPraiseNumber(99900000);
-        author.setYesterdayRedNumber(888);
-        setData(author);
-        Apic.requestAuthorInfo()
+        Apic.requestWorkbenchAuthorInfo()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<Author>, Author>() {
                     @Override
                     protected void onRespSuccessData(Author data) {
-//                        mAuthorWorkbenchHeadView.setData(data);
+                        updateAuthorData(data);
                     }
                 })
                 .fire();
     }
 
     private void requestAuthorArticle() {
-        Apic.requestAuthorArticle(mPage)
+        Apic.requestAuthorWorkbenchArticle(mPage)
                 .tag(TAG)
-                .callback(new Callback2D<List<AuthorArticle>, List<AuthorArticle>>() {
+                .callback(new Callback<ListResp<AuthorArticle>>() {
                     @Override
-                    protected void onRespSuccessData(List<AuthorArticle> data) {
-                        updateArticle(data);
+                    protected void onRespSuccess(ListResp<AuthorArticle> resp) {
+                        if (resp != null && resp.getListData() != null)
+                            updateArticle(resp.getListData());
                     }
 
                     @Override
@@ -117,16 +108,6 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
                     }
                 })
                 .fire();
-
-        ArrayList<AuthorArticle> authorArticles = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            AuthorArticle authorArticle = new AuthorArticle();
-            authorArticle.setTitle("第 " + i + " 条");
-            authorArticle.setReaderCount(i);
-            authorArticle.setReviewCount(i);
-            authorArticles.add(authorArticle);
-        }
-        mAuthorArticleAdapter.addAll(authorArticles);
     }
 
     private void initView() {
@@ -171,17 +152,19 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
         });
     }
 
-    public void setData(Author author) {
+    public void updateAuthorData(Author author) {
         mHasLabelLayout.setImageSrc(author.getUserPortrait());
         mNickName.setText(author.getUserName());
 
-        setYesterdayData(mYesterdayRedNumber, author.getYesterdayRedNumber());
-        setYesterdayData(mYesterdayFansNumber, author.getYesterdayFansNumber());
-        setYesterdayData(mYesterdayPraiseNumber, author.getYesterdayPraiseNumber());
+        setYesterdayData(mYesterdayRedNumber, author.getYesterdayReadCount());
+        setYesterdayData(mYesterdayFansNumber, author.getYesterdayFansCount());
+        setYesterdayData(mYesterdayPraiseNumber, author.getYesterdayPraiseCount());
 
-        setTotalData(mTotalRedNumber, author.getTotalRedNumber());
-        setTotalData(mTotalPraiseNumber, author.getTotalPraiseNumber());
-        setTotalData(mTotalFansNumber, author.getTotalFansNumber());
+        setTotalData(mTotalRedNumber, author.getShowReadCount());
+        setTotalData(mTotalPraiseNumber, author.getPraiseCount());
+        setTotalData(mTotalFansNumber, author.getFansCount());
+
+        setMyArticleTotal(author.getArticleCount());
     }
 
     private void setYesterdayData(TextView textView, int data) {
@@ -213,6 +196,7 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
     @Override
     public void onRefresh() {
         mPage = 0;
+        requestAuthorArticle();
     }
 
     private void updateArticle(List<AuthorArticle> data) {

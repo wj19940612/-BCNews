@@ -126,12 +126,12 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
             });
 
             mTitle.setText(data.getTitle());
-            mTimeLine.setText(DateUtil.formatDefaultStyleTime(data.getCreateTime()));
+            mTimeLine.setText(DateUtil.formatDefaultStyleTime(data.getReleaseTime()));
             if (pageType == PAGE_TYPE_AUTHOR_INFO) {
                 mReviewNumber.setVisibility(View.GONE);
             }
-            mReadNumber.setText(context.getString(R.string.read_number, data.getReaderCount()));
-            mReviewNumber.setText(context.getString(R.string.review_number, data.getReviewCount()));
+            mReadNumber.setText(context.getString(R.string.read_number, data.getShowReadCount()));
+            mReviewNumber.setText(context.getString(R.string.review_number, data.getDiscussCount()));
             List<String> imgs = data.getImgs();
             if (imgs != null && !imgs.isEmpty()) {
                 mImage.setVisibility(View.VISIBLE);
@@ -176,9 +176,9 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
             });
 
             mTitle.setText(data.getTitle());
-            mTimeLine.setText(DateUtil.formatDefaultStyleTime(data.getCreateTime()));
-            mReadNumber.setText(context.getString(R.string.read_number, data.getReaderCount()));
-            mReviewNumber.setText(context.getString(R.string.review_number, data.getReviewCount()));
+            mTimeLine.setText(DateUtil.formatDefaultStyleTime(data.getReleaseTime()));
+            mReadNumber.setText(context.getString(R.string.read_number, data.getShowReadCount()));
+            mReviewNumber.setText(context.getString(R.string.review_number, data.getDiscussCount()));
             if (pageType == PAGE_TYPE_AUTHOR_INFO) {
                 mReviewNumber.setVisibility(View.GONE);
             }

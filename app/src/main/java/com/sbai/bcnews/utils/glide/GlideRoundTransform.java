@@ -10,9 +10,9 @@ import android.support.annotation.NonNull;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.sbai.bcnews.utils.Display;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
 /**
@@ -23,9 +23,9 @@ import java.security.MessageDigest;
  */
 public class GlideRoundTransform extends BitmapTransformation {
 
-    private static final String ID = "com.bumptech.glide.transformations.FillSpace";
-
-    private float radius = 0f;
+    private static final String ID = "com.sbai.bcnews.utils.glide.GlideRoundTransform";
+    private static final byte[] ID_BYTES = ID.getBytes(CHARSET);
+    private int radius = 4;
 
     public GlideRoundTransform(Context context) {
         this(context, 4);
@@ -37,7 +37,8 @@ public class GlideRoundTransform extends BitmapTransformation {
 
     @Override
     protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
-        return roundCrop(pool, toTransform);
+//        return roundCrop(pool, toTransform);
+        return TransformationUtils.roundedCorners(pool, toTransform, radius);
     }
 
 
@@ -59,12 +60,18 @@ public class GlideRoundTransform extends BitmapTransformation {
     }
 
     @Override
+    public boolean equals(Object o) {
+        return o instanceof GlideRoundTransform;
+    }
+
+    @Override
+    public int hashCode() {
+        return ID.hashCode();
+    }
+
+    @Override
     public void updateDiskCacheKey(MessageDigest messageDigest) {
-        try {
-            messageDigest.update(ID.getBytes(STRING_CHARSET_NAME));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        messageDigest.update(ID_BYTES);
     }
 
 }

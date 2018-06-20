@@ -3,6 +3,7 @@ package com.sbai.bcnews.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.model.system.NotificationStatus;
 
 /**
@@ -84,25 +85,20 @@ public class UserInfo implements Parcelable {
     private int addIntegral;//用户此次增加的积分
 
 
-    // TODO: 2018/6/7
-    private boolean authorIsCheck;
-    public int authorType;
+    public int rankType; //角色:0普通用户,1专栏作家,2官方媒体
 
     public int getAuthorType() {
-        return authorType;
+        return rankType;
     }
 
     public void setAuthorType(int authorType) {
-        this.authorType = authorType;
+        this.rankType = authorType;
     }
 
-    public boolean isAuthorIsCheck() {
-        return authorIsCheck;
+    public boolean isAuthor() {
+        return getAuthorType() != Author.AUTHOR_STATUS_ORDINARY;
     }
 
-    public void setAuthorIsCheck(boolean authorIsCheck) {
-        this.authorIsCheck = authorIsCheck;
-    }
 
     public UserInfo() {
     }

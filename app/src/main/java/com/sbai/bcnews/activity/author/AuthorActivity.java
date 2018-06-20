@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
@@ -28,7 +29,6 @@ import com.sbai.bcnews.view.move.LinearItemDecoration;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -36,7 +36,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AuthorActivity extends RecycleViewSwipeLoadActivity {
-
 
     @BindView(R.id.hasLabelLayout)
     HasLabelLayout mHasLabelLayout;
@@ -85,6 +84,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     private View mCustomView;
     private TextView mTitleBarAuthorName;
     private HasLabelLayout mTitleBarHasLabelLayout;
+    private int mAuthorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,9 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         setContentView(R.layout.activity_author);
         ButterKnife.bind(this);
         translucentStatusBar();
+
+        mAuthorId = getIntent().getIntExtra(ExtraKeys.ID, -1);
+
         initView();
 
         requestAuthorInfo();
@@ -175,35 +178,19 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     };
 
     private void requestAuthorInfo() {
-
-        // TODO: 2018/6/11 monis hujku
-        Author author = new Author();
-        author.setTotalFansNumber(55);
-        author.setTotalPraiseNumber(98888888);
-        author.setTotalRedNumber(88);
-        author.setUserName("溺水的鱼");
-        author.setYesterdayFansNumber(555);
-        author.setUserPortrait("https://t11.baidu.com/it/u=4168610230,2544984602&fm=173&app=25&f=JPEG?w=450&h=227&s=E7C208E240521DDEBAE8890A030030D2");
-        author.setYesterdayPraiseNumber(99900000);
-        author.setYesterdayRedNumber(888);
-        author.setIntroduce("溺水的鱼推荐的 结合实际会发生的海景房电视剧环境恢复开放惊魂甫定数据恢复短时间还惊魂甫定数据恢复短时间还风刀霜剑惊魂甫定数据恢复的海景房短时间还交话费多少书记和");
-
-        Apic.requestAuthorInfo()
+        Apic.requestAuthorInfo(mAuthorId)
                 .tag(TAG)
                 .callback(new Callback2D<Resp<Author>, Author>() {
                     @Override
                     protected void onRespSuccessData(Author data) {
-//                        updateAuthorInfo(data);
+                        updateAuthorInfo(data);
                     }
-
-
                 })
                 .fire();
-        updateAuthorInfo(author);
     }
 
     private void requestAuthorArticle() {
-        Apic.requestAuthorArticle(mPage)
+        Apic.requestAuthorArticle(mPage, mAuthorId)
                 .tag(TAG)
                 .callback(new Callback2D<List<AuthorArticle>, List<AuthorArticle>>() {
                     @Override
@@ -218,25 +205,6 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                     }
                 })
                 .fire();
-
-        ArrayList<AuthorArticle> authorArticles = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            AuthorArticle authorArticle = new AuthorArticle();
-            authorArticle.setTitle("第 " + i + " 条");
-            authorArticle.setReaderCount(i);
-            authorArticle.setReviewCount(i);
-            authorArticles.add(authorArticle);
-            List<String> strings = new ArrayList<>();
-            if (i % 3 == 0) {
-                strings.add("https://t12.baidu.com/it/u=920538503,1851971766&fm=173&app=25&f=JPEG?w=500&h=335&s=31A04CB70E30CFC43025642D0300B04B");
-            } else if (i % 3 == 1) {
-                strings.add("https://t11.baidu.com/it/u=733466365,1046668169&fm=173&app=25&f=JPEG?w=600&h=393&s=F80B609406D007D80B2A359503005088");
-                strings.add("https://t12.baidu.com/it/u=537221471,2310355611&fm=173&app=25&f=JPEG?w=500&h=331&s=948240B54A31C9CE0E94758303007096");
-                strings.add("https://t11.baidu.com/it/u=1733286052,2713856546&fm=173&app=25&f=JPEG?w=500&h=279&s=5D3B26D1549ABDCA56A94104030070D2");
-            }
-            authorArticle.setImgs(strings);
-        }
-        updateArticle(authorArticles);
     }
 
     private void updateArticle(List<AuthorArticle> data) {
@@ -255,7 +223,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     private void updateAuthorInfo(Author author) {
         mHasLabelLayout.setImageSrc(author.getUserPortrait());
 
-        boolean isOfficialAuthor = author.getAuthorType() == Author.AUTHOR_STATUS_OFFICIAL;
+        boolean isOfficialAuthor = author.getRankType() == Author.AUTHOR_STATUS_OFFICIAL;
         mHasLabelLayout.setLabelSelected(isOfficialAuthor);
         if (isOfficialAuthor) {
             mAuthorIdentity.setText(R.string.official_author);
@@ -265,7 +233,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         mTitleBarHasLabelLayout.setLabelSelected(isOfficialAuthor);
 
         mAuthorName.setText(author.getUserName());
-        mAuthorIntroduce.setText(getString(R.string.author_check_introduce, author.getIntroduce()));
+        mAuthorIntroduce.setText(getString(R.string.author_check_introduce, author.getAuthInfo()));
 
         initAuthorAttentionNumber(author);
 
@@ -274,15 +242,15 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     }
 
     private void initAuthorAttentionNumber(Author author) {
-        String fans = NumberUtils.formatNumber(author.getTotalFansNumber());
+        String fans = NumberUtils.formatNumber(author.getFansCount());
         String s = fans + "\n" + getString(R.string.fans);
         mFansNumber.setText(s);
 
-        String read = NumberUtils.formatNumber(author.getTotalRedNumber());
+        String read = NumberUtils.formatNumber(author.getShowReadCount());
         String readNumber = read + "\n" + getString(R.string.read);
         mReadNumber.setText(readNumber);
 
-        String praise = NumberUtils.formatNumber(author.getTotalPraiseNumber());
+        String praise = NumberUtils.formatNumber(author.getPraiseCount());
         String s1 = praise + "\n" + getString(R.string.praise_);
         mPraiseNumber.setText(s1);
     }
