@@ -11,11 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.model.Candy;
 import com.sbai.bcnews.utils.IntegralUtils;
 import com.sbai.bcnews.utils.ShareUtils;
 import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.utils.glide.GlideRoundTransform;
 import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
@@ -34,6 +37,10 @@ public class ShareCandyActivity extends BaseActivity {
     TitleBar mTitle;
     @BindView(R.id.welfareTime)
     TextView mWelfareTime;
+    @BindView(R.id.head)
+    ImageView mHead;
+    @BindView(R.id.name)
+    TextView mName;
     @BindView(R.id.welfareTip)
     TextView mWelfareTip;
     @BindView(R.id.getNumber)
@@ -57,6 +64,8 @@ public class ShareCandyActivity extends BaseActivity {
     @BindView(R.id.share)
     LinearLayout mShare;
 
+    private Candy mCandy;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         overridePendingTransition(R.anim.slide_in_from_bottom, 0);
@@ -64,6 +73,8 @@ public class ShareCandyActivity extends BaseActivity {
         setContentView(R.layout.activity_candy_share);
         ButterKnife.bind(this);
         initData(getIntent());
+
+        initViewData();
     }
 
     @Override
@@ -79,11 +90,32 @@ public class ShareCandyActivity extends BaseActivity {
     }
 
     private void initData(Intent intent) {
+        mCandy = intent.getParcelableExtra(ExtraKeys.CANDY);
+        if (mCandy == null) {
+            ToastUtil.show(R.string.no_this_candy);
+            finish();
+        }
         GlideApp.with(getActivity())
                 .load(Apic.url.QR_CODE)
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(mDownloadImg);
+    }
+
+    private void initViewData() {
+        GlideApp.with(getActivity()).load(mCandy.getPhoto())
+                .transform(new GlideRoundTransform(getActivity()))
+                .placeholder(R.drawable.ic_default_news)
+                .centerCrop()
+                .into(mHead);
+        mName.setText(mCandy.getName());
+        mWelfareTime.setText(mCandy.getWelfare());
+        mWelfareTip.setText(mCandy.getIntro());
+        if (mCandy.getClicks() <= 99999) {
+            mGetNumber.setText(getString(R.string.x_have_get, mCandy.getClicks()));
+        } else {
+            mGetNumber.setText(getString(R.string.x_ten_thousand_have_get, mCandy.getClicks() / 10000));
+        }
     }
 
     @OnClick({R.id.back, R.id.wechat, R.id.circle, R.id.qq, R.id.weibo, R.id.download})

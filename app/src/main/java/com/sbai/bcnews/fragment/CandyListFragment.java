@@ -14,7 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.CandyDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
@@ -22,6 +24,7 @@ import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.Candy;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.glide.GlideRoundTransform;
 import com.sbai.bcnews.view.EmptyView;
@@ -114,7 +117,7 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
         mCandyAdapter = new CandyAdapter(mCandyList, getContext(), new OnItemClickListener<Candy>() {
             @Override
             public void onItemClick(Candy candy, int position) {
-
+                Launcher.with(getActivity(), CandyDetailActivity.class).putExtra(ExtraKeys.CANDY,candy).execute();
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -188,7 +191,7 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ((ViewHolder) holder).bindingData(mContext, mCandyList.get(position));
+            ((ViewHolder) holder).bindingData(mContext, mCandyList.get(position),position, mOnItemClickListener);
         }
 
         @Override
@@ -215,20 +218,29 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(Context context, Candy candy) {
+            private void bindingData(Context context, final Candy candy,final int position, final OnItemClickListener onItemClickListener) {
                 mName.setText(candy.getName());
                 mIntroduce.setText(candy.getIntro());
                 mTip.setText(candy.getWelfare());
-                if(candy.getClicks()<=99999){
-                    mGetCount.setText(context.getString(R.string.x_have_get,candy.getClicks()));
-                }else {
-                    mGetCount.setText(context.getString(R.string.x_ten_thousand_have_get,candy.getClicks()/10000));
+                if (candy.getClicks() <= 99999) {
+                    mGetCount.setText(context.getString(R.string.x_have_get, candy.getClicks()));
+                } else {
+                    mGetCount.setText(context.getString(R.string.x_ten_thousand_have_get, candy.getClicks() / 10000));
                 }
                 GlideApp.with(context).load(candy.getPhoto())
                         .transform(new GlideRoundTransform(context))
                         .placeholder(R.drawable.ic_default_news)
                         .centerCrop()
                         .into(mHead);
+
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(onItemClickListener!=null){
+                            onItemClickListener.onItemClick(candy,position);
+                        }
+                    }
+                });
             }
         }
     }

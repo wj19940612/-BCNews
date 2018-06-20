@@ -258,7 +258,8 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void requestMyAttention() {
-
+//        Apic.requestAttentionAuthor().tag(TAG).callback(new Callback2D<Resp<List<>>>() {
+//        })
     }
 
     private void loadMyAttentionData(List<NewsAuthor> newsAuthorList) {

@@ -41,6 +41,8 @@ public class NewsDetail implements Parcelable {
     private int isAdvert;//是否广告 0不是 1是
     private int urlType; //0-h5 1-下载
 
+    private int showReadCount;
+
 
     public String getAuthor() {
         return author;
@@ -276,6 +278,14 @@ public class NewsDetail implements Parcelable {
         this.urlType = urlType;
     }
 
+    public int getShowReadCount() {
+        return showReadCount;
+    }
+
+    public void setShowReadCount(int showReadCount) {
+        this.showReadCount = showReadCount;
+    }
+
     public NewsDetail() {
     }
 
@@ -316,6 +326,7 @@ public class NewsDetail implements Parcelable {
         dest.writeInt(this.isAdvert);
         dest.writeInt(this.urlType);
         dest.writeInt(this.readHeight);
+        dest.writeInt(this.showReadCount);
     }
 
     protected NewsDetail(Parcel in) {
@@ -348,6 +359,7 @@ public class NewsDetail implements Parcelable {
         this.isAdvert = in.readInt();
         this.urlType = in.readInt();
         this.readHeight = in.readInt();
+        this.showReadCount = in.readInt();
     }
 
     public static final Creator<NewsDetail> CREATOR = new Creator<NewsDetail>() {

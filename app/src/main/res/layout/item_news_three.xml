@@ -94,6 +94,17 @@
             android:textSize="11sp"
             android:gravity="center"
             android:text="@string/original"/>
+
+        <TextView
+            android:id="@+id/readCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imgLayout"
+            android:layout_marginTop="22dp"
+            android:layout_alignParentRight="true"
+            android:textSize="11sp"
+            android:textColor="@color/text_999"
+            android:text="2000人阅读" />
     </RelativeLayout>
 
     <View

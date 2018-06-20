@@ -67,6 +67,18 @@
             android:text="@string/original"
             android:textColor="@color/text_999"
             android:textSize="11sp"/>
+
+        <TextView
+            android:id="@+id/readCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="22dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:textSize="11sp"
+            android:textColor="@color/text_999"
+            android:text="2000人阅读" />
     </RelativeLayout>
 
     <View

@@ -968,31 +968,67 @@ public class Apic {
      *
      * @return
      */
-    public static Api checkPhone(String phone,int type) {
+    public static Api checkPhone(String phone, int type) {
         return Api.post("/api/news-user/login/check.do", new ReqParams().put("phone", phone).put("type", type));
     }
 
     /**
      * 设置密码
+     *
      * @return
      */
-    public static Api setPassword(String password){
-        return Api.post("/api/news-user/user/set/password.do",new ReqParams().put("password",password));
+    public static Api setPassword(String password) {
+        return Api.post("/api/news-user/user/set/password.do", new ReqParams().put("password", password));
     }
 
     /**
      * 修改密码
+     *
      * @return
      */
-    public static Api modifyPassword(String oldPassword,String newPassword){
-        return Api.post("/api/news-user/user/modify/password.do",new ReqParams().put("oldPassword",oldPassword).put("newPassword",newPassword));
+    public static Api modifyPassword(String oldPassword, String newPassword) {
+        return Api.post("/api/news-user/user/modify/password.do", new ReqParams().put("oldPassword", oldPassword).put("newPassword", newPassword));
     }
 
     /**
      * 获取糖果列表
      */
-    public static Api requestCandyList(int page){
-        return Api.get("/api/news-user/sweet/page.do",new ReqParams().put("page",page).put("size",DEFAULT_PAGE_SIZE));
+    public static Api requestCandyList(int page) {
+        return Api.get("/api/news-user/sweet/page.do", new ReqParams().put("page", page).put("size", DEFAULT_PAGE_SIZE));
     }
 
+    /**
+     * 点击糖果
+     *
+     * @param id 糖果id
+     * @return
+     */
+    public static Api requestClickCandy(String id) {
+        return Api.post("/api/news-user/sweet/click.do", new ReqParams().put("id", id));
+    }
+
+    /**
+     * 领取糖果
+     *
+     * @return
+     */
+    public static Api receiveCandy(String id) {
+        return Api.post("/api/news-user/sweet/receive.do", new ReqParams().put("id", id));
+    }
+
+    /**
+     * 关注的作者列表
+     * @return
+     */
+    public static Api requestAttentionAuthor(){
+        return Api.get("/api/news-user/author/list/concern.do");
+    }
+
+    /**
+     * 关注的文章列表
+     * @return
+     */
+    public static Api requestAttentionArticle(){
+        return Api.get("/api/news-user/author/list/concern/bitcoin.do");
+    }
 }
