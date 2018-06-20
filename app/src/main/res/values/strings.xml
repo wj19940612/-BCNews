@@ -171,6 +171,7 @@
     <string name="new_password">新密码</string>
     <string name="set_login_password">设置密码</string>
     <string name="set_login_password_again">再次输入密码</string>
+    <string name="set_success">设置成功</string>
 
 
 
@@ -479,5 +480,7 @@
     <string name="attention">关注</string>
     <string name="has_attention">已关注</string>
     <string name="candy">糖果</string>
+    <string name="x_ten_thousand_have_get">%1$d万人已领</string>
+    <string name="x_have_get">%1$d人已领</string>
 
 </resources>

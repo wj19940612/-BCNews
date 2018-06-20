@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,7 +19,10 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.ImageAuthCodeActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.model.UserInfo;
 import com.sbai.bcnews.utils.KeyBoardHelper;
 import com.sbai.bcnews.utils.KeyBoardUtils;
 import com.sbai.bcnews.utils.Launcher;
@@ -58,6 +62,8 @@ public class RegisterActivity extends BaseActivity {
     LinearLayout mAgreeWrapper;
     @BindView(R.id.register)
     TextView mRegister;
+    @BindView(R.id.loading)
+    ImageView mLoading;
 
     private KeyBoardHelper mKeyBoardHelper;
     private boolean mFreezeObtainAuthCode;
@@ -118,6 +124,7 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+        mAgreeBtn.setSelected(true);
         mPhoneNumber.addTextChangedListener(mPhoneValidationWatcher);
         mAuthCode.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
@@ -250,6 +257,7 @@ public class RegisterActivity extends BaseActivity {
                 }
                 break;
             case R.id.register:
+                register();
                 break;
         }
     }
@@ -298,11 +306,50 @@ public class RegisterActivity extends BaseActivity {
         }
     }
 
+    private void register() {
+        final String phone = getPhoneNumber();
+        String password = md5Encrypt(mPassword.getPassword());
+
+        mLoading.setVisibility(View.VISIBLE);
+        mLoading.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading));
+        Apic.register(getPhoneNumber(), mAuthCode.getText().toString().trim(), password).tag(TAG).callback(new Callback2D<Resp<UserInfo>, UserInfo>() {
+
+            @Override
+            protected void onRespSuccessData(UserInfo data) {
+                if (data != null) {
+                    LocalUser.getUser().setUserInfo(data, phone);
+                }
+                setResult(RESULT_OK);
+                finish();
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                requestRegisterButton();
+            }
+        }).fire();
+    }
+
+    private void requestRegisterButton() {
+        mLoading.setVisibility(View.GONE);
+        mLoading.clearAnimation();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_IMAGE_AUTH_CODE && resultCode == RESULT_OK) { // 发送图片验证码去 获取验证码 成功
             postAuthCodeRequested();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPhoneNumber.addTextChangedListener(mPhoneValidationWatcher);
+        mAuthCode.addTextChangedListener(mValidationWatcher);
+        mPassword.addTextChangedListener(mValidationWatcher);
+        mLoading.clearAnimation();
     }
 }

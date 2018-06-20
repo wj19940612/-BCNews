@@ -13,6 +13,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="217dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_login_background"
         android:background="@android:color/transparent"/>
 
@@ -21,9 +22,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="34dp"
         android:paddingBottom="15dp"
         android:paddingRight="15dp"
         android:src="@drawable/ic_black_close"/>
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="21dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="13dp"
         android:textSize="16sp"
@@ -46,7 +46,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="149dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -205,14 +205,14 @@
                 android:background="@drawable/btn_yellow_small_rounded"
                 android:enabled="false"
                 android:gravity="center"
-                android:text="@string/login"
+                android:text="@string/fast_login"
                 android:textColor="@android:color/white"/>
 
             <ImageView
                 android:id="@+id/loading"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_centerVertical="true"
+                android:layout_marginTop="15dp"
                 android:layout_marginLeft="90dp"
                 android:src="@drawable/ic_loading"
                 android:visibility="gone"/>

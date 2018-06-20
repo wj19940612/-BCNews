@@ -9,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.activity.ModifyPassActivity;
 import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
@@ -47,6 +49,8 @@ public class SettingActivity extends BaseActivity {
     IconTextRow mRecommendToFriend;
     @BindView(R.id.logout)
     TextView mLogout;
+    @BindView(R.id.modifyPass)
+    IconTextRow mModifyPass;
 
 
     @Override
@@ -54,6 +58,18 @@ public class SettingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
+        initPassView();
+    }
+
+    private void initPassView() {
+        if (LocalUser.getUser().isLogin()) {
+            mModifyPass.setVisibility(View.VISIBLE);
+            if (LocalUser.getUser().getUserInfo().getIsPassword() > 0) {
+                mModifyPass.setText(R.string.modify_pass);
+            } else {
+                mModifyPass.setText(R.string.set_login_password);
+            }
+        }
     }
 
 
@@ -90,7 +106,7 @@ public class SettingActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.nightOrLightModeSwitch, R.id.notificationManage, R.id.accountManager, R.id.aboutBcnews, R.id.recommendToFriend, R.id.logout})
+    @OnClick({R.id.nightOrLightModeSwitch, R.id.notificationManage, R.id.accountManager, R.id.aboutBcnews, R.id.recommendToFriend, R.id.logout,R.id.modifyPass})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.nightOrLightModeSwitch:
@@ -122,6 +138,9 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.logout:
                 logout();
+                break;
+            case R.id.modifyPass:
+                Launcher.with(this, ModifyPassActivity.class).putExtra(ExtraKeys.HAS_LOGIN_PSD, LocalUser.getUser().getUserInfo().getIsPassword() > 0).execute();
                 break;
         }
     }

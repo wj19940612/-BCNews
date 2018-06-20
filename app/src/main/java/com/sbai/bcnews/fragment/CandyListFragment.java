@@ -16,11 +16,17 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.ListResp;
+import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.Candy;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.OnItemClickListener;
+import com.sbai.bcnews.utils.glide.GlideRoundTransform;
 import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.TitleBar;
+import com.sbai.glide.GlideApp;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -79,6 +85,7 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+        loadData(true);
     }
 
     @Override
@@ -112,21 +119,38 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mCandyAdapter);
-
+        mEmptyView.setRefreshButtonClickListener(new EmptyView.OnRefreshButtonClickListener() {
+            @Override
+            public void onRefreshClick() {
+                loadData(true);
+            }
+        });
     }
 
     private void loadData(final boolean refresh) {
+        Apic.requestCandyList(mPage).tag(TAG).callback(new Callback<ListResp<Candy>>() {
+            @Override
+            protected void onRespSuccess(ListResp<Candy> resp) {
+                updateData(resp.getListData(), refresh);
+            }
 
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                stopFreshOrLoadAnimation();
+            }
+        }).fireFreely();
     }
 
     private void updateData(List<Candy> data, boolean refresh) {
-        if(refresh){
+        if (refresh) {
             mCandyList.clear();
         }
-        if (data == null && data.size() == 0) {
+        if (data == null || data.size() == 0) {
             if (mCandyList.size() > 0) {
                 mEmptyView.setVisibility(View.GONE);
             } else {
+                mEmptyView.setNoData("");
                 mEmptyView.setVisibility(View.VISIBLE);
             }
             mCandyAdapter.notifyDataSetChanged();
@@ -192,7 +216,19 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
             }
 
             private void bindingData(Context context, Candy candy) {
-
+                mName.setText(candy.getName());
+                mIntroduce.setText(candy.getIntro());
+                mTip.setText(candy.getWelfare());
+                if(candy.getClicks()<=99999){
+                    mGetCount.setText(context.getString(R.string.x_have_get,candy.getClicks()));
+                }else {
+                    mGetCount.setText(context.getString(R.string.x_ten_thousand_have_get,candy.getClicks()/10000));
+                }
+                GlideApp.with(context).load(candy.getPhoto())
+                        .transform(new GlideRoundTransform(context))
+                        .placeholder(R.drawable.ic_default_news)
+                        .centerCrop()
+                        .into(mHead);
             }
         }
     }

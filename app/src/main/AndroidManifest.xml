@@ -192,6 +192,10 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".activity.InputPhoneActivity"
             android:screenOrientation="portrait"/>
 

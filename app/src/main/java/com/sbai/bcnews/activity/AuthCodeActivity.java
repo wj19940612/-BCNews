@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.utils.KeyBoardUtils;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.bcnews.view.PasswordEditText;
 import com.sbai.bcnews.view.TitleBar;
@@ -46,6 +49,8 @@ public class AuthCodeActivity extends BaseActivity {
     TextView mComplete;
     @BindView(R.id.rootView)
     LinearLayout mRootView;
+    @BindView(R.id.loading)
+    ImageView mLoading;
 
     private String mPhoneNumber;
 
@@ -84,7 +89,7 @@ public class AuthCodeActivity extends BaseActivity {
         }, 200);
     }
 
-    private void initData(){
+    private void initData() {
         mPhoneNumber = getIntent().getStringExtra(ExtraKeys.PHONE);
     }
 
@@ -107,7 +112,7 @@ public class AuthCodeActivity extends BaseActivity {
                 requestAuthCode();
                 break;
             case R.id.complete:
-                //TODO 确定去注册的接口
+                modifyPassword();
                 break;
         }
     }
@@ -156,6 +161,33 @@ public class AuthCodeActivity extends BaseActivity {
         }
     }
 
+    private void modifyPassword(){
+        final String phone = getPhoneNumber();
+        final String code = mAuthCode.getText().toString().trim();
+        final String password = md5Encrypt(mPassword.getPassword());
+        mLoading.setVisibility(View.VISIBLE);
+        mLoading.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading));
+        Apic.forgetPass(phone,code,password).tag(TAG).callback(new Callback<Resp>() {
+            @Override
+            protected void onRespSuccess(Resp resp) {
+                ToastUtil.show(R.string.update_success);
+                setResult(RESULT_OK);
+                finish();
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                resetButton();
+            }
+        }).fire();
+    }
+
+    private void resetButton() {
+        mLoading.setVisibility(View.GONE);
+        mLoading.clearAnimation();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -167,5 +199,13 @@ public class AuthCodeActivity extends BaseActivity {
 
     private String getPhoneNumber() {
         return mPhoneNumber.trim().replaceAll(" ", "");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAuthCode.removeTextChangedListener(mValidationWatcher);
+        mPassword.removeTextChangedListener(mValidationWatcher);
+        mLoading.clearAnimation();
     }
 }
