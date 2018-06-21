@@ -70,6 +70,7 @@ public class HasLabelLayout extends RelativeLayout {
         addView(mLabelImageView, layoutParams);
         setLabel();
         setImageSrc(mDrawable);
+        setLabelImageViewVisible(false);
     }
 
     private void setImageSrc(String url, Drawable drawable) {

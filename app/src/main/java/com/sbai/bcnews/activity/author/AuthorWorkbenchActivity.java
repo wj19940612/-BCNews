@@ -10,7 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.activity.mine.PersonalDataActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
@@ -24,6 +26,7 @@ import com.sbai.bcnews.model.author.AuthorArticle;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.NumberUtils;
+import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.adapter.AuthorArticleAdapter;
 import com.sbai.bcnews.view.HasLabelLayout;
@@ -79,6 +82,27 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
         requestAuthorArticle();
     }
 
+    private void initView() {
+
+        mAuthorArticleAdapter = new AuthorArticleAdapter(getActivity());
+        mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        mSwipeTarget.addItemDecoration(new LinearItemDecoration(ContextCompat.getColor(getActivity(), R.color.split)));
+        mSwipeTarget.setAdapter(mAuthorArticleAdapter);
+
+        initHeadView();
+
+        mAuthorArticleAdapter.setItemClickListener(new OnItemClickListener<AuthorArticle>() {
+            @Override
+            public void onItemClick(AuthorArticle item, int position) {
+                Launcher.with(getActivity(), NewsDetailActivity.class)
+                        .putExtra(ExtraKeys.NEWS_ID, item.getId())
+                        .putExtra(ExtraKeys.CHANNEL, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
+                        .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
+            }
+        });
+
+    }
+
     private void requestAuthorInfo() {
         Apic.requestWorkbenchAuthorInfo()
                 .tag(TAG)
@@ -110,16 +134,6 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
                 .fire();
     }
 
-    private void initView() {
-
-
-        mAuthorArticleAdapter = new AuthorArticleAdapter(getActivity());
-        mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mSwipeTarget.setAdapter(mAuthorArticleAdapter);
-
-        initHeadView();
-
-    }
 
     private void initHeadView() {
         View mHeadView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_author_workbench_head, mSwipeTarget, false);
@@ -197,6 +211,7 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
     public void onRefresh() {
         mPage = 0;
         requestAuthorArticle();
+        requestAuthorInfo();
     }
 
     private void updateArticle(List<AuthorArticle> data) {

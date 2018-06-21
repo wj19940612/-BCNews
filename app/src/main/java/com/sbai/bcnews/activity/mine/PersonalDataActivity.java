@@ -26,6 +26,7 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.UserInfo;
+import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.view.IconTextRow;
 import com.sbai.bcnews.view.TitleBar;
@@ -104,7 +105,15 @@ public class PersonalDataActivity extends BaseActivity {
     }
 
     private void requestService() {
-        // TODO: 2018/6/7 请求客服的邮箱和联系方式
+        Apic.requestOperationSetting(Operation.OPERATION_TYPE_WE_CHAT)
+                .tag(TAG)
+                .callback(new Callback2D<Resp<Operation>, Operation>() {
+                    @Override
+                    protected void onRespSuccessData(Operation data) {
+                        mConnectServiceHint.setText(getString(R.string.connect_service_hint,data.getEmail(),data.getSYS_OPERATE_WX()));
+                    }
+                })
+                .fire();
     }
 
     @Override

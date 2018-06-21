@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.Gravity;
 
 import com.igexin.sdk.PushManager;
 import com.sbai.bcnews.activity.CrashInfoActivity;
@@ -139,9 +138,7 @@ public class App extends Application implements TimerHandler.TimerCallback {
 
             @Override
             public void onActivityStarted(Activity activity) {
-                Log.d(TAG, " onStart " + activity);
                 if (mFinalCount == 0) {
-                    Log.d(TAG, "onStart result");
                     startTiming();
                 }
                 mFinalCount++;
@@ -160,10 +157,8 @@ public class App extends Application implements TimerHandler.TimerCallback {
 
             @Override
             public void onActivityStopped(Activity activity) {
-                Log.d(TAG, " onStop " + activity + " mFinalCount:" + mFinalCount);
                 mFinalCount--;
                 if (mFinalCount == 0) {
-                    Log.d(TAG, "onStop result");
                     endTiming();
                 }
 
@@ -183,7 +178,6 @@ public class App extends Application implements TimerHandler.TimerCallback {
 
     private void startTiming() {
         if (LocalUser.getUser().isLogin()) {
-            Log.d(TAG, "startTiming");
             mOnlineTime = HashRateTimeCahche.getOnlineTime(LocalUser.getUser().getUserInfo().getId());
             if (mOnlineTime != null) {
                 //跨天了,重置
@@ -219,7 +213,6 @@ public class App extends Application implements TimerHandler.TimerCallback {
             if (!DateUtil.isInThisDay(mOnlineTime.getDay(), SysTime.getSysTime().getSystemTimestamp())) {
                 mOnlineTime.setDay(SysTime.getSysTime().getSystemTimestamp());
             }
-            Log.d(TAG, getClass().getName() + " time:" + mOnlineTime.getOnlineTime());
             if (mOnlineTime.getOnlineTime() == DEFAULT_COUNT_MAX) {
                 stopFrontTiming();
                 onlineAddQKC();
@@ -240,13 +233,11 @@ public class App extends Application implements TimerHandler.TimerCallback {
     }
 
     private void endTiming() {
-        Log.d(TAG, "endTiming");
         stopFrontTiming();
         recordFrontTiming();
     }
 
     private void stopFrontTiming() {
-        Log.d(TAG, "stopFrontTiming");
         if (mBaseHandler != null) {
             mBaseHandler.removeCallbacksAndMessages(null);
             mBaseHandler.resetCount();

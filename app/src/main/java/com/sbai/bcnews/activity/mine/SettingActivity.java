@@ -110,7 +110,6 @@ public class SettingActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.nightOrLightModeSwitch:
-                // TODO: 2018/4/24 夜间模式或者白天模式
                 break;
             case R.id.notificationManage:
                 Launcher.with(getActivity(), NotificationManageActivity.class).execute();
