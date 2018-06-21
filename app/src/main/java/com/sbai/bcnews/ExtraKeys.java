@@ -53,4 +53,5 @@ public interface ExtraKeys {
     String TITLE = "title";
     String POSITION = "position";
     String HAS_LOGIN_PSD = "has_login_psd";
+    String CANDY = "candy";
 }

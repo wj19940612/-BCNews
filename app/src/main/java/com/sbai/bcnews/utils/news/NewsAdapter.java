@@ -3,6 +3,7 @@ package com.sbai.bcnews.utils.news;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,6 +112,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView mSource;
         @BindView(R.id.time)
         TextView mTime;
+        @BindView(R.id.readCount)
+        TextView mReadCount;
         @BindView(R.id.contentRL)
         RelativeLayout mContentRL;
         @BindView(R.id.line)
@@ -131,7 +134,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mSplitView.setVisibility(View.GONE);
             }
 
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter, mReadCount);
         }
     }
 
@@ -150,6 +153,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView mSource;
         @BindView(R.id.time)
         TextView mTime;
+        @BindView(R.id.readCount)
+        TextView mReadCount;
         @BindView(R.id.contentRL)
         RelativeLayout mContentRL;
         @BindView(R.id.line)
@@ -169,7 +174,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter, mReadCount);
 
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg.setVisibility(View.VISIBLE);
@@ -201,6 +206,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView mSource;
         @BindView(R.id.time)
         TextView mTime;
+        @BindView(R.id.readCount)
+        TextView mReadCount;
         @BindView(R.id.contentRL)
         RelativeLayout mContentRL;
         @BindView(R.id.line)
@@ -216,7 +223,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
                                 final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot) {
 
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter, mReadCount);
 
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg1.setVisibility(View.VISIBLE);
@@ -257,7 +264,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * 显示三种Type都需要显示的View的内容
      */
     public static void setBasicView(final Context context, final NewsDetail item, int position, int count,
-                                    final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, final TextView mTitle, TextView mSource, TextView mTime, ImageView mOriginal, RelativeLayout mContentRL, View mLine, View mFooter) {
+                                    final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, final TextView mTitle, TextView mSource, TextView mTime, ImageView mOriginal, RelativeLayout mContentRL, View mLine, View mFooter, TextView mReadCount) {
         if (item.getIsAdvert() > 0) {
             mTitle.setText(item.getAdvertCopyWriter());
             mSource.setText(item.getAdvertName());
@@ -265,9 +272,18 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTime.setText(context.getString(R.string.point_x, context.getString(R.string.advert)));
         } else {
             mTitle.setText(item.getTitle());
-            mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
-            mSource.setVisibility(View.VISIBLE);
-            mSource.setText(item.getSource());
+            if (TextUtils.isEmpty(item.getAuthor())) {
+                mSource.setVisibility(View.GONE);
+                mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
+            } else {
+                mSource.setText(item.getAuthor());
+                mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
+            }
+        }
+        if (item.getReaderCount() > 99999) {
+            mReadCount.setText(context.getString(R.string.x_ten_thousand_people_read, item.getShowReadCount() / 10000));
+        } else {
+            mReadCount.setText(context.getString(R.string.x_people_read, item.getShowReadCount() / 10000));
         }
         mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
         mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);

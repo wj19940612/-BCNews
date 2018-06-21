@@ -481,5 +481,8 @@
     <string name="candy">糖果</string>
     <string name="x_ten_thousand_have_get">%1$d万人已领</string>
     <string name="x_have_get">%1$d人已领</string>
+    <string name="no_this_candy">糖果已不存在，请重试</string>
+    <string name="x_people_read">%1$d人阅读</string>
+    <string name="x_ten_thousand_people_read">%1$d万人阅读</string>
 
 </resources>

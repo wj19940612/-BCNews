@@ -1,6 +1,9 @@
 package com.sbai.bcnews.model;
 
-public class Candy {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Candy implements Parcelable {
 
     /**
      * createTime : 1528872653394
@@ -134,4 +137,57 @@ public class Candy {
     public void setClicks(int clicks) {
         this.clicks = clicks;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.createTime);
+        dest.writeString(this.id);
+        dest.writeString(this.intro);
+        dest.writeString(this.introduce);
+        dest.writeString(this.name);
+        dest.writeString(this.photo);
+        dest.writeInt(this.sort);
+        dest.writeInt(this.status);
+        dest.writeString(this.sweetIntroduce);
+        dest.writeLong(this.updateTime);
+        dest.writeString(this.url);
+        dest.writeString(this.welfare);
+        dest.writeInt(this.clicks);
+    }
+
+    public Candy() {
+    }
+
+    protected Candy(Parcel in) {
+        this.createTime = in.readLong();
+        this.id = in.readString();
+        this.intro = in.readString();
+        this.introduce = in.readString();
+        this.name = in.readString();
+        this.photo = in.readString();
+        this.sort = in.readInt();
+        this.status = in.readInt();
+        this.sweetIntroduce = in.readString();
+        this.updateTime = in.readLong();
+        this.url = in.readString();
+        this.welfare = in.readString();
+        this.clicks = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Candy> CREATOR = new Parcelable.Creator<Candy>() {
+        @Override
+        public Candy createFromParcel(Parcel source) {
+            return new Candy(source);
+        }
+
+        @Override
+        public Candy[] newArray(int size) {
+            return new Candy[size];
+        }
+    };
 }

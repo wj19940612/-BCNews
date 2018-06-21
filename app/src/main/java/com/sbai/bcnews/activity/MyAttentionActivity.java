@@ -19,8 +19,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.AttentionFragment;
 import com.sbai.bcnews.fragment.CommonBottomDialogFragment;
 import com.sbai.bcnews.http.Apic;
-import com.sbai.bcnews.model.Candy;
-import com.sbai.bcnews.model.NewsAuthor;
+import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.TitleBar;
@@ -51,8 +50,8 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
     RelativeLayout mRootView;
 
     private AttentionAdapter mAttentionAdapter;
-    private List<NewsAuthor> mNewsAuthorList;
-    private NewsAuthor mAttentionAuthor;
+    private List<Author> mNewsAuthorList;
+    private Author mAttentionAuthor;
     private int mAttentionPosition;
 
     private int mPage;
@@ -90,7 +89,7 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
             }
 
             @Override
-            public void onAttention(NewsAuthor newsAuthor, boolean isAttention, int position) {
+            public void onAttention(Author newsAuthor, boolean isAttention, int position) {
                 if (isAttention) {
                     mAttentionPosition = position;
                     mAttentionAuthor = newsAuthor;
@@ -104,11 +103,10 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
 
 
     private void loadData(final boolean refresh) {
-        mNewsAuthorList.add(new NewsAuthor(true));
         mAttentionAdapter.notifyDataSetChanged();
     }
 
-    private void updateData(List<NewsAuthor> data, boolean refresh) {
+    private void updateData(List<Author> data, boolean refresh) {
         if (refresh) {
             mNewsAuthorList.clear();
         }
@@ -134,7 +132,7 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
 
     @Override
     public void onFirstClick() {
-        mAttentionAuthor.setAttention(false);
+//        mAttentionAuthor.setAttention(false);
         mAttentionAdapter.notifyItemChanged(mAttentionPosition);
     }
 
@@ -156,9 +154,9 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
 
         private AttentionFragment.OnItemClickListener mOnItemClickListener;
         private Context mContext;
-        private List<NewsAuthor> mNewsAuthorList;
+        private List<Author> mNewsAuthorList;
 
-        public AttentionAdapter(Context context, List<NewsAuthor> newsAuthorList, AttentionFragment.OnItemClickListener onItemClickListener) {
+        public AttentionAdapter(Context context, List<Author> newsAuthorList, AttentionFragment.OnItemClickListener onItemClickListener) {
             mOnItemClickListener = onItemClickListener;
             mContext = context;
             mNewsAuthorList = newsAuthorList;
@@ -196,8 +194,8 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(Context context,final NewsAuthor newsAuthor, final int position, final AttentionFragment.OnItemClickListener onItemClickListener) {
-                setNoAttentionBtn(mAttentionBtn,newsAuthor.isAttention(),context);
+            private void bindingData(Context context,final Author newsAuthor, final int position, final AttentionFragment.OnItemClickListener onItemClickListener) {
+//                setNoAttentionBtn(mAttentionBtn,newsAuthor.isAttention(),context);
                 mAttentionBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
