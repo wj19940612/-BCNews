@@ -15,17 +15,28 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.model.author.AuthorArticle;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
+import com.sbai.bcnews.utils.ClipboardUtils;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.NumberUtils;
+import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.adapter.AuthorArticleAdapter;
 import com.sbai.bcnews.view.HasLabelLayout;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.move.LinearItemDecoration;
+import com.sbai.bcnews.view.share.NewsShareAndSetDialog;
+import com.sbai.bcnews.view.share.NewsShareDialog;
+import com.sbai.bcnews.view.share.ShareDialog;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -85,6 +96,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     private TextView mTitleBarAuthorName;
     private HasLabelLayout mTitleBarHasLabelLayout;
     private int mAuthorId;
+    private Author mAuthor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +129,16 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                 mTotalScrollRange = mAppBarLayout.getTotalScrollRange() - 20;
             }
         });
+
+        mAuthorArticleAdapter.setItemClickListener(new OnItemClickListener<AuthorArticle>() {
+            @Override
+            public void onItemClick(AuthorArticle item, int position) {
+                Launcher.with(getActivity(), NewsDetailActivity.class)
+                        .putExtra(ExtraKeys.NEWS_ID, item.getId())
+                        .putExtra(ExtraKeys.CHANNEL, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
+                        .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
+            }
+        });
     }
 
     private void initTitleBar() {
@@ -134,24 +156,29 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     }
 
     private void showShareDialog() {
-//        NewsShareDialog.with(getActivity())
-//                .setOnNewsLinkCopyListener(new NewsShareAndSetDialog.OnNewsLinkCopyListener() {
-//                    @Override
-//                    public void onCopyLink() {
-//                        ClipboardUtils.clipboardText(getActivity(), shareUrl, R.string.copy_success);
-//                    }
-//                }).setTitleVisible(false)
-//                .setShareTitle(mNewsDetail.getTitle())
-//                .setShareDescription(getSummaryData())
-//                .setListener(new ShareDialog.OnShareDialogCallback() {
-//                    @Override
-//                    public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {
+        if (mAuthor == null) return;
+        String shareThumbUrl = mAuthor.getUserPortrait();
+        String shareTitle = getString(R.string.recommend_author, getString(R.string.app_name), mAuthor.getUserName());
+
+        final String shareUrl = String.format(Apic.url.SHARE_AUTHOR, mAuthor.getId());
+        NewsShareDialog.with(getActivity())
+                .setOnNewsLinkCopyListener(new NewsShareAndSetDialog.OnNewsLinkCopyListener() {
+                    @Override
+                    public void onCopyLink() {
+                        ClipboardUtils.clipboardText(getActivity(), shareUrl, R.string.copy_success);
+                    }
+                }).setTitleVisible(false)
+                .setShareTitle(shareTitle)
+                .setShareDescription(mAuthor.getAuthInfo())
+                .setListener(new ShareDialog.OnShareDialogCallback() {
+                    @Override
+                    public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {
 //                        Apic.share(mNewsDetail.getId(), 0).tag(TAG).fireFreely();
-//                    }
-//                })
-//                .setShareUrl(shareUrl)
-//                .setShareThumbUrl(shareThumbUrl)
-//                .show();
+                    }
+                })
+                .setShareUrl(shareUrl)
+                .setShareThumbUrl(shareThumbUrl)
+                .show();
     }
 
     private AppBarLayout.OnOffsetChangedListener mOnOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
@@ -183,6 +210,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                 .callback(new Callback2D<Resp<Author>, Author>() {
                     @Override
                     protected void onRespSuccessData(Author data) {
+                        mAuthor = data;
                         updateAuthorInfo(data);
                     }
                 })
@@ -192,10 +220,11 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     private void requestAuthorArticle() {
         Apic.requestAuthorArticle(mPage, mAuthorId)
                 .tag(TAG)
-                .callback(new Callback2D<List<AuthorArticle>, List<AuthorArticle>>() {
+                .callback(new Callback<ListResp<AuthorArticle>>() {
                     @Override
-                    protected void onRespSuccessData(List<AuthorArticle> data) {
-                        updateArticle(data);
+                    protected void onRespSuccess(ListResp<AuthorArticle> resp) {
+                        if (resp.getListData() != null)
+                            updateArticle(resp.getListData());
                     }
 
                     @Override
@@ -222,14 +251,13 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
     private void updateAuthorInfo(Author author) {
         mHasLabelLayout.setImageSrc(author.getUserPortrait());
+        mHasLabelLayout.setLabelImageViewVisible(author.isAuthor());
+        mTitleBarHasLabelLayout.setLabelImageViewVisible(author.isAuthor());
 
         boolean isOfficialAuthor = author.getRankType() == Author.AUTHOR_STATUS_OFFICIAL;
         mHasLabelLayout.setLabelSelected(isOfficialAuthor);
-        if (isOfficialAuthor) {
-            mAuthorIdentity.setText(R.string.official_author);
-        } else {
-            mAuthorIdentity.setText(R.string.special_author);
-        }
+        mAuthorIdentity.setText(author.getRemark());
+
         mTitleBarHasLabelLayout.setLabelSelected(isOfficialAuthor);
 
         mAuthorName.setText(author.getUserName());
@@ -239,6 +267,9 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
         mTitleBarHasLabelLayout.setImageSrc(author.getUserPortrait());
         mTitleBarAuthorName.setText(author.getUserName());
+        mAttentionAuthor.setSelected(author.getIsConcern()==Author.AUTHOR_IS_ALREADY_ATTENTION);
+
+        setMyArticleTotal(author.getArticleCount());
     }
 
     private void initAuthorAttentionNumber(Author author) {
@@ -267,22 +298,42 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
     @OnClick(R.id.attentionAuthor)
     public void onViewClicked() {
-
+        if (LocalUser.getUser().isLogin())
+            attentionAuthor();
+        else
+            Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
     }
 
     @Override
     public void onLoadMore() {
-
+        requestAuthorArticle();
     }
 
     @Override
     public void onRefresh() {
-
+        mPage = 0;
+        requestAuthorArticle();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mAppBarLayout.removeOnOffsetChangedListener(mOnOffsetChangedListener);
+    }
+
+    private void attentionAuthor() {
+        if (mAuthor != null) {
+            final int attentionType = mAuthor.getIsConcern() == Author.AUTHOR_STATUS_SPECIAL ? Author.AUTHOR_IS_NOT_ATTENTION : Author.AUTHOR_IS_ALREADY_ATTENTION;
+            Apic.attentionAuthor(mAuthor.getId(), attentionType)
+                    .tag(TAG)
+                    .callback(new Callback<Resp<Object>>() {
+                        @Override
+                        protected void onRespSuccess(Resp<Object> resp) {
+                            mAuthor.setIsConcern(attentionType);
+                            mAttentionAuthor.setSelected(mAuthor.getIsConcern()==Author.AUTHOR_IS_ALREADY_ATTENTION);
+                        }
+                    })
+                    .fire();
+        }
     }
 }

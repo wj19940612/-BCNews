@@ -493,10 +493,14 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                     Launcher.with(getActivity(), LoginActivity.class).execute();
                 break;
             case R.id.authorInfo:
+                if (getCallingActivity() != null && getCallingActivity().getClassName().equalsIgnoreCase(AuthorActivity.class.getName())) {
+                    finish();
+                    return;
+                }
                 NewsDetail newsDetail1 = getNewsDetail();
                 if (newsDetail1 != null && newsDetail1.getRankType() != Author.AUTHOR_STATUS_ORDINARY)
                     Launcher.with(getActivity(), AuthorActivity.class)
-                            .putExtra(ExtraKeys.ID,newsDetail1.getAuthorId())
+                            .putExtra(ExtraKeys.ID, newsDetail1.getAuthorId())
                             .execute();
                 break;
 
@@ -1006,9 +1010,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void updateReadNumber(NewsDetail newsDetail) {
-        int readNumber = 0;
-        readNumber = newsDetail.getReaderCount();
-        mPubTime.setText(getString(R.string.news_publish_time_and_red_number, DateUtil.formatNewsStyleTime(newsDetail.getReleaseTime()), readNumber));
+        mPubTime.setText(getString(R.string.news_publish_time_and_red_number, DateUtil.formatDefaultStyleTime(newsDetail.getReleaseTime()), newsDetail.getReaderCount()));
     }
 
     private void requestOtherArticle() {
@@ -1091,10 +1093,13 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         if (isAuthor) {
             boolean isOfficialAuthor = data.getRankType() == Author.AUTHOR_STATUS_OFFICIAL;
             mHasLabelLayout.setLabelSelected(isOfficialAuthor);
+            mAuthorAttention.setVisibility(View.VISIBLE);
+        } else {
+            mAuthorAttention.setVisibility(View.GONE);
         }
         updateReadNumber(data);
         mArticleIntroduce.setText(data.getSummary());
-        mAuthorAttention.setSelected(data.getIsConcern()==Author.AUTHOR_IS_ALREADY_ATTENTION);
+        mAuthorAttention.setSelected(data.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
     }
 
     private void updatePraiseCollect(NewsDetail newsDetail) {

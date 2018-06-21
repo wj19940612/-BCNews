@@ -18,6 +18,16 @@ public class Operation {
 
     private String quota;
 
+    private String SYS_OPERATE_EMAIL;
+
+    public String getEmail() {
+        return SYS_OPERATE_EMAIL;
+    }
+
+    public void setEmail(String email) {
+        this.SYS_OPERATE_EMAIL = email;
+    }
+
     public String getSYS_OPERATE_WX() {
         return SYS_OPERATE_WX;
     }

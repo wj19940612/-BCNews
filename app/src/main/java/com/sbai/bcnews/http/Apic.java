@@ -20,7 +20,7 @@ public class Apic {
 
 
     /**
-     * /api/news-user/page/bitcoin.do
+     * /api/news-user/author/page/bitcoin.do
      * GET
      * 用户查询作者文章--薛松
      *
@@ -29,7 +29,7 @@ public class Apic {
      * @return
      */
     public static Api requestAuthorArticle(int page, int authorId) {
-        return Api.get("/api/news-user/page/bitcoin.do",
+        return Api.get("/api/news-user/author/page/bitcoin.do",
                 new ReqParams()
                         .put("page", page)
                         .put("authorId", authorId)
@@ -91,6 +91,8 @@ public class Apic {
     public interface url {
         String SHARE_NEWS = Api.getFixedHost() + "/news/share/index.html?id=%s";
 
+        //作者详情页
+        String SHARE_AUTHOR = Api.getFixedHost() + "/news/author/authordetail.html?id=%s";
 
         String QR_CODE = Api.getFixedHost() + "/qc.png";
 

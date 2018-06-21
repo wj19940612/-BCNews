@@ -113,7 +113,6 @@ public class MineFragment extends BaseFragment {
      * 控制qkc和邀请有礼显示的接口
      */
     private void requestQKCAndInviteHasGiftTabVisible() {
-        // TODO: 2018/5/25 目前服务端是返回的0 开发环境就让显示  测试环境的话 看服务端配置
         if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")) {
             mInvite.setVisibility(View.VISIBLE);
             mQkc.setVisibility(View.VISIBLE);

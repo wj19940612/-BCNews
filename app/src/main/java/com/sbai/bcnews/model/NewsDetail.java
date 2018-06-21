@@ -42,9 +42,9 @@ public class NewsDetail implements Parcelable {
     private int showReadCount;
     private String author;       //作者
     private int rankType;
-    private int rankTypeStr;
+    private String rankTypeStr;
     private int isConcern;      //是否关注:0未关注,1关注
-    private int userPortrait;
+    private String userPortrait;
     private int authorId;
 
 
@@ -56,11 +56,11 @@ public class NewsDetail implements Parcelable {
         this.rankType = rankType;
     }
 
-    public int getRankTypeStr() {
+    public String getRankTypeStr() {
         return rankTypeStr;
     }
 
-    public void setRankTypeStr(int rankTypeStr) {
+    public void setRankTypeStr(String rankTypeStr) {
         this.rankTypeStr = rankTypeStr;
     }
 
@@ -72,11 +72,11 @@ public class NewsDetail implements Parcelable {
         this.isConcern = isConcern;
     }
 
-    public int getUserPortrait() {
+    public String getUserPortrait() {
         return userPortrait;
     }
 
-    public void setUserPortrait(int userPortrait) {
+    public void setUserPortrait(String userPortrait) {
         this.userPortrait = userPortrait;
     }
 
@@ -363,12 +363,17 @@ public class NewsDetail implements Parcelable {
         dest.writeInt(this.collect);
         dest.writeLong(this.updateTime);
         dest.writeLong(this.readTime);
-        dest.writeString(this.author);
         dest.writeString(this.advertCopyWriter);
         dest.writeString(this.advertName);
         dest.writeString(this.androidUrl);
         dest.writeInt(this.isAdvert);
         dest.writeInt(this.urlType);
+        dest.writeString(this.author);
+        dest.writeInt(this.rankType);
+        dest.writeString(this.rankTypeStr);
+        dest.writeInt(this.isConcern);
+        dest.writeString(this.userPortrait);
+        dest.writeInt(this.authorId);
         dest.writeInt(this.readHeight);
         dest.writeInt(this.showReadCount);
     }
@@ -396,12 +401,17 @@ public class NewsDetail implements Parcelable {
         this.collect = in.readInt();
         this.updateTime = in.readLong();
         this.readTime = in.readLong();
-        this.author = in.readString();
         this.advertCopyWriter = in.readString();
         this.advertName = in.readString();
         this.androidUrl = in.readString();
         this.isAdvert = in.readInt();
         this.urlType = in.readInt();
+        this.author = in.readString();
+        this.rankType = in.readInt();
+        this.rankTypeStr = in.readString();
+        this.isConcern = in.readInt();
+        this.userPortrait = in.readString();
+        this.authorId = in.readInt();
         this.readHeight = in.readInt();
         this.showReadCount = in.readInt();
     }

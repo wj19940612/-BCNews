@@ -95,7 +95,7 @@ public class AuthorArticle {
     private String secondDetail;
     private int secondType;
     private long updateTime;
-    private List<?> channel;
+    private List<String> channel;
     private List<String> imgs;
     private List<String> tags;
 
@@ -339,11 +339,11 @@ public class AuthorArticle {
         this.updateTime = updateTime;
     }
 
-    public List<?> getChannel() {
+    public List<String> getChannel() {
         return channel;
     }
 
-    public void setChannel(List<?> channel) {
+    public void setChannel(List<String> channel) {
         this.channel = channel;
     }
 
