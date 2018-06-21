@@ -27,6 +27,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.model.StartWindow;
 import com.sbai.bcnews.model.news.NotReadMessage;
 import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.swipeload.BaseSwipeLoadFragment;
@@ -36,6 +37,8 @@ import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.BottomTabs;
 import com.sbai.bcnews.view.ScrollableViewPager;
 import com.sbai.bcnews.view.dialog.RegisterScoreDialog;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +71,7 @@ public class MainActivity extends BaseActivity {
         requestShowMarketPageSwitch();
         requestWhetherHasAllNotReadMessage();
         requestFirstIntegral();
+        requestStartActivities();
     }
 
     private BroadcastReceiver mLoginBroadcastReceiver = new BroadcastReceiver() {
@@ -118,21 +122,18 @@ public class MainActivity extends BaseActivity {
             return;
         }
         Preference.get().setTodayFirstOpenAppTime(System.currentTimeMillis());
-        String sceneType = "1";//定时弹窗
         if (Preference.get().isFirstOpenApp()) {
             Preference.get().setNoFirstOpenApp();
-            sceneType = "0,1";
         }
-        //TODO 请求启动弹窗内容
-//        Apic.getPop(sceneType).tag(TAG)
-//                .callback(new Callback2D<Resp<RespWrapper<Pop>>, RespWrapper<Pop>>() {
-//                    @Override
-//                    protected void onRespSuccessData(RespWrapper<Pop> data) {
-//                        if (data.getData() != null && !data.getData().isEmpty()) {
-//                            StartDialogFragment.newInstance(data.getData()).show(getSupportFragmentManager());
-//                        }
-//                    }
-//                }).fireFreely();
+        Apic.requestStartWindow().tag(TAG)
+                .callback(new Callback2D<Resp<List<StartWindow>>, List<StartWindow>>() {
+                    @Override
+                    protected void onRespSuccessData(List<StartWindow> data) {
+                        if(data!=null && data.size()>0){
+                            StartDialogFragment.newInstance(data.get(0)).show(getSupportFragmentManager());
+                        }
+                    }
+                }).fireFreely();
     }
 
     @Override

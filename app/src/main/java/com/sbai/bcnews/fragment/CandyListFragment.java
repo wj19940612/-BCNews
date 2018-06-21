@@ -30,6 +30,7 @@ import com.sbai.bcnews.utils.glide.GlideRoundTransform;
 import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
+import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -141,6 +142,16 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
             public void onFinish() {
                 super.onFinish();
                 stopFreshOrLoadAnimation();
+            }
+
+            @Override
+            public void onFailure(ReqError reqError) {
+                super.onFailure(reqError);
+                mEmptyView.setNoNet();
+                if (mCandyList.size() == 0)
+                    mEmptyView.setVisibility(View.VISIBLE);
+                else
+                    mEmptyView.setVisibility(View.GONE);
             }
         }).fireFreely();
     }

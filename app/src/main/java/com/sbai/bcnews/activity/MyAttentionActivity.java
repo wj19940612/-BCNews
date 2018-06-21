@@ -168,8 +168,7 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
+        setResult(RESULT_OK, getIntent());
         finish();
     }
 

@@ -1105,4 +1105,12 @@ public class Apic {
     public static Api requestConcernAuthor(int authorId,int type){
         return Api.post("/api/news-user/author/concern.do",new ReqParams().put("authorId",authorId).put("type",type));
     }
+
+    /**
+     * 启动弹窗
+     * @return
+     */
+    public static Api requestStartWindow(){
+        return Api.get("/api/news-user/window/list.do");
+    }
 }

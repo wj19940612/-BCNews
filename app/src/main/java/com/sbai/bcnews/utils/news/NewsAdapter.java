@@ -304,7 +304,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mLine.setVisibility(View.VISIBLE);
         }
 
-        if (mHasFoot && count - 1 == position && count > Apic.DEFAULT_PAGE_SIZE) {
+        if (mHasFoot) {
             mFooter.setVisibility(View.VISIBLE);
         } else {
             mFooter.setVisibility(View.GONE);

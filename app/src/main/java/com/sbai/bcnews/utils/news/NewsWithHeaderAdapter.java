@@ -10,7 +10,12 @@ import android.view.ViewGroup;
 
 public class NewsWithHeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    public static final int NORMAL_HEADER = 0;
+    public static final int EMPTY_HEADER = -1;
+
     private View mHeaderView;
+
+    private int mHeaderType = NORMAL_HEADER;
 
     private RecyclerView.Adapter mInnerAdapter;
 
@@ -36,7 +41,7 @@ public class NewsWithHeaderAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public int getItemViewType(int position) {
         if (isHeaderViewPos(position)) {
-            return position;
+            return mHeaderType;
         }
         return mInnerAdapter.getItemViewType(position - getHeadersCount());
     }
@@ -59,17 +64,26 @@ public class NewsWithHeaderAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return getHeadersCount() + getRealItemCount();
     }
 
-    private boolean isHeaderViewPos(int position) {
-        return position < getHeadersCount();
+    private boolean isHeaderViewPos(int viewType) {
+        return mHeaderView != null && (viewType == EMPTY_HEADER || viewType == NORMAL_HEADER);
     }
 
 
     public void setHeaderView(View view) {
-        mHeaderView = view;
+        setHeaderView(view, false);
     }
 
-    public View getHeaderView(){
+    public View getHeaderView() {
         return mHeaderView;
+    }
+
+    public void setHeaderView(View view, boolean isEmptyHeader) {
+        mHeaderView = view;
+        if (isEmptyHeader) {
+            mHeaderType = EMPTY_HEADER;
+        } else {
+            mHeaderType = NORMAL_HEADER;
+        }
     }
 
 

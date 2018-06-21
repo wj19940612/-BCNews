@@ -198,17 +198,17 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
     private void initEmptyView() {
         mEmptyView = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.view_empty_candy, null);
+        mEmptyView.setLayoutParams(new RecyclerView.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mEmptyRecyclerView = mEmptyView.findViewById(R.id.emptyRecyclerView);
     }
 
     private void initHeadView() {
         mHeaderView = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.view_my_attention, null);
-        mHeaderView.setLayoutParams(new RecyclerView.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(HEADER_HEIGHT, getResources())));
         mHeaderView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Launcher.with(AttentionFragment.this, MyAttentionActivity.class).executeForResult(INTENT_REQUEST_CODE_ATTENTIONLIST);
+                Launcher.with(AttentionFragment.this, MyAttentionActivity.class).excuteForResultFragment(INTENT_REQUEST_CODE_ATTENTIONLIST);
             }
         });
     }
@@ -241,7 +241,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
     private void setEmptyView(boolean isEmpty) {
         if (isEmpty) {
-            mNewsAdapter.setHeaderView(mEmptyView);
+            mNewsAdapter.setHeaderView(mEmptyView, isEmpty);
             mNewsAdapter.notifyDataSetChanged();
             loadEmptyData();
         } else {
@@ -256,6 +256,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         }
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            refreshFoot(0);
             mNewsAdapter.notifyDataSetChanged();
             return;
         }
@@ -267,7 +268,16 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         if (data.size() != 0)
             mPage++;
         mNewsWraps.addAll(NewsWrap.updateImgType(data));
+        refreshFoot(data.size());
         mNewsAdapter.notifyDataSetChanged();
+    }
+
+    private void refreshFoot(int size) {
+        if (mNewsWraps.size() >= Apic.DEFAULT_PAGE_SIZE && size < Apic.DEFAULT_PAGE_SIZE) {
+            mNewsAdapter.setHasFoot(true);
+        } else {
+            mNewsAdapter.setHasFoot(false);
+        }
     }
 
     private void requestMyAttention() {
@@ -332,6 +342,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     private void updateEmptyView(List<Author> newsAuthorList) {
         mNewsAuthorList.clear();
         mNewsAuthorList.addAll(newsAuthorList);
+        mEmptyRecyclerView.setFocusableInTouchMode(false);
         mRecommendAdapter.notifyDataSetChanged();
     }
 

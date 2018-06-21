@@ -2,67 +2,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/emptyView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="340dp"
-            android:layout_height="207dp"
+    <RelativeLayout
+        android:layout_width="340dp"
+        android:layout_height="207dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_no_attention">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="109dp"
+            android:layout_marginTop="33dp"
+            android:src="@drawable/ic_no_attention" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_no_attention">
+            android:layout_marginTop="153dp"
+            android:text="@string/you_have_not_attention_author"
+            android:textColor="@color/text_9b"
+            android:textSize="13sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="109dp"
-                android:layout_marginTop="33dp"
-                android:src="@drawable/ic_no_attention" />
+    </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="153dp"
-                android:layout_centerHorizontal="true"
-                android:textSize="13sp"
-                android:textColor="@color/text_9b"
-                android:text="@string/you_have_not_attention_author"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="284dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/recommend_attention"
+            android:textColor="@color/text_222"
+            android:textSize="18sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="284dp"
-            android:background="@color/white"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/recommend_attention_tip"
+            android:textColor="@color/text_9b"
+            android:textSize="11sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="18dp"
-                android:textSize="18sp"
-                android:textColor="@color/text_222"
-                android:gravity="center"
-                android:text="@string/recommend_attention" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/emptyRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginLeft="18dp"
-                android:textSize="11sp"
-                android:textColor="@color/text_9b"
-                android:text="@string/recommend_attention_tip" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/emptyRecyclerView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp" />
-
-        </LinearLayout>
-
+    </LinearLayout>
 
 </LinearLayout>
