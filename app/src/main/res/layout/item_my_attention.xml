@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="80dp"
+    android:layout_marginBottom="1dp"
     android:background="@color/white">
 
-    <ImageView
+    <com.sbai.bcnews.view.HasLabelLayout
         android:id="@+id/head"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="12dp" />
+        android:layout_marginLeft="12dp"
+        app:labelDrawable="@drawable/ic_label_v" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/text_4a"
-        android:layout_toRightOf="@+id/head"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="23dp" />
+        android:layout_marginTop="23dp"
+        android:layout_toRightOf="@+id/head"
+        android:textColor="@color/text_4a"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/introduce"
         android:layout_width="204dp"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/name"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_alignLeft="@+id/name"/>
+        android:layout_marginBottom="20dp" />
 
     <TextView
         android:id="@+id/attentionBtn"
         android:layout_width="50dp"
         android:layout_height="16dp"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="17dp"
         android:layout_centerVertical="true"
+        android:layout_marginRight="17dp"
         android:background="@drawable/btn_attention_author"
         android:gravity="center"
         android:text="已关注"

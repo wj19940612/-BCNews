@@ -1082,7 +1082,25 @@ public class Apic {
      * 关注的文章列表
      * @return
      */
-    public static Api requestAttentionArticle(){
-        return Api.get("/api/news-user/author/list/concern/bitcoin.do");
+    public static Api requestAttentionArticle(int page){
+        return Api.get("/api/news-user/author/list/concern/bitcoin.do",new ReqParams().put("page",page).put("size",DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * 获取推荐作者列表
+     * @return
+     */
+    public static Api requestRecommendAuthorList(){
+        return Api.get("/api/news-user/author/list/recommend.do");
+    }
+
+    /**
+     * 关注/取消关注 作者
+     * @param authorId 作者Id
+     * @param type     1关注 0-取消关注
+     * @return
+     */
+    public static Api requestConcernAuthor(int authorId,int type){
+        return Api.post("/api/news-user/author/concern.do",new ReqParams().put("authorId",authorId).put("type",type));
     }
 }

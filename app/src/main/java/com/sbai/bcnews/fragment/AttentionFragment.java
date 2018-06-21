@@ -1,10 +1,12 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,10 +20,14 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.MyAttentionActivity;
 import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.author.Author;
@@ -31,6 +37,7 @@ import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsAdapter;
 import com.sbai.bcnews.utils.news.NewsWithHeaderAdapter;
+import com.sbai.bcnews.view.dialog.AttentionDialog;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
@@ -43,11 +50,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static android.app.Activity.RESULT_OK;
 import static com.sbai.bcnews.ExtraKeys.CHANNEL;
 
 public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
-    public static final int HEADER_HEIGHT = 60;
+    public static final int HEADER_HEIGHT = 80;
+
+    public static final int INTENT_REQUEST_CODE_ATTENTIONLIST = 996;
+
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
     @BindView(R.id.swipe_target)
@@ -74,7 +85,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     public interface OnItemClickListener {
         public void onItemClick();
 
-        public void onAttention(Author newsAuthor,boolean isAttention,int position);
+        public void onAttention(Author newsAuthor, boolean isAttention, int position);
     }
 
     public static AttentionFragment newsIntance(String channel) {
@@ -108,7 +119,6 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         initView();
         loadData(true);
         requestMyAttention();
-        loadEmptyData();
     }
 
     @Override
@@ -150,7 +160,19 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
             }
 
             @Override
-            public void onAttention(Author newsAuthor,boolean isAttention,int position) {
+            public void onAttention(final Author newsAuthor, final boolean isAttention, final int position) {
+                if (isAttention) {
+                    AttentionDialog.with(getActivity()).setOnSureClickListener(new AttentionDialog.OnClickListener() {
+                        @Override
+                        public void onClick() {
+                            cancelOrAttention(false, newsAuthor, position);
+                        }
+                    }).setTitle(R.string.sure_cancel_attention).show();
+                } else if (LocalUser.getUser().isLogin()) {
+                    cancelOrAttention(true, newsAuthor, position);
+                } else {
+                    Launcher.with(getContext(), LoginActivity.class).execute();
+                }
             }
         });
         mEmptyRecyclerView.setAdapter(mRecommendAdapter);
@@ -186,23 +208,17 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         mHeaderView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Launcher.with(AttentionFragment.this, MyAttentionActivity.class).executeForResult(INTENT_REQUEST_CODE_ATTENTIONLIST);
             }
         });
     }
 
     private void loadData(final boolean refresh) {
-        String channelParam = Uri.encode(mChannel);
-        Apic.requestNewsListWithChannel(channelParam, mPage)
+        Apic.requestAttentionArticle(mPage)
                 .tag(TAG)
                 .callback(new Callback2D<Resp<News>, News>() {
                     @Override
                     protected void onRespSuccessData(News data) {
-                        if (mNewsWraps.size() == 0 && data.getContent().size() == 0) {
-                            setEmptyView(true);
-                        } else {
-                            setEmptyView(false);
-                        }
                         updateData(data.getContent(), refresh);
                     }
 
@@ -215,11 +231,6 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                     @Override
                     public void onFailure(ReqError reqError) {
                         super.onFailure(reqError);
-                        if (mNewsWraps.size() == 0) {
-                            setEmptyView(true);
-                        } else {
-                            setEmptyView(false);
-                        }
                         if (refresh) {
                             refreshFailure();
                         }
@@ -232,8 +243,10 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         if (isEmpty) {
             mNewsAdapter.setHeaderView(mEmptyView);
             mNewsAdapter.notifyDataSetChanged();
+            loadEmptyData();
         } else {
             mNewsAdapter.setHeaderView(null);
+            mNewsAdapter.notifyDataSetChanged();
         }
     }
 
@@ -258,11 +271,26 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void requestMyAttention() {
-//        Apic.requestAttentionAuthor().tag(TAG).callback(new Callback2D<Resp<List<>>>() {
-//        })
+        Apic.requestAttentionAuthor().tag(TAG).callback(new Callback2D<Resp<List<Author>>, List<Author>>() {
+            @Override
+            protected void onRespSuccessData(List<Author> data) {
+                updateMyAttentionData(data);
+            }
+
+            @Override
+            public void onFailure(ReqError reqError) {
+                super.onFailure(reqError);
+                setEmptyView(true);
+            }
+        }).fireFreely();
     }
 
-    private void loadMyAttentionData(List<Author> newsAuthorList) {
+    private void updateMyAttentionData(List<Author> newsAuthorList) {
+        if (newsAuthorList == null || newsAuthorList.size() == 0) {
+            setEmptyView(true);
+            return;
+        }
+        setEmptyView(false);
         if (newsAuthorList != null && newsAuthorList.size() > 0) {
             ImageView[] imageViews = new ImageView[4];
             imageViews[0] = mHeaderView.findViewById(R.id.head1);
@@ -275,7 +303,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                 if (i < displaySize) {
                     imageViews[i].setVisibility(View.VISIBLE);
                     GlideApp.with(getActivity())
-                            .load("")
+                            .load(newsAuthorList.get(i).getUserPortrait())
                             .placeholder(R.drawable.ic_default_head_portrait)
                             .circleCrop()
                             .into(imageViews[i]);
@@ -289,16 +317,16 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                     mNewsAdapter.notifyDataSetChanged();
                 }
             }
-        } else {
-            if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
-                mNewsAdapter.setHeaderView(null);
-                mNewsAdapter.notifyDataSetChanged();
-            }
         }
     }
 
     private void loadEmptyData() {
-
+        Apic.requestRecommendAuthorList().tag(TAG).callback(new Callback2D<Resp<List<Author>>, List<Author>>() {
+            @Override
+            protected void onRespSuccessData(List<Author> data) {
+                updateEmptyView(data);
+            }
+        }).fireFreely();
     }
 
     private void updateEmptyView(List<Author> newsAuthorList) {
@@ -310,6 +338,30 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     private void refreshReadStatus() {
         if (mNewsWraps != null && mNewsWraps.size() != 0) {
             mNewsAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void cancelOrAttention(final boolean isAttention, final Author selectAuthor, final int selectPosition) {
+        int type = isAttention ? 1 : 0;
+        Apic.requestConcernAuthor(selectAuthor.getId(), type).tag(TAG).callback(new Callback<Resp>() {
+            @Override
+            protected void onRespSuccess(Resp resp) {
+                if (!isAttention) {
+                    selectAuthor.setIsConcern(0);
+                } else {
+                    selectAuthor.setIsConcern(1);
+                }
+                mRecommendAdapter.notifyItemChanged(selectPosition);
+            }
+        }).fire();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == INTENT_REQUEST_CODE_ATTENTIONLIST && resultCode == RESULT_OK) {
+            loadData(true);
+            requestMyAttention();
         }
     }
 
@@ -334,7 +386,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ((ViewHolder) holder).bindingData(mNewsAuthors.get(position), mContext);
+            ((ViewHolder) holder).bindingData(mNewsAuthors.get(position), mContext, mOnItemClickListener, position);
         }
 
         @Override
@@ -358,8 +410,38 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(Author newsAuthor, Context context) {
+            private void bindingData(final Author newsAuthor, Context context, final OnItemClickListener onItemClickListener, final int position) {
+                GlideApp.with(context)
+                        .load(newsAuthor.getUserPortrait())
+                        .placeholder(R.drawable.ic_default_head_portrait)
+                        .circleCrop()
+                        .into(mHead);
 
+                mName.setText(newsAuthor.getUserName());
+                if (!LocalUser.getUser().isLogin()) {
+                    setNoAttentionBtn(mAttentionBtn, false, context);
+                } else {
+                    setNoAttentionBtn(mAttentionBtn, newsAuthor.getIsConcern() > 0, context);
+                }
+                mAttentionBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onAttention(newsAuthor, newsAuthor.getIsConcern() > 0, position);
+                        }
+                    }
+                });
+            }
+
+            private void setNoAttentionBtn(TextView attentionBtn, boolean hasAttention, Context context) {
+                attentionBtn.setSelected(hasAttention);
+                if (hasAttention) {
+                    attentionBtn.setTextColor(ContextCompat.getColor(context, R.color.text_d9));
+                    attentionBtn.setText(R.string.has_attention);
+                } else {
+                    attentionBtn.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+                    attentionBtn.setText(R.string.attention);
+                }
             }
         }
     }

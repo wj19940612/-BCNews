@@ -142,6 +142,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onResume() {
         super.onResume();
+        loadData(true);
         refreshReadStatus();
         startScheduleJob(TIME_ONE);
     }
