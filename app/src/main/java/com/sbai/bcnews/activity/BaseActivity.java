@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
@@ -94,6 +95,7 @@ public class BaseActivity extends StatusBarActivity implements
         SysTime.getSysTime().sync();
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         initScreenShotListener();
+        initBroadcastListener();
     }
 
     private void initScreenShotListener() {
@@ -108,6 +110,13 @@ public class BaseActivity extends StatusBarActivity implements
                 mDialogList.add(dialog);
             }
         });
+    }
+
+    private void initBroadcastListener(){
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LoginActivity.ACTION_LOGIN_SUCCESS);
+        intentFilter.addAction(LoginActivity.ACTION_TOKEN_EXPIRED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, intentFilter);
     }
 
     private void scrollToTop(View view) {
@@ -161,17 +170,12 @@ public class BaseActivity extends StatusBarActivity implements
     protected void onStart() {
         super.onStart();
         mScreenShotListenManager.startListen();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LoginActivity.ACTION_LOGIN_SUCCESS);
-        intentFilter.addAction(LoginActivity.ACTION_TOKEN_EXPIRED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mScreenShotListenManager.stopListen();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
     @Override
@@ -186,6 +190,7 @@ public class BaseActivity extends StatusBarActivity implements
         mRequestProgress.dismissAll();
 
         stopScheduleJob();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
     private void showLoginRewardDialog() {

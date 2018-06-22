@@ -60,7 +60,6 @@
                 android:layout_width="90dp"
                 android:layout_height="28dp"
                 android:layout_gravity="center_vertical"
-                android:enabled="false"
                 android:gravity="center"
                 android:text="@string/get_auth_code"
                 android:textColor="@color/primary_or_unlucky_text_color" />

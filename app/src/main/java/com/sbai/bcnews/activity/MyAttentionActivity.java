@@ -139,6 +139,12 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity {
             protected void onRespSuccessData(List<Author> data) {
                 updateData(data, refresh);
             }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                stopFreshOrLoadAnimation();
+            }
         }).fireFreely();
     }
 

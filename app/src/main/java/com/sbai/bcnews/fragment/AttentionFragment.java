@@ -37,6 +37,7 @@ import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsAdapter;
 import com.sbai.bcnews.utils.news.NewsWithHeaderAdapter;
+import com.sbai.bcnews.view.HasLabelLayout;
 import com.sbai.bcnews.view.dialog.AttentionDialog;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
@@ -408,7 +409,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
         static class ViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.head)
-            ImageView mHead;
+            HasLabelLayout mHead;
             @BindView(R.id.name)
             TextView mName;
             @BindView(R.id.attentionBtn)
@@ -422,11 +423,14 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
             }
 
             private void bindingData(final Author newsAuthor, Context context, final OnItemClickListener onItemClickListener, final int position) {
-                GlideApp.with(context)
-                        .load(newsAuthor.getUserPortrait())
-                        .placeholder(R.drawable.ic_default_head_portrait)
-                        .circleCrop()
-                        .into(mHead);
+                mHead.setImageSrc(newsAuthor.getUserPortrait());
+                if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_OFFICIAL) {
+                    mHead.setLabelSelected(true);
+                } else if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_SPECIAL) {
+                    mHead.setLabelSelected(false);
+                } else {
+                    mHead.setLabelImageViewVisible(false);
+                }
 
                 mName.setText(newsAuthor.getUserName());
                 if (!LocalUser.getUser().isLogin()) {

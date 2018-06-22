@@ -19,6 +19,7 @@ import com.sbai.bcnews.activity.mine.ImageAuthCodeActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.utils.KeyBoardUtils;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrFormatter;
@@ -77,6 +78,15 @@ public class InputPhoneActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_phone);
         ButterKnife.bind(this);
+
+        mPhoneNumber.clearFocus();
+
+        if (!TextUtils.isEmpty(LocalUser.getUser().getPhone())) {
+            mPhoneNumber.setText(LocalUser.getUser().getPhone());
+            formatPhoneNumber();
+            mPhoneNumber.clearFocus();
+            mNext.setEnabled(checkNextButtonEnable());
+        }
 
         mPhoneNumber.requestFocus();
         mPhoneNumber.addTextChangedListener(mPhoneValidationWatcher);

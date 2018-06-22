@@ -112,6 +112,8 @@ public class LoginActivity extends WeChatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        switchLoginMode();//默认登录应为密码登录
+
         translucentStatusBar();
         // 第一次登录不需要弹出软键盘
         mPhoneNumber.clearFocus();
@@ -139,7 +141,6 @@ public class LoginActivity extends WeChatActivity {
         initListener();
 
         setKeyboardHelper();
-        Log.d(TAG, "onCreate: ");
     }
 
     private void initListener() {
@@ -199,7 +200,6 @@ public class LoginActivity extends WeChatActivity {
         mPassword.removeTextChangedListener(mValidationWatcher);
         mKeyBoardHelper.onDestroy();
         mLoading.clearAnimation();
-        Log.d(TAG, "onDestroy: ");
     }
 
     @Override
@@ -492,7 +492,14 @@ public class LoginActivity extends WeChatActivity {
                             super.onRespFailure(failedResp);
                             if (failedResp.getCode() == CODE_NOT_SET_PASSWORD) {
                                 showSwitchDialog();
+                            } else {
+                                ToastUtil.show(failedResp.getMsg());
                             }
+                        }
+
+                        @Override
+                        protected boolean toastError() {
+                            return false;
                         }
                     }).fire();
         }
