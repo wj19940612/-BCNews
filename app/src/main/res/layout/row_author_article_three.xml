@@ -29,13 +29,13 @@
         tools:text="溺水的鱼 阿斯加德好几款撒旦画啥的季后赛抠脚大萨达所大萨达撒大萨达撒大汉"/>
 
     <com.sbai.bcnews.view.ThreeImageLayout
-        android:id="@+id/threeImageLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:minHeight="70dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"/>
+    android:id="@+id/threeImageLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="13dp"
+    android:minHeight="70dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/title"/>
 
     <TextView
         android:id="@+id/timeLine"

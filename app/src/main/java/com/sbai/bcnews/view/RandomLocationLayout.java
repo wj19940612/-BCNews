@@ -21,6 +21,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.mine.QKC;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.FinanceUtil;
+import com.sbai.bcnews.utils.TypefaceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,7 @@ public class RandomLocationLayout extends LinearLayout {
             qkcCoin.setText(null);
             qkcCoin.setEnabled(true);
             qkcCoin.setVisibility(INVISIBLE);
+            TypefaceUtils.setMiningTextTypeface(qkcCoin);
 //            setRandomTranslate(qkcCoin, i);
         }
     }

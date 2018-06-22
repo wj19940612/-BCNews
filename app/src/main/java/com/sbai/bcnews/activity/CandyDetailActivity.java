@@ -1,22 +1,16 @@
 package com.sbai.bcnews.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
-import android.webkit.DownloadListener;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sbai.bcnews.AppJs;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
@@ -25,7 +19,7 @@ import com.sbai.bcnews.model.Candy;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
-import com.sbai.bcnews.utils.glide.GlideRoundTransform;
+import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
 
@@ -142,7 +136,7 @@ public class CandyDetailActivity extends BaseActivity {
         });
 
         GlideApp.with(getActivity()).load(mCandy.getPhoto())
-                .transform(new GlideRoundTransform(getActivity()))
+                .transform(new GlideRoundAndCenterCropTransform(getActivity()))
                 .placeholder(R.drawable.ic_default_news)
                 .centerCrop()
                 .into(mHead);

@@ -76,6 +76,7 @@ public abstract class NewsShareOrCommentBaseActivity extends RecycleViewSwipeLoa
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         registersBroadcastReceiver();
+        mWebTextSize = Preference.get().getLocalWebTextSize();
     }
 
     @Override

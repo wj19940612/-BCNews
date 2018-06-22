@@ -533,7 +533,8 @@ public class ReplyMineFragment extends RecycleViewSwipeLoadFragment implements W
 
 
                 SpannableString spannableString = formatReviewContent(pageType, itemData, context);
-                if (spannableString == null) {
+                //0 代表对文章的评论
+                if (spannableString == null || itemData.getType() == 0) {
                     mTitle.setVisibility(View.GONE);
                 } else {
                     mTitle.setVisibility(View.VISIBLE);

@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.sbai.bcnews.utils.Display;
-import com.sbai.bcnews.utils.glide.GlideRoundTransform;
+import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.glide.GlideApp;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class ThreeImageLayout extends LinearLayout {
                 final String imagePath = content.get(i);
                 ImageView imageView = mImageViewList.get(i);
                 imageView.setVisibility(VISIBLE);
-                RequestOptions requestOptions = new RequestOptions().transform(new GlideRoundTransform(getContext()));
+                RequestOptions requestOptions = new RequestOptions().transform(new GlideRoundAndCenterCropTransform(getContext()));
                 GlideApp.with(getContext())
                         .load(imagePath)
                         .apply(requestOptions)

@@ -19,14 +19,12 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.CandyDetailActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
-import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.ListResp;
-import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.Candy;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.OnItemClickListener;
-import com.sbai.bcnews.utils.glide.GlideRoundTransform;
+import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.bcnews.view.EmptyView;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
@@ -228,7 +226,7 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
                     mGetCount.setText(context.getString(R.string.x_ten_thousand_have_get, candy.getClicks() / 10000));
                 }
                 GlideApp.with(context).load(candy.getPhoto())
-                        .transform(new GlideRoundTransform(context))
+                        .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
                         .centerCrop()
                         .into(mHead);

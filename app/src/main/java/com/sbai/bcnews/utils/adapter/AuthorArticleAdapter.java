@@ -14,7 +14,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.author.AuthorArticle;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.OnItemClickListener;
-import com.sbai.bcnews.utils.glide.GlideRoundTransform;
+import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.bcnews.view.ThreeImageLayout;
 import com.sbai.bcnews.view.recycleview.HeaderViewRecycleViewAdapter;
 import com.sbai.glide.GlideApp;
@@ -138,7 +138,7 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
                 GlideApp.with(context)
                         .load(imgs.get(0))
                         .placeholder(R.drawable.ic_default_news)
-                        .transform(new GlideRoundTransform(context))
+                        .transform(new GlideRoundAndCenterCropTransform(context))
                         .into(mImage);
             } else {
                 mImage.setVisibility(View.GONE);
@@ -150,6 +150,9 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
     static class MultiImageViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.title)
         TextView mTitle;
+//        @BindView(R.id.threeImageLayout)
+//        LinearLayout mThreeImageLayout;
+
         @BindView(R.id.threeImageLayout)
         ThreeImageLayout mThreeImageLayout;
         @BindView(R.id.timeLine)
@@ -183,7 +186,7 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
                 mReviewNumber.setVisibility(View.GONE);
             }
 
-            if(data.getImgs()!=null&&data.getImgs().size()>1){
+            if (data.getImgs() != null && data.getImgs().size() > 1) {
                 mThreeImageLayout.setImagePath(data.getImgs());
             }
         }

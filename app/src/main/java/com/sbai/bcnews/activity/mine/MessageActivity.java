@@ -112,8 +112,9 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
                 else if (message.getType() == Message.MESSAGE_TYPE_FEED_BACK_REVIEW)
                     Launcher.with(getActivity(), FeedbackActivity.class).execute();
                 else if(message.getType()==Message.MESSAGE_TYPE_ARTICLE){
-                    // TODO: 2018/6/13 需要补充全
-                    Launcher.with(getActivity(), NewsDetailActivity.class).execute();
+                    Launcher.with(getActivity(), NewsDetailActivity.class)
+                            .putExtra(ExtraKeys.NEWS_ID, message.getDataId())
+                            .execute();
                 }
             }
         });

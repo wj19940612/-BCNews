@@ -16,7 +16,7 @@ import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.utils.DateUtil;
-import com.sbai.bcnews.utils.glide.GlideRoundTransform;
+import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.glide.GlideApp;
 
 import java.util.List;
@@ -179,7 +179,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(0))
-                        .transform(new GlideRoundTransform(context))
+                        .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
                         .centerCrop()
                         .into(mImg);
@@ -228,7 +228,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg1.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(0))
-                        .transform(new GlideRoundTransform(context))
+                        .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
                         .centerCrop()
                         .into(mImg1);
@@ -239,7 +239,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (item.getImgs() != null && item.getImgs().size() > 1) {
                 mImg2.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(1))
-                        .transform(new GlideRoundTransform(context))
+                        .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
                         .centerCrop()
                         .into(mImg2);
@@ -250,7 +250,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (item.getImgs() != null && item.getImgs().size() > 2) {
                 mImg3.setVisibility(View.VISIBLE);
                 GlideApp.with(context).load(item.getImgs().get(2))
-                        .transform(new GlideRoundTransform(context))
+                        .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
                         .centerCrop()
                         .into(mImg3);

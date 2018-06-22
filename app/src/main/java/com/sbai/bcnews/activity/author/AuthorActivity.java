@@ -1,5 +1,6 @@
 package com.sbai.bcnews.activity.author;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -47,6 +48,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AuthorActivity extends RecycleViewSwipeLoadActivity {
+
+    public static final int REQ_CODE_ATTENTION_AUTHOR = 14882;
 
     @BindView(R.id.hasLabelLayout)
     HasLabelLayout mHasLabelLayout;
@@ -109,8 +112,14 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
         initView();
 
-        requestAuthorInfo();
+
         requestAuthorArticle();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestAuthorInfo();
     }
 
     private void initView() {
@@ -256,7 +265,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
         boolean isOfficialAuthor = author.getRankType() == Author.AUTHOR_STATUS_OFFICIAL;
         mHasLabelLayout.setLabelSelected(isOfficialAuthor);
-        mAuthorIdentity.setText(author.getRemark());
+        mAuthorIdentity.setText(author.getRankTypeStr());
 
         mTitleBarHasLabelLayout.setLabelSelected(isOfficialAuthor);
 
@@ -267,7 +276,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
         mTitleBarHasLabelLayout.setImageSrc(author.getUserPortrait());
         mTitleBarAuthorName.setText(author.getUserName());
-        mAttentionAuthor.setSelected(author.getIsConcern()==Author.AUTHOR_IS_ALREADY_ATTENTION);
+        mAttentionAuthor.setSelected(author.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
 
         setMyArticleTotal(author.getArticleCount());
     }
@@ -330,7 +339,10 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                         @Override
                         protected void onRespSuccess(Resp<Object> resp) {
                             mAuthor.setIsConcern(attentionType);
-                            mAttentionAuthor.setSelected(mAuthor.getIsConcern()==Author.AUTHOR_IS_ALREADY_ATTENTION);
+                            Intent intent = new Intent();
+                            intent.putExtra(ExtraKeys.TAG, attentionType);
+                            setResult(RESULT_OK, intent);
+                            mAttentionAuthor.setSelected(mAuthor.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
                         }
                     })
                     .fire();

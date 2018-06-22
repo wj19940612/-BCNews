@@ -38,7 +38,7 @@ public class Message implements MessageStatus {
      */
 
     private long createTime;
-    private int dataId;      //对象的id:暂时为评论的id
+    private String dataId;      //对象的id:暂时为评论的id
     private String id;       //该消息的id(阅读的时候使用)
     private String msg;
     private int sourceUserId;
@@ -64,11 +64,11 @@ public class Message implements MessageStatus {
         this.createTime = createTime;
     }
 
-    public int getDataId() {
+    public String getDataId() {
         return dataId;
     }
 
-    public void setDataId(int dataId) {
+    public void setDataId(String dataId) {
         this.dataId = dataId;
     }
 

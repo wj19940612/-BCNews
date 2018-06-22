@@ -18,7 +18,7 @@ import com.sbai.bcnews.model.Candy;
 import com.sbai.bcnews.utils.IntegralUtils;
 import com.sbai.bcnews.utils.ShareUtils;
 import com.sbai.bcnews.utils.ToastUtil;
-import com.sbai.bcnews.utils.glide.GlideRoundTransform;
+import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.bcnews.utils.image.ImageUtils;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.glide.GlideApp;
@@ -104,7 +104,7 @@ public class ShareCandyActivity extends BaseActivity {
 
     private void initViewData() {
         GlideApp.with(getActivity()).load(mCandy.getPhoto())
-                .transform(new GlideRoundTransform(getActivity()))
+                .transform(new GlideRoundAndCenterCropTransform(getActivity()))
                 .placeholder(R.drawable.ic_default_news)
                 .centerCrop()
                 .into(mHead);

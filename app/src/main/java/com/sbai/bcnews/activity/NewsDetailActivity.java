@@ -501,7 +501,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                 if (newsDetail1 != null && newsDetail1.getRankType() != Author.AUTHOR_STATUS_ORDINARY)
                     Launcher.with(getActivity(), AuthorActivity.class)
                             .putExtra(ExtraKeys.ID, newsDetail1.getAuthorId())
-                            .execute();
+                            .executeForResult(AuthorActivity.REQ_CODE_ATTENTION_AUTHOR);
                 break;
 
         }
@@ -577,7 +577,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        requestDetailData();
         updateOtherData(mOtherArticleList);
         requestNewsViewpoint();
         if (LocalUser.getUser().isLogin()) {
@@ -974,6 +973,12 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                 } else {
                     mNetNewsDetail = data;
                     updatePraiseCollect(data);
+
+                    if (mChannel == null && mTag == null && mNetNewsDetail.getChannel().size() > 0) {
+                        mChannel = mNetNewsDetail.getChannel().get(0);
+                        requestOtherArticle();
+                    }
+
                 }
                 updateAuthorInfo(data);
             }
@@ -1098,6 +1103,11 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             mAuthorAttention.setVisibility(View.GONE);
         }
         updateReadNumber(data);
+        if (TextUtils.isEmpty(data.getSummary())) {
+            mArticleIntroduce.setVisibility(View.GONE);
+        } else {
+            mArticleIntroduce.setVisibility(View.VISIBLE);
+        }
         mArticleIntroduce.setText(data.getSummary());
         mAuthorAttention.setSelected(data.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
     }
@@ -1195,6 +1205,14 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                                 updateCollect(mNewsDetail);
                             }
                         }
+                    }
+                    break;
+                case AuthorActivity.REQ_CODE_ATTENTION_AUTHOR:
+                    int attentionType = data.getIntExtra(ExtraKeys.TAG, -1);
+                    NewsDetail newsDetail = getNewsDetail();
+                    if (newsDetail != null && attentionType != -1 && attentionType != newsDetail.getIsConcern()) {
+                        newsDetail.setIsConcern(attentionType);
+                        mAuthorAttention.setSelected(newsDetail.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
                     }
                     break;
             }
