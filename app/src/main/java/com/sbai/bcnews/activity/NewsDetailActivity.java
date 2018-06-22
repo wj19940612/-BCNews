@@ -47,6 +47,7 @@ import com.sbai.bcnews.model.mine.QKC;
 import com.sbai.bcnews.model.news.NewViewPointAndReview;
 import com.sbai.bcnews.model.news.NewsViewpoint;
 import com.sbai.bcnews.model.news.WriteComment;
+import com.sbai.bcnews.service.DownloadService;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.PermissionUtil;
@@ -223,6 +224,12 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     TextView mArticleIntroduce;
     @BindView(R.id.authorInfo)
     ConstraintLayout mAuthorInfo;
+    @BindView(R.id.firstReadCount)
+    TextView mFirstReadCount;
+    @BindView(R.id.secondReadCount)
+    TextView mSecondReadCount;
+    @BindView(R.id.thirdReadCount)
+    TextView mThirdReadCount;
 
 
     private WebViewClient mWebViewClient;
@@ -289,6 +296,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         initView();
         initWebView();
         initScrollView();
+        requestDetailData();
         requestOtherArticle();
         requestNewsViewpoint();
     }
@@ -632,11 +640,32 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     private void openNewsDetailsPage(int position) {
         if (mOtherArticleList != null && position < mOtherArticleList.size()) {
             OtherArticle data = mOtherArticleList.get(position);
+            if (data.getIsAdvert() > 0) {
+                if (data.getUrlType() > 0 && !TextUtils.isEmpty(data.getAndroidUrl())) {
+                    downLoadApp(data.getAndroidUrl());
+                } else if (!TextUtils.isEmpty(data.getAndroidUrl())) {
+                    Launcher.with(getActivity(), WebActivity.class)
+                            .putExtra(WebActivity.EX_URL, data.getAndroidUrl())
+                            .execute();
+                }
+                NewsReadCache.markNewsRead(data.getId());
+            }
             if (!TextUtils.isEmpty(mChannel)) {
                 Launcher.with(NewsDetailActivity.this, NewsDetailActivity.class).putExtra(ExtraKeys.CHANNEL, mChannel).putExtra(ExtraKeys.NEWS_ID, data.getId()).execute();
             } else if (!TextUtils.isEmpty(mTag)) {
                 Launcher.with(NewsDetailActivity.this, NewsDetailActivity.class).putExtra(ExtraKeys.TAG, mTag).putExtra(ExtraKeys.NEWS_ID, data.getId()).execute();
             }
+        }
+    }
+
+    private void downLoadApp(String downloadUrl) {
+        if (downloadUrl == null || TextUtils.isEmpty(downloadUrl)) {
+            return;
+        }
+        if (PermissionUtil.isStoragePermissionGranted(getActivity(), PermissionUtil.REQ_CODE_ASK_PERMISSION)) {
+            Intent intent = new Intent(getActivity(), DownloadService.class);
+            intent.putExtra(DownloadService.KEY_DOWN_LOAD_URL, downloadUrl);
+            getActivity().startService(intent);
         }
     }
 
@@ -1055,30 +1084,47 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         mOtherArticleTip.setVisibility(View.VISIBLE);
         OtherArticle otherArticle = data.get(0);
         if (otherArticle != null)
-            updateArticle(otherArticle, mFirstArticle, mFirstTitle, mFirstOriginal, mFirstSource, mFirstTime, mFirstImg);
+            updateArticle(otherArticle, mFirstArticle, mFirstTitle, mFirstOriginal, mFirstSource, mFirstTime, mFirstImg, mFirstReadCount);
 
         if (data.size() > 1) {
             OtherArticle otherArticle1 = data.get(1);
             if (otherArticle1 != null)
-                updateArticle(otherArticle1, mSecondArticle, mSecondTitle, mSecondOriginal, mSecondSource, mSecondTime, mSecondImg);
+                updateArticle(otherArticle1, mSecondArticle, mSecondTitle, mSecondOriginal, mSecondSource, mSecondTime, mSecondImg, mSecondReadCount);
         }
 
         if (data.size() > 2) {
             OtherArticle otherArticle2 = data.get(2);
             if (otherArticle2 != null)
-                updateArticle(otherArticle2, mThirdArticle, mThirdTitle, mThirdOriginal, mThirdSource, mThirdTime, mThirdImg);
+                updateArticle(otherArticle2, mThirdArticle, mThirdTitle, mThirdOriginal, mThirdSource, mThirdTime, mThirdImg, mThirdReadCount);
         }
     }
 
-    private void updateArticle(OtherArticle data, RelativeLayout articleRl, TextView articleTitle, TextView articleOriginal, TextView articleSource, TextView articleTime, ImageView articleImg) {
+    private void updateArticle(OtherArticle data, RelativeLayout articleRl, TextView articleTitle, TextView articleOriginal, TextView articleSource, TextView articleTime, ImageView articleImg, TextView readCount) {
+        //广告
+        if (data.getIsAdvert() > 0) {
+            readCount.setVisibility(View.GONE);
+            articleTitle.setText(data.getAdvertCopyWriter());
+            articleSource.setText(data.getAdvertName());
+            articleSource.setVisibility(View.VISIBLE);
+            articleTime.setText(getString(R.string.point_x, getString(R.string.advert)));
+        } else {
+            readCount.setVisibility(View.VISIBLE);
+            articleTitle.setText(data.getTitle());
+
+            if (TextUtils.isEmpty(data.getAuthor())) {
+                articleSource.setVisibility(View.GONE);
+                articleTime.setText(DateUtil.formatNewsStyleTime(data.getReleaseTime()));
+            } else {
+                articleSource.setText(data.getAuthor());
+                articleTime.setText(getString(R.string.point_x, DateUtil.formatNewsStyleTime(data.getReleaseTime())));
+            }
+            readCount.setText(getString(R.string.read_number, data.getShowReadCount()));
+        }
+
         articleRl.setVisibility(View.VISIBLE);
-        articleTitle.setText(data.getTitle());
-        articleTitle.setEnabled(!NewsReadCache.isRead(data.getId()));
         articleOriginal.setVisibility(data.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-        articleSource.setText(data.getSource());
-//        articleSource.setVisibility(TextUtils.isEmpty(data.getSource()) ? View.GONE : View.VISIBLE);
-        articleSource.setVisibility(View.GONE);
-        articleTime.setText(DateUtil.formatNewsStyleTime(data.getReleaseTime()));
+        articleTitle.setEnabled(!NewsReadCache.isRead(data.getId()));
+
         if (data.getImgs() != null && data.getImgs().size() > 0) {
             articleImg.setVisibility(View.VISIBLE);
             GlideApp.with(getActivity()).load(data.getImgs().get(0))

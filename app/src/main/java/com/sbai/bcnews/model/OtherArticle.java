@@ -37,6 +37,14 @@ public class OtherArticle {
     private List<String> channel;
     private List<String> imgs;
     private List<?> tags;
+    private String author;       //作者
+    private int showReadCount;
+
+    private String advertCopyWriter;//广告文案
+    private String advertName;//广告名
+    private String androidUrl; //广告链接
+    private int isAdvert;//是否广告 0不是 1是
+    private int urlType; //0-h5 1-下载
 
     public int getEdit() {
         return edit;
@@ -140,5 +148,61 @@ public class OtherArticle {
 
     public void setTags(List<?> tags) {
         this.tags = tags;
+    }
+
+    public String getAdvertCopyWriter() {
+        return advertCopyWriter;
+    }
+
+    public void setAdvertCopyWriter(String advertCopyWriter) {
+        this.advertCopyWriter = advertCopyWriter;
+    }
+
+    public String getAdvertName() {
+        return advertName;
+    }
+
+    public void setAdvertName(String advertName) {
+        this.advertName = advertName;
+    }
+
+    public String getAndroidUrl() {
+        return androidUrl;
+    }
+
+    public void setAndroidUrl(String androidUrl) {
+        this.androidUrl = androidUrl;
+    }
+
+    public int getIsAdvert() {
+        return isAdvert;
+    }
+
+    public void setIsAdvert(int isAdvert) {
+        this.isAdvert = isAdvert;
+    }
+
+    public int getUrlType() {
+        return urlType;
+    }
+
+    public void setUrlType(int urlType) {
+        this.urlType = urlType;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public int getShowReadCount() {
+        return showReadCount;
+    }
+
+    public void setShowReadCount(int showReadCount) {
+        this.showReadCount = showReadCount;
     }
 }

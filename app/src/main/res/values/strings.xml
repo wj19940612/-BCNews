@@ -174,7 +174,6 @@
     <string name="set_success">设置成功</string>
 
 
-
     <!-- 图形验证码输入框 -->
     <string name="please_input_image_auth_code">请输入图形验证码</string>
     <string name="auth_code_error">图形验证码有误</string>
@@ -460,7 +459,7 @@
     <string name="his_article_number">TA的文章（%1$d）</string>
     <string name="read_number">%1$d人阅读</string>
     <string name="review_number">%1$d评论</string>
-    <string name="news_publish_time_and_red_number">%1$s . %2$d人阅读</string>
+    <string name="news_publish_time_and_red_number">%1$s· %2$d人阅读</string>
     <string name="author_check_introduce">认证简介：%1$s</string>
     <string name="recommend_author">推荐%1$s作者：%2$s</string>
 
