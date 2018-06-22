@@ -1,5 +1,7 @@
 package com.sbai.bcnews.fragment.dialog;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -25,6 +27,7 @@ import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.model.Pop;
 import com.sbai.bcnews.model.StartWindow;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.bcnews.view.StartBanner;
 import com.sbai.glide.GlideApp;
 
@@ -51,12 +54,22 @@ public class StartDialogFragment extends DialogFragment {
     private Unbinder mBind;
     private StartWindow mStartWindow;
 
+    private SmartDialog.OnDismissListener mOnDismissListener;
+
     public static StartDialogFragment newInstance(StartWindow startWindow) {
         StartDialogFragment startDialogFragment = new StartDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ExtraKeys.START_WINDOW, startWindow);
         startDialogFragment.setArguments(bundle);
         return startDialogFragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof SmartDialog.OnDismissListener){
+            mOnDismissListener = (SmartDialog.OnDismissListener) context;
+        }
     }
 
     @Nullable
@@ -130,6 +143,14 @@ public class StartDialogFragment extends DialogFragment {
         switch (view.getId()) {
             case R.id.dialogDelete:
                 dismissAllowingStateLoss();
+        }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if(mOnDismissListener!=null){
+            mOnDismissListener.onDismiss(null);
         }
     }
 }

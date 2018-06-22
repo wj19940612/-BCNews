@@ -15,7 +15,9 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.Preference;
+import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.model.LocalUser;
@@ -72,6 +74,8 @@ public class BaseActivity extends StatusBarActivity implements
                 LocalUser.getUser().logout();
                 Launcher.with(getActivity(), MainActivity.class).execute();
                 Launcher.with(getActivity(), LoginActivity.class).execute();
+            } else if (ACTION_LOGIN_SUCCESS.equalsIgnoreCase(intent.getAction())) {
+                showUpdateSetLoginDialog();
             }
         }
     };
@@ -141,7 +145,7 @@ public class BaseActivity extends StatusBarActivity implements
 
         MobclickAgent.onPageStart(TAG);
         MobclickAgent.onResume(this);
-        showIfFirstDialog();
+        showLoginRewardDialog();
     }
 
     @Override
@@ -157,7 +161,10 @@ public class BaseActivity extends StatusBarActivity implements
     protected void onStart() {
         super.onStart();
         mScreenShotListenManager.startListen();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(ACTION_TOKEN_EXPIRED));
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LoginActivity.ACTION_LOGIN_SUCCESS);
+        intentFilter.addAction(LoginActivity.ACTION_TOKEN_EXPIRED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
@@ -181,7 +188,7 @@ public class BaseActivity extends StatusBarActivity implements
         stopScheduleJob();
     }
 
-    private void showIfFirstDialog() {
+    private void showLoginRewardDialog() {
         if (LocalUser.getUser().isLogin() && LocalUser.getUser().getUserInfo().getAddRate() > 0) {
             RegisterScoreDialog.with(this, REGISTER).setScore(LocalUser.getUser().getUserInfo().getAddRate()).show();
             LocalUser.getUser().getUserInfo().setAddRate(0);
@@ -192,6 +199,17 @@ public class BaseActivity extends StatusBarActivity implements
             LocalUser.getUser().getUserInfo().setAddRate(0);
             LocalUser.getUser().getUserInfo().setAddIntegral(0);
             LocalUser.getUser().saveToPreference();
+        }
+    }
+
+    public void showUpdateSetLoginDialog() {
+        if (LocalUser.getUser().getUserInfo().getIsPassword() == 0) {
+            SmartDialog.with(getActivity(), getString(R.string.please_set_login_password)).setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                @Override
+                public void onClick(Dialog dialog) {
+                    Launcher.with(BaseActivity.this, ModifyPassActivity.class).putExtra(ExtraKeys.HAS_LOGIN_PSD, LocalUser.getUser().getUserInfo().getIsPassword() > 0).execute();
+                }
+            }).show();
         }
     }
 

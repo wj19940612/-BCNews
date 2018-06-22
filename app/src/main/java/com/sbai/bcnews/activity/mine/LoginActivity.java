@@ -1,5 +1,6 @@
 package com.sbai.bcnews.activity.mine;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -36,11 +37,15 @@ import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.bcnews.view.PasswordEditText;
+import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.glide.GlideApp;
+import com.sbai.httplib.ReqError;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.sbai.bcnews.http.Resp.CODE_NOT_SET_PASSWORD;
 
 
 public class LoginActivity extends WeChatActivity {
@@ -310,7 +315,7 @@ public class LoginActivity extends WeChatActivity {
         return mPhoneNumber.getText().toString().trim().replaceAll(" ", "");
     }
 
-    @OnClick({R.id.closePage, R.id.phoneNumberClear, R.id.getAuthCode, R.id.login, R.id.rootView, R.id.weChatLogin, R.id.agree, R.id.passLogin, R.id.registerBtn,R.id.forgetPass})
+    @OnClick({R.id.closePage, R.id.phoneNumberClear, R.id.getAuthCode, R.id.login, R.id.rootView, R.id.weChatLogin, R.id.agree, R.id.passLogin, R.id.registerBtn, R.id.forgetPass})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.closePage:
@@ -481,17 +486,35 @@ public class LoginActivity extends WeChatActivity {
                             LocalUser.getUser().setUserInfo(resp.getData(), phoneNumber);
                             postLogin();
                         }
+
+                        @Override
+                        protected void onRespFailure(Resp failedResp) {
+                            super.onRespFailure(failedResp);
+                            if (failedResp.getCode() == CODE_NOT_SET_PASSWORD) {
+                                showSwitchDialog();
+                            }
+                        }
                     }).fire();
         }
+    }
+
+    private void showSwitchDialog() {
+        SmartDialog.single(getActivity(), getString(R.string.switch_to_fast_login)).setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+            @Override
+            public void onClick(Dialog dialog) {
+                dialog.dismiss();
+                switchLoginMode();
+            }
+        }).show();
     }
 
 
     private void resetLoginButton() {
         if (isBindPhone()) {
             mLogin.setText(getString(R.string.ok));
-        } else if(isAuthCodeLogin()){
+        } else if (isAuthCodeLogin()) {
             mLogin.setText(R.string.fast_login);
-        }else{
+        } else {
             mLogin.setText(R.string.login);
         }
         mLoading.setVisibility(View.GONE);

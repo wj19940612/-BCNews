@@ -485,5 +485,7 @@
     <string name="x_people_read">%1$d人阅读</string>
     <string name="x_ten_thousand_people_read">%1$d万人阅读</string>
     <string name="sure_cancel_attention">确定不再关注此人</string>
+    <string name="switch_to_fast_login">您未设置密码，请使用短信快捷登录</string>
+    <string name="please_set_login_password">为保障账户安全，请设置登陆密码</string>
 
 </resources>
