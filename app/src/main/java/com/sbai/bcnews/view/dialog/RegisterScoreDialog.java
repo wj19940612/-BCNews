@@ -12,7 +12,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.TimerHandler;
 import com.sbai.bcnews.view.SmartDialog;
 
-public class RegisterScoreDialog implements TimerHandler.TimerCallback{
+public class RegisterScoreDialog implements TimerHandler.TimerCallback {
 
     public static final int DISMISS_TIME_COUNT = 2;
     public static final int HANDLER_TIME = 1000;
@@ -27,19 +27,20 @@ public class RegisterScoreDialog implements TimerHandler.TimerCallback{
     private TextView mName;
     private TextView mScore;
     private OnClickListener mOnClickListener;
+    private SmartDialog.OnDismissListener mOnDismissListener;
 
     private Style mStyle;
     private int mScoreValue;
 
     @Override
     public void onTimeUp(int count) {
-        if(count >= DISMISS_TIME_COUNT){
+        if (count >= DISMISS_TIME_COUNT) {
             mSmartDialog.dismiss();
             stopScheduleJob();
         }
     }
 
-    private void startTimeHandler(int millisecond){
+    private void startTimeHandler(int millisecond) {
         stopScheduleJob();
 
         if (mTimerHandler == null) {
@@ -48,7 +49,7 @@ public class RegisterScoreDialog implements TimerHandler.TimerCallback{
         mTimerHandler.sendEmptyMessageDelayed(millisecond, millisecond);
     }
 
-    private void stopScheduleJob(){
+    private void stopScheduleJob() {
         if (mTimerHandler != null) {
             mTimerHandler.removeCallbacksAndMessages(null);
             mTimerHandler.resetCount();
@@ -69,7 +70,7 @@ public class RegisterScoreDialog implements TimerHandler.TimerCallback{
         RegisterScoreDialog registerScoreDialog = new RegisterScoreDialog();
         registerScoreDialog.mStyle = style;
         registerScoreDialog.mActivity = activity;
-        registerScoreDialog.mSmartDialog = SmartDialog.single(activity);
+        registerScoreDialog.mSmartDialog = SmartDialog.with(activity);
         registerScoreDialog.mView = LayoutInflater.from(activity).inflate(R.layout.dialog_register_score, null);
         registerScoreDialog.mSmartDialog.setCustomView(registerScoreDialog.mView);
         registerScoreDialog.init();
@@ -86,6 +87,11 @@ public class RegisterScoreDialog implements TimerHandler.TimerCallback{
         return this;
     }
 
+    public RegisterScoreDialog setDismissListener(SmartDialog.OnDismissListener onDismissListener) {
+        this.mOnDismissListener = onDismissListener;
+        return this;
+    }
+
     private void init() {
         mSrcView = mView.findViewById(R.id.lookDetailBtn);
         mName = mView.findViewById(R.id.name);
@@ -95,6 +101,14 @@ public class RegisterScoreDialog implements TimerHandler.TimerCallback{
             public void onClick(View view) {
                 if (mOnClickListener != null) {
                     mOnClickListener.onClick();
+                }
+            }
+        });
+        mSmartDialog.setOnDismissListener(new SmartDialog.OnDismissListener() {
+            @Override
+            public void onDismiss(Dialog dialog) {
+                if (mOnDismissListener != null) {
+                    mOnDismissListener.onDismiss(dialog);
                 }
             }
         });
