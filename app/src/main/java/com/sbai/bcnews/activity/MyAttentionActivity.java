@@ -1,6 +1,7 @@
 package com.sbai.bcnews.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,13 +17,22 @@ import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.AttentionFragment;
-import com.sbai.bcnews.fragment.CommonBottomDialogFragment;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.view.EmptyView;
+import com.sbai.bcnews.view.HasLabelLayout;
 import com.sbai.bcnews.view.TitleBar;
+import com.sbai.bcnews.view.dialog.AttentionDialog;
+import com.sbai.glide.GlideApp;
+import com.sbai.httplib.ReqError;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -32,7 +42,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements CommonBottomDialogFragment.OnClickListener {
+public class MyAttentionActivity extends RecycleViewSwipeLoadActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -51,8 +61,6 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
 
     private AttentionAdapter mAttentionAdapter;
     private List<Author> mNewsAuthorList;
-    private Author mAttentionAuthor;
-    private int mAttentionPosition;
 
     private int mPage;
 
@@ -62,6 +70,7 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
         setContentView(R.layout.activity_my_attention);
         ButterKnife.bind(this);
         initView();
+        loadData(true);
     }
 
     @Override
@@ -89,11 +98,18 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
             }
 
             @Override
-            public void onAttention(Author newsAuthor, boolean isAttention, int position) {
+            public void onAttention(final Author newsAuthor, boolean isAttention, final int position) {
                 if (isAttention) {
-                    mAttentionPosition = position;
-                    mAttentionAuthor = newsAuthor;
-                    CommonBottomDialogFragment.newInstance("确定不再关注此人").show(getSupportFragmentManager());
+                    AttentionDialog.with(getActivity()).setOnSureClickListener(new AttentionDialog.OnClickListener() {
+                        @Override
+                        public void onClick() {
+                            cancelOrAttention(false, newsAuthor, position);
+                        }
+                    }).setTitle(R.string.sure_cancel_attention).show();
+                } else if (LocalUser.getUser().isLogin()) {
+                    cancelOrAttention(true, newsAuthor, position);
+                } else {
+                    Launcher.with(getActivity(), LoginActivity.class).execute();
                 }
             }
         });
@@ -101,9 +117,29 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
         mSwipeTarget.setAdapter(mAttentionAdapter);
     }
 
+    private void cancelOrAttention(final boolean isAttention, final Author selectAuthor, final int selectPosition) {
+        int type = isAttention ? 1 : 0;
+        Apic.requestConcernAuthor(selectAuthor.getId(), type).tag(TAG).callback(new Callback<Resp>() {
+            @Override
+            protected void onRespSuccess(Resp resp) {
+                if (!isAttention) {
+                    selectAuthor.setIsConcern(0);
+                } else {
+                    selectAuthor.setIsConcern(1);
+                }
+                mAttentionAdapter.notifyItemChanged(selectPosition);
+            }
+        }).fire();
+    }
+
 
     private void loadData(final boolean refresh) {
-        mAttentionAdapter.notifyDataSetChanged();
+        Apic.requestAttentionAuthor().tag(TAG).callback(new Callback2D<Resp<List<Author>>, List<Author>>() {
+            @Override
+            protected void onRespSuccessData(List<Author> data) {
+                updateData(data, refresh);
+            }
+        }).fireFreely();
     }
 
     private void updateData(List<Author> data, boolean refresh) {
@@ -131,23 +167,9 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
     }
 
     @Override
-    public void onFirstClick() {
-//        mAttentionAuthor.setAttention(false);
-        mAttentionAdapter.notifyItemChanged(mAttentionPosition);
-    }
-
-    @Override
-    public void onSecondClick() {
-
-    }
-
-    private void setNoAttentionBtn(TextView attentionBtn, boolean hasAttention) {
-        attentionBtn.setSelected(hasAttention);
-        if (hasAttention) {
-            attentionBtn.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_d9));
-        } else {
-            attentionBtn.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
-        }
+    public void onBackPressed() {
+        setResult(RESULT_OK, getIntent());
+        finish();
     }
 
     static class AttentionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -171,7 +193,7 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ((ViewHolder) holder).bindingData(mContext,mNewsAuthorList.get(position), position, mOnItemClickListener);
+            ((ViewHolder) holder).bindingData(mContext, mNewsAuthorList.get(position), position, mOnItemClickListener);
         }
 
         @Override
@@ -181,7 +203,7 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
 
         static class ViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.head)
-            ImageView mHead;
+            HasLabelLayout mHead;
             @BindView(R.id.name)
             TextView mName;
             @BindView(R.id.introduce)
@@ -194,19 +216,33 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity implements
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(Context context,final Author newsAuthor, final int position, final AttentionFragment.OnItemClickListener onItemClickListener) {
-//                setNoAttentionBtn(mAttentionBtn,newsAuthor.isAttention(),context);
+            private void bindingData(Context context, final Author newsAuthor, final int position, final AttentionFragment.OnItemClickListener onItemClickListener) {
+                mHead.setImageSrc(newsAuthor.getUserPortrait());
+                if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_OFFICIAL) {
+                    mHead.setLabelSelected(true);
+                } else if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_SPECIAL) {
+                    mHead.setLabelSelected(false);
+                } else {
+                    mHead.setLabelImageViewVisible(false);
+                }
+
+                mName.setText(newsAuthor.getUserName());
+                if (!LocalUser.getUser().isLogin()) {
+                    setNoAttentionBtn(mAttentionBtn, false, context);
+                } else {
+                    setNoAttentionBtn(mAttentionBtn, newsAuthor.getIsConcern() > 0, context);
+                }
                 mAttentionBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (onItemClickListener != null) {
-                            onItemClickListener.onAttention(newsAuthor, mAttentionBtn.isSelected(), position);
+                            onItemClickListener.onAttention(newsAuthor, newsAuthor.getIsConcern() > 0, position);
                         }
                     }
                 });
             }
 
-            private void setNoAttentionBtn(TextView attentionBtn, boolean hasAttention,Context context) {
+            private void setNoAttentionBtn(TextView attentionBtn, boolean hasAttention, Context context) {
                 attentionBtn.setSelected(hasAttention);
                 if (hasAttention) {
                     attentionBtn.setTextColor(ContextCompat.getColor(context, R.color.text_d9));

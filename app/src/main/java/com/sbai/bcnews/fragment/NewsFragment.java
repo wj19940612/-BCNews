@@ -353,6 +353,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private void updateData(List<NewsDetail> data, boolean refresh) {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            refreshFoot(0);
             mNewsAdapter.notifyDataSetChanged();
             return;
         }
@@ -368,6 +369,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         if (data.size() != 0)
             mPage++;
         mNewsWraps.addAll(NewsWrap.updateImgType(data));
+        refreshFoot(data.size());
         mNewsAdapter.notifyDataSetChanged();
     }
 
@@ -391,6 +393,22 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                     }
                 }
             }).fireFreely();
+        }
+    }
+
+    private void refreshFoot(int size) {
+        if (mNewsWraps.size() >= Apic.DEFAULT_PAGE_SIZE && size < Apic.DEFAULT_PAGE_SIZE) {
+            if (mNewsAdapter instanceof NewsAdapter) {
+                ((NewsAdapter) mNewsAdapter).setHasFoot(true);
+            } else if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
+                ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(true);
+            }
+        } else {
+            if (mNewsAdapter instanceof NewsAdapter) {
+                ((NewsAdapter) mNewsAdapter).setHasFoot(false);
+            } else if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
+                ((NewsWithHeaderAdapter) mNewsAdapter).setHasFoot(false);
+            }
         }
     }
 

@@ -46,8 +46,8 @@ public class ConversionGoodsDialog {
         mConversionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mSmartDialog.dismiss();
                 if (mOnClickListener != null) {
-                    mSmartDialog.dismiss();
                     mOnClickListener.onClick();
                 }
             }

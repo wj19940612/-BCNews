@@ -6,6 +6,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatImageView;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,10 +14,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.activity.WebActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.model.Pop;
+import com.sbai.bcnews.model.StartWindow;
+import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.view.StartBanner;
+import com.sbai.glide.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,17 +46,15 @@ public class StartDialogFragment extends DialogFragment {
     public static final String ACTION_DISMISS = "11";
     @BindView(R.id.dialogDelete)
     AppCompatImageView mDialogDelete;
-    @BindView(R.id.startBanner)
-    StartBanner mStartBanner;
+    @BindView(R.id.window)
+    ImageView mWindow;
     private Unbinder mBind;
-    private List<Pop> mPopList;
+    private StartWindow mStartWindow;
 
-    public static StartDialogFragment newInstance(List<Pop> popList) {
-        ArrayList<Pop> arrayList = new ArrayList<Pop>();
-        arrayList.addAll(popList);
+    public static StartDialogFragment newInstance(StartWindow startWindow) {
         StartDialogFragment startDialogFragment = new StartDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("pop", arrayList);
+        bundle.putParcelable(ExtraKeys.START_WINDOW, startWindow);
         startDialogFragment.setArguments(bundle);
         return startDialogFragment;
     }
@@ -64,7 +72,7 @@ public class StartDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_TITLE, R.style.BaseDialog);
         if (getArguments() != null) {
-            mPopList = getArguments().getParcelableArrayList("pop");
+            mStartWindow = getArguments().getParcelable(ExtraKeys.START_WINDOW);
         }
     }
 
@@ -82,13 +90,23 @@ public class StartDialogFragment extends DialogFragment {
     }
 
     private void initView() {
-        if (mPopList == null) return;
-        mStartBanner.setPopList(mPopList);
-        mStartBanner.setOnViewClickListener(null);
-        mStartBanner.setOnButtonClickListener(new StartBanner.OnButtonClickListener() {
+        GlideApp.with(getContext())
+                .load(mStartWindow.getWindowUrl())
+                .placeholder(R.drawable.ic_default_image)
+                .circleCrop()
+                .into(mWindow);
+        mWindow.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onButtonClick() {
-                dismissAllowingStateLoss();
+            public void onClick(View v) {
+                if (mStartWindow.getLinkType() == StartWindow.START_TYPE_MODULE) {
+                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                } else if (mStartWindow.getLinkType() == StartWindow.START_TYPE_ARTICLE) {
+                    Launcher.with(getActivity(), NewsDetailActivity.class).putExtra(ExtraKeys.NEWS_ID, mStartWindow.getLink()).execute();
+                } else if (mStartWindow.getLinkType() == StartWindow.START_TYPE_H5) {
+                    Launcher.with(getActivity(), WebActivity.class)
+                            .putExtra(WebActivity.EX_URL, mStartWindow.getLink())
+                            .execute();
+                }
             }
         });
     }
