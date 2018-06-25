@@ -90,6 +90,15 @@ public class UserInfo implements Parcelable {
 
 
     public int rankType; //角色:0普通用户,1专栏作家,2官方媒体
+    private String authInfo;
+
+    public String getAuthInfo() {
+        return authInfo;
+    }
+
+    public void setAuthInfo(String authInfo) {
+        this.authInfo = authInfo;
+    }
 
     public int getAuthorType() {
         return rankType;

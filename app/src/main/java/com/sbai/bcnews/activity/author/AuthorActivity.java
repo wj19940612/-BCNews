@@ -273,7 +273,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
         mAuthorName.setText(author.getUserName());
         String introduce = TextUtils.isEmpty(author.getAuthInfo()) ? "--" : author.getAuthInfo();
-        mAuthorIntroduce.setText(getString(R.string.author_check_introduce, introduce));
+        mAuthorIntroduce.setText(getString(R.string.author_check_introduce_s, introduce));
 
         initAuthorAttentionNumber(author);
 

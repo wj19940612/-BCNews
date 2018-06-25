@@ -350,7 +350,7 @@
     <string name="telephone_num_start">手机号码：</string>
     <string name="immediately_binding">立即绑定</string>
     <string name="invite_has_gift">邀请有礼</string>
-    <string name="mine_qkc">我的qkc：</string>
+    <string name="mine_qkc">我的QKC：</string>
 
     <string name="binding_ali_pay_account">绑定支付宝账户</string>
     <string name="please_input_your_ali_pay_account">请输入您的支付宝账户</string>
@@ -460,7 +460,8 @@
     <string name="read_number">%1$d人阅读</string>
     <string name="review_number">%1$d评论</string>
     <string name="news_publish_time_and_red_number">%1$s· %2$d人阅读</string>
-    <string name="author_check_introduce">认证简介：%1$s</string>
+    <string name="author_check_introduce_s">认证简介：%1$s</string>
+    <string name="author_check_introduce">认证简介</string>
     <string name="recommend_author">推荐%1$s作者：%2$s</string>
     <string name="attention_success">关注成功</string>
     <string name="cancel_attention_success">取消关注成功</string>
