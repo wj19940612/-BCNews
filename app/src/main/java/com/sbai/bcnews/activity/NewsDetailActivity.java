@@ -499,7 +499,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                 if (LocalUser.getUser().isLogin())
                     attentionAuthor();
                 else
-                    Launcher.with(getActivity(), LoginActivity.class).execute();
+                    Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
                 break;
             case R.id.authorInfo:
                 if (getCallingActivity() != null && getCallingActivity().getClassName().equalsIgnoreCase(AuthorActivity.class.getName())) {
