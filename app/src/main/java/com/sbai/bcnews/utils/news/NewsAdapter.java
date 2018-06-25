@@ -273,13 +273,14 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
             } else {
                 mSource.setText(item.getAuthor());
+                mSource.setVisibility(View.VISIBLE);
                 mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
             }
         }
         if (item.getReaderCount() > 99999) {
             mReadCount.setText(context.getString(R.string.x_ten_thousand_people_read, item.getShowReadCount() / 10000));
         } else {
-            mReadCount.setText(context.getString(R.string.x_people_read, item.getShowReadCount() / 10000));
+            mReadCount.setText(context.getString(R.string.x_people_read, item.getShowReadCount()));
         }
         mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
         mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);

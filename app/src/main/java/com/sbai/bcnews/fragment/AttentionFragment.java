@@ -22,6 +22,7 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.MyAttentionActivity;
 import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.activity.author.AuthorActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
@@ -84,7 +85,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     private int mPage;
 
     public interface OnItemClickListener {
-        public void onItemClick();
+        public void onItemClick(Author author);
 
         public void onAttention(Author newsAuthor, boolean isAttention, int position);
     }
@@ -156,8 +157,8 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         mEmptyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.HORIZONTAL, false));
         mRecommendAdapter = new RecommendAdapter(mNewsAuthorList, getActivity(), new OnItemClickListener() {
             @Override
-            public void onItemClick() {
-
+            public void onItemClick(Author author) {
+                Launcher.with(AttentionFragment.this.getActivity(), AuthorActivity.class).putExtra(ExtraKeys.ID, author.getId()).execute();
             }
 
             @Override
@@ -422,7 +423,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(final Author newsAuthor, Context context, final OnItemClickListener onItemClickListener, final int position) {
+            private void bindingData(final Author newsAuthor, final Context context, final OnItemClickListener onItemClickListener, final int position) {
                 mHead.setImageSrc(newsAuthor.getUserPortrait());
                 if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_OFFICIAL) {
                     mHead.setLabelSelected(true);
@@ -443,6 +444,14 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                     public void onClick(View v) {
                         if (onItemClickListener != null) {
                             onItemClickListener.onAttention(newsAuthor, newsAuthor.getIsConcern() > 0, position);
+                        }
+                    }
+                });
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(newsAuthor);
                         }
                     }
                 });
