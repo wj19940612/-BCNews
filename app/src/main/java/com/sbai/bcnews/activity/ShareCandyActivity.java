@@ -106,7 +106,6 @@ public class ShareCandyActivity extends BaseActivity {
         GlideApp.with(getActivity()).load(mCandy.getPhoto())
                 .transform(new GlideRoundAndCenterCropTransform(getActivity()))
                 .placeholder(R.drawable.ic_default_news)
-                .centerCrop()
                 .into(mHead);
         mName.setText(mCandy.getName());
         mWelfareTime.setText(mCandy.getWelfare());

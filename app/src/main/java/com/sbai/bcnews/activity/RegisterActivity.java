@@ -238,7 +238,7 @@ public class RegisterActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.phoneNumberClear, R.id.getAuthCode, R.id.agreeBtn, R.id.register})
+    @OnClick({R.id.phoneNumberClear, R.id.getAuthCode, R.id.agreeBtn, R.id.register,R.id.agree})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.phoneNumberClear:
@@ -259,6 +259,10 @@ public class RegisterActivity extends BaseActivity {
             case R.id.register:
                 register();
                 break;
+            case R.id.agree:
+                Launcher.with(getActivity(), WebActivity.class)
+                        .putExtra(WebActivity.EX_URL, Apic.url.WEB_URI_AGREEMENT)
+                        .execute();
         }
     }
 

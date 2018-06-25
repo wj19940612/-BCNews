@@ -239,7 +239,6 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
                 GlideApp.with(context).load(candy.getPhoto())
                         .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
-                        .centerCrop()
                         .into(mHead);
 
                 mRootView.setOnClickListener(new View.OnClickListener() {

@@ -39,7 +39,7 @@ public class Preference {
         String FIRST_OPEN_WALLET_PAGE = "first_open_wallet_page";
         String SHOW_REGISTER_INVITE = "show_register_invite";
         String SHOW_BIND_WECHAT = "show_bind_wechat";
-        String FIRST_OPEN_APP = "first_open_app";
+        String FIRST_OPEN_APP = "first_open";
         String UPDATE_OPEN_APP_TIME = "update_open_app_time";
         String FIRST_LOGIN = "first_login";
         String NEWS_DETAIL = "news_detail";

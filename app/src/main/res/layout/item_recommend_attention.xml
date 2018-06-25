@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:id="@+id/rootView"
@@ -9,12 +10,13 @@
         android:layout_height="192dp"
         android:background="@drawable/bg_recommend_author">
 
-        <ImageView
+        <com.sbai.bcnews.view.HasLabelLayout
             android:id="@+id/head"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="46dp" />
+            android:layout_marginTop="46dp"
+            app:labelDrawable="@drawable/ic_label_v"/>
 
         <TextView
             android:id="@+id/name"

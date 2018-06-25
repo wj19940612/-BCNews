@@ -16,7 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.author.AuthorActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.AttentionFragment;
 import com.sbai.bcnews.http.Apic;
@@ -93,8 +95,8 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity {
         mNewsAuthorList = new ArrayList<>();
         mAttentionAdapter = new AttentionAdapter(getActivity(), mNewsAuthorList, new AttentionFragment.OnItemClickListener() {
             @Override
-            public void onItemClick() {
-
+            public void onItemClick(Author author) {
+                Launcher.with(MyAttentionActivity.this.getActivity(), AuthorActivity.class).putExtra(ExtraKeys.ID, author.getId()).execute();
             }
 
             @Override
@@ -138,6 +140,12 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity {
             @Override
             protected void onRespSuccessData(List<Author> data) {
                 updateData(data, refresh);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                stopFreshOrLoadAnimation();
             }
         }).fireFreely();
     }
@@ -210,6 +218,8 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity {
             TextView mIntroduce;
             @BindView(R.id.attentionBtn)
             TextView mAttentionBtn;
+            @BindView(R.id.rootView)
+            RelativeLayout mRootView;
 
             ViewHolder(View view) {
                 super(view);
@@ -237,6 +247,15 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity {
                     public void onClick(View v) {
                         if (onItemClickListener != null) {
                             onItemClickListener.onAttention(newsAuthor, newsAuthor.getIsConcern() > 0, position);
+                        }
+                    }
+                });
+
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(newsAuthor);
                         }
                     }
                 });
