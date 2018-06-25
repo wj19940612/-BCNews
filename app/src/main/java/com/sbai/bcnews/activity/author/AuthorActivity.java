@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +32,7 @@ import com.sbai.bcnews.utils.ClipboardUtils;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.NumberUtils;
 import com.sbai.bcnews.utils.OnItemClickListener;
+import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.adapter.AuthorArticleAdapter;
 import com.sbai.bcnews.view.HasLabelLayout;
 import com.sbai.bcnews.view.TitleBar;
@@ -270,7 +272,8 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         mTitleBarHasLabelLayout.setLabelSelected(isOfficialAuthor);
 
         mAuthorName.setText(author.getUserName());
-        mAuthorIntroduce.setText(getString(R.string.author_check_introduce, author.getAuthInfo()));
+        String introduce = TextUtils.isEmpty(author.getAuthInfo()) ? "--" : author.getAuthInfo();
+        mAuthorIntroduce.setText(getString(R.string.author_check_introduce_s, introduce));
 
         initAuthorAttentionNumber(author);
 
@@ -343,6 +346,12 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                             intent.putExtra(ExtraKeys.TAG, attentionType);
                             setResult(RESULT_OK, intent);
                             mAttentionAuthor.setSelected(mAuthor.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
+
+                            if (mAuthor.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION) {
+                                ToastUtil.show(R.string.attention_success);
+                            } else {
+                                ToastUtil.show(R.string.cancel_attention_success);
+                            }
                         }
                     })
                     .fire();

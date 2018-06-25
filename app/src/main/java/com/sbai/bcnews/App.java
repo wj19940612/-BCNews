@@ -72,7 +72,7 @@ public class App extends Application implements TimerHandler.TimerCallback {
         PushManager.getInstance().initialize(this, PushService.class);
 //        //init getui service
         PushManager.getInstance().registerPushIntentService(this, PushIntentService.class);
-//        processCaughtException();
+        processCaughtException();
         registerLoginBroadcast();
         registerFrontBackCallback();
     }

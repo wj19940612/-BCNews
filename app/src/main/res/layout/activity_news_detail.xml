@@ -74,6 +74,7 @@
                         android:id="@+id/hasLabelLayout"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:visibility="gone"
                         app:labelDrawable="@drawable/ic_label_v"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -108,35 +109,49 @@
                         tools:text="2018/08/12"/>
 
                     <ImageView
-                        android:visibility="gone"
                         android:id="@+id/authorAttention"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="6dp"
                         android:layout_marginTop="12dp"
                         android:src="@drawable/ic_author_attention"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
+
+                </android.support.constraint.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/authorInfo"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="11dp"
+                    android:background="@drawable/bg_f5_round"
+                    android:minHeight="50dp"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="11dp"
+                    android:paddingRight="11dp"
+                    android:paddingTop="16dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_logo_left_ear"/>
 
                     <TextView
                         android:id="@+id/articleIntroduce"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="11dp"
-                        android:background="@drawable/bg_f5_round"
-                        android:drawableLeft="@drawable/ic_logo_left_ear"
-                        android:minHeight="50dp"
-                        android:paddingBottom="16dp"
-                        android:paddingLeft="11dp"
-                        android:drawablePadding="5dp"
-                        android:textSize="13sp"
                         android:textColor="@color/text_4a"
-                        android:paddingRight="11dp"
-                        android:paddingTop="16dp"
-                        tools:text="你谁的技术接口都是控件"
-                        app:layout_constraintTop_toBottomOf="@+id/hasLabelLayout"/>
+                        android:textSize="13sp"
+                        tools:text="你谁的技术接口都是控件快圣诞节福利肯定就是德生科技发了肯定是德生科技发了肯定是就肯德基法律"/>
 
-                </android.support.constraint.ConstraintLayout>
+                </LinearLayout>
+
 
             </RelativeLayout>
 

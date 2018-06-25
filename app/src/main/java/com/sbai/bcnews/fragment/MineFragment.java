@@ -4,6 +4,7 @@ package com.sbai.bcnews.fragment;
 import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -91,6 +92,8 @@ public class MineFragment extends BaseFragment {
 
     private int mNotReadMessageCount;
 
+    private SpannableString mSpannableString;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,6 +103,17 @@ public class MineFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        String s = getString(R.string.author_workbench) + "                    ";
+        mSpannableString = new SpannableString(s);
+        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.ic_mine_author_not_check);
+        drawable.setBounds(0, 0, 135, 60);
+        ImageSpan imageSpan = new ImageSpan(drawable);
+        mSpannableString.setSpan(imageSpan, 9, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+    }
 
     @Override
     public void onResume() {
@@ -214,13 +228,7 @@ public class MineFragment extends BaseFragment {
 
             } else {
                 mHeadPortrait.setLabelImageViewVisible(false);
-                String s = getString(R.string.author_workbench) + "                    ";
-                SpannableString spannableString = new SpannableString(s);
-                Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.ic_mine_author_not_check);
-                drawable.setBounds(0, 0, 135, 60);
-                ImageSpan imageSpan = new ImageSpan(drawable);
-                spannableString.setSpan(imageSpan, 9, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                mContribute.setText(spannableString);
+                mContribute.setText(mSpannableString);
             }
         } else {
             mUserName.setText(R.string.click_login);
@@ -233,7 +241,7 @@ public class MineFragment extends BaseFragment {
             updateUserReadHistory(readHistorySize);
             updateNotReadMessage(0);
             mQkc.setSubText("");
-            mContribute.setText(R.string.author_workbench);
+            mContribute.setText(mSpannableString);
             mHeadPortrait.setLabelImageViewVisible(false);
         }
     }

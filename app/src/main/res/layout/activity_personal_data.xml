@@ -136,7 +136,7 @@
 
 
     <LinearLayout
-        android:id="@+id/personalIntroduce"
+        android:id="@+id/personalIntroduceLL"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/bg_white"
@@ -146,6 +146,7 @@
         app:layout_constraintTop_toBottomOf="@+id/locationLL">
 
         <TextView
+            android:id="@+id/personalIntroduce"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/personal_introduce"
@@ -191,7 +192,7 @@
         android:layout_marginTop="20dp"
         android:lineSpacingExtra="5dp"
         android:textColor="@color/text97"
-        app:layout_constraintTop_toBottomOf="@+id/personalIntroduce"
+        app:layout_constraintTop_toBottomOf="@+id/personalIntroduceLL"
         tools:text="@string/connect_service_hint"/>
 
 </android.support.constraint.ConstraintLayout>

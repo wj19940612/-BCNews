@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -72,8 +73,7 @@ public class PersonalDataActivity extends BaseActivity {
     @BindView(R.id.birthday)
     IconTextRow mBirthday;
 
-    @BindView(R.id.personalIntroduce)
-    LinearLayout mPersonalIntroduce;
+
     @BindView(R.id.introduce)
     TextView mIntroduce;
     @BindView(R.id.location)
@@ -84,6 +84,15 @@ public class PersonalDataActivity extends BaseActivity {
     TextView mLocationHint;
     @BindView(R.id.connectServiceHint)
     TextView mConnectServiceHint;
+    @BindView(R.id.locationIv)
+    ImageView mLocationIv;
+
+    @BindView(R.id.split)
+    View mSplit;
+    @BindView(R.id.personalIntroduce)
+    TextView mPersonalIntroduce;
+    @BindView(R.id.personalIntroduceLL)
+    LinearLayout mPersonalIntroduceLL;
 
     private UserInfo mUserInfo;
     private OptionPicker mSexPicker;
@@ -110,7 +119,7 @@ public class PersonalDataActivity extends BaseActivity {
                 .callback(new Callback2D<Resp<Operation>, Operation>() {
                     @Override
                     protected void onRespSuccessData(Operation data) {
-                        mConnectServiceHint.setText(getString(R.string.connect_service_hint,data.getEmail(),data.getSYS_OPERATE_WX()));
+                        mConnectServiceHint.setText(getString(R.string.connect_service_hint, data.getEmail(), data.getSYS_OPERATE_WX()));
                     }
                 })
                 .fire();
@@ -183,15 +192,17 @@ public class PersonalDataActivity extends BaseActivity {
         updateUserInfoModifyEnable(!data.isAuthor());
     }
 
-    private void updateUserInfoModifyEnable(boolean viewEnable) {
-        mHeadImageLayout.setEnabled(viewEnable);
-        mNickName.setEnabled(viewEnable);
-        mSex.setEnabled(viewEnable);
-        mBirthday.setEnabled(viewEnable);
-        mLocationLL.setEnabled(viewEnable);
-        mPersonalIntroduce.setEnabled(viewEnable);
-        if (!viewEnable) {
+    private void updateUserInfoModifyEnable(boolean isAuthor) {
+        mHeadImageLayout.setEnabled(isAuthor);
+        mNickName.setEnabled(isAuthor);
+        mSex.setEnabled(isAuthor);
+        mBirthday.setEnabled(isAuthor);
+        mLocationLL.setEnabled(isAuthor);
+        mPersonalIntroduce.setEnabled(isAuthor);
+        if (!isAuthor) {
             mConnectServiceHint.setVisibility(View.VISIBLE);
+            mPersonalIntroduce.setText(R.string.author_check_introduce);
+            mIntroduce.setText(mUserInfo.getAuthInfo());
         }
     }
 
@@ -203,7 +214,7 @@ public class PersonalDataActivity extends BaseActivity {
                 .into(mUserHeadImage);
     }
 
-    @OnClick({R.id.headImageLayout, R.id.nickName, R.id.sex, R.id.birthday, R.id.locationLL, R.id.personalIntroduce})
+    @OnClick({R.id.headImageLayout, R.id.nickName, R.id.sex, R.id.birthday, R.id.locationLL, R.id.personalIntroduceLL})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.headImageLayout:
@@ -225,7 +236,7 @@ public class PersonalDataActivity extends BaseActivity {
             case R.id.locationLL:
                 showLocationWheel();
                 break;
-            case R.id.personalIntroduce:
+            case R.id.personalIntroduceLL:
                 String personalIntroduce = "";
                 if (mUserInfo != null) {
                     personalIntroduce = mUserInfo.getIntroduction();

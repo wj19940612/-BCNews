@@ -224,11 +224,12 @@ public class RandomLocationLayout extends LinearLayout {
         for (int i = 0; i < animationDrawable.getNumberOfFrames(); i++) {
             duration += animationDrawable.getDuration(i);
         }
-
+        v.setEnabled(false);
         v.postDelayed(new Runnable() {
             @Override
             public void run() {
                 animationDrawable.stop();
+                v.setEnabled(true);
                 mQksList.remove(qks);
                 ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_qkc, 0, 0);
                 (v).setVisibility(INVISIBLE);

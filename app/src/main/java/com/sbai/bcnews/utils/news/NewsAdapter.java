@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.utils.DateUtil;
