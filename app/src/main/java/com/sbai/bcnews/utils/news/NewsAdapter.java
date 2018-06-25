@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.utils.DateUtil;
@@ -181,7 +180,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 GlideApp.with(context).load(item.getImgs().get(0))
                         .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
-                        .centerCrop()
                         .into(mImg);
             } else {
                 mImg.setVisibility(View.GONE);
@@ -230,7 +228,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 GlideApp.with(context).load(item.getImgs().get(0))
                         .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
-                        .centerCrop()
                         .into(mImg1);
             } else {
                 mImg1.setVisibility(View.INVISIBLE);
@@ -241,7 +238,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 GlideApp.with(context).load(item.getImgs().get(1))
                         .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
-                        .centerCrop()
                         .into(mImg2);
             } else {
                 mImg2.setVisibility(View.INVISIBLE);
@@ -252,7 +248,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 GlideApp.with(context).load(item.getImgs().get(2))
                         .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
-                        .centerCrop()
                         .into(mImg3);
             } else {
                 mImg3.setVisibility(View.INVISIBLE);

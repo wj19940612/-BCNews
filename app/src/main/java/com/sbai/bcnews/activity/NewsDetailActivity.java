@@ -53,6 +53,7 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.PermissionUtil;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
+import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.view.EmptyView;
@@ -530,7 +531,14 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                         @Override
                         protected void onRespSuccess(Resp<Object> resp) {
                             newsDetail.setIsConcern(attentionType);
+                            mAuthorAttention.setSelected(newsDetail.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
+                            if (newsDetail.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION) {
+                                ToastUtil.show(R.string.attention_success);
+                            } else {
+                                ToastUtil.show(R.string.cancel_attention_success);
+                            }
                         }
+
                     })
                     .fire();
         }
@@ -1129,7 +1137,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             articleImg.setVisibility(View.VISIBLE);
             GlideApp.with(getActivity()).load(data.getImgs().get(0))
                     .placeholder(R.drawable.ic_default_news)
-                    .centerCrop()
+                    .transform(new GlideRoundAndCenterCropTransform(getActivity()))
                     .into(articleImg);
         } else {
             articleImg.setVisibility(View.GONE);
@@ -1138,6 +1146,12 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
 
     private void updateAuthorInfo(NewsDetail data) {
+        //判断该文章有没有作者
+        if (data.getAuthorId() == 0) {
+            mHasLabelLayout.setVisibility(View.GONE);
+        } else {
+            mHasLabelLayout.setVisibility(View.VISIBLE);
+        }
         boolean isAuthor = data.getRankType() != Author.AUTHOR_STATUS_ORDINARY;
         mHasLabelLayout.setLabelImageViewVisible(isAuthor);
         mHasLabelLayout.setImageSrc(data.getUserPortrait());

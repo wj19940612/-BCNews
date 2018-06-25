@@ -462,6 +462,8 @@
     <string name="news_publish_time_and_red_number">%1$s· %2$d人阅读</string>
     <string name="author_check_introduce">认证简介：%1$s</string>
     <string name="recommend_author">推荐%1$s作者：%2$s</string>
+    <string name="attention_success">关注成功</string>
+    <string name="cancel_attention_success">取消关注成功</string>
 
 
     <string name="you_have_not_attention_author">你还没有关注作者哦</string>
