@@ -133,8 +133,7 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
         Apic.requestCandyList(mPage).tag(TAG).callback(new Callback<ListResp<Candy>>() {
             @Override
             protected void onRespSuccess(ListResp<Candy> resp) {
-//                updateData(resp.getListData(), refresh);
-                updateData(new ArrayList<Candy>(), refresh);
+                updateData(resp.getListData(), refresh);
             }
 
             @Override
