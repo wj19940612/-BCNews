@@ -128,6 +128,8 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         super.onResume();
         refreshReadStatus();
         loadEmptyData();
+        loadData(true);
+        requestMyAttention();
     }
 
     @Override
@@ -432,8 +434,10 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
             private void bindingData(final Author newsAuthor, final Context context, final OnItemClickListener onItemClickListener, final int position) {
                 mHead.setImageSrc(newsAuthor.getUserPortrait());
                 if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_OFFICIAL) {
+                    mHead.setLabelImageViewVisible(true);
                     mHead.setLabelSelected(true);
                 } else if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_SPECIAL) {
+                    mHead.setLabelImageViewVisible(true);
                     mHead.setLabelSelected(false);
                 } else {
                     mHead.setLabelImageViewVisible(false);

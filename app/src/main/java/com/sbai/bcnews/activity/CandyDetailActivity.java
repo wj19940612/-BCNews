@@ -144,7 +144,7 @@ public class CandyDetailActivity extends BaseActivity {
         } else {
             mGetCount.setText(getString(R.string.x_ten_thousand_have_get, mCandy.getClicks() / 10000));
         }
-        mTip.setText(mCandy.getWelfare());
+        mTip.setText(getString(R.string.welfare_time_x,mCandy.getWelfare()));
 
         openWebView(mCandy.getSweetIntroduce(), mContentIntroduce);
         openWebView(mCandy.getIntroduce(), mWelfareIntroduce);

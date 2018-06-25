@@ -230,8 +230,10 @@ public class MyAttentionActivity extends RecycleViewSwipeLoadActivity {
             private void bindingData(Context context, final Author newsAuthor, final int position, final AttentionFragment.OnItemClickListener onItemClickListener) {
                 mHead.setImageSrc(newsAuthor.getUserPortrait());
                 if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_OFFICIAL) {
+                    mHead.setLabelImageViewVisible(true);
                     mHead.setLabelSelected(true);
                 } else if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_SPECIAL) {
+                    mHead.setLabelImageViewVisible(true);
                     mHead.setLabelSelected(false);
                 } else {
                     mHead.setLabelImageViewVisible(false);
