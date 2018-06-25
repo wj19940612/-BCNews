@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/rootView"
@@ -16,7 +16,7 @@
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="46dp"
-            app:labelDrawable="@drawable/ic_label_v"/>
+            app:labelDrawable="@drawable/ic_label_v" />
 
         <TextView
             android:id="@+id/name"
@@ -28,17 +28,24 @@
             android:textColor="@color/text_4a"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/attentionBtn"
-            android:layout_width="50dp"
-            android:layout_height="16dp"
+        <LinearLayout
+            android:id="@+id/attentionBtnLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/name"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/btn_attention_author"
-            android:gravity="center"
-            android:text="已关注"
-            android:textColor="@color/colorPrimary"
-            android:textSize="11sp" />
+            android:paddingTop="6dp"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:id="@+id/attentionBtn"
+                android:layout_width="50dp"
+                android:layout_height="16dp"
+                android:background="@drawable/btn_attention_author"
+                android:gravity="center"
+                android:text="已关注"
+                android:textColor="@color/colorPrimary"
+                android:textSize="11sp" />
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

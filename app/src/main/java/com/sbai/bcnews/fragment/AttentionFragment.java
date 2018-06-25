@@ -419,6 +419,8 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
             TextView mName;
             @BindView(R.id.attentionBtn)
             TextView mAttentionBtn;
+            @BindView(R.id.attentionBtnLayout)
+            LinearLayout mAttentionBtnLayout;
             @BindView(R.id.rootView)
             RelativeLayout mRootView;
 
@@ -443,7 +445,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     setNoAttentionBtn(mAttentionBtn, newsAuthor.getIsConcern() > 0, context);
                 }
-                mAttentionBtn.setOnClickListener(new View.OnClickListener() {
+                mAttentionBtnLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (onItemClickListener != null) {

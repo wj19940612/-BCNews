@@ -9,8 +9,9 @@
 
     <ImageView
         android:id="@+id/window"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_width="244dp"
+        android:layout_height="324dp"
+        android:layout_centerHorizontal="true"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/dialogDelete"
