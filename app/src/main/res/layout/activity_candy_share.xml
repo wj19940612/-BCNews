@@ -10,7 +10,7 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="46dp"
-        app:titleText="@string/share_news_flash"/>
+        app:titleText="@string/share_candy"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -68,16 +68,12 @@
                 android:textColor="@color/text_9b"
                 android:textSize="11sp"/>
 
-            <TextView
+            <WebView
                 android:id="@+id/welfareTip"
-                android:layout_width="wrap_content"
-                android:layout_height="18dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="5dp"
-                android:text="@string/encrypt_rabbit"
-                android:textColor="@color/text_4a"
-                android:textSize="13sp"/>
+                tools:ignore="WebViewLayout" />
 
             <TextView
                 android:id="@+id/getNumber"

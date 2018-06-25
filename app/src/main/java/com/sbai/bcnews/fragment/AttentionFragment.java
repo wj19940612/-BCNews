@@ -127,6 +127,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     public void onResume() {
         super.onResume();
         refreshReadStatus();
+        loadEmptyData();
     }
 
     @Override
@@ -343,6 +344,9 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
     private void updateEmptyView(List<Author> newsAuthorList) {
         mNewsAuthorList.clear();
+        if (newsAuthorList != null && newsAuthorList.size() > 4) {
+            newsAuthorList = newsAuthorList.subList(0, 4);
+        }
         mNewsAuthorList.addAll(newsAuthorList);
         mEmptyRecyclerView.setFocusableInTouchMode(false);
         mRecommendAdapter.notifyDataSetChanged();

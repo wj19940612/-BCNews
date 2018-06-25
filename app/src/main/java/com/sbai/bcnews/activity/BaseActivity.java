@@ -212,6 +212,7 @@ public class BaseActivity extends StatusBarActivity implements
             SmartDialog.with(getActivity(), getString(R.string.please_set_login_password)).setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                 @Override
                 public void onClick(Dialog dialog) {
+                    dialog.dismiss();
                     Launcher.with(BaseActivity.this, ModifyPassActivity.class).putExtra(ExtraKeys.HAS_LOGIN_PSD, LocalUser.getUser().getUserInfo().getIsPassword() > 0).execute();
                 }
             }).show();
