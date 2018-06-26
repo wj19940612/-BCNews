@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.sbai.bcnews.BuildConfig;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.BaseActivity;
+import com.sbai.bcnews.activity.ModifyPassActivity;
 import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.activity.author.AuthorWorkbenchActivity;
 import com.sbai.bcnews.activity.mine.FeedbackActivity;
@@ -163,6 +165,7 @@ public class MineFragment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             refreshUserData();
+            showUpdateSetLoginDialog();
         }
     }
 
@@ -278,6 +281,18 @@ public class MineFragment extends BaseFragment {
             mHeadPortrait.setImageSrc(LocalUser.getUser().getUserInfo().getUserPortrait());
         } else {
             mHeadPortrait.setImageSrc(R.drawable.ic_default_head_portrait);
+        }
+    }
+
+    public void showUpdateSetLoginDialog() {
+        if (LocalUser.getUser().isLogin() && LocalUser.getUser().getUserInfo().getIsPassword() == 0) {
+            SmartDialog.with(getActivity(), getString(R.string.please_set_login_password)).setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                @Override
+                public void onClick(Dialog dialog) {
+                    dialog.dismiss();
+                    Launcher.with(getActivity(), ModifyPassActivity.class).putExtra(ExtraKeys.HAS_LOGIN_PSD, LocalUser.getUser().getUserInfo().getIsPassword() > 0).execute();
+                }
+            }).show();
         }
     }
 

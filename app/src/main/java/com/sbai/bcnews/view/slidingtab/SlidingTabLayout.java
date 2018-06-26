@@ -24,6 +24,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -391,12 +392,14 @@ public class SlidingTabLayout extends HorizontalScrollView {
         if (selectedChild != null) {
             int targetScrollX = selectedChild.getLeft() + positionOffset;
 
-            if (tabIndex > 0 || positionOffset > 0) {
-                // If we're not at the first child and are mid-scroll, make sure we obey the offset
-                targetScrollX -= mTitleOffset;
-            }
+//            if (tabIndex > 0 || positionOffset > 0) {
+//                // If we're not at the first child and are mid-scroll, make sure we obey the offset
+//                targetScrollX -= mTitleOffset;
+//            }
 
-            scrollTo(targetScrollX, 0);
+            //这里由原先指向的tab直接滚动到当前页的首个  改为   当指向的滑块超过一半再滑动
+            scrollTo(targetScrollX - getWidth() / 2, 0);
+//            scrollTo(targetScrollX, 0);
         }
     }
 

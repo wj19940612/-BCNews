@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/contentRL"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"
         android:paddingTop="16dp">
@@ -30,6 +30,7 @@
             android:layout_height="70dp"
             android:layout_below="@+id/title"
             android:layout_marginTop="14dp"
+            android:layout_marginBottom="40dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -59,12 +60,17 @@
                 android:layout_weight="1"/>
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/bottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="17dp">
+
         <ImageView
             android:id="@+id/original"
             android:layout_width="24dp"
             android:layout_height="13dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="17dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/bg_original"
             android:visibility="visible"/>
@@ -73,8 +79,6 @@
             android:id="@+id/source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="17dp"
             android:layout_marginRight="3dp"
             android:layout_toRightOf="@+id/original"
             android:textColor="@color/text_999"
@@ -86,8 +90,6 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="17dp"
             android:layout_toRightOf="@+id/source"
             android:textColor="@color/text_999"
             android:textSize="11sp"
@@ -98,12 +100,11 @@
             android:id="@+id/readCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="17dp"
             android:layout_alignParentRight="true"
             android:textSize="11sp"
             android:textColor="@color/text_999"
             android:text="2000人阅读" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <View
