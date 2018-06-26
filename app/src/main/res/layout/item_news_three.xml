@@ -9,10 +9,9 @@
     <RelativeLayout
         android:id="@+id/contentRL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="160dp"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"
-        android:paddingBottom="16dp"
         android:paddingTop="16dp">
 
         <TextView
@@ -28,7 +27,7 @@
         <LinearLayout
             android:id="@+id/imgLayout"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:layout_below="@+id/title"
             android:layout_marginTop="14dp"
             android:orientation="horizontal">
@@ -64,9 +63,9 @@
             android:id="@+id/original"
             android:layout_width="24dp"
             android:layout_height="13dp"
-            android:layout_below="@+id/imgLayout"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="17dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="23dp"
             android:background="@drawable/bg_original"
             android:visibility="visible"/>
 
@@ -74,8 +73,8 @@
             android:id="@+id/source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imgLayout"
-            android:layout_marginTop="22dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="17dp"
             android:layout_marginRight="3dp"
             android:layout_toRightOf="@+id/original"
             android:textColor="@color/text_999"
@@ -87,8 +86,8 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imgLayout"
-            android:layout_marginTop="22dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="17dp"
             android:layout_toRightOf="@+id/source"
             android:textColor="@color/text_999"
             android:textSize="11sp"
@@ -99,8 +98,8 @@
             android:id="@+id/readCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imgLayout"
-            android:layout_marginTop="22dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="17dp"
             android:layout_alignParentRight="true"
             android:textSize="11sp"
             android:textColor="@color/text_999"
