@@ -127,6 +127,9 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     public void onResume() {
         super.onResume();
         refreshReadStatus();
+        loadEmptyData();
+        loadData(true);
+        requestMyAttention();
     }
 
     @Override
@@ -343,6 +346,9 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
 
     private void updateEmptyView(List<Author> newsAuthorList) {
         mNewsAuthorList.clear();
+        if (newsAuthorList != null && newsAuthorList.size() > 4) {
+            newsAuthorList = newsAuthorList.subList(0, 4);
+        }
         mNewsAuthorList.addAll(newsAuthorList);
         mEmptyRecyclerView.setFocusableInTouchMode(false);
         mRecommendAdapter.notifyDataSetChanged();
@@ -415,6 +421,8 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
             TextView mName;
             @BindView(R.id.attentionBtn)
             TextView mAttentionBtn;
+            @BindView(R.id.attentionBtnLayout)
+            LinearLayout mAttentionBtnLayout;
             @BindView(R.id.rootView)
             RelativeLayout mRootView;
 
@@ -426,8 +434,10 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
             private void bindingData(final Author newsAuthor, final Context context, final OnItemClickListener onItemClickListener, final int position) {
                 mHead.setImageSrc(newsAuthor.getUserPortrait());
                 if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_OFFICIAL) {
+                    mHead.setLabelImageViewVisible(true);
                     mHead.setLabelSelected(true);
                 } else if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_SPECIAL) {
+                    mHead.setLabelImageViewVisible(true);
                     mHead.setLabelSelected(false);
                 } else {
                     mHead.setLabelImageViewVisible(false);
@@ -439,7 +449,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     setNoAttentionBtn(mAttentionBtn, newsAuthor.getIsConcern() > 0, context);
                 }
-                mAttentionBtn.setOnClickListener(new View.OnClickListener() {
+                mAttentionBtnLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (onItemClickListener != null) {

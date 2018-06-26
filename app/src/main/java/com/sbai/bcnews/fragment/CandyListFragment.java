@@ -236,6 +236,7 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     mGetCount.setText(context.getString(R.string.x_ten_thousand_have_get, candy.getClicks() / 10000));
                 }
+                mTip.setText(context.getString(R.string.welfare_time_x,candy.getWelfare()));
                 GlideApp.with(context).load(candy.getPhoto())
                         .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)

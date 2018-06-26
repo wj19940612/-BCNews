@@ -127,7 +127,6 @@ public class ModifyPassActivity extends BaseActivity {
             if (TextUtils.isEmpty(password) || password.length() < 6 || TextUtils.isEmpty(againPassword) || againPassword.length() < 6) {
                 return false;
             }
-            return password.equals(againPassword);
         }
         return true;
     }
@@ -138,6 +137,12 @@ public class ModifyPassActivity extends BaseActivity {
             case R.id.complete:
                 String oldPassword = md5Encrypt(mOldPassword.getPassword());
                 String password = md5Encrypt(mPassword.getPassword());
+                if (!mHasLoginPassword) {
+                    if (!oldPassword.equals(password)) {
+                        ToastUtil.show(R.string.old_new_pass_not_true);
+                        return;
+                    }
+                }
                 mLoading.setVisibility(View.VISIBLE);
                 mLoading.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading));
                 if (!mHasLoginPassword) {

@@ -238,6 +238,7 @@
     <string name="update_success">修改成功</string>
     <string name="send_message_connect">您好，欢迎反馈！反馈时附上界面截屏，可以更好地给我们反馈问题哦~</string>
     <string name="modify_success">修改成功</string>
+    <string name="old_new_pass_not_true">新旧密码不一致</string>
 
     <string name="have_good_article_how_to_tell_you">有优质的内容\n怎么第一时间告诉你呢</string>
     <string name="now_notify_me">马上通知我</string>
@@ -489,5 +490,6 @@
     <string name="sure_cancel_attention">确定不再关注此人</string>
     <string name="switch_to_fast_login">您未设置密码，请使用短信快捷登录</string>
     <string name="please_set_login_password">为保障账户安全，请设置登陆密码</string>
+    <string name="share_candy">分享糖果</string>
 
 </resources>

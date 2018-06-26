@@ -57,7 +57,6 @@ public class CandyDetailActivity extends BaseActivity {
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
 
-    private String mPureHtml;
     private Candy mCandy;
 
     @Override
@@ -78,7 +77,6 @@ public class CandyDetailActivity extends BaseActivity {
             ToastUtil.show(R.string.no_this_candy);
             finish();
         }
-        mPureHtml = mCandy.getSweetIntroduce();
     }
 
     protected void initWebView(WebView webView) {
@@ -146,7 +144,7 @@ public class CandyDetailActivity extends BaseActivity {
         } else {
             mGetCount.setText(getString(R.string.x_ten_thousand_have_get, mCandy.getClicks() / 10000));
         }
-        mTip.setText(mCandy.getWelfare());
+        mTip.setText(getString(R.string.welfare_time_x,mCandy.getWelfare()));
 
         openWebView(mCandy.getSweetIntroduce(), mContentIntroduce);
         openWebView(mCandy.getIntroduce(), mWelfareIntroduce);
@@ -156,7 +154,7 @@ public class CandyDetailActivity extends BaseActivity {
         String content;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-            content = INFO_HTML_META + "<body>" + mPureHtml + "</body>";
+            content = INFO_HTML_META + "<body>" + urlData + "</body>";
         } else {
             webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             content = getHtmlData(urlData);

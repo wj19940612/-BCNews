@@ -105,8 +105,8 @@ public class StartDialogFragment extends DialogFragment {
     private void initView() {
         GlideApp.with(getContext())
                 .load(mStartWindow.getWindowUrl())
+                .centerCrop()
                 .placeholder(R.drawable.ic_default_image)
-                .circleCrop()
                 .into(mWindow);
         mWindow.setOnClickListener(new View.OnClickListener() {
             @Override
