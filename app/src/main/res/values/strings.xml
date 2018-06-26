@@ -466,6 +466,7 @@
     <string name="recommend_author">推荐%1$s作者：%2$s</string>
     <string name="attention_success">关注成功</string>
     <string name="cancel_attention_success">取消关注成功</string>
+    <string name="app_author">区块财经作者</string>
 
 
     <string name="you_have_not_attention_author">你还没有关注作者哦</string>

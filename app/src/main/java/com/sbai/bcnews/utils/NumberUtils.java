@@ -10,7 +10,7 @@ public class NumberUtils {
 
     private static final int RANG_NUMBER = 99999;
     private static final int TEN_THOUSAND = 10000;
-    public static final String UNIT_WANG = "万";
+    public static final String UNIT_WANG = "W";
     public static final String UNIT_YI = "亿";
 
 

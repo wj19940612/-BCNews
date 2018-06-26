@@ -2,6 +2,7 @@ package com.sbai.bcnews.activity.author;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -106,7 +108,6 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     private int mAuthorId;
     private Author mAuthor;
 
-    private boolean mSwipeToLoadLayoutRefreshEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +161,9 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         if (BuildConfigUtils.isProductFlavor()) {
             mFansNumber.setVisibility(View.GONE);
             mFirstSplit.setVisibility(View.GONE);
+            ViewGroup.MarginLayoutParams layoutParams = (ConstraintLayout.LayoutParams) mReadNumber.getLayoutParams();
+            layoutParams.leftMargin = 0;
+            mReadNumber.setLayoutParams(layoutParams);
         }
     }
 
@@ -180,7 +184,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     private void showShareDialog() {
         if (mAuthor == null) return;
         String shareThumbUrl = mAuthor.getUserPortrait();
-        String shareTitle = getString(R.string.recommend_author, getString(R.string.app_name), mAuthor.getUserName());
+        String shareTitle = getString(R.string.recommend_author, getString(R.string.app_name), getString(R.string.app_author));
         String shareDescription = !TextUtils.isEmpty(mAuthor.getAuthInfo()) ? mAuthor.getAuthInfo() : mAuthor.getUserName();
         final String shareUrl = String.format(Apic.url.SHARE_AUTHOR, mAuthor.getId());
         NewsShareDialog.with(getActivity())
