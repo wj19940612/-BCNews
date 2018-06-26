@@ -75,8 +75,6 @@ public class BaseActivity extends StatusBarActivity implements
                 LocalUser.getUser().logout();
                 Launcher.with(getActivity(), MainActivity.class).execute();
                 Launcher.with(getActivity(), LoginActivity.class).execute();
-            } else if (ACTION_LOGIN_SUCCESS.equalsIgnoreCase(intent.getAction())) {
-                showUpdateSetLoginDialog();
             }
         }
     };
@@ -114,7 +112,6 @@ public class BaseActivity extends StatusBarActivity implements
 
     private void initBroadcastListener(){
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LoginActivity.ACTION_LOGIN_SUCCESS);
         intentFilter.addAction(LoginActivity.ACTION_TOKEN_EXPIRED);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, intentFilter);
     }
@@ -170,12 +167,14 @@ public class BaseActivity extends StatusBarActivity implements
     protected void onStart() {
         super.onStart();
         mScreenShotListenManager.startListen();
+        initBroadcastListener();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mScreenShotListenManager.stopListen();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
     @Override
@@ -190,7 +189,6 @@ public class BaseActivity extends StatusBarActivity implements
         mRequestProgress.dismissAll();
 
         stopScheduleJob();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
     private void showLoginRewardDialog() {
@@ -204,18 +202,6 @@ public class BaseActivity extends StatusBarActivity implements
             LocalUser.getUser().getUserInfo().setAddRate(0);
             LocalUser.getUser().getUserInfo().setAddIntegral(0);
             LocalUser.getUser().saveToPreference();
-        }
-    }
-
-    public void showUpdateSetLoginDialog() {
-        if (LocalUser.getUser().getUserInfo().getIsPassword() == 0) {
-            SmartDialog.with(getActivity(), getString(R.string.please_set_login_password)).setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                @Override
-                public void onClick(Dialog dialog) {
-                    dialog.dismiss();
-                    Launcher.with(BaseActivity.this, ModifyPassActivity.class).putExtra(ExtraKeys.HAS_LOGIN_PSD, LocalUser.getUser().getUserInfo().getIsPassword() > 0).execute();
-                }
-            }).show();
         }
     }
 

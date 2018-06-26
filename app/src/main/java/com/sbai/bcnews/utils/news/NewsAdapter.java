@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -273,10 +274,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 mSource.setText(item.getAuthor());
                 mSource.setVisibility(View.VISIBLE);
-                mTime.setText(context.getString(R.string.point_x, DateUtil.formatNewsStyleTime(item.getReleaseTime())));
+                mTime.setText(context.getString(R.string.point_x, DateUtil.formatDefaultStyleTime(item.getReleaseTime())));
             }
         }
-        if (item.getReaderCount() > 99999) {
+        if (item.getShowReadCount() > 99999) {
             mReadCount.setText(context.getString(R.string.x_ten_thousand_people_read, item.getShowReadCount() / 10000));
         } else {
             mReadCount.setText(context.getString(R.string.x_people_read, item.getShowReadCount()));

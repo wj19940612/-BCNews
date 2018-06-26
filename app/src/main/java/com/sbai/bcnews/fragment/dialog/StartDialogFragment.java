@@ -54,8 +54,6 @@ public class StartDialogFragment extends DialogFragment {
     private Unbinder mBind;
     private StartWindow mStartWindow;
 
-    private SmartDialog.OnDismissListener mOnDismissListener;
-
     public static StartDialogFragment newInstance(StartWindow startWindow) {
         StartDialogFragment startDialogFragment = new StartDialogFragment();
         Bundle bundle = new Bundle();
@@ -67,9 +65,6 @@ public class StartDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof SmartDialog.OnDismissListener){
-            mOnDismissListener = (SmartDialog.OnDismissListener) context;
-        }
     }
 
     @Nullable
@@ -120,6 +115,8 @@ public class StartDialogFragment extends DialogFragment {
                             .putExtra(WebActivity.EX_URL, mStartWindow.getLink())
                             .execute();
                 }
+
+                dismiss();
             }
         });
     }
@@ -149,8 +146,5 @@ public class StartDialogFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if(mOnDismissListener!=null){
-            mOnDismissListener.onDismiss(null);
-        }
     }
 }

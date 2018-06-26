@@ -119,15 +119,13 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         super.onActivityCreated(savedInstanceState);
         initEmptyView();
         initView();
-        loadData(true);
-        requestMyAttention();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         refreshReadStatus();
-        loadEmptyData();
+        mPage = 0;
         loadData(true);
         requestMyAttention();
     }
