@@ -1040,6 +1040,11 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private void updateData(NewsDetail newsDetail) {
         mSubtitle.setText(newsDetail.getTitle());
+        if (!TextUtils.isEmpty(newsDetail.getAuthor())) {
+            mSource.setVisibility(View.VISIBLE);
+        } else {
+            mSource.setVisibility(View.GONE);
+        }
         mSource.setText(newsDetail.getAuthor());
         updateReadNumber(newsDetail);
 //        mReadTime.setText(String.format(getString(R.string.reader_time), newsDetail.getReaderTime()));

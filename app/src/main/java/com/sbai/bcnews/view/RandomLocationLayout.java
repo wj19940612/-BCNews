@@ -12,9 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
@@ -25,7 +23,6 @@ import com.sbai.bcnews.utils.TypefaceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.ButterKnife;
 
@@ -50,7 +47,6 @@ public class RandomLocationLayout extends LinearLayout {
 
     private ArrayList<Integer> randomIndex;
 
-    private Random mRandom;
 
     private OnCoinClickListener mOnCoinClickListener;
 
@@ -76,7 +72,6 @@ public class RandomLocationLayout extends LinearLayout {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_random_location_qkc, this, false);
         ButterKnife.bind(view);
         addView(view);
-        mRandom = new Random();
         resetView();
     }
 
@@ -140,12 +135,16 @@ public class RandomLocationLayout extends LinearLayout {
             stopSize = mQksList.size();
         }
         ViewGroup parent = (ViewGroup) getChildAt(MINING_VIEW_INDEX);
-        while (index < stopSize) {
-            Integer e = mRandom.nextInt(parent.getChildCount());
-            if (!randomIndex.contains(e)) {
-                randomIndex.add(e);
-                index++;
-            }
+//        while (index < stopSize) {
+//            Integer e = mRandom.nextInt(parent.getChildCount());
+//            if (!randomIndex.contains(e)) {
+//                randomIndex.add(e);
+//                index++;
+//            }
+//        }
+
+        for (int i = 0; i < stopSize; i++) {
+            randomIndex.add(i);
         }
         if (mQksList.isEmpty()) {
             showEmptyView();
@@ -242,69 +241,6 @@ public class RandomLocationLayout extends LinearLayout {
 
     }
 
-    private void setRandomTranslate(View view, int i) {
-        int marginLeft = 0;
-        int marginRight = 0;
-        int marginTop = 0;
-        int marginBottom = 0;
-        if (i == 0) {
-            marginLeft = mDefaultRandomMargin * 3;
-        } else if (i == 1) {
-            marginRight = mDefaultRandomMargin * 3;
-        } else if (i == 5) {
-            marginLeft = mDefaultRandomMargin * 4;
-        } else if (i == 7) {
-            marginLeft = mDefaultRandomMargin * 3;
-        } else if (i == 10) {
-            marginTop = mDefaultRandomMargin * 2;
-        }
-
-        marginLeft = getMarginLeft(marginLeft);
-        marginTop = getMarginTop(marginTop);
-        marginBottom = getMarginBottom(marginBottom);
-        marginRight = getMarginRight(marginRight);
-
-        if (i == 0) {
-            marginLeft = 40 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 4));
-        } else if (i == 4) {
-            marginTop = 20 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 3));
-            marginRight = mRandom.nextInt(dp2px(mDefaultRandomMargin * 2));
-        } else if (i == 8) {
-            marginLeft = 10 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 3));
-        } else if (i == 9) {
-            marginTop = 10 - mRandom.nextInt(dp2px(mDefaultRandomMargin * 4));
-        }
-
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-        layoutParams.leftMargin += marginLeft;
-        layoutParams.topMargin += marginTop;
-        layoutParams.bottomMargin += marginBottom;
-        layoutParams.rightMargin += marginRight;
-        view.setLayoutParams(layoutParams);
-    }
-
-
-    private int getMarginTop(int randomMarginTop) {
-        if (randomMarginTop == 0) randomMarginTop = mDefaultRandomMargin;
-        int randomValues = mRandom.nextInt(dp2px(randomMarginTop));
-        return randomValues;
-    }
-
-    private int getMarginLeft(int randomMarginLeft) {
-        if (randomMarginLeft == 0) randomMarginLeft = mDefaultRandomMargin;
-        return mRandom.nextInt(dp2px(randomMarginLeft));
-    }
-
-    private int getMarginBottom(int randomMarginBottom) {
-        if (randomMarginBottom == 0) randomMarginBottom = mDefaultRandomMargin;
-        return mRandom.nextInt(dp2px(randomMarginBottom));
-    }
-
-    public int getMarginRight(int randomMarginRight) {
-        if (randomMarginRight == 0) randomMarginRight = 1;
-        return mRandom.nextInt(dp2px(randomMarginRight));
-    }
-
     public interface OnCoinClickListener {
         /**
          * 领取QKC回调
@@ -322,23 +258,5 @@ public class RandomLocationLayout extends LinearLayout {
     public void setOnCoinClickListener(OnCoinClickListener onCoinClickListener) {
         mOnCoinClickListener = onCoinClickListener;
     }
-
-    private Animation.AnimationListener animationListener = new Animation.AnimationListener() {
-        @Override
-        public void onAnimationStart(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-
-        }
-    };
-
 
 }

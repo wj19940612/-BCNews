@@ -166,6 +166,7 @@
             tools:text="接口升到复健科水电费回家打开是否可见得风湿空间划分空间"/>
 
         <ImageView
+            android:id="@+id/personalIntroduceIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_common_right_arrow"/>

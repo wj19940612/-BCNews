@@ -93,6 +93,8 @@ public class PersonalDataActivity extends BaseActivity {
     TextView mPersonalIntroduce;
     @BindView(R.id.personalIntroduceLL)
     LinearLayout mPersonalIntroduceLL;
+    @BindView(R.id.personalIntroduceIv)
+    ImageView mPersonalIntroduceIv;
 
     private UserInfo mUserInfo;
     private OptionPicker mSexPicker;
@@ -189,20 +191,28 @@ public class PersonalDataActivity extends BaseActivity {
         if (!TextUtils.isEmpty(data.getUserProvince()) && !TextUtils.isEmpty(data.getUserCity())) {
             mLocation.setText(data.getUserProvince() + " " + data.getUserCity());
         }
-        updateUserInfoModifyEnable(!data.isAuthor());
+        updateUserInfoModifyEnable(data.isAuthor());
     }
 
     private void updateUserInfoModifyEnable(boolean isAuthor) {
-        mHeadImageLayout.setEnabled(isAuthor);
-        mNickName.setEnabled(isAuthor);
-        mSex.setEnabled(isAuthor);
-        mBirthday.setEnabled(isAuthor);
-        mLocationLL.setEnabled(isAuthor);
-        mPersonalIntroduce.setEnabled(isAuthor);
-        if (!isAuthor) {
+        boolean viewUnEnabled = !isAuthor;
+        mHeadImageLayout.setEnabled(viewUnEnabled);
+        mNickName.setEnabled(viewUnEnabled);
+        mSex.setEnabled(viewUnEnabled);
+        mBirthday.setEnabled(viewUnEnabled);
+        mLocationLL.setEnabled(viewUnEnabled);
+        mPersonalIntroduceLL.setEnabled(viewUnEnabled);
+        if (isAuthor) {
             mConnectServiceHint.setVisibility(View.VISIBLE);
             mPersonalIntroduce.setText(R.string.author_check_introduce);
             mIntroduce.setText(mUserInfo.getAuthInfo());
+
+            mHelpArrow.setVisibility(View.INVISIBLE);
+            mNickName.setRightIconVisibility(View.INVISIBLE);
+            mSex.setRightIconVisibility(View.INVISIBLE);
+            mBirthday.setRightIconVisibility(View.INVISIBLE);
+            mLocationIv.setVisibility(View.GONE);
+            mPersonalIntroduceIv.setVisibility(View.GONE);
         }
     }
 

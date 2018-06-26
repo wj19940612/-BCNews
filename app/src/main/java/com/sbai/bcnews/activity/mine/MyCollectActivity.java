@@ -344,7 +344,8 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 mNewsTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-                mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
+//                mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
+                mSource.setVisibility(View.GONE);
                 List<String> itemImgs = item.getImgs();
                 if (itemImgs != null && !itemImgs.isEmpty()) {
                     mCover.setVisibility(View.VISIBLE);
@@ -407,7 +408,8 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 mNewsTitle.setText(item.getTitle());
                 mSource.setText(item.getSource());
                 mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
-                mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
+                //                mSource.setVisibility(TextUtils.isEmpty(item.getSource()) ? View.GONE : View.VISIBLE);
+                mSource.setVisibility(View.GONE);
                 List<String> itemImgs = item.getImgs();
                 if (itemImgs != null && !itemImgs.isEmpty()) {
                     mThreeImageLayout.setVisibility(View.VISIBLE);

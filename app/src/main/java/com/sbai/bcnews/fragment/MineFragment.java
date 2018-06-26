@@ -314,16 +314,13 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), ReadHistoryActivity.class).execute();
                 break;
             case R.id.contribute:
-                if (!LocalUser.getUser().isLogin()) {
-                    login();
+                if (LocalUser.getUser().isLogin() && LocalUser.getUser().getUserInfo().isAuthor()) {
+                    Launcher.with(getActivity(), AuthorWorkbenchActivity.class).execute();
                 } else {
-                    if (LocalUser.getUser().getUserInfo().isAuthor()) {
-                        Launcher.with(getActivity(), AuthorWorkbenchActivity.class).execute();
-                    } else {
-                        requestOperationWeChatAccount();
-                    }
-                    umengEventCount(UmengCountEventId.MINE_CONTRIBUTE);
+                    requestOperationWeChatAccount();
                 }
+                umengEventCount(UmengCountEventId.MINE_CONTRIBUTE);
+
                 break;
             case R.id.feedBack:
                 Launcher.with(getActivity(), FeedbackActivity.class).execute();
