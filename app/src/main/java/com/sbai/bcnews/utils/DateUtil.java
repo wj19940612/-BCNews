@@ -415,7 +415,7 @@ public class DateUtil {
     public static String formatNewsStyleTime(long createTime) {
         long systemTime = SysTime.getSysTime().getSystemTimestamp();
         if (DateUtil.isInThisDay(createTime, systemTime))
-            return DateUtil.format(createTime, "HH:mm");
+            return "今天";
         else if (DateUtil.isYesterday(createTime, systemTime)) {
             return "昨天";
         } else if (DateUtil.isInThisYear(createTime)) {
@@ -435,7 +435,6 @@ public class DateUtil {
         int time = Integer.valueOf(DateUtil.format(systemTime, "HHmm"));
         return time >= 600 && time <= 1800;
     }
-
 
 
     /**

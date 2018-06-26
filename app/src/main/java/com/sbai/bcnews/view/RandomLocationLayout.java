@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +76,6 @@ public class RandomLocationLayout extends LinearLayout {
 
     private void resetView() {
         int childCount = getChildCount();
-        Log.d(TAG, "resetView: " + childCount);
         ViewGroup parent = (ViewGroup) getChildAt(MINING_VIEW_INDEX);
         for (int i = 0; i < parent.getChildCount(); i++) {
             TextView qkcCoin = (TextView) parent.getChildAt(i);
@@ -144,7 +142,13 @@ public class RandomLocationLayout extends LinearLayout {
 //        }
 
         for (int i = 0; i < stopSize; i++) {
-            randomIndex.add(i);
+            if (stopSize < 3) {
+                randomIndex.add(i + 3);
+            } else if (stopSize < 5) {
+                randomIndex.add(i + 2);
+            } else {
+                randomIndex.add(i);
+            }
         }
         if (mQksList.isEmpty()) {
             showEmptyView();
@@ -216,7 +220,8 @@ public class RandomLocationLayout extends LinearLayout {
 
         final AnimationDrawable animationDrawable = (AnimationDrawable) ContextCompat.getDrawable(getContext(), R.drawable.animation_mining_cancel);
         ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(null, animationDrawable, null, null);
-        ((TextView) v).setText(" ");
+        ((TextView) v).setText("");
+
         animationDrawable.start();
 
         int duration = 0;

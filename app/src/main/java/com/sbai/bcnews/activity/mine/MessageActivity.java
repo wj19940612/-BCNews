@@ -111,7 +111,7 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
                     Launcher.with(getActivity(), ReviewActivity.class).execute();
                 else if (message.getType() == Message.MESSAGE_TYPE_FEED_BACK_REVIEW)
                     Launcher.with(getActivity(), FeedbackActivity.class).execute();
-                else if(message.getType()==Message.MESSAGE_TYPE_ARTICLE){
+                else if (message.getType() == Message.MESSAGE_TYPE_ARTICLE) {
                     Launcher.with(getActivity(), NewsDetailActivity.class)
                             .putExtra(ExtraKeys.NEWS_ID, message.getDataId())
                             .execute();
@@ -292,7 +292,6 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
         }
 
 
-
         static class ViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.notReadHint)
             ImageView mNotReadHint;
@@ -338,7 +337,11 @@ public class MessageActivity extends RecycleViewSwipeLoadActivity {
 
                 mUserName.setText(message.getSourceUserName());
                 mUserBehavior.setText(message.getTitle());
-                mContent.setText(message.getMsg());
+                if (message.isArticle()) {
+                    mContent.setText("《"+message.getMsg()+"》");
+                } else {
+                    mContent.setText(message.getMsg());
+                }
                 mTimeLine.setText(DateUtil.formatDefaultStyleTime(message.getCreateTime()));
 
             }

@@ -201,7 +201,7 @@ public class PersonalDataActivity extends BaseActivity {
         mSex.setEnabled(viewUnEnabled);
         mBirthday.setEnabled(viewUnEnabled);
         mLocationLL.setEnabled(viewUnEnabled);
-        mPersonalIntroduceLL.setEnabled(viewUnEnabled);
+//        mPersonalIntroduceLL.setEnabled(viewUnEnabled);
         if (isAuthor) {
             mConnectServiceHint.setVisibility(View.VISIBLE);
             mPersonalIntroduce.setText(R.string.author_check_introduce);
@@ -211,8 +211,7 @@ public class PersonalDataActivity extends BaseActivity {
             mNickName.setRightIconVisibility(View.INVISIBLE);
             mSex.setRightIconVisibility(View.INVISIBLE);
             mBirthday.setRightIconVisibility(View.INVISIBLE);
-            mLocationIv.setVisibility(View.GONE);
-            mPersonalIntroduceIv.setVisibility(View.GONE);
+            mLocationIv.setVisibility(View.INVISIBLE);
         }
     }
 
