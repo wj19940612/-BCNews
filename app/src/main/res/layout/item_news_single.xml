@@ -17,16 +17,15 @@
     <RelativeLayout
         android:id="@+id/contentRL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"
-        android:paddingBottom="16dp"
         android:paddingTop="16dp">
 
         <ImageView
             android:id="@+id/img"
             android:layout_width="114dp"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="12dp"/>
 
@@ -40,16 +39,15 @@
             android:maxLines="3"
             android:textColor="@color/text_222"
             android:textSize="15sp"
-            android:textStyle="bold"
-            android:text="这么自信打个包"/>
+            android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/original"
             android:layout_width="24dp"
             android:layout_height="13dp"
-            android:layout_below="@+id/title"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="23dp"
             android:background="@drawable/bg_original"
             android:visibility="visible"/>
 
@@ -57,8 +55,8 @@
             android:id="@+id/source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:layout_marginTop="22dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
             android:layout_marginRight="8dp"
             android:layout_toRightOf="@+id/original"
             android:gravity="center"
@@ -70,8 +68,8 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:layout_marginTop="22dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
             android:layout_toRightOf="@+id/source"
             android:gravity="center"
             android:text="@string/original"
@@ -82,10 +80,9 @@
             android:id="@+id/readCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:layout_marginTop="22dp"
-            android:layout_toLeftOf="@+id/img"
-            android:layout_marginRight="12dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:layout_alignParentRight="true"
             android:textSize="11sp"
             android:textColor="@color/text_999"
             android:text="2000人阅读" />
