@@ -222,8 +222,16 @@ public class IconTextRow extends LinearLayout {
     }
 
     public void setRightIconVisible(boolean visible) {
+        if(visible){
+            setRightIconVisibility(VISIBLE);
+        }else {
+            setRightIconVisibility(GONE);
+        }
+    }
+
+    public void setRightIconVisibility(int visibility) {
         if (mRightImage != null) {
-            mRightImage.setVisibility(visible ? VISIBLE : GONE);
+            mRightImage.setVisibility(visibility);
         }
     }
 

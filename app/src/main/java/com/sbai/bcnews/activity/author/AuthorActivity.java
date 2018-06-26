@@ -170,7 +170,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         if (mAuthor == null) return;
         String shareThumbUrl = mAuthor.getUserPortrait();
         String shareTitle = getString(R.string.recommend_author, getString(R.string.app_name), mAuthor.getUserName());
-
+        String shareDescription = !TextUtils.isEmpty(mAuthor.getAuthInfo()) ? mAuthor.getAuthInfo() : mAuthor.getUserName();
         final String shareUrl = String.format(Apic.url.SHARE_AUTHOR, mAuthor.getId());
         NewsShareDialog.with(getActivity())
                 .setOnNewsLinkCopyListener(new NewsShareAndSetDialog.OnNewsLinkCopyListener() {
@@ -180,7 +180,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                     }
                 }).setTitleVisible(false)
                 .setShareTitle(shareTitle)
-                .setShareDescription(mAuthor.getAuthInfo())
+                .setShareDescription(shareDescription)
                 .setListener(new ShareDialog.OnShareDialogCallback() {
                     @Override
                     public void onSharePlatformClick(ShareDialog.SHARE_PLATFORM platform) {
