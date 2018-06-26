@@ -41,8 +41,18 @@ public class PersonalIntroduceActivity extends BaseActivity {
         ButterKnife.bind(this);
         String introduce = getIntent().getStringExtra(ExtraKeys.PERSONAL_INTRODUCE);
 
+
+        if (LocalUser.getUser().getUserInfo().isAuthor()) {
+            mPersonalIntroduce.setEnabled(false);
+            mSubmitIntroduce.setEnabled(false);
+            mPersonalIntroduce.setText(LocalUser.getUser().getUserInfo().getAuthInfo());
+            return;
+        }
+
         mPersonalIntroduce.addTextChangedListener(mValidationWatcher);
         mPersonalIntroduce.setText(introduce);
+
+
     }
 
     @OnClick(R.id.submitIntroduce)
@@ -93,7 +103,7 @@ public class PersonalIntroduceActivity extends BaseActivity {
 
         if (s.length() > 30) {
             mWordsNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.redPrimary));
-        }else {
+        } else {
             mWordsNumber.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_999));
         }
     }

@@ -28,6 +28,7 @@ import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.model.author.AuthorArticle;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
+import com.sbai.bcnews.utils.BuildConfigUtils;
 import com.sbai.bcnews.utils.ClipboardUtils;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.NumberUtils;
@@ -95,13 +96,17 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     LinearLayout mLayout;
     private int mPage;
     private AuthorArticleAdapter mAuthorArticleAdapter;
+
     private int mTotalScrollRange;
+    private int mOffsetRang;
 
     private View mCustomView;
     private TextView mTitleBarAuthorName;
     private HasLabelLayout mTitleBarHasLabelLayout;
     private int mAuthorId;
     private Author mAuthor;
+
+    private boolean mSwipeToLoadLayoutRefreshEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +142,8 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         mAppBarLayout.post(new Runnable() {
             @Override
             public void run() {
-                mTotalScrollRange = mAppBarLayout.getTotalScrollRange() - 20;
+                mTotalScrollRange = mAppBarLayout.getTotalScrollRange();
+                mOffsetRang = mTotalScrollRange - 20;
             }
         });
 
@@ -150,6 +156,11 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                         .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
             }
         });
+
+        if (BuildConfigUtils.isProductFlavor()) {
+            mFansNumber.setVisibility(View.GONE);
+            mFirstSplit.setVisibility(View.GONE);
+        }
     }
 
     private void initTitleBar() {
@@ -195,8 +206,8 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     private AppBarLayout.OnOffsetChangedListener mOnOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
         @Override
         public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-            if (verticalOffset != 0)
-                if (verticalOffset > -mTotalScrollRange) {
+            if (verticalOffset != 0) {
+                if (verticalOffset > -mOffsetRang) {
                     if (mCustomView.getVisibility() == View.VISIBLE) {
                         mCustomView.setVisibility(View.GONE);
                         if (mLayout.getVisibility() == View.INVISIBLE) {
@@ -212,6 +223,18 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                     }
 
                 }
+
+                if (Math.abs(verticalOffset) == mTotalScrollRange) {
+                    if (mSwipeToLoadLayout.isRefreshEnabled()) {
+                        mSwipeToLoadLayout.setRefreshEnabled(false);
+                    }
+                } else {
+                    if (!mSwipeToLoadLayout.isRefreshEnabled()) {
+                        mSwipeToLoadLayout.setRefreshEnabled(true);
+                    }
+                }
+            }
+
         }
     };
 

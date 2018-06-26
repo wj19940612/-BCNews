@@ -10,224 +10,225 @@
     tools:context=".activity.author.AuthorActivity">
 
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBarLayout"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_author_page_head">
+
+        <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_author_page_head">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <android.support.design.widget.CollapsingToolbarLayout
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                android:layout_marginTop="48dp"
+                android:orientation="vertical">
 
-                <android.support.constraint.ConstraintLayout
+                <com.sbai.bcnews.view.HasLabelLayout
+                    android:id="@+id/hasLabelLayout"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="26dp"
+                    app:labelDrawable="@drawable/ic_label_v"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/authorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/hasLabelLayout"
+                    app:layout_constraintTop_toTopOf="@+id/hasLabelLayout"
+                    tools:text="nishuideyu"/>
+
+                <TextView
+                    android:id="@+id/authorIdentity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bg_white_line_round"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="2dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/authorName"
+                    app:layout_constraintStart_toEndOf="@id/authorName"
+                    tools:text="溺水的鱼啊啊啊"/>
+
+                <TextView
+
+                    android:id="@+id/fansNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@id/authorName"
+                    app:layout_constraintTop_toBottomOf="@id/authorName"
+                    tools:text="5111\n粉丝"/>
+
+                <View
+                    android:id="@+id/firstSplit"
+                    android:layout_width="1dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="@dimen/common_padding"
+                    android:background="@android:color/white"
+                    app:layout_constraintBaseline_toBaselineOf="@id/fansNumber"
+                    app:layout_constraintStart_toEndOf="@id/fansNumber"/>
+
+                <TextView
+                    android:id="@+id/readNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/common_padding"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/fansNumber"
+                    app:layout_constraintStart_toEndOf="@id/firstSplit"
+                    app:layout_constraintTop_toBottomOf="@id/authorName"
+                    tools:text="5111\n阅读"/>
+
+                <View
+                    android:id="@+id/secondSplit"
+                    android:layout_width="1dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="@dimen/common_padding"
+                    android:background="@android:color/white"
+                    app:layout_constraintBaseline_toBaselineOf="@id/fansNumber"
+                    app:layout_constraintStart_toEndOf="@id/readNumber"/>
+
+                <TextView
+                    android:id="@+id/praiseNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/common_padding"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/fansNumber"
+                    app:layout_constraintStart_toEndOf="@id/secondSplit"
+                    tools:text="5111\n点赞"/>
+
+                <ImageView
+                    android:id="@+id/attentionAuthor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/common_padding"
+                    android:layout_marginTop="17dp"
+                    android:src="@drawable/ic_attention_author"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/authorName"/>
+
+                <LinearLayout
+                    android:id="@+id/layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
-                    android:orientation="vertical">
-
-                    <com.sbai.bcnews.view.HasLabelLayout
-                        android:id="@+id/hasLabelLayout"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="26dp"
-                        app:labelDrawable="@drawable/ic_label_v"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/fansNumber">
 
                     <TextView
-                        android:id="@+id/authorName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toEndOf="@id/hasLabelLayout"
-                        app:layout_constraintTop_toTopOf="@+id/hasLabelLayout"
-                        tools:text="nishuideyu"/>
-
-                    <TextView
-                        android:id="@+id/authorIdentity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/bg_white_line_round"
-                        android:paddingBottom="2dp"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:paddingTop="2dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="10sp"
-                        app:layout_constraintBaseline_toBaselineOf="@id/authorName"
-                        app:layout_constraintStart_toEndOf="@id/authorName"
-                        tools:text="溺水的鱼啊啊啊"/>
-
-                    <TextView
-                        android:id="@+id/fansNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:lineSpacingExtra="5dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="12sp"
-                        android:gravity="center"
-                        app:layout_constraintStart_toStartOf="@id/authorName"
-                        app:layout_constraintTop_toBottomOf="@id/authorName"
-                        tools:text="5111\n粉丝"/>
-
-                    <View
-                        android:id="@+id/firstSplit"
-                        android:layout_width="1dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="@dimen/common_padding"
-                        android:background="@android:color/white"
-                        app:layout_constraintBaseline_toBaselineOf="@id/fansNumber"
-                        app:layout_constraintStart_toEndOf="@id/fansNumber"/>
-
-                    <TextView
-                        android:gravity="center"
-                        android:id="@+id/readNumber"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/authorIntroduce"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/common_padding"
-
-                        android:lineSpacingExtra="5dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="12sp"
-                        app:layout_constraintBaseline_toBaselineOf="@id/fansNumber"
-                        app:layout_constraintStart_toEndOf="@id/firstSplit"
-                        tools:text="5111\n阅读"/>
-
-                    <View
-                        android:id="@+id/secondSplit"
-                        android:layout_width="1dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="@dimen/common_padding"
-                        android:background="@android:color/white"
-                        app:layout_constraintBaseline_toBaselineOf="@id/fansNumber"
-                        app:layout_constraintStart_toEndOf="@id/readNumber"/>
-
-                    <TextView
-                        android:gravity="center"
-                        android:id="@+id/praiseNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/common_padding"
-                        android:layout_marginTop="15dp"
-                        android:lineSpacingExtra="5dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="12sp"
-                        app:layout_constraintBaseline_toBaselineOf="@id/fansNumber"
-                        app:layout_constraintStart_toEndOf="@id/secondSplit"
-                        tools:text="5111\n点赞"/>
-
-                    <ImageView
-                        android:id="@+id/attentionAuthor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/common_padding"
                         android:layout_marginTop="17dp"
-                        android:src="@drawable/ic_attention_author"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/authorName"/>
+                        android:background="@drawable/bg_white_alpha_round"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="9dp"
+                        android:paddingRight="9dp"
+                        android:paddingTop="4dp"
+                        android:textColor="#ADFFFFFF"
+                        android:textSize="11sp"
 
-                    <LinearLayout
-                        android:id="@+id/layout"
+                        tools:text="溺水大师级的好时机汇顶科技"/>
+
+                    <TextView
+                        android:id="@+id/myArticleTotal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintTop_toBottomOf="@+id/fansNumber">
+                        android:layout_height="22dp"
+                        android:layout_marginTop="26dp"
+                        android:background="@color/bg_F0F0"
+                        android:gravity="center"
+                        app:layout_constraintTop_toBottomOf="@+id/authorIntroduce"
+                        tools:text="我的文章(20)"/>
+                </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/authorIntroduce"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_padding"
-                            android:layout_marginRight="@dimen/common_padding"
-                            android:layout_marginTop="17dp"
-                            android:background="@drawable/bg_white_alpha_round"
-                            android:paddingBottom="4dp"
-                            android:paddingLeft="9dp"
-                            android:paddingRight="9dp"
-                            android:paddingTop="4dp"
-                            android:textColor="#ADFFFFFF"
-                            android:textSize="11sp"
+            </android.support.constraint.ConstraintLayout>
 
-                            tools:text="溺水大师级的好时机汇顶科技"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="pin">
 
-                        <TextView
-                            android:id="@+id/myArticleTotal"
-                            android:layout_width="match_parent"
-                            android:layout_height="22dp"
-                            android:layout_marginTop="26dp"
-                            android:background="@color/bg_F0F0"
-                            android:gravity="center"
-                            app:layout_constraintTop_toBottomOf="@+id/authorIntroduce"
-                            tools:text="我的文章(20)"/>
-                    </LinearLayout>
-
-                </android.support.constraint.ConstraintLayout>
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolBar"
+                <com.sbai.bcnews.view.TitleBar
+                    android:id="@+id/titleBar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:fitsSystemWindows="true"
-                    app:layout_collapseMode="pin">
+                    app:backFeature="true"
+                    app:backIcon="@drawable/ic_tb_back_white"
+                    app:customView="@layout/layout_author_titlebar"
+                    app:leftViewLeftPadding="0dp"
+                    app:rightImage="@drawable/ic_share_author"
+                    app:rightVisible="true"/>
+            </android.support.v7.widget.Toolbar>
 
-                    <com.sbai.bcnews.view.TitleBar
-                        android:id="@+id/titleBar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:fitsSystemWindows="true"
-                        app:backFeature="true"
-                        app:backIcon="@drawable/ic_tb_back_white"
-                        app:customView="@layout/layout_author_titlebar"
-                        app:leftViewLeftPadding="0dp"
-                        app:rightImage="@drawable/ic_share_author"
-                        app:rightVisible="true"/>
-                </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
 
-            </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
 
-        </android.support.design.widget.AppBarLayout>
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titleBar"
+        app:default_to_loading_more_scrolling_duration="500"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:load_more_complete_delay_duration="0"
+        app:load_more_final_drag_offset="@dimen/load_more_final_offset_google"
+        app:load_more_trigger_offset="@dimen/load_more_trigger_offset_google"
+        app:refresh_final_drag_offset="@dimen/refresh_final_offset_google"
+        app:refresh_trigger_offset="@dimen/refresh_trigger_offset_google"
+        app:swipe_style="classic">
 
-        <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
-            android:id="@+id/swipeToLoadLayout"
+        <com.zcmrr.swipelayout.header.RefreshHeaderView
+            android:id="@+id/swipe_refresh_header"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/titleBar"
-            app:default_to_loading_more_scrolling_duration="500"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:load_more_complete_delay_duration="0"
-            app:load_more_final_drag_offset="@dimen/load_more_final_offset_google"
-            app:load_more_trigger_offset="@dimen/load_more_trigger_offset_google"
-            app:refresh_final_drag_offset="@dimen/refresh_final_offset_google"
-            app:refresh_trigger_offset="@dimen/refresh_trigger_offset_google"
-            app:swipe_style="classic">
+            android:layout_height="wrap_content"/>
 
-            <com.zcmrr.swipelayout.header.RefreshHeaderView
-                android:id="@+id/swipe_refresh_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@id/swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_F5F5"
+            android:clipToPadding="false"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:background="@color/bg_F5F5"
-                android:id="@id/swipe_target"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"/>
+        <com.zcmrr.swipelayout.foot.LoadMoreFooterView
+            android:id="@+id/swipe_load_more_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-            <com.zcmrr.swipelayout.foot.LoadMoreFooterView
-                android:id="@+id/swipe_load_more_footer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
 
-    </android.support.design.widget.CoordinatorLayout>
+</android.support.design.widget.CoordinatorLayout>

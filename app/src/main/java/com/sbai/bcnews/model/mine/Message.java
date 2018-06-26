@@ -20,7 +20,7 @@ public class Message implements MessageStatus {
     public static final int MESSAGE_TYPE_REVIEW_PRAISE = 5;
     public static final int MESSAGE_TYPE_REVIEW_REVIEW = 6;
 
-    public static final int MESSAGE_TYPE_ARTICLE = 7; //对文章的点赞和评论
+    public static final int MESSAGE_TYPE_ARTICLE = 7; //对文章的点赞
 
     /**
      * createTime : 1521098828000
@@ -54,6 +54,10 @@ public class Message implements MessageStatus {
         return getType() == MESSAGE_TYPE_COMMENT ||
                 getType() == MESSAGE_TYPE_COMMENT_REVIEW ||
                 getType() == MESSAGE_TYPE_REVIEW_REVIEW;
+    }
+
+    public boolean isArticle() {
+        return getType() == MESSAGE_TYPE_COMMENT || getType() == MESSAGE_TYPE_ARTICLE;
     }
 
     public long getCreateTime() {
