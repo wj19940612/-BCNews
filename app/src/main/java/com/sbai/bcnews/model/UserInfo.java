@@ -476,6 +476,7 @@ public class UserInfo implements Parcelable {
         dest.writeString(this.city);
         dest.writeString(this.userAddress);
         dest.writeString(this.introduction);
+        dest.writeInt(this.isPassword);
         dest.writeInt(this.age);
         dest.writeString(this.birthday);
         dest.writeString(this.deviceId);
@@ -488,9 +489,12 @@ public class UserInfo implements Parcelable {
         dest.writeInt(this.wxBound);
         dest.writeString(this.wxName);
         dest.writeInt(this.isModifyPortrait);
+        dest.writeInt(this.discuss);
+        dest.writeInt(this.praise);
         dest.writeInt(this.addRate);
         dest.writeInt(this.addIntegral);
-        dest.writeInt(this.isPassword);
+        dest.writeInt(this.rankType);
+        dest.writeString(this.authInfo);
     }
 
     protected UserInfo(Parcel in) {
@@ -513,6 +517,7 @@ public class UserInfo implements Parcelable {
         this.city = in.readString();
         this.userAddress = in.readString();
         this.introduction = in.readString();
+        this.isPassword = in.readInt();
         this.age = in.readInt();
         this.birthday = in.readString();
         this.deviceId = in.readString();
@@ -525,9 +530,12 @@ public class UserInfo implements Parcelable {
         this.wxBound = in.readInt();
         this.wxName = in.readString();
         this.isModifyPortrait = in.readInt();
+        this.discuss = in.readInt();
+        this.praise = in.readInt();
         this.addRate = in.readInt();
         this.addIntegral = in.readInt();
-        this.isPassword = in.readInt();
+        this.rankType = in.readInt();
+        this.authInfo = in.readString();
     }
 
     public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {

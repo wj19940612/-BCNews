@@ -23,7 +23,7 @@ import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.view.RandomLocationLayout;
 import com.sbai.bcnews.view.TitleBar;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,27 +95,27 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
     }
 
     private void requestCanGetQkcList() {
-//        Apic.requestQKC()
-//                .tag(TAG)
-//                .callback(new Callback2D<Resp<List<QKC>>, List<QKC>>() {
-//                    @Override
-//                    protected void onRespSuccessData(List<QKC> data) {
-//                        mRandomLayout.setQksList(data);
-//                    }
-//
-//                    @Override
-//                    public void onFinish() {
-//                        super.onFinish();
-//                    }
-//                })
-//                .fire();
-        ArrayList<QKC> qkcs = new ArrayList<>();
-        for (int i = 0; i < 22; i++) {
-            QKC qkc = new QKC();
-            qkc.setIntegral(i);
-            qkcs.add(qkc);
-        }
-        mRandomLayout.setQksList(qkcs);
+        Apic.requestQKC()
+                .tag(TAG)
+                .callback(new Callback2D<Resp<List<QKC>>, List<QKC>>() {
+                    @Override
+                    protected void onRespSuccessData(List<QKC> data) {
+                        mRandomLayout.setQksList(data);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                    }
+                })
+                .fire();
+//        ArrayList<QKC> qkcs = new ArrayList<>();
+//        for (int i = 0; i < 22; i++) {
+//            QKC qkc = new QKC();
+//            qkc.setIntegral(i);
+//            qkcs.add(qkc);
+//        }
+//        mRandomLayout.setQksList(qkcs);
     }
 
     private void setQKCAndRate(MyIntegral data) {
@@ -144,10 +144,6 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
         } else {
             ToastUtil.show(R.string.http_error_network);
         }
-
-        mRandomLayout.removeCoin(v, qks);
-        mMyIntegral.setIntegral(mMyIntegral.getIntegral() + qks.getIntegral());
-        setQKCAndRate(mMyIntegral);
 
     }
 

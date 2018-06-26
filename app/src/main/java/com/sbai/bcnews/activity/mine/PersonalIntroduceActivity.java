@@ -4,7 +4,11 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
@@ -33,6 +37,8 @@ public class PersonalIntroduceActivity extends BaseActivity {
     TextView mWordsNumber;
     @BindView(R.id.submitIntroduce)
     TextView mSubmitIntroduce;
+    @BindView(R.id.scrollView)
+    ScrollView mScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +49,14 @@ public class PersonalIntroduceActivity extends BaseActivity {
 
 
         if (LocalUser.getUser().getUserInfo().isAuthor()) {
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mScrollView.setLayoutParams(layoutParams);
+
             mPersonalIntroduce.setEnabled(false);
-            mSubmitIntroduce.setEnabled(false);
+            mSubmitIntroduce.setVisibility(View.GONE);
             mPersonalIntroduce.setText(LocalUser.getUser().getUserInfo().getAuthInfo());
+            mWordsNumber.setVisibility(View.GONE);
             return;
         }
 
