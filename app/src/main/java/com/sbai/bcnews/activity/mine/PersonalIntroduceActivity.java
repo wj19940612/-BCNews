@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -57,9 +58,11 @@ public class PersonalIntroduceActivity extends BaseActivity {
             mSubmitIntroduce.setVisibility(View.GONE);
             mPersonalIntroduce.setText(LocalUser.getUser().getUserInfo().getAuthInfo());
             mWordsNumber.setVisibility(View.GONE);
+            mTitleBar.setTitle(R.string.introduce);
             return;
         }
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         mPersonalIntroduce.addTextChangedListener(mValidationWatcher);
         mPersonalIntroduce.setText(introduce);
 

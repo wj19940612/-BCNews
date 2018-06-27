@@ -231,6 +231,8 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     TextView mSecondReadCount;
     @BindView(R.id.thirdReadCount)
     TextView mThirdReadCount;
+    @BindView(R.id.authorLl)
+    LinearLayout mAuthorLl;
 
 
     private WebViewClient mWebViewClient;
@@ -657,8 +659,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                             .execute();
                 }
                 NewsReadCache.markNewsRead(data.getId());
-            }
-            if (!TextUtils.isEmpty(mChannel)) {
+            } else if (!TextUtils.isEmpty(mChannel)) {
                 Launcher.with(NewsDetailActivity.this, NewsDetailActivity.class).putExtra(ExtraKeys.CHANNEL, mChannel).putExtra(ExtraKeys.NEWS_ID, data.getId()).execute();
             } else if (!TextUtils.isEmpty(mTag)) {
                 Launcher.with(NewsDetailActivity.this, NewsDetailActivity.class).putExtra(ExtraKeys.TAG, mTag).putExtra(ExtraKeys.NEWS_ID, data.getId()).execute();
@@ -1169,9 +1170,9 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         }
         updateReadNumber(data);
         if (TextUtils.isEmpty(data.getSummary())) {
-            mArticleIntroduce.setVisibility(View.GONE);
+            mAuthorLl.setVisibility(View.GONE);
         } else {
-            mArticleIntroduce.setVisibility(View.VISIBLE);
+            mAuthorLl.setVisibility(View.VISIBLE);
         }
         mArticleIntroduce.setText(data.getSummary());
         mAuthorAttention.setSelected(data.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);

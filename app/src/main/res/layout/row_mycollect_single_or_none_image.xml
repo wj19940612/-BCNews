@@ -59,7 +59,6 @@
             android:layout_marginRight="18dp"
             android:background="@drawable/bg_original"
             android:minWidth="24dp"
-            android:text="@string/original"
             android:textColor="@color/textColorPrimary"/>
 
         <TextView
