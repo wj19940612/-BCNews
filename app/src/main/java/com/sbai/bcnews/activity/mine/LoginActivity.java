@@ -341,6 +341,7 @@ public class LoginActivity extends WeChatActivity {
                 Launcher.with(getActivity(), WebActivity.class)
                         .putExtra(WebActivity.EX_URL, Apic.url.WEB_URI_AGREEMENT)
                         .execute();
+                break;
             case R.id.passLogin:
                 switchLoginMode();
                 break;
@@ -577,6 +578,7 @@ public class LoginActivity extends WeChatActivity {
     }
 
     private void switchLoginMode() {
+        Log.e("zzz", "switchLoginMode");
         if (isAuthCodeLogin()) { // 当前是验证码登录 -> 密码登录
             mPageTitle.setText(R.string.password_login);
             mAuthCodeArea.setVisibility(View.GONE);
