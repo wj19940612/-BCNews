@@ -98,6 +98,7 @@ public class ModifyPassActivity extends BaseActivity {
             mPageTitle.setText(R.string.set_login_password);
             mOldPassword.setHint(R.string.set_login_password);
             mPassword.setHint(R.string.set_login_password_again);
+            mOldPassword.addTextChangedListener(mValidationWatcher);
             mPassword.addTextChangedListener(mValidationWatcher);
 
             mPassword.postDelayed(new Runnable() {
