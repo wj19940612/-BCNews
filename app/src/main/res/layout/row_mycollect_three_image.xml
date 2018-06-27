@@ -60,7 +60,6 @@
             android:background="@drawable/bg_original"
             android:gravity="center"
             android:minWidth="24dp"
-            android:text="@string/original"
             android:textColor="@color/textColorPrimary"
             android:visibility="gone"/>
 

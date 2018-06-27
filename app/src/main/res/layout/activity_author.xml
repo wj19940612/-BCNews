@@ -92,11 +92,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/common_padding"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:lineSpacingExtra="5dp"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"
-                    android:layout_marginTop="10dp"
                     app:layout_constraintStart_toEndOf="@id/firstSplit"
                     app:layout_constraintTop_toBottomOf="@id/authorName"
                     tools:text="5111\n阅读"/>
@@ -228,6 +228,18 @@
             android:layout_height="wrap_content"/>
 
     </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleBar"
+        android:layout_marginTop="300dp"
+        android:drawablePadding="20dp"
+        android:drawableTop="@drawable/ic_news_error"
+        android:gravity="center"
+        android:text="@string/not_has_article"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -2,23 +2,21 @@ package com.sbai.bcnews.fragment;
 
 
 import android.app.Dialog;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.BuildConfig;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.activity.ModifyPassActivity;
 import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.activity.author.AuthorWorkbenchActivity;
@@ -76,7 +74,7 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.headLayout)
     RelativeLayout mHeadLayout;
     @BindView(R.id.contribute)
-    IconTextRow mContribute;
+    LinearLayout mContribute;
     @BindView(R.id.feedBack)
     IconTextRow mFeedBack;
     @BindView(R.id.setting)
@@ -91,10 +89,11 @@ public class MineFragment extends BaseFragment {
     IconTextRow mQkc;
     @BindView(R.id.invite)
     IconTextRow mInvite;
+    @BindView(R.id.notCheckLabel)
+    ImageView mNotCheckLabel;
 
     private int mNotReadMessageCount;
 
-    private SpannableString mSpannableString;
 
 
     @Override
@@ -108,13 +107,6 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        String s = getString(R.string.author_workbench) + "                    ";
-        mSpannableString = new SpannableString(s);
-        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.ic_mine_author_not_check);
-        drawable.setBounds(0, 0, 135, 60);
-        ImageSpan imageSpan = new ImageSpan(drawable);
-        mSpannableString.setSpan(imageSpan, 9, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
     }
 
     @Override
@@ -224,14 +216,14 @@ public class MineFragment extends BaseFragment {
             updateUserCollectNumber(userInfo.getCollectCount());
             updateUserReadHistory(userInfo.getReadCount());
             if (userInfo.isAuthor()) {
-                mContribute.setText(R.string.author_workbench);
+                mNotCheckLabel.setVisibility(View.GONE);
                 mHeadPortrait.setLabelImageViewVisible(true);
                 boolean isOfficialAuthor = userInfo.getAuthorType() == Author.AUTHOR_STATUS_OFFICIAL;
                 mHeadPortrait.setLabelSelected(isOfficialAuthor);
 
             } else {
                 mHeadPortrait.setLabelImageViewVisible(false);
-                mContribute.setText(mSpannableString);
+                mNotCheckLabel.setVisibility(View.VISIBLE);
             }
         } else {
             mUserName.setText(R.string.click_login);
@@ -244,8 +236,8 @@ public class MineFragment extends BaseFragment {
             updateUserReadHistory(readHistorySize);
             updateNotReadMessage(0);
             mQkc.setSubText("");
-            mContribute.setText(mSpannableString);
             mHeadPortrait.setLabelImageViewVisible(false);
+            mNotCheckLabel.setVisibility(View.VISIBLE);
         }
     }
 

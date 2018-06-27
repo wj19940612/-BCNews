@@ -232,6 +232,7 @@
     <string name="please_input_introduce">让别人瞻仰下不凡的你吧</string>
     <string name="save">保存</string>
     <string name="introduce_is_too_more">简介太丰富了</string>
+    <string name="introduce">简介</string>
 
     <string name="set_nick_name">设置昵称</string>
     <string name="please_input_nick_name">请输入昵称</string>
@@ -467,6 +468,7 @@
     <string name="attention_success">关注成功</string>
     <string name="cancel_attention_success">取消关注成功</string>
     <string name="app_author">区块财经作者</string>
+    <string name="not_has_article">暂无文章</string>
 
 
     <string name="you_have_not_attention_author">你还没有关注作者哦</string>

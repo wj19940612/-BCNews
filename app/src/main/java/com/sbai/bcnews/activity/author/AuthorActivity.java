@@ -96,6 +96,8 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     TitleBar mTitleBar;
     @BindView(R.id.layout)
     LinearLayout mLayout;
+    @BindView(R.id.emptyView)
+    TextView mEmptyView;
     private int mPage;
     private AuthorArticleAdapter mAuthorArticleAdapter;
 
@@ -284,6 +286,18 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
             mPage++;
         }
 
+        if (!data.isEmpty() || !mAuthorArticleAdapter.isEmpty()) {
+            if (mSwipeToLoadLayout.getVisibility() != View.VISIBLE) {
+                mSwipeToLoadLayout.setVisibility(View.VISIBLE);
+                mEmptyView.setVisibility(View.GONE);
+            }
+        } else {
+            if (mEmptyView.getVisibility() != View.VISIBLE) {
+                mEmptyView.setVisibility(View.VISIBLE);
+                mSwipeToLoadLayout.setVisibility(View.GONE);
+            }
+        }
+
         mAuthorArticleAdapter.addAll(data);
     }
 
@@ -329,19 +343,26 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         mMyArticleTotal.setText(getString(R.string.his_article_number, articleNumber));
     }
 
+    @OnClick({R.id.attentionAuthor, R.id.emptyView})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.attentionAuthor:
+                if (LocalUser.getUser().isLogin())
+                    attentionAuthor();
+                else
+                    Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
+                break;
+            case R.id.emptyView:
+                onRefresh();
+                break;
+        }
+    }
 
     @Override
     public View getContentView() {
         return mRootView;
     }
 
-    @OnClick(R.id.attentionAuthor)
-    public void onViewClicked() {
-        if (LocalUser.getUser().isLogin())
-            attentionAuthor();
-        else
-            Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
-    }
 
     @Override
     public void onLoadMore() {
@@ -384,4 +405,6 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                     .fire();
         }
     }
+
+
 }

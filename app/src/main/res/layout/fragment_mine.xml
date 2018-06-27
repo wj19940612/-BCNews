@@ -144,21 +144,50 @@
             app:rowVerticalPadding="0dp"/>
 
 
-        <com.sbai.bcnews.view.IconTextRow
+        <LinearLayout
             android:id="@+id/contribute"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/bg_white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/common_padding"
+            android:paddingRight="@dimen/common_padding"
             android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@+id/review"
-            app:leftIcon="@drawable/ic_mine_author_workbench"
-            app:rightIcon="@drawable/ic_common_right_arrow"
-            app:rowTextDrawablePadding="14dp"
-            app:rowText="@string/author_workbench"
-            app:rowTextColor="@color/text_222"
-            app:rowTextSize="16sp"
-            app:rowVerticalPadding="0dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/review">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_mine_author_workbench"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/common_padding"
+                android:text="@string/author_workbench"
+                android:textColor="@color/text_222"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:id="@+id/notCheckLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/common_padding"
+                android:src="@drawable/ic_mine_author_not_check"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_common_right_arrow"/>
+        </LinearLayout>
+
 
         <com.sbai.bcnews.view.IconTextRow
             android:id="@+id/feedBack"

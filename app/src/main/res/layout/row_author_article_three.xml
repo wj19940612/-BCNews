@@ -29,13 +29,13 @@
         tools:text="溺水的鱼 阿斯加德好几款撒旦画啥的季后赛抠脚大萨达所大萨达撒大萨达撒大汉"/>
 
     <com.sbai.bcnews.view.ThreeImageLayout
-    android:id="@+id/threeImageLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="13dp"
-    android:minHeight="70dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/title"/>
+        android:id="@+id/threeImageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:minHeight="70dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"/>
 
     <TextView
         android:id="@+id/timeLine"
@@ -56,7 +56,7 @@
         android:textColor="@color/text_999"
         android:textSize="11sp"
         app:layout_constraintBaseline_toBaselineOf="@id/timeLine"
-        app:layout_constraintStart_toEndOf="@id/timeLine"
+        app:layout_constraintRight_toRightOf="parent"
         tools:text="20阅读"/>
 
     <TextView
@@ -67,7 +67,7 @@
         android:textColor="@color/text_999"
         android:textSize="11sp"
         app:layout_constraintBaseline_toBaselineOf="@id/timeLine"
-        app:layout_constraintStart_toEndOf="@id/readNumber"
-        tools:text="20阅读"/>
+        app:layout_constraintStart_toEndOf="@id/timeLine"
+        tools:text="20评论"/>
 
 </android.support.constraint.ConstraintLayout>
