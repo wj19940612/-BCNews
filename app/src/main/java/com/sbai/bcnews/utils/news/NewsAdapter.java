@@ -301,7 +301,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mLine.setVisibility(View.VISIBLE);
         }
 
-        if (mHasFoot) {
+        if (mHasFoot && count - 1 == position) {
             mFooter.setVisibility(View.VISIBLE);
         } else {
             mFooter.setVisibility(View.GONE);

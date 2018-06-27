@@ -2,10 +2,15 @@ package com.sbai.bcnews.fragment;
 
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -96,6 +101,17 @@ public class MineFragment extends BaseFragment {
 
     private SpannableString mSpannableString;
 
+    private BroadcastReceiver mLoginBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase(LoginActivity.ACTION_LOGIN_SUCCESS)) {
+                if (getUserVisibleHint()) {
+                    showUpdateSetLoginDialog();
+                }
+            }
+        }
+    };
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,7 +124,7 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        registerLoginBroadcast();
         String s = getString(R.string.author_workbench) + "                    ";
         mSpannableString = new SpannableString(s);
         Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.ic_mine_author_not_check);
@@ -123,6 +139,19 @@ public class MineFragment extends BaseFragment {
         updateUserLoginStatus();
         refreshUserData();
         requestQKCAndInviteHasGiftTabVisible();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLoginBroadcastReceiver);
+    }
+
+    private void registerLoginBroadcast() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LoginActivity.ACTION_LOGIN_SUCCESS);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mLoginBroadcastReceiver, intentFilter);
     }
 
     /**
@@ -165,7 +194,6 @@ public class MineFragment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             refreshUserData();
-            showUpdateSetLoginDialog();
         }
     }
 
