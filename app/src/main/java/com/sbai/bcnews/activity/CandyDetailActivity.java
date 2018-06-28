@@ -211,6 +211,7 @@ public class CandyDetailActivity extends BaseActivity {
 
         Launcher.with(getActivity(), WebActivity.class)
                 .putExtra(WebActivity.EX_URL, mCandy.getUrl())
+                .putExtra(ExtraKeys.HAS_CLOSE_BUTTON,true)
                 .execute();
     }
 }

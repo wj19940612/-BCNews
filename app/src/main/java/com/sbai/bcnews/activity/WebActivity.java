@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.sbai.bcnews.AppJs;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.utils.Network;
@@ -68,6 +69,8 @@ public class WebActivity extends BaseActivity {
     private BroadcastReceiver mNetworkChangeReceiver;
     private WebViewClient mWebViewClient;
 
+    private boolean mHasCloseView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +79,7 @@ public class WebActivity extends BaseActivity {
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
         initData(getIntent());
+        initTitleBar();
         initWebView();
     }
 
@@ -124,7 +128,21 @@ public class WebActivity extends BaseActivity {
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
         mPureHtml = intent.getStringExtra(EX_HTML);
+
+        mHasCloseView = intent.getBooleanExtra(ExtraKeys.HAS_CLOSE_BUTTON,false);
         tryToFixPageUrl();
+    }
+
+    private void initTitleBar(){
+        if(mHasCloseView){
+            mTitleBar.setShowCloseView(true);
+        }
+        mTitleBar.setOnCloseClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void tryToFixPageUrl() {

@@ -25,6 +25,8 @@ import com.bumptech.glide.Glide;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.Display;
 
+import butterknife.OnClick;
+
 
 public class TitleBar extends RelativeLayout {
 
@@ -38,6 +40,7 @@ public class TitleBar extends RelativeLayout {
     private float mRightTextSize;
     private ColorStateList mRightTextColor;
     private Drawable mRightTextLeftImage;
+    private Drawable mCloseImage;
     private Drawable mRightBackground;
     private boolean mRightVisible;
     private boolean mBackFeature;
@@ -45,9 +48,11 @@ public class TitleBar extends RelativeLayout {
     private CharSequence mBackText;
     private float mBackTextSize;
     private ColorStateList mBackTextColor;
+    private boolean mHasCloseView;
 
     private TextView mTitleView;
     private TextView mBackView;
+    private ImageView mCloseView;
     private LinearLayout mRightViewParent;
     private TextView mRightView;
     private View mCustomView;
@@ -63,6 +68,9 @@ public class TitleBar extends RelativeLayout {
     private int mTitleLeftMargin;
     private int mTitleRightMargin;
     private View mLeftView;
+    private LinearLayout mLeftLayout;
+
+    private boolean mShowCloseView;
 
     public TitleBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -71,6 +79,8 @@ public class TitleBar extends RelativeLayout {
     }
 
     private OnBackClickListener mBackClickListener;
+
+    private OnClickListener mCloseClickListener;
 
     private OnClickListener mLeftClickListener;
 
@@ -106,9 +116,11 @@ public class TitleBar extends RelativeLayout {
         mRightTextSize = typedArray.getDimension(R.styleable.TitleBar_rightTextSize, defaultFontSize);
         mRightTextColor = typedArray.getColorStateList(R.styleable.TitleBar_rightTextColor);
         mRightTextLeftImage = typedArray.getDrawable(R.styleable.TitleBar_rightImage);
+        mCloseImage = typedArray.getDrawable(R.styleable.TitleBar_closeImage);
         mRightTextRightImage = typedArray.getDrawable(R.styleable.TitleBar_rightTextRightImage);
         mRightBackground = typedArray.getDrawable(R.styleable.TitleBar_rightBackground);
         mRightVisible = typedArray.getBoolean(R.styleable.TitleBar_rightVisible, false);
+        mHasCloseView = typedArray.getBoolean(R.styleable.TitleBar_hasCloseView, false);
         mBackFeature = typedArray.getBoolean(R.styleable.TitleBar_backFeature, false);
         mBackIcon = typedArray.getDrawable(R.styleable.TitleBar_backIcon);
         mBackText = typedArray.getText(R.styleable.TitleBar_backText);
@@ -175,15 +187,20 @@ public class TitleBar extends RelativeLayout {
         }
 
         // left view
+        mLeftLayout = new LinearLayout(getContext());
+        mLeftLayout.setOrientation(LinearLayout.HORIZONTAL);
         params = new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        addView(mLeftLayout, params);
         if (mLeftViewLeftPadding == -1) {
             mLeftViewLeftPadding = paddingHorizontal;
         }
+        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, fixedHeight);
         if (mLeftView != null) {
             mLeftView.setPadding(mLeftViewLeftPadding, 0, paddingHorizontal, 0);
-            params.addRule(RelativeLayout.CENTER_VERTICAL | RelativeLayout.ALIGN_LEFT);
-            addView(mLeftView, params);
+            linearParams.gravity = Gravity.CENTER_VERTICAL;
+//            params.addRule(RelativeLayout.CENTER_VERTICAL | RelativeLayout.ALIGN_LEFT);
+            mLeftLayout.addView(mLeftView, linearParams);
             mLeftView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -196,10 +213,18 @@ public class TitleBar extends RelativeLayout {
             mBackView = new TextView(getContext());
             mBackView.setGravity(Gravity.CENTER);
             mBackView.setPadding(mLeftViewLeftPadding, 0, paddingHorizontal, 0);
-            addView(mBackView, params);
+            mLeftLayout.addView(mBackView, linearParams);
             if (mBackFeature) {
                 setBackFeature(true);
             }
+        }
+
+        if (mHasCloseView && mCloseImage != null) {
+            mCloseView = new ImageView(getContext());
+            mCloseView.setPadding(mLeftViewLeftPadding, 0, paddingHorizontal, 0);
+            mCloseView.setImageDrawable(mCloseImage);
+            mLeftLayout.addView(mCloseView,linearParams);
+            mCloseView.setVisibility(mShowCloseView ? View.VISIBLE : View.GONE);
         }
 
         // right view
@@ -398,6 +423,10 @@ public class TitleBar extends RelativeLayout {
         mRightViewParent.setOnClickListener(listener);
     }
 
+    public void setOnCloseClickListener(OnClickListener listener) {
+        mCloseView.setOnClickListener(listener);
+    }
+
     public void setTitleColor(ColorStateList titleColor) {
         if (mTitleView == null) return;
         mTitleColor = titleColor;
@@ -451,6 +480,13 @@ public class TitleBar extends RelativeLayout {
         if (mLeftView != null) {
             mLeftView.setVisibility(leftViewVisible ? VISIBLE : GONE);
             mLeftView.setEnabled(leftViewVisible);
+        }
+    }
+
+    public void setShowCloseView(boolean show) {
+        mShowCloseView = show;
+        if(mCloseView!=null){
+            mCloseView.setVisibility(show?View.VISIBLE:View.GONE);
         }
     }
 }

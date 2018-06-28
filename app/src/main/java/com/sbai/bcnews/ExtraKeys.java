@@ -56,4 +56,5 @@ public interface ExtraKeys {
     String CANDY = "candy";
 
     String START_WINDOW = "start_window";
+    String HAS_CLOSE_BUTTON = "has_close_button";
 }
