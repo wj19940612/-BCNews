@@ -63,21 +63,21 @@
             android:ellipsize="end"
             android:textSize="12sp"
             android:textColor="@color/text_4a"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:text="2000人已领" />
 
         <TextView
             android:id="@+id/tip"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="16dp"
             android:layout_marginTop="4dp"
-            android:layout_marginRight="20dp"
-            android:maxLines="1"
+            android:paddingRight="10dp"
+            android:singleLine="true"
             android:ellipsize="end"
             android:textSize="12sp"
             android:textColor="@color/text_9b"
-            android:gravity="center"
-            android:text="2000人已领" />
+            android:gravity="center_vertical"
+            android:text="福利时间:21212121sdadasdsadasdsadasddsaddsadsadsad" />
     </LinearLayout>
 
 </RelativeLayout>
