@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_news_item"
-    android:id="@+id/rootView">
+    android:background="@drawable/bg_news_item">
 
     <RelativeLayout
         android:id="@+id/contentRL"
@@ -18,8 +18,8 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="3"
             android:ellipsize="end"
+            android:maxLines="3"
             android:textColor="@color/text_222"
             android:textSize="15sp"
             android:textStyle="bold"/>
@@ -29,8 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_below="@+id/title"
-            android:layout_marginTop="14dp"
             android:layout_marginBottom="40dp"
+            android:layout_marginTop="14dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -67,43 +67,43 @@
             android:layout_alignParentBottom="true"
             android:paddingBottom="17dp">
 
-        <ImageView
-            android:id="@+id/original"
-            android:layout_width="24dp"
-            android:layout_height="13dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/bg_original"
-            android:visibility="visible"/>
+            <ImageView
+                android:id="@+id/original"
+                android:layout_width="24dp"
+                android:layout_height="13dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/bg_original"
+                android:visibility="visible"/>
 
-        <TextView
-            android:id="@+id/source"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
-            android:layout_toRightOf="@+id/original"
-            android:textColor="@color/text_999"
-            android:textSize="11sp"
-            android:gravity="center"
-            android:text="@string/original"/>
+            <TextView
+                android:id="@+id/source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:layout_toRightOf="@+id/original"
+                android:gravity="center"
+                android:text="@string/original"
+                android:textColor="@color/text_999"
+                android:textSize="11sp"/>
 
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/source"
-            android:textColor="@color/text_999"
-            android:textSize="11sp"
-            android:gravity="center"
-            android:text="@string/original"/>
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/source"
+                android:gravity="center"
+                android:text="@string/original"
+                android:textColor="@color/text_999"
+                android:textSize="11sp"/>
 
-        <TextView
-            android:id="@+id/readCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textSize="11sp"
-            android:textColor="@color/text_999"
-            android:text="2000人阅读" />
+            <TextView
+                android:id="@+id/readCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="2000人阅读"
+                android:textColor="@color/text_999"
+                android:textSize="11sp"/>
         </RelativeLayout>
     </RelativeLayout>
 
@@ -111,18 +111,35 @@
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/bg_F5F5"
-        android:layout_below="@+id/contentRL"/>
+        android:layout_below="@+id/contentRL"
+        android:background="@color/bg_F5F5"/>
 
-    <TextView
+    <LinearLayout
+        android:background="@color/bg_F5F5"
         android:id="@+id/footer"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/bg_F5F5"
-        android:layout_below="@+id/contentRL"
+        android:layout_height="40dp"
         android:gravity="center"
-        android:text="@string/no_more_article"
-        android:textColor="@color/text_999"
-        android:textSize="10sp"
-        android:visibility="gone"/>
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <View
+            android:layout_width="100dp"
+            android:layout_height="1dp"
+            android:background="@color/bg_EA"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:text="@string/i_have_a_bottom_line"
+            android:textColor="@color/gray"
+            android:textSize="9sp"/>
+
+        <View
+            android:layout_width="100dp"
+            android:layout_height="1dp"
+            android:background="@color/bg_EA"/>
+    </LinearLayout>
 </RelativeLayout>

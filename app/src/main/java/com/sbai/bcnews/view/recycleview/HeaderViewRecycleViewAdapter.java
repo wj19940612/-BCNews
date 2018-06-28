@@ -2,17 +2,14 @@ package com.sbai.bcnews.view.recycleview;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.Display;
+import com.sbai.bcnews.view.FooterView;
 
 /**
  * Modified by $nishuideyu$ on 2018/4/19
@@ -168,12 +165,9 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
      * @return
      */
     public View createDefaultFooterView(Context context) {
-        TextView footerView = new TextView(context);
-        footerView.setText(R.string.i_have_a_bottom_line);
-        footerView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        footerView.setTextColor(ContextCompat.getColor(context, R.color.text_666));
-        footerView.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(40, context.getResources()));
+        FooterView footerView = new FooterView(context);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(30, context.getResources()));
+        layoutParams.gravity = Gravity.CENTER;
         footerView.setLayoutParams(layoutParams);
         return footerView;
     }

@@ -3,18 +3,14 @@ package com.sbai.bcnews.activity.author;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
@@ -57,32 +53,19 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
     public static final int REQ_CODE_ATTENTION_AUTHOR = 14882;
 
-    @BindView(R.id.hasLabelLayout)
     HasLabelLayout mHasLabelLayout;
-    @BindView(R.id.authorName)
     TextView mAuthorName;
-    @BindView(R.id.authorIdentity)
     TextView mAuthorIdentity;
-    @BindView(R.id.fansNumber)
     TextView mFansNumber;
-    @BindView(R.id.firstSplit)
     View mFirstSplit;
-    @BindView(R.id.readNumber)
     TextView mReadNumber;
-    @BindView(R.id.secondSplit)
     View mSecondSplit;
-    @BindView(R.id.praiseNumber)
     TextView mPraiseNumber;
-    @BindView(R.id.attentionAuthor)
     ImageView mAttentionAuthor;
-    @BindView(R.id.authorIntroduce)
     TextView mAuthorIntroduce;
-    @BindView(R.id.myArticleTotal)
     TextView mMyArticleTotal;
-    @BindView(R.id.toolBar)
-    Toolbar mToolBar;
-    @BindView(R.id.appBarLayout)
-    AppBarLayout mAppBarLayout;
+    TitleBar mTitleBar;
+
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
     @BindView(R.id.swipe_target)
@@ -93,27 +76,16 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
     CoordinatorLayout mRootView;
-    @BindView(R.id.titleBar)
-    TitleBar mTitleBar;
-    @BindView(R.id.layout)
-    LinearLayout mLayout;
     @BindView(R.id.emptyView)
     TextView mEmptyView;
     private int mPage;
     private AuthorArticleAdapter mAuthorArticleAdapter;
 
-    private int mTotalScrollRange;
-    private int mOffsetRang;
 
-    private View mCustomView;
-    private TextView mTitleBarAuthorName;
-    private HasLabelLayout mTitleBarHasLabelLayout;
     private int mAuthorId;
     private Author mAuthor;
 
     private View mFooterView;
-
-    private int mVerticalOffset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +98,6 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
         initView();
 
-
         requestAuthorArticle();
     }
 
@@ -137,32 +108,10 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     }
 
     private void initView() {
-        initTitleBar();
-        mAuthorArticleAdapter = new AuthorArticleAdapter(getActivity());
-        mAuthorArticleAdapter.setPageType(AuthorArticleAdapter.PAGE_TYPE_AUTHOR_INFO);
-        mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mSwipeTarget.addItemDecoration(new LinearItemDecoration(ContextCompat.getColor(getActivity(), R.color.bg_F5F5)));
-        mSwipeTarget.setAdapter(mAuthorArticleAdapter);
 
-        mAppBarLayout.addOnOffsetChangedListener(mOnOffsetChangedListener);
+        initAdapter();
 
-        mAppBarLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mTotalScrollRange = mAppBarLayout.getTotalScrollRange();
-                mOffsetRang = mTotalScrollRange - 20;
-            }
-        });
-
-        mAuthorArticleAdapter.setItemClickListener(new OnItemClickListener<AuthorArticle>() {
-            @Override
-            public void onItemClick(AuthorArticle item, int position) {
-                Launcher.with(getActivity(), NewsDetailActivity.class)
-                        .putExtra(ExtraKeys.NEWS_ID, item.getId())
-                        .putExtra(ExtraKeys.CHANNEL, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
-                        .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
-            }
-        });
+        initHeadView();
 
         if (BuildConfigUtils.isProductFlavor()) {
             mFansNumber.setVisibility(View.GONE);
@@ -173,39 +122,62 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         }
 
         mFooterView = mAuthorArticleAdapter.createDefaultFooterView(getActivity());
-
-//        mSwipeTarget.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()){
-//                    case MotionEvent.ACTION_MOVE:
-//                        if (mVerticalOffset == 0) {
-//                            if (!mSwipeToLoadLayout.isRefreshing() && mSwipeToLoadLayout.isRefreshEnabled()) {
-//                                mSwipeToLoadLayout.setRefreshing(true);
-//                            }
-//                        }
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
-
     }
 
+    private void initAdapter() {
+        mAuthorArticleAdapter = new AuthorArticleAdapter(getActivity());
+        mAuthorArticleAdapter.setPageType(AuthorArticleAdapter.PAGE_TYPE_AUTHOR_INFO);
+        mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mSwipeTarget.addItemDecoration(new LinearItemDecoration(ContextCompat.getColor(getActivity(), R.color.bg_F5F5)));
+        mSwipeTarget.setAdapter(mAuthorArticleAdapter);
 
-    private void initTitleBar() {
+
+        mAuthorArticleAdapter.setItemClickListener(new OnItemClickListener<AuthorArticle>() {
+            @Override
+            public void onItemClick(AuthorArticle item, int position) {
+                Launcher.with(getActivity(), NewsDetailActivity.class)
+                        .putExtra(ExtraKeys.NEWS_ID, item.getId())
+                        .putExtra(ExtraKeys.CHANNEL, (item.getChannel() == null || item.getChannel().isEmpty()) ? null : item.getChannel().get(0))
+                        .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
+            }
+        });
+    }
+
+    private void initHeadView() {
+        View view = getLayoutInflater().inflate(R.layout.row_author_head_view, mSwipeTarget, false);
+        mHasLabelLayout = view.findViewById(R.id.hasLabelLayout);
+        mAuthorName = view.findViewById(R.id.authorName);
+        mAuthorIdentity = view.findViewById(R.id.authorIdentity);
+        mFansNumber = view.findViewById(R.id.fansNumber);
+        mFirstSplit = view.findViewById(R.id.firstSplit);
+
+        mReadNumber = view.findViewById(R.id.readNumber);
+        mSecondSplit = view.findViewById(R.id.secondSplit);
+        mPraiseNumber = view.findViewById(R.id.praiseNumber);
+        mAttentionAuthor = view.findViewById(R.id.attentionAuthor);
+        mAuthorIntroduce = view.findViewById(R.id.authorIntroduce);
+        mMyArticleTotal = view.findViewById(R.id.myArticleTotal);
+        mTitleBar = view.findViewById(R.id.titleBar);
+        mAuthorArticleAdapter.addHeaderView(view);
+
+        mAttentionAuthor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (LocalUser.getUser().isLogin())
+                    attentionAuthor();
+                else
+                    Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
+            }
+        });
+
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showShareDialog();
             }
         });
-
-        mCustomView = mTitleBar.getCustomView();
-        mCustomView.setVisibility(View.GONE);
-        mTitleBarAuthorName = mCustomView.findViewById(R.id.titleBarAuthorName);
-        mTitleBarHasLabelLayout = mCustomView.findViewById(R.id.titleBarHasLabelLayout);
     }
+
 
     private void showShareDialog() {
         if (mAuthor == null) return;
@@ -234,57 +206,18 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     }
 
 
-    private AppBarLayout.OnOffsetChangedListener mOnOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
-        @Override
-        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-            mVerticalOffset = verticalOffset;
-            if (verticalOffset != 0) {
-                if (verticalOffset > -mOffsetRang) {
-                    if (mCustomView.getVisibility() == View.VISIBLE) {
-                        mCustomView.setVisibility(View.GONE);
-                        if (mLayout.getVisibility() == View.INVISIBLE) {
-                            mLayout.setVisibility(View.VISIBLE);
-                        }
-                    }
-                } else {
-                    if (mCustomView.getVisibility() == View.GONE) {
-                        mCustomView.setVisibility(View.VISIBLE);
-                        if (mLayout.getVisibility() == View.VISIBLE) {
-                            mLayout.setVisibility(View.INVISIBLE);
-                        }
-                    }
+//    @Override
+//    protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
+//        super.onRecycleViewScrolled(recyclerView, dx, dy);
+//        if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
+//            triggerLoadMore();
+//        }
+//    }
 
-                }
-
-                if (Math.abs(verticalOffset) == mTotalScrollRange) {
-                    if (mSwipeToLoadLayout.isRefreshEnabled()) {
-                        mSwipeToLoadLayout.setRefreshEnabled(false);
-                    }
-                } else {
-                    if (!mSwipeToLoadLayout.isRefreshEnabled()) {
-                        mSwipeToLoadLayout.setRefreshEnabled(true);
-                    }
-                }
-            } else {
-                if (!mSwipeToLoadLayout.isRefreshEnabled()) {
-                    mSwipeToLoadLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mSwipeToLoadLayout.setRefreshEnabled(true);
-                            mSwipeToLoadLayout.getParent().requestDisallowInterceptTouchEvent(true);
-                        }
-                    });
-
-                }
-            }
-        }
-    };
-
-    @Override
-    protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
-        super.onRecycleViewScrolled(recyclerView, dx, dy);
-        Log.d(TAG, "onRecycleViewScrolled: " + dx + " " + dy);
-    }
+//    @Override
+//    public boolean isUseDefaultLoadMoreConditions() {
+//        return false;
+//    }
 
     private void requestAuthorInfo() {
         Apic.requestAuthorInfo(mAuthorId)
@@ -341,7 +274,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
 
-            if (!mAuthorArticleAdapter.hasFooterView() && mAuthorArticleAdapter.getDataList().size() > 2) {
+            if (!mAuthorArticleAdapter.hasFooterView() && mAuthorArticleAdapter.getDataList().size() > 3) {
                 mAuthorArticleAdapter.addFooterView(mFooterView);
             }
         } else {
@@ -355,13 +288,11 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     private void updateAuthorInfo(Author author) {
         mHasLabelLayout.setImageSrc(author.getUserPortrait());
         mHasLabelLayout.setLabelImageViewVisible(author.isAuthor());
-        mTitleBarHasLabelLayout.setLabelImageViewVisible(author.isAuthor());
 
         boolean isOfficialAuthor = author.getRankType() == Author.AUTHOR_STATUS_OFFICIAL;
         mHasLabelLayout.setLabelSelected(isOfficialAuthor);
         mAuthorIdentity.setText(author.getRankTypeStr());
 
-        mTitleBarHasLabelLayout.setLabelSelected(isOfficialAuthor);
 
         mAuthorName.setText(author.getUserName());
         String introduce = TextUtils.isEmpty(author.getAuthInfo()) ? "--" : author.getAuthInfo();
@@ -369,8 +300,6 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
         initAuthorAttentionNumber(author);
 
-        mTitleBarHasLabelLayout.setImageSrc(author.getUserPortrait());
-        mTitleBarAuthorName.setText(author.getUserName());
         mAttentionAuthor.setSelected(author.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
 
         setMyArticleTotal(author.getArticleCount());
@@ -394,15 +323,9 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         mMyArticleTotal.setText(getString(R.string.his_article_number, articleNumber));
     }
 
-    @OnClick({R.id.attentionAuthor, R.id.emptyView})
+    @OnClick({ R.id.emptyView})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.attentionAuthor:
-                if (LocalUser.getUser().isLogin())
-                    attentionAuthor();
-                else
-                    Launcher.with(getActivity(), LoginActivity.class).executeForResult(LoginActivity.REQ_CODE_LOGIN);
-                break;
             case R.id.emptyView:
                 onRefresh();
                 break;
@@ -426,11 +349,6 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         requestAuthorArticle();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mAppBarLayout.removeOnOffsetChangedListener(mOnOffsetChangedListener);
-    }
 
     private void attentionAuthor() {
         if (mAuthor != null) {

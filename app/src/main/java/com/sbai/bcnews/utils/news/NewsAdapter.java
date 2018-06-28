@@ -4,11 +4,11 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -119,7 +119,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.line)
         View mLine;
         @BindView(R.id.footer)
-        View mFooter;
+        LinearLayout mFooter;
 
         NoneHolder(View view) {
             super(view);
@@ -160,7 +160,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.line)
         View mLine;
         @BindView(R.id.footer)
-        View mFooter;
+        LinearLayout mFooter;
 
         SingleHolder(View view) {
             super(view);
@@ -212,7 +212,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.line)
         View mLine;
         @BindView(R.id.footer)
-        View mFooter;
+        LinearLayout mFooter;
 
         ThreeHolder(View view) {
             super(view);

@@ -58,6 +58,8 @@ public interface SwipeLoader<T> {
      *
      * @return
      */
-    boolean isUseDefaultLoadMoreConditions();
+    default boolean isUseDefaultLoadMoreConditions() {
+        return true;
+    }
 
 }

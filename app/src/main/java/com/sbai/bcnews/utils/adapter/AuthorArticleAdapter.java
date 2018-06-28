@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.author.AuthorArticle;
 import com.sbai.bcnews.utils.DateUtil;
-import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.bcnews.view.ThreeImageLayout;
@@ -33,8 +32,9 @@ import butterknife.ButterKnife;
  */
 public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArticle, RecyclerView.ViewHolder> {
 
-    private static final int ITEM_TYPE_NONE_OR_SINGLE = 0;
-    private static final int ITEM_TYPE_THREE_IMAGE = 2;
+    private static final int ITEM_TYPE_NONE_IMAGE = 1;
+    private static final int ITEM_TYPE_SINGLE_IMAGE = 2;
+    private static final int ITEM_TYPE_THREE_IMAGE = 3;
 
     private static final int PAGE_TYPE_AUTHOR_WORKBENCH = 0; //工作台
     public static final int PAGE_TYPE_AUTHOR_INFO = 1;
@@ -61,11 +61,14 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
     @Override
     public RecyclerView.ViewHolder onContentCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
-            case ITEM_TYPE_NONE_OR_SINGLE:
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_author_article_single_or_noe, parent, false);
-                return new SingleOrNoneImageViewHolder(view);
+            case ITEM_TYPE_NONE_IMAGE:
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_author_article_none_image, parent, false);
+                return new NoneImageViewHolder(view);
+            case ITEM_TYPE_SINGLE_IMAGE:
+                View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_author_article_single_image, parent, false);
+                return new SingleImageViewHolder(view2);
             case ITEM_TYPE_THREE_IMAGE:
-                View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_author_article_three, parent, false);
+                View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_author_article_three_image, parent, false);
                 return new MultiImageViewHolder(view1);
         }
         return null;
@@ -73,12 +76,15 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
 
     @Override
     public void onBindContentViewHolder(@NonNull RecyclerView.ViewHolder holder, AuthorArticle data, int position) {
-        if (holder instanceof SingleOrNoneImageViewHolder) {
-            SingleOrNoneImageViewHolder singleOrNoneImageViewHolder = (SingleOrNoneImageViewHolder) holder;
-            singleOrNoneImageViewHolder.bindDataWithView(data, position, mItemClickListener, mContext, pageType);
+        if (holder instanceof SingleImageViewHolder) {
+            SingleImageViewHolder singleImageViewHolder = (SingleImageViewHolder) holder;
+            singleImageViewHolder.bindDataWithView(data, position, mItemClickListener, mContext, pageType);
         } else if (holder instanceof MultiImageViewHolder) {
             MultiImageViewHolder multiImageViewHolder = (MultiImageViewHolder) holder;
             multiImageViewHolder.bindDataWithView(data, position, mItemClickListener, mContext, pageType);
+        } else if (holder instanceof NoneImageViewHolder) {
+            NoneImageViewHolder noneImageViewHolder = (NoneImageViewHolder) holder;
+            noneImageViewHolder.bindDataWithView(data, position, mItemClickListener, mContext, pageType);
         }
     }
 
@@ -89,16 +95,19 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
         if (itemData != null) {
             List<String> articleImgs = itemData.getImgs();
             if (articleImgs != null
-                    && !articleImgs.isEmpty()
-                    && articleImgs.size() > 1) {
-                return ITEM_TYPE_THREE_IMAGE;
+                    && !articleImgs.isEmpty()) {
+                if (articleImgs.size() == 1) {
+                    return ITEM_TYPE_SINGLE_IMAGE;
+                } else {
+                    return ITEM_TYPE_THREE_IMAGE;
+                }
             }
-            return ITEM_TYPE_NONE_OR_SINGLE;
+            return ITEM_TYPE_NONE_IMAGE;
         }
         return super.getContentItemViewType(position);
     }
 
-    static class SingleOrNoneImageViewHolder extends RecyclerView.ViewHolder {
+    static class SingleImageViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.title)
         TextView mTitle;
         @BindView(R.id.image)
@@ -112,7 +121,7 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
         @BindView(R.id.rootView)
         ConstraintLayout mRootView;
 
-        SingleOrNoneImageViewHolder(View view) {
+        SingleImageViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
@@ -141,17 +150,9 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
                         .placeholder(R.drawable.ic_default_news)
                         .transform(new GlideRoundAndCenterCropTransform(context))
                         .into(mImage);
-
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mTimeLine.getLayoutParams();
-                layoutParams.topMargin = (int) Display.dp2Px(32,context.getResources());
-                mTimeLine.setLayoutParams(layoutParams);
-
             } else {
                 mImage.setVisibility(View.GONE);
 
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mTimeLine.getLayoutParams();
-                layoutParams.topMargin = (int) Display.dp2Px(5,context.getResources());
-                mTimeLine.setLayoutParams(layoutParams);
             }
 
         }
@@ -196,6 +197,41 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
             if (data.getImgs() != null && data.getImgs().size() > 1) {
                 mThreeImageLayout.setImagePath(data.getImgs());
             }
+        }
+    }
+
+    static class NoneImageViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.title)
+        TextView mTitle;
+        @BindView(R.id.timeLine)
+        TextView mTimeLine;
+        @BindView(R.id.readNumber)
+        TextView mReadNumber;
+        @BindView(R.id.reviewNumber)
+        TextView mReviewNumber;
+        @BindView(R.id.rootView)
+        ConstraintLayout mRootView;
+
+        NoneImageViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
+        public void bindDataWithView(AuthorArticle data, int position, OnItemClickListener<AuthorArticle> itemClickListener, Context context, int pageType) {
+            mRootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (itemClickListener != null)
+                        itemClickListener.onItemClick(data, position);
+                }
+            });
+            mTitle.setText(data.getTitle());
+            mTimeLine.setText(DateUtil.formatDefaultStyleTime(data.getReleaseTime()));
+            if (pageType == PAGE_TYPE_AUTHOR_INFO) {
+                mReviewNumber.setVisibility(View.GONE);
+            }
+            mReadNumber.setText(context.getString(R.string.read_number, data.getShowReadCount()));
+            mReviewNumber.setText(context.getString(R.string.review_number, data.getDiscussCount()));
         }
     }
 }

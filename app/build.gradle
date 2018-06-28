@@ -107,6 +107,10 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -134,7 +138,6 @@ dependencies {
     implementation project(path: ':glide')
     implementation project(path: ':chart')
     implementation files('libs/SocialSDK_QQ_Simplify.jar')
-
     implementation('cn.qqtheme.framework:WheelPicker:1.4.4') {
         exclude group: 'com.android.support'
     }

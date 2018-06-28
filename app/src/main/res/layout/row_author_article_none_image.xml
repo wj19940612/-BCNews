@@ -7,10 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_white"
-    android:paddingBottom="20dp"
+    android:paddingBottom="12dp"
     android:paddingLeft="12dp"
     android:paddingRight="12dp"
-    android:paddingTop="20dp">
+    android:paddingTop="17dp">
 
     <TextView
         android:id="@+id/title"
@@ -29,19 +29,11 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="溺水的鱼 阿斯加德好几款撒旦画啥的季后赛抠脚大萨达所大萨达撒大萨达撒大汉"/>
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="114dp"
-        android:layout_height="70dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:src="@drawable/ic_default_image"/>
-
     <TextView
         android:id="@+id/timeLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="5dp"
         android:textColor="@color/text_999"
         android:textSize="11sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,6 +61,5 @@
         app:layout_constraintBaseline_toBaselineOf="@id/timeLine"
         app:layout_constraintStart_toEndOf="@id/timeLine"
         tools:text="20评论"/>
-
 
 </android.support.constraint.ConstraintLayout>
