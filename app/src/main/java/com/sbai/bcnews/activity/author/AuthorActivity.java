@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -110,6 +111,9 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     private int mAuthorId;
     private Author mAuthor;
 
+    private View mFooterView;
+
+    private int mVerticalOffset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +171,27 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
             layoutParams.leftMargin = 0;
             mReadNumber.setLayoutParams(layoutParams);
         }
+
+        mFooterView = mAuthorArticleAdapter.createDefaultFooterView(getActivity());
+
+//        mSwipeTarget.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()){
+//                    case MotionEvent.ACTION_MOVE:
+//                        if (mVerticalOffset == 0) {
+//                            if (!mSwipeToLoadLayout.isRefreshing() && mSwipeToLoadLayout.isRefreshEnabled()) {
+//                                mSwipeToLoadLayout.setRefreshing(true);
+//                            }
+//                        }
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
+
     }
+
 
     private void initTitleBar() {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
@@ -209,9 +233,11 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                 .show();
     }
 
+
     private AppBarLayout.OnOffsetChangedListener mOnOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
         @Override
         public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            mVerticalOffset = verticalOffset;
             if (verticalOffset != 0) {
                 if (verticalOffset > -mOffsetRang) {
                     if (mCustomView.getVisibility() == View.VISIBLE) {
@@ -239,10 +265,26 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
                         mSwipeToLoadLayout.setRefreshEnabled(true);
                     }
                 }
-            }
+            } else {
+                if (!mSwipeToLoadLayout.isRefreshEnabled()) {
+                    mSwipeToLoadLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSwipeToLoadLayout.setRefreshEnabled(true);
+                            mSwipeToLoadLayout.getParent().requestDisallowInterceptTouchEvent(true);
+                        }
+                    });
 
+                }
+            }
         }
     };
+
+    @Override
+    protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onRecycleViewScrolled(recyclerView, dx, dy);
+        Log.d(TAG, "onRecycleViewScrolled: " + dx + " " + dy);
+    }
 
     private void requestAuthorInfo() {
         Apic.requestAuthorInfo(mAuthorId)
@@ -278,12 +320,8 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
     private void updateArticle(List<AuthorArticle> data) {
 
-        if (mPage == 0) mAuthorArticleAdapter.clear();
-
-        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
-            mSwipeToLoadLayout.setLoadMoreEnabled(false);
-        } else {
-            mPage++;
+        if (mPage == 0) {
+            mAuthorArticleAdapter.clear();
         }
 
         if (!data.isEmpty() || !mAuthorArticleAdapter.isEmpty()) {
@@ -299,6 +337,19 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         }
 
         mAuthorArticleAdapter.addAll(data);
+
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+
+            if (!mAuthorArticleAdapter.hasFooterView() && mAuthorArticleAdapter.getDataList().size() > 2) {
+                mAuthorArticleAdapter.addFooterView(mFooterView);
+            }
+        } else {
+            mPage++;
+            if (mAuthorArticleAdapter.hasFooterView()) {
+                mAuthorArticleAdapter.removeFooterView();
+            }
+        }
     }
 
     private void updateAuthorInfo(Author author) {

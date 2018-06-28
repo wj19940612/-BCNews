@@ -70,6 +70,8 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
 
     private int mPage;
 
+    private View mFooterView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +91,7 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
 //        mSwipeTarget.addItemDecoration(new LinearItemDecoration(ContextCompat.getColor(getActivity(), R.color.split)));
         mSwipeTarget.setAdapter(mAuthorArticleAdapter);
 
+
         initHeadView();
 
         mAuthorArticleAdapter.setItemClickListener(new OnItemClickListener<AuthorArticle>() {
@@ -100,6 +103,8 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
                         .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
             }
         });
+
+        mFooterView = mAuthorArticleAdapter.createDefaultFooterView(getActivity());
 
     }
 
@@ -220,12 +225,18 @@ public class AuthorWorkbenchActivity extends RecycleViewSwipeLoadActivity {
             mAuthorArticleAdapter.clear();
         }
 
+        mAuthorArticleAdapter.addAll(data);
+
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            if (!mAuthorArticleAdapter.hasFooterView() && mAuthorArticleAdapter.getDataList().size() > 3) {
+                mAuthorArticleAdapter.addFooterView(mFooterView);
+            }
         } else {
             mPage++;
+            if (mAuthorArticleAdapter.hasFooterView()) {
+                mAuthorArticleAdapter.removeFooterView();
+            }
         }
-
-        mAuthorArticleAdapter.addAll(data);
     }
 }

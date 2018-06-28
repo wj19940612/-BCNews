@@ -1,9 +1,18 @@
 package com.sbai.bcnews.view.recycleview;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.sbai.bcnews.R;
+import com.sbai.bcnews.utils.Display;
 
 /**
  * Modified by $nishuideyu$ on 2018/4/19
@@ -13,7 +22,6 @@ import android.view.ViewGroup;
  * </p>
  */
 public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.ViewHolder> extends BaseRecycleViewAdapter<T, K> implements HeaderViewController {
-
 
     private View mHeaderView;
 
@@ -57,7 +65,9 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
                 break;
             default:
                 T itemData = getItemData(position - getHeaderViewsCount());
-                onBindContentViewHolder((K) holder, itemData, position - getHeaderViewsCount());
+                if (itemData != null) {
+                    onBindContentViewHolder((K) holder, itemData, position - getHeaderViewsCount());
+                }
         }
     }
 
@@ -72,14 +82,14 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
         if (getHeaderViewsCount() != 0 && position == 0) {
             return HEADER_VIEW_TYPE;
         }
-        if (getFooterViewsCount() != 0 && position == getDataList().size()) {
+        if (getFooterViewsCount() != 0 && position == getDataList().size() + getHeaderViewsCount()) {
             return FOOTER_VIEW_TYPE;
         }
         return getContentItemViewType(position - getHeaderViewsCount());
     }
 
     public int getContentItemViewType(int position) {
-        return 0;
+        return super.getItemViewType(position);
     }
 
     @Override
@@ -101,8 +111,10 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
 
     @Override
     public boolean removeHeaderView() {
-        mFooterView = null;
-        notifyDataSetChanged();
+        if (mHeaderView != null) {
+            mHeaderView = null;
+            notifyDataSetChanged();
+        }
         return false;
     }
 
@@ -123,8 +135,10 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
 
     @Override
     public boolean removeFooterView() {
-        mFooterView = null;
-        notifyDataSetChanged();
+        if (mFooterView != null) {
+            mFooterView = null;
+            notifyDataSetChanged();
+        }
         return false;
     }
 
@@ -145,5 +159,22 @@ public abstract class HeaderViewRecycleViewAdapter<T, K extends RecyclerView.Vie
         public FooterViewViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+
+    /**
+     * 好多页面需要加尾部
+     *
+     * @return
+     */
+    public View createDefaultFooterView(Context context) {
+        TextView footerView = new TextView(context);
+        footerView.setText(R.string.i_have_a_bottom_line);
+        footerView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        footerView.setTextColor(ContextCompat.getColor(context, R.color.text_666));
+        footerView.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) Display.dp2Px(40, context.getResources()));
+        footerView.setLayoutParams(layoutParams);
+        return footerView;
     }
 }
