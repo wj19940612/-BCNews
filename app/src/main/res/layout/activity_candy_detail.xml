@@ -89,7 +89,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="16dp"
                         android:layout_marginTop="9dp"
-                        android:gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
                         android:text="2000人已领"
                         android:textColor="@color/text_9b"
                         android:textSize="12sp" />

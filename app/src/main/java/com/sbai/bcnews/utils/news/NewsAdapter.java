@@ -270,7 +270,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTitle.setText(item.getTitle());
             if (TextUtils.isEmpty(item.getAuthor())) {
                 mSource.setVisibility(View.GONE);
-                mTime.setText(DateUtil.formatNewsStyleTime(item.getReleaseTime()));
+                mTime.setText(DateUtil.formatDefaultStyleTime(item.getReleaseTime()));
             } else {
                 mSource.setText(item.getAuthor());
                 mSource.setVisibility(View.VISIBLE);
