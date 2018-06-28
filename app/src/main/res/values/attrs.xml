@@ -54,8 +54,10 @@
         <attr name="rightTextSize" format="dimension"/>
         <attr name="rightTextColor" format="color"/>
         <attr name="rightImage" format="reference"/>
+        <attr name="closeImage" format="reference"/>
         <attr name="rightTextRightImage" format="reference"/>
         <attr name="rightVisible" format="boolean"/>
+        <attr name="hasCloseView" format="boolean"/>
         <attr name="backFeature" format="boolean"/>
         <attr name="backIcon" format="reference"/>
         <attr name="backText" format="reference|string"/>

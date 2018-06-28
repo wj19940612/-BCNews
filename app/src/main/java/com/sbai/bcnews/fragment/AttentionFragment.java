@@ -222,6 +222,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
                 .callback(new Callback2D<Resp<News>, News>() {
                     @Override
                     protected void onRespSuccessData(News data) {
+                        refreshSuccess();
                         updateData(data.getContent(), refresh);
                     }
 
