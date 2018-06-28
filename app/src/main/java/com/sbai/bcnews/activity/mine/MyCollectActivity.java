@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -33,11 +34,11 @@ import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.bcnews.view.ThreeImageLayout;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.move.SwipeItemLayout;
+import com.sbai.bcnews.view.recycleview.HeaderViewRecycleViewAdapter;
 import com.sbai.glide.GlideApp;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
     private int mPage;
     private HashSet<String> mSet;
     private MyCollectAdapter mMyCollectAdapter;
-    private ArrayList<ReadHistoryOrMyCollect> mReadHistoryOrMyCollectList;
+    private View mFooterView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,11 +76,11 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
 
     private void initView() {
         mSet = new HashSet<>();
-        mReadHistoryOrMyCollectList = new ArrayList<>();
-        mMyCollectAdapter = new MyCollectAdapter(this, mReadHistoryOrMyCollectList);
+        mMyCollectAdapter = new MyCollectAdapter(this);
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(this));
         mSwipeTarget.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(this));
         mSwipeTarget.setAdapter(mMyCollectAdapter);
+        mFooterView = mMyCollectAdapter.createDefaultFooterView(getActivity());
 
         mMyCollectAdapter.setOnItemLongClickListener(new OnItemLongClickListener<ReadHistoryOrMyCollect>() {
             @Override
@@ -115,14 +116,14 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
 
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
-                        mMyCollectAdapter.removeItem(position, readHistoryOrMyCollect);
+                        mMyCollectAdapter.remove(position);
                     }
 
                     @Override
                     protected void onRespFailure(Resp failedResp) {
                         super.onRespFailure(failedResp);
                         if (failedResp.getCode() == Resp.CODE_ARTICLE_ALREADY_SOLD_OUT) {
-                            mMyCollectAdapter.removeItem(position, readHistoryOrMyCollect);
+                            mMyCollectAdapter.remove(position);
                         }
                     }
                 })
@@ -157,15 +158,22 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         if (mSet.isEmpty()) {
             mMyCollectAdapter.clear();
         }
-        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
-            mSwipeToLoadLayout.setLoadMoreEnabled(false);
-        } else {
-            mPage++;
-        }
 
         for (ReadHistoryOrMyCollect readHistoryOrMyCollect : data) {
             if (mSet.add(readHistoryOrMyCollect.getDataId())) {
                 mMyCollectAdapter.add(readHistoryOrMyCollect);
+            }
+        }
+
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            if (!mMyCollectAdapter.hasFooterView() && mMyCollectAdapter.getDataList().size() > 4) {
+                mMyCollectAdapter.addFooterView(mFooterView);
+            }
+        } else {
+            mPage++;
+            if (mMyCollectAdapter.hasFooterView()) {
+                mMyCollectAdapter.removeFooterView();
             }
         }
     }
@@ -197,9 +205,9 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 case NewsDetailActivity.REQ_CODE_CANCEL_COLLECT:
                     String id = data.getStringExtra(ExtraKeys.TAG);
                     if (!TextUtils.isEmpty(id)) {
-                        for (ReadHistoryOrMyCollect readHistoryOrMyCollect : mReadHistoryOrMyCollectList) {
+                        for (ReadHistoryOrMyCollect readHistoryOrMyCollect : mMyCollectAdapter.getDataList()) {
                             if (id.equalsIgnoreCase(readHistoryOrMyCollect.getId())) {
-                                mReadHistoryOrMyCollectList.remove(readHistoryOrMyCollect);
+                                mMyCollectAdapter.getDataList().remove(readHistoryOrMyCollect);
                                 mMyCollectAdapter.notifyDataSetChanged();
                                 break;
                             }
@@ -210,34 +218,18 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         }
     }
 
-    public static class MyCollectAdapter extends RecyclerView.Adapter {
+    public static class MyCollectAdapter extends HeaderViewRecycleViewAdapter<ReadHistoryOrMyCollect, RecyclerView.ViewHolder> {
 
         private static final int ITEM_TYPE_NONE_OR_SINGLE = 0;
         private static final int ITEM_TYPE_THREE_IMAGE = 1;
 
-        private ArrayList<ReadHistoryOrMyCollect> mReadHistoryOrMyCollectList;
-        private Context mContext;
         private OnItemLongClickListener<ReadHistoryOrMyCollect> mOnItemLongClickListener;
         private OnItemClickListener<ReadHistoryOrMyCollect> mOnItemClickListener;
 
-        public MyCollectAdapter(Context context, ArrayList<ReadHistoryOrMyCollect> readHistoryOrMyCollectList) {
-            mReadHistoryOrMyCollectList = readHistoryOrMyCollectList;
+        private Context mContext;
+
+        public MyCollectAdapter(Context context) {
             mContext = context;
-        }
-
-        public void add(ReadHistoryOrMyCollect readHistoryOrMyCollect) {
-            mReadHistoryOrMyCollectList.add(readHistoryOrMyCollect);
-            notifyDataSetChanged();
-        }
-
-        public void clear() {
-            mReadHistoryOrMyCollectList.clear();
-            notifyDataSetChanged();
-        }
-
-        public void removeItem(int position, ReadHistoryOrMyCollect readHistoryOrMyCollect) {
-            mReadHistoryOrMyCollectList.remove(position);
-            notifyDataSetChanged();
         }
 
         public void setOnItemLongClickListener(OnItemLongClickListener<ReadHistoryOrMyCollect> onItemLongClickListener) {
@@ -248,8 +240,9 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
             mOnItemClickListener = onItemClickListener;
         }
 
+        @NonNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public RecyclerView.ViewHolder onContentCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             switch (viewType) {
                 case ITEM_TYPE_NONE_OR_SINGLE:
                     View view = LayoutInflater.from(mContext).inflate(R.layout.row_mycollect_single_or_none_image, parent, false);
@@ -262,26 +255,20 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindContentViewHolder(@NonNull RecyclerView.ViewHolder holder, ReadHistoryOrMyCollect data, int position) {
             if (holder instanceof NoneOrSingleImageViewHolder) {
                 NoneOrSingleImageViewHolder noneOrSingleImageViewHolder = (NoneOrSingleImageViewHolder) holder;
-                noneOrSingleImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemLongClickListener, mOnItemClickListener);
+                noneOrSingleImageViewHolder.bindDataWithView(data, position, mContext, mOnItemLongClickListener, mOnItemClickListener);
             } else if (holder instanceof ThreeImageViewHolder) {
                 ThreeImageViewHolder threeImageViewHolder = (ThreeImageViewHolder) holder;
-                threeImageViewHolder.bindDataWithView(mReadHistoryOrMyCollectList.get(position), position, mContext, mOnItemLongClickListener, mOnItemClickListener);
+                threeImageViewHolder.bindDataWithView(data, position, mContext, mOnItemLongClickListener, mOnItemClickListener);
             }
         }
 
-
         @Override
-        public int getItemCount() {
-            return mReadHistoryOrMyCollectList.size();
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (!mReadHistoryOrMyCollectList.isEmpty()) {
-                ReadHistoryOrMyCollect readHistoryOrMyCollect = mReadHistoryOrMyCollectList.get(position);
+        public int getContentItemViewType(int position) {
+            if (!getDataList().isEmpty()) {
+                ReadHistoryOrMyCollect readHistoryOrMyCollect = getDataList().get(position);
                 List<String> readHistoryImgs = readHistoryOrMyCollect.getImgs();
                 if (readHistoryImgs != null
                         && !readHistoryImgs.isEmpty()
@@ -290,8 +277,9 @@ public class MyCollectActivity extends RecycleViewSwipeLoadActivity {
                 }
                 return ITEM_TYPE_NONE_OR_SINGLE;
             }
-            return super.getItemViewType(position);
+            return super.getContentItemViewType(position);
         }
+
 
         static class NoneOrSingleImageViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.split)

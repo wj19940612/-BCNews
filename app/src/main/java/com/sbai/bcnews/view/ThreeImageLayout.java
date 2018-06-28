@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.sbai.bcnews.R;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.glide.GlideApp;
@@ -71,6 +72,7 @@ public class ThreeImageLayout extends LinearLayout {
                 RequestOptions requestOptions = new RequestOptions().transform(new GlideRoundAndCenterCropTransform(getContext()));
                 GlideApp.with(getContext())
                         .load(imagePath)
+                        .placeholder(R.drawable.ic_default_news)
                         .apply(requestOptions)
                         .into(imageView);
             }

@@ -144,6 +144,7 @@ public class NewsViewPointListActivity extends NewsShareOrCommentBaseActivity {
         mSwipeTarget.setAdapter(mAdapter);
         mAdapter.setNewsDetail(mNewsDetail);
 
+        mTitleBar.setRightViewEnable(false);
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

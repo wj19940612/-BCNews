@@ -11,14 +11,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
 
-import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.Preference;
-import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.model.LocalUser;
@@ -110,7 +107,7 @@ public class BaseActivity extends StatusBarActivity implements
         });
     }
 
-    private void initBroadcastListener(){
+    private void initBroadcastListener() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LoginActivity.ACTION_TOKEN_EXPIRED);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, intentFilter);

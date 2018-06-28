@@ -81,7 +81,7 @@
         android:layout_height="60dp"
         android:background="@color/bg_F5F5"
         android:gravity="center"
-        android:text="@string/no_more_data"
+        android:text="@string/i_have_a_bottom_line"
         android:textColor="@color/text_999"
         android:textSize="10sp"
         android:visibility="visible"/>
