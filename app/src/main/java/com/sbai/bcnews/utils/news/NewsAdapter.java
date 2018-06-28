@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -301,6 +302,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mLine.setVisibility(View.VISIBLE);
         }
 
+        Log.e("zzz","foot:"+mHasFoot + "count :"+count+" position:"+position);
         if (mHasFoot && count - 1 == position) {
             mFooter.setVisibility(View.VISIBLE);
         } else {
