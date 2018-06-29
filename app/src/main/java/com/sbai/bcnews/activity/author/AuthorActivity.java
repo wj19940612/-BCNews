@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -98,7 +99,10 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 
         initView();
 
+        requestAuthorInfo();
+
         requestAuthorArticle();
+
     }
 
     @Override
@@ -213,7 +217,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
 //            triggerLoadMore();
 //        }
 //    }
-
+//
 //    @Override
 //    public boolean isUseDefaultLoadMoreConditions() {
 //        return false;
@@ -252,20 +256,21 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     }
 
     private void updateArticle(List<AuthorArticle> data) {
-
+        Log.d(TAG, "updateArticle: "+data.size());
         if (mPage == 0) {
             mAuthorArticleAdapter.clear();
         }
 
         if (!data.isEmpty() || !mAuthorArticleAdapter.isEmpty()) {
-            if (mSwipeToLoadLayout.getVisibility() != View.VISIBLE) {
-                mSwipeToLoadLayout.setVisibility(View.VISIBLE);
+            if (mEmptyView.getVisibility() == View.VISIBLE) {
                 mEmptyView.setVisibility(View.GONE);
+                if (!mSwipeToLoadLayout.isRefreshEnabled())
+                    mSwipeToLoadLayout.setRefreshEnabled(true);
             }
         } else {
-            if (mEmptyView.getVisibility() != View.VISIBLE) {
+            if (mEmptyView.getVisibility() == View.GONE) {
                 mEmptyView.setVisibility(View.VISIBLE);
-                mSwipeToLoadLayout.setVisibility(View.GONE);
+                mSwipeToLoadLayout.setRefreshEnabled(false);
             }
         }
 
@@ -323,7 +328,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         mMyArticleTotal.setText(getString(R.string.his_article_number, articleNumber));
     }
 
-    @OnClick({ R.id.emptyView})
+    @OnClick({R.id.emptyView})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.emptyView:

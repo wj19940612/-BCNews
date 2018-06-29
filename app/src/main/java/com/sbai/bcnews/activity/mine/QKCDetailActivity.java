@@ -54,6 +54,7 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
     private QKCDetailAdapter mQKCDetailAdapter;
 
     private int mPage;
+    private View mFooterView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,8 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
 
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_qkc_detail_head, mSwipeTarget, false);
         mQKCDetailAdapter.addHeaderView(headView);
+
+        mFooterView = mQKCDetailAdapter.createDefaultFooterView(getActivity());
     }
 
     private void requestQksDetailsList() {
@@ -111,8 +114,14 @@ public class QKCDetailActivity extends RecycleViewSwipeLoadActivity {
         }
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            if (!mQKCDetailAdapter.hasFooterView() && mQKCDetailAdapter.getDataList().size() > 10) {
+                mQKCDetailAdapter.addFooterView(mFooterView);
+            }
         } else {
             mPage++;
+            if (mQKCDetailAdapter.hasFooterView()) {
+                mQKCDetailAdapter.removeFooterView();
+            }
         }
 
         mQKCDetailAdapter.addAll(data);
