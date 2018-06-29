@@ -84,8 +84,9 @@
         android:layout_height="15dp"
         android:layout_marginLeft="@dimen/common_padding"
         android:background="@android:color/white"
-        app:layout_constraintBaseline_toBaselineOf="@id/fansNumber"
-        app:layout_constraintStart_toEndOf="@id/fansNumber"/>
+        app:layout_constraintBaseline_toBaselineOf="@id/readNumber"
+        app:layout_constraintLeft_toRightOf="@+id/fansNumber"
+        app:layout_constraintTop_toBottomOf="@id/authorName"/>
 
     <TextView
         android:id="@+id/readNumber"
@@ -107,7 +108,7 @@
         android:layout_height="15dp"
         android:layout_marginLeft="@dimen/common_padding"
         android:background="@android:color/white"
-        app:layout_constraintBaseline_toBaselineOf="@id/fansNumber"
+        app:layout_constraintBaseline_toBaselineOf="@id/readNumber"
         app:layout_constraintLeft_toRightOf="@+id/readNumber"/>
 
     <TextView

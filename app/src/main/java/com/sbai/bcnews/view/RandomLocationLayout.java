@@ -106,6 +106,7 @@ public class RandomLocationLayout extends LinearLayout {
             layoutParams.gravity = Gravity.CENTER;
 
             addView(mEmptyTextView, layoutParams);
+            mEmptyTextView.setVisibility(GONE);
         }
 
         startEmptyViewAnimator();

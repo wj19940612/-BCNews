@@ -1058,7 +1058,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void updateReadNumber(NewsDetail newsDetail) {
-        mPubTime.setText(getString(R.string.news_publish_time_and_red_number, DateUtil.formatDefaultStyleTime(newsDetail.getReleaseTime()), newsDetail.getReaderCount()));
+        mPubTime.setText(getString(R.string.news_publish_time_and_red_number, DateUtil.formatDefaultStyleTime(newsDetail.getReleaseTime()), newsDetail.getShowReadCount()));
     }
 
     private void requestOtherArticle() {

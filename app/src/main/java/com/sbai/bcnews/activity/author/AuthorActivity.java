@@ -186,8 +186,8 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     private void showShareDialog() {
         if (mAuthor == null) return;
         String shareThumbUrl = mAuthor.getUserPortrait();
-        String shareTitle = getString(R.string.recommend_author, getString(R.string.app_name), getString(R.string.app_author));
-        String shareDescription = !TextUtils.isEmpty(mAuthor.getAuthInfo()) ? mAuthor.getAuthInfo() : mAuthor.getUserName();
+        String shareTitle = getString(R.string.recommend_author, getString(R.string.app_name),mAuthor.getUserName() );
+        String shareDescription = !TextUtils.isEmpty(mAuthor.getAuthInfo()) ? mAuthor.getAuthInfo() :getString(R.string.app_author);
         final String shareUrl = String.format(Apic.url.SHARE_AUTHOR, mAuthor.getId());
         NewsShareDialog.with(getActivity())
                 .setOnNewsLinkCopyListener(new NewsShareAndSetDialog.OnNewsLinkCopyListener() {
@@ -210,18 +210,6 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     }
 
 
-//    @Override
-//    protected void onRecycleViewScrolled(RecyclerView recyclerView, int dx, int dy) {
-//        super.onRecycleViewScrolled(recyclerView, dx, dy);
-//        if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
-//            triggerLoadMore();
-//        }
-//    }
-//
-//    @Override
-//    public boolean isUseDefaultLoadMoreConditions() {
-//        return false;
-//    }
 
     private void requestAuthorInfo() {
         Apic.requestAuthorInfo(mAuthorId)
@@ -352,6 +340,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
     public void onRefresh() {
         mPage = 0;
         requestAuthorArticle();
+        requestAuthorInfo();
     }
 
 
