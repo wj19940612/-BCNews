@@ -128,6 +128,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         mPage = 0;
         loadData(true);
         requestMyAttention();
+        mSwipeTarget.setFocusableInTouchMode(false);
     }
 
     @Override
