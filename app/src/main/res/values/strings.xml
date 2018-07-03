@@ -156,7 +156,7 @@
     <string name="bind_phone">关联手机号</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
-    <string name="tel_pass_login">手机号密码录</string>
+    <string name="tel_pass_login">手机号密码登录</string>
     <string name="tel_auth_code_login">手机号验证码登录</string>
     <string name="password_login">密码登录</string>
     <string name="forget_pass">忘记密码</string>
