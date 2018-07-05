@@ -11,4 +11,6 @@
 
     <dimen name="sectioned_alignBottom">23dp</dimen>
 
+    <dimen name="sectioned_left_margin">15dp</dimen>
+
 </resources>

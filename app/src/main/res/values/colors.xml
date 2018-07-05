@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFC90C</color>
+    <color name="transparent">@android:color/transparent</color>
     <color name="colorPrimaryLight">#FFE12A</color>
     <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#FF4081</color>
@@ -63,5 +64,6 @@
 
     <color name="gray">#d9d9d9</color>
     <color name="bg_EA">#EAEAEA</color>
+    <color name="bg_time">#FFFAED</color>
 
 </resources>

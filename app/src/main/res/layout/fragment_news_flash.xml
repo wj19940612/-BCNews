@@ -37,9 +37,8 @@
             android:id="@id/swipe_target"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_F5F5"
-            android:clipToPadding="false"
-            android:paddingTop="12dp"/>
+            android:background="@color/white"
+            android:clipToPadding="false"/>
 
         <com.zcmrr.swipelayout.foot.LoadMoreFooterView
             android:id="@+id/swipe_load_more_footer"
