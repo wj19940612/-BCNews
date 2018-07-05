@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/dateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:visibility="visible">
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="23dp"
+        android:text="2018年06月25日"
+        android:textColor="@color/text_4a"
+        android:textSize="18sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/timeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/dateLayout">
+
+        <ImageView
+            android:id="@+id/timeIcon"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_flash_news_time" />
+
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="14dp"
+            android:layout_toRightOf="@+id/timeIcon"
+            android:layout_marginLeft="4dp"
+            android:textSize="10sp"
+            android:textColor="@color/text_1567DD"
+            android:gravity="center"
+            android:text="19:30"/>
+
+        <RelativeLayout
+            android:id="@+id/smallLineLayout"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/timeIcon"
+            android:layout_alignLeft="@+id/timeIcon">
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:background="@color/background" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/dateLayout"
+        android:layout_marginRight="20dp"
+        android:padding="2dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_news_flash_share"
+            android:gravity="center_vertical"
+            android:text="@string/share"
+            android:textColor="@color/text_999"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timeLayout"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="30dp"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:text="韩国金融消费者院开设EOS货币实名交易投诉举报中心" />
+
+    <com.sbai.bcnews.view.AutoSplitTextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginBottom="19dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="6dp"
+        android:maxLines="6"
+        android:textColor="#494949"
+        android:textSize="14sp"
+        android:text="立陶宛的区块链项目Prodeum于1月20日发起众筹，仅仅8天后项目方无故下线网站，随后社交平台的官方信息也被删除干净，未解释任何原因。Prodeum原来的愿景为利用以太坊区块链技术革新蔬果行业。网友猜测此为有预谋的诈骗项目，拿钱就跑…"/>
+
+
+    <View
+        android:id="@+id/viewStub"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_below="@+id/content" />
+
+    <RelativeLayout
+        android:id="@+id/lineLayout"
+        android:layout_width="5dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timeLayout"
+        android:layout_alignBottom="@+id/viewStub"
+        android:layout_alignLeft="@+id/timeLayout">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:background="@color/background" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

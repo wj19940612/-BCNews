@@ -18,6 +18,7 @@ public class DateUtil {
     public static final String FORMAT_NOT_HOUR = "MM月dd日 ";
     public static final String FORMAT_ONLY_DATE = "dd日 ";
     public static final String FORMAT_YEAR_MONTH_DAY = "yyyy年MM月dd日 HH:mm";
+    public static final String FORMAT_YEAR_MONTH_DAY_NO_HOUR = "yyyy年MM月dd日";
     public static final String FORMAT_YEAR_MONTH = "yyyy年MM月";
     public static final String FORMAT_SPECIAL = "yyyy-MM-dd HH:mm:ss";
     public static final String FORMAT_SPECIAL_SLASH = "yyyy/MM/dd HH:mm";

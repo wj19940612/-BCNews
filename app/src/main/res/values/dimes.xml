@@ -7,4 +7,8 @@
 
     <dimen name="common_padding">14dp</dimen>
 
+    <dimen name="sectioned_top">62dp</dimen>
+
+    <dimen name="sectioned_alignBottom">23dp</dimen>
+
 </resources>
