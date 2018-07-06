@@ -496,4 +496,8 @@
     <string name="please_set_login_password">为保障账户安全，请设置登录密码</string>
     <string name="share_candy">分享糖果</string>
 
+    <string name="click_require">点击领取</string>
+    <string name="has_get">已领取</string>
+    <string name="today_upper_limit">今日领取已达上限</string>
+
 </resources>
