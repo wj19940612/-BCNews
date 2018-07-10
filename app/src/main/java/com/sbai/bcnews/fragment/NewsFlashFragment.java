@@ -2,21 +2,30 @@ package com.sbai.bcnews.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.RelatedNewsActivity;
 import com.sbai.bcnews.activity.ShareNewsFlashActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
@@ -24,6 +33,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.NewsFlash;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
@@ -36,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -202,6 +213,14 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 requestNewsFlash(mFirstDataTime, GREATER_THAN_TIME);
             }
         });
+
+        mRecyclerView.addItemDecoration(new SectionDecoration(mNewsAdapter.getDataList(), getActivity(), new SectionDecoration.DecorationCallback() {
+            @Override
+            public String getGroupName(int position) {
+                NewsFlash newsFlash = mNewsAdapter.getDataList().get(position);
+                return DateUtil.format(newsFlash.getReleaseTime(), DateUtil.FORMAT_YEAR_MONTH_DAY_NO_HOUR);
+            }
+        }));
     }
 
     @Override
@@ -258,6 +277,10 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
             notifyDataSetChanged();
         }
 
+        public List<NewsFlash> getDataList() {
+            return dataList;
+        }
+
         public void refresh() {
             notifyDataSetChanged();
         }
@@ -273,13 +296,13 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
         @Override
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_news_flash, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_flash_news, parent, false);
             return new ViewHolder(v);
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.bindDataWithView(showFooterView && position == dataList.size() - 1, dataList.get(position), mContext);
+            holder.bindDataWithView(showFooterView && position == dataList.size() - 1, dataList.get(position), mContext, position, getItemCount());
         }
 
         @Override
@@ -288,16 +311,24 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.title)
+            TextView mTitle;
+            @BindView(R.id.smallLineLayout)
+            RelativeLayout mSmallLineLayout;
+            @BindView(R.id.timeIcon)
+            ImageView mTimeIcon;
+            @BindView(R.id.lineLayout)
+            RelativeLayout mLineLayout;
             @BindView(R.id.time)
             TextView mTime;
             @BindView(R.id.share)
             LinearLayout mShare;
             @BindView(R.id.content)
             TextView mContent;
-            @BindView(R.id.split)
-            View mSplit;
-            @BindView(R.id.footer)
-            TextView mFooter;
+//            @BindView(R.id.split)
+//            View mSplit;
+//            @BindView(R.id.footer)
+//            TextView mFooter;
 
 
             public ViewHolder(View itemView) {
@@ -305,31 +336,48 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, itemView);
             }
 
-            private void bindDataWithView(boolean showFooterView, final NewsFlash newsFlash, final Context context) {
-                String colorValue = "#FF9F00";
-                if (showFooterView) {
-                    mSplit.setVisibility(View.GONE);
-                    mFooter.setVisibility(View.VISIBLE);
+            private void bindDataWithView(boolean showFooterView, final NewsFlash newsFlash, final Context context, int position, int count) {
+                String colorValue = "#0E418C";
+                if (position == count - 1) {
+                    mTimeIcon.setVisibility(View.GONE);
+                    mSmallLineLayout.setVisibility(View.GONE);
+                    mLineLayout.setVisibility(View.GONE);
                 } else {
-                    mSplit.setVisibility(View.VISIBLE);
-                    mFooter.setVisibility(View.GONE);
+                    mTimeIcon.setVisibility(View.VISIBLE);
+                    mSmallLineLayout.setVisibility(View.VISIBLE);
+                    mLineLayout.setVisibility(View.VISIBLE);
                 }
+//                if (showFooterView) {
+//                    mSplit.setVisibility(View.GONE);
+//                    mFooter.setVisibility(View.VISIBLE);
+//                } else {
+//                    mSplit.setVisibility(View.VISIBLE);
+//                    mFooter.setVisibility(View.GONE);
+//                }
                 mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()));
                 if (newsFlash.isImportant()) {
                     if (TextUtils.isEmpty(newsFlash.getTitle())) {
-                        mContent.setText(newsFlash.getContent());
+                        mTitle.setVisibility(View.GONE);
+                        mContent.setText(newsFlash.getContent().trim());
                         mContent.setTextColor(Color.parseColor(colorValue));
                     } else {
-                        mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
-                                Color.parseColor(colorValue), Color.parseColor(colorValue)));
+                        mContent.setText(newsFlash.getContent().trim());
+                        mContent.setTextColor(Color.parseColor(colorValue));
+                        mTitle.setVisibility(View.VISIBLE);
+                        mTitle.setText(newsFlash.getTitle().replace("【", "").replace("】", "").trim());
+                        mTitle.setTextColor(Color.parseColor(colorValue));
                     }
                 } else {
                     if (TextUtils.isEmpty(newsFlash.getTitle())) {
-                        mContent.setText(newsFlash.getContent());
-                        mContent.setTextColor(Color.parseColor(colorValue));
+                        mTitle.setVisibility(View.GONE);
+                        mContent.setText(newsFlash.getContent().trim());
+                        mContent.setTextColor(Color.parseColor("#494949"));
                     } else {
-                        mContent.setText(StrUtil.mergeTextWithRatioColorBold(newsFlash.getTitle(), newsFlash.getContent(), 1.0f,
-                                Color.parseColor("#494949"), Color.parseColor("#494949")));
+                        mTitle.setVisibility(View.VISIBLE);
+                        mTitle.setText(newsFlash.getTitle().replace("【", "").replace("】", "").trim());
+                        mTitle.setTextColor(ContextCompat.getColor(context,R.color.text_4949));
+                        mContent.setText(newsFlash.getContent());
+                        mContent.setTextColor(ContextCompat.getColor(context,R.color.text_4949));
                     }
                 }
                 mShare.setOnClickListener(new View.OnClickListener() {
@@ -362,5 +410,110 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
                 });
             }
         }
+    }
+
+    static class SectionDecoration extends RecyclerView.ItemDecoration {
+
+        private DecorationCallback mCallback;
+        private List<NewsFlash> mNewsFlashes;
+        private Context mContext;
+        private Paint mPaint;
+        private TextPaint mTextPaint;
+
+        private int topGap;
+        private int alignBottom;
+        private int mLeftMargin;
+
+
+        public SectionDecoration(List<NewsFlash> newsFlashes, Context context, DecorationCallback callback) {
+            mCallback = callback;
+            mNewsFlashes = newsFlashes;
+            mContext = context;
+            mPaint = new Paint();
+            mPaint.setColor(ContextCompat.getColor(mContext, R.color.white));
+
+            mTextPaint = new TextPaint(mTextPaint.FAKE_BOLD_TEXT_FLAG);
+            mTextPaint.setAntiAlias(true);
+            mTextPaint.setTextSize(Display.sp2Px(18, context.getResources()));
+            mTextPaint.setColor(ContextCompat.getColor(mContext, R.color.text_4a));
+            mTextPaint.setTextAlign(Paint.Align.LEFT);
+            //决定悬浮栏的高度等
+            topGap = context.getResources().getDimensionPixelSize(R.dimen.sectioned_top);
+            //决定文本的显示位置等
+            alignBottom = context.getResources().getDimensionPixelSize(R.dimen.sectioned_alignBottom);
+            mLeftMargin = context.getResources().getDimensionPixelOffset(R.dimen.sectioned_left_margin);
+        }
+
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            int pos = parent.getChildAdapterPosition(view);
+            if (pos == 0 || isFirstInGroup(pos)) {
+                outRect.top = topGap;
+            }
+        }
+
+        @Override
+        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+            super.onDrawOver(c, parent, state);
+            final int itemCount = state.getItemCount();
+            final int childCount = parent.getChildCount();
+            final int left = parent.getLeft() + parent.getPaddingLeft();
+            final int right = parent.getRight() - parent.getPaddingRight();
+            String preGroupName;      //标记上一个item对应的Group
+            String currentGroupName = null;       //当前item对应的Group
+            for (int i = 0; i < childCount; i++) {
+                View view = parent.getChildAt(i);
+                int position = parent.getChildAdapterPosition(view);
+                preGroupName = currentGroupName;
+                currentGroupName = mCallback.getGroupName(position);
+                if (currentGroupName == null || TextUtils.equals(currentGroupName, preGroupName))
+                    continue;
+                int viewBottom = view.getBottom();
+                float top = Math.max(topGap, view.getTop());//top 决定当前顶部第一个悬浮Group的位置
+                if (position + 1 < itemCount) {
+                    //获取下个GroupName
+                    String nextGroupName = mCallback.getGroupName(position + 1);
+                    //下一组的第一个View接近头部
+                    if (!currentGroupName.equals(nextGroupName) && viewBottom < top) {
+                        top = viewBottom;
+                    }
+                }
+                //根据top绘制group
+                c.drawRect(left, top - topGap, right, top, mPaint);
+                Paint.FontMetrics fm = mTextPaint.getFontMetrics();
+                //文字竖直居中显示
+                float baseLine = top - (topGap - (fm.bottom - fm.top)) / 2 - fm.bottom;
+                c.drawText(currentGroupName, left + mLeftMargin, baseLine, mTextPaint);
+            }
+        }
+
+
+        /**
+         * 判断是不是组中的第一个位置
+         *
+         * @param pos
+         * @return
+         */
+        private boolean isFirstInGroup(int pos) {
+            if (pos == 0) {
+                return true;
+            } else {
+
+                NewsFlash pre = mNewsFlashes.get(pos - 1);
+                NewsFlash next = mNewsFlashes.get(pos);
+                long preTime = pre.getReleaseTime();
+                long nextTime = next.getReleaseTime();
+                return !DateUtil.isInThisDay(nextTime, preTime);
+
+            }
+        }
+
+        //定义一个借口方便外界的调用
+        interface DecorationCallback {
+            String getGroupName(int position);
+        }
+
     }
 }

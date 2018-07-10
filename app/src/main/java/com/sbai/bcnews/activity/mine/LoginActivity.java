@@ -578,7 +578,6 @@ public class LoginActivity extends WeChatActivity {
     }
 
     private void switchLoginMode() {
-        Log.e("zzz", "switchLoginMode");
         if (isAuthCodeLogin()) { // 当前是验证码登录 -> 密码登录
             mPageTitle.setText(R.string.password_login);
             mAuthCodeArea.setVisibility(View.GONE);

@@ -378,10 +378,10 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == INTENT_REQUEST_CODE_ATTENTIONLIST && resultCode == RESULT_OK) {
-            loadData(true);
-            requestMyAttention();
-        }
+//        if (requestCode == INTENT_REQUEST_CODE_ATTENTIONLIST && resultCode == RESULT_OK) {
+//            loadData(true);
+//            requestMyAttention();
+//        }
     }
 
     static class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

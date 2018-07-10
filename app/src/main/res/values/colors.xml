@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFC90C</color>
+    <color name="transparent">@android:color/transparent</color>
     <color name="colorPrimaryLight">#FFE12A</color>
     <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#FF4081</color>
@@ -45,6 +46,7 @@
     <color name="bg_F2">#F2F2F2</color>
     <color name="text_AAA9A6">#AAA9A6</color>
     <color name="text_7099D4">#7099D4</color>
+    <color name="text_1567DD">#1567DD</color>
 
     <color name="white">#FFF</color>
     <color name="collect">#444</color>
@@ -65,5 +67,6 @@
 
     <color name="gray">#d9d9d9</color>
     <color name="bg_EA">#EAEAEA</color>
+    <color name="bg_time">#FFFAED</color>
 
 </resources>
