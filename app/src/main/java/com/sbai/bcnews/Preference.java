@@ -53,7 +53,7 @@ public class Preference {
         String FRONT_TIME = "front_time";
         String READ_TIME = "read_time";
         String TODAY_FIRST_OPEN_APP = "first_open_app";
-
+        String SEARCH_HISTORY = "search_history";
     }
 
     private static Preference sInstance;
@@ -278,14 +278,14 @@ public class Preference {
         return mPrefs.getInt(key, TextSizeModel.NORMAL);
     }
 
-    public void setLocalWebTextSize( int textSize) {
+    public void setLocalWebTextSize(int textSize) {
         String key = Key.WEB_TEXT_SIZE;
         apply(key, textSize);
     }
 
     public String getOnlineTime() {
         String key = Key.FRONT_TIME;
-        return mPrefs.getString(key,null);
+        return mPrefs.getString(key, null);
     }
 
     public void setOnlineTime(String onlineTime) {
@@ -298,7 +298,7 @@ public class Preference {
         return mPrefs.getInt(key, TextSizeModel.NORMAL);
     }
 
-    public void setReadTime( int readTime) {
+    public void setReadTime(int readTime) {
         String key = Key.READ_TIME;
         apply(key, readTime);
     }
@@ -322,5 +322,11 @@ public class Preference {
         apply(Key.FIRST_OPEN_APP, false);
     }
 
+    public void setHistoryRearch(String values) {
+        apply(Key.SEARCH_HISTORY, values);
+    }
 
+    public String getHistorySearch() {
+        return mPrefs.getString(Key.SEARCH_HISTORY, null);
+    }
 }

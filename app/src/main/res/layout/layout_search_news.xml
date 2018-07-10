@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/searchNewsLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/newsSplit"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/bg_F5F5"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="@dimen/common_padding"
+        android:layout_marginTop="20dp"
+        android:text="@string/news_flash"
+        android:textColor="@color/text_4a"
+        android:textSize="16sp"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/firstNews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="24dp">
+
+        <View
+            android:id="@+id/firstPoint"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="@drawable/bg_gray_round"
+            app:layout_constraintBottom_toBottomOf="@id/firstTimeLine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/firstTimeLine"/>
+
+        <TextView
+            android:id="@+id/firstTimeLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/text_999"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="20155151115"/>
+
+        <TextView
+            android:id="@+id/firstShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_news_flash_share"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="@string/share"
+            android:textColor="@color/text_999"
+            android:textSize="12sp"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/firstTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="3dp"
+            android:maxLines="2"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/firstTimeLine"
+            tools:text="尽快付款减肥的健康健康健康路附近考虑附近考虑将考虑了放大镜看了房间开即可放款减肥"/>
+
+        <com.sbai.bcnews.view.AutoSplitTextView
+            android:id="@+id/firstContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="6dp"
+            android:maxLines="6"
+            android:textColor="#494949"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/firstTitle"
+            tools:text="高上市公司质量深交所，将研究创新监管和质量"/>
+
+        <View
+            android:id="@+id/firstSplit"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="19dp"
+            android:background="@color/bg_F5F5"
+            app:layout_constraintTop_toBottomOf="@+id/firstContent"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/secondNews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="24dp">
+
+        <View
+            android:id="@+id/secondPoint"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="@drawable/bg_gray_round"
+            app:layout_constraintBottom_toBottomOf="@id/secondTimeLine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/secondTimeLine"/>
+
+        <TextView
+            android:id="@+id/secondTimeLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/text_999"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="20155151115"/>
+
+        <TextView
+            android:id="@+id/secondShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_news_flash_share"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="@string/share"
+            android:textColor="@color/text_999"
+            android:textSize="12sp"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/secondTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="3dp"
+            android:maxLines="2"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/secondTimeLine"
+            tools:text="尽快付款减肥的健康健康健康路附近考虑附近考虑将考虑了放大镜看了房间开即可放款减肥"/>
+
+        <com.sbai.bcnews.view.AutoSplitTextView
+            android:id="@+id/secondContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="6dp"
+            android:maxLines="6"
+            android:textColor="#494949"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/secondTitle"
+            tools:text="高上市公司质量深交所，将研究创新监管和质量"/>
+
+        <View
+            android:id="@+id/secondSplit"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="19dp"
+            android:background="@color/bg_F5F5"
+            app:layout_constraintTop_toBottomOf="@+id/secondContent"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/thirdNews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="24dp">
+
+        <View
+            android:id="@+id/thirdPoint"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="@drawable/bg_gray_round"
+            app:layout_constraintBottom_toBottomOf="@id/thirdTimeLine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/thirdTimeLine"/>
+
+        <TextView
+            android:id="@+id/thirdTimeLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/text_999"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="20155151115"/>
+
+        <TextView
+            android:id="@+id/thirdShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_news_flash_share"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:text="@string/share"
+            android:textColor="@color/text_999"
+            android:textSize="12sp"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/thirdTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="3dp"
+            android:maxLines="2"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/thirdTimeLine"
+            tools:text="尽快付款减肥的健康健康健康路附近考虑附近考虑将考虑了放大镜看了房间开即可放款减肥"/>
+
+        <com.sbai.bcnews.view.AutoSplitTextView
+            android:id="@+id/thirdContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="6dp"
+            android:maxLines="6"
+            android:textColor="#494949"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/thirdTitle"
+            tools:text="高上市公司质量深交所，将研究创新监管和质量"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/lookAllNews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_white"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/look_all_news"
+        android:textColor="@color/text_9B9B"
+        android:layout_marginBottom="10dp"
+        android:textSize="12sp"/>
+
+</LinearLayout>

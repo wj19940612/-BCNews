@@ -116,4 +116,17 @@
         <item name="android:enabled">true</item>
     </style>
 
+    <style name="SearchText">
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingTop">11dp</item>
+        <item name="android:paddingBottom">11dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/text_AAA9A6</item>
+        <item name="android:background">@drawable/bg_f5_round</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+    </style>
+
 </resources>

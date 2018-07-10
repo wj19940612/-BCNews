@@ -127,8 +127,7 @@
         <activity
             android:name=".activity.mine.PersonalIntroduceActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.mine.ModifyNickNameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -186,42 +185,38 @@
         <activity
             android:name=".activity.ConversionResultActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.ShareCandyActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.RegisterActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.InputPhoneActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.AuthCodeActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.ModifyPassActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.MyAttentionActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.CandyDetailActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.author.AuthorWorkbenchActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.author.AuthorActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.SearchActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+
 
         <service android:name=".service.DownloadService"/>
 

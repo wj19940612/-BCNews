@@ -169,4 +169,15 @@
         <attr name="android:src"/>
     </declare-styleable>
 
+    <declare-styleable name="SearchEditText">
+        <attr name="leftDrawable" format="reference"/>
+        <attr name="searchEditTextColor" format="color|reference"/>
+        <attr name="searchEditTextSize" format="dimension|reference"/>
+        <attr name="searchEditHintTextColor" format="color|reference"/>
+        <attr name="searchEditCursorDrawable" format="reference"/>
+        <attr name="clearText" format="string|reference"/>
+        <attr name="clearTextSize" format="reference|dimension"/>
+        <attr name="clearTextColor" format="color|dimension"/>
+    </declare-styleable>
+
 </resources>

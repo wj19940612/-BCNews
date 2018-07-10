@@ -1,10 +1,7 @@
 package com.sbai.bcnews.fragment;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -26,6 +23,7 @@ import android.widget.TextView;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ChannelActivity;
+import com.sbai.bcnews.activity.SearchActivity;
 import com.sbai.bcnews.activity.mine.HourWelfareActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.dialog.StartRobRedPacketDialogFragment;
@@ -38,7 +36,6 @@ import com.sbai.bcnews.model.mine.UserRedPacketStatus;
 import com.sbai.bcnews.model.system.RedPacketActivityStatus;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
-import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.ChannelCache;
@@ -128,7 +125,7 @@ public class HomeNewsFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (getUserVisibleHint()) {
-            requestRedActivityPacketStatus();
+            requestRedActivityPacketStatus(false);
         }
     }
 
@@ -136,7 +133,7 @@ public class HomeNewsFragment extends BaseFragment {
     protected void onNetWorkAvailable() {
         super.onNetWorkAvailable();
         if (isAdded() && getUserVisibleHint()) {
-            requestRedActivityPacketStatus();
+            requestRedActivityPacketStatus(false);
         }
     }
 
@@ -144,7 +141,7 @@ public class HomeNewsFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isAdded()) {
-            requestRedActivityPacketStatus();
+            requestRedActivityPacketStatus(false);
         } else {
             stopScheduleJob();
             resetCountDownTimer();
@@ -155,33 +152,16 @@ public class HomeNewsFragment extends BaseFragment {
         View leftView = mTitleBar.getLeftView();
         mRedPacketImage = leftView.findViewById(R.id.redPacketImage);
         mRedPacketText = leftView.findViewById(R.id.redPacketText);
-        mTitleBar.setLeftClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!LocalUser.getUser().isLogin()) {
-                    Launcher.with(getContext(), LoginActivity.class).execute();
-                    return;
-                }
-
-                Apic.requestRedPacketStatus()
-                        .tag(TAG)
-                        .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {
-                            @Override
-                            protected void onRespSuccessData(RedPacketActivityStatus data) {
-                                mRedPacketActivityStatus = data;
-                                updateRedPacketActivityStatus(data);
-
-                                if (mRedPacketActivityStatus != null &&
-                                        mRedPacketActivityStatus.getRedPacketStatus() == RedPacketActivityStatus.RED_PACKET_ACTIVITY_IS_OPEN) {
-                                    requestUserRedPacketStatus();
-
-                                }
-                            }
-                        })
-                        .fire();
-
+        mTitleBar.setLeftClickListener((v -> {
+            if (!LocalUser.getUser().isLogin()) {
+                Launcher.with(getContext(), LoginActivity.class).execute();
+                return;
             }
-        });
+            requestRedActivityPacketStatus(true);
+        }));
+        mTitleBar.setOnRightViewClickListener((v -> {
+            Launcher.with(getContext(), SearchActivity.class).execute();
+        }));
     }
 
     private void requestUserRedPacketStatus() {
@@ -289,8 +269,10 @@ public class HomeNewsFragment extends BaseFragment {
         mTabLayout.selectItem(1);
     }
 
-
-    private void requestRedActivityPacketStatus() {
+    /**
+     * @param isRequestUserRedPacketStatus 是否请求用户的红包情况
+     */
+    private void requestRedActivityPacketStatus(boolean isRequestUserRedPacketStatus) {
         Apic.requestRedPacketStatus()
                 .tag(TAG)
                 .callback(new Callback2D<Resp<RedPacketActivityStatus>, RedPacketActivityStatus>() {
@@ -298,6 +280,12 @@ public class HomeNewsFragment extends BaseFragment {
                     protected void onRespSuccessData(RedPacketActivityStatus data) {
                         mRedPacketActivityStatus = data;
                         updateRedPacketActivityStatus(data);
+                        if (isRequestUserRedPacketStatus)
+                            if (mRedPacketActivityStatus != null &&
+                                    mRedPacketActivityStatus.getRedPacketStatus() == RedPacketActivityStatus.RED_PACKET_ACTIVITY_IS_OPEN) {
+                                requestUserRedPacketStatus();
+
+                            }
                     }
                 })
                 .fire();
@@ -348,7 +336,7 @@ public class HomeNewsFragment extends BaseFragment {
 
             @Override
             public void onFinish() {
-                requestRedActivityPacketStatus();
+                requestRedActivityPacketStatus(false);
             }
         }.start();
     }
@@ -358,7 +346,7 @@ public class HomeNewsFragment extends BaseFragment {
     public void onTimeUp(int count) {
         super.onTimeUp(count);
         if (count == mWaitTime / 1000) {
-            requestRedActivityPacketStatus();
+            requestRedActivityPacketStatus(false);
             stopScheduleJob();
         }
     }
@@ -464,7 +452,7 @@ public class HomeNewsFragment extends BaseFragment {
             } else if (position == 1) {
                 NewsFragment newsFragment = NewsFragment.newsInstance(true, title);
                 return newsFragment;
-            }else if(title.equals(mContext.getString(R.string.candy))){
+            } else if (title.equals(mContext.getString(R.string.candy))) {
                 CandyListFragment candyListFragment = new CandyListFragment();
                 return candyListFragment;
             }

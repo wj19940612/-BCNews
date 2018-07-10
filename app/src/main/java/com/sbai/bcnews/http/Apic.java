@@ -4,6 +4,7 @@ import com.sbai.bcnews.App;
 import com.sbai.bcnews.Preference;
 import com.sbai.bcnews.model.news.WriteComment;
 import com.sbai.bcnews.utils.AppInfo;
+import com.sbai.bcnews.view.search.SearchLabelLayout;
 import com.sbai.httplib.ReqParams;
 
 import java.io.File;
@@ -85,6 +86,32 @@ public class Apic {
                 new ReqParams()
                         .put("authorId", authorId)
                         .put("type", type));
+    }
+
+    /**
+     * /api/news-info/news/search/hot.do
+     * GET
+     * 热词--薛松
+     *
+     * @return
+     */
+    public static Api requestHotSearchContent() {
+        return Api.get("/api/news-info/news/search/hot.do", new ReqParams().put("page", 0).put("size", SearchLabelLayout.HOT_SEARCH_LABEL_MAX_SIZE));
+    }
+
+    /**
+     * /api/news-info/news/search.do
+     * GET
+     * 搜索--薛松
+     *
+     * @param searchContent
+     * @return
+     */
+    public static Api requestSearchContent(String searchContent) {
+        return Api.get("/api/news-info/news/search.do",
+                new ReqParams()
+                        .put("word", searchContent)
+        );
     }
 
 
@@ -1074,43 +1101,48 @@ public class Apic {
 
     /**
      * 关注的作者列表
+     *
      * @return
      */
-    public static Api requestAttentionAuthor(){
+    public static Api requestAttentionAuthor() {
         return Api.get("/api/news-user/author/list/concern.do");
     }
 
     /**
      * 关注的文章列表
+     *
      * @return
      */
-    public static Api requestAttentionArticle(int page){
-        return Api.get("/api/news-user/author/list/concern/bitcoin.do",new ReqParams().put("page",page).put("size",DEFAULT_PAGE_SIZE));
+    public static Api requestAttentionArticle(int page) {
+        return Api.get("/api/news-user/author/list/concern/bitcoin.do", new ReqParams().put("page", page).put("size", DEFAULT_PAGE_SIZE));
     }
 
     /**
      * 获取推荐作者列表
+     *
      * @return
      */
-    public static Api requestRecommendAuthorList(){
+    public static Api requestRecommendAuthorList() {
         return Api.get("/api/news-user/author/list/recommend.do");
     }
 
     /**
      * 关注/取消关注 作者
+     *
      * @param authorId 作者Id
      * @param type     1关注 0-取消关注
      * @return
      */
-    public static Api requestConcernAuthor(int authorId,int type){
-        return Api.post("/api/news-user/author/concern.do",new ReqParams().put("authorId",authorId).put("type",type));
+    public static Api requestConcernAuthor(int authorId, int type) {
+        return Api.post("/api/news-user/author/concern.do", new ReqParams().put("authorId", authorId).put("type", type));
     }
 
     /**
      * 启动弹窗
+     *
      * @return
      */
-    public static Api requestStartWindow(){
+    public static Api requestStartWindow() {
         return Api.get("/api/news-user/window/list.do");
     }
 

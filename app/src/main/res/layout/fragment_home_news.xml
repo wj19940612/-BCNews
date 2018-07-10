@@ -11,9 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="false"
-        app:leftView="@layout/layout_rad_packet_home_page"
         app:backIcon="@mipmap/ic_launcher"
-        app:customView="@layout/view_title_news"/>
+        app:customView="@layout/view_title_news"
+        app:leftView="@layout/layout_rad_packet_home_page"
+        app:rightImage="@drawable/ic_search"
+        app:rightVisible="true"/>
 
 
     <RelativeLayout

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="@dimen/common_padding"
+        android:layout_marginTop="20dp"
+        android:text="@string/author"
+        android:textColor="@color/text_4a"
+        android:textSize="16sp"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/firstAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="24dp">
+
+        <com.sbai.bcnews.view.HasLabelLayout
+            android:id="@+id/firstHasLabelLayout"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:labelDrawable="@drawable/ic_label_v"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/firstAuthorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/text_4a"
+            app:layout_constraintLeft_toRightOf="@id/firstHasLabelLayout"
+            app:layout_constraintTop_toTopOf="@id/firstHasLabelLayout"
+            tools:text="溺水的鱼"/>
+
+        <TextView
+            android:id="@+id/firstAuthorIntroduce"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@+id/firstAuthorName"
+            app:layout_constraintRight_toLeftOf="@+id/firstAttentionAuthor"
+            app:layout_constraintTop_toBottomOf="@id/firstAuthorName"
+            tools:text="hdfkjfkjdfjkdjkfdjkfdjkfdj开发的开放接口附近空间分开放接口fkdjfkd"/>
+
+        <ImageView
+            android:id="@+id/firstAttentionAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_attention_author"
+            app:layout_constraintBottom_toBottomOf="@id/firstHasLabelLayout"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/firstHasLabelLayout"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/secondAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="24dp">
+
+        <com.sbai.bcnews.view.HasLabelLayout
+            android:id="@+id/secondHasLabelLayout"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:labelDrawable="@drawable/ic_label_v"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/secondAuthorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/text_4a"
+            app:layout_constraintLeft_toRightOf="@id/secondHasLabelLayout"
+            app:layout_constraintTop_toTopOf="@id/secondHasLabelLayout"
+            tools:text="溺水的鱼"/>
+
+        <TextView
+            android:id="@+id/secondAuthorIntroduce"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@+id/secondAuthorName"
+            app:layout_constraintRight_toLeftOf="@+id/secondAttentionAuthor"
+            app:layout_constraintTop_toBottomOf="@id/secondAuthorName"
+            tools:text="hdfkjfkjdfjkdjkfdjkfdjkfdj开发的开放接口附近空间分开放接口fkdjfkd"/>
+
+        <ImageView
+            android:id="@+id/secondAttentionAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_attention_author"
+            app:layout_constraintBottom_toBottomOf="@id/secondHasLabelLayout"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/secondHasLabelLayout"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/lookAllAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_white"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/look_all_author"
+        android:textColor="@color/text_9B9B"
+        android:textSize="12sp"/>
+</LinearLayout>

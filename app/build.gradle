@@ -91,8 +91,8 @@ android {
         baidu {}
         others {}
         fenx {}
-        weixin{}
-        huawei{}
+        weixin {}
+        huawei {}
     }
 
     android.applicationVariants.all { variant ->
@@ -132,6 +132,7 @@ dependencies {
     implementation 'com.getui:sdk:2.10.2.0'
     implementation 'com.umeng.analytics:analytics:latest.integration'
     implementation files('libs/SocialSDK_QQ_Simplify.jar')
+    implementation 'com.google.android:flexbox:1.0.0'
     // local lib
     implementation project(path: ':swipeloadlayout')
     implementation project(path: ':httplib')

@@ -32,12 +32,15 @@ import butterknife.ButterKnife;
  */
 public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArticle, RecyclerView.ViewHolder> {
 
+    public final static String emptyText = "     ";
+
     private static final int ITEM_TYPE_NONE_IMAGE = 1;
     private static final int ITEM_TYPE_SINGLE_IMAGE = 2;
     private static final int ITEM_TYPE_THREE_IMAGE = 3;
 
     private static final int PAGE_TYPE_AUTHOR_WORKBENCH = 0; //工作台
     public static final int PAGE_TYPE_AUTHOR_INFO = 1;
+
 
     private int pageType;
 
@@ -112,12 +115,8 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
         TextView mTitle;
         @BindView(R.id.image)
         ImageView mImage;
-        @BindView(R.id.timeLine)
-        TextView mTimeLine;
-        @BindView(R.id.readNumber)
-        TextView mReadNumber;
-        @BindView(R.id.reviewNumber)
-        TextView mReviewNumber;
+        @BindView(R.id.bottomText)
+        TextView mBottomText;
         @BindView(R.id.rootView)
         ConstraintLayout mRootView;
 
@@ -134,14 +133,11 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
                         itemClickListener.onItemClick(data, position);
                 }
             });
-
             mTitle.setText(data.getTitle());
-            mTimeLine.setText(DateUtil.formatDefaultStyleTime(data.getReleaseTime()));
-            if (pageType == PAGE_TYPE_AUTHOR_INFO) {
-                mReviewNumber.setVisibility(View.GONE);
-            }
-            mReadNumber.setText(context.getString(R.string.read_number, data.getShowReadCount()));
-            mReviewNumber.setText(context.getString(R.string.review_number, data.getDiscussCount()));
+
+            StringBuilder bottomContent = getBottomContent(data, context, pageType);
+            mBottomText.setText(bottomContent.toString());
+
             List<String> imgs = data.getImgs();
             if (imgs != null && !imgs.isEmpty()) {
                 mImage.setVisibility(View.VISIBLE);
@@ -154,7 +150,6 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
                 mImage.setVisibility(View.GONE);
 
             }
-
         }
     }
 
@@ -163,12 +158,8 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
         TextView mTitle;
         @BindView(R.id.threeImageLayout)
         ThreeImageLayout mThreeImageLayout;
-        @BindView(R.id.timeLine)
-        TextView mTimeLine;
-        @BindView(R.id.readNumber)
-        TextView mReadNumber;
-        @BindView(R.id.reviewNumber)
-        TextView mReviewNumber;
+        @BindView(R.id.bottomText)
+        TextView mBottomText;
         @BindView(R.id.rootView)
         ConstraintLayout mRootView;
 
@@ -187,12 +178,8 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
             });
 
             mTitle.setText(data.getTitle());
-            mTimeLine.setText(DateUtil.formatDefaultStyleTime(data.getReleaseTime()));
-            mReadNumber.setText(context.getString(R.string.read_number, data.getShowReadCount()));
-            mReviewNumber.setText(context.getString(R.string.review_number, data.getDiscussCount()));
-            if (pageType == PAGE_TYPE_AUTHOR_INFO) {
-                mReviewNumber.setVisibility(View.GONE);
-            }
+            StringBuilder bottomContent = getBottomContent(data, context, pageType);
+            mBottomText.setText(bottomContent);
 
             if (data.getImgs() != null && data.getImgs().size() > 1) {
                 mThreeImageLayout.setImagePath(data.getImgs());
@@ -203,12 +190,8 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
     static class NoneImageViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.title)
         TextView mTitle;
-        @BindView(R.id.timeLine)
-        TextView mTimeLine;
-        @BindView(R.id.readNumber)
-        TextView mReadNumber;
-        @BindView(R.id.reviewNumber)
-        TextView mReviewNumber;
+        @BindView(R.id.bottomText)
+        TextView mBottomText;
         @BindView(R.id.rootView)
         ConstraintLayout mRootView;
 
@@ -226,12 +209,25 @@ public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArt
                 }
             });
             mTitle.setText(data.getTitle());
-            mTimeLine.setText(DateUtil.formatDefaultStyleTime(data.getReleaseTime()));
-            if (pageType == PAGE_TYPE_AUTHOR_INFO) {
-                mReviewNumber.setVisibility(View.GONE);
-            }
-            mReadNumber.setText(context.getString(R.string.read_number, data.getShowReadCount()));
-            mReviewNumber.setText(context.getString(R.string.review_number, data.getDiscussCount()));
+
+            StringBuilder bottomContent = getBottomContent(data, context, pageType);
+            mBottomText.setText(bottomContent);
         }
+    }
+
+    private static StringBuilder getBottomContent(AuthorArticle data, Context context, int pageType) {
+        StringBuilder stringBuilder = new StringBuilder();
+        String styleTime = DateUtil.formatDefaultStyleTime(data.getReleaseTime());
+        String readCount = context.getString(R.string.read_number, data.getShowReadCount());
+        String reviewCount = context.getString(R.string.review_number, data.getDiscussCount());
+
+        stringBuilder.append(styleTime);
+        stringBuilder.append(emptyText);
+        if (pageType == PAGE_TYPE_AUTHOR_WORKBENCH) {
+            stringBuilder.append(reviewCount);
+            stringBuilder.append(emptyText);
+        }
+        stringBuilder.append(readCount);
+        return stringBuilder;
     }
 }
