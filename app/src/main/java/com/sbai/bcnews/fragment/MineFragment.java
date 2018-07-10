@@ -269,6 +269,7 @@ public class MineFragment extends BaseFragment {
             mHeadPortrait.setLabelImageViewVisible(false);
             mNotCheckLabel.setVisibility(View.VISIBLE);
         }
+
     }
 
     private void updateNotReadMessage(int count) {

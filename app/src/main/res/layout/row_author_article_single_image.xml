@@ -37,38 +37,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:src="@drawable/ic_default_image"/>
 
+
     <TextView
-        android:id="@+id/timeLine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:textColor="@color/text_999"
-        android:textSize="11sp"
+        app:layout_constraintEnd_toStartOf="@id/image"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image"
-        tools:text="2018/08/05"/>
-
-    <TextView
-        android:id="@+id/readNumber"
-        android:layout_width="wrap_content"
+        android:id="@+id/bottomText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
         android:textColor="@color/text_999"
-        android:textSize="11sp"
-        app:layout_constraintBaseline_toBaselineOf="@id/timeLine"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:text="20阅读"/>
-
-    <TextView
-        android:id="@+id/reviewNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:textColor="@color/text_999"
-        android:textSize="11sp"
-        app:layout_constraintBaseline_toBaselineOf="@id/timeLine"
-        app:layout_constraintStart_toEndOf="@id/timeLine"
-        tools:text="20评论"/>
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:layout_marginRight="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintRight_toRightOf="@id/title"
+        android:ellipsize="end"
+        tools:text="解放军飞快的接口发动机开发的艰苦奋斗就放假放假客服即可"/>
 
 
 </android.support.constraint.ConstraintLayout>

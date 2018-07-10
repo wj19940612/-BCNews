@@ -278,6 +278,7 @@ public class AuthorActivity extends RecycleViewSwipeLoadActivity {
         }
     }
 
+
     private void updateAuthorInfo(Author author) {
         mHasLabelLayout.setImageSrc(author.getUserPortrait());
         mHasLabelLayout.setLabelImageViewVisible(author.isAuthor());

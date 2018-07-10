@@ -99,6 +99,7 @@ public class AuthorArticle {
     private List<String> imgs;
     private List<String> tags;
 
+
     public int getAuthorId() {
         return authorId;
     }

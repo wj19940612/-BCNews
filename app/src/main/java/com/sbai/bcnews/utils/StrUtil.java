@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Parcel;
+import android.support.annotation.ColorInt;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -19,6 +20,24 @@ import android.text.style.TypefaceSpan;
 
 
 public class StrUtil {
+
+    /**
+     * 设置某一段文字中几个字颜色变化
+     *
+     * @param values          总的文本
+     * @param changeColorText values 中将要变化颜色的文字
+     * @param color
+     * @return
+     */
+    public static SpannableString changeSpecialTextColor(String values, String changeColorText, @ColorInt int color) {
+        SpannableString spannableString = new SpannableString(values);
+        if (!TextUtils.isEmpty(values)) {
+            ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
+            int i = values.indexOf(changeColorText);
+            spannableString.setSpan(foregroundColorSpan, i, i + changeColorText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+        return spannableString;
+    }
 
     /**
      * 设置 s1 的字体，按比例缩放 s2 的大小，同时拼接 s1 和 s2
@@ -67,7 +86,7 @@ public class StrUtil {
      * 按比例缩放 s2 的大小并设置 s2 颜色，同时拼接 s1 和 s2
      *
      * @param s1
-     * @param ratio 比例值，单位字体大小 = 原字体大小 * ratio
+     * @param ratio   比例值，单位字体大小 = 原字体大小 * ratio
      * @param s2Color
      * @param s2
      * @return 处理后的字符串
@@ -288,6 +307,7 @@ public class StrUtil {
         }
         return res;
     }
+
 
     private static class RoundedBgSpan extends ReplacementSpan {
 
