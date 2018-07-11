@@ -115,6 +115,12 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
     private String mSearchContent;
     private int mSearchTextColor;
 
+    private OnSearchContentClickListener mOnSearchContentClickListener;
+
+    public void setOnSearchContentClickListener(OnSearchContentClickListener onSearchContentClickListener) {
+        mOnSearchContentClickListener = onSearchContentClickListener;
+    }
+
     public SearchContentLayout(Context context) {
         this(context, null);
     }
@@ -188,45 +194,59 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+        if (mOnSearchContentClickListener == null) return;
         switch (v.getId()) {
             case R.id.firstArticle:
+                mOnSearchContentClickListener.onArticleClick(mArticleList.get(0));
                 break;
             case R.id.secondArticle:
+                mOnSearchContentClickListener.onArticleClick(mArticleList.get(1));
                 break;
             case R.id.thirdArticle:
+                mOnSearchContentClickListener.onArticleClick(mArticleList.get(2));
                 break;
-            case R.id.lookAllNews:
+            case R.id.lookAllArticle:
+                mOnSearchContentClickListener.onLookAllArticle();
                 break;
-
             case R.id.firstAttentionAuthor:
+                mOnSearchContentClickListener.onAttentionAuthor(mAuthorList.get(0), mFirstAttentionAuthor);
                 break;
             case R.id.firstAuthor:
+                mOnSearchContentClickListener.onAuthorClick(mAuthorList.get(0));
                 break;
             case R.id.secondAttentionAuthor:
+                mOnSearchContentClickListener.onAttentionAuthor(mAuthorList.get(1), mSecondAttentionAuthor);
                 break;
             case R.id.secondAuthor:
+                mOnSearchContentClickListener.onAuthorClick(mAuthorList.get(1));
                 break;
             case R.id.lookAllAuthor:
+                mOnSearchContentClickListener.onLookAllAuthor();
                 break;
         }
     }
 
     @OnClick({R.id.firstShare, R.id.firstNews, R.id.secondShare, R.id.secondNews, R.id.thirdShare, R.id.thirdNews, R.id.lookAllNews})
     public void onViewClicked(View view) {
+        if (mOnSearchContentClickListener == null) return;
         switch (view.getId()) {
             case R.id.firstShare:
+                mOnSearchContentClickListener.onShareNewsFlash(mFlashList.get(0));
                 break;
             case R.id.firstNews:
                 break;
             case R.id.secondShare:
+                mOnSearchContentClickListener.onShareNewsFlash(mFlashList.get(1));
                 break;
             case R.id.secondNews:
                 break;
             case R.id.thirdShare:
+                mOnSearchContentClickListener.onShareNewsFlash(mFlashList.get(2));
                 break;
             case R.id.thirdNews:
                 break;
             case R.id.lookAllNews:
+                mOnSearchContentClickListener.onLookAllNewsFlash();
                 break;
         }
     }
@@ -296,7 +316,6 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
 
         updateArticleInfo(articleList.get(0), mFirstArticle);
 
-
         if (articleList.size() == 1) {
             mSecondArticle.setVisibility(GONE);
             mThirdArticle.setVisibility(GONE);
@@ -304,9 +323,12 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
             mSecondArticle.setVisibility(VISIBLE);
             mThirdArticle.setVisibility(GONE);
             updateArticleInfo(articleList.get(1), mSecondArticle);
+            mFirstSplit.setVisibility(VISIBLE);
         } else {
             mSecondArticle.setVisibility(VISIBLE);
             mThirdArticle.setVisibility(VISIBLE);
+            mFirstSplit.setVisibility(VISIBLE);
+            mSecondSplit.setVisibility(VISIBLE);
             updateArticleInfo(articleList.get(1), mSecondArticle);
             updateArticleInfo(articleList.get(2), mThirdArticle);
         }
@@ -336,7 +358,7 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
                 updateNewsFlashInfo(mFlashList.get(0), mFirstTitle, mFirstTimeLine, mFirstContent);
                 updateNewsFlashInfo(mFlashList.get(1), mSecondTitle, mSecondTimeLine, mSecondContent);
                 break;
-            case 3:
+            default:
                 mSecondNews.setVisibility(VISIBLE);
                 mThirdNews.setVisibility(VISIBLE);
                 updateNewsFlashInfo(mFlashList.get(0), mFirstTitle, mFirstTimeLine, mFirstContent);
@@ -362,6 +384,8 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
 
         title.setText(StrUtil.changeSpecialTextColor(newsFlash.getTitle(), mSearchContent, mSearchTextColor));
 
+        content.setText(newsFlash.getContent());
+
         content.setOnClickListener((v -> {
             int lineCount = content.getLineCount();
             if (lineCount == 6) {
@@ -384,4 +408,25 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
         return mFlashList == null || mFlashList.isEmpty();
     }
 
+    public void updateAttentionAuthor(Author author, ImageView imageView) {
+        imageView.setSelected(author.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
+    }
+
+
+    public interface OnSearchContentClickListener {
+
+        void onAuthorClick(Author author);
+
+        void onAttentionAuthor(Author author, ImageView imageView);
+
+        void onLookAllAuthor();
+
+        void onArticleClick(AuthorArticle authorArticle);
+
+        void onLookAllArticle();
+
+        void onShareNewsFlash(NewsFlash newsFlash);
+
+        void onLookAllNewsFlash();
+    }
 }

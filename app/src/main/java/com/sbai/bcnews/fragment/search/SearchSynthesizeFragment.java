@@ -1,15 +1,24 @@
 package com.sbai.bcnews.fragment.search;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.activity.SearchActivity;
+import com.sbai.bcnews.activity.ShareNewsFlashActivity;
+import com.sbai.bcnews.activity.author.AuthorActivity;
+import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.fragment.BaseFragment;
 import com.sbai.bcnews.http.Api;
 import com.sbai.bcnews.http.Apic;
@@ -17,11 +26,19 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.LocalUser;
+import com.sbai.bcnews.model.NewsFlash;
+import com.sbai.bcnews.model.author.Author;
+import com.sbai.bcnews.model.author.AuthorArticle;
 import com.sbai.bcnews.model.search.HistorySearch;
 import com.sbai.bcnews.model.search.HotSearch;
 import com.sbai.bcnews.model.search.SearchContent;
+import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.search.SearchContentLayout;
 import com.sbai.bcnews.view.search.SearchLabelLayout;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class SearchSynthesizeFragment extends BaseFragment {
+public class SearchSynthesizeFragment extends BaseFragment implements SearchLabelLayout.OnSearchLabelClickListener {
 
     Unbinder unbinder;
 
@@ -38,10 +55,26 @@ public class SearchSynthesizeFragment extends BaseFragment {
     SearchLabelLayout mSearchLabelLayout;
     @BindView(R.id.searchContentLayout)
     SearchContentLayout mSearchContentLayout;
-    @BindView(R.id.scrollView)
-    NestedScrollView mScrollView;
 
     private ArrayList<String> mHotSearchList;
+
+    private SearchActivity mSearchActivity;
+
+    private String mSearchContent;
+
+    private OnSearchLabelSelectListener mOnSearchLabelSelectListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof SearchActivity) {
+            mSearchActivity = (SearchActivity) context;
+        }
+
+        if (context instanceof OnSearchLabelSelectListener) {
+            mOnSearchLabelSelectListener = (OnSearchLabelSelectListener) context;
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -57,8 +90,18 @@ public class SearchSynthesizeFragment extends BaseFragment {
 
         init();
         requestHotSearchContent();
-        setSearchContent("数字货币");
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isAdded()) {
+            if (!TextUtils.isEmpty(mSearchContent)) {
+                requestSearchContent(mSearchContent);
+            }
+        }
+    }
+
 
     private void requestHotSearchContent() {
         Apic.requestHotSearchContent()
@@ -83,71 +126,103 @@ public class SearchSynthesizeFragment extends BaseFragment {
 
         mHotSearchList = new ArrayList<String>();
 
-        ArrayList<String> data = new ArrayList<>();
-        data.add("22222");
-        data.add("867447jfkldj");
-        data.add("888");
-        data.add("754155445jisjkfsjkfsdjkfdssjk健康更健康的风格的进口量给大家看两个房间开两个房间开两个房间空间管控尽快两个接口规范健康规范健康健康了规范健康规范健康规范健康克己奉公即可将");
-        data.add("33");
-        data.add("kjfjklfjkfjkfjk");
+        updateSearchLabel();
+        mSearchLabelLayout.setOnSearchLabelClickListener(this);
 
+        mSearchContentLayout.setOnSearchContentClickListener(new SearchContentLayout.OnSearchContentClickListener() {
+            @Override
+            public void onAuthorClick(Author author) {
+                Launcher.with(getActivity(), AuthorActivity.class).putExtra(ExtraKeys.ID, author.getId()).execute();
+            }
+
+            @Override
+            public void onAttentionAuthor(Author author, ImageView imageView) {
+                attentionAuthor(author, imageView);
+            }
+
+            @Override
+            public void onLookAllAuthor() {
+                mSearchActivity.getViewPager().setCurrentItem(SearchActivity.FRAGMENT_AUTHOR_POSITION, false);
+            }
+
+            @Override
+            public void onArticleClick(AuthorArticle authorArticle) {
+                Launcher.with(getActivity(), NewsDetailActivity.class)
+                        .putExtra(ExtraKeys.NEWS_ID, authorArticle.getId())
+                        .putExtra(ExtraKeys.CHANNEL, (authorArticle.getChannel() == null || authorArticle.getChannel().isEmpty()) ? null : authorArticle.getChannel().get(0))
+                        .executeForResult(NewsDetailActivity.REQ_CODE_CANCEL_COLLECT);
+            }
+
+            @Override
+            public void onLookAllArticle() {
+                mSearchActivity.getViewPager().setCurrentItem(SearchActivity.FRAGMENT_ARTICLE_POSITION, false);
+            }
+
+            @Override
+            public void onShareNewsFlash(NewsFlash newsFlash) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventId.NEWS_FLASH_SHARE);
+                Launcher.with(getActivity(), ShareNewsFlashActivity.class)
+                        .putExtra(ExtraKeys.NEWS_FLASH, newsFlash)
+                        .execute();
+            }
+
+            @Override
+            public void onLookAllNewsFlash() {
+                mSearchActivity.getViewPager().setCurrentItem(SearchActivity.FRAGMENT_NEWS_FLASH_POSITION, false);
+            }
+        });
+    }
+
+    private void updateSearchLabel() {
         List<String> historySearchList = HistorySearch.getHistorySearchList();
-
         mSearchLabelLayout.setHistorySearchLabel(historySearchList);
+    }
 
-
-        mSearchLabelLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSearchLabelLayout.setHotSearchLabel(null);
+    private void attentionAuthor(Author author, ImageView imageView) {
+        if (!LocalUser.getUser().isLogin()) {
+            Launcher.with(getContext(), LoginActivity.class).execute();
+        } else {
+            if (author != null) {
+                final int attentionType = author.getIsConcern() == Author.AUTHOR_STATUS_SPECIAL ? Author.AUTHOR_IS_NOT_ATTENTION : Author.AUTHOR_IS_ALREADY_ATTENTION;
+                Apic.attentionAuthor(author.getId(), attentionType)
+                        .tag(TAG)
+                        .callback(new Callback<Resp<Object>>() {
+                            @Override
+                            protected void onRespSuccess(Resp<Object> resp) {
+                                author.setIsConcern(attentionType);
+                                Intent intent = new Intent();
+                                intent.putExtra(ExtraKeys.TAG, attentionType);
+                                mSearchContentLayout.updateAttentionAuthor(author, imageView);
+                                if (author.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION) {
+                                    ToastUtil.show(R.string.attention_success);
+                                } else {
+                                    ToastUtil.show(R.string.cancel_attention_success);
+                                }
+                            }
+                        })
+                        .fire();
             }
-        }, 500);
-
-
-        mSearchLabelLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSearchLabelLayout.setHotSearchLabel(data);
-            }
-        }, 2000);
-
-        mSearchLabelLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSearchLabelLayout.setVisibility(View.GONE);
-            }
-        }, 5000);
-
-
-//        AuthorArticle authorArticle = new AuthorArticle();
-//        authorArticle.setTitle("第一天哈哈哈哈哈哈哈");
-//        mFirstArticle.setAuthorArticle(authorArticle);
-//
-//        ArrayList<String> strings = new ArrayList<>();
-//        strings.add("https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=311241833,2213359007&fm=173&app=25&f=JPEG?w=640&h=456&s=27161DC7033197F51474DCAE0300F013");
-//        AuthorArticle authorArticle2 = new AuthorArticle();
-//        authorArticle2.setTitle("第一天哈哈哈哈哈哈哈空间的数据库附近的康师傅尽快和基督教高房价和好几个房间和高房价和高房价巨化股份借古讽今和");
-//        authorArticle2.setImgs(strings);
-//        mSecondArticle.setAuthorArticle(authorArticle2);
-//
-//        strings.clear();
-//
-//        strings.add("https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1553888185,2759920345&fm=173&app=25&f=JPEG?w=640&h=426&s=B1F0E9376872D19E81955DC203007030");
-//        strings.add("https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=524274293,2410873114&fm=173&app=25&f=JPEG?w=640&h=427&s=7EE18B54B5106E7D1C973FE80300E03C");
-//        strings.add("https://hiphotos.baidu.com/feed/pic/item/1e30e924b899a9014eda61d511950a7b0308f561.jpg");
-//        AuthorArticle authorArticle3 = new AuthorArticle();
-//        authorArticle3.setImgs(strings);
-//        authorArticle3.setTitle("第一天哈哈哈哈哈哈哈");
-//        mThirdArticle.setAuthorArticle(authorArticle3);
+        }
     }
 
     public void setSearchContent(String searchContent) {
+        mSearchContent = searchContent;
+        if (getUserVisibleHint())
+            requestSearchContent(searchContent);
+    }
+
+    private void requestSearchContent(String searchContent) {
         Api.cancel(TAG);
         Apic.requestSearchContent(Uri.encode(searchContent))
                 .tag(TAG)
                 .callback(new Callback2D<Resp<SearchContent>, SearchContent>() {
                     @Override
                     protected void onRespSuccessData(SearchContent data) {
+                        if (data.isEmpty()) {
+                            showSearchLabelView();
+                        } else {
+                            showSearchContentView();
+                        }
                         mSearchContentLayout.setSearchContent(searchContent);
                         mSearchContentLayout.setSearchContentData(data);
                     }
@@ -155,9 +230,44 @@ public class SearchSynthesizeFragment extends BaseFragment {
                 .fireFreely();
     }
 
+    private void showSearchLabelView() {
+        mSearchContentLayout.setVisibility(View.GONE);
+        mSearchLabelLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showSearchContentView() {
+        mSearchContentLayout.setVisibility(View.VISIBLE);
+        mSearchLabelLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSearchLabelClick(String values) {
+        if (mOnSearchLabelSelectListener != null) {
+            mOnSearchLabelSelectListener.onSearchLabelSelect(values);
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    public void updateSearchContent(String values) {
+        if (TextUtils.isEmpty(values)) {
+            if (mSearchLabelLayout.getVisibility() == View.GONE) {
+                showSearchLabelView();
+            }
+            updateSearchLabel();
+        } else {
+//            if (mSearchContentLayout.getVisibility() == View.GONE) {
+//                showSearchContentView();
+//            }
+        }
+    }
+
+    public interface OnSearchLabelSelectListener {
+        void onSearchLabelSelect(String values);
+    }
+
 }

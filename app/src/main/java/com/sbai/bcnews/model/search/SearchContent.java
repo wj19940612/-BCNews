@@ -19,6 +19,12 @@ public class SearchContent {
     private List<NewsFlash> information;
     private List<AuthorArticle> bitcoin;
 
+    public boolean isEmpty() {
+        return (getAuthor() == null || getAuthor().isEmpty()) &&
+                (getBitcoin() == null || getBitcoin().isEmpty()) &&
+                (getInformation() == null || getInformation().isEmpty());
+    }
+
     public List<Author> getAuthor() {
         return author;
     }
@@ -41,5 +47,14 @@ public class SearchContent {
 
     public void setBitcoin(List<AuthorArticle> bitcoin) {
         this.bitcoin = bitcoin;
+    }
+
+    @Override
+    public String toString() {
+        return "SearchContent{" +
+                "author=" + author +
+                ", information=" + information +
+                ", bitcoin=" + bitcoin +
+                '}';
     }
 }

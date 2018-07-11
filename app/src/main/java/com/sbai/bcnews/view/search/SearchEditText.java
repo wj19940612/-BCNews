@@ -14,6 +14,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,9 +45,14 @@ public class SearchEditText extends LinearLayout {
     TextView mClearContent;
 
     private OnSearchContentListener mOnSearchContentListener;
+    private String mDefaultHintText;
+
 
     public interface OnSearchContentListener {
+
         void onSearchContent(String values);
+
+        void onKeyBoardSearch(String values);
     }
 
 
@@ -70,9 +76,12 @@ public class SearchEditText extends LinearLayout {
 
         mSearchEditText = createSearchEditText();
 
+        mDefaultHintText = getContext().getString(R.string.please_input_antistop);
+
         setTextSize(mSearchTextSize);
         setTextColor(mSearchTextColor);
         setHintColor(mSearchHintTextColor);
+        setHint(mDefaultHintText);
 
         LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         layoutParams.weight = 1;
@@ -109,6 +118,7 @@ public class SearchEditText extends LinearLayout {
         editText.setMaxLines(1);
         editText.setGravity(Gravity.CENTER_VERTICAL);
         editText.setSingleLine();
+        editText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         if (mEditCursorDrawable != null) {
             try {
                 Field field = TextView.class.getDeclaredField("mCursorDrawableRes");
@@ -118,6 +128,23 @@ public class SearchEditText extends LinearLayout {
                 e.printStackTrace();
             }
         }
+
+        editText.setOnEditorActionListener(((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (mOnSearchContentListener != null) {
+                    if (!TextUtils.isEmpty(editText.getText())) {
+                        mOnSearchContentListener.onKeyBoardSearch(editText.getText().toString());
+                    } else {
+                        if (!mDefaultHintText.equalsIgnoreCase(editText.getHint().toString())) {
+                            mOnSearchContentListener.onKeyBoardSearch(editText.getHint().toString());
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        }));
+
         return editText;
     }
 
@@ -127,7 +154,7 @@ public class SearchEditText extends LinearLayout {
         mLeftDrawable = typedArray.getDrawable(R.styleable.SearchEditText_leftDrawable);
         mSearchTextColor = typedArray.getColor(R.styleable.SearchEditText_searchEditTextColor, Color.BLACK);
         mSearchTextSize = typedArray.getDimensionPixelOffset(R.styleable.SearchEditText_searchEditTextSize, defaultTextSize);
-        mSearchHintTextColor = typedArray.getColor(R.styleable.SearchEditText_searchEditHintTextColor, Color.GRAY);
+        mSearchHintTextColor = typedArray.getColor(R.styleable.SearchEditText_searchEditHintTextColor, Color.RED);
         mEditCursorDrawable = typedArray.getDrawable(R.styleable.SearchEditText_searchEditCursorDrawable);
         mClearText = typedArray.getString(R.styleable.SearchEditText_clearText);
         mClearTextColor = typedArray.getColor(R.styleable.SearchEditText_clearTextColor, Color.GRAY);
@@ -157,6 +184,10 @@ public class SearchEditText extends LinearLayout {
 
     public void setHint(int hintRes) {
         mSearchEditText.setHint(hintRes);
+    }
+
+    public void setText(CharSequence text) {
+        mSearchEditText.setText(text);
     }
 
     public void setOnSearchContentListener(OnSearchContentListener onSearchContentListener) {

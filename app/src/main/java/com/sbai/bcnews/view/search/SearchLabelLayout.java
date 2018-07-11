@@ -31,6 +31,9 @@ public class SearchLabelLayout extends FrameLayout {
 
     public static final int HOT_SEARCH_LABEL_MAX_SIZE = 6;
 
+    private static final int SEARCH_LABEL_HOT_TYPE = 1;
+    private static final int SEARCH_LABEL_HISTORY_TYPE = 2;
+
     @BindView(R.id.hotSearchLabel)
     TextView mHotSearchLabel;
     @BindView(R.id.firstHotSearch)
@@ -82,6 +85,12 @@ public class SearchLabelLayout extends FrameLayout {
     private List<String> mHistorySearchList;
     private int mOldHistorySearchSize = 0;
 
+    private OnSearchLabelClickListener mOnSearchLabelClickListener;
+
+    public void setOnSearchLabelClickListener(OnSearchLabelClickListener onSearchLabelClickListener) {
+        mOnSearchLabelClickListener = onSearchLabelClickListener;
+    }
+
     public SearchLabelLayout(@NonNull Context context) {
         this(context, null);
     }
@@ -95,13 +104,9 @@ public class SearchLabelLayout extends FrameLayout {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_search_label, null);
         addView(view);
         mBind = ButterKnife.bind(this, view);
+        updateHotSearch();
     }
 
-    @OnClick(R.id.clearHistory)
-    public void onViewClicked() {
-        Preference.get().setHistoryRearch(null);
-        setHistorySearchLabel(null);
-    }
 
     @Override
     protected void onDetachedFromWindow() {
@@ -132,7 +137,16 @@ public class SearchLabelLayout extends FrameLayout {
     }
 
     private void updateHotSearch() {
-        if (mHotSearchList == null) return;
+        if (mHotSearchList == null || mHotSearchList.isEmpty()) {
+            mHotFlexboxLayout.setVisibility(GONE);
+            mSplit.setVisibility(GONE);
+            mHotSearchLabel.setVisibility(GONE);
+            return;
+        } else {
+            mHotFlexboxLayout.setVisibility(VISIBLE);
+            mSplit.setVisibility(VISIBLE);
+            mHotSearchLabel.setVisibility(VISIBLE);
+        }
 
         int viewSize = 0;
         if (mHotSearchList.size() > HOT_SEARCH_LABEL_MAX_SIZE) {
@@ -154,9 +168,9 @@ public class SearchLabelLayout extends FrameLayout {
             viewSize = mHistorySearchList.size();
         }
 
-        boolean ifNeedUpdateView = false;
+        boolean ifNeedUpdateView = true;
         if (mOldHistorySearchSize == mHistorySearchList.size()) {
-            ifNeedUpdateView = true;
+            ifNeedUpdateView = false;
         }
         mOldHistorySearchSize = mHistorySearchList.size();
 
@@ -188,5 +202,85 @@ public class SearchLabelLayout extends FrameLayout {
         } else {
             mEmptyView.setVisibility(GONE);
         }
+    }
+
+    @OnClick({R.id.firstHotSearch, R.id.secondHotSearch, R.id.ThirdHotSearch, R.id.ForthHotSearch, R.id.FifthHotSearch, R.id.sixthHotSearch,
+            R.id.firstHistorySearch, R.id.secondHistorySearch, R.id.ThirdHistorySearch, R.id.ForthHistorySearch,
+            R.id.FifthHistorySearch, R.id.sixthHistorySearch, R.id.seventhHistorySearch, R.id.eighthHistorySearch, R.id.ninthHistorySearch,
+            R.id.historyFlexboxLayout, R.id.clearHistory})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.firstHotSearch:
+                searchLabelClick(0, SEARCH_LABEL_HOT_TYPE);
+                break;
+            case R.id.secondHotSearch:
+                searchLabelClick(1, SEARCH_LABEL_HOT_TYPE);
+                break;
+            case R.id.ThirdHotSearch:
+                searchLabelClick(2, SEARCH_LABEL_HOT_TYPE);
+                break;
+            case R.id.ForthHotSearch:
+                searchLabelClick(3, SEARCH_LABEL_HOT_TYPE);
+                break;
+            case R.id.FifthHotSearch:
+                searchLabelClick(4, SEARCH_LABEL_HOT_TYPE);
+                break;
+            case R.id.sixthHotSearch:
+                searchLabelClick(5, SEARCH_LABEL_HOT_TYPE);
+                break;
+            case R.id.firstHistorySearch:
+                searchLabelClick(0, SEARCH_LABEL_HISTORY_TYPE);
+                break;
+            case R.id.secondHistorySearch:
+                searchLabelClick(1, SEARCH_LABEL_HISTORY_TYPE);
+                break;
+            case R.id.ThirdHistorySearch:
+                searchLabelClick(2, SEARCH_LABEL_HISTORY_TYPE);
+                break;
+            case R.id.ForthHistorySearch:
+                searchLabelClick(3, SEARCH_LABEL_HISTORY_TYPE);
+                break;
+            case R.id.FifthHistorySearch:
+                searchLabelClick(4, SEARCH_LABEL_HISTORY_TYPE);
+                break;
+            case R.id.sixthHistorySearch:
+                searchLabelClick(5, SEARCH_LABEL_HISTORY_TYPE);
+                break;
+            case R.id.seventhHistorySearch:
+                searchLabelClick(6, SEARCH_LABEL_HISTORY_TYPE);
+                break;
+            case R.id.eighthHistorySearch:
+                searchLabelClick(7, SEARCH_LABEL_HISTORY_TYPE);
+                break;
+            case R.id.ninthHistorySearch:
+                searchLabelClick(8, SEARCH_LABEL_HISTORY_TYPE);
+                break;
+            case R.id.clearHistory:
+                Preference.get().setHistorySearch(null);
+                HistorySearch.clear();
+                setHistorySearchLabel(null);
+                break;
+        }
+    }
+
+    private void searchLabelClick(int position, int searchLabelHotType) {
+        if (searchLabelHotType == SEARCH_LABEL_HOT_TYPE) {
+            if (position < mHotSearchList.size() && mOnSearchLabelClickListener != null) {
+                mOnSearchLabelClickListener.onSearchLabelClick(mHotSearchList.get(position));
+            }
+        } else if (searchLabelHotType == SEARCH_LABEL_HISTORY_TYPE) {
+            if (position < mHistorySearchList.size() && mOnSearchLabelClickListener != null) {
+                mOnSearchLabelClickListener.onSearchLabelClick(mHistorySearchList.get(position));
+            }
+        }
+    }
+
+    public void update() {
+
+    }
+
+
+    public interface OnSearchLabelClickListener {
+        void onSearchLabelClick(String values);
     }
 }

@@ -17,6 +17,7 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.ReplacementSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 
 
 public class StrUtil {
@@ -33,8 +34,16 @@ public class StrUtil {
         SpannableString spannableString = new SpannableString(values);
         if (!TextUtils.isEmpty(values)) {
             ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
-            int i = values.indexOf(changeColorText);
-            spannableString.setSpan(foregroundColorSpan, i, i + changeColorText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            int i = values.indexOf(changeColorText.toUpperCase());
+            if (i == -1) {
+                i = values.indexOf(changeColorText.toLowerCase());
+            }
+            int end = i + changeColorText.length();
+            if (end > values.length()) {
+                end = values.length();
+            }
+            if (i == -1) return spannableString;
+            spannableString.setSpan(foregroundColorSpan, i, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
         return spannableString;
     }

@@ -260,4 +260,34 @@ public class Author {
     public void setYesterdayFansCount(int yesterdayFansCount) {
         this.yesterdayFansCount = yesterdayFansCount;
     }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "articleCount=" + articleCount +
+                ", authInfo='" + authInfo + '\'' +
+                ", collectCount=" + collectCount +
+                ", createTime=" + createTime +
+                ", fansCount=" + fansCount +
+                ", id=" + id +
+                ", isAuthor=" + isAuthor +
+                ", isConcern=" + isConcern +
+                ", isRecommend=" + isRecommend +
+                ", praiseCount=" + praiseCount +
+                ", rankType=" + rankType +
+                ", rankTypeStr='" + rankTypeStr + '\'' +
+                ", readCount=" + readCount +
+                ", recommendTime=" + recommendTime +
+                ", remark='" + remark + '\'' +
+                ", setReadCount=" + setReadCount +
+                ", showReadCount=" + showReadCount +
+                ", updateTime=" + updateTime +
+                ", userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userPortrait='" + userPortrait + '\'' +
+                ", yesterdayReadCount=" + yesterdayReadCount +
+                ", yesterdayPraiseCount=" + yesterdayPraiseCount +
+                ", yesterdayFansCount=" + yesterdayFansCount +
+                '}';
+    }
 }

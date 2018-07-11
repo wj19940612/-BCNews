@@ -322,7 +322,7 @@ public class Preference {
         apply(Key.FIRST_OPEN_APP, false);
     }
 
-    public void setHistoryRearch(String values) {
+    public void setHistorySearch(String values) {
         apply(Key.SEARCH_HISTORY, values);
     }
 

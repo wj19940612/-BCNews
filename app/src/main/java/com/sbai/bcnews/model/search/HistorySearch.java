@@ -43,9 +43,18 @@ public class HistorySearch {
         if (sHistorySearchList.size() > HISTORY_SEARCH_LABEL_MAX_SIZE - 1) {
             sHistorySearchList.remove(sHistorySearchList.size() - 1);
         }
+        if (sHistorySearchList.contains(searchContent)) {
+            sHistorySearchList.remove(searchContent);
+        }
         sHistorySearchList.add(0, searchContent);
         String s = sGson.toJson(sHistorySearchList);
-        Preference.get().setHistoryRearch(s);
+        Preference.get().setHistorySearch(s);
+    }
+
+    public static void clear() {
+        if (sHistorySearchList != null)
+            sHistorySearchList.clear();
+        sHistorySearchList = null;
     }
 
 }

@@ -9,12 +9,12 @@
 
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/emptyView"
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/search_for_everything_you_want_to_see"/>
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="@string/search_for_everything_you_want_to_see"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/hotSearchLabel"

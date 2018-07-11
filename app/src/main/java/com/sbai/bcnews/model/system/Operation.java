@@ -12,13 +12,26 @@ public class Operation {
     public static final String OPERATION_TYPE_MARKET_PAGE_SWITCH = "quota";
     public static final String OPERATION_TYPE_WE_CHAT = "SYS_OPERATE_WX";
 
+    public static final String RECOMMEND_HOT_SEARCH_CONTENT = "ewqe";
+
     public static final String OPERATION_SETTING_OPEN_MARKET_PAGE = "1";
+
 
     private String SYS_OPERATE_WX;
 
     private String quota;
 
     private String SYS_OPERATE_EMAIL;
+
+    private String ewqe;
+
+    public String getEwqe() {
+        return ewqe;
+    }
+
+    public void setEwqe(String ewqe) {
+        this.ewqe = ewqe;
+    }
 
     public String getEmail() {
         return SYS_OPERATE_EMAIL;

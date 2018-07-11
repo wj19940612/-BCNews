@@ -8,10 +8,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.fragment.search.SearchSynthesizeFragment;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.search.HistorySearch;
+import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.view.search.SearchEditText;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
@@ -20,7 +26,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SearchActivity extends BaseActivity implements SearchEditText.OnSearchContentListener {
+public class SearchActivity extends BaseActivity implements SearchEditText.OnSearchContentListener, SearchSynthesizeFragment.OnSearchLabelSelectListener {
+
+    public static final int FRAGMENT_SYNTHESIZE_POSITION = 0;
+    public static final int FRAGMENT_AUTHOR_POSITION = 1;
+    public static final int FRAGMENT_ARTICLE_POSITION = 2;
+    public static final int FRAGMENT_NEWS_FLASH_POSITION = 3;
 
 
     @BindView(R.id.searchEditText)
@@ -31,24 +42,27 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
     SlidingTabLayout mSlidingTabLayout;
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
+
     private SearchContentFragmentAdapter mSearchContentFragmentAdapter;
 
-    private SearchSynthesizeFragment mSearchSynthesizeFragment;
+    SearchSynthesizeFragment mSearchSynthesizeFragment;
+
+    private int mFragmentPosition;
+
+    public ViewPager getViewPager() {
+        return mViewPager;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
-        translucentStatusBar();
-
         init();
     }
 
     private void init() {
         mSearchEditText.setOnSearchContentListener(this);
-        mSearchEditText.setHint(R.string.please_input_antistop);
-
         mSearchContentFragmentAdapter = new SearchContentFragmentAdapter(getSupportFragmentManager(), getActivity());
         mViewPager.setAdapter(mSearchContentFragmentAdapter);
         mViewPager.setOffscreenPageLimit(4);
@@ -63,19 +77,41 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
         mSlidingTabLayout.setHasBottomBorder(true);
         mSlidingTabLayout.setViewPager(mViewPager);
 
-        mViewPager.post(() -> {
-            SearchSynthesizeFragment searchSynthesizeFragment = getSearchSynthesizeFragment();
-            if (searchSynthesizeFragment != null) {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mFragmentPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
+
+        requestRecommendContent();
+    }
+
+    private void requestRecommendContent() {
+        Apic.requestOperationSetting(Operation.OPERATION_TYPE_WE_CHAT)
+                .tag(TAG)
+                .callback(new Callback2D<Resp<Operation>, Operation>() {
+                    @Override
+                    protected void onRespSuccessData(Operation data) {
+                        if (TextUtils.isEmpty(data.getEwqe())) return;
+                        mSearchEditText.setHint(data.getEwqe());
+                    }
+                })
+                .fire();
     }
 
     private SearchSynthesizeFragment getSearchSynthesizeFragment() {
-        if (mSearchSynthesizeFragment != null) return mSearchSynthesizeFragment;
-        SearchSynthesizeFragment fragment = (SearchSynthesizeFragment) mSearchContentFragmentAdapter.getFragment(0);
-        mSearchSynthesizeFragment = fragment;
-        return fragment;
+        return (SearchSynthesizeFragment) mSearchContentFragmentAdapter.getFragment(FRAGMENT_SYNTHESIZE_POSITION);
     }
 
 
@@ -86,8 +122,50 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
 
     @Override
     public void onSearchContent(String values) {
+        if (mSearchSynthesizeFragment == null) {
+            mSearchSynthesizeFragment = getSearchSynthesizeFragment();
+        }
 
+        if (mSearchSynthesizeFragment != null) {
+            mSearchSynthesizeFragment.updateSearchContent(values);
+        }
     }
+
+    @Override
+    public void onKeyBoardSearch(String values) {
+        mSearchEditText.setText(values);
+        updateSearchValues(values);
+    }
+
+    @Override
+    public void onSearchLabelSelect(String values) {
+        mSearchEditText.setText(values);
+        updateSearchValues(values);
+    }
+
+    private void updateSearchValues(String values) {
+        HistorySearch.updateHistorySearch(values);
+        SearchSynthesizeFragment searchSynthesizeFragment = getSearchSynthesizeFragment();
+        if (searchSynthesizeFragment != null) {
+            searchSynthesizeFragment.setSearchContent(values);
+        }
+
+//        switch (mFragmentPosition) {
+//            case FRAGMENT_SYNTHESIZE_POSITION:
+//
+//                break;
+//            case FRAGMENT_AUTHOR_POSITION:
+//                // TODO: 2018/7/11 作者页面
+//                break;
+//            case FRAGMENT_ARTICLE_POSITION:
+//                // TODO: 2018/7/11  文章页面
+//                break;
+//            case FRAGMENT_NEWS_FLASH_POSITION:
+//                // TODO: 2018/7/11 快讯
+//                break;
+//        }
+    }
+
 
     private static class SearchContentFragmentAdapter extends FragmentPagerAdapter {
 
