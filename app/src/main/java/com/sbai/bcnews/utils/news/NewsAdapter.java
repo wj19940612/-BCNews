@@ -17,6 +17,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.glide.GlideApp;
 
@@ -40,6 +41,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private NewsAdapter.OnItemClickListener mOnItemClickListener;
     private boolean mSplitViewVisible;
     private boolean mHasFoot;
+    private String mSearchContent;
 
     public NewsAdapter(Context context, List<NewsWrap> newsWraps, OnItemClickListener onItemClickListener) {
         mContext = context;
@@ -53,6 +55,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         items = newsWraps;
         mOnItemClickListener = onItemClickListener;
         mSplitViewVisible = splitViewVisible;
+    }
+
+    public void setSearchContent(String searchContent) {
+        mSearchContent = searchContent;
     }
 
     public void setHasFoot(boolean hasFoot) {
@@ -92,11 +98,11 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof NewsAdapter.NoneHolder) {
-            ((NewsAdapter.NoneHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot);
+            ((NewsAdapter.NoneHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot, mSearchContent);
         } else if (holder instanceof NewsAdapter.SingleHolder) {
-            ((NewsAdapter.SingleHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot);
+            ((NewsAdapter.SingleHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot, mSearchContent);
         } else {
-            ((NewsAdapter.ThreeHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mHasFoot);
+            ((NewsAdapter.ThreeHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mHasFoot, mSearchContent);
         }
     }
 
@@ -111,10 +117,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView mOriginal;
         @BindView(R.id.source)
         TextView mSource;
-        @BindView(R.id.time)
-        TextView mTime;
-        @BindView(R.id.readCount)
-        TextView mReadCount;
         @BindView(R.id.contentRL)
         RelativeLayout mContentRL;
         @BindView(R.id.line)
@@ -128,14 +130,14 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot) {
+                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot, String searchContent) {
             if (position == 0 && splitViewVisible) {
                 mSplitView.setVisibility(View.VISIBLE);
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
 
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter, mReadCount);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent);
         }
     }
 
@@ -152,10 +154,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView mOriginal;
         @BindView(R.id.source)
         TextView mSource;
-        @BindView(R.id.time)
-        TextView mTime;
-        @BindView(R.id.readCount)
-        TextView mReadCount;
         @BindView(R.id.contentRL)
         RelativeLayout mContentRL;
         @BindView(R.id.line)
@@ -169,13 +167,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot) {
+                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot, String searchContent) {
             if (position == 0 && splitViewVisible) {
                 mSplitView.setVisibility(View.VISIBLE);
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter, mReadCount);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent);
 
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg.setVisibility(View.VISIBLE);
@@ -204,10 +202,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView mOriginal;
         @BindView(R.id.source)
         TextView mSource;
-        @BindView(R.id.time)
-        TextView mTime;
-        @BindView(R.id.readCount)
-        TextView mReadCount;
         @BindView(R.id.contentRL)
         RelativeLayout mContentRL;
         @BindView(R.id.line)
@@ -221,9 +215,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot) {
+                                final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, String searchContent) {
 
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mTime, mOriginal, mContentRL, mLine, mFooter, mReadCount);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent);
 
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg1.setVisibility(View.VISIBLE);
@@ -261,27 +255,27 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * 显示三种Type都需要显示的View的内容
      */
     public static void setBasicView(final Context context, final NewsDetail item, int position, int count,
-                                    final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, final TextView mTitle, TextView mSource, TextView mTime, ImageView mOriginal, RelativeLayout mContentRL, View mLine, View mFooter, TextView mReadCount) {
+                                    final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, final TextView mTitle, TextView mSource, ImageView mOriginal, RelativeLayout mContentRL, View mLine, View mFooter, String searchContent) {
         if (item.getIsAdvert() > 0) {
             mTitle.setText(item.getAdvertCopyWriter());
-            mSource.setText(item.getAdvertName());
-            mSource.setVisibility(View.VISIBLE);
-            mTime.setText(context.getString(R.string.point_x, context.getString(R.string.advert)));
+            mSource.setText(context.getString(R.string.source_x_time_x_read_x, item.getAdvertName(), context.getString(R.string.advert), ""));
         } else {
-            mTitle.setText(item.getTitle());
-            if (TextUtils.isEmpty(item.getAuthor())) {
-                mSource.setVisibility(View.GONE);
-                mTime.setText(DateUtil.formatDefaultStyleTime(item.getReleaseTime()));
+            if (TextUtils.isEmpty(searchContent)) {
+                mTitle.setText(item.getTitle());
             } else {
-                mSource.setText(item.getAuthor());
-                mSource.setVisibility(View.VISIBLE);
-                mTime.setText(context.getString(R.string.point_x, DateUtil.formatDefaultStyleTime(item.getReleaseTime())));
+                mTitle.setText(StrUtil.changeSpecialTextColor(item.getTitle().trim(), searchContent, ContextCompat.getColor(context, R.color.colorPrimary)));
             }
-        }
-        if (item.getShowReadCount() > 99999) {
-            mReadCount.setText(context.getString(R.string.x_ten_thousand_people_read, item.getShowReadCount() / 10000));
-        } else {
-            mReadCount.setText(context.getString(R.string.x_people_read, item.getShowReadCount()));
+            String readCount;
+            if (item.getShowReadCount() > 99999) {
+                readCount = context.getString(R.string.x_ten_thousand_people_read, item.getShowReadCount() / 10000);
+            } else {
+                readCount = context.getString(R.string.x_people_read, item.getShowReadCount());
+            }
+            if (TextUtils.isEmpty(item.getAuthor())) {
+                mSource.setText(context.getString(R.string.time_x_read_x, DateUtil.formatDefaultStyleTime(item.getReleaseTime()), readCount));
+            } else {
+                mSource.setText(context.getString(R.string.source_x_time_x_read_x, item.getAuthor(), DateUtil.formatDefaultStyleTime(item.getReleaseTime()), readCount));
+            }
         }
         mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
         mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);

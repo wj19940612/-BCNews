@@ -496,6 +496,12 @@
     <string name="please_set_login_password">为保障账户安全，请设置登录密码</string>
     <string name="share_candy">分享糖果</string>
 
+    <string name="click_require">点击领取</string>
+    <string name="has_get">已领取</string>
+    <string name="today_upper_limit">今日领取已达上限</string>
+
+    <string name="source_x_time_x_read_x">%1$s&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;%2$s&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;%3$s</string>
+    <string name="time_x_read_x">%1$s&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;%2$s</string>
     <!--搜索-->
     <string name="synthesize">综合</string>
     <string name="author">作者</string>

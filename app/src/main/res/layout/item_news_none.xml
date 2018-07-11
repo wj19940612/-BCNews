@@ -17,66 +17,48 @@
     <RelativeLayout
         android:id="@+id/contentRL"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="14dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:paddingBottom="10dp"
         android:paddingTop="16dp">
+
+        <View
+            android:id="@+id/viewStub"
+            android:layout_width="match_parent"
+            android:layout_height="44dp" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxLines="3"
+            android:maxLines="2"
             android:textColor="@color/text_222"
             android:textSize="15sp"
             android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/original"
-            android:layout_width="24dp"
-            android:layout_height="13dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewStub"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/bg_original"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <TextView
             android:id="@+id/source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="8dp"
+            android:layout_below="@+id/viewStub"
+            android:layout_marginTop="15dp"
             android:layout_toRightOf="@+id/original"
             android:gravity="center"
             android:text="@string/original"
             android:textColor="@color/text_999"
-            android:textSize="11sp"/>
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="5dp"
-            android:layout_toRightOf="@+id/source"
-            android:gravity="center"
-            android:text="@string/original"
-            android:textColor="@color/text_999"
-            android:textSize="11sp"/>
-
-        <TextView
-            android:id="@+id/readCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="5dp"
-            android:text="2000人阅读"
-            android:textColor="@color/text_999"
+            android:includeFontPadding="false"
             android:textSize="11sp"/>
     </RelativeLayout>
 

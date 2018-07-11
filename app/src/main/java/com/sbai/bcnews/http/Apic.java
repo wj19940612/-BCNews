@@ -1145,4 +1145,28 @@ public class Apic {
     public static Api requestStartWindow() {
         return Api.get("/api/news-user/window/list.do");
     }
+
+    /**
+     * 搜索快讯
+     * @return
+     */
+    public static Api requestSearchFlashNews(String searchContent,int page){
+        return Api.get("/api/news-info/news/search/information.do",new ReqParams().put("word",searchContent).put("page",page).put("size",DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * 搜索作者
+     * @return
+     */
+    public static Api requestSearchAuthor(String searchContent,int page){
+        return Api.get("/api/news-info/news/search/author.do",new ReqParams().put("word",searchContent).put("page",page).put("size",DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * 搜索快讯
+     * @return
+     */
+    public static Api requestSearchNews(String searchContent,int page){
+        return Api.get("/api/news-info/news/search/bitcoin.do",new ReqParams().put("word",searchContent).put("page",page).put("size",DEFAULT_PAGE_SIZE));
+    }
 }

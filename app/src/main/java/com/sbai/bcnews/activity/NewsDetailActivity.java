@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -233,6 +234,14 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     TextView mThirdReadCount;
     @BindView(R.id.authorLl)
     LinearLayout mAuthorLl;
+    @BindView(R.id.roundPercent)
+    ImageView mRoundPercent;
+    @BindView(R.id.readPercent)
+    TextView mReadPercent;
+    @BindView(R.id.rateStatus)
+    TextView mRateStatus;
+    @BindView(R.id.percentLayout)
+    RelativeLayout mPercentLayout;
 
 
     private WebViewClient mWebViewClient;
@@ -439,7 +448,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             R.id.bottomShareIcon, R.id.wxShare, R.id.circleShare, R.id.praiseLayout,
             R.id.firstArticle, R.id.secondArticle, R.id.thirdArticle,
             R.id.firstPoint, R.id.secondPoint, R.id.allComment,
-            R.id.authorAttention, R.id.authorInfo})
+            R.id.authorAttention, R.id.authorInfo, R.id.percentLayout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.titleBar:
@@ -513,6 +522,9 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
                     Launcher.with(getActivity(), AuthorActivity.class)
                             .putExtra(ExtraKeys.ID, newsDetail1.getAuthorId())
                             .executeForResult(AuthorActivity.REQ_CODE_ATTENTION_AUTHOR);
+                break;
+            case R.id.percentLayout:
+                clickPercent();
                 break;
 
         }
@@ -597,8 +609,9 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         super.onPostResume();
         updateOtherData(mOtherArticleList);
         requestNewsViewpoint();
-        if (LocalUser.getUser().isLogin()) {
+        if (LocalUser.getUser().isLogin() && mReadArticleTime < TIME_COUNT_GET_HASH_RATE) {
             startScheduleJob(TIME_SECOND);
+            startReadAnim();
         }
     }
 
@@ -606,14 +619,12 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        getLastReadTime();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         GlideApp.with(getActivity()).onStop();
-        saveReadTime();
     }
 
 
@@ -631,20 +642,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     public void onBackPressed() {
         saveDetailCache();
         super.onBackPressed();
-    }
-
-    private void getLastReadTime() {
-        mReadArticleTime = Preference.get().getLastReadTime();
-        if (mReadArticleTime >= TIME_COUNT_GET_HASH_RATE) {
-            mReadArticleTime = 0;
-        }
-    }
-
-    private void saveReadTime() {
-        if (mReadArticleTime >= TIME_COUNT_GET_HASH_RATE) {
-            mReadArticleTime = 0;
-        }
-        Preference.get().setReadTime(mReadArticleTime);
     }
 
     private void openNewsDetailsPage(int position) {
@@ -865,14 +862,16 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         } else if (mScrolling) {
             mScrollIdleTime = 0;
         }
+        //如果超过45s不滚动则不进行阅读计时,开始滚动后才开始计时
         if (mScrollIdleTime != 0 && count - mScrollIdleTime >= TIME_COUNT_DELAY) {
             return;
         } else {
             mReadArticleTime++;
+            updateReadAnimStatus();
         }
         if (mReadArticleTime == TIME_COUNT_GET_HASH_RATE) {
-            readAddQKC();
-            mReadArticleTime = 0;
+            updateReadFinishStatus();
+//            mReadArticleTime = 0;
         }
 //        mTitleHeight = mTitleLayout.getMeasuredHeight();
 //        int webViewHeight = mWebView.getHeight();
@@ -890,6 +889,31 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 //        }
     }
 
+    private void startReadAnim() {
+        mRoundPercent.startAnimation(AnimationUtils.loadAnimation(this, R.anim.read_anim));
+        mPercentLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void updateReadAnimStatus() {
+        String percent = mReadArticleTime* 100 / TIME_COUNT_GET_HASH_RATE + "%";
+        mReadPercent.setText(percent);
+    }
+
+    private void updateReadFinishStatus() {
+        stopScheduleJob();
+        mRateStatus.setText(R.string.click_require);
+        mRoundPercent.clearAnimation();
+        mReadPercent.setText("");
+        mReadPercent.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.ic_news_rate_readed));
+        mRoundPercent.setBackgroundDrawable(null);
+    }
+
+    private void clickPercent() {
+        if (mReadArticleTime == TIME_COUNT_GET_HASH_RATE) {
+            readAddQKC();
+        }
+    }
+
     private void readAddQKC() {
         Apic.requestHashRate(QKC.TYPE_READ_ARTICLE).tag(TAG).callback(new Callback2D<Resp<Integer>, Integer>() {
 
@@ -897,9 +921,23 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
             protected void onRespSuccessData(Integer data) {
                 if (data != null && data > 0) {
                     ToastUtil.show(NewsDetailActivity.this, getString(R.string.get_read_hash_data_x, data), Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, mTitleLayout.getMeasuredHeight());
+                    updateGetRateStatus(true);
+                } else if (data != null && data == 0) {
+                    updateGetRateStatus(false);
                 }
             }
         }).fireFreely();
+    }
+
+    private void updateGetRateStatus(boolean hasGet) {
+        mPercentLayout.setClickable(false);
+        mReadPercent.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.ic_news_rate_has_get));
+        mRateStatus.setTextColor(ContextCompat.getColor(this,R.color.text_cb));
+        if (hasGet) {
+            mRateStatus.setText(R.string.has_get);
+        } else {
+            mRateStatus.setText(R.string.today_upper_limit);
+        }
     }
 
     private void initScrollView() {

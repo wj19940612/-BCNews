@@ -392,6 +392,7 @@ public class LoginActivity extends WeChatActivity {
 
     private void updateBindPhoneViews() {
         mPageTitle.setText(R.string.password_login);
+        mRegisterBtn.setVisibility(View.GONE);
         mAuthCodeArea.setVisibility(View.GONE);
         mPassword.setVisibility(View.VISIBLE);
         mPassLogin.setText(R.string.tel_auth_code_login);
@@ -580,6 +581,7 @@ public class LoginActivity extends WeChatActivity {
     private void switchLoginMode() {
         if (isAuthCodeLogin()) { // 当前是验证码登录 -> 密码登录
             mPageTitle.setText(R.string.password_login);
+            mRegisterBtn.setVisibility(View.VISIBLE);
             mAuthCodeArea.setVisibility(View.GONE);
             mPassword.setVisibility(View.VISIBLE);
             mPassLogin.setText(R.string.tel_auth_code_login);
@@ -594,6 +596,7 @@ public class LoginActivity extends WeChatActivity {
             }
         } else {
             mPageTitle.setText(R.string.auth_code_login);
+            mRegisterBtn.setVisibility(View.GONE);
             mPassLogin.setText(R.string.tel_pass_login);
             mAuthCodeArea.setVisibility(View.VISIBLE);
             mPassword.setVisibility(View.GONE);
