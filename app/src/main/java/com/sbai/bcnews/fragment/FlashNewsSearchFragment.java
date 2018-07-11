@@ -1,7 +1,7 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,16 +21,13 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ShareNewsFlashActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
-import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.ListResp;
-import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.NewsFlash;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
-import com.sbai.bcnews.view.EmptyView;
-import com.sbai.bcnews.view.TitleBar;
 import com.umeng.analytics.MobclickAgent;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
@@ -116,9 +113,15 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
         requestNewsFlash(true);
     }
 
+    public void setSearchContent(String searchContent){
+        mSearchContent = searchContent;
+        requestNewsFlash(true);
+    }
+
     private void requestNewsFlash(final boolean isRefresh) {
         if (!TextUtils.isEmpty(mSearchContent)) {
-            Apic.requestSearchFlashNews(mSearchContent, mPage).tag(TAG).callback(new Callback<ListResp<NewsFlash>>() {
+            String searchContent = Uri.encode(mSearchContent);
+            Apic.requestSearchFlashNews(searchContent, mPage).tag(TAG).callback(new Callback<ListResp<NewsFlash>>() {
                 @Override
                 protected void onRespSuccess(ListResp<NewsFlash> resp) {
                     updateData(mSearchContent, resp.getListData(), isRefresh);
@@ -135,14 +138,13 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void updateData(String searchContent, List<NewsFlash> data, boolean isRefresh) {
-        if (isRefresh) {
-            mData.clear();
-        }
         if (TextUtils.isEmpty(searchContent) || data == null) {
             mNewsAdapter.notifyDataSetChanged();
             return;
         }
-
+        if (isRefresh) {
+            mData.clear();
+        }
         mNewsAdapter.setSearchContent(searchContent);
         mData.addAll(data);
         if (mData.size() >= Apic.DEFAULT_PAGE_SIZE && data.size() < Apic.DEFAULT_PAGE_SIZE) {
@@ -238,12 +240,10 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
                 if (TextUtils.isEmpty(newsFlash.getTitle())) {
                     mTitle.setVisibility(View.GONE);
                     mContent.setText(newsFlash.getContent().trim());
-                    mContent.setTextColor(Color.parseColor("#494949"));
                 } else {
-                    setSearchTitle(mTitle,searchContent,newsFlash.getTitle());
+                    setSearchTitle(mTitle,searchContent,newsFlash.getTitle(),context);
                     mTitle.setVisibility(View.VISIBLE);
                     mContent.setText(newsFlash.getContent());
-                    mContent.setTextColor(ContextCompat.getColor(context, R.color.text_4949));
                 }
                 mShare.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -275,8 +275,9 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
                 });
             }
 
-            private void setSearchTitle(TextView titleView,String searchContent,String title){
+            private void setSearchTitle(TextView titleView,String searchContent,String title,Context context){
                 title = title.replace("【", "").replace("】", "").trim();
+                titleView.setText(StrUtil.changeSpecialTextColor(title,searchContent,ContextCompat.getColor(context,R.color.colorPrimary)));
             }
         }
     }

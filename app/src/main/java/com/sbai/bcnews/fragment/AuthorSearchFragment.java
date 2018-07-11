@@ -1,6 +1,7 @@
 package com.sbai.bcnews.fragment;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,12 +23,14 @@ import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.NewsFlash;
 import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.view.HasLabelLayout;
 import com.sbai.bcnews.view.dialog.AttentionDialog;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
@@ -150,12 +153,18 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
         }).fire();
     }
 
+    public void setSearchContent(String searchContent){
+        mSearchContent = searchContent;
+        requestAuthor(true);
+    }
+
     private void requestAuthor(final boolean isRefresh){
         if (!TextUtils.isEmpty(mSearchContent)) {
-            Apic.requestSearchFlashNews(mSearchContent, mPage).tag(TAG).callback(new Callback2D<Resp<List<Author>>, List<Author>>() {
+            String searchContent = Uri.encode(mSearchContent);
+            Apic.requestSearchAuthor(searchContent, mPage).tag(TAG).callback(new Callback<ListResp<Author>>() {
                 @Override
-                protected void onRespSuccessData(List<Author> data) {
-                    updateData(mSearchContent, data, isRefresh);
+                protected void onRespSuccess(ListResp<Author> resp) {
+                    updateData(mSearchContent, resp.getListData(), isRefresh);
                 }
 
                 @Override
@@ -213,7 +222,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ((ViewHolder) holder).bindingData(mContext, mNewsAuthorList.get(position), position, mOnItemClickListener);
+            ((ViewHolder) holder).bindingData(mContext, mNewsAuthorList.get(position), position, mOnItemClickListener,mSearchContent);
         }
 
         @Override
@@ -238,7 +247,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(Context context, final Author newsAuthor, final int position, final AttentionFragment.OnItemClickListener onItemClickListener) {
+            private void bindingData(Context context, final Author newsAuthor, final int position, final AttentionFragment.OnItemClickListener onItemClickListener,String searchContent) {
                 mHead.setImageSrc(newsAuthor.getUserPortrait());
                 if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_OFFICIAL) {
                     mHead.setLabelImageViewVisible(true);
@@ -250,7 +259,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
                     mHead.setLabelImageViewVisible(false);
                 }
 
-                mName.setText(newsAuthor.getUserName());
+                mName.setText(StrUtil.changeSpecialTextColor(newsAuthor.getUserName(),searchContent,ContextCompat.getColor(context,R.color.colorPrimary)));
                 if (!LocalUser.getUser().isLogin()) {
                     setNoAttentionBtn(mAttentionBtn, false, context);
                 } else {

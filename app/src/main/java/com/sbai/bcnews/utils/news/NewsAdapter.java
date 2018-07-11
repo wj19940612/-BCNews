@@ -17,6 +17,7 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.glide.GlideApp;
 
@@ -40,6 +41,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private NewsAdapter.OnItemClickListener mOnItemClickListener;
     private boolean mSplitViewVisible;
     private boolean mHasFoot;
+    private String mSearchContent;
 
     public NewsAdapter(Context context, List<NewsWrap> newsWraps, OnItemClickListener onItemClickListener) {
         mContext = context;
@@ -53,6 +55,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         items = newsWraps;
         mOnItemClickListener = onItemClickListener;
         mSplitViewVisible = splitViewVisible;
+    }
+
+    public void setSearchContent(String searchContent) {
+        mSearchContent = searchContent;
     }
 
     public void setHasFoot(boolean hasFoot) {
@@ -92,11 +98,11 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof NewsAdapter.NoneHolder) {
-            ((NewsAdapter.NoneHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot);
+            ((NewsAdapter.NoneHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot, mSearchContent);
         } else if (holder instanceof NewsAdapter.SingleHolder) {
-            ((NewsAdapter.SingleHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot);
+            ((NewsAdapter.SingleHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot, mSearchContent);
         } else {
-            ((NewsAdapter.ThreeHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mHasFoot);
+            ((NewsAdapter.ThreeHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mHasFoot, mSearchContent);
         }
     }
 
@@ -124,14 +130,14 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot) {
+                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot, String searchContent) {
             if (position == 0 && splitViewVisible) {
                 mSplitView.setVisibility(View.VISIBLE);
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
 
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent);
         }
     }
 
@@ -161,13 +167,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot) {
+                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot, String searchContent) {
             if (position == 0 && splitViewVisible) {
                 mSplitView.setVisibility(View.VISIBLE);
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent);
 
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg.setVisibility(View.VISIBLE);
@@ -209,9 +215,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot) {
+                                final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, String searchContent) {
 
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent);
 
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg1.setVisibility(View.VISIBLE);
@@ -249,12 +255,16 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * 显示三种Type都需要显示的View的内容
      */
     public static void setBasicView(final Context context, final NewsDetail item, int position, int count,
-                                    final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, final TextView mTitle, TextView mSource, ImageView mOriginal, RelativeLayout mContentRL, View mLine, View mFooter) {
+                                    final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, final TextView mTitle, TextView mSource, ImageView mOriginal, RelativeLayout mContentRL, View mLine, View mFooter, String searchContent) {
         if (item.getIsAdvert() > 0) {
             mTitle.setText(item.getAdvertCopyWriter());
             mSource.setText(context.getString(R.string.source_x_time_x_read_x, item.getAdvertName(), context.getString(R.string.advert), ""));
         } else {
-            mTitle.setText(item.getTitle());
+            if (TextUtils.isEmpty(searchContent)) {
+                mTitle.setText(item.getTitle());
+            } else {
+                mTitle.setText(StrUtil.changeSpecialTextColor(item.getTitle().trim(), searchContent, ContextCompat.getColor(context, R.color.colorPrimary)));
+            }
             String readCount;
             if (item.getShowReadCount() > 99999) {
                 readCount = context.getString(R.string.x_ten_thousand_people_read, item.getShowReadCount() / 10000);

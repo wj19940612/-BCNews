@@ -1,10 +1,12 @@
 package com.sbai.bcnews.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,9 @@ import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.model.News;
@@ -58,12 +62,12 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
     private List<NewsWrap> mData;
     private NewsAdapter mNewsAdapter;
 
-    public static AuthorSearchFragment newsInstance(String searchContent) {
-        AuthorSearchFragment authorSearchFragment = new AuthorSearchFragment();
+    public static ArticleSearchFragment newsInstance(String searchContent) {
+        ArticleSearchFragment articleSearchFragment = new ArticleSearchFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ExtraKeys.SEARCH_CONTENT, searchContent);
-        authorSearchFragment.setArguments(bundle);
-        return authorSearchFragment;
+        articleSearchFragment.setArguments(bundle);
+        return articleSearchFragment;
     }
 
     @Override
@@ -119,17 +123,32 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
         requestNews(true);
     }
 
-    private void requestNews(final boolean isRefresh) {
-        Apic.requestSearchNews(mSearchContent, mPage).tag(TAG).callback(new Callback2D<Resp<List<NewsDetail>>, List<NewsDetail>>() {
-            @Override
-            protected void onRespSuccessData(List<NewsDetail> data) {
-                updateData(data,isRefresh);
-            }
-        }).fireFreely();
+    public void setSearchContent(String searchContent){
+        mSearchContent = searchContent;
+        requestNews(true);
     }
 
-    private void updateData(List<NewsDetail> data, boolean refresh) {
-        if (data == null || data.size() == 0) {
+    private void requestNews(final boolean isRefresh) {
+        if (!TextUtils.isEmpty(mSearchContent)) {
+            String searchContent = Uri.encode(mSearchContent);
+            Apic.requestSearchNews(searchContent, mPage).tag(TAG).callback(new Callback<ListResp<NewsDetail>>() {
+                @Override
+                protected void onRespSuccess(ListResp<NewsDetail> resp) {
+                    updateData(resp.getListData(), isRefresh, mSearchContent);
+                }
+
+
+                @Override
+                public void onFinish() {
+                    super.onFinish();
+                    stopFreshOrLoadAnimation();
+                }
+            }).fireFreely();
+        }
+    }
+
+    private void updateData(List<NewsDetail> data, boolean refresh, String searchContent) {
+        if (data == null || TextUtils.isEmpty(mSearchContent)) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
             refreshFoot(0);
             mNewsAdapter.notifyDataSetChanged();
@@ -143,8 +162,10 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
         } else {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);
         }
-        if (data.size() != 0)
+        if (data.size() != 0) {
             mPage++;
+        }
+        mNewsAdapter.setSearchContent(searchContent);
         mData.addAll(NewsWrap.updateImgType(data));
         refreshFoot(data.size());
         mNewsAdapter.notifyDataSetChanged();

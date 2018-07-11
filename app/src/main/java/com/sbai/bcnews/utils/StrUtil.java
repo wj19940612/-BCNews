@@ -34,7 +34,33 @@ public class StrUtil {
         if (!TextUtils.isEmpty(values)) {
             ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
             int i = values.indexOf(changeColorText);
-            spannableString.setSpan(foregroundColorSpan, i, i + changeColorText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            if (i >= 0) {
+                spannableString.setSpan(foregroundColorSpan, i, i + changeColorText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            }
+        }
+        return spannableString;
+    }
+
+    /**
+     * 设置某一段文字中几个字颜色变化
+     *
+     * @param values          总的文本
+     * @param changeColorText values 中将要变化颜色的文字
+     * @param color
+     * @return
+     */
+    public static SpannableString changeAllSpecialTextColor(String values, String changeColorText, @ColorInt int color) {
+        SpannableString spannableString = new SpannableString(values);
+        int addIndex = 0;
+        if (!TextUtils.isEmpty(values)) {
+            int index = values.indexOf(changeColorText);
+            while (index >= 0) {
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
+                spannableString.setSpan(foregroundColorSpan, index + addIndex, index + addIndex + changeColorText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                values = values.substring(index + changeColorText.length(), values.length());
+                addIndex = addIndex + index + changeColorText.length();
+                index = values.indexOf(changeColorText);
+            }
         }
         return spannableString;
     }
