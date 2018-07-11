@@ -12,6 +12,9 @@ import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.fragment.ArticleSearchFragment;
+import com.sbai.bcnews.fragment.AuthorSearchFragment;
+import com.sbai.bcnews.fragment.FlashNewsSearchFragment;
 import com.sbai.bcnews.fragment.search.SearchSynthesizeFragment;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback2D;
@@ -114,6 +117,17 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
         return (SearchSynthesizeFragment) mSearchContentFragmentAdapter.getFragment(FRAGMENT_SYNTHESIZE_POSITION);
     }
 
+    private AuthorSearchFragment getSearchAuthorFragment() {
+        return (AuthorSearchFragment) mSearchContentFragmentAdapter.getFragment(FRAGMENT_AUTHOR_POSITION);
+    }
+
+    private ArticleSearchFragment getSearchArticleFragment() {
+        return (ArticleSearchFragment) mSearchContentFragmentAdapter.getFragment(FRAGMENT_ARTICLE_POSITION);
+    }
+
+    private FlashNewsSearchFragment getSearchFlashNewsFragment() {
+        return (FlashNewsSearchFragment) mSearchContentFragmentAdapter.getFragment(FRAGMENT_NEWS_FLASH_POSITION);
+    }
 
     @OnClick(R.id.cancel)
     public void onViewClicked() {
@@ -150,6 +164,21 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
             searchSynthesizeFragment.setSearchContent(values);
         }
 
+        AuthorSearchFragment authorSearchFragment = getSearchAuthorFragment();
+        if (authorSearchFragment != null) {
+            authorSearchFragment.setSearchContent(values);
+        }
+
+        ArticleSearchFragment articleSearchFragment = getSearchArticleFragment();
+        if (articleSearchFragment != null) {
+            articleSearchFragment.setSearchContent(values);
+        }
+
+        FlashNewsSearchFragment flashNewsSearchFragment = getSearchFlashNewsFragment();
+        if (flashNewsSearchFragment != null) {
+            flashNewsSearchFragment.setSearchContent(values);
+        }
+
 //        switch (mFragmentPosition) {
 //            case FRAGMENT_SYNTHESIZE_POSITION:
 //
@@ -183,6 +212,12 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
             switch (position) {
                 case 0:
                     return new SearchSynthesizeFragment();
+                case 1:
+                    return new AuthorSearchFragment();
+                case 2:
+                    return new ArticleSearchFragment();
+                case 3:
+                    return new FlashNewsSearchFragment();
 
             }
             return null;
@@ -190,7 +225,7 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
 
         @Override
         public int getCount() {
-            return 1;
+            return 4;
         }
 
         @Nullable
