@@ -325,9 +325,9 @@
 
 
     <string name="the_hour_of_welfare">整点福利</string>
-    <string name="rob">抢</string>
+    <string name="rob">开抢</string>
     <string name="already_rob_empty">已抢光</string>
-    <string name="distance_nex_red_packet_time">距离下次抢红包剩余：%1$s</string>
+    <string name="distance_nex_red_packet_time">距离抢包剩余：%1$s</string>
     <string name="congrats_you_rob_number_red_packet">恭喜您！ 抢到</string>
     <string name="save_account">\n已存入账户</string>
     <string name="number_qks">%1$sQKC</string>
@@ -380,10 +380,10 @@
     <string name="click_copy">(点击复制)</string>
     <string name="no_detail">暂无明细</string>
 
-    <string name="congratulations_login_success">恭喜您登录成功</string>
-    <string name="congratulations_register_success">恭喜您注册成功</string>
-    <string name="login_award_x">获得登录奖励+%1$d积分</string>
-    <string name="register_award_x">获得注册奖励+%1$d算力</string>
+    <string name="congratulations_login_success">恭喜您，登录成功</string>
+    <string name="congratulations_register_success">恭喜您，注册成功</string>
+    <string name="login_award_x">·您获得登录奖励+%1$d积分已放入账户!\n·同时可邀请好友拿QKC赚现金奖励哦！</string>
+    <string name="register_award_x">·您获得注册奖励+%1$d算力已放入账户!\n·同时可邀请好友拿QKC赚现金奖励哦！</string>
 
     <string name="conversion_price_x">兑换：%1$sQKC</string>
     <string name="conversion_margin_x">余量 %1$d</string>

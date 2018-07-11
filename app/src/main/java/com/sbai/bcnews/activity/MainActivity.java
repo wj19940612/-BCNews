@@ -1,6 +1,5 @@
 package com.sbai.bcnews.activity;
 
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -38,7 +37,6 @@ import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.BottomTabs;
 import com.sbai.bcnews.view.ScrollableViewPager;
-import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.bcnews.view.dialog.RegisterScoreDialog;
 
 import java.util.List;
@@ -47,9 +45,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.sbai.bcnews.view.dialog.RegisterScoreDialog.Style.LOGIN;
-import static com.sbai.bcnews.view.dialog.RegisterScoreDialog.Style.REGISTER;
 
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity {
     public static final int PAGE_POSITION_NEWS = 0;
     public static final int PAGE_POSITION_NEWS_FLASH = 1;
     private static final int PAGE_POSITION_MARKET = 2;
