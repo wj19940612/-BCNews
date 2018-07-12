@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:scrollbars="none"
+    android:background="@android:color/white"
     tools:context=".fragment.search.SearchSynthesizeFragment">
 
     <FrameLayout

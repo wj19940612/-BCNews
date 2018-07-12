@@ -38,9 +38,9 @@ import butterknife.OnClick;
 public class SearchContentLayout extends LinearLayout implements View.OnClickListener {
 
     //作者
-    HasLabelLayout mFirstHasLabelLayout;
-    TextView mFirstAuthorName;
-    TextView mFirstAuthorIntroduce;
+    private HasLabelLayout mFirstHasLabelLayout;
+    private TextView mFirstAuthorName;
+    private TextView mFirstAuthorIntroduce;
     ImageView mFirstAttentionAuthor;
     ConstraintLayout mFirstAuthor;
     HasLabelLayout mSecondHasLabelLayout;
@@ -51,11 +51,15 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
     TextView mLookAllAuthor;
 
     //文章
-    SearchArticleContent mFirstArticle;
-    SearchArticleContent mSecondArticle;
-    SearchArticleContent mThirdArticle;
-    TextView mLookAllArticle;
-    View mArticleSplit;
+    private SearchArticleContent mFirstArticle;
+    private SearchArticleContent mSecondArticle;
+    private SearchArticleContent mThirdArticle;
+    private TextView mLookAllArticle;
+    private View mArticleSplit;
+    private View mArticleFirstSplit;
+    private View mArticleSecondSplit;
+
+
     @BindView(R.id.newsSplit)
     View mNewsSplit;
     @BindView(R.id.firstPoint)
@@ -160,6 +164,8 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
         mSecondArticle = mArticleView.findViewById(R.id.secondArticle);
         mThirdArticle = mArticleView.findViewById(R.id.thirdArticle);
         mLookAllArticle = mArticleView.findViewById(R.id.lookAllArticle);
+        mArticleFirstSplit = mArticleView.findViewById(R.id.firstSplit);
+        mArticleSecondSplit = mArticleView.findViewById(R.id.secondSplit);
 
         mFirstArticle.setOnClickListener(this);
         mSecondArticle.setOnClickListener(this);
@@ -252,8 +258,8 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
     }
 
     public void setSearchContentData(SearchContent data) {
-        setArticleList(data.getBitcoin());
         setAuthorList(data.getAuthor());
+        setArticleList(data.getBitcoin());
         setFlashList(data.getInformation());
     }
 
@@ -279,8 +285,10 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
     private void updateAuthorView() {
         if (notHasAuthor()) {
             mAuthorView.setVisibility(GONE);
+            mArticleSplit.setVisibility(GONE);
             return;
         } else {
+            mArticleSplit.setVisibility(VISIBLE);
             mAuthorView.setVisibility(VISIBLE);
         }
 
@@ -317,21 +325,34 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
             mArticleView.setVisibility(VISIBLE);
         }
 
+        int showViewSize;
+        if (articleList.size() < 4) {
+            showViewSize = articleList.size();
+        } else {
+            showViewSize = 3;
+        }
+
         updateArticleInfo(articleList.get(0), mFirstArticle);
 
-        if (articleList.size() == 1) {
+        if (showViewSize == 1) {
             mSecondArticle.setVisibility(GONE);
             mThirdArticle.setVisibility(GONE);
-        } else if (articleList.size() == 2) {
+            mLookAllArticle.setVisibility(GONE);
+            mArticleFirstSplit.setVisibility(GONE);
+            mArticleSecondSplit.setVisibility(GONE);
+        } else if (showViewSize == 2) {
             mSecondArticle.setVisibility(VISIBLE);
             mThirdArticle.setVisibility(GONE);
             updateArticleInfo(articleList.get(1), mSecondArticle);
-            mFirstSplit.setVisibility(VISIBLE);
+            mArticleFirstSplit.setVisibility(VISIBLE);
+            mArticleSecondSplit.setVisibility(GONE);
+            mLookAllArticle.setVisibility(GONE);
         } else {
+            mLookAllArticle.setVisibility(VISIBLE);
             mSecondArticle.setVisibility(VISIBLE);
             mThirdArticle.setVisibility(VISIBLE);
-            mFirstSplit.setVisibility(VISIBLE);
-            mSecondSplit.setVisibility(VISIBLE);
+            mArticleFirstSplit.setVisibility(VISIBLE);
+            mArticleSecondSplit.setVisibility(VISIBLE);
             updateArticleInfo(articleList.get(1), mSecondArticle);
             updateArticleInfo(articleList.get(2), mThirdArticle);
         }
@@ -351,12 +372,16 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
         }
         switch (flashList.size()) {
             case 1:
+                mFirstSplit.setVisibility(GONE);
+                mSecondSplit.setVisibility(GONE);
                 mLookAllNews.setVisibility(GONE);
                 mSecondNews.setVisibility(GONE);
                 mThirdNews.setVisibility(GONE);
                 updateNewsFlashInfo(mFlashList.get(0), mFirstTitle, mFirstTimeLine, mFirstContent);
                 break;
             case 2:
+                mFirstSplit.setVisibility(VISIBLE);
+                mSecondSplit.setVisibility(GONE);
                 mLookAllNews.setVisibility(GONE);
                 mSecondNews.setVisibility(VISIBLE);
                 mThirdNews.setVisibility(GONE);
@@ -364,6 +389,8 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
                 updateNewsFlashInfo(mFlashList.get(1), mSecondTitle, mSecondTimeLine, mSecondContent);
                 break;
             default:
+                mFirstSplit.setVisibility(VISIBLE);
+                mSecondSplit.setVisibility(VISIBLE);
                 mLookAllNews.setVisibility(VISIBLE);
                 mSecondNews.setVisibility(VISIBLE);
                 mThirdNews.setVisibility(VISIBLE);
@@ -376,7 +403,7 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
     }
 
     private void updateNewsFlashInfo(NewsFlash newsFlash, TextView title, TextView timeLine, AutoSplitTextView content) {
-        if (TextUtils.isEmpty(newsFlash.getTitle().trim())) {
+        if (TextUtils.isEmpty(newsFlash.getTitle())) {
             content.setVisibility(GONE);
         } else {
             content.setVisibility(VISIBLE);
@@ -387,17 +414,23 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
 
         timeLine.setText(DateUtil.format(newsFlash.getReleaseTime(), DateUtil.FORMAT_SPECIAL_SLASH_NO_HOUR));
 
-        String trim = newsFlash.getTitle()
-                .replace("【", "")
-                .replace("】", "")
-                .replaceAll("\r", "")
-                .replaceAll("\n", "").trim();
-        title.setText(StrUtil.changeSpecialTextColor(trim, mSearchContent, mSearchTextColor));
+        if (!TextUtils.isEmpty(newsFlash.getTitle())) {
+            String trim = newsFlash.getTitle()
+                    .replace("【", "")
+                    .replace("】", "")
+                    .replaceAll("\r", "")
+                    .replaceAll("\n", "").trim();
+            title.setText(StrUtil.changeSpecialTextColor(trim, mSearchContent, mSearchTextColor));
+            content.setVisibility(VISIBLE);
+        } else {
+            content.setVisibility(GONE);
+        }
 
         content.setText(newsFlash.getContent());
 
         content.setOnClickListener(new OnClickListener() {
             boolean flag = true;
+
             @Override
             public void onClick(View v) {
                 int lineCount = content.getLineCount();

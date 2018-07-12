@@ -18,21 +18,19 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
-import com.sbai.bcnews.activity.MyAttentionActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
-import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.LocalUser;
-import com.sbai.bcnews.model.NewsFlash;
 import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.view.HasLabelLayout;
 import com.sbai.bcnews.view.dialog.AttentionDialog;
+import com.sbai.bcnews.view.search.SearchEditText;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -61,6 +59,8 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
     private List<Author> mData;
     private AuthorAdapter mAuthorAdapter;
 
+    private SearchEditText.OnSearchContentResultListener mSearchContentResultListener;
+
 
     public static AuthorSearchFragment newsInstance(String searchContent) {
         AuthorSearchFragment authorSearchFragment = new AuthorSearchFragment();
@@ -75,6 +75,14 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mSearchContent = getArguments().getString(ExtraKeys.SEARCH_CONTENT);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof SearchEditText.OnSearchContentResultListener) {
+            mSearchContentResultListener = (SearchEditText.OnSearchContentResultListener) context;
         }
     }
 
@@ -153,12 +161,12 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
         }).fire();
     }
 
-    public void setSearchContent(String searchContent){
+    public void setSearchContent(String searchContent) {
         mSearchContent = searchContent;
         requestAuthor(true);
     }
 
-    private void requestAuthor(final boolean isRefresh){
+    private void requestAuthor(final boolean isRefresh) {
         if (!TextUtils.isEmpty(mSearchContent)) {
             String searchContent = Uri.encode(mSearchContent);
             Apic.requestSearchAuthor(searchContent, mPage).tag(TAG).callback(new Callback<ListResp<Author>>() {
@@ -177,13 +185,17 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
         }
     }
 
-    private void updateData(String searchContent, List<Author> data, boolean isRefresh){
+    private void updateData(String searchContent, List<Author> data, boolean isRefresh) {
         if (isRefresh) {
             mData.clear();
         }
         if (TextUtils.isEmpty(searchContent) || data == null) {
             mAuthorAdapter.notifyDataSetChanged();
             return;
+        }
+
+        if (mSearchContentResultListener != null) {
+            mSearchContentResultListener.onSearchFinish(searchContent, data);
         }
 
         mAuthorAdapter.setSearchContent(searchContent);
@@ -209,7 +221,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
             mNewsAuthorList = newsAuthorList;
         }
 
-        public void setSearchContent(String searchContent){
+        public void setSearchContent(String searchContent) {
             mSearchContent = searchContent;
         }
 
@@ -222,7 +234,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ((ViewHolder) holder).bindingData(mContext, mNewsAuthorList.get(position), position, mOnItemClickListener,mSearchContent);
+            ((ViewHolder) holder).bindingData(mContext, mNewsAuthorList.get(position), position, mOnItemClickListener, mSearchContent);
         }
 
         @Override
@@ -247,7 +259,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(Context context, final Author newsAuthor, final int position, final AttentionFragment.OnItemClickListener onItemClickListener,String searchContent) {
+            private void bindingData(Context context, final Author newsAuthor, final int position, final AttentionFragment.OnItemClickListener onItemClickListener, String searchContent) {
                 mHead.setImageSrc(newsAuthor.getUserPortrait());
                 if (newsAuthor.getRankType() == Author.AUTHOR_STATUS_OFFICIAL) {
                     mHead.setLabelImageViewVisible(true);
@@ -259,7 +271,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
                     mHead.setLabelImageViewVisible(false);
                 }
 
-                mName.setText(StrUtil.changeSpecialTextColor(newsAuthor.getUserName(),searchContent,ContextCompat.getColor(context,R.color.colorPrimary)));
+                mName.setText(StrUtil.changeSpecialTextColor(newsAuthor.getUserName(), searchContent, ContextCompat.getColor(context, R.color.colorPrimary)));
                 if (!LocalUser.getUser().isLogin()) {
                     setNoAttentionBtn(mAttentionBtn, false, context);
                 } else {
@@ -268,7 +280,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
 
                 if (!TextUtils.isEmpty(newsAuthor.getAuthInfo())) {
                     mIntroduce.setText(newsAuthor.getAuthInfo());
-                }else{
+                } else {
                     mIntroduce.setText("");
                 }
 

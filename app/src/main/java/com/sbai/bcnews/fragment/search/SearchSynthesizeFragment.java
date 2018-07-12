@@ -37,6 +37,7 @@ import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.view.search.SearchContentLayout;
+import com.sbai.bcnews.view.search.SearchEditText;
 import com.sbai.bcnews.view.search.SearchLabelLayout;
 import com.umeng.analytics.MobclickAgent;
 
@@ -64,6 +65,8 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
 
     private OnSearchLabelSelectListener mOnSearchLabelSelectListener;
 
+    private SearchEditText.OnSearchContentResultListener mSearchContentResultListener;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -73,6 +76,10 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
 
         if (context instanceof OnSearchLabelSelectListener) {
             mOnSearchLabelSelectListener = (OnSearchLabelSelectListener) context;
+        }
+
+        if (context instanceof SearchEditText.OnSearchContentResultListener) {
+            mSearchContentResultListener = (SearchEditText.OnSearchContentResultListener) context;
         }
     }
 
@@ -176,6 +183,7 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
     private void updateSearchLabel() {
         List<String> historySearchList = HistorySearch.getHistorySearchList();
         mSearchLabelLayout.setHistorySearchLabel(historySearchList);
+        mSearchLabelLayout.updateHotSearch();
     }
 
     private void attentionAuthor(Author author, ImageView imageView) {
@@ -219,20 +227,38 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
                     @Override
                     protected void onRespSuccessData(SearchContent data) {
                         if (data.isEmpty()) {
-                            showSearchLabelView();
+                            showSearchLabelView(true);
                         } else {
                             showSearchContentView();
+                            if (mSearchContentResultListener != null) {
+                                mSearchContentResultListener.onSearchFinish(searchContent, data);
+                            }
+                            mSearchContentLayout.setSearchContent(searchContent);
+                            mSearchContentLayout.setSearchContentData(data);
                         }
-                        mSearchContentLayout.setSearchContent(searchContent);
-                        mSearchContentLayout.setSearchContentData(data);
+
+//                        List<AuthorArticle> bitcoin = data.getBitcoin();
+//
+//                        if (bitcoin.size() > 2) {
+//                            AuthorArticle a = bitcoin.get(0);
+//                            bitcoin.remove(a);
+//
+//                            AuthorArticle authorArticle = bitcoin.get(1);
+//                            bitcoin.remove(authorArticle);
+//                        }
+
+
                     }
                 })
                 .fireFreely();
     }
 
-    private void showSearchLabelView() {
+    private void showSearchLabelView(boolean showNotSearchDataView) {
         mSearchContentLayout.setVisibility(View.GONE);
         mSearchLabelLayout.setVisibility(View.VISIBLE);
+        if (showNotSearchDataView) {
+            mSearchLabelLayout.showNotSearchView();
+        }
     }
 
     private void showSearchContentView() {
@@ -256,7 +282,7 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
     public void updateSearchContent(String values) {
         if (TextUtils.isEmpty(values)) {
             if (mSearchLabelLayout.getVisibility() == View.GONE) {
-                showSearchLabelView();
+                showSearchLabelView(false);
             }
             updateSearchLabel();
         } else {

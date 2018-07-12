@@ -1,5 +1,6 @@
 package com.sbai.bcnews.fragment;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,23 +16,15 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
-import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
-import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.ListResp;
-import com.sbai.bcnews.http.Resp;
-import com.sbai.bcnews.model.LocalUser;
-import com.sbai.bcnews.model.News;
 import com.sbai.bcnews.model.NewsDetail;
-import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsAdapter;
-import com.sbai.bcnews.utils.news.NewsSummaryCache;
-import com.sbai.bcnews.utils.news.NewsWithHeaderAdapter;
-import com.sbai.bcnews.view.dialog.AttentionDialog;
+import com.sbai.bcnews.view.search.SearchEditText;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
 
@@ -41,8 +34,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static com.sbai.bcnews.ExtraKeys.CHANNEL;
 
 public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
 
@@ -62,12 +53,24 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
     private List<NewsWrap> mData;
     private NewsAdapter mNewsAdapter;
 
+    private SearchEditText.OnSearchContentResultListener mSearchContentResultListener;
+
+
+
     public static ArticleSearchFragment newsInstance(String searchContent) {
         ArticleSearchFragment articleSearchFragment = new ArticleSearchFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ExtraKeys.SEARCH_CONTENT, searchContent);
         articleSearchFragment.setArguments(bundle);
         return articleSearchFragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof SearchEditText.OnSearchContentResultListener) {
+            mSearchContentResultListener = (SearchEditText.OnSearchContentResultListener) context;
+        }
     }
 
     @Override
@@ -154,6 +157,10 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
             mNewsAdapter.notifyDataSetChanged();
             return;
         }
+        if (mSearchContentResultListener != null) {
+            mSearchContentResultListener.onSearchFinish(searchContent, data);
+        }
+
         if (refresh) {
             mData.clear();
         }

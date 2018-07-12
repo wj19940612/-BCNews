@@ -15,7 +15,7 @@ import com.sbai.bcnews.view.SmartDialog;
 public class RegisterScoreDialog implements TimerHandler.TimerCallback {
 
     public static final int DISMISS_TIME_COUNT = 2;
-    public static final int HANDLER_TIME = 1000*10000;
+    public static final int HANDLER_TIME = 1000;
 
     private TimerHandler mTimerHandler;
 

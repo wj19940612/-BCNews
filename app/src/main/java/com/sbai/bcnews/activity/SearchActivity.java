@@ -22,6 +22,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.search.HistorySearch;
 import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.utils.Display;
+import com.sbai.bcnews.utils.KeyBoardUtils;
 import com.sbai.bcnews.view.search.SearchEditText;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
 
@@ -29,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SearchActivity extends BaseActivity implements SearchEditText.OnSearchContentListener, SearchSynthesizeFragment.OnSearchLabelSelectListener {
+public class SearchActivity extends BaseActivity implements SearchEditText.OnSearchContentListener, SearchSynthesizeFragment.OnSearchLabelSelectListener, SearchEditText.OnSearchContentResultListener {
 
     public static final int FRAGMENT_SYNTHESIZE_POSITION = 0;
     public static final int FRAGMENT_AUTHOR_POSITION = 1;
@@ -75,7 +76,7 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
 //        mSlidingTabLayout.setCustomTabView(R.layout.view_tab_news, R.id.tab);
 //        mSlidingTabLayout.setPadding((int) Display.dp2Px(60, getResources()), 0, (int) Display.dp2Px(60, getResources()), 0);
         mSlidingTabLayout.setSelectedIndicatorPadding(Display.dp2Px(30, getResources()));
-        mSlidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this, R.color.home_sliding_text));
+        mSlidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this, R.color.colorPrimary));
         mSlidingTabLayout.setSelectedIndicatorThickness(4);
         mSlidingTabLayout.setHasBottomBorder(true);
         mSlidingTabLayout.setViewPager(mViewPager);
@@ -111,6 +112,7 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
                     }
                 })
                 .fire();
+        mSearchEditText.setHint("btc");
     }
 
     private SearchSynthesizeFragment getSearchSynthesizeFragment() {
@@ -178,6 +180,11 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
         if (flashNewsSearchFragment != null) {
             flashNewsSearchFragment.setSearchContent(values);
         }
+    }
+
+    @Override
+    public void onSearchFinish(String searchKeyBoard, Object result) {
+        KeyBoardUtils.closeKeyboard(mSearchEditText);
     }
 
 

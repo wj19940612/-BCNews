@@ -233,4 +233,8 @@ public class SearchEditText extends LinearLayout {
         mOnSearchContentListener = null;
         mSearchEditText.removeTextChangedListener(mTextWatcher);
     }
+
+    public interface OnSearchContentResultListener {
+        void onSearchFinish(String searchKeyBoard, Object result);
+    }
 }

@@ -28,6 +28,7 @@ import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
+import com.sbai.bcnews.view.search.SearchEditText;
 import com.umeng.analytics.MobclickAgent;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
@@ -58,12 +59,23 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
 
     private int mPage;
 
+    private SearchEditText.OnSearchContentResultListener mSearchContentResultListener;
+
     public static FlashNewsSearchFragment newsInstance(String searchContent) {
         FlashNewsSearchFragment flashNewsSearchFragment = new FlashNewsSearchFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ExtraKeys.SEARCH_CONTENT, searchContent);
         flashNewsSearchFragment.setArguments(bundle);
         return flashNewsSearchFragment;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof SearchEditText.OnSearchContentResultListener) {
+            mSearchContentResultListener = (SearchEditText.OnSearchContentResultListener) context;
+        }
     }
 
     @Override
@@ -113,7 +125,7 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
         requestNewsFlash(true);
     }
 
-    public void setSearchContent(String searchContent){
+    public void setSearchContent(String searchContent) {
         mSearchContent = searchContent;
         requestNewsFlash(true);
     }
@@ -142,6 +154,11 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
             mNewsAdapter.notifyDataSetChanged();
             return;
         }
+
+        if (mSearchContentResultListener != null) {
+            mSearchContentResultListener.onSearchFinish(searchContent, data);
+        }
+
         if (isRefresh) {
             mData.clear();
         }
@@ -200,7 +217,7 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.bindDataWithView(mSearchContent,showFooterView && position == mDataList.size() - 1, mDataList.get(position), mContext, position, getItemCount());
+            holder.bindDataWithView(mSearchContent, showFooterView && position == mDataList.size() - 1, mDataList.get(position), mContext, position, getItemCount());
         }
 
         @Override
@@ -228,7 +245,7 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, itemView);
             }
 
-            private void bindDataWithView(String searchContent,boolean showFooterView, final NewsFlash newsFlash, final Context context, int position, int count) {
+            private void bindDataWithView(String searchContent, boolean showFooterView, final NewsFlash newsFlash, final Context context, int position, int count) {
                 if (showFooterView) {
                     mSplit.setVisibility(View.GONE);
                     mFooter.setVisibility(View.VISIBLE);
@@ -241,7 +258,7 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
                     mTitle.setVisibility(View.GONE);
                     mContent.setText(newsFlash.getContent().trim());
                 } else {
-                    setSearchTitle(mTitle,searchContent,newsFlash.getTitle(),context);
+                    setSearchTitle(mTitle, searchContent, newsFlash.getTitle(), context);
                     mTitle.setVisibility(View.VISIBLE);
                     mContent.setText(newsFlash.getContent());
                 }
@@ -275,9 +292,9 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
                 });
             }
 
-            private void setSearchTitle(TextView titleView,String searchContent,String title,Context context){
+            private void setSearchTitle(TextView titleView, String searchContent, String title, Context context) {
                 title = title.replace("【", "").replace("】", "").trim();
-                titleView.setText(StrUtil.changeSpecialTextColor(title,searchContent,ContextCompat.getColor(context,R.color.colorPrimary)));
+                titleView.setText(StrUtil.changeSpecialTextColor(title, searchContent, ContextCompat.getColor(context, R.color.colorPrimary)));
             }
         }
     }

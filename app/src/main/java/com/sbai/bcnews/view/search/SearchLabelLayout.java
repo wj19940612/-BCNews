@@ -85,6 +85,8 @@ public class SearchLabelLayout extends FrameLayout {
     private List<String> mHistorySearchList;
     private int mOldHistorySearchSize = 0;
 
+    private int mNotSearchDataDrawableId;
+
     private OnSearchLabelClickListener mOnSearchLabelClickListener;
 
     public void setOnSearchLabelClickListener(OnSearchLabelClickListener onSearchLabelClickListener) {
@@ -105,6 +107,7 @@ public class SearchLabelLayout extends FrameLayout {
         addView(view);
         mBind = ButterKnife.bind(this, view);
         updateHotSearch();
+        mNotSearchDataDrawableId = 0;
     }
 
 
@@ -124,28 +127,32 @@ public class SearchLabelLayout extends FrameLayout {
         mHistorySearchList = data;
         checkDataIsEmpty();
         if (data == null || data.isEmpty()) {
-            mHistoryFlexboxLayout.setVisibility(GONE);
-            mClearHistory.setVisibility(GONE);
-            mHistorySearchLabel.setVisibility(GONE);
+            hideHistoryView();
             return;
         } else {
-            mHistoryFlexboxLayout.setVisibility(VISIBLE);
-            mClearHistory.setVisibility(VISIBLE);
-            mHistorySearchLabel.setVisibility(VISIBLE);
+            showHistoryView();
         }
         updateHistorySearch();
     }
 
-    private void updateHotSearch() {
+    private void showHistoryView() {
+        mHistoryFlexboxLayout.setVisibility(VISIBLE);
+        mClearHistory.setVisibility(VISIBLE);
+        mHistorySearchLabel.setVisibility(VISIBLE);
+    }
+
+    private void hideHistoryView() {
+        mHistoryFlexboxLayout.setVisibility(GONE);
+        mClearHistory.setVisibility(GONE);
+        mHistorySearchLabel.setVisibility(GONE);
+    }
+
+    public void updateHotSearch() {
         if (mHotSearchList == null || mHotSearchList.isEmpty()) {
-            mHotFlexboxLayout.setVisibility(GONE);
-            mSplit.setVisibility(GONE);
-            mHotSearchLabel.setVisibility(GONE);
+            hideHotView();
             return;
         } else {
-            mHotFlexboxLayout.setVisibility(VISIBLE);
-            mSplit.setVisibility(VISIBLE);
-            mHotSearchLabel.setVisibility(VISIBLE);
+            showHotView();
         }
 
         int viewSize = 0;
@@ -156,6 +163,18 @@ public class SearchLabelLayout extends FrameLayout {
         }
 
         updateSearchText(viewSize, true, mHotFlexboxLayout, mHotSearchList);
+    }
+
+    private void showHotView() {
+        mHotFlexboxLayout.setVisibility(VISIBLE);
+        mSplit.setVisibility(VISIBLE);
+        mHotSearchLabel.setVisibility(VISIBLE);
+    }
+
+    private void hideHotView() {
+        mHotFlexboxLayout.setVisibility(GONE);
+        mSplit.setVisibility(GONE);
+        mHotSearchLabel.setVisibility(GONE);
     }
 
     private void updateHistorySearch() {
@@ -197,11 +216,25 @@ public class SearchLabelLayout extends FrameLayout {
     private void checkDataIsEmpty() {
         boolean historySearchIsEmpty = mHistorySearchList == null || mHistorySearchList.isEmpty();
         boolean hotSearchIsEmpty = mHotSearchList == null || mHotSearchList.isEmpty();
+        mNotSearchDataDrawableId = 0;
         if (historySearchIsEmpty && hotSearchIsEmpty) {
             mEmptyView.setVisibility(VISIBLE);
         } else {
             mEmptyView.setVisibility(GONE);
         }
+        mEmptyView.setText(R.string.search_for_everything_you_want_to_see);
+        mEmptyView.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+    }
+
+    public void showNotSearchView() {
+        if (mNotSearchDataDrawableId == 0) {
+            mNotSearchDataDrawableId = R.drawable.bg_search_no_data;
+            mEmptyView.setCompoundDrawablesWithIntrinsicBounds(0, mNotSearchDataDrawableId, 0, 0);
+        }
+        mEmptyView.setVisibility(VISIBLE);
+        mEmptyView.setText(R.string.now_not_searched_content);
+        hideHistoryView();
+        hideHotView();
     }
 
     @OnClick({R.id.firstHotSearch, R.id.secondHotSearch, R.id.ThirdHotSearch, R.id.ForthHotSearch, R.id.FifthHotSearch, R.id.sixthHotSearch,
@@ -273,10 +306,6 @@ public class SearchLabelLayout extends FrameLayout {
                 mOnSearchLabelClickListener.onSearchLabelClick(mHistorySearchList.get(position));
             }
         }
-    }
-
-    public void update() {
-
     }
 
 

@@ -11,10 +11,14 @@
     <TextView
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:drawablePadding="23dp"
         android:gravity="center"
+        android:minHeight="100dp"
+        android:layout_marginTop="80dp"
         android:text="@string/search_for_everything_you_want_to_see"
-        android:visibility="gone"/>
+        android:textColor="@color/text_c2"
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/hotSearchLabel"
@@ -67,6 +71,7 @@
             android:layout_height="wrap_content"/>
 
         <TextView
+
             android:id="@+id/sixthHotSearch"
             style="@style/SearchText"
             android:layout_width="wrap_content"
@@ -78,11 +83,11 @@
         android:id="@+id/split"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="24dp"
         android:background="@color/bg_F5F5"/>
 
     <TextView
+        android:layout_marginTop="20dp"
         android:id="@+id/historySearchLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
