@@ -2,7 +2,7 @@ package com.sbai.bcnews.view.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,7 +15,7 @@ import com.sbai.bcnews.view.SmartDialog;
 public class RegisterScoreDialog implements TimerHandler.TimerCallback {
 
     public static final int DISMISS_TIME_COUNT = 2;
-    public static final int HANDLER_TIME = 1000;
+    public static final int HANDLER_TIME = 1000*10000;
 
     private TimerHandler mTimerHandler;
 
@@ -129,6 +129,7 @@ public class RegisterScoreDialog implements TimerHandler.TimerCallback {
             }
         });
         mSmartDialog.setWidthScale(1).show();
+        mSmartDialog.setGravity(Gravity.CENTER);
         startTimeHandler(HANDLER_TIME);
     }
 }

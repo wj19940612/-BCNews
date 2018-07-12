@@ -196,10 +196,10 @@ public class StartRobRedPacketDialogFragment extends BaseDialogFragment {
     private void updateRobText(boolean isRobRedPacketTime) {
         if (isRobRedPacketTime) {
             mRob.setText(R.string.rob);
-            mRob.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+            mRob.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         } else {
             mRob.setText(R.string.already_rob_empty);
-            mRob.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            mRob.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         }
         mRob.setEnabled(isRobRedPacketTime);
     }

@@ -8,15 +8,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.BuildConfig;
@@ -49,11 +46,11 @@ import com.sbai.bcnews.model.system.Operation;
 import com.sbai.bcnews.utils.ClipboardUtils;
 import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.Launcher;
-import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.view.HasLabelLayout;
 import com.sbai.bcnews.view.IconTextRow;
+import com.sbai.bcnews.view.RedPointTipTextView;
 import com.sbai.bcnews.view.SmartDialog;
 
 import java.util.List;
@@ -69,34 +66,48 @@ import butterknife.Unbinder;
  */
 public class MineFragment extends BaseFragment {
 
+
+    Unbinder unbinder;
     @BindView(R.id.headPortrait)
     HasLabelLayout mHeadPortrait;
     @BindView(R.id.userName)
     TextView mUserName;
+    @BindView(R.id.userHint)
+    TextView mUserHint;
+    @BindView(R.id.authorLabel)
+    TextView mAuthorLabel;
+    @BindView(R.id.mineQkc)
+    TextView mMineQkc;
+    @BindView(R.id.mineQkcNumber)
+    TextView mMineQkcNumber;
+    @BindView(R.id.collectQkc)
+    LinearLayout mCollectQkc;
+    @BindView(R.id.mineHashRate)
+    TextView mMineHashRate;
+    @BindView(R.id.qkcLayout)
+    ConstraintLayout mQkcLayout;
     @BindView(R.id.collect)
     TextView mCollect;
     @BindView(R.id.history)
     TextView mHistory;
-    @BindView(R.id.headLayout)
-    RelativeLayout mHeadLayout;
+    @BindView(R.id.comment)
+    TextView mComment;
+    @BindView(R.id.message)
+    RedPointTipTextView mMessage;
+    @BindView(R.id.messageLL)
+    LinearLayout mMessageLL;
+    @BindView(R.id.contentLayout)
+    LinearLayout mContentLayout;
+    @BindView(R.id.split)
+    View mSplit;
     @BindView(R.id.contribute)
-    LinearLayout mContribute;
+    IconTextRow mContribute;
+    @BindView(R.id.invite)
+    IconTextRow mInvite;
     @BindView(R.id.feedBack)
     IconTextRow mFeedBack;
     @BindView(R.id.setting)
     IconTextRow mSetting;
-    @BindView(R.id.message)
-    IconTextRow mMessage;
-    @BindView(R.id.review)
-    IconTextRow mReview;
-
-    Unbinder unbinder;
-    @BindView(R.id.qkc)
-    IconTextRow mQkc;
-    @BindView(R.id.invite)
-    IconTextRow mInvite;
-    @BindView(R.id.notCheckLabel)
-    ImageView mNotCheckLabel;
 
     private int mNotReadMessageCount;
 
@@ -154,7 +165,7 @@ public class MineFragment extends BaseFragment {
     private void requestQKCAndInviteHasGiftTabVisible() {
         if (BuildConfig.FLAVOR.equalsIgnoreCase("dev")) {
             mInvite.setVisibility(View.VISIBLE);
-            mQkc.setVisibility(View.VISIBLE);
+            mQkcLayout.setVisibility(View.VISIBLE);
         } else {
             Apic.requestQKCAndInviteHasGiftTabVisible()
                     .tag(TAG)
@@ -176,9 +187,9 @@ public class MineFragment extends BaseFragment {
         }
 
         if (data.getIntegralShow() == MintTabStatus.MINE_QKC_TAB_SHOW) {
-            mQkc.setVisibility(View.VISIBLE);
+            mQkcLayout.setVisibility(View.VISIBLE);
         } else {
-            mQkc.setVisibility(View.GONE);
+            mQkcLayout.setVisibility(View.GONE);
         }
     }
 
@@ -213,14 +224,15 @@ public class MineFragment extends BaseFragment {
                 .callback(new Callback2D<Resp<MyIntegral>, MyIntegral>() {
                     @Override
                     protected void onRespSuccessData(MyIntegral data) {
-                        updateQKCNumber(data.getIntegral());
+                        updateQKCNumber(data);
                     }
                 })
                 .fire();
     }
 
-    private void updateQKCNumber(double integral) {
-        mQkc.setSubText(FinanceUtil.formatWithScaleRemoveTailZero(integral));
+    private void updateQKCNumber(MyIntegral integral) {
+        mMineQkcNumber.setText(FinanceUtil.formatWithScaleRemoveTailZero(integral.getIntegral()));
+        mMineHashRate.setText(getString(R.string.mine_hashrate, integral.getRate()));
     }
 
     public void updateNotReadMessage(NotReadMessage data) {
@@ -246,15 +258,19 @@ public class MineFragment extends BaseFragment {
             updateUserCollectNumber(userInfo.getCollectCount());
             updateUserReadHistory(userInfo.getReadCount());
             if (userInfo.isAuthor()) {
-                mNotCheckLabel.setVisibility(View.GONE);
+                mContribute.setSubTextRightDrawable(0);
                 mHeadPortrait.setLabelImageViewVisible(true);
                 boolean isOfficialAuthor = userInfo.getAuthorType() == Author.AUTHOR_STATUS_OFFICIAL;
                 mHeadPortrait.setLabelSelected(isOfficialAuthor);
+                mAuthorLabel.setVisibility(View.VISIBLE);
+                mAuthorLabel.setText(userInfo.getRankTypeStr());
 
             } else {
                 mHeadPortrait.setLabelImageViewVisible(false);
-                mNotCheckLabel.setVisibility(View.VISIBLE);
+                mContribute.setSubTextRightDrawable(R.drawable.ic_mine_author_not_check);
+                mAuthorLabel.setVisibility(View.GONE);
             }
+            mUserHint.setText(R.string.click_look_user_info);
         } else {
             mUserName.setText(R.string.click_login);
             updateUserCollectNumber(0);
@@ -265,45 +281,45 @@ public class MineFragment extends BaseFragment {
             }
             updateUserReadHistory(readHistorySize);
             updateNotReadMessage(0);
-            mQkc.setSubText("");
+            mMineQkcNumber.setText(String.valueOf(0));
             mHeadPortrait.setLabelImageViewVisible(false);
-            mNotCheckLabel.setVisibility(View.VISIBLE);
+            mContribute.setSubTextRightDrawable(R.drawable.ic_mine_author_not_check);
+            mUserHint.setText(R.string.login_look_more_news);
+            mMineHashRate.setText(getString(R.string.mine_hashrate, 0));
+            mAuthorLabel.setVisibility(View.GONE);
         }
 
     }
 
     private void updateNotReadMessage(int count) {
-        if (count < 100)
-            mMessage.setSubText(String.valueOf(count));
-        else
-            mMessage.setSubText("99+");
+
         mNotReadMessageCount = count;
-        if (count != 0) {
-            mMessage.setSubTextVisible(View.VISIBLE);
+        if (mNotReadMessageCount <= 0) {
+            mMessage.setRedPointVisibility(View.GONE);
         } else {
-            mMessage.setSubTextVisible(View.GONE);
+            mMessage.setRedPointVisibility(View.VISIBLE);
         }
     }
 
     private void updateUserReadHistory(int readHistory) {
-        SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.history),
-                " " + readHistory,
-                ContextCompat.getColor(getActivity(), R.color.text_476E92));
-        mHistory.setText(spannableString);
+//        SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.history),
+//                " " + readHistory,
+//                ContextCompat.getColor(getActivity(), R.color.text_476E92));
+//        mHistory.setText(spannableString);
     }
 
     private void updateUserCollectNumber(int collectNumber) {
-        SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.collect),
-                " " + collectNumber,
-                ContextCompat.getColor(getActivity(), R.color.text_476E92));
-        mCollect.setText(spannableString);
+//        SpannableString spannableString = StrUtil.mergeTextWithColor(getString(R.string.collect),
+//                " " + collectNumber,
+//                ContextCompat.getColor(getActivity(), R.color.text_476E92));
+//        mCollect.setText(spannableString);
     }
 
     private void updateUserHeadPortrait() {
         if (LocalUser.getUser().isLogin()) {
             mHeadPortrait.setImageSrc(LocalUser.getUser().getUserInfo().getUserPortrait());
         } else {
-            mHeadPortrait.setImageSrc(R.drawable.ic_default_head_portrait);
+            mHeadPortrait.setImageSrc(R.drawable.ic_mine_head_portrait);
         }
     }
 
@@ -325,16 +341,24 @@ public class MineFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.headPortrait, R.id.userName, R.id.collect, R.id.history,
-            R.id.contribute, R.id.feedBack, R.id.setting, R.id.message,
-            R.id.review, R.id.qkc, R.id.invite})
+
+    @OnClick({R.id.headPortrait, R.id.userName, R.id.userHint, R.id.qkcLayout, R.id.collect, R.id.history,
+            R.id.comment, R.id.messageLL, R.id.contribute, R.id.invite, R.id.feedBack, R.id.setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.headPortrait:
             case R.id.userName:
+            case R.id.userHint:
                 umengEventCount(UmengCountEventId.MINE_PORTRAIT_AND_NAME);
                 if (LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), PersonalDataActivity.class).execute();
+                } else {
+                    login();
+                }
+                break;
+            case R.id.qkcLayout:
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), QKCActivity.class).execute();
                 } else {
                     login();
                 }
@@ -351,6 +375,20 @@ public class MineFragment extends BaseFragment {
                 umengEventCount(UmengCountEventId.MINE_HISTORY);
                 Launcher.with(getActivity(), ReadHistoryActivity.class).execute();
                 break;
+            case R.id.comment:
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), ReviewActivity.class).execute();
+                } else {
+                    login();
+                }
+                break;
+            case R.id.messageLL:
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), MessageActivity.class).putExtra(ExtraKeys.DATA, mNotReadMessageCount).execute();
+                } else {
+                    login();
+                }
+                break;
             case R.id.contribute:
                 if (LocalUser.getUser().isLogin() && LocalUser.getUser().getUserInfo().isAuthor()) {
                     Launcher.with(getActivity(), AuthorWorkbenchActivity.class).execute();
@@ -358,35 +396,6 @@ public class MineFragment extends BaseFragment {
                     requestOperationWeChatAccount();
                 }
                 umengEventCount(UmengCountEventId.MINE_CONTRIBUTE);
-
-                break;
-            case R.id.feedBack:
-                Launcher.with(getActivity(), FeedbackActivity.class).execute();
-                break;
-            case R.id.setting:
-                umengEventCount(UmengCountEventId.MINE_SETTING);
-                Launcher.with(getActivity(), SettingActivity.class).execute();
-                break;
-            case R.id.message:
-                if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), MessageActivity.class).putExtra(ExtraKeys.DATA, mNotReadMessageCount).execute();
-                } else {
-                    login();
-                }
-                break;
-            case R.id.review:
-                if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), ReviewActivity.class).execute();
-                } else {
-                    login();
-                }
-                break;
-            case R.id.qkc:
-                if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), QKCActivity.class).execute();
-                } else {
-                    login();
-                }
                 break;
             case R.id.invite:
                 if (LocalUser.getUser().isLogin()) {
@@ -396,6 +405,13 @@ public class MineFragment extends BaseFragment {
                 } else {
                     login();
                 }
+                break;
+            case R.id.feedBack:
+                Launcher.with(getActivity(), FeedbackActivity.class).execute();
+                break;
+            case R.id.setting:
+                umengEventCount(UmengCountEventId.MINE_SETTING);
+                Launcher.with(getActivity(), SettingActivity.class).execute();
                 break;
         }
     }
@@ -427,4 +443,5 @@ public class MineFragment extends BaseFragment {
                 })
                 .show();
     }
+
 }

@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_f2_round"
             android:minHeight="30dp"
-            app:clearText="@string/cancel"
+            app:clearText="@string/clear_data"
             app:clearTextColor="@color/text_AAA9A6"
             app:leftDrawable="@drawable/ic_search"
             app:searchEditCursorDrawable="@drawable/cursor_drawable_search"

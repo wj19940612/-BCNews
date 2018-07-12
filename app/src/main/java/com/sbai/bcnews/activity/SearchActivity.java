@@ -73,7 +73,7 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(getActivity(), android.R.color.transparent));
 //        mSlidingTabLayout.setCustomTabView(R.layout.view_tab_news, R.id.tab);
-        mSlidingTabLayout.setPadding((int) Display.dp2Px(60, getResources()), 0, (int) Display.dp2Px(60, getResources()), 0);
+//        mSlidingTabLayout.setPadding((int) Display.dp2Px(60, getResources()), 0, (int) Display.dp2Px(60, getResources()), 0);
         mSlidingTabLayout.setSelectedIndicatorPadding(Display.dp2Px(30, getResources()));
         mSlidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this, R.color.home_sliding_text));
         mSlidingTabLayout.setSelectedIndicatorThickness(4);
@@ -101,13 +101,13 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
     }
 
     private void requestRecommendContent() {
-        Apic.requestOperationSetting(Operation.OPERATION_TYPE_WE_CHAT)
+        Apic.requestOperationSetting(Operation.RECOMMEND_HOT_SEARCH_CONTENT)
                 .tag(TAG)
                 .callback(new Callback2D<Resp<Operation>, Operation>() {
                     @Override
                     protected void onRespSuccessData(Operation data) {
-                        if (TextUtils.isEmpty(data.getEwqe())) return;
-                        mSearchEditText.setHint(data.getEwqe());
+                        if (TextUtils.isEmpty(data.getSYS_SEARCH())) return;
+                        mSearchEditText.setHint(data.getSYS_SEARCH());
                     }
                 })
                 .fire();
@@ -178,21 +178,6 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
         if (flashNewsSearchFragment != null) {
             flashNewsSearchFragment.setSearchContent(values);
         }
-
-//        switch (mFragmentPosition) {
-//            case FRAGMENT_SYNTHESIZE_POSITION:
-//
-//                break;
-//            case FRAGMENT_AUTHOR_POSITION:
-//                // TODO: 2018/7/11 作者页面
-//                break;
-//            case FRAGMENT_ARTICLE_POSITION:
-//                // TODO: 2018/7/11  文章页面
-//                break;
-//            case FRAGMENT_NEWS_FLASH_POSITION:
-//                // TODO: 2018/7/11 快讯
-//                break;
-//        }
     }
 
 

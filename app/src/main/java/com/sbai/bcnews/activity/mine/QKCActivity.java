@@ -109,13 +109,6 @@ public class QKCActivity extends BaseActivity implements RandomLocationLayout.On
                     }
                 })
                 .fire();
-//        ArrayList<QKC> qkcs = new ArrayList<>();
-//        for (int i = 0; i < 22; i++) {
-//            QKC qkc = new QKC();
-//            qkc.setIntegral(i);
-//            qkcs.add(qkc);
-//        }
-//        mRandomLayout.setQksList(qkcs);
     }
 
     private void setQKCAndRate(MyIntegral data) {
