@@ -99,6 +99,15 @@ public class AuthorArticle {
     private List<String> imgs;
     private List<String> tags;
 
+    private String author;
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     public int getAuthorId() {
         return authorId;

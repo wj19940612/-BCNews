@@ -509,6 +509,7 @@
     <string name="hot_search">热门搜索</string>
     <string name="history_search">历史搜索</string>
     <string name="clear_history">清除历史</string>
+    <string name="clear_data">清除</string>
     <string name="please_input_antistop">请输入关键字</string>
     <string name="search_for_everything_you_want_to_see">快搜索你想看到的一切</string>
     <string name="look_all_news">查看全部资讯</string>

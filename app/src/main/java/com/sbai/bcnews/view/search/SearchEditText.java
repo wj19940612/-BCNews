@@ -210,6 +210,9 @@ public class SearchEditText extends LinearLayout {
                 if (mClearContent.getVisibility() == INVISIBLE)
                     mClearContent.setVisibility(VISIBLE);
             }
+
+            mSearchEditText.setSelection(s.toString().length());
+
         }
 
         @Override

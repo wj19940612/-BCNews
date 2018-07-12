@@ -287,9 +287,12 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
         updateAuthorInfo(mAuthorList.get(0), mFirstHasLabelLayout, mFirstAuthorName, mFirstAuthorIntroduce, mFirstAttentionAuthor);
         if (mAuthorList.size() > 1) {
             mSecondAuthor.setVisibility(VISIBLE);
+            mLookAllAuthor.setVisibility(VISIBLE);
             updateAuthorInfo(mAuthorList.get(1), mSecondHasLabelLayout, mSecondAuthorName, mSecondAuthorIntroduce, mSecondAttentionAuthor);
         } else {
             mSecondAuthor.setVisibility(GONE);
+            mLookAllAuthor.setVisibility(GONE);
+
         }
     }
 
@@ -348,17 +351,20 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
         }
         switch (flashList.size()) {
             case 1:
+                mLookAllNews.setVisibility(GONE);
                 mSecondNews.setVisibility(GONE);
                 mThirdNews.setVisibility(GONE);
                 updateNewsFlashInfo(mFlashList.get(0), mFirstTitle, mFirstTimeLine, mFirstContent);
                 break;
             case 2:
+                mLookAllNews.setVisibility(GONE);
                 mSecondNews.setVisibility(VISIBLE);
                 mThirdNews.setVisibility(GONE);
                 updateNewsFlashInfo(mFlashList.get(0), mFirstTitle, mFirstTimeLine, mFirstContent);
                 updateNewsFlashInfo(mFlashList.get(1), mSecondTitle, mSecondTimeLine, mSecondContent);
                 break;
             default:
+                mLookAllNews.setVisibility(VISIBLE);
                 mSecondNews.setVisibility(VISIBLE);
                 mThirdNews.setVisibility(VISIBLE);
                 updateNewsFlashInfo(mFlashList.get(0), mFirstTitle, mFirstTimeLine, mFirstContent);
@@ -379,20 +385,34 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
             content.setEllipsize(TextUtils.TruncateAt.END);
         }
 
-        // TODO: 2018/7/10 没有确定
         timeLine.setText(DateUtil.format(newsFlash.getReleaseTime(), DateUtil.FORMAT_SPECIAL_SLASH_NO_HOUR));
 
-        title.setText(StrUtil.changeSpecialTextColor(newsFlash.getTitle(), mSearchContent, mSearchTextColor));
+        String trim = newsFlash.getTitle()
+                .replace("【", "")
+                .replace("】", "")
+                .replaceAll("\r", "")
+                .replaceAll("\n", "").trim();
+        title.setText(StrUtil.changeSpecialTextColor(trim, mSearchContent, mSearchTextColor));
 
         content.setText(newsFlash.getContent());
 
-        content.setOnClickListener((v -> {
-            int lineCount = content.getLineCount();
-            if (lineCount == 6) {
-                content.setMaxLines(Integer.MAX_VALUE);
-                content.setEllipsize(null);
+        content.setOnClickListener(new OnClickListener() {
+            boolean flag = true;
+            @Override
+            public void onClick(View v) {
+                int lineCount = content.getLineCount();
+                if (lineCount != 0 && lineCount >= 6)
+                    if (flag) {
+                        flag = false;
+                        content.setMaxLines(Integer.MAX_VALUE);
+                        content.setEllipsize(null);
+                    } else {
+                        flag = true;
+                        content.setMaxLines(6);
+                        content.setEllipsize(TextUtils.TruncateAt.END);
+                    }
             }
-        }));
+        });
     }
 
 

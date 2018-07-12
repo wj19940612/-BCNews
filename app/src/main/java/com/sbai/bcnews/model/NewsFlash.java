@@ -27,6 +27,16 @@ public class NewsFlash implements Parcelable {
     private int status;
     private String title;
 
+    private long createTime;
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
     public boolean isImportant() {
         return rank == 1;
     }

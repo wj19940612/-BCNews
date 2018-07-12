@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.model.author.AuthorArticle;
+import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.StrUtil;
 import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
 import com.sbai.bcnews.view.ThreeImageLayout;
@@ -106,9 +108,14 @@ public class SearchArticleContent extends FrameLayout {
     private void updateArticleInfo(AuthorArticle authorArticle, TextView title, TextView bottomText) {
         title.setText(StrUtil.changeSpecialTextColor(authorArticle.getTitle(), mHighlightText, mHighlightTextColor));
         String readCount = getContext().getString(R.string.read_number, authorArticle.getShowReadCount());
-        // TODO: 2018/7/9 未完成
 
-        bottomText.setText(readCount);
+        if (TextUtils.isEmpty(authorArticle.getAuthor())) {
+            bottomText.setText(getContext().getString(R.string.time_x_read_x, DateUtil.formatDefaultStyleTime(authorArticle.getReleaseTime()), readCount));
+        } else {
+            bottomText.setText(getContext().getString(R.string.source_x_time_x_read_x, authorArticle.getAuthor(), DateUtil.formatDefaultStyleTime(authorArticle.getReleaseTime()), readCount));
+        }
+
+//        bottomText.setText(readCount);
     }
 
     public void setHighlightColor(int searchTextColor) {
