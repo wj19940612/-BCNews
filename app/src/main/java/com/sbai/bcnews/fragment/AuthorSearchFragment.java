@@ -133,6 +133,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAuthorAdapter);
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
     }
 
     @Override
@@ -190,6 +191,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
             mData.clear();
         }
         if (TextUtils.isEmpty(searchContent) || data == null) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
             mAuthorAdapter.notifyDataSetChanged();
             return;
         }
@@ -200,6 +202,11 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
 
         mAuthorAdapter.setSearchContent(searchContent);
         mData.addAll(data);
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+        } else {
+            mSwipeToLoadLayout.setLoadMoreEnabled(true);
+        }
 //        if (mData.size() >= Apic.DEFAULT_PAGE_SIZE && data.size() < Apic.DEFAULT_PAGE_SIZE) {
 //            mAuthorAdapter.showFooterView(true);
 //        } else {

@@ -354,7 +354,7 @@ public class NewsFlashFragment extends RecycleViewSwipeLoadFragment {
 //                    mSplit.setVisibility(View.VISIBLE);
 //                    mFooter.setVisibility(View.GONE);
 //                }
-                mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()));
+                mTime.setText(DateUtil.getFormatDayTime(newsFlash.getReleaseTime()));
                 if (newsFlash.isImportant()) {
                     if (TextUtils.isEmpty(newsFlash.getTitle())) {
                         mTitle.setVisibility(View.GONE);

@@ -15,25 +15,25 @@ import java.util.LinkedList;
 public class HashRateTimeCahche {
     private static Gson sGson = new Gson();
 
-    private static OnlineTime mOnlineTimeCache;
+    private static OnlineTime sOnlineTimeCache;
 
     public static void updateOnlineTime(OnlineTime onlineTime) {
-        mOnlineTimeCache = onlineTime;
-        String onlineTimeString = sGson.toJson(mOnlineTimeCache);
+        sOnlineTimeCache = onlineTime;
+        String onlineTimeString = sGson.toJson(sOnlineTimeCache);
         Preference.get().setOnlineTime(onlineTimeString);
     }
 
     public static OnlineTime getOnlineTime(int userId) {
-        if (mOnlineTimeCache == null) {
+        if (sOnlineTimeCache == null) {
             readFromPreference();
         }
-        if (mOnlineTimeCache.getUserId() == userId) {
-            return mOnlineTimeCache;
+        if (sOnlineTimeCache.getUserId() == userId) {
+            return sOnlineTimeCache;
         }
-        mOnlineTimeCache.setUserId(userId);
-        mOnlineTimeCache.setDay(SysTime.getSysTime().getSystemTimestamp());
-        mOnlineTimeCache.setOnlineTime(0);
-        return mOnlineTimeCache;
+        sOnlineTimeCache.setUserId(userId);
+        sOnlineTimeCache.setDay(SysTime.getSysTime().getSystemTimestamp());
+        sOnlineTimeCache.setOnlineTime(0);
+        return sOnlineTimeCache;
     }
 
     private static void readFromPreference() {
@@ -42,12 +42,12 @@ public class HashRateTimeCahche {
             Type type = new TypeToken<OnlineTime>() {
             }.getType();
             try {
-                mOnlineTimeCache = sGson.fromJson(onlineTime, type);
+                sOnlineTimeCache = sGson.fromJson(onlineTime, type);
             } catch (JsonSyntaxException exception) {
-                mOnlineTimeCache = new OnlineTime();
+                sOnlineTimeCache = new OnlineTime();
             }
         } else {
-            mOnlineTimeCache = new OnlineTime();
+            sOnlineTimeCache = new OnlineTime();
         }
     }
 }

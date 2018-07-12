@@ -54,6 +54,7 @@ public class Preference {
         String READ_TIME = "read_time";
         String TODAY_FIRST_OPEN_APP = "first_open_app";
         String SEARCH_HISTORY = "search_history";
+        String RATE_LIMIT = "rate_limit";
     }
 
     private static Preference sInstance;
@@ -328,5 +329,13 @@ public class Preference {
 
     public String getHistorySearch() {
         return mPrefs.getString(Key.SEARCH_HISTORY, null);
+    }
+
+    public void setRateLimit(String values) {
+        apply(Key.RATE_LIMIT, values);
+    }
+
+    public String getRateLimit() {
+        return mPrefs.getString(Key.RATE_LIMIT, null);
     }
 }
