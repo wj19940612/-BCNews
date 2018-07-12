@@ -360,6 +360,15 @@ public class DateUtil {
     }
 
     /**
+     * 返回时间 15:23
+     * @param createTime
+     * @return
+     */
+    public static String getFormatDayTime(long createTime) {
+        return DateUtil.format(createTime, "HH:mm");
+    }
+
+    /**
      * 返回格式 7月15日
      *
      * @param createTime

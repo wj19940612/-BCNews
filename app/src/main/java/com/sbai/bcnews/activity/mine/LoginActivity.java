@@ -394,6 +394,8 @@ public class LoginActivity extends WeChatActivity {
         mPageTitle.setText(R.string.password_login);
         mRegisterBtn.setVisibility(View.GONE);
         mAuthCodeArea.setVisibility(View.GONE);
+        mPassLogin.setVisibility(View.GONE);
+        mForgetPass.setVisibility(View.GONE);
         mPassword.setVisibility(View.VISIBLE);
         mPassLogin.setText(R.string.tel_auth_code_login);
         mAuthCode.setText("");

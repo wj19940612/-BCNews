@@ -100,6 +100,7 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
         mNewsAdapter = new NewsAdapter(getActivity(), mData);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNewsAdapter);
+        mSwipeToLoadLayout.setLoadMoreEnabled(false);
     }
 
     @Override
@@ -139,6 +140,7 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
 
     private void updateData(String searchContent, List<NewsFlash> data, boolean isRefresh) {
         if (TextUtils.isEmpty(searchContent) || data == null) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
             mNewsAdapter.notifyDataSetChanged();
             return;
         }
@@ -147,6 +149,11 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
         }
         mNewsAdapter.setSearchContent(searchContent);
         mData.addAll(data);
+        if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
+            mSwipeToLoadLayout.setLoadMoreEnabled(false);
+        } else {
+            mSwipeToLoadLayout.setLoadMoreEnabled(true);
+        }
         if (mData.size() >= Apic.DEFAULT_PAGE_SIZE && data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mNewsAdapter.showFooterView(true);
         } else {

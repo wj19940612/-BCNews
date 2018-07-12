@@ -55,6 +55,7 @@ import com.sbai.bcnews.utils.PermissionUtil;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.glide.GlideRoundAndCenterCropTransform;
+import com.sbai.bcnews.utils.hashrate.RateRecordCache;
 import com.sbai.bcnews.utils.news.NewsCache;
 import com.sbai.bcnews.utils.news.NewsReadCache;
 import com.sbai.bcnews.view.EmptyView;
@@ -611,8 +612,8 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         requestNewsViewpoint();
         if (LocalUser.getUser().isLogin() && mReadArticleTime < TIME_COUNT_GET_HASH_RATE) {
             startScheduleJob(TIME_SECOND);
-            startReadAnim();
         }
+        resetReadStatus();
     }
 
 
@@ -889,13 +890,20 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 //        }
     }
 
-    private void startReadAnim() {
-        mRoundPercent.startAnimation(AnimationUtils.loadAnimation(this, R.anim.read_anim));
-        mPercentLayout.setVisibility(View.VISIBLE);
+    //获取阅读状态，可能用户今日领取算力已达上限
+    private void resetReadStatus() {
+        if (RateRecordCache.isRateLimit()) {
+            stopScheduleJob();
+            updateGetRateStatus(false);
+        } else {
+            mRoundPercent.clearAnimation();
+            mRoundPercent.startAnimation(AnimationUtils.loadAnimation(this, R.anim.read_anim));
+            mReadArticleTime = 0;
+        }
     }
 
     private void updateReadAnimStatus() {
-        String percent = mReadArticleTime* 100 / TIME_COUNT_GET_HASH_RATE + "%";
+        String percent = mReadArticleTime * 100 / TIME_COUNT_GET_HASH_RATE + "%";
         mReadPercent.setText(percent);
     }
 
@@ -931,12 +939,26 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private void updateGetRateStatus(boolean hasGet) {
         mPercentLayout.setClickable(false);
+        mReadPercent.setText("");
         mReadPercent.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.ic_news_rate_has_get));
-        mRateStatus.setTextColor(ContextCompat.getColor(this,R.color.text_cb));
+        mRateStatus.setTextColor(ContextCompat.getColor(this, R.color.text_cb));
         if (hasGet) {
             mRateStatus.setText(R.string.has_get);
         } else {
             mRateStatus.setText(R.string.today_upper_limit);
+            saveReadLimitStatus();
+        }
+    }
+
+    //保存阅读算力上限的状态，下次进入可直接提示
+    private void saveReadLimitStatus() {
+        new ReadStatusThread().run();
+    }
+
+    static class ReadStatusThread extends Thread {
+
+        public void run() {
+            RateRecordCache.setRateLimit();
         }
     }
 
