@@ -445,7 +445,7 @@ public class HomeNewsFragment extends BaseFragment {
         public Fragment getItem(int position) {
             String title = mMyChannelEntities.get(position);
             if (position == 0) {
-                AttentionFragment attentionFragment = AttentionFragment.newsIntance(title);
+                AttentionFragment attentionFragment = AttentionFragment.newsInstance(title);
                 return attentionFragment;
             } else if (position == 1) {
                 NewsFragment newsFragment = NewsFragment.newsInstance(true, title);

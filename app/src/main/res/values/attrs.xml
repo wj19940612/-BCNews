@@ -166,6 +166,7 @@
         <attr name="labelDrawable" format="reference"/>
         <attr name="labelWidth" format="reference|dimension"/>
         <attr name="labelHeight" format="reference|dimension"/>
+        <attr name="placeDrawable" format="reference"/>
         <attr name="android:src"/>
     </declare-styleable>
 

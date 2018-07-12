@@ -37,7 +37,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:gravity="center"
+        android:gravity="start"
         android:textColor="@color/text_9B9B"
         android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="parent"

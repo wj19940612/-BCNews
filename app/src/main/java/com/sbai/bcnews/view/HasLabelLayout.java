@@ -27,6 +27,7 @@ public class HasLabelLayout extends RelativeLayout {
     private int mLabelHeight;
     private ImageView mMainImageView;
     private ImageView mLabelImageView;
+    private Drawable mPlaceDrawable;
 
     public HasLabelLayout(Context context) {
         this(context, null);
@@ -49,6 +50,7 @@ public class HasLabelLayout extends RelativeLayout {
         mLabelDrawable = typedArray.getDrawable(R.styleable.HasLabelLayout_labelDrawable);
         mLabelWidth = typedArray.getDimensionPixelOffset(R.styleable.HasLabelLayout_labelWidth, 0);
         mLabelHeight = typedArray.getDimensionPixelOffset(R.styleable.HasLabelLayout_labelHeight, 0);
+        mPlaceDrawable = typedArray.getDrawable(R.styleable.HasLabelLayout_placeDrawable);
         typedArray.recycle();
     }
 
@@ -58,6 +60,9 @@ public class HasLabelLayout extends RelativeLayout {
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         addView(mMainImageView, layoutParams);
 
+        if (mPlaceDrawable == null) {
+            mPlaceDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_default_head_portrait);
+        }
 
         mLabelImageView = new ImageView(getContext());
         if (mLabelWidth != 0 && mLabelHeight != 0) {
@@ -76,7 +81,7 @@ public class HasLabelLayout extends RelativeLayout {
     private void setImageSrc(String url, Drawable drawable) {
         GlideApp.with(getContext())
                 .load(!TextUtils.isEmpty(url) ? url : drawable)
-                .placeholder(R.drawable.ic_default_head_portrait)
+                .placeholder(mPlaceDrawable)
                 .circleCrop()
                 .into(mMainImageView);
     }

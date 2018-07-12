@@ -90,7 +90,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         public void onAttention(Author newsAuthor, boolean isAttention, int position);
     }
 
-    public static AttentionFragment newsIntance(String channel) {
+    public static AttentionFragment newsInstance(String channel) {
         AttentionFragment attentionFragment = new AttentionFragment();
         Bundle bundle = new Bundle();
         bundle.putString(CHANNEL, channel);

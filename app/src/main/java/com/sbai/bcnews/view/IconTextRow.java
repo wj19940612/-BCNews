@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -222,9 +223,9 @@ public class IconTextRow extends LinearLayout {
     }
 
     public void setRightIconVisible(boolean visible) {
-        if(visible){
+        if (visible) {
             setRightIconVisibility(VISIBLE);
-        }else {
+        } else {
             setRightIconVisibility(GONE);
         }
     }
@@ -233,6 +234,10 @@ public class IconTextRow extends LinearLayout {
         if (mRightImage != null) {
             mRightImage.setVisibility(visibility);
         }
+    }
+
+    public void setSubTextRightDrawable(@DrawableRes int resId) {
+        mSubTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, resId, 0);
     }
 
     public void setSubTextViewBg(int resId) {

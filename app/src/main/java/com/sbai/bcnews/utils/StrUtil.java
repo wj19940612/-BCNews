@@ -49,6 +49,30 @@ public class StrUtil {
     }
 
     /**
+     * 设置某一段文字中几个字颜色变化
+     *
+     * @param values          总的文本
+     * @param changeColorText values 中将要变化颜色的文字
+     * @param color
+     * @return
+     */
+    public static SpannableString changeAllSpecialTextColor(String values, String changeColorText, @ColorInt int color) {
+        SpannableString spannableString = new SpannableString(values);
+        int addIndex = 0;
+        if (!TextUtils.isEmpty(values)) {
+            int index = values.indexOf(changeColorText);
+            while (index >= 0) {
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
+                spannableString.setSpan(foregroundColorSpan, index + addIndex, index + addIndex + changeColorText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                values = values.substring(index + changeColorText.length(), values.length());
+                addIndex = addIndex + index + changeColorText.length();
+                index = values.indexOf(changeColorText);
+            }
+        }
+        return spannableString;
+    }
+
+    /**
      * 设置 s1 的字体，按比例缩放 s2 的大小，同时拼接 s1 和 s2
      *
      * @param s1

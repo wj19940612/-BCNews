@@ -23,14 +23,14 @@ public class Operation {
 
     private String SYS_OPERATE_EMAIL;
 
-    private String ewqe;
+    private String SYS_SEARCH;
 
-    public String getEwqe() {
-        return ewqe;
+    public String getSYS_SEARCH() {
+        return SYS_SEARCH;
     }
 
     public void setEwqe(String ewqe) {
-        this.ewqe = ewqe;
+        this.SYS_SEARCH = ewqe;
     }
 
     public String getEmail() {

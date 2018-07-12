@@ -90,10 +90,15 @@ public class UserInfo implements Parcelable {
 
 
     public int rankType; //角色:0普通用户,1专栏作家,2官方媒体
+    private String rankTypeStr; //角色名
     private String authInfo;
 
     public String getAuthInfo() {
         return authInfo;
+    }
+
+    public boolean isAuthor() {
+        return getAuthorType() != Author.AUTHOR_STATUS_ORDINARY;
     }
 
     public void setAuthInfo(String authInfo) {
@@ -108,10 +113,14 @@ public class UserInfo implements Parcelable {
         this.rankType = authorType;
     }
 
-    public boolean isAuthor() {
-        return getAuthorType() != Author.AUTHOR_STATUS_ORDINARY;
+
+    public String getRankTypeStr() {
+        return rankTypeStr;
     }
 
+    public void setRankTypeStr(String rankTypeStr) {
+        this.rankTypeStr = rankTypeStr;
+    }
 
     public UserInfo() {
     }
@@ -494,6 +503,7 @@ public class UserInfo implements Parcelable {
         dest.writeInt(this.addRate);
         dest.writeInt(this.addIntegral);
         dest.writeInt(this.rankType);
+        dest.writeString(this.rankTypeStr);
         dest.writeString(this.authInfo);
     }
 
@@ -535,6 +545,7 @@ public class UserInfo implements Parcelable {
         this.addRate = in.readInt();
         this.addIntegral = in.readInt();
         this.rankType = in.readInt();
+        this.rankTypeStr = in.readString();
         this.authInfo = in.readString();
     }
 
