@@ -207,6 +207,9 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
         } else {
             mSwipeToLoadLayout.setLoadMoreEnabled(true);
         }
+        if (data.size() != 0) {
+            mPage++;
+        }
 //        if (mData.size() >= Apic.DEFAULT_PAGE_SIZE && data.size() < Apic.DEFAULT_PAGE_SIZE) {
 //            mAuthorAdapter.showFooterView(true);
 //        } else {
