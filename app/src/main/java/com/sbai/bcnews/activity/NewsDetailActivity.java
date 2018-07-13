@@ -610,9 +610,6 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         super.onPostResume();
         updateOtherData(mOtherArticleList);
         requestNewsViewpoint();
-        if (LocalUser.getUser().isLogin() && mReadArticleTime < TIME_COUNT_GET_HASH_RATE) {
-            startScheduleJob(TIME_SECOND);
-        }
         resetReadStatus();
     }
 
@@ -895,11 +892,22 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         if (RateRecordCache.isRateLimit()) {
             stopScheduleJob();
             updateGetRateStatus(false);
-        } else {
+        } else if (!LocalUser.getUser().isLogin()) {
             mRoundPercent.clearAnimation();
-            mRoundPercent.startAnimation(AnimationUtils.loadAnimation(this, R.anim.read_anim));
-            mReadArticleTime = 0;
+            updateReadFinishStatus();
+        } else if(mReadArticleTime < TIME_COUNT_GET_HASH_RATE){
+            updateStartAnim();
         }
+    }
+
+    private void updateStartAnim(){
+        mRateStatus.setText(R.string.rate_adding);
+        mReadPercent.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.ic_news_rate_reading));
+        mRoundPercent.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.ic_news_round_anim));
+        mRoundPercent.clearAnimation();
+        mRoundPercent.startAnimation(AnimationUtils.loadAnimation(this, R.anim.read_anim));
+        mReadArticleTime = 0;
+        startScheduleJob(TIME_SECOND);
     }
 
     private void updateReadAnimStatus() {
@@ -917,7 +925,9 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     }
 
     private void clickPercent() {
-        if (mReadArticleTime == TIME_COUNT_GET_HASH_RATE) {
+        if (!LocalUser.getUser().isLogin()) {
+            Launcher.with(this, LoginActivity.class).execute();
+        } else if (mReadArticleTime == TIME_COUNT_GET_HASH_RATE) {
             readAddQKC();
         }
     }
