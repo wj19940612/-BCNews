@@ -139,12 +139,14 @@ public class SearchLabelLayout extends FrameLayout {
         mHistoryFlexboxLayout.setVisibility(VISIBLE);
         mClearHistory.setVisibility(VISIBLE);
         mHistorySearchLabel.setVisibility(VISIBLE);
+        mSplit.setVisibility(VISIBLE);
     }
 
     private void hideHistoryView() {
         mHistoryFlexboxLayout.setVisibility(GONE);
         mClearHistory.setVisibility(GONE);
         mHistorySearchLabel.setVisibility(GONE);
+        mSplit.setVisibility(GONE);
     }
 
     public void updateHotSearch() {
@@ -167,13 +169,11 @@ public class SearchLabelLayout extends FrameLayout {
 
     private void showHotView() {
         mHotFlexboxLayout.setVisibility(VISIBLE);
-        mSplit.setVisibility(VISIBLE);
         mHotSearchLabel.setVisibility(VISIBLE);
     }
 
     private void hideHotView() {
         mHotFlexboxLayout.setVisibility(GONE);
-        mSplit.setVisibility(GONE);
         mHotSearchLabel.setVisibility(GONE);
     }
 

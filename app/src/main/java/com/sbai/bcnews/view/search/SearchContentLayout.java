@@ -58,6 +58,7 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
     private View mArticleSplit;
     private View mArticleFirstSplit;
     private View mArticleSecondSplit;
+    private View mArticleThirdSplit;
 
 
     @BindView(R.id.newsSplit)
@@ -166,6 +167,7 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
         mLookAllArticle = mArticleView.findViewById(R.id.lookAllArticle);
         mArticleFirstSplit = mArticleView.findViewById(R.id.firstSplit);
         mArticleSecondSplit = mArticleView.findViewById(R.id.secondSplit);
+        mArticleThirdSplit = mArticleView.findViewById(R.id.thirdSplit);
 
         mFirstArticle.setOnClickListener(this);
         mSecondArticle.setOnClickListener(this);
@@ -340,12 +342,14 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
             mLookAllArticle.setVisibility(GONE);
             mArticleFirstSplit.setVisibility(GONE);
             mArticleSecondSplit.setVisibility(GONE);
+            mArticleThirdSplit.setVisibility(GONE);
         } else if (showViewSize == 2) {
             mSecondArticle.setVisibility(VISIBLE);
             mThirdArticle.setVisibility(GONE);
             updateArticleInfo(articleList.get(1), mSecondArticle);
             mArticleFirstSplit.setVisibility(VISIBLE);
             mArticleSecondSplit.setVisibility(GONE);
+            mArticleThirdSplit.setVisibility(GONE);
             mLookAllArticle.setVisibility(GONE);
         } else {
             mLookAllArticle.setVisibility(VISIBLE);
@@ -353,6 +357,7 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
             mThirdArticle.setVisibility(VISIBLE);
             mArticleFirstSplit.setVisibility(VISIBLE);
             mArticleSecondSplit.setVisibility(VISIBLE);
+            mArticleThirdSplit.setVisibility(VISIBLE);
             updateArticleInfo(articleList.get(1), mSecondArticle);
             updateArticleInfo(articleList.get(2), mThirdArticle);
         }
