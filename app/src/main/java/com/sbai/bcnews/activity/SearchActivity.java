@@ -112,7 +112,6 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
                     }
                 })
                 .fire();
-        mSearchEditText.setHint("btc");
     }
 
     private SearchSynthesizeFragment getSearchSynthesizeFragment() {
