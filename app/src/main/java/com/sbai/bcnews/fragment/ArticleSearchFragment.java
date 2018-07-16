@@ -56,7 +56,6 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
     private SearchEditText.OnSearchContentResultListener mSearchContentResultListener;
 
 
-
     public static ArticleSearchFragment newsInstance(String searchContent) {
         ArticleSearchFragment articleSearchFragment = new ArticleSearchFragment();
         Bundle bundle = new Bundle();
@@ -127,7 +126,7 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
         requestNews(true);
     }
 
-    public void setSearchContent(String searchContent){
+    public void setSearchContent(String searchContent) {
         mSearchContent = searchContent;
         requestNews(true);
     }
@@ -148,6 +147,9 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
                     stopFreshOrLoadAnimation();
                 }
             }).fireFreely();
+        } else {
+            refreshSuccess();
+            stopFreshOrLoadAnimation();
         }
     }
 

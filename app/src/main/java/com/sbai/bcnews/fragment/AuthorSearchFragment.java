@@ -183,6 +183,9 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
                 }
 
             }).fireFreely();
+        }else {
+            refreshSuccess();
+            stopFreshOrLoadAnimation();
         }
     }
 
