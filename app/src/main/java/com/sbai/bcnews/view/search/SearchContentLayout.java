@@ -425,7 +425,7 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
     }
 
     private void updateNewsFlashInfo(NewsFlash newsFlash, TextView title, TextView timeLine, AutoSplitTextView content) {
-        if (TextUtils.isEmpty(newsFlash.getTitle())) {
+        if (TextUtils.isEmpty(newsFlash.getContent())) {
             content.setVisibility(GONE);
         } else {
             content.setVisibility(VISIBLE);
@@ -434,7 +434,7 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
             content.setEllipsize(TextUtils.TruncateAt.END);
         }
 
-        timeLine.setText(DateUtil.format(newsFlash.getReleaseTime(), DateUtil.FORMAT_SPECIAL_SLASH_NO_HOUR));
+        timeLine.setText(DateUtil.formatDefaultStyleTime(newsFlash.getReleaseTime()));
 
         if (!TextUtils.isEmpty(newsFlash.getTitle())) {
             String trim = newsFlash.getTitle()
@@ -443,9 +443,9 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
                     .replaceAll("\r", "")
                     .replaceAll("\n", "").trim();
             title.setText(StrUtil.changeSpecialTextColor(trim, mSearchContent, mSearchTextColor));
-            content.setVisibility(VISIBLE);
+            title.setVisibility(VISIBLE);
         } else {
-            content.setVisibility(GONE);
+            title.setVisibility(GONE);
         }
 
         content.setText(newsFlash.getContent());

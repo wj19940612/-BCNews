@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@+id/headPortrait">
 
             <ImageView
@@ -119,7 +119,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="35dp"
-                android:background="@drawable/bg_white_round"
+                android:background="@drawable/bg_white_line_round"
+                android:clickable="false"
                 android:gravity="center"
                 android:minWidth="80dp"
                 app:layout_constraintBottom_toBottomOf="@id/mineQkcNumber"
@@ -130,6 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_common_right_arrow"
+                    android:enabled="false"
                     android:gravity="center"
                     android:paddingBottom="3dp"
                     android:paddingTop="3dp"
@@ -143,7 +145,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_mine_hash_rate"
-                android:gravity="center"
+                android:gravity="center_vertical"
+                android:paddingLeft="3dp"
                 android:text="@string/mine_hashrate"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"

@@ -95,7 +95,7 @@ public class ShareNewsFlashActivity extends BaseActivity {
         if (newsFlash != null) {
             mId = newsFlash.getId();
             mWeek.setText(getString(R.string.week_, DateUtil.getDayOfWeek(newsFlash.getReleaseTime())));
-            mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()).concat(" ").concat(getString(R.string.news_flash)));
+            mTime.setText(DateUtil.formatDefaultStyleTime(newsFlash.getReleaseTime()).concat(" ").concat(getString(R.string.news_flash)));
             if (newsFlash.isImportant()) {
                 if (TextUtils.isEmpty(newsFlash.getTitle())) {
                     mContent.setText(newsFlash.getContent());
