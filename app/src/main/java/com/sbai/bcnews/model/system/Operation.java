@@ -12,7 +12,7 @@ public class Operation {
     public static final String OPERATION_TYPE_MARKET_PAGE_SWITCH = "quota";
     public static final String OPERATION_TYPE_WE_CHAT = "SYS_OPERATE_WX";
 
-    public static final String RECOMMEND_HOT_SEARCH_CONTENT = "ewqe";
+    public static final String RECOMMEND_HOT_SEARCH_CONTENT = "SYS_SEARCH";
 
     public static final String OPERATION_SETTING_OPEN_MARKET_PAGE = "1";
 

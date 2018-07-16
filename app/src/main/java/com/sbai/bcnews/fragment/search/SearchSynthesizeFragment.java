@@ -10,10 +10,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.BaseActivity;
 import com.sbai.bcnews.activity.NewsDetailActivity;
 import com.sbai.bcnews.activity.SearchActivity;
 import com.sbai.bcnews.activity.ShareNewsFlashActivity;
@@ -143,8 +144,8 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
             }
 
             @Override
-            public void onAttentionAuthor(Author author, ImageView imageView) {
-                attentionAuthor(author, imageView);
+            public void onAttentionAuthor(Author author, TextView textView) {
+                attentionAuthor(author, textView);
             }
 
             @Override
@@ -186,9 +187,11 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
         mSearchLabelLayout.updateHotSearch();
     }
 
-    private void attentionAuthor(Author author, ImageView imageView) {
+    private void attentionAuthor(Author author, TextView textView) {
         if (!LocalUser.getUser().isLogin()) {
-            Launcher.with(getContext(), LoginActivity.class).execute();
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), LoginActivity.class);
+            startActivityForResult(intent,LoginActivity.REQ_CODE_LOGIN);
         } else {
             if (author != null) {
                 final int attentionType = author.getIsConcern() == Author.AUTHOR_STATUS_SPECIAL ? Author.AUTHOR_IS_NOT_ATTENTION : Author.AUTHOR_IS_ALREADY_ATTENTION;
@@ -200,7 +203,7 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
                                 author.setIsConcern(attentionType);
                                 Intent intent = new Intent();
                                 intent.putExtra(ExtraKeys.TAG, attentionType);
-                                mSearchContentLayout.updateAttentionAuthor(author, imageView);
+                                mSearchContentLayout.updateAttentionAuthor(author, textView);
                                 if (author.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION) {
                                     ToastUtil.show(R.string.attention_success);
                                 } else {
@@ -270,6 +273,20 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
     public void onSearchLabelClick(String values) {
         if (mOnSearchLabelSelectListener != null) {
             mOnSearchLabelSelectListener.onSearchLabelSelect(values);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == BaseActivity.RESULT_OK) {
+            switch (requestCode) {
+                case LoginActivity.REQ_CODE_LOGIN:
+                    if (!TextUtils.isEmpty(mSearchContent)) {
+                        requestSearchContent(mSearchContent);
+                    }
+                    break;
+            }
         }
     }
 

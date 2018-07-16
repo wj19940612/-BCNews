@@ -108,7 +108,7 @@ public class Launcher {
         }
     }
 
-    public void excuteForResultFragment(int requestCode) {
+    public void executeForResultFragment(int requestCode) {
         if (mFragment != null && mContext != null) {
             if (mFragment instanceof Fragment) {
                 mFragment.startActivityForResult(mIntent, requestCode);

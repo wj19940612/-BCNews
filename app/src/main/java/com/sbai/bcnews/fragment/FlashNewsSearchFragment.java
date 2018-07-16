@@ -266,7 +266,7 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
                     mSplit.setVisibility(View.VISIBLE);
                     mFooter.setVisibility(View.GONE);
                 }
-                mTime.setText(DateUtil.getFormatTime(newsFlash.getReleaseTime()));
+                mTime.setText(DateUtil.formatDefaultStyleTime(newsFlash.getReleaseTime()));
                 if (TextUtils.isEmpty(newsFlash.getTitle())) {
                     mTitle.setVisibility(View.GONE);
                     mContent.setText(newsFlash.getContent().trim());

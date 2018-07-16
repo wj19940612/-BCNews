@@ -32,6 +32,8 @@ import java.lang.reflect.Field;
  */
 public class SearchEditText extends LinearLayout {
 
+    private static final String TAG = "SearchEditText";
+
     private Drawable mLeftDrawable;
     private int mSearchTextColor;
     private int mSearchTextSize;
@@ -46,6 +48,8 @@ public class SearchEditText extends LinearLayout {
 
     private OnSearchContentListener mOnSearchContentListener;
     private String mDefaultHintText;
+
+    private boolean mCursorVisable = true;
 
 
     public interface OnSearchContentListener {
@@ -65,6 +69,17 @@ public class SearchEditText extends LinearLayout {
 
         handleAttrs(attrs);
         init();
+
+//        mSearchEditText.setOnFocusChangeListener((view, hasFocus) -> {
+//            if (hasFocus) {
+//                setCursorVisible(true);
+//            }
+//        });
+
+        mSearchEditText.setOnClickListener((v -> {
+            if (!mCursorVisable)
+                setCursorVisible(true);
+        }));
     }
 
     private void init() {
@@ -204,6 +219,9 @@ public class SearchEditText extends LinearLayout {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             boolean isEmpty = checkSearchContentIsEmpty();
             if (isEmpty) {
+                if (!mCursorVisable) {
+                    setCursorVisible(true);
+                }
                 if (mClearContent.getVisibility() == VISIBLE)
                     mClearContent.setVisibility(INVISIBLE);
             } else {
@@ -225,6 +243,11 @@ public class SearchEditText extends LinearLayout {
 
     private boolean checkSearchContentIsEmpty() {
         return TextUtils.isEmpty(mSearchEditText.getText());
+    }
+
+    public void setCursorVisible(boolean visible) {
+        mCursorVisable = visible;
+        mSearchEditText.setCursorVisible(visible);
     }
 
     @Override

@@ -86,15 +86,15 @@ android {
             ]
         }
 
-        xiaomi {}
-        vivo {}
-        c360 {}
-        tencent {}
-        baidu {}
-        others {}
-        fenx {}
-        weixin {}
-        huawei {}
+//        xiaomi {}
+//        vivo {}
+//        c360 {}
+//        tencent {}
+//        baidu {}
+//        others {}
+//        fenx {}
+//        weixin {}
+//        huawei {}
     }
 
     android.applicationVariants.all { variant ->

@@ -139,13 +139,28 @@ public class SearchLabelLayout extends FrameLayout {
         mHistoryFlexboxLayout.setVisibility(VISIBLE);
         mClearHistory.setVisibility(VISIBLE);
         mHistorySearchLabel.setVisibility(VISIBLE);
-        mSplit.setVisibility(VISIBLE);
     }
 
     private void hideHistoryView() {
         mHistoryFlexboxLayout.setVisibility(GONE);
         mClearHistory.setVisibility(GONE);
         mHistorySearchLabel.setVisibility(GONE);
+
+    }
+
+    private void showHotView() {
+        mHotFlexboxLayout.setVisibility(VISIBLE);
+        mHotSearchLabel.setVisibility(VISIBLE);
+        if (mHistorySearchList == null || mHistorySearchList.isEmpty()) {
+            mSplit.setVisibility(GONE);
+        } else {
+            mSplit.setVisibility(VISIBLE);
+        }
+    }
+
+    private void hideHotView() {
+        mHotFlexboxLayout.setVisibility(GONE);
+        mHotSearchLabel.setVisibility(GONE);
         mSplit.setVisibility(GONE);
     }
 
@@ -167,15 +182,6 @@ public class SearchLabelLayout extends FrameLayout {
         updateSearchText(viewSize, true, mHotFlexboxLayout, mHotSearchList);
     }
 
-    private void showHotView() {
-        mHotFlexboxLayout.setVisibility(VISIBLE);
-        mHotSearchLabel.setVisibility(VISIBLE);
-    }
-
-    private void hideHotView() {
-        mHotFlexboxLayout.setVisibility(GONE);
-        mHotSearchLabel.setVisibility(GONE);
-    }
 
     private void updateHistorySearch() {
         if (mHistorySearchList == null) return;
@@ -223,7 +229,7 @@ public class SearchLabelLayout extends FrameLayout {
             mEmptyView.setVisibility(GONE);
         }
         mEmptyView.setText(R.string.search_for_everything_you_want_to_see);
-        mEmptyView.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+        mEmptyView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
     }
 
     public void showNotSearchView() {

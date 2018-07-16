@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,12 +40,12 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
     private HasLabelLayout mFirstHasLabelLayout;
     private TextView mFirstAuthorName;
     private TextView mFirstAuthorIntroduce;
-    ImageView mFirstAttentionAuthor;
+    TextView mFirstAttentionAuthor;
     ConstraintLayout mFirstAuthor;
     HasLabelLayout mSecondHasLabelLayout;
     TextView mSecondAuthorName;
     TextView mSecondAuthorIntroduce;
-    ImageView mSecondAttentionAuthor;
+    TextView mSecondAttentionAuthor;
     ConstraintLayout mSecondAuthor;
     TextView mLookAllAuthor;
 
@@ -306,7 +305,7 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
         }
     }
 
-    private void updateAuthorInfo(Author author, HasLabelLayout hasLabelLayout, TextView authorName, TextView authorIntroduce, ImageView attentionAuthor) {
+    private void updateAuthorInfo(Author author, HasLabelLayout hasLabelLayout, TextView authorName, TextView authorIntroduce, TextView attentionAuthor) {
         hasLabelLayout.setImageSrc(author.getUserPortrait());
         hasLabelLayout.setLabelImageViewVisible(author.isAuthor());
 
@@ -314,9 +313,27 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
         hasLabelLayout.setLabelSelected(isOfficialAuthor);
 
         authorName.setText(StrUtil.changeSpecialTextColor(author.getUserName(), mSearchContent, mSearchTextColor));
-        String introduce = TextUtils.isEmpty(author.getAuthInfo()) ? "--" : author.getAuthInfo();
-        authorIntroduce.setText(getContext().getString(R.string.author_check_introduce_s, introduce));
-        attentionAuthor.setSelected(author.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
+        if (!TextUtils.isEmpty(author.getAuthInfo())) {
+            authorIntroduce.setVisibility(VISIBLE);
+            authorIntroduce.setText(author.getAuthInfo());
+        } else {
+            authorIntroduce.setVisibility(GONE);
+        }
+
+        updateAttentionAuthor(author, attentionAuthor);
+
+    }
+
+    public void updateAttentionAuthor(Author author, TextView attentionAuthor) {
+        if (author.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION) {
+            attentionAuthor.setSelected(true);
+            attentionAuthor.setTextColor(ContextCompat.getColor(getContext(), R.color.text_d9));
+            attentionAuthor.setText(R.string.has_attention);
+        } else {
+            attentionAuthor.setSelected(false);
+            attentionAuthor.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            attentionAuthor.setText(R.string.attention);
+        }
     }
 
     private void updateArticle(List<AuthorArticle> articleList) {
@@ -408,7 +425,7 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
     }
 
     private void updateNewsFlashInfo(NewsFlash newsFlash, TextView title, TextView timeLine, AutoSplitTextView content) {
-        if (TextUtils.isEmpty(newsFlash.getTitle())) {
+        if (TextUtils.isEmpty(newsFlash.getContent())) {
             content.setVisibility(GONE);
         } else {
             content.setVisibility(VISIBLE);
@@ -417,7 +434,7 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
             content.setEllipsize(TextUtils.TruncateAt.END);
         }
 
-        timeLine.setText(DateUtil.format(newsFlash.getReleaseTime(), DateUtil.FORMAT_SPECIAL_SLASH_NO_HOUR));
+        timeLine.setText(DateUtil.formatDefaultStyleTime(newsFlash.getReleaseTime()));
 
         if (!TextUtils.isEmpty(newsFlash.getTitle())) {
             String trim = newsFlash.getTitle()
@@ -426,9 +443,9 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
                     .replaceAll("\r", "")
                     .replaceAll("\n", "").trim();
             title.setText(StrUtil.changeSpecialTextColor(trim, mSearchContent, mSearchTextColor));
-            content.setVisibility(VISIBLE);
+            title.setVisibility(VISIBLE);
         } else {
-            content.setVisibility(GONE);
+            title.setVisibility(GONE);
         }
 
         content.setText(newsFlash.getContent());
@@ -466,16 +483,14 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
         return mFlashList == null || mFlashList.isEmpty();
     }
 
-    public void updateAttentionAuthor(Author author, ImageView imageView) {
-        imageView.setSelected(author.getIsConcern() == Author.AUTHOR_IS_ALREADY_ATTENTION);
-    }
+
 
 
     public interface OnSearchContentClickListener {
 
         void onAuthorClick(Author author);
 
-        void onAttentionAuthor(Author author, ImageView imageView);
+        void onAttentionAuthor(Author author, TextView textView);
 
         void onLookAllAuthor();
 
