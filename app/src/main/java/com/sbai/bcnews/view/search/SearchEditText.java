@@ -32,6 +32,8 @@ import java.lang.reflect.Field;
  */
 public class SearchEditText extends LinearLayout {
 
+    private static final String TAG = "SearchEditText";
+
     private Drawable mLeftDrawable;
     private int mSearchTextColor;
     private int mSearchTextSize;
@@ -68,12 +70,16 @@ public class SearchEditText extends LinearLayout {
         handleAttrs(attrs);
         init();
 
-        mSearchEditText.setOnFocusChangeListener((view, hasFocus) -> {
-            if (hasFocus) {
-                setCursorVisible(true);
-            }
-        });
+//        mSearchEditText.setOnFocusChangeListener((view, hasFocus) -> {
+//            if (hasFocus) {
+//                setCursorVisible(true);
+//            }
+//        });
 
+        mSearchEditText.setOnClickListener((v -> {
+            if (!mCursorVisable)
+                setCursorVisible(true);
+        }));
     }
 
     private void init() {
@@ -213,7 +219,7 @@ public class SearchEditText extends LinearLayout {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             boolean isEmpty = checkSearchContentIsEmpty();
             if (isEmpty) {
-                if(!mCursorVisable){
+                if (!mCursorVisable) {
                     setCursorVisible(true);
                 }
                 if (mClearContent.getVisibility() == VISIBLE)
