@@ -335,6 +335,7 @@ public class LoginActivity extends WeChatActivity {
                 break;
             case R.id.weChatLogin:
                 umengEventCount(UmengCountEventId.LOGIN_WECHAT);
+                mWeChatLogin.setClickable(false);
                 weChatLogin();
                 break;
             case R.id.agree:
@@ -388,6 +389,7 @@ public class LoginActivity extends WeChatActivity {
     @Override
     protected void bindFailure() {
         ToastUtil.show(R.string.cancel_login);
+        mWeChatLogin.setClickable(true);
     }
 
     private void updateBindPhoneViews() {
