@@ -2,7 +2,6 @@ package com.sbai.bcnews.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,7 +33,6 @@ import com.sbai.bcnews.model.NewsDetail;
 import com.sbai.bcnews.model.author.Author;
 import com.sbai.bcnews.model.wrap.NewsWrap;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadFragment;
-import com.sbai.bcnews.utils.Display;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.news.NewsAdapter;
 import com.sbai.bcnews.utils.news.NewsWithHeaderAdapter;
@@ -52,7 +50,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static android.app.Activity.RESULT_OK;
 import static com.sbai.bcnews.ExtraKeys.CHANNEL;
 
 public class AttentionFragment extends RecycleViewSwipeLoadFragment {
@@ -212,7 +209,7 @@ public class AttentionFragment extends RecycleViewSwipeLoadFragment {
         mHeaderView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Launcher.with(AttentionFragment.this, MyAttentionActivity.class).excuteForResultFragment(INTENT_REQUEST_CODE_ATTENTIONLIST);
+                Launcher.with(AttentionFragment.this, MyAttentionActivity.class).executeForResultFragment(INTENT_REQUEST_CODE_ATTENTIONLIST);
             }
         });
     }

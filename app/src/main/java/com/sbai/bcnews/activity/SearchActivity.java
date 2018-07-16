@@ -184,6 +184,7 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
     @Override
     public void onSearchFinish(String searchKeyBoard, Object result) {
         KeyBoardUtils.closeKeyboard(mSearchEditText);
+        mSearchEditText.setCursorVisible(false);
     }
 
 

@@ -61,11 +61,17 @@
             app:layout_constraintTop_toBottomOf="@id/firstAuthorName"
             tools:text="hdfkjfkjdfjkdjkfdjkfdjkfdj开发的开放接口附近空间分开放接口fkdjfkd"/>
 
-        <ImageView
+        <TextView
             android:id="@+id/firstAttentionAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_attention_author"
+            android:background="@drawable/btn_attention_author"
+            android:minHeight="16dp"
+            android:minWidth="50dp"
+            android:gravity="center"
+            android:text="@string/has_attention"
+            android:textColor="@color/colorPrimary"
+            android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@id/firstHasLabelLayout"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/firstHasLabelLayout"/>
@@ -114,11 +120,17 @@
             app:layout_constraintTop_toBottomOf="@id/secondAuthorName"
             tools:text="hdfkjfkjdfjkdjkfdjkfdjkfdj开发的开放接口附近空间分开放接口fkdjfkd"/>
 
-        <ImageView
+        <TextView
             android:id="@+id/secondAttentionAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_attention_author"
+            android:background="@drawable/btn_attention_author"
+            android:minHeight="16dp"
+            android:minWidth="50dp"
+            android:gravity="center"
+            android:text="@string/has_attention"
+            android:textColor="@color/colorPrimary"
+            android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@id/secondHasLabelLayout"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/secondHasLabelLayout"/>

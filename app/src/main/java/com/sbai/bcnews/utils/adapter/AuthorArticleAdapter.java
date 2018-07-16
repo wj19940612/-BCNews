@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  */
 public class AuthorArticleAdapter extends HeaderViewRecycleViewAdapter<AuthorArticle, RecyclerView.ViewHolder> {
 
-    public final static String emptyText = "     ";
+    public final static String emptyText = "    ";
 
     private static final int ITEM_TYPE_NONE_IMAGE = 1;
     private static final int ITEM_TYPE_SINGLE_IMAGE = 2;
