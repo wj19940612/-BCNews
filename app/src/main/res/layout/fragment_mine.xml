@@ -270,7 +270,7 @@
             app:rowVerticalPadding="0dp"
             app:subText="@string/invite_friend_get_money"
             app:subTextColor="@color/text_cb"
-            app:subTextSize="12sp"/>
+            app:subTextSize="10sp"/>
 
 
         <com.sbai.bcnews.view.IconTextRow

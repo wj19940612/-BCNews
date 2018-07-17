@@ -295,8 +295,12 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
 
         updateAuthorInfo(mAuthorList.get(0), mFirstHasLabelLayout, mFirstAuthorName, mFirstAuthorIntroduce, mFirstAttentionAuthor);
         if (mAuthorList.size() > 1) {
+            if (mAuthorList.size() > 2) {
+                mLookAllAuthor.setVisibility(VISIBLE);
+            } else {
+                mLookAllAuthor.setVisibility(GONE);
+            }
             mSecondAuthor.setVisibility(VISIBLE);
-            mLookAllAuthor.setVisibility(VISIBLE);
             updateAuthorInfo(mAuthorList.get(1), mSecondHasLabelLayout, mSecondAuthorName, mSecondAuthorIntroduce, mSecondAttentionAuthor);
         } else {
             mSecondAuthor.setVisibility(GONE);
@@ -313,9 +317,14 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
         hasLabelLayout.setLabelSelected(isOfficialAuthor);
 
         authorName.setText(StrUtil.changeSpecialTextColor(author.getUserName(), mSearchContent, mSearchTextColor));
-        if (!TextUtils.isEmpty(author.getAuthInfo())) {
+        boolean isEmpty = TextUtils.isEmpty(author.getAuthInfo());
+        String introduce = "";
+        if (!isEmpty) {
+            introduce = author.getAuthInfo().trim();
+        }
+        if (!TextUtils.isEmpty(introduce)) {
             authorIntroduce.setVisibility(VISIBLE);
-            authorIntroduce.setText(author.getAuthInfo());
+            authorIntroduce.setText(introduce);
         } else {
             authorIntroduce.setVisibility(GONE);
         }
@@ -429,9 +438,10 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
             content.setVisibility(GONE);
         } else {
             content.setVisibility(VISIBLE);
-            content.setMaxLines(6);
-            content.setAutoSplitEnabled(true);
-            content.setEllipsize(TextUtils.TruncateAt.END);
+//            content.setMaxLines(6);
+//            content.setAutoSplitEnabled(true);
+//            content.setEllipsize(TextUtils.TruncateAt.END);
+            content.setText(newsFlash.getContent().trim());
         }
 
         timeLine.setText(DateUtil.formatDefaultStyleTime(newsFlash.getReleaseTime()));
@@ -448,8 +458,6 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
             title.setVisibility(GONE);
         }
 
-        content.setText(newsFlash.getContent());
-
         content.setOnClickListener(new OnClickListener() {
             boolean flag = true;
 
@@ -460,11 +468,11 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
                     if (flag) {
                         flag = false;
                         content.setMaxLines(Integer.MAX_VALUE);
-                        content.setEllipsize(null);
+//                        content.setEllipsize(null);
                     } else {
                         flag = true;
                         content.setMaxLines(6);
-                        content.setEllipsize(TextUtils.TruncateAt.END);
+//                        content.setEllipsize(TextUtils.TruncateAt.END);
                     }
             }
         });
@@ -482,8 +490,6 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
     private boolean notHasNewsFlash() {
         return mFlashList == null || mFlashList.isEmpty();
     }
-
-
 
 
     public interface OnSearchContentClickListener {
