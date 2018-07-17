@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.activity.MyAttentionActivity;
+import com.sbai.bcnews.activity.author.AuthorActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
 import com.sbai.bcnews.http.Callback;
@@ -112,7 +114,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
         mAuthorAdapter = new AuthorAdapter(getActivity(), mData, new AttentionFragment.OnItemClickListener() {
             @Override
             public void onItemClick(Author author) {
-
+                Launcher.with(getActivity(), AuthorActivity.class).putExtra(ExtraKeys.ID, author.getId()).execute();
             }
 
             @Override
@@ -284,15 +286,15 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
                     mHead.setLabelImageViewVisible(false);
                 }
 
-                mName.setText(StrUtil.changeSpecialTextColor(newsAuthor.getUserName(), searchContent, ContextCompat.getColor(context, R.color.colorPrimary)));
+                mName.setText(StrUtil.changeSpecialTextColor(newsAuthor.getUserName().trim(), searchContent, ContextCompat.getColor(context, R.color.colorPrimary)));
                 if (!LocalUser.getUser().isLogin()) {
                     setNoAttentionBtn(mAttentionBtn, false, context);
                 } else {
                     setNoAttentionBtn(mAttentionBtn, newsAuthor.getIsConcern() > 0, context);
                 }
 
-                if (!TextUtils.isEmpty(newsAuthor.getAuthInfo())) {
-                    mIntroduce.setText(newsAuthor.getAuthInfo());
+                if (!TextUtils.isEmpty(newsAuthor.getAuthInfo().trim())) {
+                    mIntroduce.setText(newsAuthor.getAuthInfo().trim());
                 } else {
                     mIntroduce.setText("");
                 }

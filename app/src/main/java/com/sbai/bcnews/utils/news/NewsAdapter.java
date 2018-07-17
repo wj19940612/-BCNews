@@ -42,12 +42,14 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private boolean mSplitViewVisible;
     private boolean mHasFoot;
     private String mSearchContent;
+    private boolean mNeedReadStatus;
 
     public NewsAdapter(Context context, List<NewsWrap> newsWraps, OnItemClickListener onItemClickListener) {
         mContext = context;
         items = newsWraps;
         mOnItemClickListener = onItemClickListener;
         mSplitViewVisible = false;
+        mNeedReadStatus = true;
     }
 
     public NewsAdapter(Context context, List<NewsWrap> newsWraps, OnItemClickListener onItemClickListener, boolean splitViewVisible) {
@@ -55,6 +57,11 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         items = newsWraps;
         mOnItemClickListener = onItemClickListener;
         mSplitViewVisible = splitViewVisible;
+        mNeedReadStatus = true;
+    }
+
+    public void setNeedReadStatus(boolean needReadStatus){
+        mNeedReadStatus = needReadStatus;
     }
 
     public void setSearchContent(String searchContent) {
@@ -98,11 +105,11 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof NewsAdapter.NoneHolder) {
-            ((NewsAdapter.NoneHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot, mSearchContent);
+            ((NewsAdapter.NoneHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot, mSearchContent,mNeedReadStatus);
         } else if (holder instanceof NewsAdapter.SingleHolder) {
-            ((NewsAdapter.SingleHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot, mSearchContent);
+            ((NewsAdapter.SingleHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mSplitViewVisible, mHasFoot, mSearchContent,mNeedReadStatus);
         } else {
-            ((NewsAdapter.ThreeHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mHasFoot, mSearchContent);
+            ((NewsAdapter.ThreeHolder) holder).bindingData(mContext, items.get(position).getNewsDetail(), position, getItemCount(), mOnItemClickListener, mHasFoot, mSearchContent,mNeedReadStatus);
         }
     }
 
@@ -130,14 +137,14 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot, String searchContent) {
+                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot, String searchContent,boolean needReadStatus) {
             if (position == 0 && splitViewVisible) {
                 mSplitView.setVisibility(View.VISIBLE);
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
 
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent,needReadStatus);
         }
     }
 
@@ -167,13 +174,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot, String searchContent) {
+                                final OnItemClickListener onItemClickListener, boolean splitViewVisible, boolean mHasFoot, String searchContent,boolean needReadStatus) {
             if (position == 0 && splitViewVisible) {
                 mSplitView.setVisibility(View.VISIBLE);
             } else {
                 mSplitView.setVisibility(View.GONE);
             }
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent,needReadStatus);
 
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg.setVisibility(View.VISIBLE);
@@ -215,9 +222,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bindingData(final Context context, final NewsDetail item, int position, int count,
-                                final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, String searchContent) {
+                                final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, String searchContent,boolean needReadStatus) {
 
-            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent);
+            setBasicView(context, item, position, count, onItemClickListener, mHasFoot, mTitle, mSource, mOriginal, mContentRL, mLine, mFooter, searchContent,needReadStatus);
 
             if (item.getImgs() != null && item.getImgs().size() > 0) {
                 mImg1.setVisibility(View.VISIBLE);
@@ -255,7 +262,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * 显示三种Type都需要显示的View的内容
      */
     public static void setBasicView(final Context context, final NewsDetail item, int position, int count,
-                                    final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, final TextView mTitle, TextView mSource, ImageView mOriginal, RelativeLayout mContentRL, View mLine, View mFooter, String searchContent) {
+                                    final NewsAdapter.OnItemClickListener onItemClickListener, boolean mHasFoot, final TextView mTitle, TextView mSource, ImageView mOriginal, RelativeLayout mContentRL, View mLine, View mFooter, String searchContent,boolean needReadStatus) {
         if (item.getIsAdvert() > 0) {
             mTitle.setText(item.getAdvertCopyWriter());
             mSource.setText(context.getString(R.string.source_x_time_x_read_x, item.getAdvertName(), context.getString(R.string.advert), ""));
@@ -277,20 +284,22 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mSource.setText(context.getString(R.string.source_x_time_x_read_x, item.getAuthor(), DateUtil.formatDefaultStyleTime(item.getReleaseTime()), readCount));
             }
         }
-        mTitle.setTextColor(NewsReadCache.isRead(item.getId()) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
+        mTitle.setTextColor((needReadStatus && NewsReadCache.isRead(item.getId())) ? ContextCompat.getColor(context, R.color.text_999) : ContextCompat.getColor(context, R.color.text_222));
         mOriginal.setVisibility(item.getOriginal() > 0 ? View.VISIBLE : View.GONE);
 
         mContentRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null) {
-                    mTitle.setTextColor(ContextCompat.getColor(context, R.color.text_999));
+                    if(needReadStatus) {
+                        mTitle.setTextColor(ContextCompat.getColor(context, R.color.text_999));
+                    }
                     onItemClickListener.onItemClick(item);
                 }
             }
         });
 
-        if (count - 1 == position) {
+        if (count - 1 == position && mHasFoot) {
             mLine.setVisibility(View.GONE);
         } else {
             mLine.setVisibility(View.VISIBLE);

@@ -110,6 +110,7 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
                         .putExtra(ExtraKeys.NEWS_ID, newsDetail.getId()).execute();
             }
         });
+        mNewsAdapter.setNeedReadStatus(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mNewsAdapter);
         mSwipeToLoadLayout.setLoadMoreEnabled(false);
