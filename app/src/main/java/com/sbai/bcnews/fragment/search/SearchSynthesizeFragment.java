@@ -128,6 +128,7 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
                     }
                 })
                 .fire();
+
     }
 
     private void init() {

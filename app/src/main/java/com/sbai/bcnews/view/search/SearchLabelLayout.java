@@ -145,7 +145,7 @@ public class SearchLabelLayout extends FrameLayout {
         mHistoryFlexboxLayout.setVisibility(GONE);
         mClearHistory.setVisibility(GONE);
         mHistorySearchLabel.setVisibility(GONE);
-
+        mSplit.setVisibility(GONE);
     }
 
     private void showHotView() {
