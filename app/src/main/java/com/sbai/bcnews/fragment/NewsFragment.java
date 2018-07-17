@@ -93,7 +93,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     private int mPage;
     private boolean mHasBanner;
     private String mChannel;
-    private boolean mIsVisible;
+    private boolean mLoaded;
 
     public static NewsFragment newsInstance(boolean hasBanner, String channel) {
         NewsFragment newsFragment = new NewsFragment();
@@ -134,9 +134,10 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-        loadCacheData();
-        loadData(true);
         requestBanners();
+        if(mHasBanner){
+            loadFirstData();
+        }
     }
 
     @Override
@@ -175,14 +176,22 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            mIsVisible = true;
-        } else {
-            mIsVisible = false;
+            loadFirstData();
+        }
+    }
+
+    private void loadFirstData(){
+        if(!mLoaded) {
+            mLoaded = true;
+            loadCacheData();
+            loadData(true);
         }
     }
 
     private void initView() {
         mNewsWraps = new ArrayList<>();
+        mEmptyView.setVisibility(View.VISIBLE);
+        mEmptyView.setNoData("");
         NewsAdapter newsAdapter = new NewsAdapter(getActivity(), mNewsWraps, new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(NewsDetail newsDetail) {

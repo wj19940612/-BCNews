@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,11 +113,12 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
     }
 
     private void initView() {
+        mPage = 0;
         mCandyList = new ArrayList<>();
         mCandyAdapter = new CandyAdapter(mCandyList, getContext(), new OnItemClickListener<Candy>() {
             @Override
             public void onItemClick(Candy candy, int position) {
-                Launcher.with(getActivity(), CandyDetailActivity.class).putExtra(ExtraKeys.CANDY,candy).execute();
+                Launcher.with(getActivity(), CandyDetailActivity.class).putExtra(ExtraKeys.CANDY, candy).execute();
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -200,7 +202,7 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ((ViewHolder) holder).bindingData(mContext, mCandyList.get(position),position, mOnItemClickListener);
+            ((ViewHolder) holder).bindingData(mContext, mCandyList.get(position), position, mOnItemClickListener);
         }
 
         @Override
@@ -227,7 +229,7 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
                 ButterKnife.bind(this, view);
             }
 
-            private void bindingData(Context context, final Candy candy,final int position, final OnItemClickListener onItemClickListener) {
+            private void bindingData(Context context, final Candy candy, final int position, final OnItemClickListener onItemClickListener) {
                 mName.setText(candy.getName());
                 mIntroduce.setText(candy.getIntro());
                 mTip.setText(candy.getWelfare());
@@ -236,7 +238,7 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     mGetCount.setText(context.getString(R.string.x_ten_thousand_have_get, candy.getClicks() / 10000));
                 }
-                mTip.setText(context.getString(R.string.welfare_time_x,candy.getWelfare()));
+                mTip.setText(context.getString(R.string.welfare_time_x, candy.getWelfare()));
                 GlideApp.with(context).load(candy.getPhoto())
                         .transform(new GlideRoundAndCenterCropTransform(context))
                         .placeholder(R.drawable.ic_default_news)
@@ -245,8 +247,8 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(onItemClickListener!=null){
-                            onItemClickListener.onItemClick(candy,position);
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(candy, position);
                         }
                     }
                 });

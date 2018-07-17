@@ -31,8 +31,8 @@ public class ChannelCache {
             channelCacheModel.setMyChannelEntities(myChannels);
         if (otherChannels != null && otherChannels.size() != 0)
             channelCacheModel.setOtherChannelEntities(otherChannels);
-        String channles = sGson.toJson(channelCacheModel);
-        Preference.get().setChannelCache(channles);
+        String channels = sGson.toJson(channelCacheModel);
+        Preference.get().setChannelCache(channels);
     }
 
     public static ChannelCacheModel getChannel() {

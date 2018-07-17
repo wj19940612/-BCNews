@@ -220,14 +220,24 @@
 
     </LinearLayout>
 
-    <ImageView
+    <LinearLayout
         android:id="@+id/defaultImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titleBar"
+        android:background="@color/background"
+        android:orientation="vertical">
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="230dp"
+        android:layout_gravity="center_horizontal"
         android:src="@drawable/ic_news_error"
+        android:layout_marginTop="230dp"
+        android:background="@color/white"
         android:visibility="visible"/>
+
+    </LinearLayout>
 
     <com.sbai.bcnews.view.EmptyView
         android:id="@+id/emptyView"

@@ -147,6 +147,9 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
                 }
 
             }).fireFreely();
+        } else {
+            refreshSuccess();
+            stopFreshOrLoadAnimation();
         }
     }
 

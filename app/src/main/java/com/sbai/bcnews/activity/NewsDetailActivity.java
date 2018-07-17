@@ -174,7 +174,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
     @BindView(R.id.collectAndShareLayout)
     LinearLayout mCollectAndShareLayout;
     @BindView(R.id.defaultImg)
-    ImageView mDefaultImg;
+    LinearLayout mDefaultImg;
     @BindView(R.id.emptyView)
     EmptyView mEmptyView;
     @BindView(R.id.allPoint)
@@ -889,6 +889,10 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     //获取阅读状态，可能用户今日领取算力已达上限
     private void resetReadStatus() {
+        if(mReadArticleTime == TIME_COUNT_GET_HASH_RATE && mRateStatus.getText().toString().equals(getString(R.string.has_get))){
+            mReadArticleTime = 0;
+            mPercentLayout.setClickable(true);
+        }
         if (RateRecordCache.isRateLimit()) {
             stopScheduleJob();
             updateGetRateStatus(false);
