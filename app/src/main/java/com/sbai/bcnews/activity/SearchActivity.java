@@ -154,13 +154,7 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
 
     @Override
     public void onClearSearchContent() {
-
-        SearchSynthesizeFragment searchSynthesizeFragment = getSearchSynthesizeFragment();
-        if(searchSynthesizeFragment!=null){
-            searchSynthesizeFragment.updateSearchContent("");
-        }
-
-        // TODO: 2018/7/18 清除 
+        updateSearchValues("");
     }
 
     @Override
@@ -170,7 +164,9 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
     }
 
     private void updateSearchValues(String values) {
-        HistorySearch.updateHistorySearch(values);
+        if (!TextUtils.isEmpty(values)) {
+            HistorySearch.updateHistorySearch(values);
+        }
         SearchSynthesizeFragment searchSynthesizeFragment = getSearchSynthesizeFragment();
         if (searchSynthesizeFragment != null) {
             searchSynthesizeFragment.setSearchContent(values);
