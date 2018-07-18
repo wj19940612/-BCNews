@@ -906,6 +906,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     private void updateStartAnim(){
         mRateStatus.setText(R.string.rate_adding);
+        mRateStatus.setTextColor(ContextCompat.getColor(this,R.color.colorPrimary));
         mReadPercent.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.ic_news_rate_reading));
         mRoundPercent.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.ic_news_round_anim));
         mRoundPercent.clearAnimation();

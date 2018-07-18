@@ -106,7 +106,6 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-        requestAuthor(true);
     }
 
     private void initView() {
@@ -165,6 +164,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
     }
 
     public void setSearchContent(String searchContent) {
+        mPage = 0;
         mSearchContent = searchContent;
         requestAuthor(true);
     }
