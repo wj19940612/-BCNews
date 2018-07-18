@@ -104,7 +104,6 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-        requestNewsFlash(true);
     }
 
     private void initView() {
@@ -127,6 +126,7 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
     }
 
     public void setSearchContent(String searchContent) {
+        mPage = 0;
         mSearchContent = searchContent;
         requestNewsFlash(true);
     }
