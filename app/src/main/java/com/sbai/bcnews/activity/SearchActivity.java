@@ -153,6 +153,17 @@ public class SearchActivity extends BaseActivity implements SearchEditText.OnSea
     }
 
     @Override
+    public void onClearSearchContent() {
+
+        SearchSynthesizeFragment searchSynthesizeFragment = getSearchSynthesizeFragment();
+        if(searchSynthesizeFragment!=null){
+            searchSynthesizeFragment.updateSearchContent("");
+        }
+
+        // TODO: 2018/7/18 清除 
+    }
+
+    @Override
     public void onSearchLabelSelect(String values) {
         mSearchEditText.setText(values);
         updateSearchValues(values);
