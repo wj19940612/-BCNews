@@ -273,7 +273,7 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
                 } else {
                     setSearchTitle(mTitle, searchContent, newsFlash.getTitle(), context);
                     mTitle.setVisibility(View.VISIBLE);
-                    mContent.setText(newsFlash.getContent());
+                    mContent.setText(newsFlash.getContent().trim());
                 }
                 mShare.setOnClickListener(new View.OnClickListener() {
                     @Override

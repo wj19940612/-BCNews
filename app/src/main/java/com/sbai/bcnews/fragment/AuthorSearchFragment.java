@@ -293,7 +293,7 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
                     setNoAttentionBtn(mAttentionBtn, newsAuthor.getIsConcern() > 0, context);
                 }
 
-                if (!TextUtils.isEmpty(newsAuthor.getAuthInfo().trim())) {
+                if (!TextUtils.isEmpty(newsAuthor.getAuthInfo())) {
                     mIntroduce.setText(newsAuthor.getAuthInfo().trim());
                 } else {
                     mIntroduce.setText("");
