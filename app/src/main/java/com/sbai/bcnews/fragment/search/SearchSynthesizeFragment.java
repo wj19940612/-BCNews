@@ -192,7 +192,7 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
         if (!LocalUser.getUser().isLogin()) {
             Intent intent = new Intent();
             intent.setClass(getActivity(), LoginActivity.class);
-            startActivityForResult(intent,LoginActivity.REQ_CODE_LOGIN);
+            startActivityForResult(intent, LoginActivity.REQ_CODE_LOGIN);
         } else {
             if (author != null) {
                 final int attentionType = author.getIsConcern() == Author.AUTHOR_STATUS_SPECIAL ? Author.AUTHOR_IS_NOT_ATTENTION : Author.AUTHOR_IS_ALREADY_ATTENTION;
@@ -298,6 +298,7 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
     }
 
     public void updateSearchContent(String values) {
+        mSearchContent = values;
         if (TextUtils.isEmpty(values)) {
             if (mSearchLabelLayout.getVisibility() == View.GONE) {
                 showSearchLabelView(false);

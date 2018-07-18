@@ -57,6 +57,8 @@ public class SearchEditText extends LinearLayout {
         void onSearchContent(String values);
 
         void onKeyBoardSearch(String values);
+
+        void onClearSearchContent();
     }
 
 
@@ -113,6 +115,8 @@ public class SearchEditText extends LinearLayout {
 
         mClearContent.setOnClickListener((v -> {
             mSearchEditText.setText("");
+            if (mOnSearchContentListener != null)
+                mOnSearchContentListener.onClearSearchContent();
         }));
 
         mSearchEditText.addTextChangedListener(mTextWatcher);
