@@ -218,8 +218,8 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
     }
 
     public void setSearchContent(String searchContent) {
-        mSearchContent = searchContent;
-        if (getUserVisibleHint())
+        updateSearchContent(searchContent);
+        if (getUserVisibleHint() && !TextUtils.isEmpty(searchContent))
             requestSearchContent(searchContent);
     }
 
@@ -240,17 +240,6 @@ public class SearchSynthesizeFragment extends BaseFragment implements SearchLabe
                             mSearchContentLayout.setSearchContent(searchContent);
                             mSearchContentLayout.setSearchContentData(data);
                         }
-
-//                        List<AuthorArticle> bitcoin = data.getBitcoin();
-//
-//                        if (bitcoin.size() > 2) {
-//                            AuthorArticle a = bitcoin.get(0);
-//                            bitcoin.remove(a);
-//
-//                            AuthorArticle authorArticle = bitcoin.get(1);
-//                            bitcoin.remove(authorArticle);
-//                        }
-
 
                     }
                 })
