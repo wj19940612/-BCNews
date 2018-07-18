@@ -186,6 +186,9 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
 
             }).fireFreely();
         }else {
+            if (mPage == 0){
+                clearContent();
+            }
             refreshSuccess();
             stopFreshOrLoadAnimation();
         }
@@ -220,6 +223,11 @@ public class AuthorSearchFragment extends RecycleViewSwipeLoadFragment {
 //        } else {
 //            mAuthorAdapter.showFooterView(false);
 //        }
+        mAuthorAdapter.notifyDataSetChanged();
+    }
+
+    private void clearContent(){
+        mData.clear();
         mAuthorAdapter.notifyDataSetChanged();
     }
 

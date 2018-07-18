@@ -152,6 +152,9 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
         } else {
             refreshSuccess();
             stopFreshOrLoadAnimation();
+            if(mPage == 0) {
+                clearContent();
+            }
         }
     }
 
@@ -189,6 +192,12 @@ public class ArticleSearchFragment extends RecycleViewSwipeLoadFragment {
         } else {
             mNewsAdapter.setHasFoot(false);
         }
+    }
+
+    private void clearContent(){
+        mData.clear();
+        mNewsAdapter.setHasFoot(false);
+        mNewsAdapter.notifyDataSetChanged();
     }
 
 }

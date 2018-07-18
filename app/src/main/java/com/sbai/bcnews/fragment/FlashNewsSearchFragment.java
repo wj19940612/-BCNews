@@ -148,6 +148,9 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
 
             }).fireFreely();
         } else {
+            if (mPage == 0) {
+                clearContent();
+            }
             refreshSuccess();
             stopFreshOrLoadAnimation();
         }
@@ -182,6 +185,12 @@ public class FlashNewsSearchFragment extends RecycleViewSwipeLoadFragment {
         } else {
             mNewsAdapter.showFooterView(false);
         }
+        mNewsAdapter.notifyDataSetChanged();
+    }
+
+    private void clearContent() {
+        mData.clear();
+        mNewsAdapter.showFooterView(false);
         mNewsAdapter.notifyDataSetChanged();
     }
 
