@@ -441,7 +441,8 @@ public class SearchContentLayout extends LinearLayout implements View.OnClickLis
 //            content.setMaxLines(6);
 //            content.setAutoSplitEnabled(true);
 //            content.setEllipsize(TextUtils.TruncateAt.END);
-            content.setText(newsFlash.getContent().trim());
+            content.setText(newsFlash.getContent()
+                    .trim());
         }
 
         timeLine.setText(DateUtil.formatDefaultStyleTime(newsFlash.getReleaseTime()));
