@@ -175,7 +175,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+        if (isVisibleToUser && isAdded()) {
             loadFirstData();
         }
     }
