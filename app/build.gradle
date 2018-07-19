@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    def verName = System.getProperties().getProperty("verName")
-    def verCode = System.getProperties().getProperty("verCode")
-
-    def alphaVersionName = verName ? verName : alphaVerName
-    def alphaVersionCode = verCode ? verCode : alphaVerCode
-
-    println alphaVersionName
-    println alphaVersionCode
+//    def verName = System.getProperties().getProperty("verName")
+//    def verCode = System.getProperties().getProperty("verCode")
+//
+//    def alphaVersionName = verName ? verName : alphaVerName
+//    def alphaVersionCode = verCode ? verCode : alphaVerCode
+//
+//    println alphaVersionName
+//    println alphaVersionCode
 
     compileSdkVersion 27
     defaultConfig {
@@ -73,10 +73,10 @@ android {
             ]
         }
         alpha {
-            versionCode alphaVersionCode as Integer
-            versionName alphaVersionName
-//            versionCode 45
-//            versionName "1.4.0"
+//            versionCode alphaVersionCode as Integer
+//            versionName alphaVersionName
+            versionCode 49
+            versionName "1.4.0.07.18"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",

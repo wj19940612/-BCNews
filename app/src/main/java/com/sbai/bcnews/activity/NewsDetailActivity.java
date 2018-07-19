@@ -889,7 +889,7 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
 
     //获取阅读状态，可能用户今日领取算力已达上限
     private void resetReadStatus() {
-        if(mReadArticleTime == TIME_COUNT_GET_HASH_RATE && mRateStatus.getText().toString().equals(getString(R.string.has_get))){
+        if (mReadArticleTime == TIME_COUNT_GET_HASH_RATE && mRateStatus.getText().toString().equals(getString(R.string.has_get))) {
             mReadArticleTime = 0;
             mPercentLayout.setClickable(true);
         }
@@ -899,18 +899,20 @@ public class NewsDetailActivity extends NewsShareOrCommentBaseActivity {
         } else if (!LocalUser.getUser().isLogin()) {
             mRoundPercent.clearAnimation();
             updateReadFinishStatus();
-        } else if(mReadArticleTime < TIME_COUNT_GET_HASH_RATE){
+        } else if (mReadArticleTime < TIME_COUNT_GET_HASH_RATE) {
             updateStartAnim();
         }
     }
 
-    private void updateStartAnim(){
+    private void updateStartAnim() {
         mRateStatus.setText(R.string.rate_adding);
-        mRateStatus.setTextColor(ContextCompat.getColor(this,R.color.colorPrimary));
+        mRateStatus.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         mReadPercent.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.ic_news_rate_reading));
         mRoundPercent.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.ic_news_round_anim));
         mRoundPercent.clearAnimation();
-        mRoundPercent.startAnimation(AnimationUtils.loadAnimation(this, R.anim.read_anim));
+        if (mRoundPercent.getAnimation() == null) {
+            mRoundPercent.startAnimation(AnimationUtils.loadAnimation(this, R.anim.read_anim));
+        }
         mReadArticleTime = 0;
         startScheduleJob(TIME_SECOND);
     }
