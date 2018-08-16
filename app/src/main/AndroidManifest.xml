@@ -216,6 +216,21 @@
             android:name=".activity.SearchActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".zxing.activity.CaptureActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar"/>
+        <activity
+            android:name=".zxing.activity.ResultActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar"/>
+
+        <activity
+            android:name=".activity.ProjectRecommendActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
 
 
         <service android:name=".service.DownloadService"/>

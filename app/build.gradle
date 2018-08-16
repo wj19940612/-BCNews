@@ -145,4 +145,5 @@ dependencies {
     implementation('cn.qqtheme.framework:WheelPicker:1.4.4') {
         exclude group: 'com.android.support'
     }
+    implementation files('libs/zxing.jar')
 }

@@ -20,6 +20,7 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.activity.ProjectRecommendActivity;
 import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.activity.mine.QKCActivity;
@@ -135,7 +136,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         super.onActivityCreated(savedInstanceState);
         initView();
         requestBanners();
-        if(mHasBanner){
+        if (mHasBanner) {
             loadFirstData();
         }
     }
@@ -180,8 +181,8 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
         }
     }
 
-    private void loadFirstData(){
-        if(!mLoaded) {
+    private void loadFirstData() {
+        if (!mLoaded) {
             mLoaded = true;
             loadCacheData();
             loadData(true);
@@ -258,14 +259,17 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                 }
             });
 
-            mHeader.findViewById(R.id.qkcBtn).setOnClickListener(new View.OnClickListener() {
+            mHeader.findViewById(R.id.recommendBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (LocalUser.getUser().isLogin()) {
-                        Launcher.with(getActivity(), QKCActivity.class).execute();
-                    } else {
-                        Launcher.with(getActivity(), LoginActivity.class).execute();
-                    }
+                    Launcher.with(getActivity(), ProjectRecommendActivity.class).execute();
+                }
+            });
+
+            mHeader.findViewById(R.id.gradeBtn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
                 }
             });
         }
@@ -396,7 +400,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                     } else if (mHomeBanner != null) {
                         if (mNewsAdapter instanceof NewsWithHeaderAdapter) {
                             ((NewsWithHeaderAdapter) mNewsAdapter).setHeaderView(mHeader);
-                            mHomeBanner.setHomeAdvertisement(data,IMAGE_CENTER_CROP);
+                            mHomeBanner.setHomeAdvertisement(data, IMAGE_CENTER_CROP);
                             mNewsAdapter.notifyDataSetChanged();
                         }
                     }

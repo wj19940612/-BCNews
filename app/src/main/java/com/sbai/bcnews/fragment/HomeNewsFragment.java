@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +43,7 @@ import com.sbai.bcnews.utils.UmengCountEventId;
 import com.sbai.bcnews.utils.news.ChannelCache;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.view.slidingtab.SlidingTabLayout;
+import com.sbai.bcnews.zxing.activity.CaptureActivity;
 import com.sbai.glide.GlideApp;
 import com.sbai.httplib.ReqError;
 
@@ -373,8 +376,9 @@ public class HomeNewsFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toChannel:
-                umengEventCount(UmengCountEventId.NEWS03);
                 Launcher.with(this, ChannelActivity.class).putExtra(ExtraKeys.CHANNEL, mChannelCacheModel).executeForResultFragment(REQUEST_CODE_CHANNEL);
+//                Intent intent = new Intent(getActivity(), CaptureActivity.class);
+//                startActivityForResult(intent, 10234);
                 break;
         }
     }
@@ -389,6 +393,9 @@ public class HomeNewsFragment extends BaseFragment {
                     updateChannel(mChannelCacheModel, true);
                 }
             }
+        } else if (requestCode == 10234 && resultCode == RESULT_OK &&data!=null) {
+            String result = data.getStringExtra(CaptureActivity.RESULT);
+            Log.e("zzz","qrcode:"+result);
         }
     }
 
