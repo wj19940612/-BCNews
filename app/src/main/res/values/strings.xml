@@ -530,10 +530,19 @@
     <string name="researcher">研发者</string>
     <string name="publish_price">发行价格</string>
     <string name="publish_count">发行总量</string>
-    <string name="turn_over">发行总量</string>
+    <string name="turn_over">流通量</string>
+    <string name="core_algorithm">核心算法</string>
     <string name="reward_system">奖励机制</string>
-
-
+    <string name="look_more">展开</string>
+    <string name="retract">收起</string>
+    <string name="project_name">项目名称</string>
+    <string name="grade">评级</string>
+    <string name="update_time">更新时间</string>
+    <string name="all_load_finish">全部加载完毕</string>
+    <string name="wallet">钱包</string>
+    <string name="my_wallet">我的钱包</string>
+    <string name="bit_type">币种</string>
+    <string name="bit_count">数量</string>
 
 
 </resources>

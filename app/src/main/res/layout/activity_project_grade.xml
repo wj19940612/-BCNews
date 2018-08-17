@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <com.sbai.bcnews.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:backFeature="true"
+        app:titleText="@string/project_grade" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/background"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:text="@string/project_name"
+                android:textColor="@color/text_AAA9A6"
+                android:textSize="13sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:text="@string/type"
+                android:textColor="@color/text_AAA9A6"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:text="@string/grade"
+                android:textColor="@color/text_AAA9A6"
+                android:textSize="13sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:text="@string/update_time"
+                android:textColor="@color/text_AAA9A6"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:default_to_loading_more_scrolling_duration="500"
+        app:load_more_complete_delay_duration="0"
+        app:load_more_final_drag_offset="@dimen/load_more_final_offset_google"
+        app:load_more_trigger_offset="@dimen/load_more_trigger_offset_google"
+        app:refresh_final_drag_offset="@dimen/refresh_final_offset_google"
+        app:refresh_trigger_offset="@dimen/refresh_trigger_offset_google"
+        app:swipe_style="classic">
+
+        <com.zcmrr.swipelayout.header.RefreshHeaderView
+            android:id="@+id/swipe_refresh_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"/>
+
+        <com.zcmrr.swipelayout.foot.LoadMoreFooterView
+            android:id="@+id/swipe_load_more_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
+</LinearLayout>

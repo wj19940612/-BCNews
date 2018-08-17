@@ -20,6 +20,7 @@ import com.sbai.bcnews.BuildConfig;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.ModifyPassActivity;
+import com.sbai.bcnews.activity.MyWalletActivity;
 import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.activity.author.AuthorWorkbenchActivity;
 import com.sbai.bcnews.activity.mine.FeedbackActivity;
@@ -342,7 +343,7 @@ public class MineFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.headPortrait, R.id.userName, R.id.userHint, R.id.qkcLayout, R.id.collect, R.id.history,
+    @OnClick({R.id.headPortrait, R.id.userName, R.id.userHint, R.id.qkcLayout, R.id.wallet,R.id.collect, R.id.history,
             R.id.comment, R.id.messageLL, R.id.contribute, R.id.invite, R.id.feedBack, R.id.setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -359,6 +360,13 @@ public class MineFragment extends BaseFragment {
             case R.id.qkcLayout:
                 if (LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), QKCActivity.class).execute();
+                } else {
+                    login();
+                }
+                break;
+            case R.id.wallet:
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), MyWalletActivity.class).execute();
                 } else {
                     login();
                 }

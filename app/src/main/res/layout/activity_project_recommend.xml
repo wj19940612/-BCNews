@@ -1,257 +1,282 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg_recommend_title"/>
+        android:layout_height="match_parent">
 
-    <com.sbai.bcnews.view.TitleBar
-        android:id="@+id/titleBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:backFeature="true"
-        app:backIcon="@drawable/ic_tb_back_white"
-        android:background="@color/transparent"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_recommend_title" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="17sp"
-        android:textColor="@color/black_554100"
-        android:includeFontPadding="false"
-        android:layout_below="@id/titleBar"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="24dp"
-        android:text="@string/recommend_project"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="@color/black_554100"
-        android:includeFontPadding="false"
-        android:layout_below="@id/titleBar"
-        android:layout_marginTop="45dp"
-        android:layout_marginLeft="24dp"
-        android:text="BTC"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/titleBar"
-        android:layout_marginTop="106dp"
-        android:background="@drawable/bg_recommend_content"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="8dp">
+        <com.sbai.bcnews.view.TitleBar
+            android:id="@+id/titleBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:backFeature="true"
+            app:backIcon="@drawable/ic_tb_back_white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
+            android:layout_below="@id/titleBar"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+            android:includeFontPadding="false"
+            android:text="@string/recommend_project"
+            android:textColor="@color/black_554100"
             android:textSize="17sp"
-            android:textColor="@color/text_222"
-            android:text="@string/base_info"
-            android:textStyle="bold"
-            android:includeFontPadding="false"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/text_999"
-                android:text="@string/publish_time"
-                android:includeFontPadding="false" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textSize="14sp"
-                android:textColor="@color/text_222"
-                android:text="2009/01/04"
-                android:includeFontPadding="false" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/text_999"
-                android:text="@string/researcher"
-                android:includeFontPadding="false" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textSize="14sp"
-                android:textColor="@color/text_222"
-                android:text="Satoshi Nakamoto"
-                android:includeFontPadding="false" />
-
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/text_999"
-                android:text="@string/publish_price"
-                android:includeFontPadding="false" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textSize="14sp"
-                android:textColor="@color/text_222"
-                android:text="$0.01"
-                android:includeFontPadding="false" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/text_999"
-                android:text="@string/publish_count"
-                android:includeFontPadding="false" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textSize="14sp"
-                android:textColor="@color/text_222"
-                android:text="21000000"
-                android:includeFontPadding="false" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/text_999"
-                android:text="@string/turn_over"
-                android:includeFontPadding="false" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textSize="14sp"
-                android:textColor="@color/text_222"
-                android:text="17073700"
-                android:includeFontPadding="false" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/text_999"
-                android:text="@string/core_algorithm"
-                android:includeFontPadding="false" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textSize="14sp"
-                android:textColor="@color/text_222"
-                android:text="17073700"
-                android:includeFontPadding="false" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/text_999"
-                android:text="@string/reward_system"
-                android:includeFontPadding="false" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textSize="14sp"
-                android:textColor="@color/text_222"
-                android:text="Pow"
-                android:includeFontPadding="false" />
-
-        </RelativeLayout>
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:textSize="17sp"
-            android:textColor="@color/text_222"
-            android:text="@string/introduce"
-            android:textStyle="bold"
-            android:includeFontPadding="false"/>
+            android:layout_below="@id/titleBar"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="45dp"
+            android:includeFontPadding="false"
+            android:text="BTC"
+            android:textColor="@color/black_554100"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/baseInfoLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            />
+            android:layout_below="@+id/titleBar"
+            android:layout_marginTop="106dp"
+            android:background="@drawable/bg_recommend_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:includeFontPadding="false"
+                android:text="@string/base_info"
+                android:textColor="@color/text_222"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/publish_time"
+                    android:textColor="@color/text_999"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
+                    android:text="2009/01/04"
+                    android:textColor="@color/text_222"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/researcher"
+                    android:textColor="@color/text_999"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
+                    android:text="Satoshi Nakamoto"
+                    android:textColor="@color/text_222"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
 
 
-    </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/publish_price"
+                    android:textColor="@color/text_999"
+                    android:textSize="14sp" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
+                    android:text="$0.01"
+                    android:textColor="@color/text_222"
+                    android:textSize="14sp" />
 
+            </RelativeLayout>
 
-</RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/publish_count"
+                    android:textColor="@color/text_999"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
+                    android:text="21000000"
+                    android:textColor="@color/text_222"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/turn_over"
+                    android:textColor="@color/text_999"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
+                    android:text="17073700"
+                    android:textColor="@color/text_222"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/core_algorithm"
+                    android:textColor="@color/text_999"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
+                    android:text="17073700"
+                    android:textColor="@color/text_222"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/reward_system"
+                    android:textColor="@color/text_999"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:includeFontPadding="false"
+                    android:text="Pow"
+                    android:textColor="@color/text_222"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:includeFontPadding="false"
+                android:text="@string/introduce"
+                android:textColor="@color/text_222"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/introduce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:ellipsize="end"
+                android:maxLines="5"
+                android:textColor="@color/text_4949"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/btnLookMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:paddingBottom="10dp"
+                android:text="@string/look_more"
+                android:textColor="@color/text_538"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/baseInfoLayout"
+            android:layout_marginTop="34dp"/>
+
+    </RelativeLayout>
+
+</ScrollView>

@@ -163,6 +163,19 @@
             app:layout_constraintTop_toBottomOf="@+id/qkcLayout">
 
             <TextView
+                android:id="@+id/wallet"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="9dp"
+                android:drawableTop="@drawable/ic_wallet"
+                android:gravity="center"
+                android:paddingBottom="22dp"
+                android:paddingTop="22dp"
+                android:text="@string/wallet"
+                android:textColor="@android:color/black"/>
+
+            <TextView
                 android:id="@+id/collect"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

@@ -20,6 +20,7 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.NewsDetailActivity;
+import com.sbai.bcnews.activity.ProjectGradeActivity;
 import com.sbai.bcnews.activity.ProjectRecommendActivity;
 import com.sbai.bcnews.activity.WebActivity;
 import com.sbai.bcnews.activity.mine.LoginActivity;
@@ -269,7 +270,7 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
             mHeader.findViewById(R.id.gradeBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Launcher.with(getActivity(), ProjectGradeActivity.class).execute();
                 }
             });
         }
