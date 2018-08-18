@@ -33,6 +33,7 @@ public class Candy implements Parcelable {
     private String url;
     private String welfare; //福利时间
     private int clicks;//领取数
+    private String qrCode;//二维码
 
     public long getCreateTime() {
         return createTime;
@@ -138,6 +139,14 @@ public class Candy implements Parcelable {
         this.clicks = clicks;
     }
 
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -158,6 +167,7 @@ public class Candy implements Parcelable {
         dest.writeString(this.url);
         dest.writeString(this.welfare);
         dest.writeInt(this.clicks);
+        dest.writeString(this.qrCode);
     }
 
     public Candy() {
@@ -177,6 +187,7 @@ public class Candy implements Parcelable {
         this.url = in.readString();
         this.welfare = in.readString();
         this.clicks = in.readInt();
+        this.qrCode = in.readString();
     }
 
     public static final Parcelable.Creator<Candy> CREATOR = new Parcelable.Creator<Candy>() {

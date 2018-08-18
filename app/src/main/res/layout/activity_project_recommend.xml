@@ -36,13 +36,13 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/titleBar"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="45dp"
             android:includeFontPadding="false"
-            android:text="BTC"
             android:textColor="@color/black_554100"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -83,11 +83,11 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/publishTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
-                    android:text="2009/01/04"
                     android:textColor="@color/text_222"
                     android:textSize="14sp" />
 
@@ -96,7 +96,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -107,11 +108,11 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/researcher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
-                    android:text="Satoshi Nakamoto"
                     android:textColor="@color/text_222"
                     android:textSize="14sp" />
 
@@ -132,11 +133,11 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/publishPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
-                    android:text="$0.01"
                     android:textColor="@color/text_222"
                     android:textSize="14sp" />
 
@@ -156,11 +157,11 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/publishCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
-                    android:text="21000000"
                     android:textColor="@color/text_222"
                     android:textSize="14sp" />
 
@@ -180,11 +181,11 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/turnOver"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
-                    android:text="17073700"
                     android:textColor="@color/text_222"
                     android:textSize="14sp" />
 
@@ -193,7 +194,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -204,11 +206,11 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/coreAlgorithm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
-                    android:text="17073700"
                     android:textColor="@color/text_222"
                     android:textSize="14sp" />
 
@@ -228,11 +230,11 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/rewardSystem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
-                    android:text="Pow"
                     android:textColor="@color/text_222"
                     android:textSize="14sp" />
 

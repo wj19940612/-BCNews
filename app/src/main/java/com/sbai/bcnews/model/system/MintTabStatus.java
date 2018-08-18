@@ -10,6 +10,7 @@ public class MintTabStatus {
 
     public static final int MINE_QKC_TAB_SHOW = 1;
     public static final int MINE_INVITE_HAS_GIFT_TAB_SHOW = 1;
+    public static final int MINE_WALLET_SHOW = 1;
 
     /**
      * promoterShow : 0
@@ -18,6 +19,7 @@ public class MintTabStatus {
 
     private int promoterShow; //promoterShow 邀请开关:0关,1开
     private int integralShow; // 积分开关：0关,1开
+    private int walletShow;//钱包开关:0关 1开
 
 
     public int getPromoterShow() {
@@ -34,6 +36,14 @@ public class MintTabStatus {
 
     public void setIntegralShow(int integralShow) {
         this.integralShow = integralShow;
+    }
+
+    public int getWalletShow() {
+        return walletShow;
+    }
+
+    public void setWalletShow(int walletShow) {
+        this.walletShow = walletShow;
     }
 
     @Override

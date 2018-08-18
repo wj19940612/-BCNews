@@ -1169,4 +1169,53 @@ public class Apic {
     public static Api requestSearchNews(String searchContent,int page){
         return Api.get("/api/news-info/news/search/bitcoin.do",new ReqParams().put("word",searchContent).put("page",page).put("size",DEFAULT_PAGE_SIZE));
     }
+
+    /**
+     * 我的钱包
+     */
+    public static Api requestMyWallet(int page){
+        return Api.get("/api/news-user/wallet/mine.do",new ReqParams().put("page",page).put("size",DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * 币种日志
+     */
+    public static Api requestCoinHistory(String symbol,int page){
+        return Api.get("/api/news-user/wallet/coin/log.do",new ReqParams().put("symbol",symbol).put("page",page).put("size",DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * 币种详情
+     */
+    public static Api requestCoinDetail(String symbol){
+        return Api.get("/api/news-user/wallet/coin/info.do",new ReqParams().put("symbol",symbol));
+    }
+
+    /**
+     * 提币
+     */
+    public static Api requestGetCoin(String symbol,String count,String extractAddr){
+        return Api.post("/api/news-user/wallet/coin/extract.do",new ReqParams().put("symbol",symbol).put("count",count).put("extractAddr",extractAddr).put("size",DEFAULT_PAGE_SIZE));
+    }
+
+    /**
+     * 币种数量
+     */
+    public static Api requestCoinCount(String symbol){
+        return Api.post("/api/news-user/wallet/mine/coin.do",new ReqParams().put("symbol",symbol));
+    }
+
+    /**
+     * 项目推荐
+     */
+    public static Api requestProjectRecommend(){
+        return Api.post("/api/news-user/activity/project/recommend.do");
+    }
+
+    /**
+     * 项目评级
+     */
+    public static Api requestProjectGrade(int page){
+        return Api.post("/api/news-user/activity/grade/page.do",new ReqParams().put("page",page).put("size",DEFAULT_PAGE_SIZE));
+    }
 }

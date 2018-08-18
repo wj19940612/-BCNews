@@ -377,8 +377,6 @@ public class HomeNewsFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.toChannel:
                 Launcher.with(this, ChannelActivity.class).putExtra(ExtraKeys.CHANNEL, mChannelCacheModel).executeForResultFragment(REQUEST_CODE_CHANNEL);
-//                Intent intent = new Intent(getActivity(), CaptureActivity.class);
-//                startActivityForResult(intent, 10234);
                 break;
         }
     }
@@ -393,9 +391,6 @@ public class HomeNewsFragment extends BaseFragment {
                     updateChannel(mChannelCacheModel, true);
                 }
             }
-        } else if (requestCode == 10234 && resultCode == RESULT_OK &&data!=null) {
-            String result = data.getStringExtra(CaptureActivity.RESULT);
-            Log.e("zzz","qrcode:"+result);
         }
     }
 

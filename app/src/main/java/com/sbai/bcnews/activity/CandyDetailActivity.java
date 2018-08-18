@@ -56,6 +56,8 @@ public class CandyDetailActivity extends BaseActivity {
     TextView mGetCandyBtn;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
+    @BindView(R.id.scanImg)
+    ImageView mScanImg;
 
     private Candy mCandy;
 
@@ -148,6 +150,10 @@ public class CandyDetailActivity extends BaseActivity {
 
         openWebView(mCandy.getSweetIntroduce(), mContentIntroduce);
         openWebView(mCandy.getIntroduce(), mWelfareIntroduce);
+
+        GlideApp.with(getActivity()).load(mCandy.getQrCode())
+                .placeholder(R.drawable.ic_default_news)
+                .into(mScanImg);
     }
 
     private void openWebView(String urlData, WebView webView) {
@@ -202,6 +208,9 @@ public class CandyDetailActivity extends BaseActivity {
                 } else {
                     Launcher.with(getActivity(), LoginActivity.class).execute();
                 }
+                break;
+            case R.id.scanImg:
+                Launcher.with(this, LookBigPictureActivity.class).putExtra(ExtraKeys.PORTRAIT, mCandy.getQrCode()).execute();
                 break;
         }
     }

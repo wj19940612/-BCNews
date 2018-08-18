@@ -1,40 +1,40 @@
 package com.sbai.bcnews.model;
 
 public class ProjectGrade {
-    private String name;
-    private String type;
-    private String grade;
-    private String updateTime;
+    private String projectName;
+    private String typeStr;
+    private String gradeStr;
+    private long updateTime;
 
-    public String getName() {
-        return name;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
-    public String getType() {
-        return type;
+    public String getTypeStr() {
+        return typeStr;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTypeStr(String typeStr) {
+        this.typeStr = typeStr;
     }
 
-    public String getGrade() {
-        return grade;
+    public String getGradeStr() {
+        return gradeStr;
     }
 
-    public void setGrade(String grade) {
-        this.grade = grade;
+    public void setGradeStr(String gradeStr) {
+        this.gradeStr = gradeStr;
     }
 
-    public String getUpdateTime() {
+    public long getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(String updateTime) {
+    public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
     }
 }

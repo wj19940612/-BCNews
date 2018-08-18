@@ -152,6 +152,14 @@
                 android:layout_below="@+id/content"
                 tools:ignore="WebViewLayout" />
 
+            <ImageView
+                android:id="@+id/scanImg"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/contentIntroduce"
+                android:layout_marginTop="30dp" />
+
         </RelativeLayout>
     </ScrollView>
 

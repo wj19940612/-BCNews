@@ -16,9 +16,12 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ProjectGrade;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
+import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
@@ -86,10 +89,15 @@ public class ProjectGradeActivity extends RecycleViewSwipeLoadActivity {
     }
 
     private void loadData(boolean refresh){
-
+        Apic.requestProjectGrade(mPage).tag(TAG).callback(new Callback<ListResp<ProjectGrade>>() {
+            @Override
+            protected void onRespSuccess(ListResp<ProjectGrade> resp) {
+                updateData(resp.getListData(),refresh);
+            }
+        }).fireFreely();
     }
 
-    private void updateData(boolean refresh, List<ProjectGrade> data) {
+    private void updateData( List<ProjectGrade> data,boolean refresh) {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
             refreshFoot(0);
@@ -173,10 +181,10 @@ public class ProjectGradeActivity extends RecycleViewSwipeLoadActivity {
             }
 
             public void bind(ProjectGrade projectGrade, int position, int itemCount, boolean showFoot, OnItemClickListener<ProjectGrade> onItemClickListener) {
-                mName.setText(projectGrade.getName());
-                mType.setText(projectGrade.getType());
-                mGrade.setText(projectGrade.getGrade());
-                mTime.setText(projectGrade.getUpdateTime());
+                mName.setText(projectGrade.getProjectName());
+                mType.setText(projectGrade.getTypeStr());
+                mGrade.setText(projectGrade.getGradeStr());
+                mTime.setText(DateUtil.getFormatSpecialSlashNoHour(projectGrade.getUpdateTime()));
 
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override

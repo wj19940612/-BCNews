@@ -59,4 +59,7 @@ public interface ExtraKeys {
     String HAS_CLOSE_BUTTON = "has_close_button";
 
     String SEARCH_CONTENT = "search_content";
+
+    String USABLE_COIN = "usable_coin";
+    String TYPE = "type";
 }

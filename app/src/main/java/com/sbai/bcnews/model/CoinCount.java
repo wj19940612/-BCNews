@@ -1,9 +1,9 @@
 package com.sbai.bcnews.model;
 
-public class WalletCoin {
-   private double ableCoin;//可用数量
+public class CoinCount {
+    private double ableCoin;
 
-    private String coinSymbol;//币种
+    private String coinSymbol;
 
     public double getAbleCoin() {
         return ableCoin;

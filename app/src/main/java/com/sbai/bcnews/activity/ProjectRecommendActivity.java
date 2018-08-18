@@ -11,9 +11,16 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sbai.bcnews.R;
+import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.ProjectCommend;
+import com.sbai.bcnews.utils.DateUtil;
+import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.view.TitleBar;
 
 import butterknife.BindView;
@@ -26,7 +33,6 @@ public class ProjectRecommendActivity extends BaseActivity {
 
     @BindView(R.id.webView)
     WebView mWebView;
-    private String text = "区块比特币（Bitcoin，简称BTC）是目前使用最为广泛的一种数字货币，它诞生于2009年1月3日，是一种点对点（P2P）传输的数字加密货币，总量2100万枚。比特币网络每10分钟释放出一定数量币区块比特币（Bitcoin，简称BTC）是目前使用最为广泛的一种数字货币，它诞生于2009年1月3日，是一种点对点（P2P）传输的数字加密货币，总量2100万枚。比特币网络每10分钟释放出一定数量币区块比特币（Bitcoin，简称BTC）是目前使用最为广泛的一种数字货币，它诞生于2009年1月3日，是一种点对点（P2P）传输的数字加密货币，总量2100万枚。比特币网络每10分钟释放出一定数量币";
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -34,6 +40,24 @@ public class ProjectRecommendActivity extends BaseActivity {
     TextView mBtnLookMore;
     @BindView(R.id.introduce)
     TextView mIntroduce;
+    @BindView(R.id.type)
+    TextView mType;
+    @BindView(R.id.publishTime)
+    TextView mPublishTime;
+    @BindView(R.id.researcher)
+    TextView mResearcher;
+    @BindView(R.id.publishPrice)
+    TextView mPublishPrice;
+    @BindView(R.id.publishCount)
+    TextView mPublishCount;
+    @BindView(R.id.turnOver)
+    TextView mTurnOver;
+    @BindView(R.id.coreAlgorithm)
+    TextView mCoreAlgorithm;
+    @BindView(R.id.rewardSystem)
+    TextView mRewardSystem;
+    @BindView(R.id.baseInfoLayout)
+    LinearLayout mBaseInfoLayout;
 
     private ViewTreeObserver.OnPreDrawListener mOnPreDrawListener = new ViewTreeObserver.OnPreDrawListener() {
         @Override
@@ -55,13 +79,11 @@ public class ProjectRecommendActivity extends BaseActivity {
         ButterKnife.bind(this);
         initWebView(mWebView);
         initView();
+        loadData();
     }
 
     private void initView() {
         mBtnLookMore.setTag(false);
-        mIntroduce.getViewTreeObserver().addOnPreDrawListener(mOnPreDrawListener);
-
-        mIntroduce.setText(Html.fromHtml(text));
     }
 
     private void expandOrStopContent(boolean hasExpand) {
@@ -91,6 +113,29 @@ public class ProjectRecommendActivity extends BaseActivity {
             }
         }
         return false;
+    }
+
+    private void loadData() {
+        Apic.requestProjectRecommend().tag(TAG).callback(new Callback2D<Resp<ProjectCommend>, ProjectCommend>() {
+            @Override
+            protected void onRespSuccessData(ProjectCommend data) {
+                updateData(data);
+            }
+        }).fireFreely();
+    }
+
+    private void updateData(ProjectCommend data) {
+        mType.setText(data.getProjectName());
+        mPublishTime.setText(DateUtil.getFormatSpecialSlashNoHour(data.getPublishTime()));
+        mPublishPrice.setText(String.valueOf(data.getPublishPrice()));
+        mPublishCount.setText(FinanceUtil.trimTrailingZero(data.getPublishTotal()));
+        mTurnOver.setText(String.valueOf(data.getCirculateCount()));
+        mRewardSystem.setText(data.getIncentiveSystem());
+
+        mIntroduce.getViewTreeObserver().addOnPreDrawListener(mOnPreDrawListener);
+        mIntroduce.setText(Html.fromHtml(data.getIntro()));
+
+        openWebView(data.getInfo(),mWebView);
     }
 
 

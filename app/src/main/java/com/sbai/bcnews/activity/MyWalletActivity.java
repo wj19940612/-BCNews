@@ -10,13 +10,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Callback2D;
+import com.sbai.bcnews.http.ListResp;
+import com.sbai.bcnews.http.Resp;
+import com.sbai.bcnews.model.CoinHistory;
 import com.sbai.bcnews.model.WalletCoin;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
+import com.sbai.bcnews.utils.Launcher;
+import com.sbai.bcnews.utils.OnItemClickListener;
 import com.sbai.bcnews.view.TitleBar;
 import com.zcmrr.swipelayout.foot.LoadMoreFooterView;
 import com.zcmrr.swipelayout.header.RefreshHeaderView;
@@ -52,6 +61,7 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
         setContentView(R.layout.activity_my_wallet);
         ButterKnife.bind(this);
         initView();
+        loadData(true);
     }
 
     @Override
@@ -72,13 +82,29 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
 
     private void initView() {
         mWalletCoins = new ArrayList<>();
-        mWalletAdapter = new WalletAdapter(this, mWalletCoins);
+        mWalletAdapter = new WalletAdapter(this, mWalletCoins, new OnItemClickListener<WalletCoin>() {
+            @Override
+            public void onItemClick(WalletCoin walletCoin, int position) {
+                Launcher.with(getActivity(), CoinHistoryActivity.class).putExtra(ExtraKeys.USABLE_COIN,walletCoin.getAbleCoin()).putExtra(ExtraKeys.TYPE,walletCoin.getCoinSymbol()).execute();
+            }
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mWalletAdapter);
     }
 
     private void loadData(boolean refresh) {
+        Apic.requestMyWallet(mPage).tag(TAG).callback(new Callback<ListResp<WalletCoin>>() {
+            @Override
+            protected void onRespSuccess(ListResp<WalletCoin> resp) {
+                updateData(resp.getListData(), refresh);
+            }
 
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                stopFreshOrLoadAnimation();
+            }
+        }).fireFreely();
     }
 
     private void updateData(List<WalletCoin> data, boolean refresh) {
@@ -107,10 +133,12 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
 
         private Context mContext;
         private List<WalletCoin> mWalletCoins;
+        private OnItemClickListener<WalletCoin> mOnItemClickListener;
 
-        public WalletAdapter(Context context, List<WalletCoin> walletCoins) {
+        public WalletAdapter(Context context, List<WalletCoin> walletCoins, OnItemClickListener<WalletCoin> onItemClickListener) {
             mContext = context;
             mWalletCoins = walletCoins;
+            mOnItemClickListener = onItemClickListener;
         }
 
         @NonNull
@@ -130,7 +158,7 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
             if (holder instanceof HeaderHolder) {
                 ((HeaderHolder) holder).bindingData(getItemCount() - 1);
             } else {
-                ((ViewHolder) holder).bindingData(mWalletCoins.get(position - 1), position, getItemCount() - 1);
+                ((ViewHolder) holder).bindingData(mWalletCoins.get(position - 1), position-1, getItemCount()-1, mOnItemClickListener);
             }
         }
 
@@ -173,18 +201,28 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
             TextView mBitCount;
             @BindView(R.id.line)
             View mLine;
+            @BindView(R.id.rootView)
+            RelativeLayout mRootView;
 
             ViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(WalletCoin walletCoin, int position, int count) {
+            public void bindingData(WalletCoin walletCoin, int position, int count, OnItemClickListener<WalletCoin> onItemClickListener) {
 
-                mBitType.setText(walletCoin.getName());
+                mBitType.setText(walletCoin.getCoinSymbol());
 
-                mBitCount.setText(String.valueOf(walletCoin.getCoin()));
+                mBitCount.setText(String.valueOf(walletCoin.getAbleCoin()));
 
+                mRootView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onItemClick(walletCoin, position);
+                        }
+                    }
+                });
                 if (count - 1 == position) {
                     mLine.setVisibility(View.GONE);
                 } else {
