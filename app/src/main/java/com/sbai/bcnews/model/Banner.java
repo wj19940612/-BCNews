@@ -38,6 +38,7 @@ public class Banner implements Parcelable {
     public static final int JUMP_TYPE_RICH_TEXT = 0;
     public static final int JUMP_TYPE_HTML = 1;
     public static final int JUMP_TYPE_NEWS = 2;
+    public static final int JUMP_TYPE_ACTIVITY = 3;
 
 
     /**
@@ -82,6 +83,7 @@ public class Banner implements Parcelable {
     private int jumpType;//原生页面要跳到哪个原生页面
     private String jumpContent;
     private String jumpId;//原生页面跳过去带Id传过去
+    private String activityName;
 
     //gift 独有的
     private int clicks; //点击次数
@@ -285,6 +287,14 @@ public class Banner implements Parcelable {
         this.jumpContent = jumpContent;
     }
 
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
     @Override
     public String toString() {
         return "Banner{" +
@@ -339,6 +349,7 @@ public class Banner implements Parcelable {
         dest.writeInt(this.jumpType);
         dest.writeString(this.jumpId);
         dest.writeString(this.jumpContent);
+        dest.writeString(this.activityName);
     }
 
     protected Banner(Parcel in) {
@@ -366,6 +377,7 @@ public class Banner implements Parcelable {
         this.jumpId = in.readString();
         this.jumpType = in.readInt();
         this.jumpContent = in.readString();
+        this.activityName = in.readString();
     }
 
     public static final Creator<Banner> CREATOR = new Creator<Banner>() {

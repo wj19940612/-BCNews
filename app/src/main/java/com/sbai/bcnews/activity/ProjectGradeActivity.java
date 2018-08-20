@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
@@ -45,7 +46,9 @@ public class ProjectGradeActivity extends RecycleViewSwipeLoadActivity {
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
-    LinearLayout mRootView;
+    RelativeLayout mRootView;
+    @BindView(R.id.emptyView)
+    LinearLayout mEmptyView;
 
     private List<ProjectGrade> mProjectGradeList;
     private GradeAdapter mGradeAdapter;
@@ -81,29 +84,41 @@ public class ProjectGradeActivity extends RecycleViewSwipeLoadActivity {
         mGradeAdapter = new GradeAdapter(this, mProjectGradeList, new OnItemClickListener<ProjectGrade>() {
             @Override
             public void onItemClick(ProjectGrade projectGrade, int position) {
-                Log.e("zzz","zzz");
+
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mGradeAdapter);
     }
 
-    private void loadData(boolean refresh){
+    private void loadData(boolean refresh) {
         Apic.requestProjectGrade(mPage).tag(TAG).callback(new Callback<ListResp<ProjectGrade>>() {
             @Override
             protected void onRespSuccess(ListResp<ProjectGrade> resp) {
-                updateData(resp.getListData(),refresh);
+                updateData(resp.getListData(), refresh);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                stopFreshOrLoadAnimation();
             }
         }).fireFreely();
     }
 
-    private void updateData( List<ProjectGrade> data,boolean refresh) {
+    private void updateData(List<ProjectGrade> data, boolean refresh) {
         if (data == null || data.size() == 0) {
+            if (refresh) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
             refreshFoot(0);
             mGradeAdapter.notifyDataSetChanged();
             return;
         }
+        mEmptyView.setVisibility(View.GONE);
         if (refresh) {
             mProjectGradeList.clear();
         }

@@ -49,7 +49,9 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
-    LinearLayout mRootView;
+    RelativeLayout mRootView;
+    @BindView(R.id.emptyView)
+    LinearLayout mEmptyView;
 
     private List<WalletCoin> mWalletCoins;
     private WalletAdapter mWalletAdapter;
@@ -110,6 +112,11 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
     private void updateData(List<WalletCoin> data, boolean refresh) {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            if (refresh) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
             return;
         }
         if (refresh) {

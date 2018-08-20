@@ -543,4 +543,22 @@ public class FinanceUtil {
         return decimalFormat.format(value);
     }
 
+    /**
+     * 使用java正则表达式去掉多余的.与0
+     *
+     * @param value
+     * @return
+     */
+    public static String subZeroAndDot(double value, int scale) {
+        DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance();
+        decimalFormat.setGroupingUsed(false);
+        decimalFormat.setMaximumFractionDigits(scale);
+        String s = decimalFormat.format(value);
+        if (s.indexOf(".") > 0) {
+            s = s.replaceAll("0+?$", "");
+            s = s.replaceAll("[.]$", "");
+        }
+        return s;
+    }
+
 }

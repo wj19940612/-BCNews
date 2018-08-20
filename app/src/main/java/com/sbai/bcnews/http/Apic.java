@@ -133,6 +133,8 @@ public class Apic {
         //qkc介绍页
         String QKC_INTRODUCE_PAGE_URL = Api.getFixedHost() + "/news/appinvite/mentoring.html";
 
+        //活动页面
+        String ACTIVITY_URL = Api.getFixedHost() + "/news/banneractive/index.html";
     }
 
     /**

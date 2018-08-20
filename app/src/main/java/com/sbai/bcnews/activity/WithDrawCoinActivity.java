@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -19,11 +20,14 @@ import com.sbai.bcnews.http.Callback2D;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.CoinCount;
 import com.sbai.bcnews.model.CoinDetail;
+import com.sbai.bcnews.utils.FinanceUtil;
 import com.sbai.bcnews.utils.ToastUtil;
+import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.bcnews.view.SmartDialog;
 import com.sbai.bcnews.view.TitleBar;
 import com.sbai.bcnews.zxing.activity.CaptureActivity;
 
+import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
@@ -68,11 +72,29 @@ public class WithDrawCoinActivity extends BaseActivity {
 
     private double mMinExtractCoin = -1;
 
+    private ValidationWatcher mAddressEditWatcher = new ValidationWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            mAddressEdit.setSelection(s.toString().length());
+            checkoutBtnStatus();
+        }
+    };
+
+    private ValidationWatcher mCountEditWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            mCountEdit.setSelection(s.toString().length());
+            checkoutBtnStatus();
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_coin);
         ButterKnife.bind(this);
+        initView();
         initData();
         initTitle();
     }
@@ -81,6 +103,18 @@ public class WithDrawCoinActivity extends BaseActivity {
     protected void onPostResume() {
         super.onPostResume();
         loadData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAddressEdit.removeTextChangedListener(mAddressEditWatcher);
+        mCountEdit.removeTextChangedListener(mCountEditWatcher);
+    }
+
+    private void initView() {
+        mAddressEdit.addTextChangedListener(mAddressEditWatcher);
+        mCountEdit.addTextChangedListener(mCountEditWatcher);
     }
 
     private void initTitle() {
@@ -113,13 +147,13 @@ public class WithDrawCoinActivity extends BaseActivity {
     private void updateCoinDetail(CoinDetail data) {
         if (data != null) {
             mMinExtractCoin = data.getMinExtractCoin();
-            initView();
+            loadViewData();
         }
     }
 
-    private void initView() {
-        mStatement.setText(getString(R.string.coin_statement, String.valueOf(mMinExtractCoin) + "   " + mType));
-        mCountEdit.setHint(getString(R.string.min_get_coin_count_x, String.valueOf(mMinExtractCoin) + "   " + mType));
+    private void loadViewData() {
+        mStatement.setText(getString(R.string.coin_statement, FinanceUtil.subZeroAndDot(mMinExtractCoin, 8) + "   " + mType));
+        mCountEdit.setHint(getString(R.string.min_get_coin_count_x, FinanceUtil.subZeroAndDot(mMinExtractCoin, 8) + "   " + mType));
     }
 
     private void inputAllCoin() {
@@ -127,22 +161,23 @@ public class WithDrawCoinActivity extends BaseActivity {
     }
 
     private void confirm() {
-        if (TextUtils.isEmpty(mAddressEdit.getText().toString()) || TextUtils.isEmpty(mCountEdit.getText().toString())) {
-            ToastUtil.show(R.string.address_or_count_null);
-            return;
-        }
-
-        if (!checkCoinAddress(mAddressEdit.getText().toString())) {
-            ToastUtil.show(R.string.input_correct_address);
-            return;
-        }
-
         if (mMinExtractCoin <= 0) {
             return;
         }
 
+        if (mAddressEdit.getText().toString().length() > 100) {
+            ToastUtil.show(R.string.address_too_large);
+            return;
+        }
+
+
         if (Double.valueOf(mCountEdit.getText().toString()) < mMinExtractCoin) {
             ToastUtil.show(R.string.under_count);
+            return;
+        }
+
+        if (Double.valueOf(mCountEdit.getText().toString()) > mUsableCoin) {
+            ToastUtil.show(R.string.too_much_coin);
             return;
         }
 
@@ -152,6 +187,14 @@ public class WithDrawCoinActivity extends BaseActivity {
                 showSuccess();
             }
         }).fire();
+    }
+
+    private void checkoutBtnStatus() {
+        if (TextUtils.isEmpty(mAddressEdit.getText().toString()) || TextUtils.isEmpty(mCountEdit.getText().toString())) {
+            mConfirm.setEnabled(false);
+        } else {
+            mConfirm.setEnabled(true);
+        }
     }
 
     private void showSuccess() {
@@ -183,7 +226,12 @@ public class WithDrawCoinActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CODE_SCAN && resultCode == RESULT_OK && data != null) {
             String result = data.getStringExtra(CaptureActivity.RESULT);
-            mAddressEdit.setText(result);
+            if (!checkCoinAddress(result)) {
+                ToastUtil.show(R.string.input_correct_address);
+                return;
+            } else {
+                mAddressEdit.setText(result);
+            }
         }
     }
 

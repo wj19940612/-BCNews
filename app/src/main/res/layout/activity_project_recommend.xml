@@ -55,7 +55,6 @@
             android:layout_marginTop="106dp"
             android:background="@drawable/bg_recommend_content"
             android:orientation="vertical"
-            android:paddingBottom="20dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
@@ -89,15 +88,15 @@
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
                     android:textColor="@color/text_222"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:text="- -"/>
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:visibility="gone">
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -114,7 +113,8 @@
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
                     android:textColor="@color/text_222"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:text="- -"/>
 
             </RelativeLayout>
 
@@ -139,7 +139,8 @@
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
                     android:textColor="@color/text_222"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:text="- -"/>
 
             </RelativeLayout>
 
@@ -163,7 +164,8 @@
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
                     android:textColor="@color/text_222"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:text="- -"/>
 
             </RelativeLayout>
 
@@ -187,15 +189,15 @@
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
                     android:textColor="@color/text_222"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:text="- -"/>
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:visibility="gone">
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -212,7 +214,8 @@
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
                     android:textColor="@color/text_222"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:text="- -"/>
 
             </RelativeLayout>
 
@@ -236,7 +239,8 @@
                     android:layout_alignParentRight="true"
                     android:includeFontPadding="false"
                     android:textColor="@color/text_222"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:text="- -"/>
 
             </RelativeLayout>
 
@@ -265,11 +269,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="8dp"
                 android:text="@string/look_more"
                 android:textColor="@color/text_538"
                 android:textSize="14sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:visibility="invisible"/>
         </LinearLayout>
 
         <WebView

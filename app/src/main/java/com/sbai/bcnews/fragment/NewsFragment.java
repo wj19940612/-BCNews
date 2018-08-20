@@ -255,6 +255,11 @@ public class NewsFragment extends RecycleViewSwipeLoadFragment {
                         Launcher.with(getActivity(), NewsDetailActivity.class)
                                 .putExtra(ExtraKeys.NEWS_ID, information.getJumpContent())
                                 .execute();
+                    } else if (information.getJumpType() == Banner.JUMP_TYPE_ACTIVITY) {
+                        Launcher.with(getActivity(), WebActivity.class)
+                                .putExtra(WebActivity.EX_URL, Apic.url.ACTIVITY_URL + "?id=" + information.getId())
+//                                .putExtra(WebActivity.EX_TITLE, information.getActivityName())
+                                .execute();
                     }
                     Apic.requesBannerUpdate(information.getId()).tag(TAG).fireFreely();
                 }

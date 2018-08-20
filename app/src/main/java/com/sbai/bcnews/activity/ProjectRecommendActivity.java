@@ -63,7 +63,7 @@ public class ProjectRecommendActivity extends BaseActivity {
         @Override
         public boolean onPreDraw() {
             if (!judgeIsMax() && TextViewCompat.getMaxLines(mIntroduce) <= 5) {
-                mBtnLookMore.setVisibility(View.GONE);
+                mBtnLookMore.setVisibility(View.INVISIBLE);
             } else {
                 mBtnLookMore.setVisibility(View.VISIBLE);
             }
@@ -127,15 +127,22 @@ public class ProjectRecommendActivity extends BaseActivity {
     private void updateData(ProjectCommend data) {
         mType.setText(data.getProjectName());
         mPublishTime.setText(DateUtil.getFormatSpecialSlashNoHour(data.getPublishTime()));
-        mPublishPrice.setText(String.valueOf(data.getPublishPrice()));
+        if (data.getPublishPrice() != 0) {
+            mPublishPrice.setText("$" + String.valueOf(data.getPublishPrice()));
+        }
         mPublishCount.setText(FinanceUtil.trimTrailingZero(data.getPublishTotal()));
         mTurnOver.setText(String.valueOf(data.getCirculateCount()));
         mRewardSystem.setText(data.getIncentiveSystem());
 
+        mIntroduce.getViewTreeObserver().removeOnPreDrawListener(mOnPreDrawListener);
         mIntroduce.getViewTreeObserver().addOnPreDrawListener(mOnPreDrawListener);
-        mIntroduce.setText(Html.fromHtml(data.getIntro()));
+        if (!TextUtils.isEmpty(data.getInfo())) {
+            mIntroduce.setText(Html.fromHtml(data.getIntro()));
+        }
 
-        openWebView(data.getInfo(),mWebView);
+        if (!TextUtils.isEmpty(data.getInfo())) {
+            openWebView(data.getInfo(), mWebView);
+        }
     }
 
 

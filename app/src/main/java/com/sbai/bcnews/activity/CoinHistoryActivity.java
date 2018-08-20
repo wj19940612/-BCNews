@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
@@ -49,7 +50,9 @@ public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
-    LinearLayout mRootView;
+    RelativeLayout mRootView;
+    @BindView(R.id.emptyView)
+    LinearLayout mEmptyView;
 
     private String mType;
     private int mPage;
@@ -134,6 +137,11 @@ public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
     private void updateData(ArrayList<CoinHistory> data, boolean refresh) {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
+            if (refresh) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
             return;
         }
         if (refresh) {

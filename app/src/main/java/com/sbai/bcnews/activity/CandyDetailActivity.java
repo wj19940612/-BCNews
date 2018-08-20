@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -146,14 +147,19 @@ public class CandyDetailActivity extends BaseActivity {
         } else {
             mGetCount.setText(getString(R.string.x_ten_thousand_have_get, mCandy.getClicks() / 10000));
         }
-        mTip.setText(getString(R.string.welfare_time_x,mCandy.getWelfare()));
+        mTip.setText(getString(R.string.welfare_time_x, mCandy.getWelfare()));
 
         openWebView(mCandy.getSweetIntroduce(), mContentIntroduce);
         openWebView(mCandy.getIntroduce(), mWelfareIntroduce);
 
-        GlideApp.with(getActivity()).load(mCandy.getQrCode())
-                .placeholder(R.drawable.ic_default_news)
-                .into(mScanImg);
+        if (!TextUtils.isEmpty(mCandy.getQrCode())) {
+            GlideApp.with(getActivity()).load(mCandy.getQrCode())
+                    .placeholder(R.drawable.ic_default_news)
+                    .into(mScanImg);
+        } else {
+            mScanImg.setVisibility(View.GONE);
+        }
+
     }
 
     private void openWebView(String urlData, WebView webView) {
@@ -220,7 +226,7 @@ public class CandyDetailActivity extends BaseActivity {
 
         Launcher.with(getActivity(), WebActivity.class)
                 .putExtra(WebActivity.EX_URL, mCandy.getUrl())
-                .putExtra(ExtraKeys.HAS_CLOSE_BUTTON,true)
+                .putExtra(ExtraKeys.HAS_CLOSE_BUTTON, true)
                 .execute();
     }
 }

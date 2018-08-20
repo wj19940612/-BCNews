@@ -158,7 +158,8 @@
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/contentIntroduce"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="30dp"
+                android:visibility="gone"/>
 
         </RelativeLayout>
     </ScrollView>

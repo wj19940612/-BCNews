@@ -550,12 +550,15 @@
     <string name="min_get_coin_count">最小提币数量</string>
     <string name="min_get_coin_count_x">最小提币数量 %1$s</string>
     <string name="all">全部</string>
-    <string name="coin_statement">1.最小提币数量为：%1$s \n2.申请提币前请您确保提币地址准确无误，交易一旦发送到区块链网络便不可撤回。\n3.您提币至上述地址后，需要整个网络节点的确认，X次网络确认后方可到账提币。\n4.请不要直接提币到ICO的众筹地址，这会导致您无法收取众筹到的数字资产。\n5.请务必确认电脑及浏览器安全，防止信息被篡改或泄露。</string>
+    <string name="coin_statement">1.最小提币数量为：%1$s \n2.申请提币前请您确保提币地址准确无误，交易一旦发送到区块链网络便不可撤回。\n3.您提币至上述地址后，需要整个网络节点的确认，多次网络确认后方可到账提币。\n4.请不要直接提币到ICO的众筹地址，这会导致您无法收取众筹到的数字资产。\n5.请务必确认电脑及浏览器安全，防止信息被篡改或泄露。</string>
     <string name="address_or_count_null">请输入提币地址和提币</string>
     <string name="input_correct_address">请输入正确的提币地址</string>
+    <string name="address_too_large">提币地址太长</string>
     <string name="under_count">少于最小提币数量</string>
+    <string name="too_much_coin">余额不足</string>
     <string name="withdraw_coin_success">提币申请成功，请耐心等候</string>
     <string name="get_coin_x">提币(%1$s)</string>
+    <string name="no_other_info">暂无相关信息</string>
 
 
 </resources>
