@@ -9,7 +9,7 @@ public class CoinHistory {
 
     private long updateTime;
 
-    private double extractNum;
+    private String extractNum;
 
     private int changeType;  //0加 1减
 
@@ -29,11 +29,11 @@ public class CoinHistory {
         this.updateTime = updateTime;
     }
 
-    public double getExtractNum() {
+    public String getExtractNum() {
         return extractNum;
     }
 
-    public void setExtractNum(double extractNum) {
+    public void setExtractNum(String extractNum) {
         this.extractNum = extractNum;
     }
 
