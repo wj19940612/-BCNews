@@ -169,6 +169,9 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
     }
 
     private void updateData(List<WalletCoin> data, boolean refresh) {
+        if (refresh) {
+            mWalletCoins.clear();
+        }
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
             if (refresh) {
@@ -179,9 +182,7 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
             mWalletAdapter.notifyDataSetChanged();
             return;
         }
-        if (refresh) {
-            mWalletCoins.clear();
-        }
+
         mEmptyView.setVisibility(View.GONE);
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);

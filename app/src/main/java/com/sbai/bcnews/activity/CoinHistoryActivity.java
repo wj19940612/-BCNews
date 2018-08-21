@@ -194,6 +194,9 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
     }
 
     private void updateData(ArrayList<CoinHistory> data, boolean refresh) {
+        if (refresh) {
+            mCoinHistories.clear();
+        }
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
             if (refresh) {
@@ -203,9 +206,6 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
             }
             mHistoryAdapter.notifyDataSetChanged();
             return;
-        }
-        if (refresh) {
-            mCoinHistories.clear();
         }
         mEmptyView.setVisibility(View.GONE);
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {

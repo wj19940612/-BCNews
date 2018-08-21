@@ -161,6 +161,9 @@ public class ProjectGradeActivity extends BaseSwipeLoadActivity {
     }
 
     private void updateData(List<ProjectGrade> data, boolean refresh) {
+        if (refresh) {
+            mProjectGradeList.clear();
+        }
         if (data == null || data.size() == 0) {
             if (refresh) {
                 mEmptyView.setVisibility(View.VISIBLE);
@@ -173,9 +176,6 @@ public class ProjectGradeActivity extends BaseSwipeLoadActivity {
             return;
         }
         mEmptyView.setVisibility(View.GONE);
-        if (refresh) {
-            mProjectGradeList.clear();
-        }
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
