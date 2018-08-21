@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/background"
-    android:id="@+id/rootView">
+    android:orientation="vertical">
 
     <com.sbai.bcnews.view.TitleBar
         android:id="@+id/titleBar"
@@ -14,26 +14,6 @@
         android:background="@color/white"
         app:backFeature="true"
         app:titleText="@string/my_wallet" />
-
-    <LinearLayout
-        android:id="@+id/emptyView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_empty_new"
-            android:drawablePadding="18dp"
-            android:textSize="16sp"
-            android:textColor="@color/text_4949"
-            android:text="@string/no_other_info"/>
-
-    </LinearLayout>
 
 
     <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
@@ -53,18 +33,44 @@
         <com.zcmrr.swipelayout.header.RefreshHeaderView
             android:id="@+id/swipe_refresh_header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.RecyclerView
+        <RelativeLayout
             android:id="@+id/swipe_target"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"/>
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/emptyView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="300dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="18dp"
+                    android:drawableTop="@drawable/ic_empty_new"
+                    android:text="@string/no_other_info"
+                    android:textColor="@color/text_4949"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false" />
+        </RelativeLayout>
 
         <com.zcmrr.swipelayout.foot.LoadMoreFooterView
             android:id="@+id/swipe_load_more_footer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
 </RelativeLayout>

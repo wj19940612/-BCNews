@@ -56,7 +56,8 @@
             android:background="@drawable/bg_recommend_content"
             android:orientation="vertical"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -96,7 +97,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -197,7 +199,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -261,20 +264,28 @@
                 android:layout_marginTop="12dp"
                 android:ellipsize="end"
                 android:maxLines="5"
+                android:lineSpacingExtra="5dp"
                 android:textColor="@color/text_4949"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:text="dsadasdasdsadadada"/>
 
             <TextView
                 android:id="@+id/btnLookMore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:paddingBottom="8dp"
+                android:paddingBottom="10dp"
                 android:text="@string/look_more"
                 android:textColor="@color/text_538"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
+
+            <View
+                android:id="@+id/viewStub"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:visibility="visible" />
         </LinearLayout>
 
         <WebView

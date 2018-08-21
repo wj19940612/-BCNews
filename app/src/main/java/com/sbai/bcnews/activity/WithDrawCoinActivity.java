@@ -21,6 +21,7 @@ import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.CoinCount;
 import com.sbai.bcnews.model.CoinDetail;
 import com.sbai.bcnews.utils.FinanceUtil;
+import com.sbai.bcnews.utils.PermissionUtil;
 import com.sbai.bcnews.utils.ToastUtil;
 import com.sbai.bcnews.utils.ValidationWatcher;
 import com.sbai.bcnews.view.SmartDialog;
@@ -67,10 +68,10 @@ public class WithDrawCoinActivity extends BaseActivity {
     @BindView(R.id.usableCount)
     TextView mUsableCount;
 
-    private double mUsableCoin;
+    private String mUsableCoin;
     private String mType;
 
-    private double mMinExtractCoin = -1;
+    private String mMinExtractCoin;
 
     private ValidationWatcher mAddressEditWatcher = new ValidationWatcher() {
 
@@ -138,7 +139,7 @@ public class WithDrawCoinActivity extends BaseActivity {
             protected void onRespSuccessData(CoinCount data) {
                 if (data != null) {
                     mUsableCoin = data.getAbleCoin();
-                    mUsableCount.setText(String.valueOf(mUsableCoin) + "   " + mType);
+                    mUsableCount.setText(mUsableCoin + "   " + mType);
                 }
             }
         }).fireFreely();
@@ -152,8 +153,8 @@ public class WithDrawCoinActivity extends BaseActivity {
     }
 
     private void loadViewData() {
-        mStatement.setText(getString(R.string.coin_statement, FinanceUtil.subZeroAndDot(mMinExtractCoin, 8) + "   " + mType));
-        mCountEdit.setHint(getString(R.string.min_get_coin_count_x, FinanceUtil.subZeroAndDot(mMinExtractCoin, 8) + "   " + mType));
+        mStatement.setText(getString(R.string.coin_statement, mMinExtractCoin + "   " + mType));
+        mCountEdit.setHint(getString(R.string.min_get_coin_count_x, mMinExtractCoin + "   " + mType));
     }
 
     private void inputAllCoin() {
@@ -161,7 +162,7 @@ public class WithDrawCoinActivity extends BaseActivity {
     }
 
     private void confirm() {
-        if (mMinExtractCoin <= 0) {
+        if (mMinExtractCoin == null) {
             return;
         }
 
@@ -170,13 +171,18 @@ public class WithDrawCoinActivity extends BaseActivity {
             return;
         }
 
+        if (!checkCoinAddress(mAddressEdit.getText().toString())) {
+            ToastUtil.show(R.string.input_correct_address);
+            return;
+        }
 
-        if (Double.valueOf(mCountEdit.getText().toString()) < mMinExtractCoin) {
+
+        if (Double.valueOf(mCountEdit.getText().toString()) < Double.valueOf(mMinExtractCoin)) {
             ToastUtil.show(R.string.under_count);
             return;
         }
 
-        if (Double.valueOf(mCountEdit.getText().toString()) > mUsableCoin) {
+        if (Double.valueOf(mCountEdit.getText().toString()) > Double.valueOf(mUsableCoin)) {
             ToastUtil.show(R.string.too_much_coin);
             return;
         }
@@ -210,8 +216,12 @@ public class WithDrawCoinActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.scanBtn:
-                Intent intent = new Intent(getActivity(), CaptureActivity.class);
-                startActivityForResult(intent, CODE_SCAN);
+                if (PermissionUtil.cameraIsCanUse()) {
+                    Intent intent = new Intent(getActivity(), CaptureActivity.class);
+                    startActivityForResult(intent, CODE_SCAN);
+                } else {
+                    ToastUtil.show(R.string.please_open_camera_permission);
+                }
                 break;
             case R.id.allBtn:
                 inputAllCoin();

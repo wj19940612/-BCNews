@@ -24,6 +24,7 @@ import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.CoinCount;
 import com.sbai.bcnews.model.CoinHistory;
+import com.sbai.bcnews.swipeload.BaseSwipeLoadActivity;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.Launcher;
@@ -37,13 +38,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
+public class CoinHistoryActivity extends BaseSwipeLoadActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
-    @BindView(R.id.swipe_target)
+    @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView mSwipeLoadMoreFooter;
@@ -53,12 +54,39 @@ public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
     RelativeLayout mRootView;
     @BindView(R.id.emptyView)
     LinearLayout mEmptyView;
+    @BindView(R.id.swipe_target)
+    RelativeLayout mSwipeTarget;
 
     private String mType;
     private int mPage;
 
     private HistoryAdapter mHistoryAdapter;
     private List<CoinHistory> mCoinHistories;
+
+    protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
+                    triggerLoadMore();
+                }
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                boolean isTop = layoutManager.findFirstCompletelyVisibleItemPosition() == 0;
+                if (!isTop) {
+                    mSwipeToLoadLayout.setRefreshEnabled(false);
+                } else {
+                    mSwipeToLoadLayout.setRefreshEnabled(true);
+                }
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,8 +98,39 @@ public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
     }
 
     @Override
-    public View getContentView() {
-        return mRootView;
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mRecyclerView.addOnScrollListener(mOnScrollListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRecyclerView.removeOnScrollListener(mOnScrollListener);
+    }
+
+    @NonNull
+    @Override
+    public Object getSwipeTargetView() {
+        return mSwipeTarget;
+    }
+
+    @NonNull
+    @Override
+    public SwipeToLoadLayout getSwipeToLoadLayout() {
+        return mSwipeToLoadLayout;
+    }
+
+    @NonNull
+    @Override
+    public RefreshHeaderView getRefreshHeaderView() {
+        return mSwipeRefreshHeader;
+    }
+
+    @NonNull
+    @Override
+    public LoadMoreFooterView getLoadMoreFooterView() {
+        return mSwipeLoadMoreFooter;
     }
 
     @Override
@@ -101,8 +160,8 @@ public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
         mCoinHistories = new ArrayList<>();
         mHistoryAdapter = new HistoryAdapter(this, mCoinHistories, new HistoryAdapter.OnGetCoinClickListener() {
             @Override
-            public void onGetCoinClick(double usableCoin, String type) {
-                Launcher.with(getActivity(), WithDrawCoinActivity.class).putExtra(ExtraKeys.USABLE_COIN, usableCoin).putExtra(ExtraKeys.TYPE, type).execute();
+            public void onGetCoinClick(String usableCoin, String type) {
+                Launcher.with(getActivity(), WithDrawCoinActivity.class).putExtra(ExtraKeys.TYPE, type).execute();
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -142,11 +201,13 @@ public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
             } else {
                 mEmptyView.setVisibility(View.GONE);
             }
+            mHistoryAdapter.notifyDataSetChanged();
             return;
         }
         if (refresh) {
             mCoinHistories.clear();
         }
+        mEmptyView.setVisibility(View.GONE);
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
@@ -164,12 +225,12 @@ public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
         public static final int NORMAL = 1;
 
         interface OnGetCoinClickListener {
-            public void onGetCoinClick(double usableCoin, String type);
+            public void onGetCoinClick(String usableCoin, String type);
         }
 
         private Context mContext;
         private List<CoinHistory> mCoinHistoryList;
-        private double mAllCount;
+        private String mAllCount;
         private String mType;
         private OnGetCoinClickListener mOnGetCoinClickListener;
 
@@ -179,7 +240,7 @@ public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
             mOnGetCoinClickListener = onGetCoinClickListener;
         }
 
-        public void setAllCount(double allCount, String type) {
+        public void setAllCount(String allCount, String type) {
             mAllCount = allCount;
             mType = type;
         }
@@ -233,9 +294,9 @@ public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, double allCount, String type, OnGetCoinClickListener onGetCoinClickListener) {
+            public void bindingData(Context context, String allCount, String type, OnGetCoinClickListener onGetCoinClickListener) {
 
-                mAllCount.setText(String.valueOf(allCount));
+                mAllCount.setText(allCount);
 
                 mType.setText(type);
 

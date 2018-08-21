@@ -58,14 +58,18 @@ public class ProjectRecommendActivity extends BaseActivity {
     TextView mRewardSystem;
     @BindView(R.id.baseInfoLayout)
     LinearLayout mBaseInfoLayout;
+    @BindView(R.id.viewStub)
+    View mViewStub;
 
     private ViewTreeObserver.OnPreDrawListener mOnPreDrawListener = new ViewTreeObserver.OnPreDrawListener() {
         @Override
         public boolean onPreDraw() {
             if (!judgeIsMax() && TextViewCompat.getMaxLines(mIntroduce) <= 5) {
-                mBtnLookMore.setVisibility(View.INVISIBLE);
+                mBtnLookMore.setVisibility(View.GONE);
+                mViewStub.setVisibility(View.VISIBLE);
             } else {
                 mBtnLookMore.setVisibility(View.VISIBLE);
+                mViewStub.setVisibility(View.GONE);
             }
             mIntroduce.getViewTreeObserver().removeOnPreDrawListener(mOnPreDrawListener);
             return true;
@@ -106,7 +110,7 @@ public class ProjectRecommendActivity extends BaseActivity {
         Layout layout = mIntroduce.getLayout();
         if (layout != null) {
             int lines = layout.getLineCount();
-            if (lines > 0) {
+            if (lines > 4) {
                 if (layout.getEllipsisCount(4) > 0) {
                     return true;
                 }
@@ -220,18 +224,18 @@ public class ProjectRecommendActivity extends BaseActivity {
                 "            <meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1.0001, minimum-scale=1.0001, maximum-scale=1.0001, shrink-to-fit=no'>\n" +
                 "            <style type='text/css'>\n" +
                 "                body {\n" +
-                "                  margin-top: 38px !important;\n" +
+                "                  margin-top: 20px !important;\n" +
                 "                  margin-left: 20px !important;\n" +
                 "                  margin-right: 20px !important;\n" +
                 "                }\n" +
                 "                * {\n" +
                 "                  text-align:justify;\n" +
-                "                  font-size: 13px !important;\n" +
+                "                  font-size: 16px !important;\n" +
                 "                  font-family: 'PingFangSC-Regular' !important;\n" +
-                "                  color: #4a4a4a !important;\n" +
+                "                  color: #494949 !important;\n" +
                 "                  background-color: white !important;\n" +
                 "                  letter-spacing: 1px !important;\n" +
-                "                  line-height: 18px !important;\n" +
+                "                  line-height: 28px !important;\n" +
                 "                  white-space: break-all !important;\n" +
                 "                  word-wrap: break-word;\n" +
                 "                }\n" +

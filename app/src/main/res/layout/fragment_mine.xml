@@ -173,7 +173,7 @@
                 android:paddingTop="22dp"
                 android:text="@string/wallet"
                 android:textColor="@android:color/black"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/collect"

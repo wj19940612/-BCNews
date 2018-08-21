@@ -1,15 +1,15 @@
 package com.sbai.bcnews.model;
 
 public class CoinCount {
-    private double ableCoin;
+    private String ableCoin;
 
     private String coinSymbol;
 
-    public double getAbleCoin() {
+    public String getAbleCoin() {
         return ableCoin;
     }
 
-    public void setAbleCoin(double ableCoin) {
+    public void setAbleCoin(String ableCoin) {
         this.ableCoin = ableCoin;
     }
 

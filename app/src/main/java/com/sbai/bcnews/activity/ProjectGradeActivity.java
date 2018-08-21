@@ -21,6 +21,7 @@ import com.sbai.bcnews.http.Callback;
 import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.ProjectGrade;
+import com.sbai.bcnews.swipeload.BaseSwipeLoadActivity;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.DateUtil;
 import com.sbai.bcnews.utils.OnItemClickListener;
@@ -34,12 +35,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ProjectGradeActivity extends RecycleViewSwipeLoadActivity {
+public class ProjectGradeActivity extends BaseSwipeLoadActivity {
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
-    @BindView(R.id.swipe_target)
+    @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView mSwipeLoadMoreFooter;
@@ -49,10 +50,37 @@ public class ProjectGradeActivity extends RecycleViewSwipeLoadActivity {
     RelativeLayout mRootView;
     @BindView(R.id.emptyView)
     LinearLayout mEmptyView;
+    @BindView(R.id.swipe_target)
+    RelativeLayout mSwipeTarget;
 
     private List<ProjectGrade> mProjectGradeList;
     private GradeAdapter mGradeAdapter;
     private int mPage;
+
+    protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
+                    triggerLoadMore();
+                }
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                boolean isTop = layoutManager.findFirstCompletelyVisibleItemPosition() == 0;
+                if(!isTop){
+                    mSwipeToLoadLayout.setRefreshEnabled(false);
+                }else{
+                    mSwipeToLoadLayout.setRefreshEnabled(true);
+                }
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,12 +88,38 @@ public class ProjectGradeActivity extends RecycleViewSwipeLoadActivity {
         setContentView(R.layout.activity_project_grade);
         ButterKnife.bind(this);
         initView();
+        mRecyclerView.addOnScrollListener(mOnScrollListener);
         loadData(true);
     }
 
     @Override
-    public View getContentView() {
-        return mRootView;
+    protected void onDestroy() {
+        super.onDestroy();
+        mRecyclerView.removeOnScrollListener(mOnScrollListener);
+    }
+
+    @NonNull
+    @Override
+    public Object getSwipeTargetView() {
+        return mSwipeTarget;
+    }
+
+    @NonNull
+    @Override
+    public SwipeToLoadLayout getSwipeToLoadLayout() {
+        return mSwipeToLoadLayout;
+    }
+
+    @NonNull
+    @Override
+    public RefreshHeaderView getRefreshHeaderView() {
+        return mSwipeRefreshHeader;
+    }
+
+    @NonNull
+    @Override
+    public LoadMoreFooterView getLoadMoreFooterView() {
+        return mSwipeLoadMoreFooter;
     }
 
     @Override
@@ -135,7 +189,7 @@ public class ProjectGradeActivity extends RecycleViewSwipeLoadActivity {
     }
 
     private void refreshFoot(int size) {
-        if (size < Apic.DEFAULT_PAGE_SIZE) {
+        if (mProjectGradeList.size() >= Apic.DEFAULT_PAGE_SIZE && size < Apic.DEFAULT_PAGE_SIZE) {
             mGradeAdapter.setShowFoot(true);
         } else {
             mGradeAdapter.setShowFoot(false);

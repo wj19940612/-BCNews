@@ -23,6 +23,7 @@ import com.sbai.bcnews.http.ListResp;
 import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.CoinHistory;
 import com.sbai.bcnews.model.WalletCoin;
+import com.sbai.bcnews.swipeload.BaseSwipeLoadActivity;
 import com.sbai.bcnews.swipeload.RecycleViewSwipeLoadActivity;
 import com.sbai.bcnews.utils.Launcher;
 import com.sbai.bcnews.utils.OnItemClickListener;
@@ -36,13 +37,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
+public class MyWalletActivity extends BaseSwipeLoadActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
-    @BindView(R.id.swipe_target)
+    @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView mSwipeLoadMoreFooter;
@@ -52,10 +53,37 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
     RelativeLayout mRootView;
     @BindView(R.id.emptyView)
     LinearLayout mEmptyView;
+    @BindView(R.id.swipe_target)
+    RelativeLayout mSwipeTarget;
 
     private List<WalletCoin> mWalletCoins;
     private WalletAdapter mWalletAdapter;
     private int mPage;
+
+    protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
+                    triggerLoadMore();
+                }
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                boolean isTop = layoutManager.findFirstCompletelyVisibleItemPosition() == 0;
+                if(!isTop){
+                    mSwipeToLoadLayout.setRefreshEnabled(false);
+                }else{
+                    mSwipeToLoadLayout.setRefreshEnabled(true);
+                }
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,12 +91,43 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
         setContentView(R.layout.activity_my_wallet);
         ButterKnife.bind(this);
         initView();
+        mRecyclerView.addOnScrollListener(mOnScrollListener);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         loadData(true);
     }
 
     @Override
-    public View getContentView() {
-        return mRootView;
+    protected void onDestroy() {
+        super.onDestroy();
+        mRecyclerView.removeOnScrollListener(mOnScrollListener);
+    }
+
+    @NonNull
+    @Override
+    public Object getSwipeTargetView() {
+        return mSwipeTarget;
+    }
+
+    @NonNull
+    @Override
+    public SwipeToLoadLayout getSwipeToLoadLayout() {
+        return mSwipeToLoadLayout;
+    }
+
+    @NonNull
+    @Override
+    public RefreshHeaderView getRefreshHeaderView() {
+        return mSwipeRefreshHeader;
+    }
+
+    @NonNull
+    @Override
+    public LoadMoreFooterView getLoadMoreFooterView() {
+        return mSwipeLoadMoreFooter;
     }
 
     @Override
@@ -87,7 +146,7 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
         mWalletAdapter = new WalletAdapter(this, mWalletCoins, new OnItemClickListener<WalletCoin>() {
             @Override
             public void onItemClick(WalletCoin walletCoin, int position) {
-                Launcher.with(getActivity(), CoinHistoryActivity.class).putExtra(ExtraKeys.USABLE_COIN,walletCoin.getAbleCoin()).putExtra(ExtraKeys.TYPE,walletCoin.getCoinSymbol()).execute();
+                Launcher.with(getActivity(), CoinHistoryActivity.class).putExtra(ExtraKeys.TYPE,walletCoin.getCoinSymbol()).execute();
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -117,11 +176,13 @@ public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
             } else {
                 mEmptyView.setVisibility(View.GONE);
             }
+            mWalletAdapter.notifyDataSetChanged();
             return;
         }
         if (refresh) {
             mWalletCoins.clear();
         }
+        mEmptyView.setVisibility(View.GONE);
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {

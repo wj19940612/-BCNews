@@ -153,6 +153,7 @@ public class CandyDetailActivity extends BaseActivity {
         openWebView(mCandy.getIntroduce(), mWelfareIntroduce);
 
         if (!TextUtils.isEmpty(mCandy.getQrCode())) {
+            mScanImg.setVisibility(View.VISIBLE);
             GlideApp.with(getActivity()).load(mCandy.getQrCode())
                     .placeholder(R.drawable.ic_default_news)
                     .into(mScanImg);
@@ -205,7 +206,7 @@ public class CandyDetailActivity extends BaseActivity {
         return textHead;
     }
 
-    @OnClick({R.id.getCandyBtn})
+    @OnClick({R.id.getCandyBtn,R.id.scanImg})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.getCandyBtn:

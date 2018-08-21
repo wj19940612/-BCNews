@@ -1,15 +1,17 @@
 package com.sbai.bcnews.model;
 
 public class WalletCoin {
-   private double ableCoin;//可用数量
+   private String ableCoin;//可用数量
 
     private String coinSymbol;//币种
 
-    public double getAbleCoin() {
+    private int numPoint;
+
+    public String getAbleCoin() {
         return ableCoin;
     }
 
-    public void setAbleCoin(double ableCoin) {
+    public void setAbleCoin(String ableCoin) {
         this.ableCoin = ableCoin;
     }
 
@@ -19,5 +21,13 @@ public class WalletCoin {
 
     public void setCoinSymbol(String coinSymbol) {
         this.coinSymbol = coinSymbol;
+    }
+
+    public int getNumPoint() {
+        return numPoint;
+    }
+
+    public void setNumPoint(int numPoint) {
+        this.numPoint = numPoint;
     }
 }

@@ -5,7 +5,7 @@ public class CoinDetail {
 
     private int id;
 
-    private double minExtractCoin;
+    private String minExtractCoin;
 
     public long getCreateTime() {
         return createTime;
@@ -23,11 +23,11 @@ public class CoinDetail {
         this.id = id;
     }
 
-    public double getMinExtractCoin() {
+    public String getMinExtractCoin() {
         return minExtractCoin;
     }
 
-    public void setMinExtractCoin(double minExtractCoin) {
+    public void setMinExtractCoin(String minExtractCoin) {
         this.minExtractCoin = minExtractCoin;
     }
 }
