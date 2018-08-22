@@ -131,11 +131,11 @@ public class ProjectRecommendActivity extends BaseActivity {
     private void updateData(ProjectCommend data) {
         mType.setText(data.getProjectName());
         mPublishTime.setText(DateUtil.getFormatSpecialSlashNoHour(data.getPublishTime()));
-        if (data.getPublishPrice() != 0) {
-            mPublishPrice.setText("$" + String.valueOf(data.getPublishPrice()));
+        if (!TextUtils.isEmpty(data.getPublishPrice())) {
+            mPublishPrice.setText("$" + data.getPublishPrice());
         }
-        mPublishCount.setText(FinanceUtil.trimTrailingZero(data.getPublishTotal()));
-        mTurnOver.setText(String.valueOf(data.getCirculateCount()));
+        mPublishCount.setText(data.getPublishTotal());
+        mTurnOver.setText(data.getCirculateCount());
         mRewardSystem.setText(data.getIncentiveSystem());
 
         mIntroduce.getViewTreeObserver().removeOnPreDrawListener(mOnPreDrawListener);

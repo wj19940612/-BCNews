@@ -4,13 +4,13 @@ public class ProjectCommend {
     private String projectName;
     private long createTime;//
     private String id;
-    private double circulateCount;  //流通量激励机制
+    private String circulateCount;  //流通量激励机制
     private String incentiveSystem;//激励机制
     private String info;//详情
     private String intro;//简介
     private long publishTime;//发行时间
-    private double publishPrice; //发行价格
-    private double publishTotal;//发行总量
+    private String publishPrice; //发行价格
+    private String publishTotal;//发行总量
     private int status;
 
     public String getProjectName() {
@@ -37,11 +37,11 @@ public class ProjectCommend {
         this.id = id;
     }
 
-    public double getCirculateCount() {
+    public String getCirculateCount() {
         return circulateCount;
     }
 
-    public void setCirculateCount(double circulateCount) {
+    public void setCirculateCount(String circulateCount) {
         this.circulateCount = circulateCount;
     }
 
@@ -77,19 +77,19 @@ public class ProjectCommend {
         this.publishTime = publishTime;
     }
 
-    public double getPublishPrice() {
+    public String getPublishPrice() {
         return publishPrice;
     }
 
-    public void setPublishPrice(double publishPrice) {
+    public void setPublishPrice(String publishPrice) {
         this.publishPrice = publishPrice;
     }
 
-    public double getPublishTotal() {
+    public String getPublishTotal() {
         return publishTotal;
     }
 
-    public void setPublishTotal(double publishTotal) {
+    public void setPublishTotal(String publishTotal) {
         this.publishTotal = publishTotal;
     }
 
