@@ -16,6 +16,8 @@ import com.sbai.bcnews.ExtraKeys;
 import com.sbai.bcnews.R;
 import com.sbai.bcnews.activity.mine.LoginActivity;
 import com.sbai.bcnews.http.Apic;
+import com.sbai.bcnews.http.Callback;
+import com.sbai.bcnews.http.Resp;
 import com.sbai.bcnews.model.Candy;
 import com.sbai.bcnews.model.LocalUser;
 import com.sbai.bcnews.utils.Launcher;
@@ -72,6 +74,13 @@ public class CandyDetailActivity extends BaseActivity {
         initWebView(mWelfareIntroduce);
         requestClick();
         initViewData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        mContentIntroduce.destroy();
+//        mWelfareIntroduce.destroy();
     }
 
     private void initData(Intent intent) {
@@ -142,10 +151,10 @@ public class CandyDetailActivity extends BaseActivity {
                 .into(mHead);
 
         mName.setText(mCandy.getName());
-        if (mCandy.getClicks() <= 99999) {
-            mGetCount.setText(getString(R.string.x_have_get, mCandy.getClicks()));
+        if (mCandy.getReceiveNum() <= 99999) {
+            mGetCount.setText(getString(R.string.x_have_get, mCandy.getReceiveNum()));
         } else {
-            mGetCount.setText(getString(R.string.x_ten_thousand_have_get, mCandy.getClicks() / 10000));
+            mGetCount.setText(getString(R.string.x_ten_thousand_have_get, mCandy.getReceiveNum() / 10000));
         }
         mTip.setText(getString(R.string.welfare_time_x, mCandy.getWelfare()));
 
@@ -223,7 +232,12 @@ public class CandyDetailActivity extends BaseActivity {
     }
 
     private void getCandy() {
-        Apic.receiveCandy(mCandy.getId()).tag(TAG).fireFreely();
+        Apic.receiveCandy(mCandy.getId()).tag(TAG).callback(new Callback<Resp>() {
+            @Override
+            protected void onRespSuccess(Resp resp) {
+
+            }
+        }).fireFreely();
 
         Launcher.with(getActivity(), WebActivity.class)
                 .putExtra(WebActivity.EX_URL, mCandy.getUrl())

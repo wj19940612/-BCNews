@@ -129,14 +129,26 @@ public class ProjectRecommendActivity extends BaseActivity {
     }
 
     private void updateData(ProjectCommend data) {
-        mType.setText(data.getProjectName());
-        mPublishTime.setText(DateUtil.getFormatSpecialSlashNoHour(data.getPublishTime()));
+        if (!TextUtils.isEmpty(data.getProjectName())) {
+            mType.setText(data.getProjectName());
+        }
+        if (data.getPublishTime() != 0) {
+            mPublishTime.setText(DateUtil.getFormatSpecialSlashNoHour(data.getPublishTime()));
+        }
         if (!TextUtils.isEmpty(data.getPublishPrice())) {
             mPublishPrice.setText("$" + data.getPublishPrice());
         }
-        mPublishCount.setText(data.getPublishTotal());
-        mTurnOver.setText(data.getCirculateCount());
-        mRewardSystem.setText(data.getIncentiveSystem());
+        if (!TextUtils.isEmpty(data.getPublishTotal())) {
+            mPublishCount.setText(data.getPublishTotal());
+        }
+
+        if (!TextUtils.isEmpty(data.getCirculateCount())) {
+            mTurnOver.setText(data.getCirculateCount());
+        }
+
+        if (!TextUtils.isEmpty(data.getIncentiveSystem())) {
+            mRewardSystem.setText(data.getIncentiveSystem());
+        }
 
         mIntroduce.getViewTreeObserver().removeOnPreDrawListener(mOnPreDrawListener);
         mIntroduce.getViewTreeObserver().addOnPreDrawListener(mOnPreDrawListener);

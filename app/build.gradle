@@ -15,8 +15,8 @@ android {
         applicationId "com.sbai.bcnews"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 13
-        versionName "1.4.1"
+        versionCode 15
+        versionName "1.5.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField('String', 'HOST', '\"news.ailemi.com\"')
@@ -75,8 +75,8 @@ android {
         alpha {
 //            versionCode alphaVersionCode as Integer
 //            versionName alphaVersionName
-            versionCode 52
-            versionName "1.5.0.08.21.2"
+            versionCode 56
+            versionName "1.5.0.08.22.04"
             buildConfigField('String', 'HOST', '\"testnews.esongbai.xyz\"')
             manifestPlaceholders = [
                     GETUI_APP_ID    : "4FF6zVKAcN99eizSiKtVv8",

@@ -35,37 +35,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <RelativeLayout
-            android:id="@+id/swipe_target"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/emptyView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="300dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="18dp"
-                    android:drawableTop="@drawable/ic_empty_new"
-                    android:text="@string/no_other_info"
-                    android:textColor="@color/text_4949"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/swipe_target"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false" />
-        </RelativeLayout>
 
         <com.zcmrr.swipelayout.foot.LoadMoreFooterView
             android:id="@+id/swipe_load_more_footer"

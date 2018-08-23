@@ -37,13 +37,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyWalletActivity extends BaseSwipeLoadActivity {
+public class MyWalletActivity extends RecycleViewSwipeLoadActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.swipe_target)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView mSwipeLoadMoreFooter;
@@ -51,39 +51,11 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
     RelativeLayout mRootView;
-    @BindView(R.id.emptyView)
-    LinearLayout mEmptyView;
-    @BindView(R.id.swipe_target)
-    RelativeLayout mSwipeTarget;
 
     private List<WalletCoin> mWalletCoins;
     private WalletAdapter mWalletAdapter;
     private int mPage;
 
-    protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
-                    triggerLoadMore();
-                }
-
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                boolean isTop = layoutManager.findFirstCompletelyVisibleItemPosition() == 0;
-                if(!isTop){
-                    mSwipeToLoadLayout.setRefreshEnabled(false);
-                }else{
-                    mSwipeToLoadLayout.setRefreshEnabled(true);
-                }
-            }
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,43 +63,17 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
         setContentView(R.layout.activity_my_wallet);
         ButterKnife.bind(this);
         initView();
-        mRecyclerView.addOnScrollListener(mOnScrollListener);
+    }
+
+    @Override
+    public View getContentView() {
+        return mRootView;
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
         loadData(true);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mRecyclerView.removeOnScrollListener(mOnScrollListener);
-    }
-
-    @NonNull
-    @Override
-    public Object getSwipeTargetView() {
-        return mSwipeTarget;
-    }
-
-    @NonNull
-    @Override
-    public SwipeToLoadLayout getSwipeToLoadLayout() {
-        return mSwipeToLoadLayout;
-    }
-
-    @NonNull
-    @Override
-    public RefreshHeaderView getRefreshHeaderView() {
-        return mSwipeRefreshHeader;
-    }
-
-    @NonNull
-    @Override
-    public LoadMoreFooterView getLoadMoreFooterView() {
-        return mSwipeLoadMoreFooter;
     }
 
     @Override
@@ -146,7 +92,7 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
         mWalletAdapter = new WalletAdapter(this, mWalletCoins, new OnItemClickListener<WalletCoin>() {
             @Override
             public void onItemClick(WalletCoin walletCoin, int position) {
-                Launcher.with(getActivity(), CoinHistoryActivity.class).putExtra(ExtraKeys.TYPE,walletCoin.getCoinSymbol()).execute();
+                Launcher.with(getActivity(), CoinHistoryActivity.class).putExtra(ExtraKeys.TYPE, walletCoin.getCoinSymbol()).execute();
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -175,15 +121,16 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
             if (refresh) {
-                mEmptyView.setVisibility(View.VISIBLE);
+                mWalletAdapter.setShowEmptyView(true);
             } else {
-                mEmptyView.setVisibility(View.GONE);
+                mWalletAdapter.setShowEmptyView(false);
             }
+            refreshFoot(0);
             mWalletAdapter.notifyDataSetChanged();
             return;
         }
 
-        mEmptyView.setVisibility(View.GONE);
+        mWalletAdapter.setShowEmptyView(false);
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
@@ -192,22 +139,42 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
         if (data.size() != 0)
             mPage++;
         mWalletCoins.addAll(data);
+        refreshFoot(data.size());
         mWalletAdapter.notifyDataSetChanged();
+    }
+
+    private void refreshFoot(int size) {
+        if (mWalletCoins.size() >= Apic.DEFAULT_PAGE_SIZE && size < Apic.DEFAULT_PAGE_SIZE) {
+            mWalletAdapter.setShowFoot(true);
+        } else {
+            mWalletAdapter.setShowFoot(false);
+        }
     }
 
     public static class WalletAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public static final int HEAD = 0;
         public static final int NORMAL = 1;
+        public static final int EMPTY = 2;
 
         private Context mContext;
         private List<WalletCoin> mWalletCoins;
         private OnItemClickListener<WalletCoin> mOnItemClickListener;
+        private boolean mShowEmptyView;
+        private boolean mShowFoot;
 
         public WalletAdapter(Context context, List<WalletCoin> walletCoins, OnItemClickListener<WalletCoin> onItemClickListener) {
             mContext = context;
             mWalletCoins = walletCoins;
             mOnItemClickListener = onItemClickListener;
+        }
+
+        public void setShowEmptyView(boolean showEmptyView) {
+            mShowEmptyView = showEmptyView;
+        }
+
+        public void setShowFoot(boolean isShowFoot) {
+            mShowFoot = isShowFoot;
         }
 
         @NonNull
@@ -216,6 +183,9 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
             if (viewType == HEAD) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.item_wallet_header, parent, false);
                 return new HeaderHolder(view);
+            } else if (viewType == EMPTY) {
+                View view = LayoutInflater.from(mContext).inflate(R.layout.layout_empty_wallet, parent, false);
+                return new EmptyHolder(view);
             } else {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.item_wallet, parent, false);
                 return new ViewHolder(view);
@@ -226,8 +196,10 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof HeaderHolder) {
                 ((HeaderHolder) holder).bindingData(getItemCount() - 1);
+            } else if (holder instanceof EmptyHolder) {
+
             } else {
-                ((ViewHolder) holder).bindingData(mWalletCoins.get(position - 1), position-1, getItemCount()-1, mOnItemClickListener);
+                ((ViewHolder) holder).bindingData(mShowFoot, mWalletCoins.get(position - 1), position - 1, getItemCount() - 1, mOnItemClickListener);
             }
         }
 
@@ -235,6 +207,8 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
         public int getItemViewType(int position) {
             if (position == 0) {
                 return HEAD;
+            } else if (mShowEmptyView && position == 1) {
+                return EMPTY;
             } else {
                 return NORMAL;
             }
@@ -242,7 +216,7 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
 
         @Override
         public int getItemCount() {
-            return mWalletCoins.size() + 1;
+            return mWalletCoins.size() + 1 + (mShowEmptyView ? 1 : 0);
         }
 
         static class HeaderHolder extends RecyclerView.ViewHolder {
@@ -272,13 +246,15 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
             View mLine;
             @BindView(R.id.rootView)
             RelativeLayout mRootView;
+            @BindView(R.id.footer)
+            LinearLayout mFooter;
 
             ViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(WalletCoin walletCoin, int position, int count, OnItemClickListener<WalletCoin> onItemClickListener) {
+            public void bindingData(boolean showFoot, WalletCoin walletCoin, int position, int count, OnItemClickListener<WalletCoin> onItemClickListener) {
 
                 mBitType.setText(walletCoin.getCoinSymbol());
 
@@ -297,6 +273,21 @@ public class MyWalletActivity extends BaseSwipeLoadActivity {
                 } else {
                     mLine.setVisibility(View.VISIBLE);
                 }
+
+                if (showFoot && count - 1 == position) {
+                    mFooter.setVisibility(View.VISIBLE);
+                    mLine.setVisibility(View.VISIBLE);
+                } else {
+                    mFooter.setVisibility(View.GONE);
+                    mLine.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        static class EmptyHolder extends RecyclerView.ViewHolder {
+
+            public EmptyHolder(View itemView) {
+                super(itemView);
             }
         }
     }

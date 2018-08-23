@@ -27,7 +27,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="4">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -42,13 +42,13 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="3">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="10dp"
                 android:text="@string/type"
                 android:textColor="@color/text_AAA9A6"
                 android:textSize="13sp" />
@@ -57,13 +57,13 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="2">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="10dp"
                 android:text="@string/grade"
                 android:textColor="@color/text_AAA9A6"
                 android:textSize="13sp" />
@@ -72,7 +72,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="3">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -104,36 +104,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <RelativeLayout
-            android:id="@+id/swipe_target"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/emptyView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="18dp"
-                    android:drawableTop="@drawable/ic_empty_new"
-                    android:text="@string/no_other_info"
-                    android:textColor="@color/text_4949"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/swipe_target"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false" />
-        </RelativeLayout>
 
         <com.zcmrr.swipelayout.foot.LoadMoreFooterView
             android:id="@+id/swipe_load_more_footer"

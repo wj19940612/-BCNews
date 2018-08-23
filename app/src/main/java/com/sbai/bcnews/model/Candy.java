@@ -32,7 +32,8 @@ public class Candy implements Parcelable {
     private long updateTime;
     private String url;
     private String welfare; //福利时间
-    private int clicks;//领取数
+//    private int clicks;//领取数
+    private int receiveNum;//领取数
     private String qrCode;//二维码
 
     public long getCreateTime() {
@@ -131,13 +132,13 @@ public class Candy implements Parcelable {
         this.welfare = welfare;
     }
 
-    public int getClicks() {
-        return clicks;
-    }
-
-    public void setClicks(int clicks) {
-        this.clicks = clicks;
-    }
+//    public int getClicks() {
+//        return clicks;
+//    }
+//
+//    public void setClicks(int clicks) {
+//        this.clicks = clicks;
+//    }
 
     public String getQrCode() {
         return qrCode;
@@ -150,6 +151,14 @@ public class Candy implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public int getReceiveNum() {
+        return receiveNum;
+    }
+
+    public void setReceiveNum(int receiveNum) {
+        this.receiveNum = receiveNum;
     }
 
     @Override
@@ -166,8 +175,9 @@ public class Candy implements Parcelable {
         dest.writeLong(this.updateTime);
         dest.writeString(this.url);
         dest.writeString(this.welfare);
-        dest.writeInt(this.clicks);
+//        dest.writeInt(this.clicks);
         dest.writeString(this.qrCode);
+        dest.writeInt(this.receiveNum);
     }
 
     public Candy() {
@@ -186,8 +196,9 @@ public class Candy implements Parcelable {
         this.updateTime = in.readLong();
         this.url = in.readString();
         this.welfare = in.readString();
-        this.clicks = in.readInt();
+//        this.clicks = in.readInt();
         this.qrCode = in.readString();
+        this.receiveNum = in.readInt();
     }
 
     public static final Parcelable.Creator<Candy> CREATOR = new Parcelable.Creator<Candy>() {

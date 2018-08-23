@@ -150,10 +150,10 @@ public class ShareCandyActivity extends BaseActivity {
         mWelfareTime.setText(getString(R.string.welfare_time_x,mCandy.getWelfare()));
         openWebView(mCandy.getIntroduce(),mWelfareTip);
         mWelfareTip.setFocusableInTouchMode(false);
-        if (mCandy.getClicks() <= 99999) {
-            mGetNumber.setText(getString(R.string.x_have_get, mCandy.getClicks()));
+        if (mCandy.getReceiveNum() <= 99999) {
+            mGetNumber.setText(getString(R.string.x_have_get, mCandy.getReceiveNum()));
         } else {
-            mGetNumber.setText(getString(R.string.x_ten_thousand_have_get, mCandy.getClicks() / 10000));
+            mGetNumber.setText(getString(R.string.x_ten_thousand_have_get, mCandy.getReceiveNum() / 10000));
         }
     }
 

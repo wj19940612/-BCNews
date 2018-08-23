@@ -1,5 +1,6 @@
 package com.sbai.bcnews.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.view.Gravity;
@@ -87,6 +88,11 @@ public class CommentPopupWindow implements View.OnClickListener {
         if (mPopupWindow == null) {
             createPopupWindow();
         }
+        if (mContext instanceof Activity) {
+            if (((Activity) mContext).isFinishing()) {
+                return;
+            }
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mPopupWindow.showAsDropDown(mAnchor, (Display.getScreenWidth()) / 5, -mAnchor.getMeasuredHeight(), Gravity.TOP);
         }
@@ -107,7 +113,7 @@ public class CommentPopupWindow implements View.OnClickListener {
         whistleBlowing.setOnClickListener(this);
         review.setOnClickListener(this);
 
-        if(mDeleteReview){
+        if (mDeleteReview) {
             review.setText("删除");
             whistleBlowing.setVisibility(View.GONE);
         }

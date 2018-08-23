@@ -233,10 +233,10 @@ public class CandyListFragment extends RecycleViewSwipeLoadFragment {
                 mName.setText(candy.getName());
                 mIntroduce.setText(candy.getIntro());
                 mTip.setText(candy.getWelfare());
-                if (candy.getClicks() <= 99999) {
-                    mGetCount.setText(context.getString(R.string.x_have_get, candy.getClicks()));
+                if (candy.getReceiveNum() <= 99999) {
+                    mGetCount.setText(context.getString(R.string.x_have_get, candy.getReceiveNum()));
                 } else {
-                    mGetCount.setText(context.getString(R.string.x_ten_thousand_have_get, candy.getClicks() / 10000));
+                    mGetCount.setText(context.getString(R.string.x_ten_thousand_have_get, candy.getReceiveNum() / 10000));
                 }
                 mTip.setText(context.getString(R.string.welfare_time_x, candy.getWelfare()));
                 GlideApp.with(context).load(candy.getPhoto())

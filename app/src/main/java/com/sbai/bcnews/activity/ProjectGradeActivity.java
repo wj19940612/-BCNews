@@ -35,12 +35,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ProjectGradeActivity extends BaseSwipeLoadActivity {
+public class ProjectGradeActivity extends RecycleViewSwipeLoadActivity {
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.swipe_target)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView mSwipeLoadMoreFooter;
@@ -48,39 +48,10 @@ public class ProjectGradeActivity extends BaseSwipeLoadActivity {
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
     RelativeLayout mRootView;
-    @BindView(R.id.emptyView)
-    LinearLayout mEmptyView;
-    @BindView(R.id.swipe_target)
-    RelativeLayout mSwipeTarget;
 
     private List<ProjectGrade> mProjectGradeList;
     private GradeAdapter mGradeAdapter;
     private int mPage;
-
-    protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
-                    triggerLoadMore();
-                }
-
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                boolean isTop = layoutManager.findFirstCompletelyVisibleItemPosition() == 0;
-                if(!isTop){
-                    mSwipeToLoadLayout.setRefreshEnabled(false);
-                }else{
-                    mSwipeToLoadLayout.setRefreshEnabled(true);
-                }
-            }
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,38 +59,12 @@ public class ProjectGradeActivity extends BaseSwipeLoadActivity {
         setContentView(R.layout.activity_project_grade);
         ButterKnife.bind(this);
         initView();
-        mRecyclerView.addOnScrollListener(mOnScrollListener);
         loadData(true);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mRecyclerView.removeOnScrollListener(mOnScrollListener);
-    }
-
-    @NonNull
-    @Override
-    public Object getSwipeTargetView() {
-        return mSwipeTarget;
-    }
-
-    @NonNull
-    @Override
-    public SwipeToLoadLayout getSwipeToLoadLayout() {
-        return mSwipeToLoadLayout;
-    }
-
-    @NonNull
-    @Override
-    public RefreshHeaderView getRefreshHeaderView() {
-        return mSwipeRefreshHeader;
-    }
-
-    @NonNull
-    @Override
-    public LoadMoreFooterView getLoadMoreFooterView() {
-        return mSwipeLoadMoreFooter;
+    public View getContentView() {
+        return mRootView;
     }
 
     @Override
@@ -166,16 +111,16 @@ public class ProjectGradeActivity extends BaseSwipeLoadActivity {
         }
         if (data == null || data.size() == 0) {
             if (refresh) {
-                mEmptyView.setVisibility(View.VISIBLE);
+                mGradeAdapter.setShowEmptyView(true);
             } else {
-                mEmptyView.setVisibility(View.GONE);
+                mGradeAdapter.setShowEmptyView(false);
             }
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
             refreshFoot(0);
             mGradeAdapter.notifyDataSetChanged();
             return;
         }
-        mEmptyView.setVisibility(View.GONE);
+        mGradeAdapter.setShowEmptyView(false);
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
@@ -198,10 +143,14 @@ public class ProjectGradeActivity extends BaseSwipeLoadActivity {
 
     public static class GradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+        public static final int EMPTY = 1;
+        public static final int NORMAL = 2;
+
         private Context mContext;
         private List<ProjectGrade> mProjectGrades;
         private boolean mShowFoot;
         private OnItemClickListener<ProjectGrade> mOnItemClickListener;
+        private boolean mShowEmptyView;
 
         public GradeAdapter(Context context, List<ProjectGrade> projectGrades, OnItemClickListener<ProjectGrade> onItemClickListener) {
             mContext = context;
@@ -213,21 +162,42 @@ public class ProjectGradeActivity extends BaseSwipeLoadActivity {
             mShowFoot = isShowFoot;
         }
 
+        public void setShowEmptyView(boolean showEmptyView) {
+            mShowEmptyView = showEmptyView;
+        }
+
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.item_project_grade, parent, false);
-            return new ViewHolder(view);
+            if (viewType == EMPTY) {
+                View view = LayoutInflater.from(mContext).inflate(R.layout.layout_empty_wallet, parent, false);
+                return new EmptyHolder(view);
+            } else {
+                View view = LayoutInflater.from(mContext).inflate(R.layout.item_project_grade, parent, false);
+                return new ViewHolder(view);
+            }
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ((ViewHolder) holder).bind(mProjectGrades.get(position), position, getItemCount(), mShowFoot, mOnItemClickListener);
+            if (holder instanceof EmptyHolder) {
+
+            } else {
+                ((ViewHolder) holder).bind(mProjectGrades.get(position), position, getItemCount(), mShowFoot, mOnItemClickListener);
+            }
         }
 
         @Override
         public int getItemCount() {
-            return mProjectGrades.size();
+            return mProjectGrades.size() + (mShowEmptyView ? 1 : 0);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position == 0 && mShowEmptyView) {
+                return EMPTY;
+            }
+            return NORMAL;
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
@@ -269,6 +239,13 @@ public class ProjectGradeActivity extends BaseSwipeLoadActivity {
                 } else {
                     mFooter.setVisibility(View.GONE);
                 }
+            }
+        }
+
+        static class EmptyHolder extends RecyclerView.ViewHolder {
+
+            public EmptyHolder(View itemView) {
+                super(itemView);
             }
         }
     }

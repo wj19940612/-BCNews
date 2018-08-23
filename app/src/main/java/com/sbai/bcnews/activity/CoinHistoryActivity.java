@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,13 +39,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CoinHistoryActivity extends BaseSwipeLoadActivity {
+public class CoinHistoryActivity extends RecycleViewSwipeLoadActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.swipe_refresh_header)
     RefreshHeaderView mSwipeRefreshHeader;
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.swipe_target)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_load_more_footer)
     LoadMoreFooterView mSwipeLoadMoreFooter;
@@ -52,41 +53,12 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
     SwipeToLoadLayout mSwipeToLoadLayout;
     @BindView(R.id.rootView)
     RelativeLayout mRootView;
-    @BindView(R.id.emptyView)
-    LinearLayout mEmptyView;
-    @BindView(R.id.swipe_target)
-    RelativeLayout mSwipeTarget;
 
     private String mType;
     private int mPage;
 
     private HistoryAdapter mHistoryAdapter;
     private List<CoinHistory> mCoinHistories;
-
-    protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL)) {
-                    triggerLoadMore();
-                }
-
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                boolean isTop = layoutManager.findFirstCompletelyVisibleItemPosition() == 0;
-                if (!isTop) {
-                    mSwipeToLoadLayout.setRefreshEnabled(false);
-                } else {
-                    mSwipeToLoadLayout.setRefreshEnabled(true);
-                }
-            }
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,39 +70,8 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
     }
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mRecyclerView.addOnScrollListener(mOnScrollListener);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mRecyclerView.removeOnScrollListener(mOnScrollListener);
-    }
-
-    @NonNull
-    @Override
-    public Object getSwipeTargetView() {
-        return mSwipeTarget;
-    }
-
-    @NonNull
-    @Override
-    public SwipeToLoadLayout getSwipeToLoadLayout() {
-        return mSwipeToLoadLayout;
-    }
-
-    @NonNull
-    @Override
-    public RefreshHeaderView getRefreshHeaderView() {
-        return mSwipeRefreshHeader;
-    }
-
-    @NonNull
-    @Override
-    public LoadMoreFooterView getLoadMoreFooterView() {
-        return mSwipeLoadMoreFooter;
+    public View getContentView() {
+        return mRootView;
     }
 
     @Override
@@ -175,6 +116,7 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
             protected void onRespSuccessData(CoinCount data) {
                 if (data != null) {
                     mHistoryAdapter.setAllCount(data.getAbleCoin(), mType);
+                    mHistoryAdapter.notifyDataSetChanged();
                 }
             }
         }).fireFreely();
@@ -200,14 +142,15 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
         if (data == null || data.size() == 0) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
             if (refresh) {
-                mEmptyView.setVisibility(View.VISIBLE);
+                mHistoryAdapter.setShowEmptyView(true);
             } else {
-                mEmptyView.setVisibility(View.GONE);
+                mHistoryAdapter.setShowEmptyView(false);
             }
+            refreshFoot(0);
             mHistoryAdapter.notifyDataSetChanged();
             return;
         }
-        mEmptyView.setVisibility(View.GONE);
+        mHistoryAdapter.setShowEmptyView(false);
         if (data.size() < Apic.DEFAULT_PAGE_SIZE) {
             mSwipeToLoadLayout.setLoadMoreEnabled(false);
         } else {
@@ -216,13 +159,25 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
         if (data.size() != 0)
             mPage++;
         mCoinHistories.addAll(data);
-        mHistoryAdapter.notifyDataSetChanged();
+        refreshFoot(data.size());
+        if (!TextUtils.isEmpty(mHistoryAdapter.getType())) {
+            mHistoryAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void refreshFoot(int size) {
+        if (mCoinHistories.size() >= Apic.DEFAULT_PAGE_SIZE && size < Apic.DEFAULT_PAGE_SIZE) {
+            mHistoryAdapter.setShowFoot(true);
+        } else {
+            mHistoryAdapter.setShowFoot(false);
+        }
     }
 
     public static class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public static final int HEADER = 0;
         public static final int NORMAL = 1;
+        public static final int EMPTY = 2;
 
         interface OnGetCoinClickListener {
             public void onGetCoinClick(String usableCoin, String type);
@@ -233,6 +188,8 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
         private String mAllCount;
         private String mType;
         private OnGetCoinClickListener mOnGetCoinClickListener;
+        private boolean mShowEmptyView;
+        private boolean mShowFoot;
 
         public HistoryAdapter(Context context, List<CoinHistory> coinHistories, OnGetCoinClickListener onGetCoinClickListener) {
             mContext = context;
@@ -245,6 +202,17 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
             mType = type;
         }
 
+        public String getType() {
+            return mType;
+        }
+
+        public void setShowEmptyView(boolean showEmptyView) {
+            mShowEmptyView = showEmptyView;
+        }
+
+        public void setShowFoot(boolean isShowFoot) {
+            mShowFoot = isShowFoot;
+        }
 
         @NonNull
         @Override
@@ -252,6 +220,9 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
             if (viewType == HEADER) {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.item_coin_history_header, parent, false);
                 return new HeaderHolder(view);
+            } else if (viewType == EMPTY) {
+                View view = LayoutInflater.from(mContext).inflate(R.layout.layout_empty_wallet, parent, false);
+                return new EmptyHolder(view);
             } else {
                 View view = LayoutInflater.from(mContext).inflate(R.layout.item_coin_history, parent, false);
                 return new ViewHolder(view);
@@ -262,20 +233,24 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof HeaderHolder) {
                 ((HeaderHolder) holder).bindingData(mContext, mAllCount, mType, mOnGetCoinClickListener);
+            } else if (holder instanceof EmptyHolder) {
+
             } else {
-                ((ViewHolder) holder).bindingData(mContext, mCoinHistoryList.get(position - 1), mType);
+                ((ViewHolder) holder).bindingData(mShowFoot, position - 1, getItemCount() - 1, mContext, mCoinHistoryList.get(position - 1), mType);
             }
         }
 
         @Override
         public int getItemCount() {
-            return mCoinHistoryList.size() + 1;
+            return mCoinHistoryList.size() + 1 + (mShowEmptyView ? 1 : 0);
         }
 
         @Override
         public int getItemViewType(int position) {
             if (position == 0) {
                 return HEADER;
+            } else if (position == 1 && mShowEmptyView) {
+                return EMPTY;
             } else {
                 return NORMAL;
             }
@@ -321,13 +296,15 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
             TextView mTime;
             @BindView(R.id.count)
             TextView mCount;
+            @BindView(R.id.footer)
+            LinearLayout mFooter;
 
             ViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Context context, CoinHistory coinHistory, String type) {
+            public void bindingData(boolean showFoot, int position, int count, Context context, CoinHistory coinHistory, String type) {
                 mName.setText(coinHistory.getTypeStr());
 
                 mTime.setText(DateUtil.formatSlash(coinHistory.getUpdateTime()));
@@ -339,6 +316,22 @@ public class CoinHistoryActivity extends BaseSwipeLoadActivity {
                     mCount.setTextColor(ContextCompat.getColor(context, R.color.red));
                     mCount.setText("-" + coinHistory.getExtractNum() + "   " + type);
                 }
+
+                if (showFoot && count - 1 == position) {
+                    mFooter.setVisibility(View.VISIBLE);
+                } else {
+                    mFooter.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        static class EmptyHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.emptyView)
+            LinearLayout mEmptyView;
+
+            EmptyHolder(View view) {
+                super(view);
+                ButterKnife.bind(this, view);
             }
         }
     }
